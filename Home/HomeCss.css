@@ -43,7 +43,7 @@ table {
 	border-spacing: 0;
 }
 /*Font*/
-body{
+*{
 	font-family: 'Arimo', sans-serif;
 }
 /*nav bar*/
@@ -91,21 +91,23 @@ body{
 	background-color:green;
 }
 
-/*left sidebar*/
-#left_sidebar{
-	position:absolute; should be rel
-	float:left;
+/*main page*/
+#main_content{
+	background-color:red;
+	width:100%;
 }
-#FIRST img{
-	position:relative; should be absol
-	left:2%;
-	width:15%;
-	margin:10px;
+#main_content p{
+	color:#808080;
+	text-align:center;
+	font-size:1.5em;
+	padding:5px;
 }
-
-/*right content*/
-#right_content{
-	position:absolute;
-	float:right;
-	display:none;
+#social{
+	background-color:green;
+	text-align:center;
+}
+#social img{
+	width:40px;
+	padding:20px;
+	display:inline-block;
 }
