@@ -84,4 +84,28 @@ body{
 	width:100%;
 }
 
+/*seperator*/
+#seperator{
+	width:100%;
+	height:80px;
+	background-color:green;
+}
+
 /*left sidebar*/
+#left_sidebar{
+	position:absolute; should be rel
+	float:left;
+}
+#FIRST img{
+	position:relative; should be absol
+	left:2%;
+	width:15%;
+	margin:10px;
+}
+
+/*right content*/
+#right_content{
+	position:absolute;
+	float:right;
+	display:none;
+}
