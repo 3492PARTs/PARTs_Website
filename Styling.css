@@ -45,6 +45,7 @@ table {
 /*Font*/
 *{
 	font-family: 'Arimo', sans-serif;
+	color:#808080;
 }
 
 /*nav bar*/
@@ -144,6 +145,19 @@ table {
 /***********************************END HOMEPAGE**************************/
 
 /***********************************BEGIN CALENDAR**************************/
+/*calenar*/
 #calendar{
 	text-align:center;
+}
+
+/***********************************END CALENDAR**************************/
+
+/***********************************BEGIN ABOUT**************************/
+/*about*/
+#about{
+	width:100%;
+	background-color:green;
+}
+#about table{
+	border:2px solid red;
 }
