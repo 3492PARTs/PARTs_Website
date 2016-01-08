@@ -1,5 +1,5 @@
 /*CSS RESET*/
-html, body, div, span, applet, object, iframe,
+html, body/*, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -11,7 +11,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+time, mark, audio, video*/ {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -19,7 +19,7 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
+/* HTML5 display-role reset for older browsers
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
@@ -41,7 +41,7 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-}
+}*/
 /*Font*/
 *{
 	font-family: 'Arimo', sans-serif;
@@ -57,17 +57,18 @@ table {
 }
 .bot img{
 	width:5%;
+	position:absolute;
 	float:left;
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
+	top:50%;	
+	transform:translateY(-50%);
 	left:40px;
 }
-.nav ul{
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	right:10px;
+.nav{
+	position:absolute;
+	float:right;
+	top:50%;
+	transform:translateY(-50%);
+	right:20px;
 }
 .nav li{
 	display:inline-block;
@@ -156,8 +157,22 @@ table {
 /*about*/
 #about{
 	width:100%;
-	background-color:green;
 }
 #about table{
-	border:2px solid red;
+	width:80%;
+	margin-left: auto;
+    margin-right: auto;
 }
+#about img{
+	width:300px;
+}
+#about h1, h2, p, ul, li{
+	text-align:center;
+}
+#about ul{
+	list-style-type:none;
+}
+
+/***********************************END ABOUT**************************/
+
+/***********************************BEGIN MEDIA**************************/
