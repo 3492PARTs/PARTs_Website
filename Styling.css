@@ -185,3 +185,18 @@ table {
 	width:20%;
 	margin:10px;
 }
+
+/***********************************END MEDIA**************************/
+
+/***********************************BEGIN COMPETITION**************************/
+/*competition*/
+#top{
+	position:relative;
+}
+#arrow img{
+	position:absolute;
+	width:4%;
+	float:left;
+	left:10px;
+	top:-25px;
+}
