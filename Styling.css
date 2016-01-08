@@ -176,3 +176,12 @@ table {
 /***********************************END ABOUT**************************/
 
 /***********************************BEGIN MEDIA**************************/
+/*album covers*/
+#media{
+	text-align:center;
+}
+.albums img{
+	display:inline-block;
+	width:20%;
+	margin:10px;
+}
