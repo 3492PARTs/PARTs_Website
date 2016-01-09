@@ -170,7 +170,7 @@ table {
 .about h1, h2, p, ul, li{
 	text-align:center;
 }
-.about ul{
+#awards{
 	list-style-type:none;
 }
 
@@ -203,20 +203,14 @@ table {
 
 /***********************************BEGIN ABOUT FIRST AND GAME**************************/
 /*tablet text*/
-#about_first h2, p, ul, li{
+#about_first p{
 	text-align:left;
 }
-#about_first ul li {
-  color:#444; /* set color of list item to a dark gray */
-	list-style:none; /* if you’re not already using a reset */
+#about_first h2{
+	text-align:left;
 }
-#about_first ul li:before {
-  color:black; /* set color to black */
-  content:"\2022"; /* /2022 is the numerical unicode for &bull; */
-  font-size:1.5em; /* set the font-size of the bullet if necessary. Make sure to use em or %*/
-  padding-right:.25em; /* give the bullet some padding from the text Make sure to use em*/
-  position:relative;
-    top:.1em; /* set the vertical position of the bullet if necessary. Make sure to use em or % */
+#about_first li{
+	text-align:left;
 }
 
 /*images*/
