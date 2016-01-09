@@ -112,7 +112,9 @@ table {
 
 /*main page*/
 #main_content{
-	width:100%;
+	margin-left: auto;
+    margin-right: auto;
+	width:80%;
 }
 #main_content p{
 	text-align:center;
@@ -167,7 +169,19 @@ table {
 .about img{
 	width:300px;
 }
-.about h1, h2, p, ul, li{
+.about h1{
+	text-align:center;
+}
+.about h2{
+	text-align:center;
+}
+.about p{
+	text-align:center;
+}
+.about ul{
+	text-align:center;
+}
+.about li{
 	text-align:center;
 }
 #awards{
@@ -222,3 +236,17 @@ table {
 }
 
 /***********************************END ABOUT FIRST AND GAME**************************/
+
+/***********************************BEGIN SPONSORING**************************/
+/*LINK*/
+#main_sponsor{
+	margin-left: auto;
+    margin-right: auto;
+	width:80%;
+}
+#main_sponsor a{
+	font-weight:bold;
+}
+#main_sponsor a:hover{
+	color:#FF6A00;
+}
