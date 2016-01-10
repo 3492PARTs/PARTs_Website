@@ -56,6 +56,7 @@ table {
 	position:relative;
 }
 .bot img{
+	display:inline-block;
 	width:5%;
 	position:absolute;
 	float:left;
@@ -64,6 +65,7 @@ table {
 	left:40px;
 }
 .nav{
+	display:inline-block;
 	position:absolute;
 	float:right;
 	top:50%;
@@ -75,6 +77,7 @@ table {
 	margin: 10px;
 }
 .nav li a {
+	display:inline-block;
 	color:white;
 	text-decoration:none;
 	display:inline-block;	
