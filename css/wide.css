@@ -57,6 +57,9 @@ table {
 .nav_bar img{
 	width:5em;
 }
+.nav_bar img:hover{
+	opacity:.5;
+}
 .nav_bar p{
 	text-align:center;
 	padding:.5em;
@@ -114,6 +117,9 @@ table {
 	width:2.5em;
 	padding:1em;
 	display:inline-block;
+}
+#social img:hover{
+	opacity:.5;
 }
 #home_media{
 	margin-left: auto;
@@ -188,7 +194,7 @@ table {
 }
 #arrow img{
 	position:absolute;
-	width:4%;
+	width:5%;
 	float:left;
 	left:10px;
 	top:-25px;
@@ -207,13 +213,19 @@ table {
 #about_first li{
 	text-align:left;
 }
+#about_first img:hover{
+	opacity:.5;
+}
+#about_first img{
+	width:80%;
+}
 
 /*images*/
 #first {
-	margin-bottom:50px;
+	margin-bottom:25%;
 }
 #frc {
-	margin-top:50px;
+	margin-top:25%;
 }
 
 /***********************************END ABOUT FIRST AND GAME**************************/

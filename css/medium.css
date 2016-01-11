@@ -178,21 +178,24 @@ table {
 	text-align:center;
 }
 .albums img{
-	display:inline-block;
-	width:20%;
-	margin:10px;
+	display:block;
+	width:50%;
+	margin-left: auto;
+    margin-right: auto;
+	margin-top:10%;
+	margin-bottom:10%;
 }
 
 /*competition*/
-#top{
-	position:relative;
+#text{
+	display:block;
+}
+#arrow{
+	display:block;
 }
 #arrow img{
-	position:absolute;
-	width:4%;
+	width:10%;
 	float:left;
-	left:10px;
-	top:-25px;
 }
 
 /***********************************END MEDIA**************************/
@@ -208,13 +211,20 @@ table {
 #about_first li{
 	text-align:left;
 }
+#about_first img:hover{
+	opacity:.5;
+}
+#about_first img{
+	width:40%;
+	justify-content:center;
+}
 
 /*images*/
 #first {
-	margin-bottom:50px;
+	margin-right:1em;
 }
 #frc {
-	margin-top:50px;
+	margin-left:1em;
 }
 
 /***********************************END ABOUT FIRST AND GAME**************************/
