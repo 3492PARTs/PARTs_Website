@@ -148,16 +148,13 @@ table {
 
 /***********************************BEGIN ABOUT**************************/
 /*about*/
-.about{
-	width:100%;
-}
 .about table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
 .about img{
-	width:300px;
+	width:50%;
 }
 .about h1{
 	text-align:center;
@@ -166,12 +163,6 @@ table {
 	text-align:center;
 }
 .about p{
-	text-align:center;
-}
-.about ul{
-	text-align:center;
-}
-.about li{
 	text-align:center;
 }
 #awards{
