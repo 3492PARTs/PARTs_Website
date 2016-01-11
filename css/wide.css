@@ -115,7 +115,7 @@ table {
 }
 #social img{
 	width:2.5em;
-	padding:1em;
+	margin:1em;
 	display:inline-block;
 }
 #social img:hover{
@@ -181,6 +181,7 @@ table {
 /*album covers*/
 #media{
 	text-align:center;
+	height:100%;
 }
 .albums img{
 	display:inline-block;

@@ -123,7 +123,7 @@ table {
 }
 #videos iframe{
 	width:90%;
-	height:10em;
+	height:18em;
 	margin:.8em;
 }
 #sponsors{
@@ -216,7 +216,6 @@ table {
 }
 #about_first img{
 	width:40%;
-	justify-content:center;
 }
 
 /*images*/
