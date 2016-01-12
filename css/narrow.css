@@ -64,9 +64,10 @@ td:nth-child(6), td:nth-child(7){
 .nav_bar p{
 	text-align:center;
 	font-size:1.5em;
-	margin:0;
+	margin:1em;
 }
 .nav_bar a {
+	display:block;
 	color:white;
 	text-decoration:none;	
 	text-transform: uppercase;
