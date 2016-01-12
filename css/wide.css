@@ -126,19 +126,27 @@ table {
     margin-right: auto;
 	width:80%;
 }
+#home_media tr:first-child{
+	background-color:black;
+}
 #home_media p{
 	font-size:1.5em;
 }
-#videos iframe{
-	width:90%;
-	height:15em;
-	margin:1em;
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
 }
-#sponsors{
-	text-align:center;
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 #sponsors img{
-	width:90%;	
+	width:100%;	
 }
 
 
