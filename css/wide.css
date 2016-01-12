@@ -58,13 +58,14 @@ table {
 	width:5em;
 }
 .nav_bar img:hover{
-	opacity:.5;
+	-webkit-filter: grayscale(100%) sepia(0%);
 }
 .nav_bar p{
 	text-align:center;
 	padding:.5em;
 }
 .nav_bar a {
+	display:block;
 	color:white;
 	text-decoration:none;	
 	text-transform: uppercase;
@@ -141,7 +142,7 @@ body {
 	display:inline-block;
 }
 #social img:hover{
-	opacity:.5;
+	-webkit-filter: grayscale(100%) sepia(0%);
 }
 #home_media{
 	margin-left: auto;
@@ -245,7 +246,7 @@ body {
 	text-align:left;
 }
 #about_first img:hover{
-	opacity:.5;
+	-webkit-filter: grayscale(100%) sepia(0%);
 }
 #about_first img{
 	width:80%;
