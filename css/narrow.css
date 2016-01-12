@@ -228,6 +228,9 @@ td:nth-child(6), td:nth-child(7){
 /***********************************END MEDIA**************************/
 
 /***********************************BEGIN ABOUT FIRST AND GAME**************************/
+#about_first{
+	width:80%;
+}
 /*tablet text*/
 #about_first p{
 	text-align:left;
@@ -241,11 +244,16 @@ td:nth-child(6), td:nth-child(7){
 #about_first img:hover{
 	opacity:.5;
 }
-.first{
+#about_first img{
 	width:40%;
 }
-#logo:{
-	width:80%
+
+/*images*/
+#first {
+	margin-right:1em;
+}
+#frc {
+	margin-left:1em;
 }
 
 /***********************************END ABOUT FIRST AND GAME**************************/
