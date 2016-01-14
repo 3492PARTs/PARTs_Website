@@ -190,26 +190,30 @@ body {
 
 /***********************************BEGIN ABOUT**************************/
 /*about*/
-.about table{
+#aboutParts table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
-.about td{
+#aboutParts td{
 	display:block;
 }
-.about img{
-	width:40%;
+#aboutParts img{
+	width:50%;
 }
-.about h1{
+#aboutParts thead h1{
 	text-align:center;
+	font-size:2em;
 }
-.about h2{
+#aboutParts h2{
 	text-align:center;
+	font-size:1.6em;
 }
-.about p{
+#aboutParts p{
 	text-align:center;
+	font-size:1.4em;
 }
+
 #awards{
 	list-style-type:none;
 }
@@ -246,42 +250,97 @@ body {
 
 /***********************************BEGIN ABOUT FIRST AND GAME**************************/
 /*tablet text*/
-#about_first p{
+#aboutFirst table{
+	width:80%;
+	margin-left: auto;
+    margin-right: auto;
+}
+#aboutFirst td{
+	display:block;
+}
+#aboutFirst thead h1{
+	text-align:center;
+	font-size:2em;
+}
+#aboutFirst h2{
+	text-align:center;
+	font-size:1.6em;
+}
+#aboutFirst p{
+	text-align:center;
+	font-size:1.4em;
+}
+#aboutFirst ul li p{
 	text-align:left;
-}
-#about_first h2{
-	text-align:left;
-}
-#about_first li{
-	text-align:left;
-}
-#about_first img:hover{
-	opacity:.5;
-}
-#about_first img{
-	width:40%;
+	font-size:1.4em;
 }
 
 /*images*/
 #first {
-	margin-right:1em;
+	margin:1em;
+	width:40%;
 }
 #frc {
-	margin-left:1em;
+	width:40%;
+	margin:1em;
+}
+#gameLogo{
+	width:80%;
 }
 
 /***********************************END ABOUT FIRST AND GAME**************************/
 
 /***********************************BEGIN SPONSORING**************************/
 /*LINK*/
-#main_sponsor{
+#mainSponsor{
 	margin-left: auto;
     margin-right: auto;
 	width:80%;
 }
-#main_sponsor a{
+#mainSponsor a{
 	font-weight:bold;
 }
-#main_sponsor a:hover{
+#mainSponsor a:hover{
 	color:#FF6A00;
 }
+#mainSponsor h1{
+	text-align:center;
+	font-size:2em;
+}
+#mainSponsor h2{
+	text-align:center;
+	font-size:1.6em;
+}
+#mainSponsor p{
+	text-align:center;
+	font-size:1.4em;
+}
+#mainSponsor ul li p{
+	text-align:left;
+}
+
+/***********************************ENG SPONSORING**************************/
+
+/***********************************BEGIN TEAM RESOURCES**************************/
+/*tablet text*/
+#aboutResources table{
+	width:80%;
+	margin-left: auto;
+    margin-right: auto;
+}
+#aboutResources td{
+	display:block;
+}
+#aboutResources thead h1{
+	text-align:center;
+	font-size:2em;
+}
+#aboutResources h2{
+	text-align:center;
+	font-size:1.6em;
+}
+#aboutResources p{
+	text-align:center;
+	font-size:1.4em;
+}
+/***********************************END TEAM RESOURCES**************************/
