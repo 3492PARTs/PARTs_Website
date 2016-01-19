@@ -9,39 +9,61 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
-		<table class="nav_bar">
-			<thead>
-				
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<p><a href="index.html"><img src="http://i.imgur.com/MsLcE8S.png"/></a></p>
-					</td>
-					<td>
-						<p><a href="Contact.html">Contact Us</a></p>
-					</td>
-					<td>
-						<p><a href="Sponsoring.html">Sponsoring</a></p>
-					</td>
-					<td>
-						<p><a href="About_Parts.html">About PARTs</a></p>
-					</td>
-					<td>
-						<p><a href="Media.html">Media</a></p>
-					</td>
-					<td>
-						<p><a href="TeamResources.html">For Members</a></p>
-					</td>
-					<td>
-						<p><a href="Calendar.html">Calendar</a></p>
-					</td>
-					<td>
-						<p><a href="FirstAndGame.html">About First & The Game</a></p>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="accordion">
+			<div>
+				<input id="ac-1" name="accordion-1" type="checkbox" />
+				<label for="ac-1">
+					<table id="mobile_nav">
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td><img id="bot" src="http://i.imgur.com/MsLcE8S.png"/></td>
+								<td><img id="ham" src="http://i.imgur.com/LkjktdI.png"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</label>
+				<div class="article ac-small">
+					<table class="nav_bar">
+						<thead>
+			
+						</thead>
+						<tbody>
+							<tr>
+								<td id="homeBot">
+									<p><a href="index.html"><img src="http://i.imgur.com/MsLcE8S.png"/></a></p>
+								</td>
+								<td id="homeWord">
+									<p><a href="index.html">Home</a></p>
+								</td>
+								<td>
+									<p><a href="Contact.html">Contact Us</a></p>
+								</td>
+								<td>
+									<p><a href="Sponsoring.html">Sponsoring</a></p>
+								</td>
+								<td>
+									<p><a href="About_Parts.html">About PARTs</a></p>
+								</td>
+								<td>
+									<p><a href="Media.html">Media</a></p>
+								</td>
+								<td>
+									<p><a href="TeamResources.html">For Members</a></p>
+								</td>
+								<td>
+									<p><a href="Calendar.html">Calendar</a></p>
+								</td>
+								<td>
+									<p><a href="FirstAndGame.html">About First & The Game</a></p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 		<div id="wrapper">
 			<div id="header">
 				<img src="http://i.imgur.com/gQs4W4o.jpg"/>

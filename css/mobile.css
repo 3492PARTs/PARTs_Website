@@ -53,10 +53,11 @@ table {
 	background-color:#2E3094;
 	width:100%;
 }
-.nav_bar td:nth-child(2), td:nth-child(3), 
-td:nth-child(4), td:nth-child(5), 
-td:nth-child(6), td:nth-child(7){
+.nav_bar td{
 	border-bottom:1px solid #FF6A00;
+}
+.nav_bar td:nth-child(9){
+	border-bottom:0px;
 }
 .nav_bar img{
 	width:20%;
@@ -79,14 +80,52 @@ td:nth-child(6), td:nth-child(7){
 .nav_bar td{
 	display:block;
 }
-
-/*footer
-.footer{
-	background-color:#1F1F1F;
+/*Ham Menu*/
+.accordion{
+	width: 100%;
+}
+.accordion label{
+	padding: 5px 20px;
+	position: relative;
+	display: block;
+	height: 8em;
+	cursor: pointer;
+	background: #2E3094;
+}
+.accordion input{
+	display: none;
+}
+.accordion .article{
+	overflow: hidden;
+	height: 0px;
+}
+.accordion input:checked ~ .article.ac-small{
+	height: 100%;
+}
+.accordion input:checked ~ .article.ac-medium{
+	height: 100%;
+}
+.accordion input:checked ~ .article.ac-large{
+	height: 100%;
+}
+#mobile_nav{
 	width:100%;
-	height:200px;
-	position:relative;
-}*/
+	height:8em;
+}
+#mobile_nav td{
+	border-bottom:0px;
+}
+#bot{
+	height:30%;
+}
+#ham{
+	height:10%;
+	float:right;
+}
+#homeBot{
+	display:none;
+}
+
 .footer_accent{
 	position:absolute;
 	background-color:#333333;

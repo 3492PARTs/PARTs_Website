@@ -74,6 +74,9 @@ table {
 .nav_bar a:hover{
 	color:#FF6A00;
 }
+#mobile_nav, #homeWord, #ac-1{
+	display:none;
+}
 
 /*footer
 .footer{
