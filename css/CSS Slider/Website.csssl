@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualLightBox>
+    <Gallery version="2.5">
+        <Settings>
+            <AppName>cssSlider</AppName>
+            <AppUrlS>cssSlider.com</AppUrlS>
+            <AppVersion>2.1</AppVersion>
+            <AutoPlay>true</AutoPlay>
+            <Captions>false</Captions>
+            <CaptionsEffect>slide</CaptionsEffect>
+            <Controls>true</Controls>
+            <GalleryDesc></GalleryDesc>
+            <GalleryKeywords></GalleryKeywords>
+            <GalleryName>Website</GalleryName>
+            <GallerySuffix>1</GallerySuffix>
+            <GalleryTitle></GalleryTitle>
+            <HtmlCharset>UTF-8</HtmlCharset>
+            <ImageAspectRatio>true</ImageAspectRatio>
+            <ImageEffect>slide</ImageEffect>
+            <ImageFillColor>#FFFFFF</ImageFillColor>
+            <ImageHeight>900</ImageHeight>
+            <ImageQuality>90</ImageQuality>
+            <ImageShrink2>false</ImageShrink2>
+            <ImageStretch>true</ImageStretch>
+            <ImageTemplate>:/templates/backgnd/basic/</ImageTemplate>
+            <ImageTemplateName>Basic</ImageTemplateName>
+            <ImageWidth>2048</ImageWidth>
+            <Images>true</Images>
+            <JoomlaType>2.5</JoomlaType>
+            <OneLoop>false</OneLoop>
+            <PlayPause>true</PlayPause>
+            <PublishFileName>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/cssslider.html</PublishFileName>
+            <PublishIndex>cssslider.html</PublishIndex>
+            <PublishPath>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider</PublishPath>
+            <PublishPreview>true</PublishPreview>
+            <PublishType>file</PublishType>
+            <RelativePath>false</RelativePath>
+            <ShowBullets>true</ShowBullets>
+            <ShowTooltips>false</ShowTooltips>
+            <SlideshowDelay>60</SlideshowDelay>
+            <SlideshowDuration>20</SlideshowDuration>
+            <SoundEnable>false</SoundEnable>
+            <SoundFileName></SoundFileName>
+            <StopOnHover>false</StopOnHover>
+            <TemplateFont>Roboto</TemplateFont>
+            <TemplateName>basic</TemplateName>
+            <ThumbHeight>48</ThumbHeight>
+            <ThumbQuality>90</ThumbQuality>
+            <ThumbWidth>0</ThumbWidth>
+            <Thumbnails>false</Thumbnails>
+            <TooltipPos>bottom</TooltipPos>
+            <WatermarkAlign>66</WatermarkAlign>
+            <WatermarkBgColor>#ffffff</WatermarkBgColor>
+            <WatermarkColor>#514242</WatermarkColor>
+            <WatermarkHaveBgColor>true</WatermarkHaveBgColor>
+            <WatermarkImage></WatermarkImage>
+            <WatermarkOpacity>80</WatermarkOpacity>
+            <WatermarkText>cssSlider.com</WatermarkText>
+            <WatermarkType>1</WatermarkType>
+            <color>#808080</color>
+            <descriptionPos>bottomLeft</descriptionPos>
+            <enableTouch>false</enableTouch>
+            <fullWidth>0</fullWidth>
+            <ieSupport>false</ieSupport>
+            <noFrame>false</noFrame>
+            <showHover>true</showHover>
+        </Settings>
+        <Images RelativePath="false">
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/Beaniebot4K.png</url>
+                <title>Beaniebot4K</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/RegionalWinner.jpg</url>
+                <title>RegionalWinner</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/Driving.JPG</url>
+                <title>Driving</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/TNBT.png</url>
+                <title>TNBT</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/BigWin.JPG</url>
+                <title>BigWin</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/WV Cheer.JPG</url>
+                <title>WV Cheer</title>
+            </Image>
+            <Image>
+                <url>C:/Users/Brandon/Documents/GitHub/PARTs_Website/css/CSS Slider/IMG/Worlds.jpg</url>
+                <title>Worlds</title>
+            </Image>
+        </Images>
+    </Gallery>
+</VisualLightBox>
