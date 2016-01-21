@@ -199,6 +199,9 @@ body {
 #aboutParts h1, h2, p{
 	text-align:center;
 }
+#upArrow{
+	display:none;
+}
 
 /***********************************END ABOUT**************************/
 
