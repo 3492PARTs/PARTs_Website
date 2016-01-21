@@ -198,9 +198,10 @@ body {
 	text-align:center;
 }
 #social img{
-	width:2.2em;
+	width:2.5em;
 	padding:.2em;
 	display:inline-block;
+	margin-bottom:1em;
 }
 #home_media{
 	margin-left: auto;
@@ -287,8 +288,8 @@ body {
 	bottom:0;
 }
 #upArrow img{
-	width:3em;
-	margin:.5em;
+	width:4em;
+	margin:.4em;
 }
 
 /***********************************END ABOUT**************************/
