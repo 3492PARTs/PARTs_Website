@@ -100,13 +100,13 @@ table {
 	height: 0px;
 }
 .accordion input:checked ~ .article.ac-small{
-	height: 41em;
+	height: 40em;
 }
 .accordion input:checked ~ .article.ac-medium{
-	height: 41em;
+	height: 40em;
 }
 .accordion input:checked ~ .article.ac-large{
-	height: 41em;
+	height: 40em;
 }
 
 .accordion input:checked ~ .article{
@@ -132,10 +132,10 @@ table {
 	border-bottom:0px;
 }
 #bot{
-	height:30%;
+	height: 5.5em;
 }
 #ham{
-	height:10%;
+	height:1.6em;
 	float:right;
 }
 #homeBot{
