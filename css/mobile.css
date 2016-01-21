@@ -274,12 +274,11 @@ body {
 	font-size:1.6em;
 }
 #aboutParts p{
-	text-align:center;
-	font-size:1.4em;
+	text-align:left;
+	font-size:1.2em;
 }
-
-#awards{
-	list-style-type:none;
+#awards p{
+	text-align:left;
 }
 
 /***********************************END ABOUT**************************/
