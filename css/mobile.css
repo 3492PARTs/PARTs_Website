@@ -313,15 +313,21 @@ body {
 	position:relative;
 }
 #topMedia h1{
-	padding-left:1.9em;
+	text-align:center;
 }
 #leftArrow{
 	position:absolute;
+	z-index:1;
 	top:-1em;
 	left:0;
 }
 #leftArrow img{
 	width:4em;
+}
+#spacer{
+	width:4em;
+	height:4em;
+	float:left;
 }
 
 /***********************************END MEDIA**************************/
