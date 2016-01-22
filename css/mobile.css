@@ -301,7 +301,7 @@ body {
 }
 .albums img{
 	display:block;
-	width:50%;
+	width:60%;
 	margin-left: auto;
     margin-right: auto;
 	margin-top:10%;
@@ -328,6 +328,10 @@ body {
 	width:4em;
 	height:4em;
 	float:left;
+}
+#wallpaperSpacer{
+	width:100%;
+	height:.5em;
 }
 
 /***********************************END MEDIA**************************/
