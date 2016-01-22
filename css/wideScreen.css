@@ -138,16 +138,15 @@ body {
     margin-right: auto;
 	width:80%;
 }
-#home_media tr:first-child{
-	background-color:black;
-}
 #home_media p{
 	font-size:1.5em;
 }
+
 .videoWrapper {
 	position: relative;
 	padding-bottom: 56.25%; /* 16:9 */
 	padding-top: 25px;
+	margin:1em;
 	height: 0;
 }
 .videoWrapper iframe {

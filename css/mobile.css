@@ -211,9 +211,6 @@ body {
 #home_media p{
 	font-size:1.5em;
 }
-#home_media tr:first-child{
-	background-color:black;
-}
 #home_media td{
 	border-bottom:0px;
 }
@@ -221,6 +218,7 @@ body {
 	position: relative;
 	padding-bottom: 56.25%; /* 16:9 */
 	padding-top: 25px;
+	margin:.5em;
 	height: 0;
 }
 .videoWrapper iframe {
