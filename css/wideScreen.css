@@ -59,7 +59,6 @@ table {
 }
 .nav_bar p{
 	text-align:center;
-	padding:.5em;
 }
 .nav_bar a {
 	display:block;
@@ -211,16 +210,21 @@ body {
 	margin:10px;
 }
 
-/*competition*/
-#top{
+/*sub pictures*/
+#topMedia{
 	position:relative;
+	width:100%;
 }
-#arrow img{
+#topMedia h1{
+	text-align:center;
+}
+#leftArrow{
 	position:absolute;
-	width:5%;
-	float:left;
-	left:10px;
-	top:-25px;
+	top:-1em;
+	left:0;
+}
+#leftArrow img{
+	width:6em;
 }
 
 /***********************************END MEDIA**************************/
