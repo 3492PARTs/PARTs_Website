@@ -249,17 +249,48 @@ body {
 #videos td:nth-child(2){
 	padding-left:.5em;
 }
-.sponsors img{
-	width:100%;
+/*Sponsors*/
+.imgWrapper40 {
+	position: relative;
+	padding-bottom: 40%;
+	height: 0;
 }
-#homeDepot, #rcbi{
-	padding-left:.5em;
+.imgWrapper40 img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
-#toyota, #pctc, #putnamSchools{
+.imgWrapper32 {
+	position: relative;
+	padding-bottom: 32%;
+	height: 0;
+}
+.imgWrapper32 img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.imgWrapper100 {
+	position: relative;
+	padding-bottom: 100%;
+	height: 0;
+}
+.imgWrapper100 img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+#toyota, #putnam, #pctc, #aep{
 	padding-right:.5em;
 }
-#pctc img, #putnamSchools img, #toyota img, #rcbi img, #homeDepot img, #aep img{
-	vertical-align: bottom;
+#rcbi, #homeDepot{
+	padding-left:.5em;
 }
 
 
