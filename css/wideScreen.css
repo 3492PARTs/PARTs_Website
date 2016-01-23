@@ -74,13 +74,21 @@ table {
 	display:none;
 }
 
-.footer_accent{
-	position:absolute;
+#footer_accent{
 	background-color:#333333;
 	width:100%;
-	height:50px;
+	height:30%;
 }
-
+#footerArrow img{
+	width:4em;
+}
+#footerContent{
+	height:70%;
+}
+#footerContent td{
+	width:100%;
+}
+/*Keep footer at bottom*/
 html,
 body {
 	margin:0;
@@ -92,12 +100,12 @@ body {
 	position:relative;
 }
 #content {
-	padding-bottom:150px; /* Height of the footer element */
+	padding-bottom:12em; /* Height of the footer element */
 }
-.footer {
+#footer {
 	background:#1F1F1F;
 	width:100%;
-	height:150px;
+	height:12em;
 	position:absolute;
 	bottom:0;
 	left:0;
