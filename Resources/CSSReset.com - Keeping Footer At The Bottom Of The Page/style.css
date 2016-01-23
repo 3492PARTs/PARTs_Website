@@ -1,0 +1,280 @@
+/**
+ * CSSReset.com - How To Keep Footer At Bottom of Page with CSS
+ * 
+ * Original Tutorial: http://www.cssreset.com/2010/css-tutorials/how-to-keep-footer-at-bottom-of-page-with-css/
+ * License: Free - do whatever you like with it! Credit and linkbacks much appreciated.
+ *
+ * NB: Make sure the value for 'padding-bottom' on #content is equal to or greater than the height of #footer.
+ */
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+}
+#wrapper {
+	min-height:100%;
+	position:relative;
+}
+#header {
+	background:#ededed;
+	padding:10px;
+}
+#content {
+	padding-bottom:100px; /* Height of the footer element */
+}
+#footer {
+	background:#ffab62;
+	width:100%;
+	height:100px;
+	position:absolute;
+	bottom:0;
+	left:0;
+}
+
+/*CSS RESET*/
+html, body/*, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video*/ {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}*/
+/*Font*/
+*{
+	font-family: 'Arimo', sans-serif;
+	color:#808080;
+}
+
+/*nav bar*/
+.nav_bar{
+	background-color:#2E3094;
+	width:100%;
+	height:8em;
+}
+.nav_bar img{
+	width:5em;
+}
+.nav_bar img:hover{
+	opacity:.5;
+}
+.nav_bar p{
+	text-align:center;
+	padding:.5em;
+}
+.nav_bar a {
+	color:white;
+	text-decoration:none;	
+	text-transform: uppercase;
+	font-weight:bold;
+}
+.nav_bar a:hover{
+	color:#FF6A00;
+}
+
+/*footer*/
+.footer{
+	background-color:#1F1F1F;
+	width:100%;
+	height:200px;
+	position:relative;
+}
+.footer_accent{
+	position:absolute;
+	background-color:#333333;
+	width:100%;
+	height:50px;
+}
+/***********************************BEGIN HOMEPAGE**************************/
+
+/*header image*/
+#header img{
+	width:100%;
+}
+
+/*seperator*/
+#seperator{
+	width:100%;
+	height:2em;
+}
+
+/*main page*/
+#main_content{
+	margin-left: auto;
+    margin-right: auto;
+	width:80%;
+}
+#main_content p{
+	text-align:center;
+	font-size:1.5em;
+}
+#social{
+	text-align:center;
+}
+#social img{
+	width:2.5em;
+	margin:1em;
+	display:inline-block;
+}
+#social img:hover{
+	opacity:.5;
+}
+#home_media{
+	margin-left: auto;
+    margin-right: auto;
+	width:80%;
+}
+#home_media p{
+	font-size:1.5em;
+}
+#videos iframe{
+	width:90%;
+	height:15em;
+	margin:1em;
+}
+#sponsors{
+	text-align:center;
+}
+#sponsors img{
+	width:90%;	
+}
+
+
+/***********************************END HOMEPAGE**************************/
+
+/***********************************BEGIN CALENDAR**************************/
+/*calenar*/
+#calendar{
+	text-align:center;
+}
+
+/***********************************END CALENDAR**************************/
+
+/***********************************BEGIN ABOUT**************************/
+/*about*/
+.about table{
+	width:80%;
+	margin-left: auto;
+    margin-right: auto;
+}
+.about img{
+	width:50%;
+}
+.about h1{
+	text-align:center;
+}
+.about h2{
+	text-align:center;
+}
+.about p{
+	text-align:center;
+}
+#awards{
+	list-style-type:none;
+}
+
+/***********************************END ABOUT**************************/
+
+/***********************************BEGIN MEDIA**************************/
+/*album covers*/
+#media{
+	text-align:center;
+	height:100%;
+}
+.albums img{
+	display:inline-block;
+	width:20%;
+	margin:10px;
+}
+
+/*competition*/
+#top{
+	position:relative;
+}
+#arrow img{
+	position:absolute;
+	width:5%;
+	float:left;
+	left:10px;
+	top:-25px;
+}
+
+/***********************************END MEDIA**************************/
+
+/***********************************BEGIN ABOUT FIRST AND GAME**************************/
+/*tablet text*/
+#about_first p{
+	text-align:left;
+}
+#about_first h2{
+	text-align:left;
+}
+#about_first li{
+	text-align:left;
+}
+#about_first img:hover{
+	opacity:.5;
+}
+#about_first img{
+	width:80%;
+}
+
+/*images*/
+#first {
+	margin-bottom:25%;
+}
+#frc {
+	margin-top:25%;
+}
+
+/***********************************END ABOUT FIRST AND GAME**************************/
+
+/***********************************BEGIN SPONSORING**************************/
+/*LINK*/
+#main_sponsor{
+	margin-left: auto;
+    margin-right: auto;
+	width:80%;
+}
+#main_sponsor a{
+	font-weight:bold;
+}
+#main_sponsor a:hover{
+	color:#FF6A00;
+}
