@@ -305,6 +305,9 @@ body {
 }
 
 /*IMAGE SIZE*/
+#headerImg img{
+	width:100%;
+}
 #aboutParts img{
 	width:60%;
 }
