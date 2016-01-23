@@ -373,30 +373,24 @@ body {
 	text-align:center;
 }
 
-/*PREVIOUS PAGE ARROW*/
-#leftArrow{
-	position:absolute;
-	z-index:1;
-	top:-1em;
-	left:0;
+/*TEXT*/
+#topMedia h1{
+	text-align:center;
 }
+/*PREVIOUS PAGE ARROW*/
 #leftArrow img{
 	width:4em;
 }
-
-/*FIX FOR WORDS ON PREVIOUS PAGE ARROW*/
-#spacer{
+/*SPACER TO KEEP TEXT CENTERED*/
+#blockLR{
 	width:4em;
-	height:4em;
-	float:left;
 }
 
-/*FIX FOR OFF CENTER DOWNLOAD CIRCLES*/
-#wallpaperSpacer{
-	width:100%;
-	height:.5em;
+/*SPACER FOR HEIGHT ON MEDIA PAGE*/
+#mediaArrow img{
+	width:4em;
+	visibility:hidden;
 }
-
 /**********END ALL MEDIA PAGES**********/
 
 /**********BEGIN ABOUT FIRST AND GAME**********/

@@ -259,21 +259,28 @@ body {
 
 /*SUB ALBUMS*/
 #topMedia{
-	position:relative;
 	width:100%;
 }
 
-/*PREVIOUS PAGE ARROW*/
+/*TEXT*/
 #topMedia h1{
 	text-align:center;
 }
-#leftArrow{
-	position:absolute;
-	top:-1em;
-	left:0;
-}
+
+/*PREVIOUS PAGE ARROW*/
 #leftArrow img{
 	width:6em;
+}
+
+/*SPACER TO KEEP TEXT CENTERED*/
+#blockLR{
+	width:6em;
+}
+
+/*SPACER FOR HEIGHT ON MEDIA PAGE*/
+#mediaArrow img{
+	width:6em;
+	visibility:hidden;
 }
 
 /**********END ALL MEDIA PAGES**********/
