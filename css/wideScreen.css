@@ -125,6 +125,9 @@ body {
 	text-align:center;
 	font-size:1.5em;
 }
+#social img:hover {
+  -webkit-filter: grayscale(100%);
+}
 #social{
 	text-align:center;
 }
