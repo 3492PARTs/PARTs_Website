@@ -192,13 +192,13 @@ body {
 }
 #main_content p{
 	text-align:center;
-	font-size:1.5em;
+	font-size:1.2em;
 }
 #social{
 	text-align:center;
 }
 #social img{
-	width:2.5em;
+	width:2em;
 	padding:.2em;
 	display:inline-block;
 	margin-bottom:1em;
@@ -214,19 +214,37 @@ body {
 #home_media td{
 	border-bottom:0px;
 }
-.videoWrapper {
-	position: relative;
+.videoWrapper1 {
+	position:relative;
 	padding-bottom: 56.25%; /* 16:9 */
-	padding-top: 25px;
-	margin:.5em;
 	height: 0;
 }
-.videoWrapper iframe {
+.videoWrapper1 iframe {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+}
+.videoWrapper2 {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	height: 0;
+}
+.videoWrapper2 iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 96%;
+	top: 50%;
+	transform: translateY(-50%);
+}
+#videos td:first-child{
+	padding-right:.5em;
+}
+#videos td:nth-child(2){
+	padding-left:.5em;
 }
 #sponsors img{
 	width:100%;	
