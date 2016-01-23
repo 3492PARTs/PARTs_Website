@@ -1,17 +1,7 @@
+/**********BEGIN GLOBAKL CSS**********/
+
 /*CSS RESET*/
-html, body/*, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video*/ {
+html, body{
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -19,36 +9,14 @@ time, mark, audio, video*/ {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}*/
-/*Font*/
+
+/*FONT*/
 *{
 	font-family: 'Arimo', sans-serif;
 	color:#808080;
 }
 
-/*nav bar*/
+/*NAV BAR*/
 .nav_bar{
 	background-color:#2E3094;
 	width:100%;
@@ -70,10 +38,13 @@ table {
 .nav_bar a:hover{
 	color:#FF6A00;
 }
+
+/*MOBILE NAV*/
 #mobile_nav, #homeWord, #ac-1{
 	display:none;
 }
 
+/*FOOTER*/
 #footer_accent{
 	background-color:#333333;
 	width:100%;
@@ -88,7 +59,8 @@ table {
 #footerContent td{
 	width:100%;
 }
-/*Keep footer at bottom*/
+
+/*FOOTER> KEEP AT BOTTOM*/
 html,
 body {
 	margin:0;
@@ -110,29 +82,31 @@ body {
 	bottom:0;
 	left:0;
 }
-/***********************************BEGIN HOMEPAGE**************************/
 
-/*header image*/
-#header img{
-	width:100%;
-}
+/**********END GLOBAKL CSS**********/
 
-/*seperator*/
+/**********BEGIN HOME PAGE**********/
+
+/*SEPERATE SLIDESHOW FROM CONTENT*/
 #seperator{
 	width:100%;
 	height:2em;
 }
 
-/*main page*/
+/*PAGE SIZE*/
 #main_content{
 	margin-left: auto;
     margin-right: auto;
 	width:70%;
 }
+
+/*TEXT*/
 #main_content p{
 	text-align:center;
 	font-size:1.5em;
 }
+
+/*SOCIAL IMAGES*/
 #social img:hover {
   -webkit-filter: grayscale(100%);
 }
@@ -144,34 +118,28 @@ body {
 	margin:1em;
 	display:inline-block;
 }
-#home_media{
+
+/*VIDEOS AND SPONSORS SIZE*/
+#homeMedia{
 	margin-left: auto;
     margin-right: auto;
 	width:70%;
 }
-#home_media p{
+
+/*TEXT*/
+#homeMedia p{
 	font-size:1.5em;
 	padding-top:1em;
 	padding-bottom:1em;
 }
-.videoWrapper1 {
+
+/*FLUID VIDEOS*/
+.videoWrapper {
 	position:relative;
-	padding-bottom: 56.25%; /* 16:9 */
+	padding-bottom: 56.25%; /* 16:9 RATIO*/
 	height: 0;
 }
-.videoWrapper1 iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
-.videoWrapper2 {
-	position: relative;
-	padding-bottom: 56.25%; /* 16:9 */
-	height: 0;
-}
-.videoWrapper2 iframe {
+.videoWrapper iframe {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -184,7 +152,8 @@ body {
 #videos td:nth-child(2){
 	padding-left:1em;
 }
-/*Sponsors*/
+
+/*FLUID SPONSORS*/
 .imgWrapper40 {
 	position: relative;
 	padding-bottom: 40%;/*to find % aspect ratio, (height/width)100*/
@@ -228,10 +197,11 @@ body {
 	padding-left:1em;
 }
 
-/***********************************END HOMEPAGE**************************/
+/**********END HOME PAGE**********/
 
-/***********************************BEGIN CALENDAR**************************/
-/*calenar*/
+/**********BEGIN CALENDAR**********/
+
+/*FLUID CALENDAR*/
 #calendar{
 	width:100%;
 	height:100%;
@@ -243,29 +213,37 @@ body {
 	margin:2em auto 2em auto;
 }
 
-/***********************************END CALENDAR**************************/
+/**********END CALENDAR**********/
 
-/***********************************BEGIN ABOUT**************************/
-/*about*/
+/**********BEGIN ABOUT TEAM**********/
+
+/*PAGE SIZE*/
 #aboutParts table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
+
+/*IMAGE SIZE*/
 #aboutParts img{
 	width:60%;
 }
+
+/*TEXT*/
 #aboutParts h1, h2, p{
 	text-align:center;
 }
+
+/*FLOATING RETURN ARROW*/
 #upArrow{
 	display:none;
 }
 
-/***********************************END ABOUT**************************/
+/**********END ABOUT TEAM**********/
 
-/***********************************BEGIN MEDIA**************************/
-/*album covers*/
+/**********BEGIN ALL MEDIA PAGES**********/
+
+/*ALBUM COVERS*/
 #media{
 	text-align:center;
 	height:100%;
@@ -276,11 +254,13 @@ body {
 	margin:10px;
 }
 
-/*sub pictures*/
+/*SUB ALBUMS*/
 #topMedia{
 	position:relative;
 	width:100%;
 }
+
+/*PREVIOUS PAGE ARROW*/
 #topMedia h1{
 	text-align:center;
 }
@@ -293,25 +273,26 @@ body {
 	width:6em;
 }
 
-/***********************************END MEDIA**************************/
+/**********END ALL MEDIA PAGES**********/
 
-/***********************************BEGIN ABOUT FIRST AND GAME**************************/
-/*tablet text*/
+/**********BEGIN ABOUT FIRST AND GAME**********/
+
+/*TABLE SIZE*/
 #aboutFirst table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
+
+/*TABLE TEXT*/
 #aboutFirst thead h1{
 	text-align:center;
 }
 #aboutFirst h1, h2, p{
 	text-align:left;
 }
-/*images*/
-#first img:hover{
-	-webkit-filter: grayscale(100%) sepia(0%);
-}
+
+/*LOGOS*/
 #first {
 	width:80%;
 	margin-bottom:25%;
@@ -324,15 +305,17 @@ body {
 	width:80%;
 }
 
-/***********************************END ABOUT FIRST AND GAME**************************/
+/**********END ABOUT FIRST AND GAME**********/
 
-/***********************************BEGIN SPONSORING**************************/
-/*LINK*/
+/**********BEGIN SPONSORING**********/
+
+/*PAGE SIZE*/
 #mainSponsor{
 	margin-left: auto;
     margin-right: auto;
 	width:80%;
 }
+/*TEXT*/
 #mainSponsor a{
 	font-weight:bold;
 }
@@ -340,15 +323,18 @@ body {
 	color:#FF6A00;
 }
 
-/***********************************ENG SPONSORING**************************/
+/**********END SPONSORING**********/
 
-/***********************************BEGIN TEAM RESOURCES**************************/
-/*tablet text*/
+/**********BEGIN TEAM RESOURCES**********/
+
+/*TABLE SIZE*/
 #aboutResources table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
+
+/*TABLE TEXT*/
 #aboutResources thead h1{
 	text-align:center;
 }
@@ -358,17 +344,23 @@ body {
 #aboutResources a p{
 	text-align:center;
 }
-/***********************************END TEAM RESOURCES**************************/
 
-/***********************************BEGIN CONTACT**************************/
+/**********END TEAM RESOURCES**********/
+
+/**********BEGIN CONTACT US**********/
+
+/*PAGE SIZE*/
 #contact{
 	width:80%;
 	margin:auto;
 	text-align:center;
 }
+/*TEXT*/
 #contact h2{
 	text-align:center;
 }
+
+/*FLUID MAP*/
 #map{
 	width:100%;
 	height:100%;
@@ -379,4 +371,5 @@ body {
 	height:30em;
 	margin:2em auto 2em auto;
 }
-/***********************************END CONTACT**************************/
+
+/**********END CONTACT US**********/
