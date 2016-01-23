@@ -140,6 +140,8 @@ body {
 }
 #home_media p{
 	font-size:1.5em;
+	padding-top:1em;
+	padding-bottom:1em;
 }
 .videoWrapper1 {
 	position:relative;
@@ -173,9 +175,7 @@ body {
 }
 .sponsors img{
 	width:100%;
-}
-.sponsors{
-	background-color:magenta;
+	height:100%;
 }
 #homeDepot, #rcbi{
 	padding-left:1em;
