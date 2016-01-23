@@ -83,6 +83,7 @@ table {
 /*Ham Menu*/
 .accordion{
 	width: 100%;
+	background-color:#2E3094;
 }
 .accordion label{
 	padding: 5px 20px;
