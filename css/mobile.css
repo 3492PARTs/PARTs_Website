@@ -365,22 +365,21 @@ body {
 	margin-bottom:10%;
 }
 
-/*SUB ALBUMS*/
+/*TABLE SIZE*/
 #topMedia{
-	position:relative;
-}
-#topMedia h1{
-	text-align:center;
+	width:100%;
 }
 
 /*TEXT*/
 #topMedia h1{
 	text-align:center;
 }
+
 /*PREVIOUS PAGE ARROW*/
 #leftArrow img{
 	width:4em;
 }
+
 /*SPACER TO KEEP TEXT CENTERED*/
 #blockLR{
 	width:4em;
