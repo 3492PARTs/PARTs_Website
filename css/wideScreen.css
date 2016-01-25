@@ -1,4 +1,9 @@
 /**********BEGIN GLOBAKL CSS**********/
+/*FONT IMPORT*/
+@font-face {
+    font-family: roboto-regular;
+    src: url(roboto-regular.ttf);
+}
 
 /*CSS RESET*/
 html, body{
@@ -12,8 +17,8 @@ html, body{
 
 /*FONT*/
 *{
-	font-family: 'Arimo', sans-serif;
-	color:#808080;
+	font-family: 'roboto-regular';
+	color:#5B5B5B;
 }
 
 /*NAV BAR*/
@@ -29,6 +34,7 @@ html, body{
 	text-align:center;
 }
 .nav_bar a {
+	letter-spacing:.1em;
 	display:block;
 	color:white;
 	text-decoration:none;	

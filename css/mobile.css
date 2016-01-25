@@ -1,4 +1,9 @@
 /**********BEGIN GLOBAKL CSS**********/
+/*FONT IMPORT*/
+@font-face {
+    font-family: Roboto-Light;
+    src: url(roboto-light.ttf);
+}
 
 /*CSS RESET*/
 html, body {
@@ -12,8 +17,8 @@ html, body {
 
 /*FONT*/
 *{
-	font-family: 'Arimo', sans-serif;
-	color:#808080;
+	font-family: 'Roboto-Light';
+	color:#5B5B5B;
 }
 
 /*NAV BAR*/
