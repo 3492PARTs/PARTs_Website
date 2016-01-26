@@ -1,12 +1,12 @@
 /**********BEGIN GLOBAKL CSS**********/
 /*FONT IMPORT*/
 @font-face {
-    font-family: Roboto-Light;
-    src: url(roboto-light.ttf);
+    font-family: roboto-regular;
+    src: url(roboto-regular.ttf);
 }
 
 /*CSS RESET*/
-html, body {
+html, body{
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -17,7 +17,7 @@ html, body {
 
 /*FONT*/
 *{
-	font-family: 'Roboto-Light';
+	font-family: 'roboto-regular';
 	color:#5B5B5B;
 }
 
@@ -75,13 +75,13 @@ html, body {
 	height: 0px;
 }
 .accordion input:checked ~ .article.ac-small{
-	height: 40em;
+	height: 40.5em;
 }
 .accordion input:checked ~ .article.ac-medium{
-	height: 40em;
+	height: 40.5em;
 }
 .accordion input:checked ~ .article.ac-large{
-	height: 40em;
+	height: 40.5em;
 }
 .accordion input:checked ~ .article{
 	-webkit-transition: all 0.5s ease-in-out;
@@ -309,12 +309,17 @@ body {
 	display:block;
 }
 
-/*IMAGE SIZE*/
+/*HEADER IMAGE SIZE*/
 #headerImg img{
 	width:100%;
 }
+
+/*TABLE IMAGES*/
 #aboutParts img{
 	width:60%;
+}
+#aboutParts td{
+	text-align:center;
 }
 
 /*TEXT*/
@@ -427,6 +432,11 @@ body {
 #aboutFirst ul li p{
 	text-align:left;
 	font-size:1.4em;
+}
+
+/*IMAGE ALIGNMENT*/
+#aboutFirst td{
+	text-align:center;
 }
 
 /*LOGOS*/

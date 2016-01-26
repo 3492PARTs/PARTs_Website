@@ -94,7 +94,7 @@ body {
 /**********BEGIN HOME PAGE**********/
 
 /*SEPERATE SLIDESHOW FROM CONTENT*/
-#seperator{
+.seperator{
 	width:100%;
 	height:2em;
 }
@@ -230,16 +230,16 @@ body {
     margin-right: auto;
 }
 
-/*IMAGE SIZE*/
+/*HEADER IMAGE SIZE*/
 #headerImg img{
 	width:100%;
 }
+
+/*TABLE IMAGES*/
 #aboutParts img{
 	width:60%;
 }
-
-/*TEXT*/
-#aboutParts h1, h2, p{
+#aboutParts td{
 	text-align:center;
 }
 
@@ -308,6 +308,11 @@ body {
 	text-align:left;
 }
 
+/*IMAGE ALIGNMENT*/
+#aboutFirst td{
+	text-align:center;
+}
+
 /*LOGOS*/
 #first {
 	width:80%;
@@ -357,7 +362,7 @@ body {
 #aboutResources h1, h2, p{
 	text-align:left;
 }
-#aboutResources a p{
+.rightLinks p{
 	text-align:center;
 }
 
