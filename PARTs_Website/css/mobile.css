@@ -378,10 +378,7 @@ body {
 .albums img{
 	display:block;
 	width:60%;
-	margin-left: auto;
-    margin-right: auto;
-	margin-top:10%;
-	margin-bottom:10%;
+	padding:.5em;
 }
 
 /*TABLE SIZE*/
@@ -408,6 +405,63 @@ body {
 #mediaArrow img{
 	width:4em;
 	visibility:hidden;
+}
+
+/*WALLPAPER SIZE*/
+.wallpapers img{
+	display:inline-block;
+	width:100%;
+	margin:auto;
+}
+
+/*WALLPAPER DOWNLOAD DROPDOWN*/
+.wallpaperAccordion{
+	width:60%;
+	display:block;
+	margin:auto;
+	padding:.5em;
+}
+.wallpaperAccordion a{
+	text-decoration:none;
+}
+.wallpaperAccordion input{
+	display: none;
+}
+.wallpaperAccordion .article{
+	overflow: hidden;
+	height: 0px;
+}
+
+/*DROP DOWN STYLING*/
+.wallpaperAccordion input:checked ~ .article.ac-small{
+	height: 15em;
+}
+.article.ac-small table{
+	width:100%;
+}
+.article.ac-small h2{
+	text-align:center;
+}
+.wallpapers .article.ac-small .downloadLine{
+	border-bottom:1px solid #808080;
+}
+
+
+
+/*DROP DOWN ACTION*/
+.wallpaperAccordion input:checked ~ .article{
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.wallpaperAccordion .article{
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
 }
 /**********END ALL MEDIA PAGES**********/
 
