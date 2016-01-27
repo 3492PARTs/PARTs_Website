@@ -128,7 +128,16 @@ html, body{
 	height:70%;
 }
 #footerContent td{
+	text-align:center;
+}
+#footerContent h2{
+	text-align:center;
+}
+#footerContent{
 	width:100%;
+}
+.footerSpacer{
+	width:4em;
 }
 
 /*FOOTER> KEEP AT BOTTOM*/
@@ -143,7 +152,7 @@ body {
 	position:relative;
 }
 #content {
-	padding-bottom:12em; /* Height of the footer element */
+	padding-bottom:13em; /* Height of the footer element */
 }
 #footer {
 	background:#1F1F1F;
@@ -185,7 +194,7 @@ body {
 	text-align:center;
 }
 #social img{
-	width:2em;
+	width:3em;
 	padding:.2em;
 	display:inline-block;
 	margin-bottom:1em;
