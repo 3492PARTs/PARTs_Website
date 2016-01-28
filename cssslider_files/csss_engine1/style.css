@@ -15,8 +15,8 @@
 .csslider1 {
   display: inline-block;
   position: relative;
-  max-width: 2048px;
   
+  height: 900px;
   
 
   width: 100%;
@@ -39,7 +39,7 @@
   line-height: 0;
   margin: 0 auto;
   padding: 0;
-  
+  height: 900px;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -247,6 +247,34 @@
   max-width: none;
 }
 /* ------------- /General Bullets ------------- */
+
+/* ------------- General Description ------------- */
+.csslider1 > .cs_description {
+  z-index: 3;
+}
+.csslider1 > .cs_description a,
+.csslider1 > .cs_description a:visited,
+.csslider1 > .cs_description a:active {
+  color: inherit;
+}
+.csslider1 > .cs_description a:hover {
+  text-decoration: none;
+}
+.csslider1 > .cs_description > label {
+  position: absolute;
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: left;
+  max-width: 50%;
+  left: 0;
+}
+.csslider1 > .cs_description > label > span {
+  vertical-align: top;
+}
+.csslider1 > .cs_description > label span {
+  display: inline-block;
+}
+/* ------------- /General Description ------------- */
 
 /* ------------- General Play Pause ------------- */
 .csslider1 > .cs_play_pause {
@@ -789,6 +817,444 @@ _:-ms-input-placeholder, :root .csslider1 > .cs_play_pause > label span:after {
 
 
 /* ------------- Template /Bullets ------------- */
+
+/* ------------- Template Description ------------- */
+
+
+.csslider1 > .cs_description > label {
+  font-family: "Roboto",sans-serif;
+  font-size: 20px;
+  line-height: normal;
+  bottom: 50px;
+  top: auto;
+  left: 10px;
+}
+
+.csslider1 > .cs_description > label > span {
+  color: #3A4A5A;
+  position: relative;
+  padding: 13px;
+  border-radius: 10px;
+
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+
+
+.csslider1 > #cs_slide1_0:checked ~ .cs_description > .num0 > .cs_title,
+.csslider1 > #cs_slide1_0:checked ~ .cs_description > .num0 > .cs_descr,
+.csslider1 > #cs_pause1_0:checked ~ .cs_description > .num0 > .cs_title,
+.csslider1 > #cs_pause1_0:checked ~ .cs_description > .num0 > .cs_descr,
+.csslider1 > #cs_slide1_1:checked ~ .cs_description > .num1 > .cs_title,
+.csslider1 > #cs_slide1_1:checked ~ .cs_description > .num1 > .cs_descr,
+.csslider1 > #cs_pause1_1:checked ~ .cs_description > .num1 > .cs_title,
+.csslider1 > #cs_pause1_1:checked ~ .cs_description > .num1 > .cs_descr,
+.csslider1 > #cs_slide1_2:checked ~ .cs_description > .num2 > .cs_title,
+.csslider1 > #cs_slide1_2:checked ~ .cs_description > .num2 > .cs_descr,
+.csslider1 > #cs_pause1_2:checked ~ .cs_description > .num2 > .cs_title,
+.csslider1 > #cs_pause1_2:checked ~ .cs_description > .num2 > .cs_descr,
+.csslider1 > #cs_slide1_3:checked ~ .cs_description > .num3 > .cs_title,
+.csslider1 > #cs_slide1_3:checked ~ .cs_description > .num3 > .cs_descr,
+.csslider1 > #cs_pause1_3:checked ~ .cs_description > .num3 > .cs_title,
+.csslider1 > #cs_pause1_3:checked ~ .cs_description > .num3 > .cs_descr,
+.csslider1 > #cs_slide1_4:checked ~ .cs_description > .num4 > .cs_title,
+.csslider1 > #cs_slide1_4:checked ~ .cs_description > .num4 > .cs_descr,
+.csslider1 > #cs_pause1_4:checked ~ .cs_description > .num4 > .cs_title,
+.csslider1 > #cs_pause1_4:checked ~ .cs_description > .num4 > .cs_descr,
+.csslider1 > #cs_slide1_5:checked ~ .cs_description > .num5 > .cs_title,
+.csslider1 > #cs_slide1_5:checked ~ .cs_description > .num5 > .cs_descr,
+.csslider1 > #cs_pause1_5:checked ~ .cs_description > .num5 > .cs_title,
+.csslider1 > #cs_pause1_5:checked ~ .cs_description > .num5 > .cs_descr {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+
+
+.csslider1 > #cs_slide1_0:checked ~ .cs_description > .num0 .cs_wrapper,
+.csslider1 > #cs_pause1_0:checked ~ .cs_description > .num0 .cs_wrapper,
+.csslider1 > #cs_slide1_1:checked ~ .cs_description > .num1 .cs_wrapper,
+.csslider1 > #cs_pause1_1:checked ~ .cs_description > .num1 .cs_wrapper,
+.csslider1 > #cs_slide1_2:checked ~ .cs_description > .num2 .cs_wrapper,
+.csslider1 > #cs_pause1_2:checked ~ .cs_description > .num2 .cs_wrapper,
+.csslider1 > #cs_slide1_3:checked ~ .cs_description > .num3 .cs_wrapper,
+.csslider1 > #cs_pause1_3:checked ~ .cs_description > .num3 .cs_wrapper,
+.csslider1 > #cs_slide1_4:checked ~ .cs_description > .num4 .cs_wrapper,
+.csslider1 > #cs_pause1_4:checked ~ .cs_description > .num4 .cs_wrapper,
+.csslider1 > #cs_slide1_5:checked ~ .cs_description > .num5 .cs_wrapper,
+.csslider1 > #cs_pause1_5:checked ~ .cs_description > .num5 .cs_wrapper {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+.csslider1 > .cs_description > label > .cs_title {
+  background-color: #808080;
+  margin: -5px 10px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 2;
+  -webkit-transform: translateY(-100px);
+  transform: translateY(-100px);
+
+  -webkit-transition:
+    950ms opacity 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms visibility 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+  transition:
+    950ms opacity 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms transform 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms visibility 600ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+.csslider1 > .cs_description > label > .cs_descr {
+  background-color: #c0c0c0;
+  text-align: left;
+  font-size: 0.8em;
+  margin: -5px 20px;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 1;
+  -webkit-transform: translateY(100px);
+  transform: translateY(100px);
+
+  -webkit-transition:
+    950ms opacity 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms visibility 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+  transition:
+    950ms opacity 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms visibility 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+
+.csslider1 > .cs_description > label > .cs_title > .cs_wrapper {
+  opacity: 0;
+  -webkit-transform: translateY(-100px);
+  transform: translateY(-100px);
+
+  -webkit-transition:
+    950ms opacity 750ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 750ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+  transition:
+    950ms opacity 750ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 750ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms transform 750ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+.csslider1 > .cs_description > label > .cs_descr > .cs_wrapper {
+  opacity: 0;
+  -webkit-transform: translateY(100px);
+  transform: translateY(100px);
+
+  -webkit-transition:
+    950ms opacity 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+  transition:
+    950ms opacity 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms -webkit-transform 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550),
+    950ms transform 1000ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+
+
+
+@-webkit-keyframes cs_title1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    z-index: 2;
+    visibility: hidden;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+  17.66625%, 100%  { z-index: 0; }
+}
+@keyframes cs_title1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    z-index: 2;
+    visibility: hidden;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+  17.66625%, 100%  { z-index: 0; }
+}
+
+
+@-webkit-keyframes cs_descr1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+  }
+  17.66625%, 100%  { z-index: 0; }
+}
+@keyframes cs_descr1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    z-index: 1;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    z-index: 1;
+    visibility: hidden;
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+  }
+  17.66625%, 100%  { z-index: 0; }
+}
+
+
+.csslider1 > #cs_play1:checked ~ .cs_description > .num0  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite -1400ms ease;
+  animation: cs_title1 48000ms infinite -1400ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num1  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite 6600ms ease;
+  animation: cs_title1 48000ms infinite 6600ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num2  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite 14600ms ease;
+  animation: cs_title1 48000ms infinite 14600ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num3  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite 22600ms ease;
+  animation: cs_title1 48000ms infinite 22600ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num4  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite 30600ms ease;
+  animation: cs_title1 48000ms infinite 30600ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num5  > .cs_title {
+  -webkit-animation: cs_title1 48000ms infinite 38600ms ease;
+  animation: cs_title1 48000ms infinite 38600ms ease;
+}
+
+
+.csslider1 > #cs_play1:checked ~ .cs_description > .num0  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite -1150ms ease;
+  animation: cs_descr1 48000ms infinite -1150ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num1  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite 6850ms ease;
+  animation: cs_descr1 48000ms infinite 6850ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num2  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite 14850ms ease;
+  animation: cs_descr1 48000ms infinite 14850ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num3  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite 22850ms ease;
+  animation: cs_descr1 48000ms infinite 22850ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num4  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite 30850ms ease;
+  animation: cs_descr1 48000ms infinite 30850ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num5  > .cs_descr {
+  -webkit-animation: cs_descr1 48000ms infinite 38850ms ease;
+  animation: cs_descr1 48000ms infinite 38850ms ease;
+}
+
+
+
+
+@-webkit-keyframes cs_title_text1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+}
+@keyframes cs_title_text1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+}
+
+
+@-webkit-keyframes cs_descr_text1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+  }
+}
+@keyframes cs_descr_text1 {
+  0.6927083333333334%, 15.963958333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  0.9895833333333334%, 15.667083333333334%  {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625%  {
+    opacity: 0;
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+  }
+}
+
+
+.csslider1 > #cs_play1:checked ~ .cs_description > .num0 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite -1250ms ease;
+  animation: cs_title_text1 48000ms infinite -1250ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num1 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite 6750ms ease;
+  animation: cs_title_text1 48000ms infinite 6750ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num2 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite 14750ms ease;
+  animation: cs_title_text1 48000ms infinite 14750ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num3 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite 22750ms ease;
+  animation: cs_title_text1 48000ms infinite 22750ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num4 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite 30750ms ease;
+  animation: cs_title_text1 48000ms infinite 30750ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num5 .cs_title > .cs_wrapper {
+  -webkit-animation: cs_title_text1 48000ms infinite 38750ms ease;
+  animation: cs_title_text1 48000ms infinite 38750ms ease;
+}
+
+
+.csslider1 > #cs_play1:checked ~ .cs_description > .num0 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite -1000ms ease;
+  animation: cs_descr_text1 48000ms infinite -1000ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num1 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite 7000ms ease;
+  animation: cs_descr_text1 48000ms infinite 7000ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num2 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite 15000ms ease;
+  animation: cs_descr_text1 48000ms infinite 15000ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num3 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite 23000ms ease;
+  animation: cs_descr_text1 48000ms infinite 23000ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num4 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite 31000ms ease;
+  animation: cs_descr_text1 48000ms infinite 31000ms ease;
+}
+.csslider1 > #cs_play1:checked ~ .cs_description > .num5 .cs_descr > .cs_wrapper {
+  -webkit-animation: cs_descr_text1 48000ms infinite 39000ms ease;
+  animation: cs_descr_text1 48000ms infinite 39000ms ease;
+}
+
+
+
+
+.csslider1 > #cs_play1:checked ~ .cs_description > label > .cs_title,
+.csslider1 > #cs_play1:checked ~ .cs_description > label > .cs_descr,
+.csslider1 > #cs_play1:checked ~ .cs_description > label > .cs_title > .cs_wrapper,
+.csslider1 > #cs_play1:checked ~ .cs_description > label > .cs_descr > .cs_wrapper,
+.csslider1 > .pause:checked ~ .cs_description > label > .cs_title,
+.csslider1 > .pause:checked ~ .cs_description > label > .cs_descr,
+.csslider1 > .pause:checked ~ .cs_description > label > .cs_title > .cs_wrapper,
+.csslider1 > .pause:checked ~ .cs_description > label > .cs_descr > .cs_wrapper {
+  -webkit-transition: none;
+  transition: none;
+}
+
+/* ------------- /Template Description ------------- */
 /* hide description & bullets on mobile devices */
 @media
 only screen and (max-width: 480px),
@@ -801,5 +1267,12 @@ only screen and (                max-resolution: 2dppx)  and (max-width: 480px) 
   .csslider1 > .cs_description,
   .csslider1 > .cs_bullets {
     display: none;
+  }
+}
+
+@media only screen and (max-width: 2048px) {
+  .csslider1,
+  .csslider1 > ul {
+    height: auto;
   }
 }
