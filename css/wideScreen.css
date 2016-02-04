@@ -245,6 +245,9 @@ body {
 }
 
 /*TABLE IMAGES*/
+#aboutParts .bot{
+	width:40%;
+}
 #aboutParts img{
 	width:60%;
 }
