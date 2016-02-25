@@ -364,7 +364,9 @@ body {
 	-ms-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;
 }
-
+.yearAccordion .article.ac-small .yearLine{
+	border-bottom:1px solid #808080;
+}
 #yearHam{
 	float:right;
 	height:1.6em;
