@@ -233,15 +233,36 @@ body {
 /**********BEGIN ABOUT TEAM**********/
 
 /*PAGE SIZE*/
-#aboutParts table{
+#aboutParts table, #history{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
 
-/*HEADER IMAGE SIZE*/
-#headerImg img{
+/*JUMP TO YEAR*/
+.yearAccordion{
+	width:80%;
+	margin-left: auto;
+    margin-right: auto;
+}
+#yearJumpNav{
 	width:100%;
+}
+#yearJump, #ac-0{
+	display:none;
+}
+.yearJumpNav a {
+	display:block;
+	text-decoration:none;
+	font-weight:bold;
+}
+.yearJumpNav a:hover{
+	color:#2E3093;
+}
+
+/*TEXT*/
+#history h1{
+	text-align:center;
 }
 
 /*TABLE IMAGES*/

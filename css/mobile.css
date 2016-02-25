@@ -77,12 +77,6 @@ html, body{
 .accordion input:checked ~ .article.ac-small{
 	height: 40.5em;
 }
-.accordion input:checked ~ .article.ac-medium{
-	height: 40.5em;
-}
-.accordion input:checked ~ .article.ac-large{
-	height: 40.5em;
-}
 .accordion input:checked ~ .article{
 	-webkit-transition: all 0.5s ease-in-out;
 	-moz-transition: all 0.5s ease-in-out;
@@ -307,7 +301,7 @@ body {
 /**********BEGIN ABOUT TEAM**********/
 
 /*PAGE SIZE*/
-#aboutParts table{
+#aboutParts table, #history{
 	width:90%;
 	margin-left: auto;
     margin-right: auto;
@@ -318,9 +312,65 @@ body {
 	display:block;
 }
 
-/*HEADER IMAGE SIZE*/
-#headerImg img{
+/*JUMP TO YEAR DROPDOWN*/
+.yearAccordion{
+	width:90%;
+	margin-left: auto;
+    margin-right: auto;
+}
+#yearJump{
 	width:100%;
+}
+.yearJumpNav td{
+	display:block;
+}
+.yearJumpNav a:hover{
+	color:#2E3093;
+}
+.yearAccordion a{
+	text-decoration:none;
+}
+.yearAccordion input{
+	display: none;
+}
+.yearAccordion .article{
+	overflow: hidden;
+	height: 0px;
+}
+
+/*DROP DOWN STYLING*/
+.yearAccordion input:checked ~ .article.ac-small{
+	height: 28em;
+}
+.article.ac-small table{
+	width:100%;
+}
+.wallpapers .article.ac-small .yearLine{
+	border-bottom:1px solid #808080;
+}
+
+/*DROP DOWN ACTION*/
+.yearAccordion input:checked ~ .article{
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.yearAccordion .article{
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+
+#yearHam{
+	float:right;
+	height:1.6em;
+}
+#homeBot{
+	display:none;
 }
 
 /*TABLE IMAGES*/
@@ -335,7 +385,7 @@ body {
 }
 
 /*TEXT*/
-#aboutParts thead h1{
+#history h1{
 	text-align:center;
 	font-size:2em;
 }
