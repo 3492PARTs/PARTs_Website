@@ -37,8 +37,7 @@ html, body{
 	letter-spacing:.1em;
 	display:block;
 	color:white;
-	text-decoration:none;	
-	text-transform: uppercase;
+	text-decoration:none;
 	font-weight:bold;
 }
 .nav_bar a:hover{
