@@ -367,9 +367,9 @@ body {
 .yearAccordion .article.ac-small .yearLine{
 	border-bottom:1px solid #808080;
 }
-#yearHam{
+#yearDown{
 	float:right;
-	height:1.6em;
+	height:2.6em;
 }
 #homeBot{
 	display:none;
