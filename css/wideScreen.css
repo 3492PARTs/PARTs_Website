@@ -56,22 +56,46 @@ html, body{
 	height:30%;
 }
 #footerArrow img{
-	width:4em;
+	height:100%;
+	float:right;
 }
 #footerContent{
 	height:70%;
-}
-#footerContent td{
-	text-align:center;
-}
-#footerContent h2{
-	text-align:center;
-}
-#footerContent{
 	width:100%;
 }
-.footerSpacer{
-	width:4em;
+#connect{
+	height:20%;
+}
+#connect h2{
+	text-align:center;
+	padding:.1em;
+	margin:.1em;
+}
+#connectSocial{
+	height:80%;
+	width:80%;
+	margin:auto;
+	text-align: justify;
+	
+}
+#connectSocial img {
+	display: inline-block;
+	vertical-align: top;
+
+	/* IE fix. */
+	*display: inline;
+	zoom: 1;
+}
+#connectSocial:after {
+	content: "";
+	width: 100%;
+	display: inline-block;
+    }
+#connectSocial img{
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	height:80%;
 }
 
 /*FOOTER> KEEP AT BOTTOM*/
