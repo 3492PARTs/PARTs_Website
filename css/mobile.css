@@ -436,11 +436,6 @@ body {
 	width:4em;
 	margin:.4em;
 }
-
-/*FOOTER ARROW*/
-#footerAboutArrow{
-	visibility:hidden;
-}
 .specialAbout{
 	z-index:999;
 }
