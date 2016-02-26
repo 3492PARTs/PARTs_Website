@@ -654,6 +654,11 @@ body {
 #aboutResources p{
 	text-align:center;
 	font-size:1.4em;
+	
+}
+.rightLinks p{
+	text-align:center;
+	font-weight:bold;
 }
 
 /**********END TEAM RESOURCES**********/

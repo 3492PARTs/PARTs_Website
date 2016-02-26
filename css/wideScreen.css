@@ -476,6 +476,8 @@ body {
 }
 .rightLinks p{
 	text-align:center;
+	font-size:1.2em;
+	font-weight:bold;
 }
 
 /**********END TEAM RESOURCES**********/
