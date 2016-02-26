@@ -149,12 +149,25 @@ body {
   -webkit-filter: grayscale(100%);
 }
 #social{
-	text-align:center;
+	width:50%;
+	margin:auto;
+	height:3em;
+	padding-bottom:1em;
+	text-align:justify;
 }
 #social img{
-	width:3em;
-	margin:1em;
+	height:100%;
 	display:inline-block;
+	vertical-align: top;
+
+	/* IE fix. */
+	*display: inline;
+	zoom: 1;
+}
+#social:after {
+	content: "";
+	width: 100%;
+	display: inline-block;
 }
 
 /*VIDEOS AND SPONSORS SIZE*/
