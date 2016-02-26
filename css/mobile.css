@@ -123,15 +123,15 @@ html, body{
 	width:100%;
 }
 #connect{
-	height:20%;
+	height:22%;
 }
 #connect h2{
 	text-align:center;
-	padding:.1em;
-	margin:.1em;
+	padding-top:.2em;
+	margin:0;
 }
 #connectSocial{
-	height:80%;
+	height:78%;
 	text-align: justify;
 	
 }
