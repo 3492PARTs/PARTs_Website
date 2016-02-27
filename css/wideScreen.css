@@ -521,3 +521,32 @@ body {
 }
 
 /**********END CONTACT US**********/
+
+/**********BEGIN COMPETITION**********/
+
+/*PAGE SIZE*/
+#competition{
+	width:80%;
+	margin:auto;
+	text-align:center;
+}
+#competition2{
+	width:100%;
+}
+
+/*TEXT*/
+#competition h2{
+	text-align:center;
+}
+
+/*BORDER*/
+#competition td{
+	border: 2px solid #808080;
+}
+
+/*IMG*/
+#competition img{
+	width:100%;
+}
+
+/**********END COMPETITION**********/
