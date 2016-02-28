@@ -27,6 +27,7 @@ html, body{
 	width:100%;
 }
 .nav_bar td{
+	display:block;
 	border-bottom:1px solid #FF6A00;
 	overflow: hidden;
 }
@@ -51,9 +52,6 @@ html, body{
 }
 .nav_bar a:hover{
 	color:#FF6A00;
-}
-.nav_bar td{
-	display:block;
 }
 
 /*MOBILE NAV BAR*/
@@ -386,12 +384,17 @@ body {
 }
 .yearJumpNav td{
 	display:block;
+	overflow: hidden;
 }
 .yearJumpNav a:hover{
 	color:#2E3093;
 }
-.yearAccordion a{
+.yearJumpNav a{
 	text-decoration:none;
+	font-weight:bold;
+	display:block;
+	margin: -10em;
+    padding: 10em;
 }
 .yearAccordion input{
 	display: none;

@@ -318,8 +318,13 @@ body {
 #yearJump, #ac-0{
 	display:none;
 }
+.yearJumpNav td{
+	overflow:hidden;
+}
 .yearJumpNav a {
 	display:block;
+	margin:-10em;
+	padding:10em;
 	text-decoration:none;
 	font-weight:bold;
 }
