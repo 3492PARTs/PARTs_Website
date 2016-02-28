@@ -387,7 +387,7 @@ body {
 	overflow: hidden;
 }
 .yearJumpNav a:hover{
-	color:#2E3093;
+	color:#FF6A00;
 }
 .yearJumpNav a{
 	text-decoration:none;
@@ -657,7 +657,7 @@ body {
 	text-align:center;
 	font-size:2em;
 }
-#mainSponsor h2{
+#donationLevel{
 	text-align:left;
 	font-size:1.6em;
 }
@@ -667,6 +667,10 @@ body {
 }
 #mainSponsor ul li p{
 	text-align:left;
+}
+#donations{
+	text-align:center;
+	font-size:1.6em;
 }
 
 
@@ -704,6 +708,30 @@ body {
 	text-align:center;
 	font-weight:bold;
 }
+#labviewLink p{
+	text-align:center;
+	font-weight:bold;
+}
+#aboutResources a:hover{
+	color:#FF6A00;
+}
+.rightLinks{
+	overflow: hidden;
+}
+.rightLinks a{
+	display: block;
+    margin: -10em;
+    padding: 10em;
+}
+#labviewLink td{
+	overflow: hidden;
+}
+#labviewLink td a{
+	display: block;
+    margin: -10em;
+    padding: 10em;
+}
+
 
 /**********END TEAM RESOURCES**********/
 

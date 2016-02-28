@@ -329,7 +329,7 @@ body {
 	font-weight:bold;
 }
 .yearJumpNav a:hover{
-	color:#2E3093;
+	color:#FF6A00;
 }
 
 /*TEXT*/
@@ -527,6 +527,30 @@ body {
 	text-align:center;
 	font-size:1.2em;
 	font-weight:bold;
+}
+#aboutResources a:hover{
+	color:#FF6A00;
+}
+.rightLinks{
+	overflow: hidden;
+}
+.rightLinks a{
+	display: block;
+    margin: -10em;
+    padding: 10em;
+}
+#labviewLink p{
+	text-align:center;
+	font-size:1.2em;
+	font-weight:bold;
+}
+#labviewLink td{
+	overflow: hidden;
+}
+#labviewLink td a{
+	display: block;
+    margin: -10em;
+    padding: 10em;
 }
 
 /**********END TEAM RESOURCES**********/
