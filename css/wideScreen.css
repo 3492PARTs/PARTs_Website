@@ -27,15 +27,20 @@ html, body{
 	width:100%;
 	height:8em;
 }
+.nav_bar td{
+	overflow: hidden;
+}
 .nav_bar img{
 	width:5em;
 }
 .nav_bar p{
 	text-align:center;
 }
-.nav_bar a {
+.nav_bar td a {
 	letter-spacing:.1em;
-	display:block;
+	display: block;
+    margin: -10em;
+    padding: 10em;
 	color:white;
 	text-decoration:none;
 	font-weight:bold;

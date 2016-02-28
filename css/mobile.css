@@ -28,6 +28,7 @@ html, body{
 }
 .nav_bar td{
 	border-bottom:1px solid #FF6A00;
+	overflow: hidden;
 }
 .nav_bar td:nth-child(9){
 	border-bottom:0px;
@@ -42,6 +43,8 @@ html, body{
 }
 .nav_bar a {
 	display:block;
+	margin: -10em;
+    padding: 10em;
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
