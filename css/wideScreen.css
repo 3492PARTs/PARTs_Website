@@ -69,15 +69,15 @@ html, body{
 	width:100%;
 }
 #connect{
-	height:22%;
+	height:30%;
 }
 #connect h2{
 	text-align:center;
-	padding-top:.2em;
+	padding-top:.4em;
 	margin:0;
 }
 #connectSocial{
-	height:78%;
+	height:70%;
 	width:80%;
 	margin:auto;
 	text-align: justify;
@@ -100,7 +100,7 @@ html, body{
 	position: relative;
 	top: 50%;
 	transform: translateY(-50%);
-	height:80%;
+	height:60%;
 }
 
 /*FOOTER> KEEP AT BOTTOM*/
