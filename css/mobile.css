@@ -133,6 +133,8 @@ html, body{
 }
 #connectSocial{
 	height:60%;
+	width:95%;
+	margin:auto;
 	text-align: justify;
 	
 }
