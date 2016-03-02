@@ -732,6 +732,22 @@ body {
     padding: 10em;
 }
 
+/*TABLE STYLING*/
+#aboutResources table{
+	border-collapse: collapse;
+}
+#aboutResources td{
+	border-bottom: 1px solid #808080;
+}
+#aboutResources tr:nth-child(4) td:nth-child(2) tr td{
+	border-bottom:0px;
+}
+#aboutResources td:first-child{
+	border-bottom:0px;
+}
+#aboutResources tr:nth-child(8) td{
+	border-bottom:0px;
+}
 
 /**********END TEAM RESOURCES**********/
 
