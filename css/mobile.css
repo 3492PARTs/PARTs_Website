@@ -119,6 +119,8 @@ html, body{
 	height:100%;
 	float:right;
 }
+
+/*FOOTER CONTENT*/
 #footerContent{
 	height:70%;
 	width:100%;
@@ -131,6 +133,8 @@ html, body{
 	padding-top:.4em;
 	margin:0;
 }
+
+/*FOOTER SOCIAL ICONS*/
 #connectSocial{
 	height:60%;
 	width:95%;
@@ -157,7 +161,12 @@ html, body{
 	transform: translateY(-50%);
 	height:55%;
 }
-
+#connectSocial:hover img {
+	opacity: 0.2;
+}
+#connectSocial:hover img:hover {
+	opacity: 1; 
+}
 
 /*FOOTER> KEEP AT BOTTOM*/
 html,
@@ -232,8 +241,11 @@ body {
 }
 
 /*SOCIAL IMAGES*/
-#social img:hover {
-  -webkit-filter: grayscale(100%);
+#social:hover img {
+	opacity: 0.2;
+}
+#social:hover img:hover {
+	opacity: 1; 
 }
 #social{
 	width:90%;
