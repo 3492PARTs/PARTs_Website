@@ -688,8 +688,11 @@ body {
 	text-align:left;
 }
 #donations{
+	font-size:1.5em;
+}
+#closingSponsor{
 	text-align:center;
-	font-size:1.6em;
+	font-size:1.5em;
 }
 
 

@@ -523,6 +523,9 @@ body {
 #mainSponsor a:hover{
 	color:#FF6A00;
 }
+#closingSponsor{
+	text-align:center;
+}
 
 /**********END SPONSORING**********/
 
