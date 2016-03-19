@@ -106,11 +106,17 @@ html, body{
 	transform: translateY(-50%);
 	height:60%;
 }
+#connectSocial img {
+	opacity: 1;
+    transition: visibility 0s .5s, opacity .6s linear;
+}
 #connectSocial:hover img {
 	opacity: 0.2;
+    transition: opacity .5s linear;
 }
 #connectSocial:hover img:hover {
 	opacity: 1; 
+    transition: visibility 0s .5s, opacity .5s linear;
 }
 
 /*FOOTER> KEEP AT BOTTOM*/
@@ -190,11 +196,17 @@ body {
 }
 
 /*SOCIAL IMAGES*/
+#social img {
+	opacity: 1;
+    transition: visibility 0s .5s, opacity .6s linear;
+}
 #social:hover img {
 	opacity: 0.2;
+    transition: opacity .5s linear;
 }
 #social:hover img:hover {
 	opacity: 1; 
+    transition: visibility 0s .5s, opacity .5s linear;
 }
 #social{
 	width:50%;
