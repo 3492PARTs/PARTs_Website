@@ -830,3 +830,25 @@ body {
 }
 
 /**********END COMPETITION**********/
+
+/**********BEGIN CONTACT US**********/
+
+/*PAGE SIZE*/
+#EGG{
+	width:90%;
+	margin:auto;
+	text-align:center;
+}
+
+/*TEXT*/
+#EGG h1{
+	text-align:center;
+	font-size:2em;
+}
+
+/*GIF*/
+#beanieGIF{
+    width:50%;
+}
+
+/**********END CONTACT US**********/

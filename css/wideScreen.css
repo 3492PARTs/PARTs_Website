@@ -646,3 +646,22 @@ body {
 }
 
 /**********END COMPETITION**********/
+
+/**********BEGIN EGG**********/
+
+/*PAGE SIZE*/
+#EGG{
+	width:80%;
+	margin:auto;
+	text-align:center;
+}
+/*TEXT*/
+#EGG h1{
+	text-align:center;
+}
+
+/*GIF*/
+#beanieGIF{
+    width:50%;
+}
+/**********END EGG**********/
