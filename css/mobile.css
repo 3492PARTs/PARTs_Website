@@ -163,15 +163,15 @@ html, body{
 }
 #connectSocial img {
 	opacity: 1;
-    transition: visibility 0s .5s, opacity .6s linear;
+    transition: visibility 0s .25s, opacity .25s linear;
 }
 #connectSocial:hover img {
 	opacity: 0.2;
-    transition: opacity .5s linear;
+    transition: opacity .25s linear;
 }
 #connectSocial:hover img:hover {
 	opacity: 1; 
-    transition: visibility 0s .5s, opacity .5s linear;
+    transition: visibility 0s .25s, opacity .25s linear;
 }
 
 /*FOOTER> KEEP AT BOTTOM*/
@@ -253,15 +253,15 @@ body {
 /*SOCIAL IMAGES*/
 #social img {
 	opacity: 1;
-    transition: visibility 0s .5s, opacity .6s linear;
+    transition: visibility 0s .25s, opacity .25s linear;
 }
 #social:hover img {
 	opacity: 0.2;
-    transition: opacity .5s linear;
+    transition: opacity .25s linear;
 }
 #social:hover img:hover {
 	opacity: 1; 
-    transition: visibility 0s .5s, opacity .5s linear;
+    transition: visibility 0s .25s, opacity .25s linear;
 }
 #social{
 	width:90%;
