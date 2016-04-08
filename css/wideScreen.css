@@ -544,14 +544,14 @@ body {
 /**********BEGIN TEAM RESOURCES**********/
 
 /*TABLE SIZE*/
-#aboutResources table{
+/*#aboutResources table{
 	width:80%;
 	margin-left: auto;
     margin-right: auto;
 }
 
 /*TABLE TEXT*/
-#aboutResources thead h1{
+/*#aboutResources thead h1{
 	text-align:center;
 }
 #aboutResources h1, h2, p{
@@ -588,7 +588,7 @@ body {
 }
 
 /*TABLE STYLING*/
-#aboutResources table{
+/*#aboutResources table{
 	border-collapse: collapse;
 }
 #aboutResources td{
@@ -677,3 +677,51 @@ body {
     width:50%;
 }
 /**********END EGG**********/
+
+
+TEST TEAM RESOURCES
+
+#aboutResources{
+    width:80%;
+}
+.resourceTabs{
+    background-color:#D6D6D6;
+    width:80%;
+    margin:1em auto;
+    border-radius: .5em;
+}
+.resourceTakeALook{
+    background-color: #FF6A00;
+    display: table;
+    margin:0 auto;
+    border-radius: .5em;
+    
+}
+.resourceSpacer{
+    height: 1em;
+}
+.resourceTakeALook h3{
+    text-decoration: none;
+    margin: .5em;
+    
+}
+.resourceTakeALook a{
+    text-decoration: none;
+    
+}
+.resourceTabs img{
+    width:5em;
+    display: block;
+    margin: 0 auto;
+    padding: 1em;
+}
+.resourceTabs h3{
+    text-align: center;
+}
+.resourceTabs h4{
+    text-align: center;
+}
+.resourceTabs h4 > a{
+    text-decoration: none;
+    color: #FF6A00;
+}
