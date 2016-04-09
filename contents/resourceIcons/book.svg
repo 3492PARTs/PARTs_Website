@@ -12,7 +12,10 @@
    enable-background="new 0 0 48 48"
    id="svg2"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="book.svg">
+   sodipodi:docname="book.svg"
+   inkscape:export-filename="C:\Users\Brandon\Documents\GitHub\PARTs_Website\contents\resourceIcons\book.png"
+   inkscape:export-xdpi="749.21344"
+   inkscape:export-ydpi="749.21344">
   <metadata
      id="metadata18">
     <rdf:RDF>
@@ -21,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -36,16 +39,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="657"
+     inkscape:window-width="690"
+     inkscape:window-height="405"
      id="namedview14"
      showgrid="false"
      inkscape:zoom="5.6568543"
-     inkscape:cx="40.084095"
-     inkscape:cy="35.544897"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
+     inkscape:cx="13.655979"
+     inkscape:cy="21.402762"
+     inkscape:window-x="36"
+     inkscape:window-y="64"
+     inkscape:window-maximized="0"
      inkscape:current-layer="svg2" />
   <path
      fill="#FF7043"
