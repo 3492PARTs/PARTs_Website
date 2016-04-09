@@ -102,7 +102,7 @@ html, body{
 	height: 5.5em;
 }
 #ham{
-	height:1.6em;
+	width:3em;
 	float:right;
 }
 #homeBot{
