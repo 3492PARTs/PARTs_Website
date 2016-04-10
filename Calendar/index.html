@@ -12,63 +12,50 @@
 		<link rel='stylesheet' media='screen and (max-width: 1000px)' href='../css/mobile.css'/>
 		<link rel='stylesheet' media='screen and (min-width: 1001px)' href='../css/wideScreen.css'/>
 	</head>
-	<body>
-		<div id="top" class="accordion">
-			<div>
-				<input id="ac-1" name="accordion-1" type="checkbox" />
-				<label for="ac-1">
-					<table id="mobile_nav">
-						<thead>
-						</thead>
-						<tbody>
-							<tr>
-								<td><a href="../"><img id="bot" src="../contents/webImages/Robots/BeanieBot.png"/></a></td>
-								<td><img id="ham" src="../contents/webImages/Hamburger.svg" onerror="this.src='../contents/webImages/Hamburger.png'; this.onerror=null;"></td>
-							</tr>
-						</tbody>
-					</table>
-				</label>
-				<div class="article ac-small">
-					<table class="nav_bar">
-						<thead>
+	<body id="top">
+		<table class="navigation">
+            <thead>
 			
-						</thead>
-						<tbody>
-							<tr>
-								<td id="homeBot">
-									<p><a href="../"><img src="../contents/webImages/Robots/BeanieBot.png"/></a></p>
-								</td>
-								<td id="homeWord">
-									<p><a href="../">HOME</a></p>
-								</td>
-								<td>
-									<p><a href="../Contact-Us/">CONTACT US</a></p>
-								</td>
-								<td>
-									<p><a href="../Sponsoring/">SPONSORING</a></p>
-								</td>
-								<td>
-									<p><a href="../About-PARTs/">ABOUT PARTs</a></p>
-								</td>
-								<td>
-									<p><a href="../Media/">MEDIA</a></p>
-								</td>
-								<td>
-									<p><a href="../Team-Resources/">FOR MEMBERS</a></p>
-								</td>
-								<td>
-									<p><a href="../Calendar/">CALENDAR</a></p>
-								</td>
-								<td>
-									<p><a href="../FIRST/">ABOUT FIRST & THE GAME</a></p>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
+			</thead>
+            <tbody>
+				<tr>
+					<td id="homeBot">
+						<p><a href="/"><img src="../contents/webImages/Robots/BeanieBot.png"/></a></p>
+					</td>
+					<td id="homeWord">
+						<p><a href="../">HOME</a></p>
+					</td>
+					<td>
+						<p><a href="../Contact-Us/">CONTACT US</a></p>
+					</td>
+					<td>
+						<p><a href="../Sponsoring/">SPONSORING</a></p>
+					</td>
+					<td>
+						<p><a href="../About-PARTs/">ABOUT PARTs</a></p>
+					</td>
+					<td>
+						<p><a href="../Media/">MEDIA</a></p>
+					</td>
+					<td>
+						<p><a href="../Team-Resources/">FOR MEMBERS</a></p>
+					</td>
+					<td>
+						<p><a href="../Calendar/">CALENDAR</a></p>
+					</td>
+					<td>
+						<p><a href="../FIRST/">ABOUT FIRST & THE GAME</a></p>
+					</td>
+				</tr>
+			</tbody>
+        </table>
+
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger"></label>
+        
 		<div id="wrapper">
+            <div id="blueBlock"> <a href="../"><img src="../contents/webImages/Robots/BeanieBot.png"/></a></div>
+            <div id="moverBlock"></div>
 			<div id="content">
 				<div id="calendarWrapper">
 					<iframe id="calendar" src="https://calendar.google.com/calendar/embed?src=6n20ln0u5pcpg2d98fk9o7bkhg%40group.calendar.google.com&ctz=America/New_York" style="border: 0" frameborder="0" scrolling="no"></iframe>
