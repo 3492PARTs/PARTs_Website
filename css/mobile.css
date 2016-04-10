@@ -74,11 +74,12 @@ html, body{
   clip: rect(0, 0, 0, 0);
 }
 
-
+/*folloeing header*/
 #blueBlock{
     width: 100%;
     height:5em;
     background-color: #2E3094;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
     position: fixed;
     z-index: 10;
 }
@@ -93,6 +94,7 @@ html, body{
     width:100%; 
 }
 
+/*Label for opening menu*/
 label[for="nav-trigger"] {
   /* critical positioning styles */
   position: fixed;
@@ -109,7 +111,7 @@ label[for="nav-trigger"] {
 
 /* Make the Magic Happen */
 .nav-trigger + label, #wrapper {
-  transition: right 0.2s;
+  transition: right .5s;
 }
 
 .nav-trigger:checked + label {
@@ -121,7 +123,6 @@ label[for="nav-trigger"] {
   right: 14em;
   box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
-
 body {
 	/* Without this, the body has excess horizontal scroll when the menu is open */
   overflow-x: hidden;
@@ -148,10 +149,12 @@ code {
 	margin:1em;
 }
 .navigation a {
-	display:block;
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
+    display:block;
+	margin: -10em;
+    padding: 10em;
 }
 
 #homeBot{
@@ -251,7 +254,7 @@ body {
 /**********BEGIN HOME PAGE**********/
 
 /*SEPERATE SLIDESHOW FROM CONTENT*/
-#seperator{
+.seperator{
 	width:100%;
 	height:2em;
 }
@@ -549,21 +552,6 @@ body {
 	text-align:left;
 }
 
-/*FLOATING RETURN ARROW*/
-#upArrow{
-	position:fixed;
-	z-index:1;
-	right:0;
-	bottom:0;
-}
-#upArrow img{
-	width:4em;
-	margin:.4em;
-}
-.specialAbout{
-	z-index:999;
-}
-
 /**********END ABOUT TEAM**********/
 
 /**********BEGIN ALL MEDIA PAGES**********/
@@ -794,18 +782,20 @@ body {
 /*TEXT STYLING*/
 .resourceTakeALook h3{
     text-decoration: none;
-    margin: .5em;
-    
+    margin: .5em;   
 }
 .resourceTakeALook a{
     text-decoration: none;
-    
 }
-.resourceTabs h3{
+.resourceTabs > h3{
     text-align: center;
+    padding-right: .3em;
+    padding-left: .3em;
 }
-.resourceTabs h4{
+.resourceTabs > h4{
     text-align: center;
+    padding-right: .3em;
+    padding-left: .3em;
 }
 .resourceTabs h4 > a{
     text-decoration: none;
