@@ -1,3 +1,96 @@
+/* Pure CSS3 Switch*/
+.clear-menu-btn {
+  position: fixed;
+  right: 1em; top: 1em;
+  z-index: 12;
+  width: 3em;
+  height: 3em;
+  margin: 0 auto;
+}
+/*.clear-menu-btn input[type="checkbox"] {
+  position: absolute;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}*/
+.nav-trigger:hover {
+  cursor: pointer;
+}
+.nav-trigger:checked ~ .clear-menu-btn .top,
+.nav-trigger:checked ~ .clear-menu-btn .bottom {
+  top: 50%;
+}
+.nav-trigger:checked ~ .clear-menu-btn .top {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.nav-trigger:checked ~ .clear-menu-btn .bottom {
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+.nav-trigger:checked ~ .clear-menu-btn .middle {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.nav-trigger:checked ~ .clear-menu-btn .circle {
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
+.clear-menu-btn span {
+  position: absolute;
+  display: block;
+  width: 3em;
+  height: 1px;
+  background-color: black;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  z-index: -1;
+}
+.clear-menu-btn .top {
+  top: 15%;
+}
+.clear-menu-btn .middle {
+  top: 50%;
+}
+.clear-menu-btn .bottom {
+  top: 85%;
+}
+.clear-menu-btn .circle {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  filter: alpha(opacity=0);
+  opacity: 0;
+  width: 3em;
+  height: 3em;
+  background-color: transparent;
+  border-radius: 50%;
+  border: 1px solid black;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+
 /**********BEGIN GLOBAKL CSS**********/
 /*FONT IMPORT*/
 @font-face {
@@ -69,9 +162,15 @@ html, body{
 
 /* Nav Trigger */
 .nav-trigger {
-  /* critical styles - hide the checkbox input */
+  /* critical styles - hide the checkbox input*/
   position: absolute;
-  clip: rect(0, 0, 0, 0);
+    z-index: 999;
+    top: 1em;
+    right:1em;
+    height:4em;
+    width: 4em;
+    filter: alpha(opacity=0);
+  opacity: 0;
 }
 
 /*folloeing header*/
@@ -94,29 +193,10 @@ html, body{
     width:100%; 
 }
 
-/*Label for opening menu*/
-label[for="nav-trigger"] {
-  /* critical positioning styles */
-  position: fixed;
-  right: 1em; top: 1em;
-  z-index: 12;
-  
-  /* non-critical apperance styles */
-  height: 3em;
-  width: 3em;
-  cursor: pointer;
-  background-image: url(/contents/webImages/Hamburger.svg);
-  background-size: contain;
-}
-
 /* Make the Magic Happen */
-/*.nav-trigger + label,*/ #wrapper {
+#wrapper {
   transition: right .5s;
 }
-
-/*.nav-trigger:checked + label {
-  right: 15em;
-}*/
 
 .nav-trigger:checked ~ #wrapper {
     /*The window*/
@@ -126,18 +206,6 @@ label[for="nav-trigger"] {
 body {
 	/* Without this, the body has excess horizontal scroll when the menu is open */
   overflow-x: hidden;
-}
-
-/* Additional non-critical styles */
-
-h1, h3, p {
-  max-width: 600px;
-  margin: 0 auto 1em;
-}
-
-code {
-	padding: 2px;
-	background: #ddd;
 }
 
 .navigation img{
