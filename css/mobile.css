@@ -1,4 +1,113 @@
-/* Pure CSS3 Switch*/
+/**********BEGIN GLOBAKL CSS**********/
+/*FONT IMPORT*/
+@font-face {
+    font-family: roboto-regular;
+    src: url(roboto-regular.ttf);
+}
+
+/*CSS RESET*/
+html, body{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+/*FONT*/
+*{
+	font-family: 'roboto-regular';
+	color:#5B5B5B;
+}
+
+/*NAV BAR*/
+/* Navigation Menu - Background */
+.navigation {
+  background-color:#2E3094;
+    
+  /* critical sizing and position styles */
+  width: 14em;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+    
+  /*for scrolling*/
+  max-height: 100vh;
+  display: flex;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-direction: column;
+    
+}
+
+/* Navigation Menu - List items */
+.navigation td {
+  /* non-critical appearance styles */
+  width: 14em;
+  transition: background-color .3s linear;
+  display:block;
+  overflow: hidden;
+}
+.navigation td:hover{
+  background-color: #808080;
+}
+.navigation img{
+	width:20%;
+}
+.navigation p{
+	text-align:center;
+	font-size:1.5em;
+	margin:1em;
+}
+.navigation a {
+	color:white;
+	text-decoration:none;
+	font-weight:bold;
+    display:block;
+	margin: -10em;
+    padding: 10em;
+}
+
+/* Site Wrapper - Everything that isn't navigation */
+#wrapper {
+  /* Critical position and size styles */
+  min-height: 100%;
+  min-width: 100%;
+  background-color: white; /* Needs a background or else the nav will show through */
+  position: relative;
+  top: 0;
+  bottom: 100%;
+  right: 0;
+  z-index: 1;
+}
+
+/*following header*/
+#blueBlock{
+    width: 100%;
+    height:5em;
+    background-color: #2E3094;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
+    position: fixed;
+    z-index: 10;
+}
+#blueBlock img{
+    position: absolute;
+    top: .25em;
+    left:1em;
+    height:4.5em;
+}
+#moverBlock{
+  height:5em; 
+    width:100%; 
+}
+#homeBot{
+	display:none;
+}
+
+/* Pure CSS3 Hamburger*/
 .clear-menu-btn {
   position: fixed;
   right: 1em; top: 1em;
@@ -7,13 +116,6 @@
   height: 3em;
   margin: 0 auto;
 }
-/*.clear-menu-btn input[type="checkbox"] {
-  position: absolute;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-}*/
 .nav-trigger:hover {
   cursor: pointer;
 }
@@ -47,8 +149,8 @@
   position: absolute;
   display: block;
   width: 3em;
-  height: 1px;
-  background-color: black;
+  height: .12em;
+  background-color: #808080;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   -ms-transition: all 0.3s;
@@ -81,7 +183,7 @@
   height: 3em;
   background-color: transparent;
   border-radius: 50%;
-  border: 1px solid black;
+  border: .12em solid #808080;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
   -ms-transition: all 0.5s;
@@ -90,107 +192,17 @@
   z-index: -1;
 }
 
-
-/**********BEGIN GLOBAKL CSS**********/
-/*FONT IMPORT*/
-@font-face {
-    font-family: roboto-regular;
-    src: url(roboto-regular.ttf);
-}
-
-/*CSS RESET*/
-html, body{
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-
-/*FONT*/
-*{
-	font-family: 'roboto-regular';
-	color:#5B5B5B;
-}
-
-/*NAV BAR*/
-/* Navigation Menu - Background */
-.navigation {
-    background-color:#2E3094;
-    
-  /* critical sizing and position styles */
-  width: 14em;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 0;
-    
-    /*for scrolling*/
-    max-height: 100vh;
-    display: flex;
-    overflow-y: auto;
-    overflow-x: hidden;
-    flex-direction: column;
-    
-}
-
-/* Navigation Menu - List items */
-.navigation td {
-  /* non-critical appearance styles */
-  width: 14em;
-    transition: background-color .3s linear;
-	display:block;
-	overflow: hidden;
-}
-.navigation td:hover{
-	background-color: #808080;
-}
-/* Site Wrapper - Everything that isn't navigation */
-#wrapper {
-  /* Critical position and size styles */
-  min-height: 100%;
-  min-width: 100%;
-  background-color: white; /* Needs a background or else the nav will show through */
-  position: relative;
-  top: 0;
-  bottom: 100%;
-  right: 0;
-  z-index: 1;
-}
-
 /* Nav Trigger */
 .nav-trigger {
   /* critical styles - hide the checkbox input*/
-  position: absolute;
-    z-index: 999;
+  position: fixed;
+    z-index: 13;
     top: 1em;
     right:1em;
     height:4em;
     width: 4em;
     filter: alpha(opacity=0);
   opacity: 0;
-}
-
-/*folloeing header*/
-#blueBlock{
-    width: 100%;
-    height:5em;
-    background-color: #2E3094;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
-    position: fixed;
-    z-index: 10;
-}
-#blueBlock img{
-    position: absolute;
-    top: .25em;
-    left:1em;
-    height:4.5em;
-}
-#moverBlock{
-  height:5em; 
-    width:100%; 
 }
 
 /* Make the Magic Happen */
@@ -203,30 +215,10 @@ html, body{
   right: 14em;
   box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
+
+/* Without this, the body has excess horizontal scroll when the menu is open */
 body {
-	/* Without this, the body has excess horizontal scroll when the menu is open */
   overflow-x: hidden;
-}
-
-.navigation img{
-	width:20%;
-}
-.navigation p{
-	text-align:center;
-	font-size:1.5em;
-	margin:1em;
-}
-.navigation a {
-	color:white;
-	text-decoration:none;
-	font-weight:bold;
-    display:block;
-	margin: -10em;
-    padding: 10em;
-}
-
-#homeBot{
-	display:none;
 }
 
 /*FOOTER*/
