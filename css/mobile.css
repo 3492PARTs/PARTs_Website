@@ -110,13 +110,13 @@ label[for="nav-trigger"] {
 }
 
 /* Make the Magic Happen */
-.nav-trigger + label, #wrapper {
+/*.nav-trigger + label,*/ #wrapper {
   transition: right .5s;
 }
 
-.nav-trigger:checked + label {
+/*.nav-trigger:checked + label {
   right: 15em;
-}
+}*/
 
 .nav-trigger:checked ~ #wrapper {
     /*The window*/
