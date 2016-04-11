@@ -61,12 +61,14 @@ html, body{
 	text-decoration:none;
 	font-weight:bold;
 }
-
 /*MOBILE NAV*/
 #nav-trigger{
 	display:none;
 }
 #blueBlock{
+    display: none;
+}
+.clear-menu-btn{
     display: none;
 }
 #homeWord{
