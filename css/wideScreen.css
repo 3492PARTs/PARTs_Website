@@ -28,7 +28,6 @@ html, body{
 	height:7em;
     border-collapse: collapse;
     overflow: hidden;
-    position: fixed;
     z-index: 12;
 }
 .navigation td{
