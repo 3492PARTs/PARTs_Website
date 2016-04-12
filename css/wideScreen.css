@@ -28,6 +28,8 @@ html, body{
 	height:7em;
     border-collapse: collapse;
     overflow: hidden;
+    position: fixed;
+    z-index: 12;
 }
 .navigation td{
     border-collapse: collapse;
@@ -195,6 +197,10 @@ body {
 #mainContent p:nth-child(4){
 	margin-bottom:0;
 	padding-bottom:0;
+}
+
+/*SLIDE SHOW*/
+.csslider1.autoplay{
 }
 
 /*SOCIAL IMAGES*/
