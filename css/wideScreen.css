@@ -27,20 +27,23 @@ html, body{
 	width:100%;
 	height:7em;
     border-collapse: collapse;
-    z-index: 999;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
+    overflow: hidden;
 }
 .navigation td{
     border-collapse: collapse;
+    overflow: hidden;
     transition: background-color .3s linear;
 }
+.navigation td:first-child:hover{
+	background-color: #2E3094;
+}
 .navigation td:hover{
-	background-color: #808080;
+	background-color: #262977;
 }
 .navigation tr{
+    overflow: hidden;
     border-collapse: collapse;
 }
-
 .navigation td img{
 	height: 6em;
     padding: .5em;
@@ -60,7 +63,12 @@ html, body{
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
+    transition: background-color .3s linear;
 }
+.navigation td:hover  a{
+	color: #808080;
+}
+
 /*MOBILE NAV*/
 #nav-trigger{
 	display:none;
@@ -71,7 +79,7 @@ html, body{
 .clear-menu-btn{
     display: none;
 }
-#homeWord{
+.homeWord{
     display: none;
 }
 /*FOOTER*/
