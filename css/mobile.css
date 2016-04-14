@@ -52,7 +52,7 @@ html, body{
   overflow: hidden;
 }
 .navigation td:hover{
-  background-color: #808080;
+  background-color: #262977;
 }
 .navigation img{
 	width:20%;
@@ -62,13 +62,17 @@ html, body{
 	font-size:1.5em;
 	margin:1em;
 }
-.navigation a {
+.navigation td a {
+	display: block;
+    padding: 3em;
+    margin: -3em;
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
-    display:block;
-	margin: -10em;
-    padding: 10em;
+    transition: background-color .3s linear;
+}
+.navigation td:hover  a{
+	color: #808080;
 }
 
 /* Site Wrapper - Everything that isn't navigation */
@@ -179,11 +183,11 @@ html, body{
   transform: translate(-50%, -50%);
   filter: alpha(opacity=0);
   opacity: 0;
-  width: 3em;
-  height: 3em;
+  width: 2.9em;
+  height: 2.9em;
   background-color: transparent;
   border-radius: 50%;
-  border: .12em solid #808080;
+  border: .14em solid #808080;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
   -ms-transition: all 0.5s;
@@ -213,7 +217,7 @@ html, body{
 .nav-trigger:checked ~ #wrapper {
     /*The window*/
   right: 14em;
-  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);z
 }
 
 /* Without this, the body has excess horizontal scroll when the menu is open */
