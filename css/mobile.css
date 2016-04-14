@@ -217,7 +217,7 @@ html, body{
 .nav-trigger:checked ~ #wrapper {
     /*The window*/
   right: 14em;
-  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);z
 }
 
 /* Without this, the body has excess horizontal scroll when the menu is open */
