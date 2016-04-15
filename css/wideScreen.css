@@ -666,6 +666,27 @@ body {
 
 /**********END COMPETITION**********/
 
+/**********BEGIN JOIN**********/
+
+/*PAGE SIZE*/
+#joinParts{
+	width:80%;
+	margin:auto;
+	text-align:center;
+}
+/*TEXT*/
+#joinParts h1{
+	text-align:center;
+}
+
+/*IMAGES*/
+#joinParts img{
+    width: 40%;
+}
+
+/**********END JOIN**********/
+
+
 /**********BEGIN EGG**********/
 
 /*PAGE SIZE*/
