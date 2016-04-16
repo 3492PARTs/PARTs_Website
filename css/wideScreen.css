@@ -674,9 +674,16 @@ body {
 	margin:auto;
 	text-align:center;
 }
+#subgroups{
+    width: 100%;
+}
+
 /*TEXT*/
 #joinParts h1{
 	text-align:center;
+}
+#subgroups p{
+    text-align: center;
 }
 
 /*IMAGES*/
