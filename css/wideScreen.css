@@ -677,7 +677,9 @@ body {
 #subgroups{
     width: 100%;
 }
-
+#joinPic{
+    position: relative;
+}
 /*TEXT*/
 #joinPARTs h1{
 	text-align:center;
@@ -690,10 +692,19 @@ body {
 #joinPic img{
     position: relative;
     width: 100%;
+    z-index:1;
+    
 }
 #joinPic h1{
-    position: absolute;
-    text-align: center;
+    display:block;
+    position:absolute;
+    width:100%;
+    top:30%;
+    left:0;
+    z-index:2;
+    text-align:center;
+    color: white;
+    font-size: 5em;
 }
 
 /**********END JOIN**********/
