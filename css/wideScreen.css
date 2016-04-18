@@ -688,7 +688,10 @@ body {
 
 /*IMAGES*/
 #joinParts img{
-    width: 40%;
+    /*width: 40%;*/
+}
+#joinPic{
+    width: 100%;
 }
 
 /**********END JOIN**********/
