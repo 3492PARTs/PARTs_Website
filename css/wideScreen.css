@@ -669,7 +669,7 @@ body {
 /**********BEGIN JOIN**********/
 
 /*PAGE SIZE*/
-#joinParts{
+#joinPARTs{
 	width:80%;
 	margin:auto;
 	text-align:center;
@@ -679,7 +679,7 @@ body {
 }
 
 /*TEXT*/
-#joinParts h1{
+#joinPARTs h1{
 	text-align:center;
 }
 #subgroups p{
@@ -687,11 +687,13 @@ body {
 }
 
 /*IMAGES*/
-#joinParts img{
-    /*width: 40%;*/
-}
-#joinPic{
+#joinPic img{
+    position: relative;
     width: 100%;
+}
+#joinPic h1{
+    position: absolute;
+    text-align: center;
 }
 
 /**********END JOIN**********/
