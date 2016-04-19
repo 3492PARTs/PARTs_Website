@@ -64,7 +64,7 @@ html, body{
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
-    transition: background-color .3s linear;
+    transition: .3s linear;
 }
 .navigation td:hover  a{
 	color: #808080;
@@ -365,6 +365,7 @@ body {
 	padding:10em;
 	text-decoration:none;
 	font-weight:bold;
+    transition: .25s linear;
 }
 .yearJumpNav a:hover{
 	color:#FF6A00;
@@ -680,12 +681,35 @@ body {
 #joinPic{
     position: relative;
 }
+
 /*TEXT*/
-#joinPARTs h1{
+#joinPARTs h2{
 	text-align:center;
 }
-#subgroups p{
-    text-align: center;
+#joinPARTs a{
+    text-decoration: none;
+    transition: .25s linear;
+}
+#joinPARTs a:hover{
+	color:#FF6A00;
+}
+#joinText{
+    display:block;
+    position:absolute;
+    width:100%;
+    top:30%;
+    left:0;
+    z-index:2;
+}
+#joinText h1{
+    text-align:center;
+    color: white;
+    font-size: 5em;
+}
+#joinText h3{
+    text-align:center;
+    color: white;
+    font-size: 2em;
 }
 
 /*IMAGES*/
@@ -693,18 +717,8 @@ body {
     position: relative;
     width: 100%;
     z-index:1;
+    -webkit-filter: brightness(50%);
     
-}
-#joinPic h1{
-    display:block;
-    position:absolute;
-    width:100%;
-    top:30%;
-    left:0;
-    z-index:2;
-    text-align:center;
-    color: white;
-    font-size: 5em;
 }
 
 /**********END JOIN**********/
