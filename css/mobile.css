@@ -950,6 +950,8 @@ body {
 }
 #subgroups td{
     display: block;
+    overflow: hidden;
+    border: 2px solid #808080;
 }
 #joinPic{
     position: relative;
@@ -962,10 +964,16 @@ body {
 }
 #joinPARTs a{
     text-decoration: none;
+    display: block;
+    padding: 10em;
+    margin: -10em;
     transition: .25s linear;
 }
 #joinPARTs a:hover{
 	color:#FF6A00;
+}
+#joinPARTs p{
+    text-align: center;
 }
 #joinText{
     display:block;
