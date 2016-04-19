@@ -985,7 +985,7 @@ body {
     z-index:2;
     text-align: center;
 }
-#joinH1{
+#joinH1, #joinCommOut{
     text-align:center;
     color: white;
     font-size: 2.6em;
@@ -1001,6 +1001,9 @@ body {
     }
     #scrollForMoreInfo{
         font-size: 1.2em;
+    }
+    #joinCommOut{
+        font-size: 1.5em;
     }
 }
 #returnArrow h4{

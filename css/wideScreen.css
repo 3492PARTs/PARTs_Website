@@ -713,7 +713,7 @@ body {
     z-index:2;
     text-align: center;
 }
-#joinH1{
+#joinH1,  #joinCommOut{
     text-align:center;
     color: white;
     font-size: 4.6em;
