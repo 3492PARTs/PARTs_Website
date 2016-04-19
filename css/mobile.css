@@ -937,7 +937,60 @@ body {
 
 /**********END COMPETITION**********/
 
-/**********BEGIN CONTACT US**********/
+/**********BEGIN JOIN**********/
+
+/*PAGE SIZE*/
+#joinPARTs{
+	width:90%;
+	margin:auto;
+	text-align:center;
+}
+#subgroups{
+    width: 100%;
+}
+#joinPic{
+    position: relative;
+}
+
+/*TEXT*/
+#joinPARTs h2{
+	text-align:center;
+}
+#joinPARTs a{
+    text-decoration: none;
+    transition: .25s linear;
+}
+#joinPARTs a:hover{
+	color:#FF6A00;
+}
+#joinText{
+    display:block;
+    position:absolute;
+    width:100%;
+    top:30%;
+    left:0;
+    z-index:2;
+}
+#joinText h1{
+    text-align:center;
+    color: white;
+}
+#joinText h3{
+    text-align:center;
+    color: white;
+}
+
+/*IMAGES*/
+#joinPic img{
+    position: relative;
+    width: 100%;
+    z-index:1;
+    -webkit-filter: brightness(50%);
+}
+
+/**********END JOIN**********/
+
+/**********BEGIN EGG**********/
 
 /*PAGE SIZE*/
 #EGG{
@@ -957,4 +1010,4 @@ body {
     width:50%;
 }
 
-/**********END CONTACT US**********/
+/**********END EGG**********/
