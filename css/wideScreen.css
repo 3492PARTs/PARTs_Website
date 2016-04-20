@@ -64,7 +64,7 @@ html, body{
 	color:white;
 	text-decoration:none;
 	font-weight:bold;
-    transition: background-color .3s linear;
+    transition: .3s linear;
 }
 .navigation td:hover  a{
 	color: #808080;
@@ -365,6 +365,7 @@ body {
 	padding:10em;
 	text-decoration:none;
 	font-weight:bold;
+    transition: .25s linear;
 }
 .yearJumpNav a:hover{
 	color:#FF6A00;
@@ -665,6 +666,87 @@ body {
 }
 
 /**********END COMPETITION**********/
+
+/**********BEGIN JOIN**********/
+
+/*PAGE SIZE*/
+#joinPARTs{
+	width:80%;
+	margin:auto;
+	text-align:center;
+}
+#subgroups{
+    width: 100%;
+}
+#subgroups td{
+    border: 2px solid #808080;
+    overflow: hidden;
+}
+#joinPic{
+    position: relative;
+}
+
+/*TEXT*/
+#joinPARTs h2{
+	text-align:center;
+}
+#joinPARTs a{
+    transition: .25s linear;
+}
+#joinPARTs a:hover{
+	color:#FF6A00;
+}
+#joinPARTs p{
+    text-align: center;
+}
+#joinText{
+    display:block;
+    position:absolute;
+    width:100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index:2;
+    text-align: center;
+}
+#joinH1,  #joinCommOut{
+    text-align:center;
+    color: white;
+    font-size: 4.6em;
+}
+#scrollForMoreInfo{
+    text-align:center;
+    color: white;
+    font-size: 2.4em;
+}
+#returnArrow h4{
+    display: none;
+}
+#subgroups a{
+    text-decoration: none;
+    display: block;
+    padding: 10em;
+    margin: -10em;
+}
+
+/*IMAGES*/
+#joinPic img{
+    position: relative;
+    width: 100%;
+    z-index:1;
+    -webkit-filter: brightness(50%);
+}
+#returnArrow{
+    position: absolute;
+    width: 10%;
+}
+#returnArrow img{
+    position: relative;
+    width: 70%;
+}
+
+/**********END JOIN**********/
+
 
 /**********BEGIN EGG**********/
 
