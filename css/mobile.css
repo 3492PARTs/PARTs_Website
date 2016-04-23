@@ -218,7 +218,6 @@ html, body{
     /*The window*/
     right: 14em;
     box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
-    position: fixed;
 }
 
 /* Without this, the body has excess horizontal scroll when the menu is open */
