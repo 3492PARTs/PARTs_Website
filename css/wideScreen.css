@@ -178,7 +178,7 @@ body {
 /*SEPERATE SLIDESHOW FROM CONTENT*/
 .seperator{
 	width:100%;
-	height:2em;
+	height:1em;
 }
 
 /*PAGE SIZE*/
@@ -197,9 +197,11 @@ body {
 	margin-bottom:0;
 	padding-bottom:0;
 }
-
-/*SLIDE SHOW*/
-.csslider1.autoplay{
+#mainContent a{
+    transition: .25s linear;
+}
+#mainContent a:hover{
+	color:#FF6A00;
 }
 
 /*SOCIAL IMAGES*/

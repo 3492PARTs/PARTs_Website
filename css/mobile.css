@@ -320,7 +320,7 @@ body {
 /*SEPERATE SLIDESHOW FROM CONTENT*/
 .seperator{
 	width:100%;
-	height:2em;
+	height:1em;
 }
 
 /*PAGE SIZE*/
@@ -330,32 +330,6 @@ body {
 	width:90%;
 }
 
-/*COUNTER*/
- #regional{
-	width:100%;
-}
-#regional td{
-	border: 2px solid #808080;
-}
-#regional td{
-	display:block;
-}
-#regional h2{
-	text-align:center;
-}
- #counter {
-	position: relative;
-	padding-bottom: 20%;/*to find % aspect ratio, (height/width)100*/
-	height: 0;
-}
-.tc_div_88925 {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-} 
-
 /*TEXT*/
 #mainContent p{
 	text-align:center;
@@ -364,6 +338,12 @@ body {
 #mainContent p:nth-child(4){
 	margin-bottom:0;
 	padding-bottom:0;
+}
+#mainContent a{
+    transition: .25s linear;
+}
+#mainContent a:hover{
+	color:#FF6A00;
 }
 
 /*SOCIAL IMAGES*/
