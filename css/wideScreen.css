@@ -417,12 +417,12 @@ body {
 
 /*PREVIOUS PAGE ARROW*/
 #leftArrow img{
-	width:6em;
+	width:4em;
 }
 
 /*SPACER TO KEEP TEXT CENTERED*/
 #blockLR{
-	width:6em;
+	width:4em;
 }
 
 /*SPACER FOR HEIGHT ON MEDIA PAGE*/
@@ -744,7 +744,7 @@ body {
 }
 #returnArrow img{
     position: relative;
-    width: 70%;
+    width: 50%;
 }
 
 /**********END JOIN**********/
