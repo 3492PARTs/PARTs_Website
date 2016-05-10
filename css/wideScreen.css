@@ -21,6 +21,14 @@ html, body{
 	color:#5B5B5B;
 }
 
+/*LINK COLOR*/
+#content a{
+    transition: .25s linear;
+}
+#content a:hover{
+	color:#FF6A00;
+}
+
 /*NAV BAR*/
 .navigation{
 	background-color:#2E3094;
@@ -197,12 +205,6 @@ body {
 	margin-bottom:0;
 	padding-bottom:0;
 }
-#mainContent a{
-    transition: .25s linear;
-}
-#mainContent a:hover{
-	color:#FF6A00;
-}
 
 /*SOCIAL IMAGES*/
 #social img {
@@ -367,10 +369,6 @@ body {
 	padding:10em;
 	text-decoration:none;
 	font-weight:bold;
-    transition: .25s linear;
-}
-.yearJumpNav a:hover{
-	color:#FF6A00;
 }
 
 /*TEXT*/
@@ -537,9 +535,6 @@ body {
 #mainSponsor a{
 	font-weight:bold;
 }
-#mainSponsor a:hover{
-	color:#FF6A00;
-}
 #closingSponsor{
 	text-align:center;
 }
@@ -691,12 +686,6 @@ body {
 /*TEXT*/
 #joinPARTs h2{
 	text-align:center;
-}
-#joinPARTs a{
-    transition: .25s linear;
-}
-#joinPARTs a:hover{
-	color:#FF6A00;
 }
 #joinPARTs p{
     text-align: center;
