@@ -31,7 +31,7 @@ html, body{
 
 /*NAV BAR*/
 /* Navigation Menu - Background */
-.navigation {
+#nav {
   background-color:#2E3094;
     
   /* critical sizing and position styles */
@@ -52,25 +52,34 @@ html, body{
 }
 
 /* Navigation Menu - List items */
-.navigation td {
+#nav ul{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style-type: square;
+}
+#nav ul li {
   /* non-critical appearance styles */
-  width: 14em;
+  width: 100%;
   transition: background-color .3s linear;
   display:block;
   overflow: hidden;
 }
-.navigation td:hover{
+#nav ul li:hover{
   background-color: #262977;
 }
-.navigation img{
-	width:20%;
-}
-.navigation p{
-	text-align:center;
+#nav p{
+	text-align:left;
 	font-size:1.5em;
-	margin:1em;
+    padding-left: 1em;
 }
-.navigation td a {
+#nav #subNav1 p{
+    padding-left: 2em;
+}
+.currentPage{
+	color: #808080 !important;
+}
+#nav a {
 	display: block;
     padding: 3em;
     margin: -3em;
@@ -79,7 +88,7 @@ html, body{
 	font-weight:bold;
     transition: .3s linear;
 }
-.navigation td:hover  a{
+#nav a:hover{
 	color: #808080;
 }
 
@@ -105,18 +114,17 @@ html, body{
     position: fixed;
     z-index: 10;
 }
-#blueBlock img{
+#headerNav img{
     position: absolute;
+    position: fixed;
     top: .25em;
     left:1em;
     height:4.5em;
+    z-index: 11;
 }
 #moverBlock{
   height:5em; 
     width:100%; 
-}
-#homeBot{
-	display:none;
 }
 
 /* Pure CSS3 Hamburger*/

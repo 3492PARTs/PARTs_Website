@@ -17,12 +17,13 @@
 	</head>
 	<body id="top">
         <header id="headerNav">
-            <img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/>
+            <a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
             <nav id="nav">
                 <ul>
-                    <li id="navHome"><p><a href="/">HOME</a></p></li>
+                    <li id="navHome"><p>-</p></li> <!--Spacer for mobile nav-->
+                    <li id="navHome"><p class="currentPage"><a href="/">HOME</a></p></li>
                     <li><p><a href="contact/">CONTACT US</a></p>
-                        <ul>
+                        <ul id="subNav1">
                             <li><p><a href="join/">JOIN</a></p></li>
                         </ul>
                     </li>
@@ -35,6 +36,7 @@
                 </ul>
             </nav>
         </header>
+        
         <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
         
         <div class="clear-menu-btn">
@@ -44,8 +46,7 @@
 			<span class="circle"></span>
 		</div>
         
-        <div id="blueBlock"> <a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
-        </div>
+        <div id="blueBlock"></div>
         
 		<div id="wrapper">
             <div id="moverBlock"></div>

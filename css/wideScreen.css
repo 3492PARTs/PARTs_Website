@@ -66,8 +66,8 @@ html, body{
     transition: background-color .3s linear;
 }
 
-#nav ul li.current-menu-item{
-	background:#ddd;
+#nav ul li.currentpage p{
+	color: #808080;
 }
 
 #nav ul li:hover{
