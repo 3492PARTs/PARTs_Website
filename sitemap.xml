@@ -8,62 +8,87 @@
 
 <url>
   <loc>http://parts3492.org/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Contact-Us/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/contact/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Sponsoring/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/join/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/About-PARTs/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/sponsoring/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Media/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/about/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Team-Resources/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/media/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Calendar/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/resources/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/FIRST/</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/calendar/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Media/Competition.html</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/first/</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Media/BuildSeason.html</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/join/Mechanical.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Media/CommunityOutreach.html</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/join/Electrical.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 <url>
-  <loc>http://parts3492.org/Media/Wallpapers.html</loc>
-  <lastmod>2016-01-27T23:40:58+00:00</lastmod>
+  <loc>http://parts3492.org/join/Programming.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://parts3492.org/join/Community-Outreach.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://parts3492.org/media/Competition.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://parts3492.org/media/BuildSeason.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://parts3492.org/media/CommunityOutreach.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://parts3492.org/media/Wallpapers.html</loc>
+  <lastmod>2016-05-16T18:42:23+00:00</lastmod>
   <changefreq>monthly</changefreq>
 </url>
 </urlset>
