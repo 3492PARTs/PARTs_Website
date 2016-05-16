@@ -1040,3 +1040,20 @@ body {
 }
 
 /**********END EGG**********/
+
+/**********BEGIN NOT FOUND**********/
+
+/*PAGE SIZE*/
+#notFound{
+	width:90%;
+	margin:auto;
+	text-align:center;
+}
+
+/*TEXT*/
+#notFound h1{
+	text-align:center;
+	font-size:2em;
+}
+
+/**********END NOT FOUND**********/

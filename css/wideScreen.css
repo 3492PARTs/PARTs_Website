@@ -812,3 +812,19 @@ body {
     width:50%;
 }
 /**********END EGG**********/
+
+/**********BEGIN NOT FOUND**********/
+
+/*PAGE SIZE*/
+#notFound{
+	width:80%;
+	margin:auto;
+	text-align:center;
+}
+
+/*TEXT*/
+#notFound h1{
+	text-align:center;
+}
+
+/**********END NOT FOUND**********/
