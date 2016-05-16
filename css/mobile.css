@@ -103,6 +103,7 @@ html, body{
   bottom: 100%;
   right: 0;
   z-index: 1;
+  box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
 /*following header*/
@@ -110,9 +111,13 @@ html, body{
     width: 100%;
     height:5em;
     background-color: #2E3094;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 2px 3px rgba(0,0,0,0.24);
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
     position: fixed;
     z-index: 10;
+    transition: .5s linear;
+}
+.nav-trigger:checked ~ #blueBlock {
+    box-shadow: 0 0 7px 7px rgba(0,0,0,0.4);
 }
 #headerNav img{
     position: absolute;
@@ -233,7 +238,6 @@ html, body{
 .nav-trigger:checked ~ #wrapper {
     /*The window*/
     right: 14em;
-    box-shadow: 0 0 5px 5px rgba(0,0,0,0.5);
 }
 
 /* Without this, the body has excess horizontal scroll when the menu is open */
