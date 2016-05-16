@@ -1052,8 +1052,13 @@ body {
 
 /*TEXT*/
 #notFound h1{
-	text-align:center;
-	font-size:2em;
+    text-align: left;
+	font-size:8em;
+    margin: 0;
+    padding: 0;
+}
+#notFound h2{
+    text-align: left;
 }
 
 /**********END NOT FOUND**********/
