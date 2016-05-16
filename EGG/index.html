@@ -12,46 +12,27 @@
 		<link rel='stylesheet' media='screen and (min-width: 1001px)' href='../css/wideScreen.css'/>
 	</head>
 	<body id="top">
-		 <table class="navigation">
-            <thead>
-			
-			</thead>
-            <tbody>
-				<tr>
-					<td id="homeBot">
-						<p style="padding: 0; margin:0;"><a href="/"><img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a></p>
-					</td>
-                    <td class="homeWord" style="width: 14em; height:5em;">
-                        <!--Spacer for mobile nav, not displayed on desktop-->
-					</td>
-					<td class="homeWord">
-						<p><a href="../">HOME</a></p>
-					</td>
-					<td>
-						<p><a href="../Contact-Us/">CONTACT US</a></p>
-					</td>
-					<td>
-						<p><a href="../Sponsoring/">SPONSORING</a></p>
-					</td>
-					<td>
-						<p><a href="../About-PARTs/">ABOUT PARTs</a></p>
-					</td>
-					<td>
-						<p><a href="../Media/">MEDIA</a></p>
-					</td>
-					<td>
-						<p><a href="../Team-Resources/">FOR MEMBERS</a></p>
-					</td>
-					<td>
-						<p><a href="../Calendar/">CALENDAR</a></p>
-					</td>
-					<td>
-						<p><a href="../FIRST/">ABOUT FIRST & THE GAME</a></p>
-					</td>
-				</tr>
-			</tbody>
-        </table>
-
+		 <header id="headerNav">
+            <a href="../"><img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
+            <nav id="nav">
+                <ul>
+                    <li id="navHome"><p>-</p></li> <!--Spacer for mobile nav-->
+                    <li id="navHome"><p><a href="../">HOME</a></p></li>
+                    <li><p><a href="../contact/">CONTACT US</a></p>
+                        <ul id="subNav1">
+                            <li><p><a href="../join/">JOIN</a></p></li>
+                        </ul>
+                    </li>
+                    <li><p><a href="../sponsoring/">SPONSORING</a></p></li>
+                    <li><p><a href="../about/">ABOUT PARTs</a></p></li>
+                    <li><p><a href="../media/">MEDIA</a></p></li>
+                    <li><p><a href="../resources/">RESOURCES</a></p></li>
+                    <li><p><a href="../calendar/">CALENDAR</a></p></li>
+                    <li><p><a href="../first/">FIRST</a></p></li>
+                </ul>
+            </nav>
+        </header>
+        
         <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
         
         <div class="clear-menu-btn">
@@ -61,8 +42,7 @@
 			<span class="circle"></span>
 		</div>
         
-        <div id="blueBlock"> <a href="/"><img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
-        </div>
+        <div id="blueBlock"></div>
         
 		<div id="wrapper">
             <div id="moverBlock"></div>

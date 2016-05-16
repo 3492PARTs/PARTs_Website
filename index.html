@@ -16,46 +16,27 @@
 		<!--[if IE]><link rel="stylesheet" href="css/cssslider_files/csss_engine1/ie.css"><![endif]-->
 	</head>
 	<body id="top">
-        <table class="navigation">
-            <thead>
-			
-			</thead>
-            <tbody>
-				<tr>
-					<td id="homeBot">
-						<p style="padding: 0; margin:0;"><a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a></p>
-					</td>
-                    <td class="homeWord" style="width: 14em; height:5em;">
-                        <!--Spacer for mobile nav, not displayed on desktop-->
-					</td>
-					<td class="homeWord">
-						<p><a style="color: #808080;" href="/">HOME</a></p>
-					</td>
-					<td>
-						<p><a href="/Contact-Us/">CONTACT US</a></p>
-					</td>
-					<td>
-						<p><a href="/Sponsoring/">SPONSORING</a></p>
-					</td>
-					<td>
-						<p><a href="/About-PARTs/">ABOUT PARTs</a></p>
-					</td>
-					<td>
-						<p><a href="/Media/">MEDIA</a></p>
-					</td>
-					<td>
-						<p><a href="/Team-Resources/">FOR MEMBERS</a></p>
-					</td>
-					<td>
-						<p><a href="/Calendar/">CALENDAR</a></p>
-					</td>
-					<td>
-						<p><a href="/FIRST/">ABOUT FIRST & THE GAME</a></p>
-					</td>
-				</tr>
-			</tbody>
-        </table>
-
+        <header id="headerNav">
+            <a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
+            <nav id="nav">
+                <ul>
+                    <li id="navHome"><p>-</p></li> <!--Spacer for mobile nav-->
+                    <li id="navHome"><p><a class="currentPage" href="/">HOME</a></p></li>
+                    <li><p><a href="contact/">CONTACT US</a></p>
+                        <ul id="subNav1">
+                            <li><p><a href="join/">JOIN</a></p></li>
+                        </ul>
+                    </li>
+                    <li><p><a href="sponsoring/">SPONSORING</a></p></li>
+                    <li><p><a href="about/">ABOUT PARTs</a></p></li>
+                    <li><p><a href="media/">MEDIA</a></p></li>
+                    <li><p><a href="resources/">RESOURCES</a></p></li>
+                    <li><p><a href="calendar/">CALENDAR</a></p></li>
+                    <li><p><a href="first/">FIRST</a></p></li>
+                </ul>
+            </nav>
+        </header>
+        
         <input type="checkbox" id="nav-trigger" class="nav-trigger"/>
         
         <div class="clear-menu-btn">
@@ -65,8 +46,7 @@
 			<span class="circle"></span>
 		</div>
         
-        <div id="blueBlock"> <a href="/"><img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;"/></a>
-        </div>
+        <div id="blueBlock"></div>
         
 		<div id="wrapper">
             <div id="moverBlock"></div>
@@ -148,15 +128,15 @@
 			<div id="content">
 				<div class="seperator"></div>
 				<div id="mainContent">
-                    <p><a href="Join/">Interested in Joining P.A.R.T.s?</a></p>
+                    <p><a href="join/">Interested in Joining P.A.R.T.s?</a></p>
 					<p>FIRST&reg; FRC&reg; Team 3492 P.A.R.T.s (Putnam Area Robotics Team) is a high school robotics team in the Wild and Wonderful State of West Virginia.</p>
 					<p>P.A.R.T.s 3492 is a team dedicated to inclusive opportunities in FIRST&reg; Robotics Competition programs that educate and enrich youth in our communities with hands-on based advanced technology activities.</p>
 					<p>This is a varsity sport for the mind.</p>
 					<div id="social">
-							<a target="_blank" href="https://www.facebook.com/team3492"><img src="../contents/webImages/SocialIcons/Facebook.svg" onerror="this.src='../contents/webImages/SocialIcons/Facebook.png'; this.onerror=null;"/></a>
-							<a target="_blank" href="https://twitter.com/parts3492"><img src="../contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='../contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;"/></a>							
-							<a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"><img src="../contents/webImages/SocialIcons/YouTube.svg" onerror="this.src='../contents/webImages/SocialIcons/YouTube.png'; this.onerror=null;"/></a>							
-							<a target="_blank" href="https://github.com/3492PARTs"><img src="../contents/webImages/SocialIcons/GitHub.svg" onerror="this.src='../contents/webImages/SocialIcons/GitHub.png'; this.onerror=null;"/></a>
+							<a target="_blank" href="https://www.facebook.com/team3492"><img src="contents/webImages/SocialIcons/Facebook.svg" onerror="this.src='contents/webImages/SocialIcons/Facebook.png'; this.onerror=null;"/></a>
+							<a target="_blank" href="https://twitter.com/parts3492"><img src=".contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;"/></a>							
+							<a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"><img src="contents/webImages/SocialIcons/YouTube.svg" onerror="this.src='contents/webImages/SocialIcons/YouTube.png'; this.onerror=null;"/></a>							
+							<a target="_blank" href="https://github.com/3492PARTs"><img src="contents/webImages/SocialIcons/GitHub.svg" onerror="this.src='contents/webImages/SocialIcons/GitHub.png'; this.onerror=null;"/></a>
 						</div>
 				</div>
 				<table id="homeMedia">
