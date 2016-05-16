@@ -52,8 +52,7 @@ html, body{
 	list-style:none;
 	position:relative;
 	float:left;
-	margin:0;
-	padding:0;
+    padding-right: 2.5em;
     z-index: 2;
 }
 
@@ -121,9 +120,6 @@ html, body{
     padding-bottom: 0;
     padding-top: 0;
 }
-#navHome {
-    display: none;
-}
 /*IMAGE*/
 #headerNav img{
     position: absolute;
@@ -131,7 +127,7 @@ html, body{
     left: 0;
     padding-top: .5em;
     padding-bottom: .5em;
-    padding-left: 3em;
+    padding-left: 2.5em;
     height: 5em;
 }
 
@@ -143,6 +139,9 @@ html, body{
     display: none;
 }
 .clear-menu-btn{
+    display: none;
+}
+#navHome {
     display: none;
 }
 
