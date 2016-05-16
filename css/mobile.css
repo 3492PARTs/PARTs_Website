@@ -76,8 +76,8 @@ html, body{
 #nav #subNav1 p{
     padding-left: 2em;
 }
-.currentPage{
-	color: #808080 !important;
+#nav a.currentPage{
+	color: #808080;
 }
 #nav a {
 	display: block;
