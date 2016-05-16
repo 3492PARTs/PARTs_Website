@@ -30,65 +30,102 @@ html, body{
 }
 
 /*NAV BAR*/
-header *{
+#headerNav *{
     padding: 0;
     margin: 0;
 }
-header{
+#headerNav{
     position: relative;
     height: 6em;
 	width:100%;
     background-color:#2E3094;
 }
-header nav{
-    position: absolute;
+#nav{
+	position: absolute;
     top: 0;
     right: 0;
     height: 100%;
 }
-header nav ul{
-    text-align: center;
+
+#nav ul{
     height: 100%;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+	list-style:none;
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
+    z-index: 2;
 }
-header nav ul li{
-    display: inline-block;
+
+#nav ul li{
+    height: 100%;
+	position:relative;
+	float:left;
+	margin:0;
+	padding:0;
     transition: background-color .3s linear;
 }
-header nav ul li:hover{
-	background-color: #262977;
+
+#nav ul li.current-menu-item{
+	background:#ddd;
 }
-header nav ul li:hover  a{
+
+#nav ul li:hover{
+	background: #262977;
+}
+#nav ul li a:hover{
 	color: #808080;
 }
 
+#nav ul ul{
+	display:none;
+	position:absolute;
+	top:100%;
+	left:0;
+	background: #2E3094;;
+	padding:0;
+    width: 100%;
+}
+
+#nav ul ul li{
+	float:none;
+	width:100%;
+}
+
+#nav ul ul ul{
+	top:0;
+	left:100%;
+}
+
+#nav ul li:hover > ul{
+	display:block;
+}
+
 /*TEXT*/
-header nav ul li a{
-    display: table-cell;
-    vertical-align: middle;
+#nav a{
+    display: block;
+    text-align: center;
     height: 6em;
     width: 100%;
     color:white;
 	text-decoration:none;
 	font-weight:bold;
     transition: .3s linear;
+    padding-top: 2.5em;
 }
-header nav ul li p{
+#nav p{
+    font-size: 1em;
     letter-spacing:.1em;
     padding-left: .8em;
     padding-right: .8em;
     padding-bottom: 0;
     padding-top: 0;
 }
-header nav ul li:first-child{
+#navHome {
     display: none;
 }
-
 /*IMAGE*/
-header img{
+#headerNav img{
     position: absolute;
     top: 0;
     left: 0;
