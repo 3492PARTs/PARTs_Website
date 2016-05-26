@@ -104,13 +104,14 @@ html, body{
 #nav a{
     display: block;
     text-align: center;
-    height: 6em;
+    height: 3.5em;
     width: 100%;
     color:white;
 	text-decoration:none;
 	font-weight:bold;
     transition: .3s linear;
     padding-top: 2.5em;
+    overflow: hidden;
 }
 #nav p{
     font-size: 1em;
