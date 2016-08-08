@@ -162,46 +162,7 @@
 }
 
 
-@-webkit-keyframes arrow1 {
-  0%, 16.656666666666666% { opacity: 1; z-index: 5; }
-  16.666666666666668%, 100%  { opacity: 0; z-index: -1; }
-}
-@keyframes arrow1 {
-  0%, 16.656666666666666% { opacity: 1; z-index: 5; }
-  16.666666666666668%, 100%  { opacity: 0; z-index: -1; }
-}
 
-
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num5,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num1 {
-  -webkit-animation: arrow1 48000ms infinite -2000ms;
-  animation: arrow1 48000ms infinite -2000ms;
-}
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num0,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num2 {
-  -webkit-animation: arrow1 48000ms infinite 6000ms;
-  animation: arrow1 48000ms infinite 6000ms;
-}
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num1,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num3 {
-  -webkit-animation: arrow1 48000ms infinite 14000ms;
-  animation: arrow1 48000ms infinite 14000ms;
-}
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num2,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num4 {
-  -webkit-animation: arrow1 48000ms infinite 22000ms;
-  animation: arrow1 48000ms infinite 22000ms;
-}
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num3,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num5 {
-  -webkit-animation: arrow1 48000ms infinite 30000ms;
-  animation: arrow1 48000ms infinite 30000ms;
-}
-.csslider1 > #cs_play1:checked ~ .cs_arrowprev > label.num4,
-.csslider1 > #cs_play1:checked ~ .cs_arrownext > label.num0 {
-  -webkit-animation: arrow1 48000ms infinite 38000ms;
-  animation: arrow1 48000ms infinite 38000ms;
-}
 
 
 .csslider1 > .slide:checked ~ .cs_arrowprev > label,
@@ -311,7 +272,6 @@
   16.666666666666668%, 100%  { opacity: 0; z-index: -1; }
 }
 
-
 .csslider1 > #cs_play1:checked ~ .cs_play_pause > .cs_pause.num0 {
   opacity: 0;
   z-index: -1;
@@ -348,6 +308,7 @@
   -webkit-animation: pauseChange1 48000ms infinite 38000ms;
   animation: pauseChange1 48000ms infinite 38000ms;
 }
+
 
 
 .csslider1 > .slide:checked ~ .cs_play_pause > .cs_pause,
