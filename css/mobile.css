@@ -660,8 +660,8 @@ body {
     margin-right: auto;
 }
 
-.yearAccordion #jumpWideScreen {
-    display: none;
+#jumpWideScreen {
+    display: none !important;
 }
 
 #yearJump {
