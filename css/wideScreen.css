@@ -499,6 +499,21 @@ body {
 }
 
 
+/*BANNERS*/
+
+#banners {
+    text-align: center;
+}
+
+.banners {
+    display: inline-block;
+}
+
+#scrollBanner {
+    display: none;
+}
+
+
 /*JUMP TO YEAR*/
 
 .yearAccordion {
