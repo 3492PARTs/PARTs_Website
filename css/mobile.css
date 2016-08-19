@@ -634,6 +634,24 @@ body {
 }
 
 
+/*BANNERS*/
+
+#banners {
+    text-align: center;
+    height: 16em;
+    overflow: auto;
+}
+
+.banners {
+    display: inline-block;
+    width: 40.4em;
+}
+
+#scrollBanner {
+    text-align: center;
+}
+
+
 /*JUMP TO YEAR DROPDOWN*/
 
 .yearAccordion {
