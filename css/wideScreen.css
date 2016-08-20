@@ -253,6 +253,27 @@ body {
 }
 
 
+/*bduke site*/
+
+#bduke {
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    bottom: .5em;
+    right: .5em;
+}
+
+#bduke a {
+    font-size: 1em;
+    text-decoration: none;
+    transition: .25s linear;
+}
+
+#bduke a:hover {
+    color: #FF6A00;
+}
+
+
 /*FOOTER> KEEP AT BOTTOM*/
 
 html,
