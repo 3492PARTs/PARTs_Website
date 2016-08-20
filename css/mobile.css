@@ -147,7 +147,7 @@ body {
     box-shadow: 0 0 7px 7px rgba(0, 0, 0, 0.4);
 }
 
-#headerNav img {
+#navContainer img {
     position: absolute;
     position: fixed;
     top: .25em;
@@ -370,6 +370,30 @@ body {
 #connectSocial:hover img:hover {
     opacity: 1;
     transition: visibility 0s .25s, opacity .25s linear;
+}
+
+
+/*bduke site*/
+
+#bduke {
+    position: absolute;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: .5em;
+    padding-right: .5em;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#bduke a {
+    font-size: 1em;
+    text-decoration: none;
+    transition: .25s linear;
+}
+
+#bduke a:hover {
+    color: #FF6A00;
 }
 
 
