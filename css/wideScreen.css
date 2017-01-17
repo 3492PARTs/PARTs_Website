@@ -587,6 +587,47 @@ body {
 }
 
 
+/*NEW BIO*/
+
+#ourBots input {
+    display: block;
+}
+
+#ourBots> #bot2011:not(:checked)~ #botBio2011> .botBio,
+#ourBots> #bot2012:not(:checked)~ #botBio2012> .botBio,
+#ourBots> #bot2013:not(:checked)~ #botBio2013> .botBio,
+#ourBots> #bot2014:not(:checked)~ #botBio2014> .botBio,
+#ourBots> #bot2015:not(:checked)~ #botBio2015> .botBio,
+#ourBots> #bot2016:not(:checked)~ #botBio2016> .botBio {
+    display: none;
+}
+
+#ourBots> #bot2011:checked~ #botBio2011> .closeBotBio,
+#ourBots> #bot2012:checked~ #botBio2012> .closeBotBio,
+#ourBots> #bot2013:checked~ #botBio2013> .closeBotBio,
+#ourBots> #bot2014:checked~ #botBio2014> .closeBotBio,
+#ourBots> #bot2015:checked~ #botBio2015> .closeBotBio,
+#ourBots> #bot2016:checked~ #botBio2016> .closeBotBio {
+    z-index: 5;
+}
+
+#mcCoy {}
+
+#closeBotBio {
+    width: 20em;
+    height: 20em;
+    background-color: aqua;
+}
+
+#ourBots img {
+    width: 20vw;
+}
+
+#ourBots> div {
+    display: inline-block;
+}
+
+
 /**********END ABOUT TEAM**********/
 
 
@@ -751,17 +792,17 @@ p {
 /*LOGOS*/
 
 #first {
-    width: 90%;
-    margin-bottom: 25%;
+    width: 50%;
+    margin-bottom: 10%;
 }
 
 #frc {
-    width: 90%;
-    margin-top: 25%;
+    width: 50%;
+    margin-top: 10%;
 }
 
 #gameLogo {
-    width: 90%;
+    width: 50%;
 }
 
 
