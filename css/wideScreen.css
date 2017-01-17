@@ -792,17 +792,17 @@ p {
 /*LOGOS*/
 
 #first {
-    width: 90%;
-    margin-bottom: 25%;
+    width: 50%;
+    margin-bottom: 10%;
 }
 
 #frc {
-    width: 90%;
-    margin-top: 25%;
+    width: 50%;
+    margin-top: 10%;
 }
 
 #gameLogo {
-    width: 90%;
+    width: 50%;
 }
 
 
