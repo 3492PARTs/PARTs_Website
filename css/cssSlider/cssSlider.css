@@ -511,12 +511,12 @@ just replace your value based on the ratio equation*/
 #cssSlider> #pause:checked~ #pageNav> #nextArrow> #slideR6,
 #cssSlider> #pause:checked~ #pageNav> #previousArrow> #slideL5,
 #cssSlider> #pause:checked~ #pageNav #nextArrow> #slideR1,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point1,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point2,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point3,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point4,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point5,
-#cssSlider> #pause:checked~ #pageIndicators> .indicator> #point6 {
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6 {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
 }
