@@ -1,0 +1,144 @@
+/**********BEGIN ABOUT TEAM**********/
+
+
+/*JUMP TO YEAR*/
+
+.yearAccordion {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.yearJumpNav td {
+    overflow: hidden;
+}
+
+.yearJumpNav a {
+    display: block;
+    margin: -10em;
+    padding: 10em;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .25s linear;
+}
+
+
+/*yearJump:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    .yearAccordion {
+        width: 80%;
+    }
+    #yearJumpNav {
+        width: 100%;
+    }
+    #yearJump,
+    #ac-0 {
+        display: none;
+    }
+    /*TABLE IMAGES*/
+    #aboutParts .bot {
+        width: 40%;
+    }
+}
+
+
+/*yearJump:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    .yearAccordion {
+        width: 90%;
+    }
+    /*PAGE DISPLAY*/
+    #aboutParts td {
+        display: block;
+    }
+    #yearJump {
+        width: 100%;
+    }
+    .yearJumpNav td {
+        display: block;
+    }
+    .yearJumpNav a {
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        margin: -10em;
+        padding: 10em;
+    }
+    .yearAccordion input {
+        display: none;
+    }
+    .yearAccordion .article {
+        overflow: hidden;
+        height: 0px;
+    }
+    /*DROP DOWN STYLING*/
+    .yearAccordion input:checked ~ .article.ac-small {
+        height: 28em;
+    }
+    .article.ac-small table {
+        width: 100%;
+    }
+    .wallpapers .article.ac-small .yearLine {
+        border-bottom: 1px solid $navHam;
+    }
+    /*DROP DOWN ACTION*/
+    .yearAccordion input:checked ~ .article {
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+    }
+    .yearAccordion .article {
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        -ms-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+    }
+    .yearAccordion .article.ac-small .yearLine {
+        border-bottom: 1px solid #808080;
+    }
+    #yearDown {
+        float: right;
+        height: 2.6em;
+    }
+    #homeBot {
+        display: none;
+    }
+    /*TABLE IMAGES*/
+    #aboutParts .bot {
+        width: 100%;
+    }
+    #aboutParts h2 {
+        text-align: center;
+    }
+    #aboutParts p {
+        text-align: left;
+    }
+    #awards p {
+        text-align: left;
+    }
+}
+
+
+/*TEXT*/
+
+#history h1 {
+    text-align: center;
+}
+
+
+/*TABLE IMAGES*/
+
+#aboutParts img {
+    width: 60%;
+}
+
+#aboutParts td {
+    text-align: center;
+}
+
+
+/**********END ABOUT TEAM**********/

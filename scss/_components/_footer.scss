@@ -1,0 +1,154 @@
+/*FOOTER*/
+
+#footer_accent {
+    background-color: $footerAccent;
+    width: 100%;
+    height: 30%;
+}
+
+#footerArrow img {
+    height: 100%;
+    float: right;
+}
+
+
+/*FOOTER CONTENT*/
+
+#footerContent {
+    height: 70%;
+    width: 100%;
+}
+
+#connect {
+    height: 30%;
+}
+
+#connect h2 {
+    text-align: center;
+    padding-top: .4em;
+    margin: 0;
+}
+
+
+/*FOOTER SOCIAL ICONS*/
+
+#connectSocial {
+    margin: auto;
+    text-align: justify;
+}
+
+#connectSocial img {
+    display: inline-block;
+    vertical-align: top;
+    /* IE fix. */
+    *display: inline;
+    zoom: 1;
+}
+
+#connectSocial:after {
+    content: "";
+    width: 100%;
+    display: inline-block;
+}
+
+#connectSocial img {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#connectSocial img {
+    opacity: 1;
+    transition: visibility 0s .25s, opacity .25s linear;
+}
+
+#connectSocial:hover img {
+    opacity: 0.2;
+    transition: opacity .25s linear;
+}
+
+#connectSocial:hover img:hover {
+    opacity: 1;
+    transition: visibility 0s .25s, opacity .25s linear;
+}
+
+
+/*FOOTER:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    /*FOOTER SOCIAL ICONS*/
+    #connectSocial {
+        height: 70%;
+        width: 80%;
+    }
+    #connectSocial img {
+        height: 60%;
+    }
+}
+
+
+/*FOOTER:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    /*FOOTER SOCIAL ICONS*/
+    #connectSocial {
+        height: 60%;
+        width: 95%;
+    }
+    #connectSocial img {
+        height: 55%;
+    }
+}
+
+
+/*FOOTER> KEEP AT BOTTOM*/
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+#content {
+    padding-bottom: 12em;
+    /* Height of the footer element */
+}
+
+#footer {
+    background: $fontColor;
+    width: 100%;
+    height: 12em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+
+/*bduke site*/
+
+#bduke {
+    position: absolute;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: .5em;
+    padding-right: .5em;
+    margin: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#bduke a {
+    font-size: 1em;
+    text-decoration: none;
+    transition: .25s linear;
+}
+
+#bduke a:hover {
+    color: $hoverColor;
+}

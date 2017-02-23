@@ -1,0 +1,49 @@
+/*FONT IMPORT*/
+
+@font-face {
+    font-family: roboto-regular;
+    src: url(roboto-regular.ttf);
+}
+
+
+/*FONT*/
+
+* {
+    font-family: 'roboto-regular';
+    color: $fontColor;
+}
+
+
+/*TEXT*/
+
+main h1 {
+    font-size: 2em;
+}
+
+main h2 {
+    font-size: 1.8em;
+}
+
+main h3 {
+    font-size: 1.7em;
+}
+
+main h4 {
+    font-size: 1.6em;
+}
+
+main p,
+main ul>li {
+    font-size: 1.5em;
+}
+
+
+/*LINK COLOR*/
+
+#content a {
+    transition: .25s linear;
+}
+
+#content a:hover {
+    color: $hoverColor;
+}

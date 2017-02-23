@@ -1,0 +1,33 @@
+/**********BEGIN SPONSORING**********/
+
+
+/*TEXT*/
+
+#mainSponsor a {
+    font-weight: bold;
+}
+
+#closingSponsor {
+    text-align: center;
+}
+
+
+/*SPONSORING:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    #mainSponsor h1 {
+        text-align: center;
+    }
+    #donationLevel {
+        text-align: left;
+    }
+    #mainSponsor p {
+        text-align: center;
+    }
+    #mainSponsor ul li p {
+        text-align: left;
+    }
+}
+
+
+/**********END SPONSORING**********/

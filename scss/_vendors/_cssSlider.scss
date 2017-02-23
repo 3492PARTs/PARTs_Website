@@ -331,7 +331,8 @@ just replace your value based on the ratio equation*/
 
 /*size of the images*/
 
-#cssSlider> #sliderImages> img {
+#cssSlider> #sliderImages> img,
+#cssSlider> #sliderImages> a> img {
     width: 100vw;
     height: 100%;
     float: left;
@@ -343,8 +344,8 @@ just replace your value based on the ratio equation*/
 #cssSlider> #sliderImages {
     position: absolute;
     left: 0;
-    transition: 2.66666666668s;
     width: 600vw;
+    /*animation parameters*/
     -webkit-animation-name: slider;
     -webkit-animation-duration: 40s;
     -webkit-animation-timing-function: ease-in-out;
@@ -353,6 +354,9 @@ just replace your value based on the ratio equation*/
     animation-duration: 40s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
+    /*this is the time to transition between images
+    when using the arrows*/
+    transition: 2.66666666667s;
 }
 
 
@@ -511,12 +515,12 @@ just replace your value based on the ratio equation*/
 #cssSlider> #pause:checked~ #pageNav> #nextArrow> #slideR6,
 #cssSlider> #pause:checked~ #pageNav> #previousArrow> #slideL5,
 #cssSlider> #pause:checked~ #pageNav #nextArrow> #slideR1,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5,
-#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6 {
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point1,
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point2,
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point3,
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point4,
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point5,
+#cssSlider> #pause:checked~ #pageIndicators> .indicator> .hoverPoint> #point6 {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
 }

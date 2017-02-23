@@ -1,0 +1,73 @@
+/**********BEGIN ABOUT FIRST AND GAME**********/
+
+
+/*TABLE SIZE*/
+
+#aboutFirst table {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/*TABLE TEXT*/
+
+#aboutFirst thead h1 {
+    text-align: center;
+}
+
+#aboutFirst h1,
+h2,
+p {
+    text-align: left;
+}
+
+
+/*IMAGE ALIGNMENT*/
+
+#aboutFirst td {
+    text-align: center;
+}
+
+
+/*FIRST:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    /*LOGOS*/
+    #first {
+        width: 50%;
+        margin-bottom: 10%;
+    }
+    #frc {
+        width: 50%;
+        margin-top: 10%;
+    }
+    #gameLogo {
+        width: 50%;
+    }
+}
+
+
+/*FIRST:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    /*LOGOS*/
+    #first {
+        margin: 1em;
+        width: 40%;
+    }
+    #frc {
+        width: 40%;
+        margin: 1em;
+    }
+    #gameLogo {
+        width: 80%;
+    }
+    /*TABLE DISPLAY*/
+    #aboutFirst td {
+        display: block;
+    }
+}
+
+
+/**********END ABOUT FIRST AND GAME**********/
