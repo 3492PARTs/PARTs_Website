@@ -1,7 +1,8 @@
 /*SCREEN SIZE:WIDE SCREEN*/
 
 @media only screen and (min-width: 1001px) {
-    main {
+    main,
+    .globalWidth {
         width: 70%;
     }
 }
@@ -10,12 +11,14 @@
 /*SCREEN SIZE:NARROW SCREEN*/
 
 @media only screen and (max-width: 1000px) {
-    main {
+    main,
+    .globalWidth {
         width: 90%;
     }
 }
 
-main {
+main,
+.globalWidth {
     margin-left: auto;
     margin-right: auto;
 }
