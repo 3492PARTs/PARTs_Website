@@ -814,10 +814,87 @@ body {
 
 /**********END SPONSORING**********/
 /**********BEGIN ABOUT TEAM**********/
+/*BANNERS*/
+@font-face {
+  font-family: "Adam";
+  src: url("adam.otf") format("opentype");
+  unicode-range: U+0000-00FF; }
+.banners, .banners *, .banner {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; }
+
+.banner-parent {
+  width: 100%;
+  overflow: scroll; }
+  .banner-parent .banners {
+    width: auto;
+    white-space: nowrap; }
+
+.banners li, .banner {
+  line-height: 1.2;
+  font-family: "Adam", sans-serif;
+  text-align: center;
+  vertical-align: top;
+  display: inline-block;
+  margin: 0 3px 30px;
+  width: 120px;
+  position: relative;
+  background: #0f4bcb;
+  color: white;
+  padding: 10px;
+  white-space: normal; }
+
+.banners img, .banner img {
+  width: 75px;
+  margin-bottom: 5px; }
+
+.banners li:after, .banner:after {
+  content: "";
+  position: absolute;
+  display: block;
+  border: 60px solid #0f4bcb;
+  border-top-width: 5px;
+  border-bottom: 20px transparent solid;
+  top: 100%;
+  left: 0; }
+
+.banners li, .banner {
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1)); }
+  .banners li:after, .banner:after {
+    -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+    filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');
+    -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1)); }
+
+#banners {
+  text-align: center; }
+
+.banners {
+  display: inline-block; }
+
+/*banners:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  #scrollBanner {
+    display: none; } }
+/*banners:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /*BANNERS*/
+  #banners {
+    height: 16em;
+    overflow: auto; }
+
+  .banners {
+    width: 40.4em; }
+
+  #scrollBanner {
+    text-align: center; } }
 /*JUMP TO YEAR*/
 .yearAccordion {
-  margin-left: auto;
-  margin-right: auto; }
+  width: 100%; }
 
 .yearJumpNav td {
   overflow: hidden; }
@@ -832,9 +909,6 @@ body {
 
 /*yearJump:WIDE SCREEN*/
 @media only screen and (min-width: 1001px) {
-  .yearAccordion {
-    width: 80%; }
-
   #yearJumpNav {
     width: 100%; }
 
@@ -847,9 +921,6 @@ body {
     width: 40%; } }
 /*yearJump:NARROW SCREEN*/
 @media only screen and (max-width: 1000px) {
-  .yearAccordion {
-    width: 90%; }
-
   /*PAGE DISPLAY*/
   #aboutParts td {
     display: block; }
@@ -872,17 +943,14 @@ body {
 
   .yearAccordion .article {
     overflow: hidden;
-    height: 0px; }
+    max-height: 0px; }
 
   /*DROP DOWN STYLING*/
   .yearAccordion input:checked ~ .article.ac-small {
-    height: 28em; }
+    max-height: 40em; }
 
   .article.ac-small table {
     width: 100%; }
-
-  .wallpapers .article.ac-small .yearLine {
-    border-bottom: 1px solid #808080; }
 
   /*DROP DOWN ACTION*/
   .yearAccordion input:checked ~ .article {
@@ -902,32 +970,41 @@ body {
   .yearAccordion .article.ac-small .yearLine {
     border-bottom: 1px solid #808080; }
 
+  #jumpWideScreen {
+    display: none; }
+
+  /*DROPDOWN ARROW*/
   #yearDown {
     float: right;
-    height: 2.6em; }
+    height: 2.6em;
+    cursor: pointer;
+    margin: -5em;
+    padding: 5em;
+    transform: rotate(0deg);
+    transition: .2s linear; }
 
-  #homeBot {
-    display: none; }
+  .yearAccordion input:checked ~ label #yearJump tr td #yearDown {
+    transform: rotate(180deg); }
 
   /*TABLE IMAGES*/
   #aboutParts .bot {
-    width: 100%; }
+    width: 100%; } }
+/*TABLE IMAGES*/
+#aboutParts img {
+  width: 60%; }
 
-  #aboutParts h2 {
-    text-align: center; }
-
-  #aboutParts p {
-    text-align: left; }
-
-  #awards p {
-    text-align: left; } }
 /*TEXT*/
 #history h1 {
   text-align: center; }
 
-/*TABLE IMAGES*/
-#aboutParts img {
-  width: 60%; }
+#aboutParts h2 {
+  text-align: center; }
+
+#aboutParts p {
+  text-align: left; }
+
+#awards li {
+  text-align: left; }
 
 #aboutParts td {
   text-align: center; }
