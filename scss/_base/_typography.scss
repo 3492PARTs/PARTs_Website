@@ -40,10 +40,7 @@ main ul>li {
 
 /*LINK COLOR*/
 
-#content a {
-    transition: .25s linear;
-}
-
-#content a:hover {
+main a:hover {
     color: $hoverColor;
+    transition: .25s linear;
 }
