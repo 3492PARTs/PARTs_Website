@@ -3,7 +3,7 @@
 
 /*ALBUM COVERS*/
 
-#media {
+#mainMedia {
     text-align: center;
     // needed in wide not mobile? height: 100%;
 }
@@ -18,7 +18,8 @@
 /*album image:WIDE SCREEN*/
 
 @media only screen and (min-width: 1001px) {
-    .albums img {
+    .albums img,
+    .wallpaperAccordion {
         width: 20%;
     }
 }
@@ -27,7 +28,8 @@
 /*album image:NARROW SCREEN*/
 
 @media only screen and (max-width: 1000px) {
-    .albums img {
+    .albums img,
+    .wallpaperAccordion {
         width: 60%;
     }
 }
@@ -58,10 +60,6 @@
     #blockLR {
         width: 4em;
     }
-    /*SPACER FOR HEIGHT ON MEDIA PAGE*/
-    #mediaArrow img {
-        width: 6em;
-    }
 }
 
 
@@ -76,14 +74,6 @@
     #blockLR {
         width: 3em;
     }
-    /*SPACER FOR HEIGHT ON MEDIA PAGE*/
-    #mediaArrow img {
-        width: 4em;
-    }
-}
-
-#mediaArrow img {
-    visibility: hidden;
 }
 
 
@@ -98,6 +88,10 @@
 
 /*WALLPAPER DOWNLOAD DROPDOWN*/
 
+.album {
+    cursor: pointer;
+}
+
 .wallpaperAccordion {
     padding: .5em;
 }
@@ -107,7 +101,6 @@
 
 @media only screen and (min-width: 1001px) {
     .wallpaperAccordion {
-        width: 20%;
         display: inline-block;
     }
 }
@@ -132,14 +125,14 @@
 
 .wallpaperAccordion .article {
     overflow: hidden;
-    height: 0px;
+    max-height: 0px;
 }
 
 
 /*DROP DOWN STYLING*/
 
 .wallpaperAccordion input:checked~ .article.ac-small {
-    height: 15em;
+    max-height: 15em;
 }
 
 .article.ac-small table {
