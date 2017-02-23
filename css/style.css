@@ -672,6 +672,23 @@ body {
   #homeDepot {
     padding-left: .5em; } }
 /**********END HOME PAGE**********/
+/**********BEGIN CONTACT US**********/
+/*TEXT*/
+#mainContact h2 {
+  text-align: center; }
+
+/*FLUID MAP*/
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto; }
+
+#mapWrapper {
+  width: 100%;
+  height: 35em;
+  margin: 2em auto 2em auto; }
+
+/**********END CONTACT US**********/
 /**********BEGIN ABOUT TEAM**********/
 /*JUMP TO YEAR*/
 .yearAccordion {
@@ -1047,22 +1064,6 @@ p {
   #mainSponsor ul li p {
     text-align: left; } }
 /**********END SPONSORING**********/
-/**********BEGIN CONTACT US**********/
-/*TEXT*/
-#contact h2 {
-  text-align: center; }
-
-/*FLUID MAP*/
-#map {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto; }
-
-#mapWrapper {
-  height: 30em;
-  margin: 2em auto 2em auto; }
-
-/**********END CONTACT US**********/
 /**********BEGIN COMPETITION**********/
 #competition2 {
   width: 100%; }
