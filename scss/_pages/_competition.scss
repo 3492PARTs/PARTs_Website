@@ -1,28 +1,39 @@
 /**********BEGIN COMPETITION**********/
 
-#competition2 {
+#competitionTable,
+#competitionSchedule {
     width: 100%;
 }
 
 
 /*TEXT*/
 
-#competition h2 {
+#competitionTable h2,
+#competitionTable h3 {
     text-align: center;
 }
 
 
 /*BORDER*/
 
-#competition td {
+#competitionTable td {
     border: 2px solid $navHam;
 }
 
 
 /*IMG*/
 
-#competition img {
+#competitionTable img {
     width: 100%;
+}
+
+
+/*COMPETITION:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    .competitionTableDisplay {
+        display: block;
+    }
 }
 
 
