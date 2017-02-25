@@ -55,7 +55,6 @@
     padding: 10em;
     text-decoration: none;
     font-weight: bold;
-    transition: .25s linear;
 }
 
 
@@ -140,6 +139,9 @@
         padding: 5em;
         transform: rotate(0deg);
         transition: .2s linear;
+    }
+    #yearDownTd {
+        overflow: hidden;
     }
     .yearAccordion input:checked~label #yearJump tr td #yearDown {
         transform: rotate(180deg);
