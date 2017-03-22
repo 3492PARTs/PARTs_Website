@@ -103,14 +103,14 @@
         max-height: 0px;
     }
     /*DROP DOWN STYLING*/
-    .yearAccordion input:checked ~ .article.ac-small {
+    .yearAccordion input:checked~.article.ac-small {
         max-height: 40em;
     }
     .article.ac-small table {
         width: 100%;
     }
     /*DROP DOWN ACTION*/
-    .yearAccordion input:checked ~ .article {
+    .yearAccordion input:checked~.article {
         -webkit-transition: all 0.5s ease-in-out;
         -moz-transition: all 0.5s ease-in-out;
         -o-transition: all 0.5s ease-in-out;
@@ -155,7 +155,7 @@
 
 /*TABLE IMAGES*/
 
-#aboutParts img {
+#aboutParts #beanieBot {
     width: 60%;
 }
 
@@ -180,6 +180,136 @@
 
 #aboutParts td {
     text-align: center;
+}
+
+
+/*NEW BOT LAYOUT*/
+
+.cover {
+    width: 30%;
+}
+
+.cover h2 {
+    width: 100%;
+}
+
+
+/*WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    #aboutParts .cover img {
+        width: 100%;
+    }
+}
+
+
+/*NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    #aboutParts .cover img {
+        height: 14em;
+    }
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.robotLabel {
+    cursor: pointer;
+}
+
+.popup {
+    background: #fff;
+    border-radius: 5px;
+    width: 80%;
+    position: relative;
+    transition: all 1s ease-in-out;
+    max-height: 100vh;
+}
+
+.popup h2 {
+    margin-top: 0;
+    padding-top: .5em;
+    text-align: center;
+}
+
+.popup .close {
+    position: absolute;
+    transition: all 200ms;
+    font-size: 2em;
+    font-weight: bold;
+    text-decoration: none;
+    color: $fontColor;
+}
+
+.popup .close:hover {
+    color: $hoverColor;
+}
+
+.popup .robotBio {
+    max-height: 80vh;
+    padding-right: 2em;
+    padding-left: 2em;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+//wide
+@media only screen and (min-width: 1001px) {
+    .popup .close {
+        top: 20px;
+        right: 30px;
+    }
+}
+
+//narrow
+@media screen and (max-width: 1000px) {
+    .cover {
+        width: 80%;
+    }
+    .popup {
+        width: 80%; //make 80
+    }
+    .popup .close {
+        top: 40px;
+        right: 30px;
+    }
+    .noNAV:checked~#blueBlock,
+    .noNAV:checked~#menu,
+    .noNAV:checked~#navContainer {
+        visibility: hidden;
+        opacity: 0;
+        transition: .25s ease-in-out;
+    }
+}
+
+#mccoyRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#mccoy {
+    visibility: visible;
+    opacity: 1;
+    z-index: 16;
+}
+
+
+/*
+#none:checked~#wrapper>#content>#mainLibrary>#coversContainer>.overlay>.popup>.books a {
+    pointer-events: none;
+    cursor: default;
+}*/
+
+.robotRadio {
+    display: none;
 }
 
 

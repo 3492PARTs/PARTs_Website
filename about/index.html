@@ -14,6 +14,16 @@
 </head>
 
 <body id="top">
+
+    <input type="radio" name="overlay" id="none" class="robotRadio">
+    <input type="radio" name="overlay" id="mccoyRadio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2012Radio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2013Radio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2014Radio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2015Radio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2016Radio" class="robotRadio noNAV" />
+    <input type="radio" name="overlay" id="2017Radio" class="robotRadio noNAV" />
+
     <nav id="navContainer">
         <a href="../"><img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;" /></a>
         <div id="nav">
@@ -57,7 +67,7 @@
 
     <input type="checkbox" id="nav-trigger" class="nav-trigger" />
 
-    <div class="clear-menu-btn">
+    <div id="menu" class="clear-menu-btn">
         <span class="top"></span>
         <span class="middle"></span>
         <span class="bottom"></span>
@@ -140,7 +150,7 @@
                     <table>
                         <tr>
                             <td>
-                                <img src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;" />
+                                <img id="beanieBot" src="../contents/webImages/Robots/BeanieBot.svg" onerror="this.src='../contents/webImages/Robots/BeanieBot.png'; this.onerror=null;" />
                             </td>
                             <td>
                                 <h2>A Brief History...</h2>
@@ -179,7 +189,7 @@
                                 </ul>
                             </td>
                         </tr>
-                        <tr>
+                        <!--<tr>
                             <td class="bot">
                                 <img id="2011" src="../contents/webImages/Robots/McCoy.jpg" />
                             </td>
@@ -248,8 +258,30 @@
                                 <p>Beanie the Barbarian competed in the 2016 Queen City Regional, in Cincinnati, OH. There we were ranked 34 out of 56. Although we did not get selected for an alliance, we cheered for our friends form Logan, WV team 337 (Hard Working Hard Hats) who played hard in their final matches.</p>
                                 <p>In our offseason event WV ROX(West Virginia RObotics eXtreme), we competed with our new drive team and finished 16 out of 24. We went on the be on the first alliance with 456(Seige Robotics) and 2641(MARS). Playing hard with them, we won the event.</p>
                             </td>
-                        </tr>
+                        </tr>-->
                     </table>
+                    <div id="coversContainer">
+                        <div class="cover">
+                            <h2>2011</h2>
+                            <label for="mccoyRadio" class="robotLabel">
+                                <img alt="2011 Robot" src="../contents/webImages/Robots/McCoy.jpg"></label>
+                        </div>
+
+                        <div id="mccoy" class="overlay">
+                            <div class="popup">
+                                <h2>2011</h2>
+                                <label for="none" class="close robotLabel">&times;</label>
+                                <div class="robotBio">
+                                    <p>"McCoy", named in honor of one of the most respected faculty members at Winfield High, Coach Leon McCoy, was our first robot designed to play the 2011 game LOGO MOTION. He was designed as a defensive bot who had an attachment on the back to launch a "mini bot" up a pole, a crucial part of the game. </p>
+                                    <p>LOGO MOTION is played by two competing alliances on a flat 27' x 54' ft field. Each alliance consists of three robots. They compete to hang as many inflated plastic shapes (triangles, circles, and squares) on their grids as they can during a 2 minute and 15 second match. The higher the teams hang their game pieces on their scoring grid, the more points their alliance receives. The match ends with robots deploying minibots, small electro-mechanical assemblies that are independent of the host robot, onto vertical poles. The minibots race to the top of the pole to trigger a sensor and earn additional bonus points.</p>
+                                    <p>McCoy competed in the 2011 Pittsburgh Regional. There we were ranked 38 out of 39 teams. We went on to be selected by the 1st alliance consisting of teams 1114 (Simbotics) and 1503(Spartonics). We went all the way through finals and won the regional, qualifying us for the world championship.</p>
+                                    <p>We competed in the World-Wide championship in St. Louis, MO. We finished 61 out of 88 in our division.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </main>
         </div>
