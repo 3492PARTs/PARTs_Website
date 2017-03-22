@@ -39,158 +39,41 @@
 }
 
 
-/*JUMP TO YEAR*/
-
-.yearAccordion {
-    width: 100%;
-}
-
-.yearJumpNav td {
-    overflow: hidden;
-}
-
-.yearJumpNav a {
-    display: block;
-    margin: -10em;
-    padding: 10em;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-
-/*yearJump:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-    #yearJumpNav {
-        width: 100%;
-    }
-    #yearJump,
-    #ac-0 {
-        display: none;
-    }
-    /*TABLE IMAGES*/
-    #aboutParts .bot {
-        width: 40%;
-    }
-}
-
-
-/*yearJump:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-    /*PAGE DISPLAY*/
-    #aboutParts td {
-        display: block;
-    }
-    #yearJump {
-        width: 100%;
-    }
-    .yearJumpNav td {
-        display: block;
-    }
-    .yearJumpNav a {
-        text-decoration: none;
-        font-weight: bold;
-        display: block;
-        margin: -10em;
-        padding: 10em;
-    }
-    .yearAccordion input {
-        display: none;
-    }
-    .yearAccordion .article {
-        overflow: hidden;
-        max-height: 0px;
-    }
-    /*DROP DOWN STYLING*/
-    .yearAccordion input:checked~.article.ac-small {
-        max-height: 40em;
-    }
-    .article.ac-small table {
-        width: 100%;
-    }
-    /*DROP DOWN ACTION*/
-    .yearAccordion input:checked~.article {
-        -webkit-transition: all 0.5s ease-in-out;
-        -moz-transition: all 0.5s ease-in-out;
-        -o-transition: all 0.5s ease-in-out;
-        -ms-transition: all 0.5s ease-in-out;
-        transition: all 0.5s ease-in-out;
-    }
-    .yearAccordion .article {
-        -webkit-transition: all 0.3s ease-in-out;
-        -moz-transition: all 0.3s ease-in-out;
-        -o-transition: all 0.3s ease-in-out;
-        -ms-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out;
-    }
-    .yearAccordion .article.ac-small .yearLine {
-        border-bottom: 1px solid $navHam;
-    }
-    #jumpWideScreen {
-        display: none;
-    }
-    /*DROPDOWN ARROW*/
-    #yearDown {
-        float: right;
-        height: 2.6em;
-        cursor: pointer;
-        margin: -5em;
-        padding: 5em;
-        transform: rotate(0deg);
-        transition: .2s linear;
-    }
-    #yearDownTd {
-        overflow: hidden;
-    }
-    .yearAccordion input:checked~label #yearJump tr td #yearDown {
-        transform: rotate(180deg);
-    }
-    /*TABLE IMAGES*/
-    #aboutParts .bot {
-        width: 100%;
-    }
-}
-
-
-/*TABLE IMAGES*/
-
-#aboutParts #beanieBot {
-    width: 60%;
-}
-
-
 /*TEXT*/
 
-#history h1 {
-    text-align: center;
-}
-
-#aboutParts h2 {
-    text-align: center;
-}
-
-#aboutParts p {
-    text-align: left;
-}
-
-#awards li {
-    text-align: left;
-}
-
+#mainAbout h1,
+#mainAbout h2,
 #aboutParts td {
     text-align: center;
+}
+
+#aboutParts p,
+#awards li {
+    text-align: left;
 }
 
 
 /*NEW BOT LAYOUT*/
 
-.cover {
-    width: 30%;
+#coversContainer {
+    text-align: center;
+}
+
+#mainAbout .cover {
+    display: inline-block;
+    background: red;
 }
 
 .cover h2 {
-    width: 100%;
+    //width: 100%;
+    background: yellow;
+}
+
+#aboutParts .cover img {
+    margin-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 1em;
 }
 
 
@@ -198,7 +81,7 @@
 
 @media only screen and (min-width: 1001px) {
     #aboutParts .cover img {
-        width: 100%;
+        height: 18em;
     }
 }
 
@@ -295,7 +178,13 @@
     }
 }
 
-#mccoyRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#mccoy {
+#mccoyRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#mccoy,
+#huRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#hu,
+#djRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#dj,
+#carlaRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#carla,
+#turboMikeRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#turboMike,
+#beanieTheBarbarianRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#beanieTheBarbarian,
+#beaniehemothRadio:checked~#wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#beaniehemoth {
     visibility: visible;
     opacity: 1;
     z-index: 16;
