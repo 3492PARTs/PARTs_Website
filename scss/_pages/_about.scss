@@ -40,7 +40,7 @@
 
 
 /*TEXT*/
-
+#aboutStart h1,
 #mainAbout h1,
 #mainAbout h2,
 #aboutParts td {
@@ -61,12 +61,11 @@
 
 #mainAbout .cover {
     display: inline-block;
-    background: red;
 }
 
 .cover h2 {
-    //width: 100%;
-    background: yellow;
+    margin: 0;
+    padding: 0;
 }
 
 #aboutParts .cover img {
@@ -74,24 +73,7 @@
     margin-top: 1em;
     margin-bottom: 1em;
     margin-right: 1em;
-}
-
-
-/*WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-    #aboutParts .cover img {
-        height: 18em;
-    }
-}
-
-
-/*NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-    #aboutParts .cover img {
-        height: 14em;
-    }
+    height: 18em;
 }
 
 .overlay {
@@ -159,9 +141,6 @@
 
 //narrow
 @media screen and (max-width: 1000px) {
-    .cover {
-        width: 80%;
-    }
     .popup {
         width: 80%; //make 80
     }
