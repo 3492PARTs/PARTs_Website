@@ -40,6 +40,7 @@
 
 
 /*TEXT*/
+
 #aboutStart h1,
 #mainAbout h1,
 #mainAbout h2,
@@ -168,13 +169,6 @@
     opacity: 1;
     z-index: 16;
 }
-
-
-/*
-#none:checked~#wrapper>#content>#mainLibrary>#coversContainer>.overlay>.popup>.books a {
-    pointer-events: none;
-    cursor: default;
-}*/
 
 .robotRadio {
     display: none;
