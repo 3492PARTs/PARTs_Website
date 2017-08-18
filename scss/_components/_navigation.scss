@@ -1,111 +1,137 @@
 /*NAV:WIDE SCREEN*/
 
 @media only screen and (min-width: 1001px) {
-    /*NAV BAR*/
-    #navContainer * {
+    /*main nav styling and positioning*/
+    nav * {
         padding: 0;
         margin: 0;
     }
-    #navContainer {
+    nav {
         position: relative;
-        height: 6em;
+        height: 5em;
         width: 100%;
         background-color: $mainColor;
     }
-    #nav {
+    .nav-wrapper-outer {
+        position: absolute;
+        display: block;
+        z-index: 2;
+        width: 100%;
+        height: 5em;
+        line-height: 5em;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    }
+    .nav-wrapper-inner {
         position: absolute;
         top: 0;
         right: 0;
         height: 100%;
     }
-    #nav ul {
+    /*items styling and positioning*/
+    .nav-wrapper-inner ul {
         height: 100%;
         list-style: none;
-        position: relative;
-        float: left;
-        padding-right: 2.5em;
         z-index: 2;
     }
-    #nav ul li {
+    .nav-wrapper-inner>ul {
+        padding-right: 2.5em;
+    }
+    .nav-wrapper-inner ul li {
         height: 100%;
         position: relative;
         float: left;
-        margin: 0;
-        padding: 0;
         transition: background-color .3s linear;
     }
-    #nav a.currentPage {
-        color: $navHoverColor;
+    .nav-wrapper-inner ul li:hover {
+        background: $mainColorShade !important;
     }
-    #nav ul li:hover {
-        background: $mainColorShade;
+    .nav-wrapper-inner ul li a:hover,
+    .nav-wrapper-inner a.currentPage {
+        color: $hoverColor !important;
     }
-    #nav ul li a:hover {
-        color: $navHoverColor;
+    /*DROPDOWN SUBNAV*/
+    .navDropdown {
+        width: 10em;
     }
-    #nav ul ul {
-        display: none;
-        position: absolute;
-        top: 100%;
+    .subNav {
+        width: 10em;
+        background-color: $mainColor;
         left: 0;
-        background: $mainColor;
-        ; // maybe remove
-        padding: 0;
-        width: 100%;
-    }
-    #nav ul ul li {
-        float: none;
-        width: 100%;
-    }
-    #nav ul ul ul {
+        opacity: 0;
+        position: absolute;
+        /*Why did i do this?*/
         top: 0;
-        left: 100%;
+        visibility: hidden;
+        z-index: 1;
+        -webkit-transition: all .4s ease;
+        transition: all .4s ease;
     }
-    #nav ul li:hover> ul {
-        display: block;
+    .subNav li {
+        background-color: $mainColor;
+        //float: none;
+        width: 10em;
+    }
+    .navDropdown:hover>.subNav {
+        opacity: 1;
+        top: 5em;
+        visibility: visible;
+        height: initial !important;
+    }
+    .subNav li a {
+        width: 10em;
+        height: initial;
+    }
+    /* Clearfix - self center its children suppoedly TEST THE NEED OF THIS
+    .nav-wrapper-inner> ul:after,
+    .nav-wrapper-inner> ul:before {
+        content: "";
+        display: table;
+    }
+    .nav-wrapper-inner> ul:after {
+        clear: both;
     }
     /*TEXT*/
-    #nav a {
+    .nav-wrapper-inner a {
         display: block;
         text-align: center;
-        height: 3.5em;
-        width: 100%;
         color: white;
         text-decoration: none;
         font-weight: bold;
-        transition: .3s linear;
-        padding-top: 2.5em;
-        overflow: hidden;
-    }
-    #nav p {
-        font-size: 1em;
+        transition: background-color .3s;
         letter-spacing: .1em;
-        padding-left: .8em;
-        padding-right: .8em;
-        padding-bottom: 0;
-        padding-top: 0;
+        padding: 0 .8em;
+    }
+    .subNav a {
+        text-align: center;
+        height: 4em !important;
+        line-height: 4em !important;
+        padding-top: 0 !important;
+        width: initial !important;
     }
     /*IMAGE*/
-    #navContainer img {
+    nav img {
         position: absolute;
-        top: 0;
-        left: 0;
-        padding-top: .5em;
-        padding-bottom: .5em;
-        padding-left: 2.5em;
-        height: 5em;
+        left: 2.5em;
+        height: 4em;
+        height: 4em;
+        top: 50%;
+        transform: translateY(-50%)
     }
     /*MOBILE NAV*/
     #nav-trigger {
         display: none;
     }
-    #blueBlock {
+    .fixed-mobile-nav {
         display: none;
     }
     .clear-menu-btn {
         display: none;
     }
-    #navHome {
+    .navHome {
+        display: none;
+    }
+    .navDropdown input,
+    .navDropdown>img {
         display: none;
     }
 }
@@ -114,12 +140,15 @@
 /*NAV:NARROW SCREEN*/
 
 @media only screen and (max-width: 1000px) {
-    /*NAV BAR*/
+    nav * {
+        padding: 0;
+        margin: 0;
+    }
     /* Navigation Menu - Background */
-    #nav {
+    .nav-wrapper-inner {
         background-color: $mainColor;
         /* critical sizing and position styles */
-        width: 14em;
+        width: 15.5em;
         position: fixed;
         top: 0;
         right: 0;
@@ -133,44 +162,36 @@
         flex-direction: column;
     }
     /* Navigation Menu - List items */
-    #nav ul {
-        padding: 0;
-        margin: 0;
+    .nav-wrapper-inner ul {
         width: 100%;
-        list-style-type: square;
+        line-height: 4em;
     }
-    #nav ul li {
+    .nav-wrapper-inner ul li {
         /* non-critical appearance styles */
         width: 100%;
         transition: background-color .3s linear;
         display: block;
         overflow: hidden;
     }
-    #nav ul li:hover {
+    .nav-wrapper-inner ul li:hover {
         background-color: $mainColorShade;
     }
-    #nav p {
-        text-align: left;
-        font-size: 1.5em;
+    .nav-wrapper-inner .subNav a {
         padding-left: 1em;
     }
-    #nav #subNav1 p {
-        padding-left: 2em;
-    }
-    #nav a.currentPage {
-        color: $navHoverColor;
-    }
-    #nav a {
+    .nav-wrapper-inner a {
         display: block;
-        padding: 3em;
-        margin: -3em;
         color: white;
         text-decoration: none;
         font-weight: bold;
         transition: .3s linear;
+        text-align: left;
+        font-size: 1.5em;
+        padding-left: .5em;
     }
-    #nav a:hover {
-        color: $navHoverColor;
+    .nav-wrapper-inner a:hover,
+    .nav-wrapper-inner a.currentPage {
+        color: $hoverColor;
     }
     /* Site Wrapper - Everything that isn't navigation */
     #wrapper {
@@ -187,73 +208,77 @@
         box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
     }
     /*following header*/
-    #blueBlock {
+    .fixed-mobile-nav {
         width: 100%;
-        height: 5em;
+        height: 4em;
         background-color: $mainColor;
         box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
         position: fixed;
         z-index: 10;
         transition: .5s linear;
     }
-    .nav-trigger:checked~ #blueBlock {
+    .nav-trigger:checked~.fixed-mobile-nav {
         box-shadow: 0 0 7px 7px rgba(0, 0, 0, 0.4);
     }
-    #navContainer img {
-        position: absolute;
-        position: fixed;
-        top: .25em;
-        left: 1em;
-        height: 4.5em;
-        z-index: 11;
+    /*space for mobile nav*/
+    .navHome {
+        margin-top: 6.2em;
+        width: 100%;
     }
-    #moverBlock {
-        height: 5em;
+    .nav-wrapper-outer img {
+        position: fixed;
+        left: .5em;
+        top: .25em;
+        z-index: 12;
+        height: 3.5em;
+    }
+    .mobile-nav-spacer {
+        height: 4em;
         width: 100%;
     }
     /* Pure CSS3 Hamburger*/
     .clear-menu-btn {
         position: fixed;
-        right: 1em;
-        top: 1em;
+        right: .75em;
+        top: .75em;
         z-index: 12;
-        width: 3em;
-        height: 3em;
+        width: 2.5em;
+        height: 2.5em;
         margin: 0 auto;
     }
     .nav-trigger:hover {
         cursor: pointer;
     }
-    .nav-trigger:checked~ .clear-menu-btn .top,
-    .nav-trigger:checked~ .clear-menu-btn .bottom {
+    .nav-trigger:checked~.clear-menu-btn .top,
+    .nav-trigger:checked~.clear-menu-btn .bottom {
         top: 50%;
     }
-    .nav-trigger:checked~ .clear-menu-btn .top {
+    .nav-trigger:checked~.clear-menu-btn .top {
         -webkit-transform: rotate(45deg);
         -moz-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         -o-transform: rotate(45deg);
         transform: rotate(45deg);
     }
-    .nav-trigger:checked~ .clear-menu-btn .bottom {
+    .nav-trigger:checked~.clear-menu-btn .bottom {
         -webkit-transform: rotate(-45deg);
         -moz-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
         -o-transform: rotate(-45deg);
         transform: rotate(-45deg);
     }
-    .nav-trigger:checked~ .clear-menu-btn .middle {
+    .nav-trigger:checked~.clear-menu-btn .middle {
         filter: alpha(opacity=0);
         opacity: 0;
     }
-    .nav-trigger:checked~ .clear-menu-btn .circle {
+    .nav-trigger:checked~.clear-menu-btn .circle {
         filter: alpha(opacity=100);
         opacity: 1;
     }
     .clear-menu-btn span {
         position: absolute;
         display: block;
-        width: 3em;
+        width: 100%;
         height: .12em;
         background-color: $navHam;
         -webkit-transition: all 0.3s;
@@ -265,12 +290,15 @@
     }
     .clear-menu-btn .top {
         top: 15%;
+        z-index: 1;
     }
     .clear-menu-btn .middle {
         top: 50%;
+        z-index: 1;
     }
     .clear-menu-btn .bottom {
         top: 85%;
+        z-index: 1;
     }
     .clear-menu-btn .circle {
         display: block;
@@ -284,8 +312,8 @@
         transform: translate(-50%, -50%);
         filter: alpha(opacity=0);
         opacity: 0;
-        width: 2.9em;
-        height: 2.9em;
+        width: 100%;
+        height: 100%;
         background-color: transparent;
         border-radius: 50%;
         border: .14em solid $navHam;
@@ -301,10 +329,10 @@
         /* critical styles - hide the checkbox input*/
         position: fixed;
         z-index: 13;
-        top: 1em;
-        right: 1em;
-        height: 4em;
-        width: 4em;
+        top: .5em;
+        right: .5em;
+        height: 3em;
+        width: 3em;
         filter: alpha(opacity=0);
         opacity: 0;
     }
@@ -312,12 +340,50 @@
     #wrapper {
         transition: right .5s;
     }
-    .nav-trigger:checked~ #wrapper {
+    .nav-trigger:checked~#wrapper {
         /*The window*/
-        right: 14em;
+        right: 15.5em;
     }
     /* Without this, the body has excess horizontal scroll when the menu is open */
     body {
         overflow-x: hidden;
+    }
+    .navDropdown {
+        position: relative;
+    }
+    .navDropdown input,
+    .navDropdown>img {
+        position: absolute;
+        right: 1em;
+        left: initial;
+        cursor: pointer;
+    }
+    .navDropdown input {
+        filter: alpha(opacity=0);
+        opacity: 0;
+        top: 1em;
+        width: 3em;
+        height: 3em;
+        z-index: 15;
+    }
+    .navDropdown input:checked~img {
+        transform: rotate(180deg);
+    }
+    .navDropdown>img {
+        transition: .5s linear;
+        top: 1em;
+        width: 2em;
+        height: 2em;
+    }
+    .navDropdown .subNav {
+        max-height: 0;
+        -webkit-transition: all 0.5s ease-in-out;
+        -moz-transition: all 0.5s ease-in-out;
+        -o-transition: all 0.5s ease-in-out;
+        -ms-transition: all 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+    }
+    .navDropdown input:checked~.subNav {
+        max-height: 15em;
     }
 }

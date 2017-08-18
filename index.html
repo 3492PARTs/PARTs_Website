@@ -14,60 +14,65 @@
 </head>
 
 <body id="top">
-    <nav id="navContainer">
-        <a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;" /></a>
-        <div id="nav">
-            <ul>
-                <li id="navHome">
-                    <p>-</p>
-                </li>
-                <!--Spacer for mobile nav-->
-                <li id="navHome">
-                    <p><a class="currentPage" href="/">HOME</a></p>
-                </li>
-                <li>
-                    <p><a href="contact/">CONTACT US</a></p>
-                    <ul id="subNav1">
-                        <li>
-                            <p><a href="join/">JOIN</a></p>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <p><a href="sponsoring/">SPONSORING</a></p>
-                </li>
-                <li>
-                    <p><a href="about/">ABOUT PARTs</a></p>
-                </li>
-                <li>
-                    <p><a href="media/">MEDIA</a></p>
-                </li>
-                <li>
-                    <p><a href="resources/">RESOURCES</a></p>
-                </li>
-                <li>
-                    <p><a href="calendar/">CALENDAR</a></p>
-                </li>
-                <li>
-                    <p><a href="first/">FIRST</a></p>
-                </li>
-            </ul>
+
+    <!--nav-->
+    <nav>
+        <div class="nav-wrapper-outer">
+            <a href="/"><img src="contents/webImages/Robots/BeanieBot.svg" onerror="this.src='contents/webImages/Robots/BeanieBot.png'; this.onerror=null;" /></a>
+            <div class="nav-wrapper-inner">
+                <ul>
+                    <li id="navHome">
+                        <p>-</p>
+                    </li>
+                    <!--Spacer for mobile nav-->
+                    <li id="navHome">
+                        <p><a class="currentPage" href="/">HOME</a></p>
+                    </li>
+                    <li class="navDropdown">
+                        <p><a href="contact/">CONTACT US</a></p>
+                        <input type="checkbox" />
+                        <img alt="Expand" src="contents/webImages/expand.svg" onerror="this.src='contents/webImages/expand.png'; this.onerror=null;" />
+                        <ul class="subNav">
+                            <li>
+                                <p><a href="join/">JOIN</a></p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <p><a href="sponsoring/">SPONSORING</a></p>
+                    </li>
+                    <li>
+                        <p><a href="about/">ABOUT PARTs</a></p>
+                    </li>
+                    <li>
+                        <p><a href="media/">MEDIA</a></p>
+                    </li>
+                    <li>
+                        <p><a href="resources/">RESOURCES</a></p>
+                    </li>
+                    <li>
+                        <p><a href="calendar/">CALENDAR</a></p>
+                    </li>
+                    <li>
+                        <p><a href="first/">FIRST</a></p>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
+    <!--/nav-->
 
     <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-
     <div class="clear-menu-btn">
         <span class="top"></span>
         <span class="middle"></span>
         <span class="bottom"></span>
         <span class="circle"></span>
     </div>
-
-    <div id="blueBlock"></div>
+    <div class="fixed-mobile-nav"></div>
 
     <div id="wrapper">
-        <div id="moverBlock"></div>
+        <div class="mobile-nav-spacer"></div>
         <div id="header">
             <!-- Slider -->
             <div id="cssSlider">
@@ -137,37 +142,64 @@
             <!-- End slider -->
         </div>
         <div id="content">
-            <div class="seperator"></div>
             <main id="mainHome">
-                <div id="mainContent">
-                    <p><a href="join/">Interested in Joining P.A.R.T.s?</a></p>
-                    <p>FIRST&reg; FRC&reg; Team 3492 P.A.R.T.s (Putnam Area Robotics Team) is a high school robotics team in the Wild and Wonderful State of West Virginia.</p>
-                    <p>P.A.R.T.s 3492 is a team dedicated to inclusive opportunities in FIRST&reg; Robotics Competition programs that educate and enrich youth in our communities with hands-on based advanced technology activities.</p>
-                    <p>This is a varsity sport for the mind.</p>
+                <div id="partsIntro">
+                    <div id="partsIntro-inner">
+                        <h1>FIRST&reg; FRC&reg; Team 3492 P.A.R.T.s (Putnam Area Robotics Team) is a high school robotics team in the Wild and Wonderful State of West Virginia.</h1>
+                        <br>
+                        <h2>P.A.R.T.s 3492 is a team dedicated to inclusive opportunities in FIRST&reg; Robotics Competition programs that educate and enrich youth in our communities with hands-on based advanced technology activities.</h2>
+                        <br>
+                        <h2>This is a varsity sport for the mind.</h2>
+                        <br>
+                    </div>
+                    <a id="homeJoin-wrapper" href="join/">
+                        <div id="homeJoin">
+                            <div class="joinCover" id="joinHomeCover"></div>
+                            <p id="joinText">
+                                <span id="joinH1">Join P.A.R.T.s</span>
+                            </p>
+                        </div>
+                    </a>
                     <div id="social">
                         <a target="_blank" href="https://www.facebook.com/team3492"><img src="contents/webImages/SocialIcons/Facebook.svg" onerror="this.src='contents/webImages/SocialIcons/Facebook.png'; this.onerror=null;" /></a>
-                        <a target="_blank" href="https://twitter.com/parts3492"><img src=".contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;" /></a>
+                        <a target="_blank" href="https://twitter.com/parts3492"><img src="contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;" /></a>
                         <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"><img src="contents/webImages/SocialIcons/YouTube.svg" onerror="this.src='contents/webImages/SocialIcons/YouTube.png'; this.onerror=null;" /></a>
                         <a target="_blank" href="https://github.com/3492PARTs"><img src="contents/webImages/SocialIcons/GitHub.svg" onerror="this.src='contents/webImages/SocialIcons/GitHub.png'; this.onerror=null;" /></a>
                     </div>
                 </div>
+
+                <div id="videos">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="videoWrapper">
+                                                        <iframe width="1280" height="720" src="https://www.youtube.com/embed/wPcpGC5eYXs?rel=0" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="videoWrapper">
+                                                        <iframe width="1280" height="720" src="https://www.youtube.com/embed/fm9UAEiJf8A" frameborder="0" allowfullscreen></iframe>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <table id="homeMedia">
                     <thead>
 
                     </thead>
                     <tbody>
-                        <tr id="videos">
-                            <td>
-                                <div class="videoWrapper">
-                                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/wPcpGC5eYXs?rel=0" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="videoWrapper">
-                                    <iframe width="1280" height="720" src="https://www.youtube.com/embed/fm9UAEiJf8A" frameborder="0" allowfullscreen></iframe>
-                                </div>
-                            </td>
-                        </tr>
                         <tr>
                             <td colspan="2">
                                 <p>PROUDLY SPONSORED BY:</p>
@@ -217,20 +249,17 @@
             </main>
         </div>
         <footer id="footer">
-            <div id="footer_accent">
-                <a id="footerArrow" href="#top"><img src="contents/webImages/return.svg" onerror="this.src='contents/webImages/return.png'; this.onerror=null;" alt="Return to Top" /></a>
+            <div id="connect">
+                <h2><a href="EGG/" style="text-decoration:none;">CONNECT WITH PARTs</a></h2>
             </div>
-            <div id="footerContent">
-                <div id="connect">
-                    <h2><a href="EGG/" style="text-decoration:none;">CONNECT WITH PARTs</a></h2>
-                </div>
-                <div id="connectSocial">
-                    <a target="_blank" href="https://www.facebook.com/team3492"><img src="contents/webImages/SocialIcons/Facebook.svg" onerror="this.src='contents/webImages/SocialIcons/Facebook.png'; this.onerror=null;" /></a>
-                    <a target="_blank" href="https://twitter.com/parts3492"><img src="contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;" /></a>
-                    <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"><img src="contents/webImages/SocialIcons/YouTube.svg" onerror="this.src='contents/webImages/SocialIcons/YouTube.png'; this.onerror=null;" /></a>
-                    <a target="_blank" href="https://github.com/3492PARTs"><img src="contents/webImages/SocialIcons/GitHub.svg" onerror="this.src='contents/webImages/SocialIcons/GitHub.png'; this.onerror=null;" /></a>
-                    <a target="_blank" href="http://goo.gl/forms/C2plkMRYTwPuYka53"><img src="contents/webImages/SocialIcons/Email.svg" onerror="this.src='contents/webImages/SocialIcons/Email.png'; this.onerror=null;" /></a>
-                </div>
+            <a id="footerArrow" href="#top"><img src="contents/webImages/return.svg" onerror="this.src='contents/webImages/return.png'; this.onerror=null;" alt="Return to Top" /></a>
+
+            <div id="connectSocial">
+                <a target="_blank" href="https://www.facebook.com/team3492"><img src="contents/webImages/SocialIcons/Facebook.svg" onerror="this.src='contents/webImages/SocialIcons/Facebook.png'; this.onerror=null;" /></a>
+                <a target="_blank" href="https://twitter.com/parts3492"><img src="contents/webImages/SocialIcons/Twitter.svg" onerror="this.src='contents/webImages/SocialIcons/Twitter.png'; this.onerror=null;" /></a>
+                <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"><img src="contents/webImages/SocialIcons/YouTube.svg" onerror="this.src='contents/webImages/SocialIcons/YouTube.png'; this.onerror=null;" /></a>
+                <a target="_blank" href="https://github.com/3492PARTs"><img src="contents/webImages/SocialIcons/GitHub.svg" onerror="this.src='contents/webImages/SocialIcons/GitHub.png'; this.onerror=null;" /></a>
+                <a target="_blank" href="http://goo.gl/forms/C2plkMRYTwPuYka53"><img src="contents/webImages/SocialIcons/Email.svg" onerror="this.src='contents/webImages/SocialIcons/Email.png'; this.onerror=null;" /></a>
             </div>
             <p id="bduke"><a target="_blank" href="https://bmduke1997.github.io/">A b.duke Site</a></p>
         </footer>

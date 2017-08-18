@@ -1,1 +1,2756 @@
-html,body{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}@font-face{font-family:roboto-regular;src:url(roboto-regular.ttf)}*{font-family:'roboto-regular';color:#5B5B5B}main h1{font-size:2em}main h2{font-size:1.8em}main h3{font-size:1.7em}main h4{font-size:1.6em}main p,main ul>li,main ol>li{font-size:1.5em}main a:hover{color:#FF6A00;transition:.25s linear}@media only screen and (min-width: 1001px){main,.globalWidth{width:70%}}@media only screen and (max-width: 1000px){main,.globalWidth{width:90%}}main,.globalWidth{margin-left:auto;margin-right:auto;display:block}@media only screen and (min-width: 1001px){#navContainer *{padding:0;margin:0}#navContainer{position:relative;height:6em;width:100%;background-color:#2E3094}#nav{position:absolute;top:0;right:0;height:100%}#nav ul{height:100%;list-style:none;position:relative;float:left;padding-right:2.5em;z-index:2}#nav ul li{height:100%;position:relative;float:left;margin:0;padding:0;transition:background-color .3s linear}#nav a.currentPage{color:gray}#nav ul li:hover{background:#262977}#nav ul li a:hover{color:gray}#nav ul ul{display:none;position:absolute;top:100%;left:0;background:#2E3094;padding:0;width:100%}#nav ul ul li{float:none;width:100%}#nav ul ul ul{top:0;left:100%}#nav ul li:hover>ul{display:block}#nav a{display:block;text-align:center;height:3.5em;width:100%;color:white;text-decoration:none;font-weight:bold;transition:.3s linear;padding-top:2.5em;overflow:hidden}#nav p{font-size:1em;letter-spacing:.1em;padding-left:.8em;padding-right:.8em;padding-bottom:0;padding-top:0}#navContainer img{position:absolute;top:0;left:0;padding-top:.5em;padding-bottom:.5em;padding-left:2.5em;height:5em}#nav-trigger{display:none}#blueBlock{display:none}.clear-menu-btn{display:none}#navHome{display:none}}@media only screen and (max-width: 1000px){#nav{background-color:#2E3094;width:14em;position:fixed;top:0;right:0;bottom:0;z-index:0;max-height:100vh;display:flex;overflow-y:auto;overflow-x:hidden;flex-direction:column}#nav ul{padding:0;margin:0;width:100%;list-style-type:square}#nav ul li{width:100%;transition:background-color .3s linear;display:block;overflow:hidden}#nav ul li:hover{background-color:#262977}#nav p{text-align:left;font-size:1.5em;padding-left:1em}#nav #subNav1 p{padding-left:2em}#nav a.currentPage{color:gray}#nav a{display:block;padding:3em;margin:-3em;color:white;text-decoration:none;font-weight:bold;transition:.3s linear}#nav a:hover{color:gray}#wrapper{min-height:100%;min-width:100%;background-color:white;position:relative;top:0;bottom:100%;right:0;z-index:1;box-shadow:0 0 5px 5px rgba(0,0,0,0.5)}#blueBlock{width:100%;height:5em;background-color:#2E3094;box-shadow:0 0 5px 5px rgba(0,0,0,0.5);position:fixed;z-index:10;transition:.5s linear}.nav-trigger:checked ~ #blueBlock{box-shadow:0 0 7px 7px rgba(0,0,0,0.4)}#navContainer img{position:absolute;position:fixed;top:.25em;left:1em;height:4.5em;z-index:11}#moverBlock{height:5em;width:100%}.clear-menu-btn{position:fixed;right:1em;top:1em;z-index:12;width:3em;height:3em;margin:0 auto}.nav-trigger:hover{cursor:pointer}.nav-trigger:checked ~ .clear-menu-btn .top,.nav-trigger:checked ~ .clear-menu-btn .bottom{top:50%}.nav-trigger:checked ~ .clear-menu-btn .top{-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg)}.nav-trigger:checked ~ .clear-menu-btn .bottom{-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-ms-transform:rotate(-45deg);-o-transform:rotate(-45deg);transform:rotate(-45deg)}.nav-trigger:checked ~ .clear-menu-btn .middle{filter:alpha(opacity=0);opacity:0}.nav-trigger:checked ~ .clear-menu-btn .circle{filter:alpha(opacity=100);opacity:1}.clear-menu-btn span{position:absolute;display:block;width:3em;height:.12em;background-color:gray;-webkit-transition:all 0.3s;-moz-transition:all 0.3s;-ms-transition:all 0.3s;-o-transition:all 0.3s;transition:all 0.3s;z-index:-1}.clear-menu-btn .top{top:15%}.clear-menu-btn .middle{top:50%}.clear-menu-btn .bottom{top:85%}.clear-menu-btn .circle{display:block;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%, -50%);-moz-transform:translate(-50%, -50%);-ms-transform:translate(-50%, -50%);-o-transform:translate(-50%, -50%);transform:translate(-50%, -50%);filter:alpha(opacity=0);opacity:0;width:2.9em;height:2.9em;background-color:transparent;border-radius:50%;border:0.14em solid gray;-webkit-transition:all 0.5s;-moz-transition:all 0.5s;-ms-transition:all 0.5s;-o-transition:all 0.5s;transition:all 0.5s;z-index:-1}.nav-trigger{position:fixed;z-index:13;top:1em;right:1em;height:4em;width:4em;filter:alpha(opacity=0);opacity:0}#wrapper{transition:right .5s}.nav-trigger:checked ~ #wrapper{right:14em}body{overflow-x:hidden}}#footer_accent{background-color:#262626;width:100%;height:30%}#footerArrow img{height:100%;float:right}#footerContent{height:70%;width:100%}#connect{height:30%}#connect h2{text-align:center;padding-top:.4em;margin:0}#connectSocial{margin:auto;text-align:justify}#connectSocial img{display:inline-block;vertical-align:top;*display:inline;zoom:1}#connectSocial:after{content:"";width:100%;display:inline-block}#connectSocial img{position:relative;top:50%;transform:translateY(-50%)}#connectSocial img{opacity:1;transition:visibility 0s .25s, opacity .25s linear}#connectSocial:hover img{opacity:0.2;transition:opacity .25s linear}#connectSocial:hover img:hover{opacity:1;transition:visibility 0s .25s, opacity .25s linear}@media only screen and (min-width: 1001px){#connectSocial{height:70%;width:80%}#connectSocial img{height:60%}}@media only screen and (max-width: 1000px){#connectSocial{height:60%;width:95%}#connectSocial img{height:55%}}html,body{margin:0;padding:0;height:100%}#wrapper{min-height:100%;position:relative}#content{padding-bottom:12em}#footer{background:#111;width:100%;height:12em;position:absolute;bottom:0;left:0}#bduke{position:absolute;padding-top:0;padding-bottom:0;padding-left:.5em;padding-right:.5em;margin:0;bottom:0;right:0}#bduke a{font-size:1em;text-decoration:none;transition:.25s linear;color:#5B5B5B}#bduke a:hover{color:#FF6A00}#regional{width:100%}#regional td{border:2px solid #808080}#regional h2{text-align:center}#counter{position:relative;padding-bottom:15%;height:0}.tcw{position:absolute;top:0;left:0;width:100%;height:100%}@media only screen and (min-width: 1001px){#stream{width:50%}}@media only screen and (max-width: 1000px){#regional td{display:block}}#mainContent,#homeMedia{width:100%}.seperator{width:100%;height:1em}#mainContent p{text-align:center}#mainContent p:nth-child(4){margin-bottom:0;padding-bottom:0}#social img{opacity:1;transition:visibility 0s .25s, opacity .25s linear}#social:hover img{opacity:0.2;transition:opacity .25s linear}#social:hover img:hover{opacity:1;transition:visibility 0s .25s, opacity .25s linear}#social{width:50%;margin:auto;height:3em;padding-top:2em;padding-bottom:2em;text-align:justify}@media only screen and (min-width: 1001px){#social{width:50%}}@media only screen and (max-width: 1000px){#social{width:90%}}#social img{height:100%;display:inline-block;vertical-align:top;*display:inline;zoom:1}#social:after{content:"";width:100%;display:inline-block}#homeMedia p{padding-top:1em;padding-bottom:1em}.videoWrapper{position:relative;padding-bottom:56.25%;height:0}.videoWrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%}@media only screen and (min-width: 1001px){#videos td:first-child{padding-right:1em}#videos td:nth-child(2){padding-left:1em}}@media only screen and (max-width: 1000px){#videos td:first-child{padding-right:.5em}#videos td:nth-child(2){padding-left:.5em}}.imgWrapper40{position:relative;padding-bottom:40%;height:0}.imgWrapper40 img{position:absolute;top:0;left:0;width:100%;height:100%}.imgWrapper32{position:relative;padding-bottom:32%;height:0}.imgWrapper32 img{position:absolute;top:0;left:0;width:100%;height:100%}.imgWrapper100{position:relative;padding-bottom:100%;height:0}.imgWrapper100 img{position:absolute;top:0;left:0;width:100%;height:100%}@media only screen and (min-width: 1001px){#toyota,#putnam,#pctc,#aep{padding-right:1em}#rcbi,#homeDepot{padding-left:1em}}@media only screen and (max-width: 1000px){#toyota,#putnam,#pctc,#aep{padding-right:.5em}#rcbi,#homeDepot{padding-left:.5em}}#mainContact h2{text-align:center}#map{width:100%;height:100%;margin:0 auto}#mapWrapper{width:100%;height:35em;margin:2em auto 2em auto}#subgroups{width:100%}#subgroups tr td h4{text-align:center}#subgroups td{border:2px solid gray;overflow:hidden}@media only screen and (max-width: 1000px){#subgroups td{display:block}#joinPic{overflow:hidden}}#joinPic{position:relative}#mainJoin h2{text-align:center}#mainJoin p{text-align:center}#joinText{display:block;position:absolute;width:100%;top:50%;left:50%;transform:translate(-50%, -50%);z-index:2;text-align:center}#joinH1,#joinCommOut{text-align:center;color:white}#scrollForMoreInfo{text-align:center;color:white}#returnArrow h4{display:none}#subgroups a{text-decoration:none;display:block;padding:10em;margin:-10em}@media only screen and (min-width: 1001px){#joinH1,#joinCommOut{font-size:4.6em}#scrollForMoreInfo{font-size:2.4em}#returnArrow{position:absolute;width:10%}#returnArrow img{position:relative;width:50%}}@media only screen and (max-width: 1000px){#joinH1,#joinCommOut{font-size:2.6em}#scrollForMoreInfo{font-size:1.4em}#returnArrow h4{display:inline-block;text-align:center;font-size:1.1em;padding:0;margin:0;text-align:center;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%)}#returnArrow{margin:auto;width:90%;position:relative}#returnArrow img{width:10%}}@media (max-width: 280px){#joinH1{font-size:2em}#scrollForMoreInfo{font-size:1.2em}#joinCommOut{font-size:1.5em}}#joinPic{width:100%}@media only screen and (min-width: 1001px){#joinPic{height:calc(100vh - 6em)}}@media only screen and (max-width: 1000px){#joinPic{height:calc(100vh - 5em)}}.joinCover{background-size:cover;background-position:center;background-repeat:no-repeat;filter:brightness(50%);-webkit-filter:brightness(50%);width:100%;height:100%}#joinHomeCover{background-image:url(../contents/joinPictures/join.JPG)}#joinCommunityCover{background-image:url(../contents/joinPictures/communityOutreach.JPG)}#joinElectricalCover{background-image:url(../contents/joinPictures/electrical.JPG)}#joinMechanicalCover{background-image:url(../contents/joinPictures/mechanical.JPG)}#joinProgrammingCover{background-image:url(../contents/joinPictures/programming.JPG)}#mainSponsor a{font-weight:bold}#closingSponsor{text-align:center}#mainSponsor h1{text-align:center}#mainSponsor p{text-align:justify}@font-face{font-family:'Adam';src:url("adam.otf") format("opentype");unicode-range:U+0000-00FF}.banners,.banners *,.banner{margin:0;padding:0;box-sizing:border-box}.banner-parent{width:100%;overflow:scroll}.banner-parent .banners{width:auto;white-space:nowrap}.banners li,.banner{line-height:1.2;font-family:'Adam', sans-serif;text-align:center;vertical-align:top;display:inline-block;margin:0 3px 30px;width:120px;position:relative;background:#0f4bcb;color:white;padding:10px;white-space:normal}.banners img,.banner img{width:75px;margin-bottom:5px}.banners li:after,.banner:after{content:'';position:absolute;display:block;border:60px solid #0f4bcb;border-top-width:5px;border-bottom:20px transparent solid;top:100%;left:0}.banners li,.banner{-webkit-filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1));filter:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');-webkit-filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1));filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1))}.banners li:after,.banner:after{-webkit-filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1));filter:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');-webkit-filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1));filter:drop-shadow(0 10px 5px rgba(0,0,0,0.1))}#banners{text-align:center}.banners{display:inline-block}@media only screen and (min-width: 1001px){#scrollBanner{display:none}}@media only screen and (max-width: 1000px){#banners{height:16em;overflow:auto}.banners{width:40.4em}#scrollBanner{text-align:center}}#aboutStart h1,#mainAbout h1,#mainAbout h2,#aboutParts td{text-align:center}#aboutParts p,#awards li{text-align:left}#coversContainer{text-align:center}#mainAbout .cover{display:inline-block}.cover h2{margin:0;padding:0}#aboutParts .cover img{margin-left:1em;margin-top:1em;margin-bottom:1em;margin-right:1em;height:18em}.overlay{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,0.7);transition:opacity 500ms;visibility:hidden;opacity:0;display:flex;align-items:center;justify-content:center}.robotLabel{cursor:pointer}.popup{background:#fff;border-radius:5px;width:80%;position:relative;transition:all 1s ease-in-out;max-height:100vh}.popup h2{margin-top:0;padding-top:.5em;text-align:center}.popup .close{position:absolute;transition:all 200ms;font-size:2em;font-weight:bold;text-decoration:none;color:#5B5B5B}.popup .close:hover{color:#FF6A00}.popup .robotBio{max-height:80vh;padding-right:2em;padding-left:2em;overflow-x:hidden;overflow-y:auto}@media only screen and (min-width: 1001px){.popup .close{top:20px;right:30px}}@media screen and (max-width: 1000px){.popup{width:80%}.popup .close{top:40px;right:30px}.noNAV:checked ~ #blueBlock,.noNAV:checked ~ #menu,.noNAV:checked ~ #navContainer{visibility:hidden;opacity:0;transition:.25s ease-in-out}}#mccoyRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#mccoy,#huRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#hu,#djRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#dj,#carlaRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#carla,#turboMikeRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#turboMike,#beanieTheBarbarianRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#beanieTheBarbarian,#beaniehemothRadio:checked ~ #wrapper>#content>#mainAbout>#aboutParts>#coversContainer>#beaniehemoth{visibility:visible;opacity:1;z-index:16}.robotRadio{display:none}#mainMedia{text-align:center}.albums img{display:inline-block;margin:auto;padding:.5em}@media only screen and (min-width: 1001px){.albums img,.wallpaperAccordion{width:20%}}@media only screen and (max-width: 1000px){.albums img,.wallpaperAccordion{width:60%}}#topMedia{width:100%}#topMedia h1{text-align:center}@media only screen and (min-width: 1001px){#leftArrow img{width:4em}#blockLR{width:4em}}@media only screen and (max-width: 1000px){#leftArrow img{width:3em}#blockLR{width:3em}}.wallpapers img{display:inline-block;width:100%;margin:auto}.album{cursor:pointer}.wallpaperAccordion{padding:.5em}@media only screen and (min-width: 1001px){.wallpaperAccordion{display:inline-block}}@media only screen and (max-width: 1000px){.wallpaperAccordion{display:block;margin:auto}}.wallpaperAccordion a{text-decoration:none}.wallpaperAccordion input{display:none}.wallpaperAccordion .article{overflow:hidden;max-height:0px}.wallpaperAccordion input:checked ~ .article.ac-small{max-height:15em}.article.ac-small table{width:100%}.article.ac-small h2{text-align:center}.wallpapers .article.ac-small .downloadLine{border-bottom:1px solid gray}.wallpaperAccordion input:checked ~ .article{-webkit-transition:all 0.5s ease-in-out;-moz-transition:all 0.5s ease-in-out;-o-transition:all 0.5s ease-in-out;-ms-transition:all 0.5s ease-in-out;transition:all 0.5s ease-in-out}.wallpaperAccordion .article{-webkit-transition:all 0.3s ease-in-out;-moz-transition:all 0.3s ease-in-out;-o-transition:all 0.3s ease-in-out;-ms-transition:all 0.3s ease-in-out;transition:all 0.3s ease-in-out}.resourceTabs{box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.24);transition:all 0.2s ease-in-out;background-color:#D6D6D6;width:100%;margin:1em auto;border-radius:.5em}.resourceTabs:hover{box-shadow:0 10px 20px rgba(0,0,0,0.19),0 6px 6px rgba(0,0,0,0.23)}.resourceTakeALook{transition:background-color .5s linear;background-color:#FF6A00;display:table;margin:0 auto;border-radius:.5em}.resourceSpacer{height:1em}.resourceTakeALook:hover{background-color:#262626;opacity:.75}.resourceTakeALook h3{text-decoration:none;margin:.5em}.resourceTakeALook a{text-decoration:none}.resourceTabs>h3{text-align:center;padding-right:.3em;padding-left:.3em}.resourceTabs>h4{text-align:center;padding-right:.3em;padding-left:.3em}.resourceTabs h4>a{text-decoration:none}.resourceTabs img{width:5em;display:block;margin:0 auto;padding:1em}#calendar{width:100%;height:100%;margin:0 auto}#calendarWrapper{width:100%;height:30em;margin:2em auto 2em auto}#mainFirst table{width:100%}#mainFirst thead h1{text-align:center}#mainFirst ul li{text-align:left}#mainFirst td{text-align:center}@media only screen and (min-width: 1001px){#mainFirst h1,#mainFirst h2,#mainFirst p{text-align:left}#first{width:70%;margin-bottom:10%}#frc{width:70%;margin-top:10%}#gameLogo{width:70%}}@media only screen and (max-width: 1000px){#mainFirst h1,#mainFirst h2,#mainFirst p{text-align:center}#first{margin:1em;width:40%}#frc{width:40%;margin:1em}#gameLogo{width:80%}#mainFirst td{display:block}}#competitionTable,#competitionSchedule{width:100%}#competitionTable h2,#competitionTable h3,#competitionTable h4{text-align:center}.redAlliance{color:red}.blueAlliance{color:blue}#competitionTable td{border:2px solid gray}#competitionTable img{width:100%}@media only screen and (max-width: 1000px){.competitionTableDisplay{display:block}}#EGG{margin:auto;text-align:center}#EGG h1{text-align:center}#beanieGIF{width:50%}#notFound h1{text-align:left;font-size:10em;padding:0;margin:0}#notFound h2{text-align:left}html,body{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}@font-face{font-family:timeburner;src:url(timeburner.ttf)}#cssSlider>input{display:none}#cssSlider>#pageNav{position:absolute;top:50%;-webkit-transform:translateY(-50%);transform:translateY(-50%);z-index:15;width:100%;height:10vw}#cssSlider>#pageNav>#previousArrow>.slideL,#cssSlider>#pageNav>#playPause>.playPauseBtn,#cssSlider>#pageNav>#nextArrow>.slideR{position:absolute;opacity:0;cursor:pointer;-webkit-transition:opacity .5s ease-in-out;transition:opacity .5s ease-in-out}#cssSlider>#pageNav>#previousArrow>.slideL{width:10vw;height:10vw;background:url("icons/previous.png");background-image:url("icons/previous.svg"),none;background-repeat:no-repeat;background-size:100%;z-index:-1}#cssSlider>#pageNav>#nextArrow>.slideR{width:10vw;height:10vw;background:url("icons/next.png");background-image:url("icons/next.svg"),none;background-repeat:no-repeat;background-size:100%;z-index:-1}#cssSlider>#pageNav>#playPause>#playBtn{width:10vw;height:10vw;background:url("icons/play.png");background-image:url("icons/play.svg"),none;background-repeat:no-repeat;background-size:100%}#cssSlider>#pageNav>#playPause>#pauseBtn{width:10vw;height:10vw;background:url("icons/pause.png");background-image:url("icons/pause.svg"),none;background-repeat:no-repeat;background-size:100%}#cssSlider>#pageNav>#previousArrow>.slideL{left:2vw}#cssSlider>#pageNav>#playPause>.playPauseBtn{left:50%;margin:0 0 0 -5vw}#cssSlider>#pageNav>#nextArrow>.slideR{right:2vw}#cssSlider>#pageNav:hover>#previousArrow>.slideL,#cssSlider>#pageNav:hover>#playPause>.playPauseBtn,#cssSlider>#pageNav:hover>#nextArrow>.slideR,#cssSlider #sliderImages:hover ~ #pageNav #previousArrow .slideL,#cssSlider>#sliderImages:hover ~ #pageNav>#playPause>.playPauseBtn,#cssSlider>#sliderImages:hover ~ #pageNav>#nextArrow>.slideR{opacity:1}#cssSlider>#play:not(:checked) ~ #pageNav>#playPause>#pauseBtn{display:none}#cssSlider>#play:checked ~ #pageNav>#playPause>#playBtn{display:none}#cssSlider>#slide1:checked ~ #pageNav>#previousArrow>#slideL6,#cssSlider>#slide1:checked ~ #pageNav>#nextArrow>#slideR2,#cssSlider>#slide2:checked ~ #pageNav>#previousArrow>#slideL1,#cssSlider>#slide2:checked ~ #pageNav>#nextArrow>#slideR3,#cssSlider>#slide3:checked ~ #pageNav>#previousArrow>#slideL2,#cssSlider>#slide3:checked ~ #pageNav>#nextArrow>#slideR4,#cssSlider>#slide4:checked ~ #pageNav>#previousArrow>#slideL3,#cssSlider>#slide4:checked ~ #pageNav>#nextArrow>#slideR5,#cssSlider>#slide5:checked ~ #pageNav>#previousArrow>#slideL4,#cssSlider>#slide5:checked ~ #pageNav>#nextArrow>#slideR6,#cssSlider>#slide6:checked ~ #pageNav>#previousArrow>#slideL5,#cssSlider>#slide6:checked ~ #pageNav>#nextArrow>#slideR1{z-index:15}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL6,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR2,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL6,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR2{-webkit-animation:arrows 40000ms infinite 0ms;animation:arrows 40000ms infinite 0ms}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL1,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR3,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL1,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR3{-webkit-animation:arrows 40000ms infinite 6666.6666666667ms;animation:arrows 40000ms infinite 6666.6666666667ms}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL2,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR4,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL2,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR4{-webkit-animation:arrows 40000ms infinite 13333.333333333ms;animation:arrows 40000ms infinite 13333.333333333ms}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL3,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR5,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL3,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR5{-webkit-animation:arrows 40000ms infinite 20000ms;animation:arrows 40000ms infinite 20000ms}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL4,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR6,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL4,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR6{-webkit-animation:arrows 40000ms infinite 26666.666666666ms;animation:arrows 40000ms infinite 26666.666666666ms}#cssSlider>#play:checked ~ #pageNav>#previousArrow>#slideL5,#cssSlider>#play:checked ~ #pageNav>#nextArrow>#slideR1,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL5,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR1{-webkit-animation:arrows 40000ms infinite 33333.333333333ms;animation:arrows 40000ms infinite 33333.333333333ms}#cssSlider>#pageIndicators{position:absolute;bottom:0;text-align:center;width:100%;z-index:15}#cssSlider>#pageIndicators>.indicator{display:inline-block;height:1.5em;width:1.5em;border-radius:100%;background-color:#ABB7B7;cursor:pointer}#cssSlider>#pageIndicators>.indicator>.hoverPoint{margin:.5em;display:inline-block;height:.5em;width:.5em;border-radius:100%;background:transparent;transition:.3s ease-in-out;-webkit-transition:.3s ease-in-out;z-index:16}#cssSlider>#pageIndicators>.indicator>.hoverPoint>.point{margin-bottom:.5em;display:inline-block;height:.5em;width:.5em;border-radius:100%;background:transparent;transition:.3s ease-in-out;-webkit-transition:.3s ease-in-out}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point1,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point1{-webkit-animation:point 40000ms infinite 0ms;animation:point 40000ms infinite 0ms}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point2,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point2{-webkit-animation:point 40000ms infinite 6666.6666666667ms;animation:point 40000ms infinite 6666.6666666667ms}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point3,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point3{-webkit-animation:point 40000ms infinite 13333.333333333ms;animation:point 40000ms infinite 13333.333333333ms}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point4,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point4{-webkit-animation:point 40000ms infinite 20000ms;animation:point 40000ms infinite 20000ms}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point5,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point5{-webkit-animation:point 40000ms infinite 26666.666666666ms;animation:point 40000ms infinite 26666.666666666ms}#cssSlider>#play:checked ~ #pageIndicators>.indicator>.hoverPoint>#point6,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point6{-webkit-animation:point 40000ms infinite 33333.333333333ms;animation:point 40000ms infinite 33333.333333333ms}#cssSlider>#slide1:checked ~ #pageIndicators>.indicator>.hoverPoint>#point1,#cssSlider>#slide2:checked ~ #pageIndicators>.indicator>.hoverPoint>#point2,#cssSlider>#slide3:checked ~ #pageIndicators>.indicator>.hoverPoint>#point3,#cssSlider>#slide4:checked ~ #pageIndicators>.indicator>.hoverPoint>#point4,#cssSlider>#slide5:checked ~ #pageIndicators>.indicator>.hoverPoint>#point5,#cssSlider>#slide6:checked ~ #pageIndicators>.indicator>.hoverPoint>#point6{background:#F2F1EF}#cssSlider>#pageIndicators>.indicator:hover>.hoverPoint{background:#F2F1EF}#cssSlider{position:relative;overflow:hidden}#cssSlider{padding-bottom:43.95%;height:0}#cssSlider>#sliderImages>img,#cssSlider>#sliderImages>a>img{width:100vw;height:100%;float:left}#cssSlider>#sliderImages{position:absolute;left:0;width:600vw;-webkit-animation-name:slider;-webkit-animation-duration:40s;-webkit-animation-timing-function:ease-in-out;-webkit-animation-iteration-count:infinite;animation-name:slider;animation-duration:40s;animation-timing-function:ease-in-out;animation-iteration-count:infinite;transition:2.66666666667s}#cssSlider>#slideDesc>.slideText{position:absolute;bottom:0;padding:.6em;margin:2em;background-color:#ABB7B7;border-radius:.5em;z-index:-1;opacity:0;-webkit-transform:translateY(-100px);transform:translateY(-100px);-webkit-transition:950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55);transition:950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),950ms transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55)}#cssSlider>#slideDesc>.slideText>p{padding:.1em;margin:0;color:black;font-size:2em;font-family:timeburner}#cssSlider>#slide1:checked ~ #slideDesc>#slideText1,#cssSlider>#slide2:checked ~ #slideDesc>#slideText2,#cssSlider>#slide3:checked ~ #slideDesc>#slideText3,#cssSlider>#slide4:checked ~ #slideDesc>#slideText4,#cssSlider>#slide5:checked ~ #slideDesc>#slideText5,#cssSlider>#slide6:checked ~ #slideDesc>#slideText6{z-index:2;opacity:1;-webkit-transform:translateY(0);transform:translateY(0)}#cssSlider>#play:checked ~ #slideDesc>#slideText1,#cssSlider>#pause:checked ~ #slideDesc>#slideText1{-webkit-animation:textBoxBounce 40000ms infinite 0ms;animation:textBoxBounce 40000ms infinite 0ms}#cssSlider>#play:checked ~ #slideDesc>#slideText2,#cssSlider>#pause:checked ~ #slideDesc>#slideText2{-webkit-animation:textBoxBounce 40000ms infinite 6666.6666666667ms;animation:textBoxBounce 40000ms infinite 6666.6666666667ms}#cssSlider>#play:checked ~ #slideDesc>#slideText3,#cssSlider>#pause:checked ~ #slideDesc>#slideText3{-webkit-animation:textBoxBounce 40000ms infinite 13333.333333333ms;animation:textBoxBounce 40000ms infinite 13333.333333333ms}#cssSlider>#play:checked ~ #slideDesc>#slideText4,#cssSlider>#pause:checked ~ #slideDesc>#slideText4{-webkit-animation:textBoxBounce 40000ms infinite 20000ms;animation:textBoxBounce 40000ms infinite 20000ms}#cssSlider>#play:checked ~ #slideDesc>#slideText5,#cssSlider>#pause:checked ~ #slideDesc>#slideText5{-webkit-animation:textBoxBounce 40000ms infinite 26666.666666666ms;animation:textBoxBounce 40000ms infinite 26666.666666666ms}#cssSlider>#play:checked ~ #slideDesc>#slideText6,#cssSlider>#pause:checked ~ #slideDesc>#slideText6{-webkit-animation:textBoxBounce 40000ms infinite 33333.333333333ms;animation:textBoxBounce 40000ms infinite 33333.333333333ms}#cssSlider>#slide1:checked ~ #sliderImages{margin-left:0}#cssSlider>#slide2:checked ~ #sliderImages{margin-left:-100vw}#cssSlider>#slide3:checked ~ #sliderImages{margin-left:-200vw}#cssSlider>#slide4:checked ~ #sliderImages{margin-left:-300vw}#cssSlider>#slide5:checked ~ #sliderImages{margin-left:-400vw}#cssSlider>#slide6:checked ~ #sliderImages{margin-left:-500vw}#cssSlider>#slide1:checked ~ #sliderImages,#cssSlider>#slide2:checked ~ #sliderImages,#cssSlider>#slide3:checked ~ #sliderImages,#cssSlider>#slide4:checked ~ #sliderImages,#cssSlider>#slide5:checked ~ #sliderImages,#cssSlider>#slide6:checked ~ #sliderImages{-webkit-animation:none;animation:none}#cssSlider>#pause:checked ~ #sliderImages,#cssSlider>#pause:checked ~ #slideDesc>#slideText1,#cssSlider>#pause:checked ~ #slideDesc>#slideText2,#cssSlider>#pause:checked ~ #slideDesc>#slideText3,#cssSlider>#pause:checked ~ #slideDesc>#slideText4,#cssSlider>#pause:checked ~ #slideDesc>#slideText5,#cssSlider>#pause:checked ~ #slideDesc>#slideText6,#cssSlider>#pause:checked ~ #pageNav #previousArrow>#slideL6,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR2,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL1,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR3,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL2,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR4,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL3,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR5,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL4,#cssSlider>#pause:checked ~ #pageNav>#nextArrow>#slideR6,#cssSlider>#pause:checked ~ #pageNav>#previousArrow>#slideL5,#cssSlider>#pause:checked ~ #pageNav #nextArrow>#slideR1,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point1,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point2,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point3,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point4,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point5,#cssSlider>#pause:checked ~ #pageIndicators>.indicator>.hoverPoint>#point6{-webkit-animation-play-state:paused;animation-play-state:paused}@-webkit-keyframes arrows{0%,16.656666666666666%{opacity:1;z-index:15}16.666666666666668%,100%{opacity:0;z-index:-1}}@keyframes arrows{0%,16.656666666666666%{z-index:15}16.666666666666668%,100%{z-index:-1}}@keyframes point{1%,16%{background:#F2F1EF}17%,100%{background:transparent}}@-webkit-keyframes point{0%,16%{background:#F2F1EF}17%,100%{background:transparent}}@keyframes slider{0%,10%{transform:translateX(0)}16.6666666667%,26.6666666667%{transform:translateX(-100vw)}33.3333333333%,43.3333333333%{transform:translateX(-200vw)}50%,60%{transform:translateX(-300vw)}66.6666666667%,76.6666666667%{transform:translateX(-400vw)}83.3333333333%,93.3333333333%{transform:translateX(-500vw)}100%{transform:translateX(0)}}@-webkit-keyframes slider{0%,10%{transform:translateX(0)}16.6666666667%,26.6666666667%{transform:translateX(-100vw)}33.3333333333%,43.3333333333%{transform:translateX(-200vw)}50%,60%{transform:translateX(-300vw)}66.6666666667%,76.6666666667%{transform:translateX(-400vw)}83.3333333333%,93.3333333333%{transform:translateX(-500vw)}100%{transform:translateX(0)}}@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none){#sliderImages{-webkit-animation-name:slider-ie;-webkit-animation-duration:40s;-webkit-animation-timing-function:ease-in-out;-webkit-animation-iteration-count:infinite;animation-name:slider-ie;animation-duration:40s;animation-timing-function:ease-in-out;animation-iteration-count:infinite}}@keyframes slider-ie{0%,10%{margin-left:0}16.6666666667%,26.6666666667%{margin-left:-100vw}33.3333333333%,43.3333333333%{margin-left:-200vw}50%,60%{margin-left:-300vw}66.6666666667%,76.6666666667%{margin-left:-400vw}83.3333333333%,93.3333333333%{margin-left:-500vw}100%{margin-left:-.1vw}}@-webkit-keyframes slider-ie{0%,10%{margin-left:0}16.6666666667%,26.6666666667%{margin-left:-100vw}33.3333333333%,43.3333333333%{margin-left:-200vw}50%,60%{margin-left:-300vw}66.6666666667%,76.6666666667%{margin-left:-400vw}83.3333333333%,93.3333333333%{margin-left:-500vw}100%{margin-left:-.1vw}}@-webkit-keyframes textBoxBounce{0.6927083333333334%,15.963958333333334%{opacity:1;z-index:2;visibility:visible;-webkit-transform:translateY(10px);transform:translateY(10px)}0.9895833333333334%,15.667083333333334%{opacity:1;z-index:2;visibility:visible;-webkit-transform:translateY(0px);transform:translateY(0px)}17.65625%{opacity:0;z-index:2;visibility:hidden;-webkit-transform:translateY(-100px);transform:translateY(-100px)}17.66625%,100%{z-index:0}}@keyframes textBoxBounce{0.6927083333333334%,15.963958333333334%{opacity:1;z-index:2;visibility:visible;-webkit-transform:translateY(10px);transform:translateY(10px)}0.9895833333333334%,15.667083333333334%{opacity:1;z-index:2;visibility:visible;-webkit-transform:translateY(0px);transform:translateY(0px)}17.65625%{opacity:0;z-index:2;visibility:hidden;-webkit-transform:translateY(-100px);transform:translateY(-100px)}17.66625%,100%{z-index:0}}@media screen and (max-width: 1000px){#cssSlider>#slideDesc>.slideText,#cssSlider>#pageIndicators{display:none}}
+/**********BEGIN GLOBAKL CSS**********/
+/*CSS RESET*/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_base/_reset.scss */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/*FONT IMPORT*/
+@font-face {
+  font-family: roboto-regular;
+  src: url(roboto-regular.ttf);
+}
+
+/*FONT*/
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+* {
+  font-family: 'roboto-regular';
+  color: #5B5B5B;
+}
+
+/*TEXT*/
+/* line 19, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main h1 {
+  font-size: 2em;
+}
+
+/* line 23, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main h2 {
+  font-size: 1.8em;
+}
+
+/* line 27, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main h3 {
+  font-size: 1.7em;
+}
+
+/* line 31, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main h4 {
+  font-size: 1.6em;
+}
+
+/* line 35, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main p,
+main ul > li,
+main ol > li {
+  font-size: 1.5em;
+}
+
+/*LINK COLOR*/
+/* line 44, /home/brandon/GitHub/PARTs_Website/scss/_base/_typography.scss */
+main a:hover {
+  color: #FF6A00;
+  transition: .25s linear;
+}
+
+/*SCREEN SIZE:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 4, /home/brandon/GitHub/PARTs_Website/scss/_layout/_screenSize.scss */
+  main,
+  .globalWidth {
+    width: 70%;
+  }
+}
+
+/*SCREEN SIZE:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 14, /home/brandon/GitHub/PARTs_Website/scss/_layout/_screenSize.scss */
+  main,
+  .globalWidth {
+    width: 90%;
+  }
+}
+
+/* line 20, /home/brandon/GitHub/PARTs_Website/scss/_layout/_screenSize.scss */
+main,
+.globalWidth {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+/*NAV:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /*main nav styling and positioning*/
+  /* line 5, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  nav * {
+    padding: 0;
+    margin: 0;
+  }
+  /* line 9, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  nav {
+    position: relative;
+    height: 5em;
+    width: 100%;
+    background-color: #2E3094;
+  }
+  /* line 15, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-outer {
+    position: absolute;
+    display: block;
+    z-index: 2;
+    width: 100%;
+    height: 5em;
+    line-height: 5em;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  }
+  /* line 24, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+  }
+  /*items styling and positioning*/
+  /* line 31, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul {
+    height: 100%;
+    list-style: none;
+    z-index: 2;
+  }
+  /* line 36, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner > ul {
+    padding-right: 2.5em;
+  }
+  /* line 39, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul li {
+    height: 100%;
+    position: relative;
+    float: left;
+    transition: background-color .3s linear;
+  }
+  /* line 45, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul li:hover {
+    background: #262977 !important;
+  }
+  /* line 48, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul li a:hover,
+  .nav-wrapper-inner a.currentPage {
+    color: #FF6A00 !important;
+  }
+  /*DROPDOWN SUBNAV*/
+  /* line 53, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown {
+    width: 10em;
+  }
+  /* line 56, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .subNav {
+    width: 10em;
+    background-color: #2E3094;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    /*Why did i do this?*/
+    top: 0;
+    visibility: hidden;
+    z-index: 1;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+  }
+  /* line 69, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .subNav li {
+    background-color: #2E3094;
+    width: 10em;
+  }
+  /* line 74, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown:hover > .subNav {
+    opacity: 1;
+    top: 5em;
+    visibility: visible;
+    height: initial !important;
+  }
+  /* line 80, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .subNav li a {
+    width: 10em;
+    height: initial;
+  }
+  /* Clearfix - self center its children suppoedly TEST THE NEED OF THIS
+    .nav-wrapper-inner> ul:after,
+    .nav-wrapper-inner> ul:before {
+        content: "";
+        display: table;
+    }
+    .nav-wrapper-inner> ul:after {
+        clear: both;
+    }
+    /*TEXT*/
+  /* line 94, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner a {
+    display: block;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color .3s;
+    letter-spacing: .1em;
+    padding: 0 .8em;
+  }
+  /* line 104, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .subNav a {
+    text-align: center;
+    height: 4em !important;
+    line-height: 4em !important;
+    padding-top: 0 !important;
+    width: initial !important;
+  }
+  /*IMAGE*/
+  /* line 112, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  nav img {
+    position: absolute;
+    left: 2.5em;
+    height: 4em;
+    height: 4em;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  /*MOBILE NAV*/
+  /* line 121, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  #nav-trigger {
+    display: none;
+  }
+  /* line 124, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .fixed-mobile-nav {
+    display: none;
+  }
+  /* line 127, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn {
+    display: none;
+  }
+  /* line 130, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navHome {
+    display: none;
+  }
+  /* line 133, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown input,
+  .navDropdown > img {
+    display: none;
+  }
+}
+
+/*NAV:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 143, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  nav * {
+    padding: 0;
+    margin: 0;
+  }
+  /* Navigation Menu - Background */
+  /* line 148, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner {
+    background-color: #2E3094;
+    /* critical sizing and position styles */
+    width: 15.5em;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    /*for scrolling*/
+    max-height: 100vh;
+    display: flex;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-direction: column;
+  }
+  /* Navigation Menu - List items */
+  /* line 165, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul {
+    width: 100%;
+    line-height: 4em;
+  }
+  /* line 169, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul li {
+    /* non-critical appearance styles */
+    width: 100%;
+    transition: background-color .3s linear;
+    display: block;
+    overflow: hidden;
+  }
+  /* line 176, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner ul li:hover {
+    background-color: #262977;
+  }
+  /* line 179, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner .subNav a {
+    padding-left: 1em;
+  }
+  /* line 182, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: .3s linear;
+    text-align: left;
+    font-size: 1.5em;
+    padding-left: .5em;
+  }
+  /* line 192, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-inner a:hover,
+  .nav-wrapper-inner a.currentPage {
+    color: #FF6A00;
+  }
+  /* Site Wrapper - Everything that isn't navigation */
+  /* line 197, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  #wrapper {
+    /* Critical position and size styles */
+    min-height: 100%;
+    min-width: 100%;
+    background-color: white;
+    /* Needs a background or else the nav will show through */
+    position: relative;
+    top: 0;
+    bottom: 100%;
+    right: 0;
+    z-index: 1;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
+  }
+  /*following header*/
+  /* line 211, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .fixed-mobile-nav {
+    width: 100%;
+    height: 4em;
+    background-color: #2E3094;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    z-index: 10;
+    transition: .5s linear;
+  }
+  /* line 220, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .fixed-mobile-nav {
+    box-shadow: 0 0 7px 7px rgba(0, 0, 0, 0.4);
+  }
+  /*space for mobile nav*/
+  /* line 224, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navHome {
+    margin-top: 6.2em;
+    width: 100%;
+  }
+  /* line 228, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-wrapper-outer img {
+    position: fixed;
+    left: .5em;
+    top: .25em;
+    z-index: 12;
+    height: 3.5em;
+  }
+  /* line 235, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .mobile-nav-spacer {
+    height: 4em;
+    width: 100%;
+  }
+  /* Pure CSS3 Hamburger*/
+  /* line 240, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn {
+    position: fixed;
+    right: .75em;
+    top: .75em;
+    z-index: 12;
+    width: 2.5em;
+    height: 2.5em;
+    margin: 0 auto;
+  }
+  /* line 249, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:hover {
+    cursor: pointer;
+  }
+  /* line 252, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .clear-menu-btn .top,
+  .nav-trigger:checked ~ .clear-menu-btn .bottom {
+    top: 50%;
+  }
+  /* line 256, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .clear-menu-btn .top {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  /* line 263, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .clear-menu-btn .bottom {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+  }
+  /* line 270, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .clear-menu-btn .middle {
+    filter: alpha(opacity=0);
+    opacity: 0;
+  }
+  /* line 274, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ .clear-menu-btn .circle {
+    filter: alpha(opacity=100);
+    opacity: 1;
+  }
+  /* line 278, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: .12em;
+    background-color: #808080;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    z-index: -1;
+  }
+  /* line 291, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn .top {
+    top: 15%;
+    z-index: 1;
+  }
+  /* line 295, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn .middle {
+    top: 50%;
+    z-index: 1;
+  }
+  /* line 299, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn .bottom {
+    top: 85%;
+    z-index: 1;
+  }
+  /* line 303, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .clear-menu-btn .circle {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    filter: alpha(opacity=0);
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 0.14em solid #808080;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    z-index: -1;
+  }
+  /* Nav Trigger */
+  /* line 328, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger {
+    /* critical styles - hide the checkbox input*/
+    position: fixed;
+    z-index: 13;
+    top: .5em;
+    right: .5em;
+    height: 3em;
+    width: 3em;
+    filter: alpha(opacity=0);
+    opacity: 0;
+  }
+  /* Make the Magic Happen */
+  /* line 340, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  #wrapper {
+    transition: right .5s;
+  }
+  /* line 343, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .nav-trigger:checked ~ #wrapper {
+    /*The window*/
+    right: 15.5em;
+  }
+  /* Without this, the body has excess horizontal scroll when the menu is open */
+  /* line 348, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  body {
+    overflow-x: hidden;
+  }
+  /* line 351, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown {
+    position: relative;
+  }
+  /* line 354, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown input,
+  .navDropdown > img {
+    position: absolute;
+    right: 1em;
+    left: initial;
+    cursor: pointer;
+  }
+  /* line 361, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown input {
+    filter: alpha(opacity=0);
+    opacity: 0;
+    top: 1em;
+    width: 3em;
+    height: 3em;
+    z-index: 15;
+  }
+  /* line 369, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown input:checked ~ img {
+    transform: rotate(180deg);
+  }
+  /* line 372, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown > img {
+    transition: .5s linear;
+    top: 1em;
+    width: 2em;
+    height: 2em;
+  }
+  /* line 378, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown .subNav {
+    max-height: 0;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+  }
+  /* line 386, /home/brandon/GitHub/PARTs_Website/scss/_components/_navigation.scss */
+  .navDropdown input:checked ~ .subNav {
+    max-height: 15em;
+  }
+}
+
+/*FOOTER*/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#footerArrow img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30%;
+}
+
+/*FOOTER CONTENT*/
+/* line 13, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connect {
+  height: 30%;
+}
+
+/* line 17, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connect h2 {
+  text-align: center;
+  padding-top: .4em;
+  margin: 0;
+}
+
+/* line 23, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connect h2 a {
+  color: white;
+  font-size: 1.3em;
+}
+
+/*FOOTER SOCIAL ICONS*/
+/* line 31, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connectSocial {
+  margin: auto;
+  text-align: justify;
+  height: 70%;
+  /*FOOTER:WIDE SCREEN*/
+  /*FOOTER:NARROW SCREEN*/
+}
+
+@media only screen and (min-width: 1001px) {
+  /* line 31, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+  #connectSocial {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* line 31, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+  #connectSocial {
+    width: 95%;
+  }
+}
+
+/* line 45, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connectSocial img {
+  display: inline-block;
+  vertical-align: top;
+  /* IE fix. */
+  *display: inline;
+  zoom: 1;
+}
+
+/* line 53, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connectSocial:after {
+  content: "";
+  width: 100%;
+  display: inline-block;
+}
+
+/* line 59, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#connectSocial img {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 42%;
+}
+
+/*FOOTER> KEEP AT BOTTOM*/
+/* line 69, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* line 76, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#wrapper {
+  min-height: 100%;
+  position: relative;
+}
+
+/* line 81, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#content {
+  padding-bottom: 12em;
+  /* Height of the footer element */
+}
+
+/* line 86, /home/brandon/GitHub/PARTs_Website/scss/_components/_footer.scss */
+#footer {
+  background: #474747;
+  width: 100%;
+  height: 12em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+/*bduke site*/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_bduke.scss */
+#bduke {
+  position: absolute;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: .5em;
+  padding-right: .5em;
+  margin: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* line 14, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_bduke.scss */
+#bduke a {
+  font-size: 1em;
+  text-decoration: none;
+  transition: .25s linear;
+  color: #6f6f6f;
+}
+
+/* line 21, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_bduke.scss */
+#bduke a:hover {
+  color: #FF6A00;
+}
+
+/**********END GLOBAL CSS**********/
+/**********BEGIN HOME PAGE**********/
+/*COUNTER*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#regional {
+  width: 100%;
+}
+
+/* line 10, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#regional td {
+  border: 2px solid #808080;
+}
+
+/* line 14, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#regional h2 {
+  text-align: center;
+}
+
+/* line 18, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#counter {
+  position: relative;
+  padding-bottom: 15%;
+  /*to find % aspect ratio, (height/width)100*/
+  height: 0;
+}
+
+/* line 25, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.tcw {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*banners:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 37, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #stream {
+    width: 50%;
+  }
+}
+
+/*counter:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 46, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #regional td {
+    display: block;
+  }
+}
+
+/*HOME*/
+/* line 54, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#mainHome {
+  width: 100%;
+}
+
+/* line 58, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#partsIntro,
+#homeMedia,
+#videos table {
+  width: 100%;
+}
+
+/*intro*/
+/* line 67, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#partsIntro,
+#videos {
+  height: 100vh;
+  padding-top: 1em;
+}
+
+/* line 73, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeMedia {
+  height: 100vh;
+}
+
+/* line 77, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#partsIntro-inner,
+#social {
+  background-color: aqua;
+  margin: auto;
+  /*SCREEN SIZE:WIDE SCREEN*/
+  /*SCREEN SIZE:NARROW SCREEN*/
+}
+
+@media only screen and (min-width: 1001px) {
+  /* line 77, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #partsIntro-inner,
+  #social {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* line 77, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #partsIntro-inner,
+  #social {
+    width: 90%;
+  }
+}
+
+/* line 91, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeJoin {
+  width: 100%;
+  height: 50vh;
+  position: relative;
+}
+
+/* home join*/
+/* line 100, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeJoin > .joinCover,
+#homeJoin > #joinText > #joinH1 {
+  transition: 1s ease-in-out;
+}
+
+/* line 105, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeJoin-wrapper:hover > #homeJoin > .joinCover {
+  filter: brightness(100%);
+  -webkit-filter: brightness(100%);
+}
+
+/* line 110, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeJoin-wrapper:hover > #homeJoin > #joinText > #joinH1 {
+  color: #FF6A00;
+  text-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+}
+
+/*TEXT*/
+/* line 118, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#partsIntro h1,
+#partsIntro h2,
+#partsIntro h3 {
+  text-align: center;
+}
+
+/* line 124, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#partsIntro p:nth-child(4) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/*SOCIAL IMAGES*/
+/* line 132, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social img {
+  opacity: 1;
+  transition: visibility 0s .25s, opacity .25s linear;
+}
+
+/* line 137, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social:hover img {
+  opacity: 0.2;
+  transition: opacity .25s linear;
+}
+
+/* line 142, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social:hover img:hover {
+  opacity: 1;
+  transition: visibility 0s .25s, opacity .25s linear;
+}
+
+/* line 147, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social {
+  width: 50%;
+  height: 3.5em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+  text-align: justify;
+}
+
+/*social:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 159, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #social {
+    width: 50%;
+  }
+}
+
+/*social:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 168, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #social {
+    width: 90%;
+  }
+}
+
+/* line 173, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social img {
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  /* IE fix. */
+  *display: inline;
+  zoom: 1;
+}
+
+/* line 182, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#social:after {
+  content: "";
+  width: 100%;
+  display: inline-block;
+}
+
+/*VIDEOS AND SPONSORS*/
+/*TEXT*/
+/* line 194, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#homeMedia p {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+/* line 199, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#videos {
+  background-color: green;
+  vertical-align: middle;
+}
+
+/* line 205, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+#videos > table {
+  width: 100%;
+  height: calc(100vh - 1em);
+  background-color: red;
+  vertical-align: middle;
+}
+
+/*FLUID VIDEOS*/
+/* line 215, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  /* 16:9 RATIO*/
+  height: 0;
+}
+
+/* line 222, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*videos:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 234, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #videos td:first-child {
+    padding-right: 1em;
+  }
+  /* line 237, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #videos td:nth-child(2) {
+    padding-left: 1em;
+  }
+}
+
+/*videos:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 246, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #videos td:first-child {
+    padding-right: .5em;
+  }
+  /* line 249, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #videos td:nth-child(2) {
+    padding-left: .5em;
+  }
+}
+
+/*FLUID SPONSORS*/
+/* line 257, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper40 {
+  position: relative;
+  padding-bottom: 40%;
+  /*to find % aspect ratio, (height/width)100*/
+  height: 0;
+}
+
+/* line 264, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper40 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 272, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper32 {
+  position: relative;
+  padding-bottom: 32%;
+  height: 0;
+}
+
+/* line 278, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper32 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 286, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper100 {
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+}
+
+/* line 292, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+.imgWrapper100 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*photos:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 304, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #toyota,
+  #putnam,
+  #pctc,
+  #aep {
+    padding-right: 1em;
+  }
+  /* line 310, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #rcbi,
+  #homeDepot {
+    padding-left: 1em;
+  }
+}
+
+/*photos:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 320, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #toyota,
+  #putnam,
+  #pctc,
+  #aep {
+    padding-right: .5em;
+  }
+  /* line 326, /home/brandon/GitHub/PARTs_Website/scss/_pages/_home.scss */
+  #rcbi,
+  #homeDepot {
+    padding-left: .5em;
+  }
+}
+
+/**********END HOME PAGE**********/
+/**********BEGIN CONTACT US**********/
+/*TEXT*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_contact.scss */
+#mainContact h2 {
+  text-align: center;
+}
+
+/*FLUID MAP*/
+/* line 13, /home/brandon/GitHub/PARTs_Website/scss/_pages/_contact.scss */
+#map {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* line 19, /home/brandon/GitHub/PARTs_Website/scss/_pages/_contact.scss */
+#mapWrapper {
+  width: 100%;
+  height: 35em;
+  margin: 2em auto 2em auto;
+}
+
+/**********END CONTACT US**********/
+/**********BEGIN JOIN**********/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#subgroups {
+  width: 100%;
+}
+
+/* line 7, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#subgroups tr td h4 {
+  text-align: center;
+}
+
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#subgroups td {
+  border: 2px solid #808080;
+  overflow: hidden;
+}
+
+/*table nav:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 20, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #subgroups td {
+    display: block;
+  }
+  /* line 23, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinPic {
+    overflow: hidden;
+  }
+}
+
+/* line 28, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinPic {
+  position: relative;
+}
+
+/*TEXT*/
+/* line 35, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#mainJoin h2 {
+  text-align: center;
+}
+
+/* line 39, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#mainJoin p {
+  text-align: center;
+}
+
+/* line 43, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinText {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+}
+
+/* line 54, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinH1,
+#joinCommOut {
+  text-align: center;
+  color: white;
+}
+
+/* line 60, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#scrollForMoreInfo {
+  text-align: center;
+  color: white;
+}
+
+/* line 65, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#returnArrow h4 {
+  display: none;
+}
+
+/* line 69, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#subgroups a {
+  text-decoration: none;
+  display: block;
+  padding: 10em;
+  margin: -10em;
+}
+
+/*JOIN:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 80, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinH1,
+  #joinCommOut {
+    font-size: 4.6em;
+  }
+  /* line 84, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #scrollForMoreInfo {
+    font-size: 2.4em;
+  }
+  /* line 87, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #returnArrow {
+    position: absolute;
+    width: 10%;
+  }
+  /* line 91, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #returnArrow img {
+    position: relative;
+    width: 50%;
+  }
+}
+
+/*JOIN:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 101, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinH1,
+  #joinCommOut {
+    font-size: 2.6em;
+  }
+  /* line 105, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #scrollForMoreInfo {
+    font-size: 1.4em;
+  }
+  /* line 108, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #returnArrow h4 {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* line 120, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #returnArrow {
+    margin: auto;
+    width: 90%;
+    position: relative;
+  }
+  /* line 125, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #returnArrow img {
+    width: 10%;
+  }
+}
+
+/*JOIN:EVEN NARROWER SCREEN*/
+@media (max-width: 280px) {
+  /* line 134, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinH1 {
+    font-size: 2em;
+  }
+  /* line 137, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #scrollForMoreInfo {
+    font-size: 1.2em;
+  }
+  /* line 140, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinCommOut {
+    font-size: 1.5em;
+  }
+}
+
+/*IMAGES
+
+#joinPic img {
+    position: relative;
+    width: 100%;
+    z-index: 1;
+    -webkit-filter: brightness(50%);
+}*/
+/* line 155, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinPic {
+  width: 100%;
+  /*JOIN:WIDE SCREEN*/
+  /*JOIN:NARROW SCREEN*/
+}
+
+@media only screen and (min-width: 1001px) {
+  /* line 155, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinPic {
+    height: calc(100vh - 6em);
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* line 155, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+  #joinPic {
+    height: calc(100vh - 5em);
+  }
+}
+
+/* line 167, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+.joinCover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: brightness(50%);
+  -webkit-filter: brightness(50%);
+  width: 100%;
+  height: 100%;
+}
+
+/* line 178, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinHomeCover {
+  background-image: url(../contents/joinPictures/join.JPG);
+}
+
+/* line 182, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinCommunityCover {
+  background-image: url(../contents/joinPictures/communityOutreach.JPG);
+}
+
+/* line 186, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinElectricalCover {
+  background-image: url(../contents/joinPictures/electrical.JPG);
+}
+
+/* line 190, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinMechanicalCover {
+  background-image: url(../contents/joinPictures/mechanical.JPG);
+}
+
+/* line 194, /home/brandon/GitHub/PARTs_Website/scss/_pages/_join.scss */
+#joinProgrammingCover {
+  background-image: url(../contents/joinPictures/programming.JPG);
+}
+
+/**********END JOIN**********/
+/**********BEGIN SPONSORING**********/
+/*TEXT*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_sponsoring.scss */
+#mainSponsor a {
+  font-weight: bold;
+}
+
+/* line 10, /home/brandon/GitHub/PARTs_Website/scss/_pages/_sponsoring.scss */
+#closingSponsor {
+  text-align: center;
+}
+
+/* line 14, /home/brandon/GitHub/PARTs_Website/scss/_pages/_sponsoring.scss */
+#mainSponsor h1 {
+  text-align: center;
+}
+
+/* line 18, /home/brandon/GitHub/PARTs_Website/scss/_pages/_sponsoring.scss */
+#mainSponsor p {
+  text-align: justify;
+}
+
+/**********END SPONSORING**********/
+/**********BEGIN ABOUT TEAM**********/
+/*BANNERS*/
+@font-face {
+  font-family: 'Adam';
+  src: url("adam.otf") format("opentype");
+  unicode-range: U+0000-00FF;
+}
+
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners, .banners *, .banner {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* line 16, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banner-parent {
+  width: 100%;
+  overflow: scroll;
+}
+
+/* line 19, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banner-parent .banners {
+  width: auto;
+  white-space: nowrap;
+}
+
+/* line 23, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners li, .banner {
+  line-height: 1.2;
+  font-family: 'Adam', sans-serif;
+  text-align: center;
+  vertical-align: top;
+  display: inline-block;
+  margin: 0 3px 30px;
+  width: 120px;
+  position: relative;
+  background: #0f4bcb;
+  color: white;
+  padding: 10px;
+  white-space: normal;
+}
+
+/* line 37, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners img, .banner img {
+  width: 75px;
+  margin-bottom: 5px;
+}
+
+/* line 41, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners li:after, .banner:after {
+  content: '';
+  position: absolute;
+  display: block;
+  border: 60px solid #0f4bcb;
+  border-top-width: 5px;
+  border-bottom: 20px transparent solid;
+  top: 100%;
+  left: 0;
+}
+
+/* line 51, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners li, .banner {
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+}
+
+/* line 56, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_banners.sass */
+.banners li:after, .banner:after {
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');
+  -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
+}
+
+/* line 7, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#banners {
+  text-align: center;
+}
+
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.banners {
+  display: inline-block;
+}
+
+/*banners:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 19, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  #scrollBanner {
+    display: none;
+  }
+}
+
+/*banners:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /*BANNERS*/
+  /* line 29, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  #banners {
+    height: 16em;
+    overflow: auto;
+  }
+  /* line 33, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  .banners {
+    width: 40.4em;
+  }
+  /* line 36, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  #scrollBanner {
+    text-align: center;
+  }
+}
+
+/*TEXT*/
+/* line 44, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#aboutStart h1,
+#mainAbout h1,
+#mainAbout h2,
+#aboutParts td {
+  text-align: center;
+}
+
+/* line 51, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#aboutParts p,
+#awards li {
+  text-align: left;
+}
+
+/*NEW BOT LAYOUT*/
+/* line 59, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#coversContainer {
+  text-align: center;
+}
+
+/* line 63, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#mainAbout .cover {
+  display: inline-block;
+}
+
+/* line 67, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.cover h2 {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 72, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#aboutParts .cover img {
+  margin-left: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-right: 1em;
+  height: 18em;
+}
+
+/* line 80, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* line 95, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.robotLabel {
+  cursor: pointer;
+}
+
+/* line 99, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.popup {
+  background: #fff;
+  border-radius: 5px;
+  width: 80%;
+  position: relative;
+  transition: all 1s ease-in-out;
+  max-height: 100vh;
+}
+
+/* line 108, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.popup h2 {
+  margin-top: 0;
+  padding-top: .5em;
+  text-align: center;
+}
+
+/* line 114, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.popup .close {
+  position: absolute;
+  transition: all 200ms;
+  font-size: 2em;
+  font-weight: bold;
+  text-decoration: none;
+  color: #5B5B5B;
+}
+
+/* line 123, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.popup .close:hover {
+  color: #FF6A00;
+}
+
+/* line 127, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.popup .robotBio {
+  max-height: 80vh;
+  padding-right: 2em;
+  padding-left: 2em;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@media only screen and (min-width: 1001px) {
+  /* line 137, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  .popup .close {
+    top: 20px;
+    right: 30px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  /* line 145, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  .popup {
+    width: 80%;
+  }
+  /* line 148, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  .popup .close {
+    top: 40px;
+    right: 30px;
+  }
+  /* line 152, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+  .noNAV:checked ~ #blueBlock,
+  .noNAV:checked ~ #menu,
+  .noNAV:checked ~ #navContainer {
+    visibility: hidden;
+    opacity: 0;
+    transition: .25s ease-in-out;
+  }
+}
+
+/* line 161, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+#mccoyRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #mccoy,
+#huRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #hu,
+#djRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #dj,
+#carlaRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #carla,
+#turboMikeRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #turboMike,
+#beanieTheBarbarianRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beanieTheBarbarian,
+#beaniehemothRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beaniehemoth {
+  visibility: visible;
+  opacity: 1;
+  z-index: 16;
+}
+
+/* line 173, /home/brandon/GitHub/PARTs_Website/scss/_pages/_about.scss */
+.robotRadio {
+  display: none;
+}
+
+/**********END ABOUT TEAM**********/
+/**********BEGIN ALL MEDIA PAGES**********/
+/*ALBUM COVERS*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+#mainMedia {
+  text-align: center;
+}
+
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.albums img {
+  display: inline-block;
+  margin: auto;
+  padding: .5em;
+}
+
+/*album image:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 21, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  .albums img,
+  .wallpaperAccordion {
+    width: 20%;
+  }
+}
+
+/*album image:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 31, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  .albums img,
+  .wallpaperAccordion {
+    width: 60%;
+  }
+}
+
+/*TABLE SIZE*/
+/* line 40, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+#topMedia {
+  width: 100%;
+}
+
+/*TEXT*/
+/* line 47, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+#topMedia h1 {
+  text-align: center;
+}
+
+/*table:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /*PREVIOUS PAGE ARROW*/
+  /* line 56, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  #leftArrow img {
+    width: 4em;
+  }
+  /*SPACER TO KEEP TEXT CENTERED*/
+  /* line 60, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  #blockLR {
+    width: 4em;
+  }
+}
+
+/*table:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /*PREVIOUS PAGE ARROW*/
+  /* line 70, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  #leftArrow img {
+    width: 3em;
+  }
+  /*SPACER TO KEEP TEXT CENTERED*/
+  /* line 74, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  #blockLR {
+    width: 3em;
+  }
+}
+
+/*WALLPAPER SIZE*/
+/* line 82, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpapers img {
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+}
+
+/*WALLPAPER DOWNLOAD DROPDOWN*/
+/* line 91, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.album {
+  cursor: pointer;
+}
+
+/* line 95, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion {
+  padding: .5em;
+}
+
+/*wallpaper:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 103, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  .wallpaperAccordion {
+    display: inline-block;
+  }
+}
+
+/*wallpaper:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 112, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+  .wallpaperAccordion {
+    display: block;
+    margin: auto;
+  }
+}
+
+/* line 118, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion a {
+  text-decoration: none;
+}
+
+/* line 122, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion input {
+  display: none;
+}
+
+/* line 126, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion .article {
+  overflow: hidden;
+  max-height: 0px;
+}
+
+/*DROP DOWN STYLING*/
+/* line 134, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion input:checked ~ .article.ac-small {
+  max-height: 15em;
+}
+
+/* line 138, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.article.ac-small table {
+  width: 100%;
+}
+
+/* line 142, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.article.ac-small h2 {
+  text-align: center;
+}
+
+/* line 146, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpapers .article.ac-small .downloadLine {
+  border-bottom: 1px solid #808080;
+}
+
+/*DROP DOWN ACTION*/
+/* line 153, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion input:checked ~ .article {
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+/* line 161, /home/brandon/GitHub/PARTs_Website/scss/_pages/_media.scss */
+.wallpaperAccordion .article {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+/**********END ALL MEDIA PAGES**********/
+/**********BEGIN TEAM RESOURCES**********/
+/*PAGE SIZES AND THEIR STYLING*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease-in-out;
+  background-color: #D6D6D6;
+  width: 100%;
+  margin: 1em auto;
+  border-radius: .5em;
+}
+
+/* line 15, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* line 19, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTakeALook {
+  transition: background-color .5s linear;
+  background-color: #FF6A00;
+  display: table;
+  margin: 0 auto;
+  border-radius: .5em;
+}
+
+/* line 27, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceSpacer {
+  height: 1em;
+}
+
+/* line 31, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTakeALook:hover {
+  background-color: #262626;
+  opacity: .75;
+}
+
+/*TEXT STYLING*/
+/* line 39, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTakeALook h3 {
+  text-decoration: none;
+  margin: .5em;
+}
+
+/* line 44, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTakeALook a {
+  text-decoration: none;
+}
+
+/* line 48, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs > h3 {
+  text-align: center;
+  padding-right: .3em;
+  padding-left: .3em;
+}
+
+/* line 54, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs > h4 {
+  text-align: center;
+  padding-right: .3em;
+  padding-left: .3em;
+}
+
+/* line 60, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs h4 > a {
+  text-decoration: none;
+}
+
+/*IMAGE STYLING*/
+/* line 67, /home/brandon/GitHub/PARTs_Website/scss/_pages/_resources.scss */
+.resourceTabs img {
+  width: 5em;
+  display: block;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+/**********END TEAM RESOURCES**********/
+/**********BEGIN CALENDAR**********/
+/*FLUID CALENDAR*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_calendar.scss */
+#calendar {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* line 12, /home/brandon/GitHub/PARTs_Website/scss/_pages/_calendar.scss */
+#calendarWrapper {
+  width: 100%;
+  height: 30em;
+  margin: 2em auto 2em auto;
+}
+
+/**********END CALENDAR**********/
+/**********BEGIN ABOUT FIRST AND GAME**********/
+/*TABLE SIZE*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+#mainFirst table {
+  width: 100%;
+}
+
+/*TABLE TEXT*/
+/* line 13, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+#mainFirst thead h1 {
+  text-align: center;
+}
+
+/* line 17, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+#mainFirst ul li {
+  text-align: left;
+}
+
+/*IMAGE ALIGNMENT*/
+/* line 24, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+#mainFirst td {
+  text-align: center;
+}
+
+/*FIRST:WIDE SCREEN*/
+@media only screen and (min-width: 1001px) {
+  /* line 32, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #mainFirst h1,
+  #mainFirst h2,
+  #mainFirst p {
+    text-align: left;
+  }
+  /*LOGOS*/
+  /* line 38, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #first {
+    width: 70%;
+    margin-bottom: 10%;
+  }
+  /* line 42, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #frc {
+    width: 70%;
+    margin-top: 10%;
+  }
+  /* line 46, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #gameLogo {
+    width: 70%;
+  }
+}
+
+/*FIRST:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 55, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #mainFirst h1,
+  #mainFirst h2,
+  #mainFirst p {
+    text-align: center;
+  }
+  /*LOGOS*/
+  /* line 61, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #first {
+    margin: 1em;
+    width: 40%;
+  }
+  /* line 65, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #frc {
+    width: 40%;
+    margin: 1em;
+  }
+  /* line 69, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #gameLogo {
+    width: 80%;
+  }
+  /*TABLE DISPLAY*/
+  /* line 73, /home/brandon/GitHub/PARTs_Website/scss/_pages/_first.scss */
+  #mainFirst td {
+    display: block;
+  }
+}
+
+/**********END ABOUT FIRST AND GAME**********/
+/**********BEGIN COMPETITION**********/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+#competitionTable,
+#competitionSchedule {
+  width: 100%;
+}
+
+/*TEXT*/
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+#competitionTable h2,
+#competitionTable h3,
+#competitionTable h4 {
+  text-align: center;
+}
+
+/* line 17, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+.redAlliance {
+  color: red;
+}
+
+/* line 21, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+.blueAlliance {
+  color: blue;
+}
+
+/*BORDER*/
+/* line 28, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+#competitionTable td {
+  border: 2px solid #808080;
+}
+
+/*IMG*/
+/* line 35, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+#competitionTable img {
+  width: 100%;
+}
+
+/*COMPETITION:NARROW SCREEN*/
+@media only screen and (max-width: 1000px) {
+  /* line 43, /home/brandon/GitHub/PARTs_Website/scss/_pages/_competition.scss */
+  .competitionTableDisplay {
+    display: block;
+  }
+}
+
+/**********END COMPETITION**********/
+/**********BEGIN EGG**********/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_pages/_egg.scss */
+#EGG {
+  margin: auto;
+  text-align: center;
+}
+
+/*TEXT*/
+/* line 11, /home/brandon/GitHub/PARTs_Website/scss/_pages/_egg.scss */
+#EGG h1 {
+  text-align: center;
+}
+
+/*GIF*/
+/* line 18, /home/brandon/GitHub/PARTs_Website/scss/_pages/_egg.scss */
+#beanieGIF {
+  width: 50%;
+}
+
+/**********END EGG**********/
+/**********BEGIN NOT FOUND**********/
+/*TEXT*/
+/* line 6, /home/brandon/GitHub/PARTs_Website/scss/_pages/_404.scss */
+#notFound h1 {
+  text-align: left;
+  font-size: 10em;
+  padding: 0;
+  margin: 0;
+}
+
+/* line 13, /home/brandon/GitHub/PARTs_Website/scss/_pages/_404.scss */
+#notFound h2 {
+  text-align: left;
+}
+
+/**********END NOT FOUND**********/
+/**********BEGIN CSS SLIDER**********/
+/*CSS RESET*/
+/* line 3, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/*FONT IMPORT*/
+@font-face {
+  font-family: timeburner;
+  src: url(timeburner.ttf);
+}
+
+/********** NEXT SLIDE ARROW NAVIGATION **********/
+/*APPEARANCE*/
+/* line 27, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > input {
+  display: none;
+}
+
+/* line 31, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  z-index: 15;
+  width: 100%;
+  height: 10vw;
+}
+
+/* line 41, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #previousArrow > .slideL,
+#cssSlider > #pageNav > #playPause > .playPauseBtn,
+#cssSlider > #pageNav > #nextArrow > .slideR {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  -webkit-transition: opacity .5s ease-in-out;
+  transition: opacity .5s ease-in-out;
+}
+
+/* line 51, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #previousArrow > .slideL {
+  width: 10vw;
+  height: 10vw;
+  background: url("icons/previous.png");
+  background-image: url("icons/previous.svg"), none;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  z-index: -1;
+}
+
+/* line 61, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #nextArrow > .slideR {
+  width: 10vw;
+  height: 10vw;
+  background: url("icons/next.png");
+  background-image: url("icons/next.svg"), none;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  z-index: -1;
+}
+
+/* line 71, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #playPause > #playBtn {
+  width: 10vw;
+  height: 10vw;
+  background: url("icons/play.png");
+  background-image: url("icons/play.svg"), none;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+/* line 80, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #playPause > #pauseBtn {
+  width: 10vw;
+  height: 10vw;
+  background: url("icons/pause.png");
+  background-image: url("icons/pause.svg"), none;
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+/*POSITION*/
+/* line 92, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #previousArrow > .slideL {
+  left: 2vw;
+}
+
+/* line 96, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #playPause > .playPauseBtn {
+  left: 50%;
+  margin: 0 0 0 -5vw;
+}
+
+/* line 101, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav > #nextArrow > .slideR {
+  right: 2vw;
+}
+
+/*ONLY DISPLAY IF ON SLIDER*/
+/* line 108, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageNav:hover > #previousArrow > .slideL,
+#cssSlider > #pageNav:hover > #playPause > .playPauseBtn,
+#cssSlider > #pageNav:hover > #nextArrow > .slideR,
+#cssSlider #sliderImages:hover ~ #pageNav #previousArrow .slideL,
+#cssSlider > #sliderImages:hover ~ #pageNav > #playPause > .playPauseBtn,
+#cssSlider > #sliderImages:hover ~ #pageNav > #nextArrow > .slideR {
+  opacity: 1;
+}
+
+/*DON'T SHOW PLAY AND PAUSE*/
+/* line 120, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:not(:checked) ~ #pageNav > #playPause > #pauseBtn {
+  display: none;
+}
+
+/* line 124, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #playPause > #playBtn {
+  display: none;
+}
+
+/*WHICH ARROW SHOULD BE ON TOP*/
+/* line 131, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide1:checked ~ #pageNav > #previousArrow > #slideL6,
+#cssSlider > #slide1:checked ~ #pageNav > #nextArrow > #slideR2,
+#cssSlider > #slide2:checked ~ #pageNav > #previousArrow > #slideL1,
+#cssSlider > #slide2:checked ~ #pageNav > #nextArrow > #slideR3,
+#cssSlider > #slide3:checked ~ #pageNav > #previousArrow > #slideL2,
+#cssSlider > #slide3:checked ~ #pageNav > #nextArrow > #slideR4,
+#cssSlider > #slide4:checked ~ #pageNav > #previousArrow > #slideL3,
+#cssSlider > #slide4:checked ~ #pageNav > #nextArrow > #slideR5,
+#cssSlider > #slide5:checked ~ #pageNav > #previousArrow > #slideL4,
+#cssSlider > #slide5:checked ~ #pageNav > #nextArrow > #slideR6,
+#cssSlider > #slide6:checked ~ #pageNav > #previousArrow > #slideL5,
+#cssSlider > #slide6:checked ~ #pageNav > #nextArrow > #slideR1 {
+  z-index: 15;
+}
+
+/*STARTING ARROW ANIMATION, FOR WHICH TO BE ON TOP*/
+/* line 149, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL6,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR2,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL6,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR2 {
+  -webkit-animation: arrows 40000ms infinite 0ms;
+  animation: arrows 40000ms infinite 0ms;
+}
+
+/* line 157, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL1,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR3,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL1,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR3 {
+  -webkit-animation: arrows 40000ms infinite 6666.6666666667ms;
+  animation: arrows 40000ms infinite 6666.6666666667ms;
+}
+
+/* line 165, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL2,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR4,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL2,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR4 {
+  -webkit-animation: arrows 40000ms infinite 13333.333333333ms;
+  animation: arrows 40000ms infinite 13333.333333333ms;
+}
+
+/* line 173, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL3,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR5,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL3,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR5 {
+  -webkit-animation: arrows 40000ms infinite 20000ms;
+  animation: arrows 40000ms infinite 20000ms;
+}
+
+/* line 181, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL4,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR6,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL4,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR6 {
+  -webkit-animation: arrows 40000ms infinite 26666.666666666ms;
+  animation: arrows 40000ms infinite 26666.666666666ms;
+}
+
+/* line 189, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL5,
+#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR1,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL5,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR1 {
+  -webkit-animation: arrows 40000ms infinite 33333.333333333ms;
+  animation: arrows 40000ms infinite 33333.333333333ms;
+}
+
+/********** END NEXT SLIDE ARROW NAVIGATION **********/
+/********** SLIDE INDICATORS **********/
+/*PAGE INDICATORS APPEARANCE*/
+/* line 206, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageIndicators {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  width: 100%;
+  z-index: 15;
+}
+
+/* line 214, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageIndicators > .indicator {
+  display: inline-block;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 100%;
+  background-color: #ABB7B7;
+  /*color of page indicator*/
+  cursor: pointer;
+}
+
+/* line 224, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageIndicators > .indicator > .hoverPoint {
+  margin: .5em;
+  display: inline-block;
+  height: .5em;
+  width: .5em;
+  border-radius: 100%;
+  background: transparent;
+  transition: .3s ease-in-out;
+  -webkit-transition: .3s ease-in-out;
+  z-index: 16;
+}
+
+/* line 236, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageIndicators > .indicator > .hoverPoint > .point {
+  margin-bottom: .5em;
+  display: inline-block;
+  height: .5em;
+  width: .5em;
+  border-radius: 100%;
+  background: transparent;
+  transition: .3s ease-in-out;
+  -webkit-transition: .3s ease-in-out;
+}
+
+/*STARTING PAGE INDICATOR WHICH TO BE LIT ANIMATION*/
+/* line 250, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1 {
+  -webkit-animation: point 40000ms infinite 0ms;
+  animation: point 40000ms infinite 0ms;
+}
+
+/* line 256, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2 {
+  -webkit-animation: point 40000ms infinite 6666.6666666667ms;
+  animation: point 40000ms infinite 6666.6666666667ms;
+}
+
+/* line 262, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3 {
+  -webkit-animation: point 40000ms infinite 13333.333333333ms;
+  animation: point 40000ms infinite 13333.333333333ms;
+}
+
+/* line 268, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4 {
+  -webkit-animation: point 40000ms infinite 20000ms;
+  animation: point 40000ms infinite 20000ms;
+}
+
+/* line 274, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5 {
+  -webkit-animation: point 40000ms infinite 26666.666666666ms;
+  animation: point 40000ms infinite 26666.666666666ms;
+}
+
+/* line 280, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6 {
+  -webkit-animation: point 40000ms infinite 33333.333333333ms;
+  animation: point 40000ms infinite 33333.333333333ms;
+}
+
+/*WHICH INDICATOR SHOULD BE LIT*/
+/* line 289, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide1:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1,
+#cssSlider > #slide2:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2,
+#cssSlider > #slide3:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3,
+#cssSlider > #slide4:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4,
+#cssSlider > #slide5:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5,
+#cssSlider > #slide6:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6 {
+  background: #F2F1EF;
+  /*color of page indicator dot*/
+}
+
+/*used to override the animation for lit indicator*/
+/* line 302, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pageIndicators > .indicator:hover > .hoverPoint {
+  background: #F2F1EF;
+  /*color of page indicator dot*/
+}
+
+/********** END SLIDE INDICATORS **********/
+/**********IMAGE/SLIDER STYLING **********/
+/*don't show the other images*/
+/* line 316, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider {
+  position: relative;
+  overflow: hidden;
+}
+
+/*the size of the responsixe slider, 
+just replace your value based on the ratio equation*/
+/* line 325, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider {
+  padding-bottom: 43.95%;
+  /*to find % aspect ratio, (height/width)100*/
+  height: 0;
+}
+
+/*size of the images*/
+/* line 334, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #sliderImages > img,
+#cssSlider > #sliderImages > a > img {
+  width: 100vw;
+  height: 100%;
+  float: left;
+}
+
+/*transition slider size*/
+/* line 344, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #sliderImages {
+  position: absolute;
+  left: 0;
+  width: 600vw;
+  /*animation parameters*/
+  -webkit-animation-name: slider;
+  -webkit-animation-duration: 40s;
+  -webkit-animation-timing-function: ease-in-out;
+  -webkit-animation-iteration-count: infinite;
+  animation-name: slider;
+  animation-duration: 40s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  /*this is the time to transition between images
+    when using the arrows*/
+  transition: 2.66666666667s;
+}
+
+/********** END IMAGE/SLIDER STYLING **********/
+/********** SLIDER TEXT **********/
+/* line 368, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slideDesc > .slideText {
+  position: absolute;
+  bottom: 0;
+  padding: .6em;
+  margin: 2em;
+  background-color: #ABB7B7;
+  /*color of blurb box*/
+  border-radius: .5em;
+  z-index: -1;
+  opacity: 0;
+  -webkit-transform: translateY(-100px);
+  transform: translateY(-100px);
+  -webkit-transition: 950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55), 950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55), 950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: 950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55), 950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55), 950ms transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55), 950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* line 384, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slideDesc > .slideText > p {
+  padding: .1em;
+  margin: 0;
+  color: black;
+  /*color of blurb box text*/
+  font-size: 2em;
+  font-family: timeburner;
+}
+
+/*BRING THE TEXT FORWARD ON ITS PAGE*/
+/* line 396, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide1:checked ~ #slideDesc > #slideText1,
+#cssSlider > #slide2:checked ~ #slideDesc > #slideText2,
+#cssSlider > #slide3:checked ~ #slideDesc > #slideText3,
+#cssSlider > #slide4:checked ~ #slideDesc > #slideText4,
+#cssSlider > #slide5:checked ~ #slideDesc > #slideText5,
+#cssSlider > #slide6:checked ~ #slideDesc > #slideText6 {
+  z-index: 2;
+  opacity: 1;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+
+/*TEXT BOX ANIMATION*/
+/* line 411, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText1,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText1 {
+  -webkit-animation: textBoxBounce 40000ms infinite 0ms;
+  animation: textBoxBounce 40000ms infinite 0ms;
+}
+
+/* line 417, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText2,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText2 {
+  -webkit-animation: textBoxBounce 40000ms infinite 6666.6666666667ms;
+  animation: textBoxBounce 40000ms infinite 6666.6666666667ms;
+}
+
+/* line 423, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText3,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText3 {
+  -webkit-animation: textBoxBounce 40000ms infinite 13333.333333333ms;
+  animation: textBoxBounce 40000ms infinite 13333.333333333ms;
+}
+
+/* line 429, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText4,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText4 {
+  -webkit-animation: textBoxBounce 40000ms infinite 20000ms;
+  animation: textBoxBounce 40000ms infinite 20000ms;
+}
+
+/* line 435, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText5,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText5 {
+  -webkit-animation: textBoxBounce 40000ms infinite 26666.666666666ms;
+  animation: textBoxBounce 40000ms infinite 26666.666666666ms;
+}
+
+/* line 441, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #play:checked ~ #slideDesc > #slideText6,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText6 {
+  -webkit-animation: textBoxBounce 40000ms infinite 33333.333333333ms;
+  animation: textBoxBounce 40000ms infinite 33333.333333333ms;
+}
+
+/********** END SLIDER TEXT **********/
+/********** MANUAL PAGE ADVANCEMENT **********/
+/* line 453, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide1:checked ~ #sliderImages {
+  margin-left: 0;
+}
+
+/* line 457, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide2:checked ~ #sliderImages {
+  margin-left: -100vw;
+}
+
+/* line 461, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide3:checked ~ #sliderImages {
+  margin-left: -200vw;
+}
+
+/* line 465, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide4:checked ~ #sliderImages {
+  margin-left: -300vw;
+}
+
+/* line 469, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide5:checked ~ #sliderImages {
+  margin-left: -400vw;
+}
+
+/* line 473, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide6:checked ~ #sliderImages {
+  margin-left: -500vw;
+}
+
+/********** END MANUAL PAGE ADVANCEMENT **********/
+/********** PLAY PAUSE OF ALL ANIMATIONS **********/
+/*restart the show*/
+/* line 486, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #slide1:checked ~ #sliderImages,
+#cssSlider > #slide2:checked ~ #sliderImages,
+#cssSlider > #slide3:checked ~ #sliderImages,
+#cssSlider > #slide4:checked ~ #sliderImages,
+#cssSlider > #slide5:checked ~ #sliderImages,
+#cssSlider > #slide6:checked ~ #sliderImages {
+  -webkit-animation: none;
+  animation: none;
+}
+
+/*pause all animations*/
+/* line 499, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+#cssSlider > #pause:checked ~ #sliderImages,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText1,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText2,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText3,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText4,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText5,
+#cssSlider > #pause:checked ~ #slideDesc > #slideText6,
+#cssSlider > #pause:checked ~ #pageNav #previousArrow > #slideL6,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR2,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL1,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR3,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL2,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR4,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL3,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR5,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL4,
+#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR6,
+#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL5,
+#cssSlider > #pause:checked ~ #pageNav #nextArrow > #slideR1,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point1,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point2,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point3,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point4,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point5,
+#cssSlider > #pause:checked ~ #pageIndicators > .indicator > .hoverPoint > #point6 {
+  -webkit-animation-play-state: paused;
+  animation-play-state: paused;
+}
+
+/********** END PLAY PAUSE OF ALL ANIMATIONS **********/
+/********** ANIMATIONS **********/
+/*arrows*/
+@-webkit-keyframes arrows {
+  0%,
+  16.656666666666666% {
+    opacity: 1;
+    z-index: 15;
+  }
+  16.666666666666668%,
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@keyframes arrows {
+  0%,
+  16.656666666666666% {
+    z-index: 15;
+  }
+  16.666666666666668%,
+  100% {
+    z-index: -1;
+  }
+}
+
+/*page indicators*/
+@keyframes point {
+  1%,
+  16% {
+    background: #F2F1EF;
+    /*color of page indicator dot*/
+  }
+  17%,
+  100% {
+    background: transparent;
+  }
+}
+
+@-webkit-keyframes point {
+  0%,
+  16% {
+    background: #F2F1EF;
+    /*color of page indicator dot*/
+  }
+  17%,
+  100% {
+    background: transparent;
+  }
+}
+
+/*slider*/
+@keyframes slider {
+  0%,
+  10% {
+    transform: translateX(0);
+  }
+  16.6666666667%,
+  26.6666666667% {
+    transform: translateX(-100vw);
+  }
+  33.3333333333%,
+  43.3333333333% {
+    transform: translateX(-200vw);
+  }
+  50%,
+  60% {
+    transform: translateX(-300vw);
+  }
+  66.6666666667%,
+  76.6666666667% {
+    transform: translateX(-400vw);
+  }
+  83.3333333333%,
+  93.3333333333% {
+    transform: translateX(-500vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@-webkit-keyframes slider {
+  0%,
+  10% {
+    transform: translateX(0);
+  }
+  16.6666666667%,
+  26.6666666667% {
+    transform: translateX(-100vw);
+  }
+  33.3333333333%,
+  43.3333333333% {
+    transform: translateX(-200vw);
+  }
+  50%,
+  60% {
+    transform: translateX(-300vw);
+  }
+  66.6666666667%,
+  76.6666666667% {
+    transform: translateX(-400vw);
+  }
+  83.3333333333%,
+  93.3333333333% {
+    transform: translateX(-500vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* IE 10+ hack - cant animate translate */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  /* line 656, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+  #sliderImages {
+    -webkit-animation-name: slider-ie;
+    -webkit-animation-duration: 40s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    animation-name: slider-ie;
+    animation-duration: 40s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+}
+
+@keyframes slider-ie {
+  0%,
+  10% {
+    margin-left: 0;
+  }
+  16.6666666667%,
+  26.6666666667% {
+    margin-left: -100vw;
+  }
+  33.3333333333%,
+  43.3333333333% {
+    margin-left: -200vw;
+  }
+  50%,
+  60% {
+    margin-left: -300vw;
+  }
+  66.6666666667%,
+  76.6666666667% {
+    margin-left: -400vw;
+  }
+  83.3333333333%,
+  93.3333333333% {
+    margin-left: -500vw;
+  }
+  100% {
+    margin-left: -.1vw;
+    /*can't be 0, gives blank page*/
+  }
+}
+
+@-webkit-keyframes slider-ie {
+  0%,
+  10% {
+    margin-left: 0;
+  }
+  16.6666666667%,
+  26.6666666667% {
+    margin-left: -100vw;
+  }
+  33.3333333333%,
+  43.3333333333% {
+    margin-left: -200vw;
+  }
+  50%,
+  60% {
+    margin-left: -300vw;
+  }
+  66.6666666667%,
+  76.6666666667% {
+    margin-left: -400vw;
+  }
+  83.3333333333%,
+  93.3333333333% {
+    margin-left: -500vw;
+  }
+  100% {
+    margin-left: -.1vw;
+    /*can't be 0, gives blank page*/
+  }
+}
+
+/*text box*/
+@-webkit-keyframes textBoxBounce {
+  0.6927083333333334%,
+  15.963958333333334% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%,
+  15.667083333333334% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625% {
+    opacity: 0;
+    z-index: 2;
+    visibility: hidden;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+  17.66625%,
+  100% {
+    z-index: 0;
+  }
+}
+
+@keyframes textBoxBounce {
+  0.6927083333333334%,
+  15.963958333333334% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  0.9895833333333334%,
+  15.667083333333334% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17.65625% {
+    opacity: 0;
+    z-index: 2;
+    visibility: hidden;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+  17.66625%,
+  100% {
+    z-index: 0;
+  }
+}
+
+/********** END ANIMATIONS **********/
+/*FOR MOBILE*/
+@media screen and (max-width: 1000px) {
+  /* line 800, /home/brandon/GitHub/PARTs_Website/scss/_vendors/_cssSlider.scss */
+  #cssSlider > #slideDesc > .slideText,
+  #cssSlider > #pageIndicators {
+    display: none;
+  }
+}
+
+/**********END CSS SLIDER**********/
+
+/*# sourceMappingURL=../css/style.map */

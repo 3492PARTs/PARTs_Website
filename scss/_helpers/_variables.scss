@@ -8,9 +8,10 @@ $mainAccent: #676767;
 //navigation Variables
 $navHoverColor: #808080;
 $navHam: $navHoverColor;
+$navHamAccent: gray;
 //footer Variables
-$footerAccent: #262626;
-$footerColor: #111111;
+$footerAccent: $fontColor+20%;
+$footerColor: $fontColor - 20%;
 //resources Variables
 $cardBackgrounds: #D6D6D6;
 $buttonHover: #262626;

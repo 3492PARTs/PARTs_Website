@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    id="svg4"
-   sodipodi:docname="Email.svg"
+   sodipodi:docname="YouTube.svg"
    inkscape:version="0.92.1 r">
   <metadata
      id="metadata10">
@@ -48,20 +48,20 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <path
-     d="m 12,2.02 c 5.514,0 10,4.486 10,10 0,5.514 -4.486,10 -10,10 -5.514,0 -10,-4.486 -10,-10 0,-5.514 4.486,-10 10,-10 z m 0,-2 c -6.627,0 -12,5.373 -12,12 0,6.627 5.373,12 12,12 6.627,0 12,-5.373 12,-12 0,-6.627 -5.373,-12 -12,-12 z"
+     d="M 12,2 C 17.514,2 22,6.486 22,12 22,17.514 17.514,22 12,22 6.486,22 2,17.514 2,12 2,6.486 6.486,2 12,2 Z M 12,0 C 5.373,0 0,5.373 0,12 0,18.627 5.373,24 12,24 18.627,24 24,18.627 24,12 24,5.373 18.627,0 12,0 Z"
      id="path2"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ssssssssss" />
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="email"
+     inkscape:label="play"
      style="display:inline">
     <path
        id="path818"
-       d="M 12,12.57 6.008,8 H 17.991 Z M 12,13.858 6,9.229 V 16 H 18 V 9.229 Z"
+       d="M 16.23,7.102 C 14.228,6.966 9.768,6.967 7.769,7.102 5.604,7.25 5.35,8.558 5.333,12 c 0.017,3.436 0.27,4.75 2.437,4.898 1.999,0.135 6.459,0.136 8.461,0 C 18.396,16.75 18.651,15.441 18.668,12 18.65,8.564 18.397,7.25 16.23,7.102 Z M 10,14.222 V 9.778 l 4.778,2.218 z"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccccc"
-       style="fill:#669c41;fill-opacity:1" />
+       sodipodi:nodetypes="ccccccccccc"
+       style="fill:#cc181e;fill-opacity:1" />
   </g>
 </svg>
