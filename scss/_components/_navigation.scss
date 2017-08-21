@@ -1,16 +1,21 @@
 /*NAV:WIDE SCREEN*/
 
 @media only screen and (min-width: 1001px) {
+    /*transparent nav flag*/
+    .transperent-nav-flag~nav {
+        position: absolute;
+        background-color: rgba($mainColor, 0.75) !important;
+    }
     /*main nav styling and positioning*/
     nav * {
         padding: 0;
         margin: 0;
     }
     nav {
-        position: relative;
         height: 5em;
         width: 100%;
         background-color: $mainColor;
+        z-index: 10;
     }
     .nav-wrapper-outer {
         position: absolute;
@@ -68,7 +73,6 @@
     }
     .subNav li {
         background-color: $mainColor;
-        //float: none;
         width: 10em;
     }
     .navDropdown:hover>.subNav {
@@ -112,7 +116,6 @@
     nav img {
         position: absolute;
         left: 2.5em;
-        height: 4em;
         height: 4em;
         top: 50%;
         transform: translateY(-50%)

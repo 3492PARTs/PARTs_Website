@@ -156,11 +156,11 @@
     width: 100%;
     /*JOIN:WIDE SCREEN*/
     @media only screen and (min-width: 1001px) {
-        height: calc(100vh - 6em);
+        height: calc(100vh - 5em);
     }
     /*JOIN:NARROW SCREEN*/
     @media only screen and (max-width: 1000px) {
-        height: calc(100vh - 5em);
+        height: calc(100vh - 4em);
     }
 }
 

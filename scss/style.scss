@@ -1,12 +1,16 @@
 @import '_helpers/_variables';
+
 /**********BEGIN GLOBAKL CSS**********/
+
 @import '_base/_reset';
 @import '_base/_typography';
 @import '_layout/_screenSize';
 @import '_components/_navigation';
 @import '_components/_footer';
 @import '_vendors/_bduke';
+
 /**********END GLOBAL CSS**********/
+
 @import '_pages/_home';
 @import '_pages/_contact';
 @import '_pages/_join';
@@ -19,6 +23,9 @@
 @import '_pages/_competition';
 @import '_pages/_egg';
 @import '_pages/_404';
+
 /**********BEGIN CSS SLIDER**********/
-@import '_vendors/_cssSlider';
+
+@import '_vendors/_cssSliderScss/_cssSlider';
+
 /**********END CSS SLIDER**********/

@@ -64,19 +64,13 @@
 
 /*intro*/
 
-#partsIntro,
-#videos {
-    height: 100vh;
+#partsIntro {
     padding-top: 1em;
 }
 
-#homeMedia {
-    height: 100vh;
-}
-
 #partsIntro-inner,
-#social {
-    background-color: aqua;
+#social,
+#homeMedia {
     margin: auto;
     /*SCREEN SIZE:WIDE SCREEN*/
     @media only screen and (min-width: 1001px) {
@@ -90,7 +84,14 @@
 
 #homeJoin {
     width: 100%;
-    height: 50vh;
+    /*SCREEN SIZE:WIDE SCREEN*/
+    @media only screen and (min-width: 1001px) {
+        height: 50vh;
+    }
+    /*SCREEN SIZE:NARROW SCREEN*/
+    @media only screen and (max-width: 1000px) {
+        height: 30vh;
+    }
     position: relative;
 }
 
@@ -127,62 +128,32 @@
 }
 
 
-/*SOCIAL IMAGES*/
+/*SOCIAL ICONS*/
 
-#social img {
-    opacity: 1;
-    transition: visibility 0s .25s, opacity .25s linear;
-}
-
-#social:hover img {
-    opacity: 0.2;
-    transition: opacity .25s linear;
-}
-
-#social:hover img:hover {
-    opacity: 1;
-    transition: visibility 0s .25s, opacity .25s linear;
-}
-
-#social {
-    width: 50%;
+#mainHome>#partsIntro>.social {
     height: 3.5em;
     padding-top: 2em;
     padding-bottom: 2em;
     text-align: justify;
-}
-
-
-/*social:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-    #social {
+    margin: auto;
+    /*social:WIDE SCREEN*/
+    @media only screen and (min-width: 1001px) {
         width: 50%;
     }
-}
-
-
-/*social:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-    #social {
+    /*social:NARROW SCREEN*/
+    @media only screen and (max-width: 1000px) {
         width: 90%;
     }
 }
 
-#social img {
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
-    /* IE fix. */
-    *display: inline;
-    zoom: 1;
+#mainHome>#partsIntro>.social>div {
+    height: 3.5em;
+    width: 3.5em;
 }
 
-#social:after {
-    content: "";
+.social>div>a>svg {
     width: 100%;
-    display: inline-block;
+    height: 100%;
 }
 
 
@@ -191,22 +162,11 @@
 
 /*TEXT*/
 
-#homeMedia p {
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
-
-#videos {
-    background-color: green;
-    //display: table-cell;
-    vertical-align: middle;
-}
-
-#videos>table {
-    width: 100%;
-    height: calc(100vh - 1em);
-    background-color: red;
-    vertical-align: middle;
+#homeMedia {
+    margin: 2em auto;
+    h2 {
+        margin: 4em 0 1em 0;
+    }
 }
 
 
@@ -283,20 +243,6 @@
     height: 100%;
 }
 
-.imgWrapper100 {
-    position: relative;
-    padding-bottom: 100%;
-    height: 0;
-}
-
-.imgWrapper100 img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
 
 /*photos:WIDE SCREEN*/
 
@@ -319,11 +265,11 @@
 @media only screen and (max-width: 1000px) {
     #toyota,
     #putnam,
-    #pctc,
     #aep {
         padding-right: .5em;
     }
     #rcbi,
+    #pctc,
     #homeDepot {
         padding-left: .5em;
     }
