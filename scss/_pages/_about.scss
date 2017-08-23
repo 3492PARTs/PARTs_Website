@@ -143,15 +143,15 @@
 //narrow
 @media screen and (max-width: 1000px) {
     .popup {
-        width: 80%; //make 80
+        width: 80%;
     }
     .popup .close {
         top: 40px;
         right: 30px;
     }
-    .noNAV:checked~#blueBlock,
-    .noNAV:checked~#menu,
-    .noNAV:checked~#navContainer {
+    .noNAV:checked~.fixed-mobile-nav,
+    .noNAV:checked~.clear-menu-btn,
+    .noNAV:checked~nav {
         visibility: hidden;
         opacity: 0;
         transition: .25s ease-in-out;

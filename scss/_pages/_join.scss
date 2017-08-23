@@ -32,7 +32,8 @@
 
 /*TEXT*/
 
-#mainJoin h2 {
+#mainJoin h2,
+#mainJoin h3 {
     text-align: center;
 }
 
@@ -143,14 +144,7 @@
 }
 
 
-/*IMAGES
-
-#joinPic img {
-    position: relative;
-    width: 100%;
-    z-index: 1;
-    -webkit-filter: brightness(50%);
-}*/
+/*IMAGES*/
 
 #joinPic {
     width: 100%;

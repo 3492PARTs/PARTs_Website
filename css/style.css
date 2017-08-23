@@ -298,7 +298,6 @@ main,
   }
   /*space for mobile nav*/
   .navHome {
-    margin-top: 6.2em;
     width: 100%;
   }
   .nav-wrapper-outer img {
@@ -483,9 +482,13 @@ main,
   margin: 0;
 }
 
-.connect h2 a {
+.connect > h2 {
   color: white;
-  font-size: 1.3em;
+  font-size: 1.8em;
+}
+
+.connect > h2 > a {
+  color: white;
 }
 
 /*SOCIAL ICONS COMMON*/
@@ -938,7 +941,8 @@ body {
 }
 
 /*TEXT*/
-#mainJoin h2 {
+#mainJoin h2,
+#mainJoin h3 {
   text-align: center;
 }
 
@@ -1042,14 +1046,7 @@ body {
   }
 }
 
-/*IMAGES
-
-#joinPic img {
-    position: relative;
-    width: 100%;
-    z-index: 1;
-    -webkit-filter: brightness(50%);
-}*/
+/*IMAGES*/
 #joinPic {
   width: 100%;
   /*JOIN:WIDE SCREEN*/
@@ -1323,9 +1320,9 @@ body {
     top: 40px;
     right: 30px;
   }
-  .noNAV:checked ~ #blueBlock,
-  .noNAV:checked ~ #menu,
-  .noNAV:checked ~ #navContainer {
+  .noNAV:checked ~ .fixed-mobile-nav,
+  .noNAV:checked ~ .clear-menu-btn,
+  .noNAV:checked ~ nav {
     visibility: hidden;
     opacity: 0;
     transition: .25s ease-in-out;
@@ -1813,13 +1810,13 @@ for normal slider just uncomment the second width*/
 }
 
 /*ONLY DISPLAY IF ON SLIDER*/
+#cssSlider > #pageNav:hover > #playPause > .playPauseBtn {
+  opacity: 0.75;
+}
+
 #cssSlider > #pageNav:hover > #previousArrow > .slideL,
-#cssSlider > #pageNav:hover > #playPause > .playPauseBtn,
-#cssSlider > #pageNav:hover > #nextArrow > .slideR,
-#cssSlider #sliderImages:hover ~ #pageNav #previousArrow .slideL,
-#cssSlider > #sliderImages:hover ~ #pageNav > #playPause > .playPauseBtn,
-#cssSlider > #sliderImages:hover ~ #pageNav > #nextArrow > .slideR {
-  opacity: 1;
+#cssSlider > #pageNav:hover > #nextArrow > .slideR {
+  opacity: 0.125;
 }
 
 /*DON'T SHOW PLAY AND PAUSE*/
