@@ -1439,35 +1439,39 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: stretch;
+  align-content: stretch;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
-/* line 66, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 70, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 #mainAbout .cover {
   display: inline-block;
 }
 
-/* line 70, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 74, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .cover {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.2s ease-in-out;
   background-color: #D6D6D6;
-  width: 400px;
+  width: 350px;
   margin: 1em auto;
   border-radius: .5em;
   text-align: center;
 }
 
-/* line 79, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 83, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .cover:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
-/* line 83, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 87, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .cover img {
   margin: 0 auto;
 }
 
-/* line 88, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 92, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .cover h2 span {
   background-color: #FF6A00;
   display: inline-block;
@@ -1476,7 +1480,7 @@ body {
   font-size: .8em;
 }
 
-/* line 99, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 103, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 #aboutParts .cover img {
   margin-left: 1em;
   margin-top: 1em;
@@ -1486,7 +1490,7 @@ body {
   border-radius: .5em;
 }
 
-/* line 108, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 112, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .overlay {
   position: fixed;
   top: 0;
@@ -1502,12 +1506,12 @@ body {
   justify-content: center;
 }
 
-/* line 123, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 127, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .robotLabel {
   cursor: pointer;
 }
 
-/* line 127, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 131, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .popup {
   background: #fff;
   border-radius: 5px;
@@ -1517,14 +1521,14 @@ body {
   max-height: 100vh;
 }
 
-/* line 136, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 140, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .popup h2 {
   margin-top: 0;
   padding-top: .5em;
   text-align: center;
 }
 
-/* line 142, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 146, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .popup .close {
   position: absolute;
   transition: all 200ms;
@@ -1534,12 +1538,12 @@ body {
   color: #5B5B5B;
 }
 
-/* line 151, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 155, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .popup .close:hover {
   color: #FF6A00;
 }
 
-/* line 155, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 159, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .popup .robotBio {
   max-height: 80vh;
   padding-right: 2em;
@@ -1549,7 +1553,7 @@ body {
 }
 
 @media only screen and (min-width: 1001px) {
-  /* line 165, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+  /* line 169, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
   .popup .close {
     top: 20px;
     right: 30px;
@@ -1557,16 +1561,16 @@ body {
 }
 
 @media screen and (max-width: 1000px) {
-  /* line 173, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+  /* line 177, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
   .popup {
     width: 80%;
   }
-  /* line 176, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+  /* line 180, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
   .popup .close {
     top: 40px;
     right: 30px;
   }
-  /* line 180, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+  /* line 184, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
   .noNAV:checked ~ .fixed-mobile-nav,
   .noNAV:checked ~ .clear-menu-btn,
   .noNAV:checked ~ nav {
@@ -1576,7 +1580,7 @@ body {
   }
 }
 
-/* line 189, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 193, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 #mccoyRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #mccoy,
 #huRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #hu,
 #djRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #dj,
@@ -1589,7 +1593,7 @@ body {
   z-index: 16;
 }
 
-/* line 201, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
+/* line 205, /home/brandon/Git/PARTs_Website/scss/_pages/_about.scss */
 .robotRadio {
   display: none;
 }
