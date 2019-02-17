@@ -1587,7 +1587,9 @@ body {
 #carlaRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #carla,
 #turboMikeRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #turboMike,
 #beanieTheBarbarianRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beanieTheBarbarian,
-#beaniehemothRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beaniehemoth {
+#beaniehemothRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beaniehemoth, 
+#gLoughRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #gLough {
+ 
   visibility: visible;
   opacity: 1;
   z-index: 16;
