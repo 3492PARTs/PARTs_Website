@@ -1257,7 +1257,7 @@ body {
 
 /* line 172, /home/brandon/Git/PARTs_Website/scss/_pages/_join.scss */
 #joinHomeCover {
-  background-image: url(../contents/joinPictures/join.JPG);
+  background-image: url(../contents/joinPictures/join.jpg);
 }
 
 /* line 176, /home/brandon/Git/PARTs_Website/scss/_pages/_join.scss */
@@ -1587,9 +1587,7 @@ body {
 #carlaRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #carla,
 #turboMikeRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #turboMike,
 #beanieTheBarbarianRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beanieTheBarbarian,
-#beaniehemothRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beaniehemoth, 
-#gLoughRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #gLough {
- 
+#beaniehemothRadio:checked ~ #wrapper > #content > #mainAbout > #aboutParts > #coversContainer > #beaniehemoth {
   visibility: visible;
   opacity: 1;
   z-index: 16;
