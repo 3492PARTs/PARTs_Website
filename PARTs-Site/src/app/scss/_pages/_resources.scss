@@ -1,0 +1,75 @@
+/**********BEGIN TEAM RESOURCES**********/
+
+
+/*PAGE SIZES AND THEIR STYLING*/
+
+.resourceTabs {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.2s ease-in-out;
+    background-color: $cardBackgrounds;
+    width: 100%;
+    margin: 1em auto;
+    border-radius: .5em;
+}
+
+.resourceTabs:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.resourceTakeALook {
+    transition: background-color .5s linear;
+    background-color: $hoverColor;
+    display: table;
+    margin: 0 auto;
+    border-radius: .5em;
+}
+
+.resourceSpacer {
+    height: 1em;
+}
+
+.resourceTakeALook:hover {
+    background-color: $buttonHover;
+    opacity: .75;
+}
+
+
+/*TEXT STYLING*/
+
+.resourceTakeALook h3 {
+    text-decoration: none;
+    margin: .5em;
+}
+
+.resourceTakeALook a {
+    text-decoration: none;
+}
+
+.resourceTabs> h3 {
+    text-align: center;
+    padding-right: .3em;
+    padding-left: .3em;
+}
+
+.resourceTabs> h4 {
+    text-align: center;
+    padding-right: .3em;
+    padding-left: .3em;
+}
+
+.resourceTabs h4> a {
+    text-decoration: none;
+}
+
+
+/*IMAGE STYLING*/
+
+.resourceTabs img {
+    width: 5em;
+    display: block;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+
+/**********END TEAM RESOURCES**********/

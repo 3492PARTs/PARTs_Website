@@ -1,0 +1,287 @@
+/**********BEGIN HOME PAGE**********/
+
+
+/*COUNTER*/
+
+#regional {
+    width: 100%;
+}
+
+#regional td {
+    border: 2px solid #808080;
+}
+
+#regional h2 {
+    text-align: center;
+}
+
+#counter {
+    position: relative;
+    padding-bottom: 15%;
+    /*to find % aspect ratio, (height/width)100*/
+    height: 0;
+}
+
+.tcw {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*banners:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    #stream {
+        width: 50%;
+    }
+}
+
+
+/*counter:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    #regional td {
+        display: block;
+    }
+}
+
+
+/*HOME*/
+
+#mainHome {
+    width: 100%;
+}
+
+#partsIntro,
+#homeMedia,
+#videos table {
+    width: 100%;
+}
+
+
+/*intro*/
+
+#partsIntro {
+    padding-top: 1em;
+}
+
+#partsIntro-inner,
+#social,
+#homeMedia {
+    margin: auto;
+    /*SCREEN SIZE:WIDE SCREEN*/
+    @media only screen and (min-width: 1001px) {
+        width: 70%;
+    }
+    /*SCREEN SIZE:NARROW SCREEN*/
+    @media only screen and (max-width: 1000px) {
+        width: 90%;
+    }
+}
+
+#homeJoin {
+    width: 100%;
+    /*SCREEN SIZE:WIDE SCREEN*/
+    @media only screen and (min-width: 1001px) {
+        height: 50vh;
+    }
+    /*SCREEN SIZE:NARROW SCREEN*/
+    @media only screen and (max-width: 1000px) {
+        height: 30vh;
+    }
+    position: relative;
+}
+
+
+/* home join*/
+
+#homeJoin>.joinCover,
+#homeJoin>#joinText>#joinH1 {
+    transition: 1s ease-in-out;
+}
+
+#homeJoin-wrapper:hover>#homeJoin>.joinCover {
+    filter: brightness(100%);
+    -webkit-filter: brightness(100%);
+}
+
+#homeJoin-wrapper:hover>#homeJoin>#joinText>#joinH1 {
+    color: $hoverColor;
+    text-shadow: 0 6px 6px rgba(0, 0, 0, 0.50);
+}
+
+
+/*TEXT*/
+
+#partsIntro h1,
+#partsIntro h2,
+#partsIntro h3 {
+    text-align: center;
+}
+
+#partsIntro p:nth-child(4) {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+
+/*SOCIAL ICONS*/
+
+#mainHome>#partsIntro>.social {
+    height: 3.5em;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    text-align: justify;
+    margin: auto;
+    /*social:WIDE SCREEN*/
+    @media only screen and (min-width: 1001px) {
+        width: 50%;
+    }
+    /*social:NARROW SCREEN*/
+    @media only screen and (max-width: 1000px) {
+        width: 90%;
+    }
+}
+
+#mainHome>#partsIntro>.social>div {
+    height: 3.5em;
+    width: 3.5em;
+}
+
+.social>div>a>svg {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*VIDEOS AND SPONSORS*/
+
+
+/*TEXT*/
+
+#homeMedia {
+    margin: 2em auto;
+    h2 {
+        margin: 4em 0 1em 0;
+    }
+}
+
+
+/*FLUID VIDEOS*/
+
+.videoWrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 RATIO*/
+    height: 0;
+}
+
+.videoWrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*videos:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    #videos td:first-child {
+        padding-right: 1em;
+    }
+    #videos td:nth-child(2) {
+        padding-left: 1em;
+    }
+}
+
+
+/*videos:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    #videos td:first-child {
+        padding-right: .5em;
+    }
+    #videos td:nth-child(2) {
+        padding-left: .5em;
+    }
+}
+
+
+/*FLUID SPONSORS*/
+
+.imgWrapper40 {
+    position: relative;
+    padding-bottom: 40%;
+    /*to find % aspect ratio, (height/width)100*/
+    height: 0;
+}
+
+.imgWrapper40 img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.imgWrapper32 {
+    position: relative;
+    padding-bottom: 32%;
+    height: 0;
+}
+
+.imgWrapper32 img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#parsons{
+  div{
+    padding-bottom: 10.8004481015%;
+    width: 50%;
+    margin: 0 auto;
+  }
+}
+
+
+/*photos:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+    #toyota,
+    #putnam,
+    #pctc,
+    #aep {
+        padding-right: 1em;
+    }
+    #rcbi,
+    #homeDepot {
+        padding-left: 1em;
+    }
+}
+
+
+/*photos:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    #toyota,
+    #putnam,
+    #aep {
+        padding-right: .5em;
+    }
+    #rcbi,
+    #pctc,
+    #homeDepot {
+        padding-left: .5em;
+    }
+}
+
+
+/**********END HOME PAGE**********/

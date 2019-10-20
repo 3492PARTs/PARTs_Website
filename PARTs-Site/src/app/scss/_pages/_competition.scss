@@ -1,0 +1,49 @@
+/**********BEGIN COMPETITION**********/
+
+#competitionTable,
+#competitionSchedule {
+    width: 100%;
+}
+
+
+/*TEXT*/
+
+#competitionTable h2,
+#competitionTable h3,
+#competitionTable h4 {
+    text-align: center;
+}
+
+.redAlliance {
+    color: red;
+}
+
+.blueAlliance {
+    color: blue;
+}
+
+
+/*BORDER*/
+
+#competitionTable td {
+    border: 2px solid $navHam;
+}
+
+
+/*IMG*/
+
+#competitionTable img {
+    width: 100%;
+}
+
+
+/*COMPETITION:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+    .competitionTableDisplay {
+        display: block;
+    }
+}
+
+
+/**********END COMPETITION**********/
