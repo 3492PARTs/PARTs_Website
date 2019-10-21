@@ -40,19 +40,19 @@
 }
 
 #cssSlider>#pageNav>#previousArrow>.slideL {
-    @include arrowStyle('icons/previous.');
+    @include arrowStyle('../../../../assets/icons/previous.');
 }
 
 #cssSlider>#pageNav>#nextArrow>.slideR {
-    @include arrowStyle('icons/next.');
+    @include arrowStyle('../../../../assets/icons/next.');
 }
 
 #cssSlider>#pageNav>#playPause>#playBtn {
-    @include arrowStyle('icons/play.');
+    @include arrowStyle('../../../../assets/icons/play.');
 }
 
 #cssSlider>#pageNav>#playPause>#pauseBtn {
-    @include arrowStyle('icons/pause.');
+    @include arrowStyle('../../../../assets/icons/pause.');
 }
 
 

@@ -219,6 +219,8 @@
       background-color: $mainColor;
       box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
       position: fixed;
+      top: 0;
+      left: 0;
       z-index: 10;
       transition: .5s linear;
   }

@@ -30,30 +30,16 @@
   }
 }
 
-
-/*SOCIAL ICONS COMMON*/
-
-.social>div {
-  display: inline-block;
-  vertical-align: top;
-  /* IE fix. */
-  *display: inline;
-  zoom: 1;
-}
-
-.social:after {
-  content: "";
-  width: 100%;
-  display: inline-block;
-}
-
-
 /*FOOTER SOCIAL ICONS*/
 
 footer>.social {
   margin: auto;
-  text-align: justify;
   height: 70%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   /*FOOTER:WIDE SCREEN*/
   @media only screen and (min-width: 1001px) {
       width: 80%;
@@ -68,14 +54,6 @@ footer>.social>div {
   height: 42%;
   width: 56.438px;
 }
-
-footer>.social:before {
-  content: "";
-  display: block;
-  width: 100%;
-  height: 29%;
-}
-
 
 /*SOCIAL IMAGES*/
 
