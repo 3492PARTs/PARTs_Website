@@ -8,7 +8,7 @@
         </li>
         <!--Spacer for mobile nav-->
         <li class="navHome">
-          <p><a class="currentPage" href="/">HOME</a></p>
+          <p><a routerLink="" routerLinkActive="active">HOME</a></p>
         </li>
         <li class="navDropdown">
           <p><a href="contact/">CONTACT US</a></p>
@@ -33,16 +33,23 @@
           <p><a href="resources/">RESOURCES</a></p>
         </li>
         <li>
-          <p><a href="calendar/">CALENDAR</a></p>
-        </li>
-        <li>
           <p><a href="first/">FIRST</a></p>
         </li>
         <li>
           <p><a href="https://www.parts3492leads.org/">LEADS</a></p>
         </li>
-        <li>
-          <p><a href="https://scouting-parts.herokuapp.com">SCOUT</a></p>
+        <li class="navDropdown">
+          <p><a href="#">MEMBERS</a></p>
+          <input type="checkbox" />
+          <img alt="Expand" src="../../../assets/webImages/expand.svg" />
+          <ul class="subNav">
+            <li>
+              <p><a href="calendar/">CALENDAR</a></p>
+            </li>
+            <li>
+              <p><a routerLink="login" routerLinkActive="active">LOG IN</a></p>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
