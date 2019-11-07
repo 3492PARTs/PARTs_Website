@@ -38,7 +38,7 @@ export class HTTPInterceptor implements HttpInterceptor {
     }
 
     // logging the updated Parameters to browser's console
-    console.log('Before making api call : ', updatedRequest);
+    // console.log('Before making api call : ', updatedRequest);
     return next.handle(updatedRequest);
   }
 }

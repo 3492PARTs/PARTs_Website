@@ -11,7 +11,6 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class LoginComponent implements OnInit {
 
   input;
-  authUrl;
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -21,8 +20,6 @@ export class LoginComponent implements OnInit {
       password: '',
       email: ''
     };
-
-    this.authUrl = environment.authUrl;
   }
 
   login() {
