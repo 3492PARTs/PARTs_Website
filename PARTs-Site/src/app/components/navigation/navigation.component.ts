@@ -41,7 +41,7 @@ export class NavigationComponent implements OnInit {
       MenuName: 'media',
       RouterLink: 'media',
       MenuItems: []
-    }/*,
+    },
     {
       MenuName: 'resources',
       RouterLink: 'resources',
@@ -70,10 +70,10 @@ export class NavigationComponent implements OnInit {
           RouterLink: 'login'
         }
       ]
-    }*/
+    }
   ];
 
-  screenSizeWide = 700;
+  screenSizeWide = 1175;
 
   @ViewChild('links', { read: ElementRef, static: true }) links: ElementRef;
 

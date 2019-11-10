@@ -39,15 +39,19 @@ nav > #links > ul > li {
   transition: .25s linear;
 }
 
-nav > #links > ul li a,
 nav > #links > ul li p {
-  text-decoration: none;
-  /*letter-spacing:-1px; */
   color: #fff;
   display: block;
   letter-spacing: .1em;
   padding: 0 .8em;
   margin: 0;
+}
+
+nav > #links > ul li p > a {
+  text-decoration: none;
+  /*letter-spacing:-1px; */
+  color: #fff;
+  display: block;
 }
 
 nav > .sub_links {
@@ -59,12 +63,12 @@ nav .sub_links > li {
   transition: .25s linear;
 }
 
-#mobile-nav-toggle {
-  display: none;
-}
-
 .active {
   background-color: $accent_color;
+}
+
+#mobile-nav-toggle {
+  display: none;
 }
 
 /*DESKTOP NAV*/
@@ -100,7 +104,7 @@ nav .sub_links > li {
 
   nav .sub_links {
     position: absolute;
-    top: calc(5em + 3px);
+    top: 5em;
     height: 0;
     padding: 0;
     transition: .3s ease-in-out;
@@ -137,10 +141,13 @@ nav .sub_links > li {
     top: 0;
     left: 0;
 
+    height: 4em;
+    z-index: 16;
+
     &::before {
       content: '';
-      width: 22em;
-      height: 3em;
+      width: 30em;
+      height: 4em;
       background-color: $main_color;
       position: absolute;
       top: -3px;
@@ -152,16 +159,16 @@ nav .sub_links > li {
 
   nav > #links {
     position: fixed;
-    top: 3em;
+    top: 4em;
     right: -25em;
-    height: calc(100vh - 5em);
+    height: calc(100vh - 4em);
     width: 20em;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: $main_color;
     transition: .4s linear;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    z-index: 16;
     border-bottom: 1px solid #4e5486;
   }
 
@@ -193,15 +200,12 @@ nav .sub_links > li {
     transition: .5s linear;
   }
 
-  #hamburger-label {
-    position: fixed;
-    top: .55em;
-    right: 1em;
-    z-index: 3;
+  /* Pure CSS3 Hamburger*/
+
+  #ham-label {
     cursor: pointer;
   }
 
-  /* Pure CSS3 Hamburger*/
   .clear-menu-btn {
     position: fixed;
     right: .75em;
@@ -214,29 +218,29 @@ nav .sub_links > li {
 .nav-trigger:hover {
     cursor: pointer;
 }
-.nav-trigger:checked~.clear-menu-btn .top,
-.nav-trigger:checked~.clear-menu-btn .bottom {
+.nav-trigger:checked~ label > .clear-menu-btn .top,
+.nav-trigger:checked~ label > .clear-menu-btn .bottom {
     top: 50%;
 }
-.nav-trigger:checked~.clear-menu-btn .top {
+.nav-trigger:checked~ label > .clear-menu-btn .top {
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.nav-trigger:checked~.clear-menu-btn .bottom {
+.nav-trigger:checked~ label > .clear-menu-btn .bottom {
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
     transform: rotate(-45deg);
 }
-.nav-trigger:checked~.clear-menu-btn .middle {
+.nav-trigger:checked~ label > .clear-menu-btn .middle {
     filter: alpha(opacity=0);
     opacity: 0;
 }
-.nav-trigger:checked~.clear-menu-btn .circle {
+.nav-trigger:checked~ label > .clear-menu-btn .circle {
     filter: alpha(opacity=100);
     opacity: 1;
 }
@@ -289,19 +293,6 @@ nav .sub_links > li {
     transition: all 0.5s;
     z-index: -1;
 }
-/* Nav Trigger */
-.nav-trigger {
-    /* critical styles - hide the checkbox input*/
-    position: fixed;
-    z-index: 13;
-    top: .5em;
-    right: .5em;
-    height: 3em;
-    width: 3em;
-    filter: alpha(opacity=0);
-    opacity: 0;
-}
-
   .menu-item-wrapper {
     display: flex;
     justify-content: flex-start;
