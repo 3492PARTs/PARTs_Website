@@ -151,6 +151,7 @@ export class NavigationComponent implements OnInit {
   }
 
   showNavLinks(id: string, hasSubLinks: boolean) {
+    this.alignNavLinks();
     if (window.innerWidth >= this.screenSizeWide && hasSubLinks) {
       const arrow = document.querySelector('nav #' + id + ' > .arrow');
       const subLinks = document.querySelector('nav #' + id + ' ~ .sub_links');

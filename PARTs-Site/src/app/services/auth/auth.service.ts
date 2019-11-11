@@ -28,8 +28,7 @@ export class AuthService {
   getUser() {
     this.http.post(
       'auth/user_data/',
-      { token: this.internalToken },
-      { headers: new HttpHeaders().append('Authorization', 'Token ' + this.internalToken) }
+      { token: this.internalToken }
     ).subscribe(
       Response => {
         console.log(Response);

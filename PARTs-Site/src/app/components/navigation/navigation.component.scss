@@ -64,7 +64,7 @@ nav .sub_links > li {
 }
 
 .active {
-  background-color: $accent_color;
+  background-color: $accent_color !important;
 }
 
 #mobile-nav-toggle {
@@ -91,7 +91,6 @@ nav .sub_links > li {
     position: relative;
   }
 
-  nav > #links > ul li a,
   nav > #links > ul li p {
     font-size: 1em;
   }
@@ -188,7 +187,6 @@ nav .sub_links > li {
     background-color: $main_color;
   }
 
-  nav > #links > ul li a,
   nav > #links > ul li p {
     font-size: 1.2em;
   }
