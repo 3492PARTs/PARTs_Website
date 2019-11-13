@@ -48,7 +48,7 @@
               </p>
             </li>
             <ng-template #login>
-              <li *ngIf="token === ''; else hasToken">
+              <li *ngIf="!token; else hasToken">
                 <p><a routerLink="login" routerLinkActive="active">LOG IN</a></p>
               </li>
               <ng-template #hasToken>

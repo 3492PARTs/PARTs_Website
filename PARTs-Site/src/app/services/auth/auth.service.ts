@@ -10,6 +10,7 @@ export class AuthService {
 
   private token = new BehaviorSubject<string>('');
   currentToken = this.token.asObservable();
+  private internalToken = '';
 
   private user = new BehaviorSubject<User>({ username: '', email: '', first_name: '', last_name: '' });
   currentUser = this.user.asObservable();
@@ -23,6 +24,14 @@ export class AuthService {
     this.token.next('');
     this.user.next(new User());
     this.userLinks.next([]);
+    localStorage.removeItem('id_token');
+  }
+
+  previouslyAuthorized(): void {
+    this.token.next(localStorage.getItem('id_token'));
+    this.internalToken = localStorage.getItem('id_token');
+    this.getUser();
+    this.getUserLinks();
   }
 
   authorizeUser(userData): void {
@@ -31,6 +40,8 @@ export class AuthService {
         console.log(Response);
         const tmp = Response as { token: string };
         this.token.next(tmp.token);
+        this.internalToken = tmp.token;
+        localStorage.setItem('id_token', tmp.token);
         this.getUser();
         this.router.navigateByUrl('');
       },
@@ -43,7 +54,7 @@ export class AuthService {
   }
 
   getUser() {
-    if (this.currentToken) {
+    if (this.internalToken) {
       this.http.get(
         'auth/user_data/'
       ).subscribe(
@@ -56,13 +67,14 @@ export class AuthService {
           const tmp = Error as { error: { non_field_errors: [1] } };
           console.log('error', Error);
           alert(tmp.error.non_field_errors[0]);
+          this.internalToken = '';
         }
       );
     }
   }
 
   getUserLinks() {
-    if (this.currentToken) {
+    if (this.internalToken) {
       this.http.get(
         'auth/user_links/'
       ).subscribe(
