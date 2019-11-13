@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { GeneralService } from '../general/general.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
   private userLinks = new BehaviorSubject<UserLinks[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private gs: GeneralService) { }
 
   logOut(): void {
     this.token.next('');
@@ -35,39 +36,45 @@ export class AuthService {
   }
 
   authorizeUser(userData): void {
+    this.gs.incrementOutstandingCalls();
     this.http.post('auth/get_token/', userData).subscribe(
       Response => {
-        console.log(Response);
+        // console.log(Response);
         const tmp = Response as { token: string };
         this.token.next(tmp.token);
         this.internalToken = tmp.token;
         localStorage.setItem('id_token', tmp.token);
         this.getUser();
+        this.gs.decrementOutstandingCalls();
         this.router.navigateByUrl('');
       },
       Error => {
         const tmp = Error as { error: { non_field_errors: [1] } };
         console.log('error', Error);
         alert(tmp.error.non_field_errors[0]);
+        this.gs.decrementOutstandingCalls();
       }
     );
   }
 
   getUser() {
     if (this.internalToken) {
+      this.gs.incrementOutstandingCalls();
       this.http.get(
         'auth/user_data/'
       ).subscribe(
         Response => {
-          console.log(Response);
+          // console.log(Response);
           this.user.next(Response as User);
           this.getUserLinks();
+          this.gs.decrementOutstandingCalls();
         },
         Error => {
           const tmp = Error as { error: { non_field_errors: [1] } };
           console.log('error', Error);
           alert(tmp.error.non_field_errors[0]);
           this.internalToken = '';
+          this.gs.decrementOutstandingCalls();
         }
       );
     }
@@ -75,17 +82,20 @@ export class AuthService {
 
   getUserLinks() {
     if (this.internalToken) {
+      this.gs.incrementOutstandingCalls();
       this.http.get(
         'auth/user_links/'
       ).subscribe(
         Response => {
-          console.log(Response);
+          // console.log(Response);
           this.userLinks.next(Response['links'] as UserLinks[]);
+          this.gs.decrementOutstandingCalls();
         },
         Error => {
           const tmp = Error as { error: { non_field_errors: [1] } };
           console.log('error', Error);
           alert(tmp.error.non_field_errors[0]);
+          this.gs.decrementOutstandingCalls();
         }
       );
     }

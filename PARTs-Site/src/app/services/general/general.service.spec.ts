@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoadingScreenService } from './loading-screen.service';
+import { GeneralService } from './general.service';
 
-describe('LoadingScreenService', () => {
+describe('GeneralService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: LoadingScreenService = TestBed.get(LoadingScreenService);
+    const service: GeneralService = TestBed.get(GeneralService);
     expect(service).toBeTruthy();
   });
 });

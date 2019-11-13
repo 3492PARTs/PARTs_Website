@@ -11,6 +11,8 @@ import { HomeComponent } from './components/webpages/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
+import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { LoginComponent } from './components/login/login.component';
     HomeComponent,
     NavigationComponent,
     FooterComponent,
-    LoginComponent
+    LoginComponent,
+    LoadingScreenComponent,
+    ScoutFieldComponent
   ],
   imports: [
     BrowserModule,
