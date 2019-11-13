@@ -1,6 +1,6 @@
 <nav>
   <div id="company_logo">
-    <a href="" class="menu-link"><img src="./assets/webImages/Robots/BeanieBot.svg"></a>
+    <a routerLink=""><img src="./assets/webImages/Robots/BeanieBot.svg"></a>
   </div>
   <input type="checkbox" id="mobile-nav-toggle" class="nav-trigger" />
   <label for="mobile-nav-toggle" id="ham-label">
@@ -13,11 +13,11 @@
   </label>
   <div id="links" #links>
     <ul>
-      <li *ngFor="let m of Menu" routerLinkActive="active"
-        (mouseover)="showNavLinks(m.RouterLink, m.MenuItems.length > 0)"
+      <li *ngFor="let m of Menu" (mouseover)="showNavLinks(m.RouterLink, m.MenuItems.length > 0)"
         (mouseleave)="hideNavLinks(m.RouterLink, m.MenuItems.length > 0)">
         <div class="menu-item-wrapper" id="{{m.RouterLink}}"
           (click)="expandNavLinks(m.RouterLink, m.MenuItems.length > 0)">
+
           <svg *ngIf="m.MenuItems.length > 0; else noArrow" class="arrow" xmlns="http://www.w3.org/2000/svg" x="0px"
             y="0px" viewBox="0 0 50 50">
             <g id="surface1">
@@ -29,13 +29,14 @@
           <ng-template #noArrow>
             <div class="arrow"></div>
           </ng-template>
-          <p id="{{m.RouterLink}}" *ngIf="m.RouterLink === 'none'; else hasLink">
+
+          <p id="{{m.RouterLink}}" *ngIf="m.RouterLink === 'none'; else hasLink" class="menu-link">
             {{m.MenuName}}
           </p>
-
           <ng-template #hasLink>
             <p id="{{m.RouterLink}}">
-              <a routerLink="{{m.RouterLink}}" class="menu-link">{{m.MenuName}}</a>
+              <a routerLink="{{m.RouterLink}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+                true}" class="menu-link">{{m.MenuName}}</a>
             </p>
           </ng-template>
         </div>
@@ -43,23 +44,27 @@
         <ul class="sub_links" *ngIf="m.MenuItems.length > 0">
           <ng-container *ngFor="let sm of m.MenuItems">
             <li *ngIf="sm.RouterLink !== 'login'; else login">
-              <p routerLinkActive="active">
-                <a routerLink="{{sm.RouterLink}}" class="menu-link">{{sm.MenuName}}</a>
+              <p>
+                <a routerLink="{{sm.RouterLink}}" routerLinkActive="active" class="menu-link">{{sm.MenuName}}</a>
               </p>
             </li>
             <ng-template #login>
               <li *ngIf="!token; else hasToken">
-                <p><a routerLink="login" routerLinkActive="active">LOG IN</a></p>
+                <p>
+                  <a routerLink="login" routerLinkActive="active" class="menu-link">LOG IN</a>
+                </p>
               </li>
               <ng-template #hasToken>
                 <li>
-                  <p><a>WELCOME: {{user.username}}</a></p>
+                  <p><a class="menu-link">WELCOME: {{user.username}}</a></p>
                 </li>
                 <li *ngFor="let ul of userLlinks">
-                  <p><a routerLink="ul.RouterLink" routerLinkActive="active">{{ul.MenuName}}</a></p>
+                  <p>
+                    <a routerLink="{{ul.RouterLink}}" routerLinkActive="active" class="menu-link">{{ul.MenuName}}</a>
+                  </p>
                 </li>
                 <li>
-                  <p (click)="logOut()"><a>LOG OUT</a></p>
+                  <p (click)="logOut()"><a class="menu-link">LOG OUT</a></p>
                 </li>
               </ng-template>
             </ng-template>

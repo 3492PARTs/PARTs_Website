@@ -1,3 +1,5 @@
+@import './scss/_helpers/variables';
+
 /*FOOTER> KEEP AT BOTTOM*/
 
 html,
@@ -13,6 +15,11 @@ body {
 }
 
 #content {
+  min-height: 100vh;
   padding-bottom: 12em;
   /* Height of the footer element */
+
+  @media only screen and (max-width: $screen_size_narrow) {
+    padding-top: 4em;
+  }
 }

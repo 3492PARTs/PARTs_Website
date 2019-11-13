@@ -5,7 +5,7 @@ nav {
   height: 5em;
   position: relative;
   background-color: $main_color;
-  z-index: 1;
+  z-index: 16;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   text-transform: uppercase;
   border-bottom: 3px solid $accent_color;
@@ -39,19 +39,17 @@ nav > #links > ul > li {
   transition: .25s linear;
 }
 
-nav > #links > ul li p {
+nav p {
+  margin: 0;
+}
+
+.menu-link {
+  text-decoration: none;
   color: #fff;
   display: block;
   letter-spacing: .1em;
   padding: 0 .8em;
   margin: 0;
-}
-
-nav > #links > ul li p > a {
-  text-decoration: none;
-  /*letter-spacing:-1px; */
-  color: #fff;
-  display: block;
 }
 
 nav > .sub_links {
@@ -141,7 +139,6 @@ nav .sub_links > li {
     left: 0;
 
     height: 4em;
-    z-index: 16;
 
     &::before {
       content: '';
@@ -189,6 +186,10 @@ nav .sub_links > li {
 
   nav > #links > ul li p {
     font-size: 1.2em;
+  }
+
+  nav p {
+    width: 100%;
   }
 
   nav .sub_links {
