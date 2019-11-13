@@ -26,19 +26,6 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.authService.authorizeUser(this.input).subscribe(
-      Response => {
-        console.log(Response);
-        const tmp = Response as { token: string };
-        this.authService.setToken(tmp.token);
-        this.authService.getUser();
-        this.router.navigateByUrl('');
-      },
-      Error => {
-        const tmp = Error as { error: { non_field_errors: [1] } };
-        console.log('error', Error);
-        alert(tmp.error.non_field_errors[0]);
-      }
-    );
+    this.authService.authorizeUser(this.input);
   }
 }

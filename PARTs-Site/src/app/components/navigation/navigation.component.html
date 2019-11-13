@@ -55,6 +55,9 @@
                 <li>
                   <p><a>WELCOME: {{user.username}}</a></p>
                 </li>
+                <li *ngFor="let ul of userLlinks">
+                  <p><a routerLink="ul.RouterLink" routerLinkActive="active">{{ul.MenuName}}</a></p>
+                </li>
                 <li>
                   <p (click)="logOut()"><a>LOG OUT</a></p>
                 </li>

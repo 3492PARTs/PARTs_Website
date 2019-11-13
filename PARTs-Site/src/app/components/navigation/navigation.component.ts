@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener } from '@angular/core';
-import { AuthService, User } from 'src/app/services/auth/auth.service';
+import { AuthService, User, UserLinks } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -10,6 +10,7 @@ export class NavigationComponent implements OnInit {
 
   token = '';
   user: User;
+  userLlinks: UserLinks[] = [];
 
   Menu = [
     {
@@ -84,11 +85,12 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.authService.currentToken.subscribe(t => this.token = t);
     this.authService.currentUser.subscribe(u => this.user = u);
+    this.authService.currentUserLinks.subscribe(ul => this.userLlinks = ul);
     this.alignNavLinks();
   }
 
   logOut(): void {
-    this.authService.setToken('');
+    this.authService.logOut();
     this.alignNavLinks();
   }
 
