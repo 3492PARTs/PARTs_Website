@@ -1,0 +1,27 @@
+@import '../../../scss/helpers/variables.scss';
+
+.center {
+  text-align: center;
+}
+
+.underlined {
+  border-bottom: 2px solid $main_color;
+}
+
+.underlined-teal {
+  border-bottom: 2px solid $accent_color;
+}
+
+
+h1,h2,h4,h4,h5,h6{
+  font-family: 'gotham_black';
+  margin-bottom: 4px;
+}
+
+h1 {
+  color: $accent_color;
+}
+
+h2, h3, h4, h5, h6 {
+  color: $main_color;
+}

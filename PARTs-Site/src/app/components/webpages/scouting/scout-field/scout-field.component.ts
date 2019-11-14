@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -6,10 +8,36 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./scout-field.component.scss']
 })
 export class ScoutFieldComponent implements OnInit {
+  scoutFieldQuestions: ScoutFieldQuestion[];
 
-  constructor() { }
+  constructor(private http: HttpClient, private gs: GeneralService) { }
 
   ngOnInit() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_scout_field_questions/'
+    ).subscribe(
+      Response => {
+        this.scoutFieldQuestions = Response as ScoutFieldQuestion[];
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { non_field_errors: [1] } };
+        console.log('error', Error);
+        alert(tmp.error.non_field_errors[0]);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
   }
 
+}
+
+export class ScoutFieldQuestion {
+  order: number;
+  question: string;
+  question_typ: string;
+  season: number;
+  sfq_id: number;
+  void_ind: string;
+  answer: string;
 }

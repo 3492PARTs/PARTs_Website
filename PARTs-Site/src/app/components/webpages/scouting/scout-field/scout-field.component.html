@@ -1,1 +1,5 @@
-<p>scout-field works!</p>
+<app-box [Title]="'Scout Field Form'">
+  <div *ngFor="let sfq of scoutFieldQuestions">
+    <app-form-element [LabelText]="sfq.question" [Type]="sfq.question_typ"></app-form-element>
+  </div>
+</app-box>

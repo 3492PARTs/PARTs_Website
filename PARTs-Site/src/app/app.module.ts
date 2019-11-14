@@ -13,6 +13,11 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
+import { BoxComponent } from './components/atoms/box/box.component';
+import { ButtonComponent } from './components/atoms/button/button.component';
+import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
+import { FormElementComponent } from './components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from './components/atoms/form-element-group/form-element-group.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/
     FooterComponent,
     LoginComponent,
     LoadingScreenComponent,
-    ScoutFieldComponent
+    BoxComponent,
+    ScoutFieldComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormElementComponent,
+    FormElementGroupComponent
   ],
   imports: [
     BrowserModule,

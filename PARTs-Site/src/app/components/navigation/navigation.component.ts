@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck } from '@angular/core';
 import { AuthService, User, UserLinks } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -6,11 +6,12 @@ import { AuthService, User, UserLinks } from 'src/app/services/auth/auth.service
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, DoCheck {
 
   token = '';
   user: User;
-  userLlinks: UserLinks[] = [];
+  userLinks: UserLinks[] = [];
+  previousUserLinks: UserLinks[] = [];
 
   Menu = [
     {
@@ -85,8 +86,16 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.authService.currentToken.subscribe(t => this.token = t);
     this.authService.currentUser.subscribe(u => this.user = u);
-    this.authService.currentUserLinks.subscribe(ul => this.userLlinks = ul);
+    this.authService.currentUserLinks.subscribe(ul => this.userLinks = ul);
     this.alignNavLinks();
+    //this.closeOnLinkClick(); TODO COme back and fix
+  }
+
+  ngDoCheck() {
+    if (this.userLinks !== this.previousUserLinks) {
+      //this.closeOnLinkClick();
+      this.previousUserLinks = Object.assign({}, this.userLinks);
+    }
   }
 
   logOut(): void {

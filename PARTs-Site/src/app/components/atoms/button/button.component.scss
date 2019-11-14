@@ -1,0 +1,123 @@
+@import '../../../scss/_helpers/variables';
+
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.btn-main {
+  color: #fff;
+  background-color: #1974b8;
+  border-color: #007bff;
+
+  &:hover {
+    outline: 0;
+    box-shadow: 0px 0px 0px 0.2rem rgba(0,123,255,0.25);
+  }
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+  &:hover {
+    box-shadow: 0px 0px 0px 0.2rem rgba(72,180,97,0.5);
+  }
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+
+  &:hover {
+    box-shadow: 0px 0px 0px 0.2rem rgba(225,83,97,0.5);
+  }
+}
+
+.btn-warning {
+  color: #212529;
+  background-color: #ffc107;
+  border-color: #ffc107;
+
+  &:hover {
+    box-shadow: 0px 0px 0px 0.2rem rgba(222,170,12,0.5);
+  }
+}
+
+.btn-symbol {
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  border-radius: 290486px;
+  border: 0;
+  transition: all 200ms;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+  &:focus {
+    outline: none;
+  }
+
+  svg {
+    height: 1rem;
+  }
+}
+
+.close {
+  background-color: #ae1e2a;
+
+  &:hover {
+    background-color: #0a0a0a;
+    background-color: rgba(10,10,10,.3);
+    color: black;
+  }
+}
+
+.add {
+  @extend .btn-success;
+}
+
+.edit {
+  @extend .btn-warning;
+}
+
+.refresh {
+  background-color: rgb(95, 238, 246);
+
+  &:hover {
+    box-shadow: 0px 0px 0px 0.2rem rgba(95, 238, 246, 0.5);
+  }
+}
+
+.view {
+  @extend .btn-main;
+}
+
+.delete {
+  @extend .btn-danger;
+
+}

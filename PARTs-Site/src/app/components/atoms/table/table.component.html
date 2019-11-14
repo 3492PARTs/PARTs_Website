@@ -1,0 +1,79 @@
+<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelID]="'form1'" [LabelText]="'Filter'"
+  [Placeholder]="'Search By Category'" [Type]="'text'" [(Model)]="SearchText"></app-form-element>
+<div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>
+  <table class="table" [ngClass]="{
+        striped: Stripes,
+        bordered: Borders,
+        hilight: Hilighting,
+        Scrollable: Scrollable,
+        'table-resizable': Resizable,
+        'table-normal': !Resizable
+      }">
+    <thead class="thead">
+      <tr [ngClass]="{ 'resize-lines': Resizable }">
+        <th (click)="SetOrder(col.PropertyName)" *ngFor="let col of TableCols" [ngClass]="{
+              rightAlign: col.Alignment == 'right',
+              centerAlign: col.Alignment == 'center'
+            }">
+          {{ col.ColLabel }}
+          <span *ngIf="
+                !OrderByReverse &&
+                !DisableSort &&
+                col.PropertyName == OrderByProperty
+              " class="up-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
+            </svg>
+          </span>
+          <span *ngIf="
+                OrderByReverse &&
+                !DisableSort &&
+                col.PropertyName == OrderByProperty
+              " class="down-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+            </svg>
+          </span>
+        </th>
+        <th *ngIf="ShowButtonColumn()">
+          <app-button *ngIf="ShowAddButton" [ButtonType]="'add'" [TableButton]="true" (FunctionCallBack)="Add()">
+          </app-button>
+        </th>
+        <th *ngIf="Scrollable" [ngStyle]="{ width: FixedTableScrollColWidth }"></th>
+      </tr>
+    </thead>
+    <tbody class="tbody" #MainTableBody>
+      <tr *ngFor="
+            let rec of TableData
+              | strToType
+              | ObjectWildCardFilterPipe: SearchText
+              | OrderBy: OrderByProperty:OrderByReverse
+              | RemovedFilterPipe
+                : EnableRemovedFiter
+                : RemovedFiterProperty
+                : RemovedFiterPropertyValue
+          " (click)="SetActive(rec)" [ngClass]="{ ActiveRow: rec == ActiveRec }">
+        <td *ngFor="let col of TableCols">
+          <ng-container *ngIf="!col.Type; else Type">
+            {{ rec[col.PropertyName] | dateToStr }}
+          </ng-container>
+          <ng-template #Type>
+            <app-form-element [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'">
+            </app-form-element>
+          </ng-template>
+        </td>
+        <td *ngIf="ShowButtonColumn()">
+          <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true" (FunctionCallBack)="View(rec)">
+          </app-button>
+          <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true" (FunctionCallBack)="Edit(rec)">
+          </app-button>
+          <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
+            (FunctionCallBack)="Remove(rec)"></app-button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="InfoContainer" #InfoContainer>
+  <ng-content></ng-content>
+</div>

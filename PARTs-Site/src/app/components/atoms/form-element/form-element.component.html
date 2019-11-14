@@ -1,0 +1,28 @@
+<div [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline}">
+  <label *ngIf="LabelText !== '' && Type !== 'radio'" for="{{ LabelID }}">{{ LabelText }}</label>
+  <ng-container [ngSwitch]="Type">
+    <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+      [ngModel]="Model" (ngModelChange)="change($event)">
+
+    <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
+      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)">
+
+    <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngModel]="Model"
+      (ngModelChange)="change($event)">
+      <option *ngFor="let obj of SelectList" [ngValue]="obj">{{ obj.name }}</option>
+    </select>
+
+    <textarea *ngSwitchCase="'area'" class="form-control" rows="{{ Rows }}" placeholder="{{ Placeholder }}"></textarea>
+
+    <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" [ngModel]="Model"
+      (ngModelChange)="change($event)">
+
+    <ng-container *ngSwitchCase="'radio'">
+      <div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
+        <label for="{{ obj.name }}{{ i }}">{{ obj.name }}</label>
+        <input type="radio" name="{{ RadioName }}" id="{{ obj.name }}{{ i }}" [value]="obj" [ngModel]="Model"
+          (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
+      </div>
+    </ng-container>
+  </ng-container>
+</div>

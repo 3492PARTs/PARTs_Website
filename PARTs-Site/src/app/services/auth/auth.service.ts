@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -88,7 +88,7 @@ export class AuthService {
       ).subscribe(
         Response => {
           // console.log(Response);
-          this.userLinks.next(Response['links'] as UserLinks[]);
+          this.userLinks.next(Response as UserLinks[]);
           this.gs.decrementOutstandingCalls();
         },
         Error => {

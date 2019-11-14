@@ -1,0 +1,17 @@
+<app-button [ButtonType]="ButtonType"
+            (FunctionCallBack)="open()">{{ ButtonText }}</app-button>
+
+<div class="overlay" [ngClass]="{'visible': visible}">
+  <div class="popup">
+    <div class="popup-title">
+      <h2>{{ Title }}</h2>
+      <div class="close">
+        <app-button [ButtonType]="'close'"
+                    (FunctionCallBack)="close()"></app-button>
+      </div>
+    </div>
+    <div class="popup-contents">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
