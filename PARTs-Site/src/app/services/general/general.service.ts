@@ -40,8 +40,9 @@ export class GeneralService {
   }
 
   triggerError(mesage: string) {
-    this.showErrorModal = true;
+    // this.showErrorModal = true;
     this.errorMessage = mesage;
+    alert(this.errorMessage);
   }
 
 
@@ -51,12 +52,18 @@ export class GeneralService {
   }
 
 
-  checkRetRes(ResponseObject: any): boolean {
-    if (ResponseObject.RetMessage != null && ResponseObject.RetMessage.Error) {
-      this.triggerError(ResponseObject.RetMessage.Message);
+  checkResponse(response: any): boolean {
+    response = response as RetMessage;
+    if (response.retMessage && response.error) {
+      this.triggerError(response.retMessage);
       return false;
     }
     return true;
   }
 
+}
+
+export class RetMessage {
+  retMessage: string;
+  error: boolean;
 }

@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-form-element',
@@ -56,7 +55,7 @@ export class FormElementComponent implements OnInit {
     this.Model = newValue;
     this.ModelChange.emit(newValue);
     this.FunctionCallBack.emit();
-    
+
   }
   constructor() { }
 
@@ -89,7 +88,7 @@ export class FormElementComponent implements OnInit {
     this.FunctionCallBack.emit();
   }
 
-  focusOut(){
+  focusOut() {
     this.OnFocusOut.emit();
   }
 

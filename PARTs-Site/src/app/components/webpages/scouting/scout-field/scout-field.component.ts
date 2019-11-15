@@ -18,6 +18,27 @@ export class ScoutFieldComponent implements OnInit {
       'api/get_scout_field_questions/'
     ).subscribe(
       Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.scoutFieldQuestions = Response as ScoutFieldQuestion[];
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  save(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_scout_field_answers/',
+      {}
+    ).subscribe(
+      Response => {
         this.scoutFieldQuestions = Response as ScoutFieldQuestion[];
         this.gs.decrementOutstandingCalls();
       },

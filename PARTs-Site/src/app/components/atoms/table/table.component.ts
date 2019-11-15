@@ -9,7 +9,7 @@ import {
   Renderer2
 } from '@angular/core';
 
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 
 @Component({
   selector: 'app-table',
@@ -87,7 +87,7 @@ export class TableComponent implements OnInit {
       );
     }
 
-    $(function () {
+    /*$(function () {
       var startX,
         startWidth,
         $handle,
@@ -122,7 +122,7 @@ export class TableComponent implements OnInit {
             .find('th[style]')
             .css('width', '');
         });
-    });
+    });*/
 
   }
 

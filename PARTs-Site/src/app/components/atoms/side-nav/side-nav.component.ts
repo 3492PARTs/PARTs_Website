@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, HostListener } from '@angular/core';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 
 @Component({
   selector: 'app-side-nav',
@@ -18,13 +18,13 @@ export class SideNavComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event) {
-    const windowTop = $(window).scrollTop();
+    /*const windowTop = $(window).scrollTop();
 
     if (this.sideNav.nativeElement.offsetTop < windowTop + 16) {
       this.sideNav.nativeElement.classList.add('sticky');
     } else {
       this.sideNav.nativeElement.classList.remove('sticky');
-    }
+    }*/
 
   }
 

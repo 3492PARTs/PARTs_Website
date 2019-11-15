@@ -1,5 +1,10 @@
 <app-box [Title]="'Scout Field Form'">
-  <div *ngFor="let sfq of scoutFieldQuestions">
-    <app-form-element [LabelText]="sfq.question" [Type]="sfq.question_typ"></app-form-element>
-  </div>
+  <form>
+    <app-form-element *ngFor="let sfq of scoutFieldQuestions" [LabelText]="sfq.question" [Type]="sfq.question_typ"
+      [FormGroupInline]="true" [FormGroup]="true">
+    </app-form-element>
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'">Save</app-button>
+    </app-button-ribbon>
+  </form>
 </app-box>
