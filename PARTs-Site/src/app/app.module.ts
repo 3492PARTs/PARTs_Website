@@ -19,6 +19,8 @@ import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-r
 import { FormElementComponent } from './components/atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from './components/atoms/form-element-group/form-element-group.component';
 import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
+import { HeaderComponent } from './components/atoms/header/header.component';
+import { ModalComponent } from './components/atoms/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/
     ButtonRibbonComponent,
     FormElementComponent,
     FormElementGroupComponent,
-    ScoutAdminComponent
+    ScoutAdminComponent,
+    HeaderComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

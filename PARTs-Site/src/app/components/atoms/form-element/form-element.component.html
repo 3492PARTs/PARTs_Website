@@ -9,7 +9,9 @@
 
     <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">
-      <option *ngFor="let obj of SelectList" [ngValue]="obj">{{ obj.name }}</option>
+      <option value="" *ngIf="DisplayEmptyOption"></option>
+      <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+        [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
     </select>
 
     <textarea *ngSwitchCase="'area'" class="form-control" rows="{{ Rows }}" placeholder="{{ Placeholder }}"></textarea>

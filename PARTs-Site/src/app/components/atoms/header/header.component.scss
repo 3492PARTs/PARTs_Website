@@ -1,4 +1,4 @@
-@import '../../../scss/helpers/variables.scss';
+@import "../../../scss/_helpers/variables";
 
 .center {
   text-align: center;
@@ -12,9 +12,13 @@
   border-bottom: 2px solid $accent_color;
 }
 
-
-h1,h2,h4,h4,h5,h6{
-  font-family: 'gotham_black';
+h1,
+h2,
+h4,
+h4,
+h5,
+h6 {
+  font-family: "gotham_black";
   margin-bottom: 4px;
 }
 
@@ -22,6 +26,10 @@ h1 {
   color: $accent_color;
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: $main_color;
 }

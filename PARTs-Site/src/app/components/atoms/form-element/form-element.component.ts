@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
+import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
   selector: 'app-form-element',
@@ -19,7 +20,6 @@ export class FormElementComponent implements OnInit {
   @Input() FormGroupInline = false;
   @Input() RadioGroupStacked = false;
   @Input() FormInline = false;
-  @Input() LabelID = ''; // TODO Still needed?
   @Input() LabelText = '';
   @Input() Width = 'auto';
   @Input() Placeholder = ''; // TODO Still needed?
@@ -34,7 +34,8 @@ export class FormElementComponent implements OnInit {
 
   @Input() SelectList: [] = [];
   @Input() RadioList: [] = [];
-  @Input() Selected = ''; // TODO Does not work yet
+  @Input() DisplayEmptyOption = false;
+
   @Input() FormElementInline: boolean = true;
   @Input() LabelOnTop: boolean = true;
 
@@ -51,15 +52,19 @@ export class FormElementComponent implements OnInit {
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
 
+  LabelID: string;
+
   change(newValue) {
     this.Model = newValue;
     this.ModelChange.emit(newValue);
     this.FunctionCallBack.emit();
 
   }
-  constructor() { }
+  constructor(private gs: GeneralService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.LabelID = this.gs.getNextGsId();
+  }
 
   IsInvalid(): boolean {
     let ret = false;

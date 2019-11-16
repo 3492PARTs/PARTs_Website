@@ -1,1 +1,16 @@
-<p>scout-admin works!</p>
+<app-box [Title]="'Scout Admin'">
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scouts'" [Title]="'Manage Scouts'"></app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
+    <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons" [DisplayEmptyOption]="true"
+      [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [Model]="season"></app-form-element>
+
+    <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'">
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'"></app-modal>
+</app-box>

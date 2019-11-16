@@ -11,11 +11,12 @@ export class GeneralService {
   currentOutstandingCalls = this.outstandingCalls.asObservable();
   private internalOutstandingCalls = 0;
 
-
   /* Error Handeling*/
   showErrorModal = false;
   errorMessage = '';
   buttonText = 'Ok';
+
+  private gsId = 0;
 
   constructor() { }
 
@@ -45,12 +46,9 @@ export class GeneralService {
     alert(this.errorMessage);
   }
 
-
-
   handelHTTPError(Error: any) {
     this.triggerError('http error');
   }
-
 
   checkResponse(response: any): boolean {
     response = response as RetMessage;
@@ -61,6 +59,9 @@ export class GeneralService {
     return true;
   }
 
+  getNextGsId(): string {
+    return 'gsID' + this.gsId++;
+  }
 }
 
 export class RetMessage {
