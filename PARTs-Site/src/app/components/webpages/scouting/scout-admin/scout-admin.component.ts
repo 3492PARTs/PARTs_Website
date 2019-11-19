@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -37,14 +37,14 @@ export class ScoutAdminComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/get_sync_season/', {
-        params: {
-          season_id: this.season.toString()
-        }
+      params: {
+        season_id: this.season.toString()
       }
+    }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
-          this.seasons = Response as Season[];
+          alert((Response as RetMessage).retMessage);
         }
         this.gs.decrementOutstandingCalls();
       },

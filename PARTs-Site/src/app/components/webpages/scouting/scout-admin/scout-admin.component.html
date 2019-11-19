@@ -4,7 +4,7 @@
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
     <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons" [DisplayEmptyOption]="true"
-      [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [Model]="season"></app-form-element>
+      [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"></app-form-element>
 
     <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
   </app-modal>
