@@ -11,6 +11,8 @@ export class ScoutAdminComponent implements OnInit {
   seasons: Season[];
   season: number;
 
+  syncSeasonResponse = new RetMessage();
+
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit() {
@@ -37,6 +39,30 @@ export class ScoutAdminComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/get_sync_season/', {
+      params: {
+        season_id: this.season.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.syncSeasonResponse = Response as RetMessage;
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  setSeason(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_set_season/', {
       params: {
         season_id: this.season.toString()
       }
