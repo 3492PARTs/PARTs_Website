@@ -4,8 +4,13 @@
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
     <div class="inline">
-      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons" [DisplayEmptyOption]="true"
-        [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"></app-form-element>
+      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"
+        (ModelChange)="buildEventList()">
+      </app-form-element>
+      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="eventList" [DisplayEmptyOption]="true"
+        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="event">
+      </app-form-element>
       <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
       <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season</app-button>
     </div>

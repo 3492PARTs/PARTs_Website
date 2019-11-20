@@ -8,8 +8,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./scout-admin.component.scss']
 })
 export class ScoutAdminComponent implements OnInit {
-  seasons: Season[];
+  init: ScoutAdminInit = new ScoutAdminInit();
   season: number;
+  event: number;
+  eventList: Event[] = [];
 
   syncSeasonResponse = new RetMessage();
 
@@ -22,7 +24,17 @@ export class ScoutAdminComponent implements OnInit {
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
-          this.seasons = Response as Season[];
+          this.init = Response as ScoutAdminInit;
+
+          if (this.init.currentSeason.season_id) {
+            this.season = this.init.currentSeason.season_id;
+            this.buildEventList();
+          }
+
+          if (this.init.currentEvent.event_id) {
+            this.event = this.init.currentEvent.event_id;
+          }
+
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -64,7 +76,8 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'api/get_set_season/', {
       params: {
-        season_id: this.season.toString()
+        season_id: this.season.toString(),
+        event_id: this.event.toString()
       }
     }
     ).subscribe(
@@ -82,9 +95,32 @@ export class ScoutAdminComponent implements OnInit {
       }
     );
   }
+
+  buildEventList(): void {
+    this.eventList = this.init.events.filter(item => item.season === this.season);
+  }
 }
 
 export class Season {
   season_id: number;
   season: string;
+  current: string;
+}
+
+export class Event {
+  event_id: number;
+  season: number;
+  event_nm: string;
+  date_st: Date;
+  event_cd: string;
+  date_end: Date;
+  current: string;
+  void_ind: string;
+}
+
+export class ScoutAdminInit {
+  seasons: Season[] = [];
+  events: Event[] = [];
+  currentSeason: Season = new Season();
+  currentEvent: Event = new Event();
 }
