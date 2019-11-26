@@ -134,6 +134,10 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   deleteSeason(): void {
+    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being reomved.')) {
+      return null;
+    }
+
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/get_delete_season/', {
