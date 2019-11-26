@@ -10,6 +10,8 @@ import { HttpClient } from '@angular/common/http';
 export class ScoutAdminComponent implements OnInit {
   init: ScoutAdminInit = new ScoutAdminInit();
   season: number;
+  newSeason: number;
+  delSeason: number;
   event: number;
   eventList: Event[] = [];
 
@@ -18,6 +20,10 @@ export class ScoutAdminComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit() {
+    this.adminInit();
+  }
+
+  adminInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/get_scout_admin_init/'
@@ -28,12 +34,13 @@ export class ScoutAdminComponent implements OnInit {
 
           if (this.init.currentSeason.season_id) {
             this.season = this.init.currentSeason.season_id;
-            this.buildEventList();
           }
 
           if (this.init.currentEvent.event_id) {
             this.event = this.init.currentEvent.event_id;
           }
+
+          this.buildEventList();
 
         }
         this.gs.decrementOutstandingCalls();
@@ -59,6 +66,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.syncSeasonResponse = Response as RetMessage;
+          this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -98,6 +106,56 @@ export class ScoutAdminComponent implements OnInit {
 
   buildEventList(): void {
     this.eventList = this.init.events.filter(item => item.season === this.season);
+  }
+
+  addSeason(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_add_season/', {
+      params: {
+        season: this.newSeason.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  deleteSeason(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_delete_season/', {
+      params: {
+        season_id: this.delSeason.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
   }
 }
 

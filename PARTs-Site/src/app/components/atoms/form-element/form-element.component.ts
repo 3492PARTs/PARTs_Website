@@ -31,6 +31,7 @@ export class FormElementComponent implements OnInit {
   @Input() Name = '';
 
   @Input() Type = 'text';
+  @Input() Width = 'auto';
 
   @Input() SelectList: [] = [];
   @Input() RadioList: [] = [];

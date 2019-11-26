@@ -8,7 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class FormElementGroupComponent implements OnInit {
   @Input() Inline = false;
   @Input() MaxWidth = false;
-  @Input() LabelText = "";
+  @Input() LabelText = '';
+  @Input() InlineElements = false;
   constructor() { }
 
 

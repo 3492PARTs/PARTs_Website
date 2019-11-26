@@ -1,4 +1,4 @@
-<div class="FormElementGroup " [ngClass]="{InlineGroup: Inline, MaxWidth:MaxWidth}">
-  <div class="FormElementGroupLabel" *ngIf="LabelText != ''">{{LabelText}} </div>
+<div class="FormElementGroup" [ngClass]="{InlineGroup:Inline, MaxWidth:MaxWidth, 'inline-elements':InlineElements}">
+  <div class="FormElementGroupLabel" *ngIf="LabelText != ''">{{LabelText}}</div>
   <ng-content></ng-content>
 </div>

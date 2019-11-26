@@ -3,7 +3,7 @@
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scouts'" [Title]="'Manage Scouts'"></app-modal>
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
-    <div class="inline">
+    <app-form-element-group [LabelText]="'Sync/Set Season'" [InlineElements]="true">
       <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"
         (ModelChange)="buildEventList()">
@@ -12,10 +12,20 @@
         [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="event">
       </app-form-element>
       <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
-      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season</app-button>
-    </div>
+      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season/Event</app-button>
+    </app-form-element-group>
 
-    <app-form-element-group [LabelText]="'Response'">
+    <app-form-element-group [LabelText]="'Add/Delete Season'" [InlineElements]="true">
+      <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
+      </app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason">
+      </app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
       <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
     </app-form-element-group>
   </app-modal>

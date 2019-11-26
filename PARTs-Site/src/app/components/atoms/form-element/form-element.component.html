@@ -2,19 +2,20 @@
   <label *ngIf="LabelText !== '' && Type !== 'radio'" for="{{ LabelID }}">{{ LabelText }}</label>
   <ng-container [ngSwitch]="Type">
     <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-      [ngModel]="Model" (ngModelChange)="change($event)">
+      [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
 
     <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
-      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)">
+      placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
 
-    <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngModel]="Model"
-      (ngModelChange)="change($event)">
+    <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}"
+      [ngModel]="Model" (ngModelChange)="change($event)">
       <option value="" *ngIf="DisplayEmptyOption"></option>
       <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
         [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
     </select>
 
-    <textarea *ngSwitchCase="'area'" class="form-control" rows="{{ Rows }}" placeholder="{{ Placeholder }}"></textarea>
+    <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
+      placeholder="{{ Placeholder }}"></textarea>
 
     <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">

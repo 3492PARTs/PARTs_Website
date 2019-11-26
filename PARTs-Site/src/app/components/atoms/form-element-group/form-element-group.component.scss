@@ -1,4 +1,4 @@
-.FormElementGroup{
+.FormElementGroup {
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 14px;
@@ -9,7 +9,7 @@
   margin-top: 20px;
 }
 
-.FormElementGroup + .FormElementGroup{
+.FormElementGroup + .FormElementGroup {
   margin-top: 20px;
 }
 
@@ -17,11 +17,11 @@
   display: inline-block;
 }
 
-.InlineGroup + .InlineGroup{
+.InlineGroup + .InlineGroup {
   margin-left: 10px;
 }
 
-.FormElementGroupLabel{
+.FormElementGroupLabel {
   background: white;
   position: absolute;
   left: 16px;
@@ -31,7 +31,11 @@
   padding-right: 3px;
 }
 
-
-.MaxWidth{
+.MaxWidth {
   width: 100%;
+}
+
+.inline-elements {
+  display: flex;
+  align-items: flex-end;
 }
