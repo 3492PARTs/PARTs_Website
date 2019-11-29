@@ -31,6 +31,38 @@
   </app-modal>
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'">
+    <app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true">
+      <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="scoutFieldQuestion.question">
+      </app-form-element>
+      <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="scoutFieldQuestion.order" [Width]="'3em'">
+      </app-form-element>
+      <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
+        [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'"
+        [(Model)]="scoutFieldQuestion.question_typ">
+      </app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldQuestion()">Save</app-button>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Delete Questions'" [InlineElements]="true">
+      <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutFieldQuestions"
+        [DisplayProperty]="'question'" [BindingProperty]="'sfq_id'" [(Model)]="scoutFieldQuestion.sfq_id">
+      </app-form-element>
+      <ng-container *ngFor="let q of init.scoutFieldQuestions">
+        <ng-container *ngIf="q.sfq_id === scoutFieldQuestion.sfq_id">
+          <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="q.question">
+          </app-form-element>
+
+          <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="q.order" [Width]="'3em'">
+          </app-form-element>
+
+          <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
+            [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ">
+          </app-form-element>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="updateScoutFieldQuestion(q)">Update</app-button>
+          <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteScoutFieldQuestion(q)">Delete</app-button>
+        </ng-container>
+      </ng-container>
+    </app-form-element-group>
   </app-modal>
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'"></app-modal>

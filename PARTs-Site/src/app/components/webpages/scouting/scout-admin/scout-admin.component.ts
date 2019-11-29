@@ -14,6 +14,7 @@ export class ScoutAdminComponent implements OnInit {
   delSeason: number;
   event: number;
   eventList: Event[] = [];
+  scoutFieldQuestion: ScoutFieldQuestion = new ScoutFieldQuestion();
 
   syncSeasonResponse = new RetMessage();
 
@@ -161,6 +162,51 @@ export class ScoutAdminComponent implements OnInit {
       }
     );
   }
+
+  saveScoutFieldQuestion(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_scout_field_question/', this.scoutFieldQuestion
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.scoutFieldQuestion = new ScoutFieldQuestion();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  updateScoutFieldQuestion(q: ScoutFieldQuestion): void {
+    this.gs.incrementOutstandingCalls();
+    q.season = null;
+    this.http.post(
+      'api/post_update_scout_field_question/', q
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.scoutFieldQuestion = new ScoutFieldQuestion();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
 }
 
 export class Season {
@@ -180,9 +226,27 @@ export class Event {
   void_ind: string;
 }
 
+export class QuestionType {
+  question_typ: string;
+  question_typ_nm: string;
+  void_ind: string;
+}
+
 export class ScoutAdminInit {
   seasons: Season[] = [];
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
+  questionTypes: QuestionType[] = [];
+  scoutFieldQuestions: ScoutFieldQuestion[] = [];
+}
+
+export class ScoutFieldQuestion {
+  sfq_id: number;
+  season: number;
+  question_typ: string;
+  q_opt_typ_cd: string;
+  question: string;
+  order: number
+  void_ind: string;
 }

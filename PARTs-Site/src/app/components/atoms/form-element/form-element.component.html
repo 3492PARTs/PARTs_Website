@@ -15,7 +15,7 @@
     </select>
 
     <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
-      placeholder="{{ Placeholder }}"></textarea>
+      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"></textarea>
 
     <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">
