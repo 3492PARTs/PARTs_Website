@@ -21,6 +21,16 @@ import { FormElementGroupComponent } from './components/atoms/form-element-group
 import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
 import { HeaderComponent } from './components/atoms/header/header.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
+import { TableComponent } from './components/atoms/table/table.component';
+
+import {
+  ObjectWildCardFilterPipe,
+  OrderBy,
+  RemovedFilterPipe
+} from './pipes/ObjectWildcardFilter';
+import { StrToTypePipe } from './pipes/str-to-type.pipe';
+import { DateToStrPipe } from './pipes/date-to-str.pipe';
+import { QuestionAdminFormComponent } from './components/webpages/scouting/question-admin-form/question-admin-form.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +48,14 @@ import { ModalComponent } from './components/atoms/modal/modal.component';
     FormElementGroupComponent,
     ScoutAdminComponent,
     HeaderComponent,
-    ModalComponent
+    ModalComponent,
+    TableComponent,
+    ObjectWildCardFilterPipe,
+    OrderBy,
+    RemovedFilterPipe,
+    StrToTypePipe,
+    DateToStrPipe,
+    QuestionAdminFormComponent
   ],
   imports: [
     BrowserModule,

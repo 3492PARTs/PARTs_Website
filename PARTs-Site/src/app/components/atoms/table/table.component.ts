@@ -195,11 +195,11 @@ export class TableComponent implements OnInit {
   }
 
   View(rec) {
-    this.ViewRecordCallBack.emit();
+    this.ViewRecordCallBack.emit(rec);
   }
 
   Edit(rec) {
-    this.EditRecordCallBack.emit();
+    this.EditRecordCallBack.emit(rec);
   }
 
   Add() {

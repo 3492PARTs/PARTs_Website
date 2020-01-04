@@ -10,6 +10,7 @@ export class FormElementGroupComponent implements OnInit {
   @Input() MaxWidth = false;
   @Input() LabelText = '';
   @Input() InlineElements = false;
+  @Input() WrapElements = false;
   constructor() { }
 
 

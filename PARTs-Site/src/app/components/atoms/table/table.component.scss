@@ -1,4 +1,4 @@
-@import '../../../scss/helpers/variables.scss';
+@import "../../../scss/_helpers/variables";
 
 .Scrollable {
   width: 100%;
@@ -14,9 +14,10 @@
   width: 100%;
 }
 
-.table .thead tr th, .table .tbody tr td {
+.table .thead tr th,
+.table .tbody tr td {
   padding: 0.3em;
-  padding-left: .5em;
+  padding-left: 0.5em;
 }
 
 .table tr td {
@@ -26,7 +27,7 @@
 .table .thead th {
   color: white;
   background-color: $main_color;
-  border-bottom:3px solid $accent_color;
+  border-bottom: 3px solid $accent_color;
   vertical-align: middle;
   text-align: left;
   font-size: 14px;
@@ -138,7 +139,7 @@ table .thead:last-child {
     // Show resize curson when hovering over column borders
     &::before {
       @extend .table-resizable, .resizing;
-      content: '';
+      content: "";
       display: block;
       height: 100%;
       position: absolute;

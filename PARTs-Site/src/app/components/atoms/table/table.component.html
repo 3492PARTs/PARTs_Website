@@ -1,5 +1,5 @@
-<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelID]="'form1'" [LabelText]="'Filter'"
-  [Placeholder]="'Search By Category'" [Type]="'text'" [(Model)]="SearchText"></app-form-element>
+<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Placeholder]="'Search By Category'"
+  [Type]="'text'" [(Model)]="SearchText"></app-form-element>
 <div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>
   <table class="table" [ngClass]="{
         striped: Stripes,

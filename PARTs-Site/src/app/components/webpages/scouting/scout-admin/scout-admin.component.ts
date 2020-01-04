@@ -15,8 +15,15 @@ export class ScoutAdminComponent implements OnInit {
   event: number;
   eventList: Event[] = [];
   scoutFieldQuestion: ScoutFieldQuestion = new ScoutFieldQuestion();
+  scoutPitQuestion: ScoutPitQuestion = new ScoutPitQuestion();
 
   syncSeasonResponse = new RetMessage();
+
+  optionsTableCols: object[] = [
+    { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
+    { PropertyName: 'active', ColLabel: 'Active' }
+  ];
+
 
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
@@ -187,7 +194,9 @@ export class ScoutAdminComponent implements OnInit {
 
   updateScoutFieldQuestion(q: ScoutFieldQuestion): void {
     this.gs.incrementOutstandingCalls();
-    q.season = null;
+    if (q.options.length <= 0) {
+      q.options = [new QuestionOption()];
+    }
     this.http.post(
       'api/post_update_scout_field_question/', q
     ).subscribe(
@@ -195,6 +204,141 @@ export class ScoutAdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
           this.scoutFieldQuestion = new ScoutFieldQuestion();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  deleteScoutFieldQuestion(q: ScoutFieldQuestion): void {
+    if (!confirm('Are you sure you want to toggle this question?')) {
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_delete_scout_field_question/', {
+      params: {
+        sfq_id: q.sfq_id.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  addOption(list: any): void {
+    list.push(new QuestionOption());
+  }
+
+  ToggleOption(op: QuestionOption): void {
+    if (!confirm('Are you sure you want to toggle this option?')) {
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_toggle_option/', {
+      params: {
+        q_opt_id: op.q_opt_id.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  saveScoutPitQuestion(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_scout_pit_question/', this.scoutPitQuestion
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.scoutPitQuestion = new ScoutPitQuestion();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  updateScoutPitQuestion(q: ScoutPitQuestion): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_update_scout_pit_question/', q
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.scoutPitQuestion = new ScoutPitQuestion();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  deleteScoutPitQuestion(q: ScoutPitQuestion): void {
+    if (!confirm('Are you sure you want to toggle this question?')) {
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_delete_scout_pit_question/', {
+      params: {
+        sfq_id: q.spq_id.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -239,14 +383,38 @@ export class ScoutAdminInit {
   currentEvent: Event = new Event();
   questionTypes: QuestionType[] = [];
   scoutFieldQuestions: ScoutFieldQuestion[] = [];
+  scoutPitQuestions: ScoutPitQuestion[] = [];
 }
 
 export class ScoutFieldQuestion {
   sfq_id: number;
   season: number;
   question_typ: string;
-  q_opt_typ_cd: string;
   question: string;
   order: number
+  active = 'y';
+  void_ind: string;
+
+  options: QuestionOption[] = [];
+}
+
+export class ScoutPitQuestion {
+  spq_id: number;
+  season: number;
+  question_typ: string;
+  question: string;
+  order: number
+  active = 'y';
+  void_ind: string;
+
+  options: QuestionOption[] = [];
+}
+
+export class QuestionOption {
+  q_opt_id: number;
+  sfq_id: number;
+  spq_id: number;
+  option: string;
+  active = 'y';
   void_ind: string;
 }
