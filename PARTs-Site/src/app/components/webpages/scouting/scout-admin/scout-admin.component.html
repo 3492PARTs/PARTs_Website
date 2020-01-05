@@ -52,10 +52,11 @@
 
     <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true" [WrapElements]="true">
       <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutFieldQuestions"
-        [DisplayProperty]="'question'" [BindingProperty]="'sfq_id'" [(Model)]="scoutFieldQuestion.sfq_id">
+        [DisplayProperty]="'question'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
+        [(Model)]="scoutFieldQuestion.sq_id">
       </app-form-element>
       <ng-container *ngFor="let q of init.scoutFieldQuestions">
-        <ng-container *ngIf="q.sfq_id === scoutFieldQuestion.sfq_id">
+        <ng-container *ngIf="q.sq_id === scoutFieldQuestion.sq_id">
           <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="q.question">
           </app-form-element>
 
@@ -104,10 +105,11 @@
 
     <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true" [WrapElements]="true">
       <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutPitQuestions"
-        [DisplayProperty]="'question'" [BindingProperty]="'spq_id'" [(Model)]="scoutPitQuestion.spq_id">
+        [DisplayProperty]="'question'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
+        [(Model)]="scoutPitQuestion.sq_id">
       </app-form-element>
       <ng-container *ngFor="let q of init.scoutPitQuestions">
-        <ng-container *ngIf="q.spq_id === scoutPitQuestion.spq_id">
+        <ng-container *ngIf="q.sq_id === scoutPitQuestion.sq_id">
           <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="q.question">
           </app-form-element>
 

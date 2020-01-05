@@ -14,8 +14,8 @@ export class ScoutAdminComponent implements OnInit {
   delSeason: number;
   event: number;
   eventList: Event[] = [];
-  scoutFieldQuestion: ScoutFieldQuestion = new ScoutFieldQuestion();
-  scoutPitQuestion: ScoutPitQuestion = new ScoutPitQuestion();
+  scoutFieldQuestion: ScoutQuestion = new ScoutQuestion();
+  scoutPitQuestion: ScoutQuestion = new ScoutQuestion();
 
   syncSeasonResponse = new RetMessage();
 
@@ -178,7 +178,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
-          this.scoutFieldQuestion = new ScoutFieldQuestion();
+          this.scoutFieldQuestion = new ScoutQuestion();
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -192,10 +192,10 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  updateScoutFieldQuestion(q: ScoutFieldQuestion): void {
+  updateScoutFieldQuestion(q: ScoutQuestion): void {
     this.gs.incrementOutstandingCalls();
     if (q.options.length <= 0) {
-      q.options = [new QuestionOption()];
+      q.options = [];
     }
     this.http.post(
       'api/post_update_scout_field_question/', q
@@ -203,7 +203,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
-          this.scoutFieldQuestion = new ScoutFieldQuestion();
+          this.scoutFieldQuestion = new ScoutQuestion();
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -217,7 +217,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  deleteScoutFieldQuestion(q: ScoutFieldQuestion): void {
+  deleteScoutFieldQuestion(q: ScoutQuestion): void {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
@@ -226,7 +226,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'api/get_delete_scout_field_question/', {
       params: {
-        sfq_id: q.sfq_id.toString()
+        sfq_id: q.sq_id.toString()
       }
     }
     ).subscribe(
@@ -287,7 +287,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
-          this.scoutPitQuestion = new ScoutPitQuestion();
+          this.scoutPitQuestion = new ScoutQuestion();
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -301,7 +301,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  updateScoutPitQuestion(q: ScoutPitQuestion): void {
+  updateScoutPitQuestion(q: ScoutQuestion): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'api/post_update_scout_pit_question/', q
@@ -309,7 +309,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
-          this.scoutPitQuestion = new ScoutPitQuestion();
+          this.scoutPitQuestion = new ScoutQuestion();
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -323,7 +323,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  deleteScoutPitQuestion(q: ScoutPitQuestion): void {
+  deleteScoutPitQuestion(q: ScoutQuestion): void {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
@@ -332,7 +332,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'api/get_delete_scout_pit_question/', {
       params: {
-        sfq_id: q.spq_id.toString()
+        sfq_id: q.sq_id.toString()
       }
     }
     ).subscribe(
@@ -382,25 +382,14 @@ export class ScoutAdminInit {
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
   questionTypes: QuestionType[] = [];
-  scoutFieldQuestions: ScoutFieldQuestion[] = [];
-  scoutPitQuestions: ScoutPitQuestion[] = [];
+  scoutFieldQuestions: ScoutQuestion[] = [];
+  scoutPitQuestions: ScoutQuestion[] = [];
 }
 
-export class ScoutFieldQuestion {
-  sfq_id: number;
+export class ScoutQuestion {
+  sq_id: number;
   season: number;
-  question_typ: string;
-  question: string;
-  order: number
-  active = 'y';
-  void_ind: string;
-
-  options: QuestionOption[] = [];
-}
-
-export class ScoutPitQuestion {
-  spq_id: number;
-  season: number;
+  sq_typ: string;
   question_typ: string;
   question: string;
   order: number
