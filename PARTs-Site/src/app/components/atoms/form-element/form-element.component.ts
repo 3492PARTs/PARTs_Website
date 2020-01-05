@@ -35,7 +35,7 @@ export class FormElementComponent implements OnInit {
   @Input() SelectList: [] = [];
   @Input() RadioList: [] = [];
   @Input() DisplayEmptyOption = false;
-
+  @Input() FieldSize = 524288;
   @Input() FormElementInline: boolean = true;
   @Input() LabelOnTop: boolean = true;
 

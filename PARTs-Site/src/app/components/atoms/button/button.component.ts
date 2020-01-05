@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -12,6 +12,12 @@ export class ButtonComponent implements OnInit {
   @Input() Direction = false;
   @Input() Disabled = false;
   @Input() TableButton = false;
+  @Input() InvertColor = false;
+  @Input() SymbolSize = '2rem';
+  @Input() ElementID = '';
+
+  @ViewChild('thisButton', { read: ElementRef, static: false }) button: ElementRef;
+
 
   constructor() { }
 

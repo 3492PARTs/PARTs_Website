@@ -9,6 +9,10 @@
   table-layout: fixed;
 }
 
+.table {
+  border-collapse: collapse;
+}
+
 .table-normal {
   table-layout: fixed;
   width: 100%;
@@ -36,7 +40,8 @@
 .table .thead:first-child {
   border-top-left-radius: 4px;
 }
-table .thead:last-child {
+
+.table .thead:last-child {
   border-top-right-radius: 4px;
 }
 
@@ -56,6 +61,13 @@ table .thead:last-child {
 
 .table .tbody tr:first-child {
   border-top: 0;
+}
+
+/* buttons*/
+.table tbody .btn-col {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
 
 /*tables with stripes*/
@@ -115,15 +127,19 @@ table .thead:last-child {
   width: calc(100%);
   display: inline-block;
   vertical-align: top;
+  margin-top: 12px;
 }
 
 .InfoContainer {
-  display: block;
-  vertical-align: top;
-  padding: 15px;
-  background: #f9f9f9;
+  display: inline-block;
+  padding: 1em 0 1em 1em;
   border-radius: 4px;
   border-top-left-radius: 0px;
+  overflow-x: auto;
+
+  .Info {
+    display: inline-block;
+  }
 }
 
 .table-resizable {

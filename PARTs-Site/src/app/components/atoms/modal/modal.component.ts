@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2 } from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-modal',
@@ -6,11 +7,14 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  @Input() ButtonType: string = "";
-  @Input() ButtonText: string = "";
-  @Input() Title: string = "";
+  @Input() ButtonType = '';
+  @Input() ButtonText = '';
+  @Input() Title = '';
 
-  visible = false;
+  @Input() visible = false;
+  @Output() visibleChange = new EventEmitter();
+
+  @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent;
 
   constructor() { }
 
@@ -19,9 +23,11 @@ export class ModalComponent implements OnInit {
 
   open() {
     this.visible = true;
+    this.visibleChange.emit(this.visible);
   }
 
   close() {
     this.visible = false;
+    this.visibleChange.emit(this.visible);
   }
 }

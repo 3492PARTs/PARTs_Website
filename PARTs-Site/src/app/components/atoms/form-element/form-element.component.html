@@ -2,7 +2,7 @@
   <label *ngIf="LabelText !== '' && Type !== 'radio'" for="{{ LabelID }}">{{ LabelText }}</label>
   <ng-container [ngSwitch]="Type">
     <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-      [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
+      [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}">
 
     <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
       placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
@@ -15,7 +15,8 @@
     </select>
 
     <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
-      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"></textarea>
+      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
+      maxlength="{{ FieldSize }}"></textarea>
 
     <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">

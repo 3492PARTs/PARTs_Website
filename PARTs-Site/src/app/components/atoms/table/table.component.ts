@@ -6,8 +6,13 @@ import {
   EventEmitter,
   ElementRef,
   ViewChild,
-  Renderer2
+  Renderer2,
+  DoCheck,
+  OnChanges,
+  HostListener,
+  RendererStyleFlags2
 } from '@angular/core';
+
 
 //import * as $ from 'jquery';
 
@@ -16,7 +21,12 @@ import {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnInit, OnChanges {
+
+  private screenSizeWide = 1175;
+  private resizeTimer;
+
+  constructor(private renderer: Renderer2) { }
   @Input() TableData: any[];
   @Input() TableCols: any[] = [];
 
@@ -37,52 +47,64 @@ export class TableComponent implements OnInit {
 
 
   @Output() RecordClickCallBack: EventEmitter<any> = new EventEmitter();
+  @Output() DblClkRecordClickCallBack: EventEmitter<any> = new EventEmitter();
 
   @Input() EnableRemovedFiter = false;
   @Input() RemovedFiterProperty = 'Removed';
-  @Input() RemovedFiterPropertyValue: any = false;
+  @Input() RemovedFiterPropertyValue: any = true;
 
-  @Input() AppyRemovedFilter = false;
+  @Input() AppyRemovedFilter = true;
 
   @Input() Stripes = false;
   @Input() Borders = false;
   @Input() Hilighting = false;
   @Input() Scrollable = false;
   @Input() ScrollHeight = '20em';
-  @Input() Responsive = true;
-  @Input() AllowActiveRecord = false; //TODO Is this used?
-  @Input() DisplayRecordInfo = false; //TODO Is this used?
+  @Input() Responsive = false;
+  @Input() AllowActiveRecord = false;
+  @Input() DisplayRecordInfo = false;
   @Input() Resizable = false;
+  @Input() ButtonsFirstCol = false;
 
+  @Input() DisableInputs = false;
+  @Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
 
+  @Input() Width = '';
 
 
   SearchText = '';
   OrderByProperty = '';
   OrderByReverse = false;
-  ActiveRec: Object = null;
+  ActiveRec: object = null;
+  @Input()
+  set SetActiveRec(rec: object) {
+    this.ActiveRec = rec;
+    this.SetTableContainerWidth();
+  }
   FixedTableScrollColWidth = '0px';
-
-  constructor(private renderer: Renderer2) { }
   @ViewChild('InfoContainer', { read: ElementRef, static: true }) InfoContainer: ElementRef;
 
   @ViewChild('TableContainer', { read: ElementRef, static: true }) TableContainer: ElementRef;
   @ViewChild('MainTableBody', { read: ElementRef, static: true }) MainTableBody: ElementRef;
 
+  @ViewChild('Table', { read: ElementRef, static: true }) Table: ElementRef;
 
   ngOnInit() {
+    if (this.Width !== '') {
+      this.renderer.setStyle(this.Table.nativeElement, 'width', this.Width, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
+    }
+
     this.SetTableContainerWidth();
 
     /*
       If the table header is set to fixed, need width of scrollbar
       to add a col to fix spacing
     */
-
     if (this.Scrollable) {
-
+      this.FixedTableScrollColWidth = this.getScrollbarWidth() + 'px';
       this.renderer.setStyle(
         this.MainTableBody.nativeElement,
-        'height',
+        'max-height',
         this.ScrollHeight
       );
     }
@@ -126,12 +148,49 @@ export class TableComponent implements OnInit {
 
   }
 
-  SetActive(Rec) {
+  ngOnChanges() {
+    this.toType();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.SetTableContainerWidth();
+    }, 200);
+  }
+
+  private toType() {
+    for (let obj of this.TableData) {
+      for (const property in obj) {
+        if (obj.hasOwnProperty(property)) {
+          const numPatt = new RegExp('^[0-9]+(\.[0-9]+)?$');
+          const datePatt = new RegExp('^[0-2][0-9]\/[0-9][0-9]\/[0-9]{4}$');
+          /*if (numPatt.test(obj[property])) {
+            obj[property] = parseFloat(obj[property]);
+          } else */
+          if (datePatt.test(obj[property])) {
+            const dt = obj[property].split(/\/|\-|\s/);
+            // obj[property] = new Date(dt[0] + '-' + dt[1] + '-' + dt[2]); // fixed format dd-mm-yyyy
+          }
+        }
+      }
+    }
+  }
+
+  RecordClick(Rec) {
     this.RecordClickCallBack.emit(Rec);
     if (this.AllowActiveRecord) {
       this.ActiveRec = Rec;
       this.SetTableContainerWidth();
     }
+  }
+
+  DblClkRecordClick(Rec) {
+    this.DblClkRecordClickCallBack.emit(Rec);
   }
 
   SetTableContainerWidth() {
@@ -141,13 +200,31 @@ export class TableComponent implements OnInit {
         'display',
         'inline-block'
       );
-      const infopixels = this.InfoContainer.nativeElement.offsetWidth + 10;
+      const infopixels = this.InfoContainer.nativeElement.offsetWidth;
       const FinalCssVal = 'calc(100% - ' + infopixels + 'px)';
-      this.renderer.setStyle(
-        this.TableContainer.nativeElement,
-        'width',
-        FinalCssVal
-      );
+
+      if (
+        window.innerWidth >= this.screenSizeWide &&
+        (window.innerWidth - (infopixels + 300) > 0)
+      ) {
+        this.renderer.setStyle(
+          this.TableContainer.nativeElement,
+          'width',
+          FinalCssVal
+        );
+      } else {
+        this.renderer.setStyle(
+          this.TableContainer.nativeElement,
+          'width',
+          '100%'
+        );
+        this.renderer.setStyle(
+          this.InfoContainer.nativeElement,
+          'display',
+          'block'
+        );
+      }
+
     } else {
       this.renderer.setStyle(
         this.InfoContainer.nativeElement,

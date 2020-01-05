@@ -1,7 +1,7 @@
-<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Placeholder]="'Search By Category'"
-  [Type]="'text'" [(Model)]="SearchText"></app-form-element>
+<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'"
+  [(Model)]="SearchText"></app-form-element>
 <div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>
-  <table class="table" [ngClass]="{
+  <table #Table class="table" [ngClass]="{
         striped: Stripes,
         bordered: Borders,
         hilight: Hilighting,
@@ -11,10 +11,15 @@
       }">
     <thead class="thead">
       <tr [ngClass]="{ 'resize-lines': Resizable }">
+        <th *ngIf="ShowButtonColumn() && ButtonsFirstCol">
+          <!--Table buttons as first column-->
+          <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
+          </app-button>
+        </th>
         <th (click)="SetOrder(col.PropertyName)" *ngFor="let col of TableCols" [ngClass]="{
               rightAlign: col.Alignment == 'right',
               centerAlign: col.Alignment == 'center'
-            }">
+            }" [ngStyle]="{ 'width': col.Width ? col.Width : 'auto' }">
           {{ col.ColLabel }}
           <span *ngIf="
                 !OrderByReverse &&
@@ -35,8 +40,9 @@
             </svg>
           </span>
         </th>
-        <th *ngIf="ShowButtonColumn()">
-          <app-button *ngIf="ShowAddButton" [ButtonType]="'add'" [TableButton]="true" (FunctionCallBack)="Add()">
+        <th *ngIf="ShowButtonColumn() && !ButtonsFirstCol" width="100px">
+          <!--Table buttons as last column-->
+          <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
         </th>
         <th *ngIf="Scrollable" [ngStyle]="{ width: FixedTableScrollColWidth }"></th>
@@ -45,24 +51,40 @@
     <tbody class="tbody" #MainTableBody>
       <tr *ngFor="
             let rec of TableData
-              | strToType
               | ObjectWildCardFilterPipe: SearchText
               | OrderBy: OrderByProperty:OrderByReverse
               | RemovedFilterPipe
-                : EnableRemovedFiter
-                : RemovedFiterProperty
-                : RemovedFiterPropertyValue
-          " (click)="SetActive(rec)" [ngClass]="{ ActiveRow: rec == ActiveRec }">
+                :EnableRemovedFiter
+                :RemovedFiterProperty
+                :RemovedFiterPropertyValue
+          " (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngClass]="{ ActiveRow: rec == ActiveRec }">
+        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col">
+          <!--Table buttons as first column-->
+          <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true" (FunctionCallBack)="View(rec)">
+          </app-button>
+          <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true" (FunctionCallBack)="Edit(rec)">
+          </app-button>
+          <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
+            (FunctionCallBack)="Remove(rec)"></app-button>
+        </td>
         <td *ngFor="let col of TableCols">
           <ng-container *ngIf="!col.Type; else Type">
             {{ rec[col.PropertyName] | dateToStr }}
           </ng-container>
           <ng-template #Type>
-            <app-form-element [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'">
+            <app-form-element *ngIf="col.Type !== 'select'; else Select" [Type]="col.Type"
+              [(Model)]="rec[col.PropertyName]" [Width]="'100%'" [Disabled]="DisableInputs" [FieldSize]="col.FieldSize">
             </app-form-element>
+            <ng-template #Select>
+              <app-form-element [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"
+                [Disabled]="DisableInputs" [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty"
+                [BindingProperty]="col.BindingProperty">
+              </app-form-element>
+            </ng-template>
           </ng-template>
         </td>
-        <td *ngIf="ShowButtonColumn()">
+        <td *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-col" width="100px">
+          <!--Table buttons as last column-->
           <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true" (FunctionCallBack)="View(rec)">
           </app-button>
           <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true" (FunctionCallBack)="Edit(rec)">
@@ -75,5 +97,7 @@
   </table>
 </div>
 <div class="InfoContainer" #InfoContainer>
-  <ng-content></ng-content>
+  <div class="Info">
+    <ng-content></ng-content>
+  </div>
 </div>

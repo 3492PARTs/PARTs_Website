@@ -6,7 +6,7 @@
   right: 0;
   background: #000000;
   background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
+  transition: opacity .5s;
   visibility: hidden;
   opacity: 0;
   display: flex;
@@ -21,7 +21,7 @@
   display: block;
   width: 80%;
   position: relative;
-  transition: all 1s ease-in-out;
+  transition: all .5s ease-in-out;
   border-radius:4px;
 
   /*MOBILE */
@@ -33,26 +33,23 @@
 .popup .popup-title {
   height: 2.813em;
   position: relative;
+  display: inline-block;
+  width: calc(100% - 2em);
+  margin: 0 1em 1em 1em;
 }
 
 .popup .popup-contents {
-  max-height: 80vh;
+  max-height: calc(100vh - (1em + 2.813em + 2em));
   margin: 0 2em 2em 2em;
   overflow: auto;
-}
-
-.popup h2 {
-  margin-top: 0;
-  padding-top: .5em;
-  text-align: center;
+  text-align: left;
 }
 
 .popup .close {
   position: absolute;
-  font-size: 2em;
   cursor: pointer;
-  top: 0;
-  right: 0.5em;
+  top: 0.4em;
+  right: 0;
   height: 100%;
 }
 

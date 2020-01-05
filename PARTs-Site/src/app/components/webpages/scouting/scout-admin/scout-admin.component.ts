@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
+import { User } from 'src/app/services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -16,6 +17,15 @@ export class ScoutAdminComponent implements OnInit {
   eventList: Event[] = [];
 
   syncSeasonResponse = new RetMessage();
+
+  userTableCols: object[] = [
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'first_name', ColLabel: 'First' },
+    { PropertyName: 'last_name', ColLabel: 'Last' }
+  ];
+
+  manageUserModalVisible = false;
 
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
@@ -161,6 +171,10 @@ export class ScoutAdminComponent implements OnInit {
       }
     );
   }
+
+  showManageUserModal(): void {
+    this.manageUserModalVisible = true;
+  }
 }
 
 export class Season {
@@ -185,4 +199,5 @@ export class ScoutAdminInit {
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
+  users: User[] = [];
 }
