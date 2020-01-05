@@ -1,1 +1,49 @@
-<p>question-admin-form works!</p>
+<app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true" [WrapElements]="true">
+  <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="scoutQuestion.question">
+  </app-form-element>
+  <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="scoutQuestion.order" [Width]="'5em'">
+  </app-form-element>
+  <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
+    [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="scoutQuestion.question_typ">
+  </app-form-element>
+
+  <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutQuestion()">Save</app-button>
+
+  <div *ngIf="scoutQuestion.question_typ === 'select'" class="optionsTableWrapper">
+    <app-table [TableCols]="optionsTableCols" [TableData]="scoutQuestion.options" [ShowAddButton]="true"
+      (AddRecordCallBack)="addOption(scoutQuestion.options)" [Scrollable]="true">
+    </app-table>
+  </div>
+</app-form-element-group>
+
+<app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true" [WrapElements]="true">
+  <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutQuestions"
+    [DisplayProperty]="'question'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
+    [(Model)]="scoutQuestion.sq_id">
+  </app-form-element>
+  <ng-container *ngFor="let q of init.scoutQuestions">
+    <ng-container *ngIf="q.sq_id === scoutQuestion.sq_id">
+      <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="q.question">
+      </app-form-element>
+
+      <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="q.order" [Width]="'5em'">
+      </app-form-element>
+
+      <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
+        [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ">
+      </app-form-element>
+      <p *ngIf="q.active === 'y'">Active</p>
+      <p *ngIf="q.active === 'n'">Inactive</p>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="updateScoutQuestion(q)">Update</app-button>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteScoutQuestion(q)">Toggle Active
+      </app-button>
+
+      <div *ngIf="q.question_typ === 'select'" class="optionsTableWrapper">
+        <app-table [TableCols]="optionsTableCols" [TableData]="q.options" [ShowAddButton]="true"
+          (AddRecordCallBack)="addOption(q.options)" [Scrollable]="true" [ShowEditButton]="true"
+          (EditRecordCallBack)="ToggleOption($event)">
+        </app-table>
+      </div>
+    </ng-container>
+  </ng-container>
+</app-form-element-group>

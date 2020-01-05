@@ -14,16 +14,8 @@ export class ScoutAdminComponent implements OnInit {
   delSeason: number;
   event: number;
   eventList: Event[] = [];
-  scoutFieldQuestion: ScoutQuestion = new ScoutQuestion();
-  scoutPitQuestion: ScoutQuestion = new ScoutQuestion();
 
   syncSeasonResponse = new RetMessage();
-
-  optionsTableCols: object[] = [
-    { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
-    { PropertyName: 'active', ColLabel: 'Active' }
-  ];
-
 
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
@@ -169,188 +161,6 @@ export class ScoutAdminComponent implements OnInit {
       }
     );
   }
-
-  saveScoutFieldQuestion(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'api/post_save_scout_field_question/', this.scoutFieldQuestion
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutFieldQuestion = new ScoutQuestion();
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  updateScoutFieldQuestion(q: ScoutQuestion): void {
-    this.gs.incrementOutstandingCalls();
-    if (q.options.length <= 0) {
-      q.options = [];
-    }
-    this.http.post(
-      'api/post_update_scout_field_question/', q
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutFieldQuestion = new ScoutQuestion();
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  deleteScoutFieldQuestion(q: ScoutQuestion): void {
-    if (!confirm('Are you sure you want to toggle this question?')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'api/get_delete_scout_field_question/', {
-      params: {
-        sfq_id: q.sq_id.toString()
-      }
-    }
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  addOption(list: any): void {
-    list.push(new QuestionOption());
-  }
-
-  ToggleOption(op: QuestionOption): void {
-    if (!confirm('Are you sure you want to toggle this option?')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'api/get_toggle_option/', {
-      params: {
-        q_opt_id: op.q_opt_id.toString()
-      }
-    }
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  saveScoutPitQuestion(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'api/post_save_scout_pit_question/', this.scoutPitQuestion
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutPitQuestion = new ScoutQuestion();
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  updateScoutPitQuestion(q: ScoutQuestion): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'api/post_update_scout_pit_question/', q
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutPitQuestion = new ScoutQuestion();
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
-
-  deleteScoutPitQuestion(q: ScoutQuestion): void {
-    if (!confirm('Are you sure you want to toggle this question?')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'api/get_delete_scout_pit_question/', {
-      params: {
-        sfq_id: q.sq_id.toString()
-      }
-    }
-    ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
-        }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-  }
 }
 
 export class Season {
@@ -370,40 +180,9 @@ export class Event {
   void_ind: string;
 }
 
-export class QuestionType {
-  question_typ: string;
-  question_typ_nm: string;
-  void_ind: string;
-}
-
 export class ScoutAdminInit {
   seasons: Season[] = [];
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
-  questionTypes: QuestionType[] = [];
-  scoutFieldQuestions: ScoutQuestion[] = [];
-  scoutPitQuestions: ScoutQuestion[] = [];
-}
-
-export class ScoutQuestion {
-  sq_id: number;
-  season: number;
-  sq_typ: string;
-  question_typ: string;
-  question: string;
-  order: number
-  active = 'y';
-  void_ind: string;
-
-  options: QuestionOption[] = [];
-}
-
-export class QuestionOption {
-  q_opt_id: number;
-  sfq_id: number;
-  spq_id: number;
-  option: string;
-  active = 'y';
-  void_ind: string;
 }
