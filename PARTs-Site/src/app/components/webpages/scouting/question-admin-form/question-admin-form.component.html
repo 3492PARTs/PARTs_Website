@@ -35,13 +35,13 @@
       <p *ngIf="q.active === 'y'">Active</p>
       <p *ngIf="q.active === 'n'">Inactive</p>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="updateScoutQuestion(q)">Update</app-button>
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteScoutQuestion(q)">Toggle Active
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="toggleScoutQuestion(q)">Toggle Active
       </app-button>
 
       <div *ngIf="q.question_typ === 'select'" class="optionsTableWrapper">
         <app-table [TableCols]="optionsTableCols" [TableData]="q.options" [ShowAddButton]="true"
           (AddRecordCallBack)="addOption(q.options)" [Scrollable]="true" [ShowEditButton]="true"
-          (EditRecordCallBack)="ToggleOption($event)">
+          (EditRecordCallBack)="toggleOption($event)">
         </app-table>
       </div>
     </ng-container>

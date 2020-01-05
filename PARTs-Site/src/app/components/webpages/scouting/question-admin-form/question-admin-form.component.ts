@@ -51,8 +51,9 @@ export class QuestionAdminFormComponent implements OnInit {
 
   saveScoutQuestion(): void {
     this.gs.incrementOutstandingCalls();
+    this.scoutQuestion.sq_typ = this.questionType;
     this.http.post(
-      'api/post_save_scout_field_question/', this.scoutQuestion
+      'api/post_save_scout_question/', this.scoutQuestion
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -74,7 +75,7 @@ export class QuestionAdminFormComponent implements OnInit {
   updateScoutQuestion(q: ScoutQuestion): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_update_scout_field_question/', q
+      'api/post_update_scout_question/', q
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -93,16 +94,16 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  deleteScoutQuestion(q: ScoutQuestion): void {
+  toggleScoutQuestion(q: ScoutQuestion): void {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_delete_scout_field_question/', {
+      'api/get_toggle_scout_question/', {
       params: {
-        sfq_id: q.sq_id.toString()
+        sq_id: q.sq_id.toString()
       }
     }
     ).subscribe(
@@ -126,7 +127,7 @@ export class QuestionAdminFormComponent implements OnInit {
     list.push(new QuestionOption());
   }
 
-  ToggleOption(op: QuestionOption): void {
+  toggleOption(op: QuestionOption): void {
     if (!confirm('Are you sure you want to toggle this option?')) {
       return null;
     }
