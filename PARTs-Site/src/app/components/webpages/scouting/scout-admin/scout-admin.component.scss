@@ -6,3 +6,10 @@
 .word-break {
   white-space: pre;
 }
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}

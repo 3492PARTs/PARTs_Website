@@ -52,11 +52,22 @@ export class FormElementComponent implements OnInit {
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
 
+  @Input() TrueValue = true;
+  @Input() FalseValue = false;
+
   LabelID: string;
 
   change(newValue) {
     this.Model = newValue;
-    this.ModelChange.emit(newValue);
+    if (this.Type === 'checkbox') {
+      if (newValue) {
+        this.ModelChange.emit(this.TrueValue);
+      } else {
+        this.ModelChange.emit(this.FalseValue);
+      }
+    } else {
+      this.ModelChange.emit(newValue);
+    }
     this.FunctionCallBack.emit();
 
   }

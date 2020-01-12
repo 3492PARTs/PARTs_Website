@@ -13,7 +13,7 @@ export class AuthService {
   currentToken = this.token.asObservable();
   private internalToken = '';
 
-  private user = new BehaviorSubject<User>({ username: '', email: '', first_name: '', last_name: '' });
+  private user = new BehaviorSubject<User>({ id: -1, username: '', email: '', first_name: '', last_name: '', phone: '', phone_type: -1 });
   currentUser = this.user.asObservable();
 
   private userLinks = new BehaviorSubject<UserLinks[]>([]);
@@ -100,6 +100,18 @@ export class AuthService {
       );
     }
   }
+
+  getUserGroups(userId: string): Observable<object> {
+    if (userId) {
+      return this.http.get(
+        'auth/get_user_groups/', {
+        params: {
+          user_id: userId
+        }
+      }
+      );
+    }
+  }
 }
 
 export class User {
@@ -108,9 +120,23 @@ export class User {
   email: string;
   first_name: string;
   last_name: string;
+  phone: string;
+  phone_type: number;
 }
 
 export class UserLinks {
   MenuName: string;
   RouterLink: string;
+}
+
+export class AuthGroup {
+  id: number;
+  name: string;
+  description: String;
+}
+
+export class PhoneType {
+  phone_type_id: number;
+  carrier: string;
+  phone_type: string;
 }

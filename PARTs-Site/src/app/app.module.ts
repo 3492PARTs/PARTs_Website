@@ -22,6 +22,7 @@ import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/
 import { HeaderComponent } from './components/atoms/header/header.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
 import { TableComponent } from './components/atoms/table/table.component';
+import { FormComponent } from './components/atoms/form/form.component';
 
 import {
   ObjectWildCardFilterPipe,
@@ -55,7 +56,8 @@ import { QuestionAdminFormComponent } from './components/webpages/scouting/quest
     RemovedFilterPipe,
     StrToTypePipe,
     DateToStrPipe,
-    QuestionAdminFormComponent
+    QuestionAdminFormComponent,
+    FormComponent
   ],
   imports: [
     BrowserModule,

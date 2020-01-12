@@ -28,5 +28,8 @@
           (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
       </div>
     </ng-container>
+
+    <input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
+      (ngModelChange)="change($event)">
   </ng-container>
 </div>

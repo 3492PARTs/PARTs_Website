@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
-import { User } from 'src/app/services/auth/auth.service';
+import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -25,9 +25,27 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'last_name', ColLabel: 'Last' }
   ];
 
-  manageUserModalVisible = false;
+  scoutScheduleTableCols: object[] = [
+    { PropertyName: 'user', ColLabel: 'Name' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notify', ColLabel: 'Notify', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
+  ];
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  manageUserModalVisible = false;
+  activeUser: User = new User();
+  userGroups: AuthGroup[] = [];
+  availableAuthGroups: AuthGroup[] = [];
+  newAuthGroup: AuthGroup = new AuthGroup();
+
+  userGroupsTableCols: object[] = [
+    { PropertyName: 'description', ColLabel: 'Description' }
+  ];
+
+  scoutScheduleModalVisible = false;
+  scoutSchedule: ScoutSchedule = new ScoutSchedule();
+
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
     this.adminInit();
@@ -172,8 +190,126 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  showManageUserModal(): void {
+  showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
+    this.activeUser = u;
+    this.gs.incrementOutstandingCalls();
+    this.authService.getUserGroups(u.id.toString()).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.userGroups = Response as AuthGroup[];
+          this.buildAvailableUserGroups();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  private buildAvailableUserGroups(): void {
+    this.availableAuthGroups = this.init.userGroups.filter(ug => {
+      return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
+    });
+  }
+
+  addUserGroup(): void {
+    const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
+      return ag.id === this.newAuthGroup.id;
+    });
+    if (tmp[0]) {
+      if (tmp[0].name === 'lead_scout') {
+        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
+          return null;
+        }
+      }
+      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
+      this.newAuthGroup = new AuthGroup();
+      this.buildAvailableUserGroups();
+    }
+  }
+
+  removeUserGroup(ug: AuthGroup): void {
+    if (ug.name === 'lead_scout') {
+      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
+    } else {
+      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+      this.buildAvailableUserGroups();
+    }
+  }
+
+  saveUser(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_user/', { user: this.activeUser, groups: this.userGroups }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  showSoutScheduleModal(): void {
+    this.scoutScheduleModalVisible = true;
+  }
+
+  saveScoutScheduleEntry(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_scout_schedule_entry/', this.scoutSchedule
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.scoutSchedule = new ScoutSchedule();
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  notifyUsers(ss: ScoutSchedule[]): void {
+    ss.forEach(el => {
+      el.time = new Date(el.time.toString());
+    });
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_notify_users/', ss
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
   }
 }
 
@@ -194,10 +330,32 @@ export class Event {
   void_ind: string;
 }
 
+export class ScoutSchedule {
+  scout_sch_id: number;
+  user: string;
+  user_id: number;
+  sq_typ: string;
+  sq_nm: string;
+  time: Date;
+  notified: string;
+  notify: string;
+}
+
+export class ScoutQuestionType {
+  sq_typ: string;
+  sq_nm: string;
+}
+
 export class ScoutAdminInit {
   seasons: Season[] = [];
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
   users: User[] = [];
+  userGroups: AuthGroup[] = [];
+  phoneTypes: PhoneType[] = [];
+  fieldSchedule: ScoutSchedule[] = [];
+  pitSchedule: ScoutSchedule[] = [];
+  pastSchedule: ScoutSchedule[] = [];
+  scoutQuestionType: ScoutQuestionType[] = [];
 }

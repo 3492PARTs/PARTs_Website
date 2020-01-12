@@ -42,7 +42,7 @@
         </th>
         <th *ngIf="ShowButtonColumn() && !ButtonsFirstCol" width="100px">
           <!--Table buttons as last column-->
-          <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
+          <app-button *ngIf="ShowAddButton" [ButtonType]="'add'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
         </th>
         <th *ngIf="Scrollable" [ngStyle]="{ width: FixedTableScrollColWidth }"></th>
@@ -72,15 +72,20 @@
             {{ rec[col.PropertyName] | dateToStr }}
           </ng-container>
           <ng-template #Type>
-            <app-form-element *ngIf="col.Type !== 'select'; else Select" [Type]="col.Type"
-              [(Model)]="rec[col.PropertyName]" [Width]="'100%'" [Disabled]="DisableInputs" [FieldSize]="col.FieldSize">
-            </app-form-element>
-            <ng-template #Select>
-              <app-form-element [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"
-                [Disabled]="DisableInputs" [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty"
-                [BindingProperty]="col.BindingProperty">
+            <ng-container [ngSwitch]="col.Type">
+              <app-form-element *ngSwitchCase="'select'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
+                [Width]="'100%'" [Disabled]="DisableInputs" [SelectList]="col.SelectList"
+                [DisplayProperty]="col.DisplayProperty" [BindingProperty]="col.BindingProperty">
               </app-form-element>
-            </ng-template>
+
+              <app-form-element *ngSwitchCase="'checkbox'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
+                [TrueValue]="col.TrueValue" [FalseValue]="col.FalseValue" [Disabled]="DisableInputs">
+              </app-form-element>
+
+              <app-form-element *ngSwitchDefault [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"
+                [Disabled]="DisableInputs" [FieldSize]="col.FieldSize">
+              </app-form-element>
+            </ng-container>
           </ng-template>
         </td>
         <td *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-col" width="100px">
