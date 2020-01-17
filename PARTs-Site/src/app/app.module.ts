@@ -13,6 +13,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
+import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
 import { BoxComponent } from './components/atoms/box/box.component';
 import { ButtonComponent } from './components/atoms/button/button.component';
 import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
@@ -57,7 +58,8 @@ import { QuestionAdminFormComponent } from './components/webpages/scouting/quest
     StrToTypePipe,
     DateToStrPipe,
     QuestionAdminFormComponent,
-    FormComponent
+    FormComponent,
+    ScoutPitComponent
   ],
   imports: [
     BrowserModule,

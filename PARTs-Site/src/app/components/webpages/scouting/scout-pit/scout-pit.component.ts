@@ -5,12 +5,14 @@ import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-adm
 
 @Component({
   selector: 'app-scout-field',
-  templateUrl: './scout-field.component.html',
-  styleUrls: ['./scout-field.component.scss']
+  templateUrl: './scout-pit.component.html',
+  styleUrls: ['./scout-pit.component.scss']
 })
-export class ScoutFieldComponent implements OnInit {
+export class ScoutPitComponent implements OnInit {
   teams: Team[] = [];
   team: string;
+  robotPic: File;
+  previewUrl: any = null;
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
 
@@ -19,7 +21,7 @@ export class ScoutFieldComponent implements OnInit {
   ngOnInit() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_field_questions/'
+      'api/get_scout_pit_questions/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -41,12 +43,37 @@ export class ScoutFieldComponent implements OnInit {
   save(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_scout_field_answers/',
+      'api/post_save_scout_pit_answers/',
       { scoutQuestions: this.scoutQuestions, team: this.team }
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        //this.scoutQuestions = { ...this.scoutQuestionsCopy };
+        this.scoutQuestions = { ...this.scoutQuestionsCopy };
+        this.gs.decrementOutstandingCalls();
+        this.savePicture();
+      },
+      Error => {
+        const tmp = Error as { error: { non_field_errors: [1] } };
+        console.log('error', Error);
+        alert(tmp.error.non_field_errors[0]);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  private savePicture(): void {
+    this.gs.incrementOutstandingCalls();
+
+    const formData = new FormData();
+    formData.append('file', this.robotPic);
+    formData.append('team_no', this.team);
+
+    this.http.post(
+      'api/post_save_scout_pit_picture/', formData
+    ).subscribe(
+      Response => {
+        alert((Response as RetMessage).retMessage);
+        this.robotPic = null;
         this.gs.decrementOutstandingCalls();
       },
       Error => {
@@ -58,6 +85,19 @@ export class ScoutFieldComponent implements OnInit {
     );
   }
 
+  preview() {
+    // Show preview
+    const mimeType = this.robotPic.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.robotPic);
+    reader.onload = (_event) => {
+      this.previewUrl = reader.result;
+    };
+  }
 }
 
 export class ScoutAnswer {

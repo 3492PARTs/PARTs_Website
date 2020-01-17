@@ -167,6 +167,7 @@ export class ScoutQuestion {
   order: number
   active = 'y';
   void_ind: string;
+  answer: string;
 
   options: QuestionOption[] = [];
 }

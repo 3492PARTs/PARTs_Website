@@ -10,8 +10,16 @@
     <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}"
       [ngModel]="Model" (ngModelChange)="change($event)">
       <option value="" *ngIf="DisplayEmptyOption"></option>
-      <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
-        [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
+
+      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
+      </ng-container>
+
+      <ng-container *ngIf="BindingProperty === '' && DisplayProperty === ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj }}</option>
+      </ng-container>
+
     </select>
 
     <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
@@ -31,5 +39,8 @@
 
     <input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">
+
+    <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" [ngModel]="Model"
+      (change)="fileProgress($event)" placeholder="Upload file">
   </ng-container>
 </div>

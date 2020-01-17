@@ -40,8 +40,7 @@
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scout Schedule'" [Title]="'Manage Schedule'">
     <app-header [h]="3">Scout Field</app-header>
     <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true"
-      [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ShowAddButton]="true"
-      (AddRecordCallBack)="showSoutScheduleModal()">
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal()">
     </app-table>
 
     <app-button-ribbon>
@@ -50,8 +49,7 @@
 
     <app-header [h]="3">Scout Pit</app-header>
     <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule" [Scrollable]="true"
-      [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ShowAddButton]="true"
-      (AddRecordCallBack)="showSoutScheduleModal()">
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal()">
     </app-table>
 
     <app-button-ribbon>

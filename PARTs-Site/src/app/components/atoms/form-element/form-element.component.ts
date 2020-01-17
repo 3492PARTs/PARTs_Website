@@ -56,6 +56,7 @@ export class FormElementComponent implements OnInit {
   @Input() FalseValue = false;
 
   LabelID: string;
+  private fileData: File = null;
 
   change(newValue) {
     this.Model = newValue;
@@ -108,6 +109,9 @@ export class FormElementComponent implements OnInit {
     this.OnFocusOut.emit();
   }
 
-
+  fileProgress(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.change(this.fileData);
+  }
 
 }
