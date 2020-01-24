@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 
+import * as LoadImg from 'blueimp-load-image';
+
 @Component({
   selector: 'app-scout-field',
   templateUrl: './scout-pit.component.html',
@@ -27,7 +29,7 @@ export class ScoutPitComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           this.teams = (Response as ScoutAnswer).teams;
           this.scoutQuestions = (Response as ScoutAnswer).scoutQuestions;
-          this.scoutQuestionsCopy = (Response as ScoutAnswer).scoutQuestions;
+          this.scoutQuestionsCopy = JSON.parse(JSON.stringify((Response as ScoutAnswer).scoutQuestions)) as ScoutQuestion[];
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -42,15 +44,25 @@ export class ScoutPitComponent implements OnInit {
 
   save(): void {
     this.gs.incrementOutstandingCalls();
+    const formData = new FormData();
+    formData.append('file', this.robotPic);
+    formData.append('team_no', this.team);
     this.http.post(
       'api/post_save_scout_pit_answers/',
-      { scoutQuestions: this.scoutQuestions, team: this.team }
+      { scoutQuestions: this.scoutQuestions, team: this.team },
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        this.scoutQuestions = { ...this.scoutQuestionsCopy };
+        this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
         this.gs.decrementOutstandingCalls();
-        this.savePicture();
+        //this.savePicture();
+        for (let i = 0; i < this.teams.length; i++) {
+          if (this.teams[i].team_no === this.team) {
+            this.teams.splice(i, 1);
+            break;
+          }
+        }
+        this.team = '';
       },
       Error => {
         const tmp = Error as { error: { non_field_errors: [1] } };
@@ -73,7 +85,7 @@ export class ScoutPitComponent implements OnInit {
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        this.robotPic = null;
+        //this.robotPic = null;
         this.gs.decrementOutstandingCalls();
       },
       Error => {
@@ -97,6 +109,35 @@ export class ScoutPitComponent implements OnInit {
     reader.onload = (_event) => {
       this.previewUrl = reader.result;
     };
+
+    /*LoadImg(
+      this.robotPic,
+      (img) => {
+        document.body.appendChild(img);
+      },
+      {
+        maxWidth: 600,
+        maxHeight: 300,
+        minWidth: 100,
+        minHeight: 50,
+        canvas: true,
+        orientation: 8
+      }
+    );
+
+    window.setTimeout(() => {
+      let canv = document.querySelector('canvas');
+      console.log(canv);
+      canv.toBlob((blob) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = (_event) => {
+          this.previewUrl = reader.result;
+        };
+      });
+    }, 1000);*/
+
+
   }
 }
 

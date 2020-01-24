@@ -40,7 +40,7 @@
     <input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">
 
-    <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" [ngModel]="Model"
-      (change)="fileProgress($event)" placeholder="Upload file">
+    <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
+      placeholder="Upload file">
   </ng-container>
 </div>

@@ -13,7 +13,7 @@
       (change)="preview()">
     </app-form-element>
 
-    <img [src]="previewUrl" height="300" />
+    <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="save()">Save</app-button>

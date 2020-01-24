@@ -33,6 +33,7 @@ import {
 import { StrToTypePipe } from './pipes/str-to-type.pipe';
 import { DateToStrPipe } from './pipes/date-to-str.pipe';
 import { QuestionAdminFormComponent } from './components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { QuestionAdminFormComponent } from './components/webpages/scouting/quest
     DateToStrPipe,
     QuestionAdminFormComponent,
     FormComponent,
-    ScoutPitComponent
+    ScoutPitComponent,
+    ScoutFieldResultsComponent
   ],
   imports: [
     BrowserModule,
