@@ -46,6 +46,7 @@ import { ElectricalComponent } from './components/webpages/join/electrical/elect
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
+import { AboutComponent } from './components/webpages/about/about.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring
     ElectricalComponent,
     MechanicalComponent,
     ProgrammingComponent,
-    SponsoringComponent
+    SponsoringComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

@@ -15,6 +15,7 @@ import { ProgrammingComponent } from './components/webpages/join/programming/pro
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
+import { AboutComponent } from './components/webpages/about/about.component';
 
 
 
@@ -34,7 +35,8 @@ const routes: Routes = [
   { path: 'join/programming', component: ProgrammingComponent },
   { path: 'join/mechanical', component: MechanicalComponent },
   { path: 'join/electrical', component: ElectricalComponent },
-  { path: 'sponsor', component: SponsoringComponent }
+  { path: 'sponsor', component: SponsoringComponent },
+  { path: 'about', component: AboutComponent }
 ];
 
 @NgModule({
