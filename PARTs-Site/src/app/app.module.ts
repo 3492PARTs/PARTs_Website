@@ -40,6 +40,11 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
 import { ClickInsideDirective } from './directives/click-inside/click-inside.directive';
 import { ScoutPortalComponent } from './components/webpages/scouting/scout-portal/scout-portal.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
+import { JoinComponent } from './components/webpages/join/join.component';
+import { CommunityOutreachComponent } from './components/webpages/join/community-outreach/community-outreach.component';
+import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
+import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
+import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +77,12 @@ import { ContactComponent } from './components/webpages/contact/contact.componen
     ClickOutsideDirective,
     ClickInsideDirective,
     ScoutPortalComponent,
-    ContactComponent
+    ContactComponent,
+    JoinComponent,
+    CommunityOutreachComponent,
+    ElectricalComponent,
+    MechanicalComponent,
+    ProgrammingComponent
   ],
   imports: [
     BrowserModule,
