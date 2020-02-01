@@ -6,6 +6,8 @@ import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/
 import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
 import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
 import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
+import { ScoutPitResultsComponent } from './components/webpages/scouting/scout-pit-results/scout-pit-results.component';
+import { ScoutPortalComponent } from './components/webpages/scouting/scout-portal/scout-portal.component';
 
 
 
@@ -16,7 +18,9 @@ const routes: Routes = [
   { path: 'scout-field', component: ScoutFieldComponent },
   { path: 'scout-pit', component: ScoutPitComponent },
   { path: 'scout-admin', component: ScoutAdminComponent },
-  { path: 'scout-field-results', component: ScoutFieldResultsComponent }
+  { path: 'scout-field-results', component: ScoutFieldResultsComponent },
+  { path: 'scout-pit-results', component: ScoutPitResultsComponent },
+  { path: 'scout-portal', component: ScoutPortalComponent }
 ];
 
 @NgModule({

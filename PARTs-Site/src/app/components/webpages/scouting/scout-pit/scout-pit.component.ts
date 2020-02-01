@@ -150,4 +150,5 @@ export class ScoutAnswer {
 export class Team {
   team_no: string;
   team_nm: string;
+  checked = false;
 }

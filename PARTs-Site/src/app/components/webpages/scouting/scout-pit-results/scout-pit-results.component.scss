@@ -1,0 +1,29 @@
+@import "../../../../scss/_helpers/variables";
+
+#results {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding-bottom: 1em;
+  margin: 0 auto;
+
+  /*DESKTOP NAV*/
+  @media only screen and (min-width: $screen_size_wide) {
+    width: 90%;
+  }
+
+  /*MOBILE NAV*/
+  @media only screen and (max-width: $screen_size_narrow) {
+    width: 100%;
+  }
+}
+
+.team-pic {
+  padding-top: 1em;
+
+  text-align: center;
+
+  img {
+    width: 80%;
+  }
+}

@@ -19,6 +19,7 @@ import {
 })
 export class BoxComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() Width = '0';
+  @Input() MaxWidth = '0';
 
   @Input() Title = '';
 
@@ -35,6 +36,10 @@ export class BoxComponent implements OnInit, AfterViewInit, DoCheck {
   ngOnInit() {
     if (this.Width !== '0') {
       this.renderer.setStyle(this.box.nativeElement, 'width', this.Width);
+    }
+
+    if (this.MaxWidth !== '0') {
+      this.renderer.setStyle(this.box.nativeElement, 'max-width', this.MaxWidth);
     }
   }
 

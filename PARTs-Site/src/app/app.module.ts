@@ -34,6 +34,12 @@ import { StrToTypePipe } from './pipes/str-to-type.pipe';
 import { DateToStrPipe } from './pipes/date-to-str.pipe';
 import { QuestionAdminFormComponent } from './components/webpages/scouting/question-admin-form/question-admin-form.component';
 import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
+import { ScoutPitResultsComponent } from './components/webpages/scouting/scout-pit-results/scout-pit-results.component';
+
+import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
+import { ClickInsideDirective } from './directives/click-inside/click-inside.directive';
+import { ScoutPortalComponent } from './components/webpages/scouting/scout-portal/scout-portal.component';
+import { ContactComponent } from './components/webpages/contact/contact.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +67,12 @@ import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout
     QuestionAdminFormComponent,
     FormComponent,
     ScoutPitComponent,
-    ScoutFieldResultsComponent
+    ScoutFieldResultsComponent,
+    ScoutPitResultsComponent,
+    ClickOutsideDirective,
+    ClickInsideDirective,
+    ScoutPortalComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
