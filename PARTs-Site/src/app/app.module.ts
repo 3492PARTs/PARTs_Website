@@ -45,6 +45,7 @@ import { CommunityOutreachComponent } from './components/webpages/join/community
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
+import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +83,8 @@ import { ProgrammingComponent } from './components/webpages/join/programming/pro
     CommunityOutreachComponent,
     ElectricalComponent,
     MechanicalComponent,
-    ProgrammingComponent
+    ProgrammingComponent,
+    SponsoringComponent
   ],
   imports: [
     BrowserModule,

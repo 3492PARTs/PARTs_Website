@@ -14,6 +14,7 @@ import { CommunityOutreachComponent } from './components/webpages/join/community
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
+import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
 
 
 
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'join/community-outreach', component: CommunityOutreachComponent },
   { path: 'join/programming', component: ProgrammingComponent },
   { path: 'join/mechanical', component: MechanicalComponent },
-  { path: 'join/electrical', component: ElectricalComponent }
+  { path: 'join/electrical', component: ElectricalComponent },
+  { path: 'sponsor', component: SponsoringComponent }
 ];
 
 @NgModule({
