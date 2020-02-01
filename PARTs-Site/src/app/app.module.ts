@@ -47,6 +47,10 @@ import { MechanicalComponent } from './components/webpages/join/mechanical/mecha
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
 import { AboutComponent } from './components/webpages/about/about.component';
+import { MediaComponent } from './components/webpages/media/media.component';
+import { BuildSeasonComponent } from './components/webpages/media/build-season/build-season.component';
+import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
+import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +90,11 @@ import { AboutComponent } from './components/webpages/about/about.component';
     MechanicalComponent,
     ProgrammingComponent,
     SponsoringComponent,
-    AboutComponent
+    AboutComponent,
+    MediaComponent,
+    BuildSeasonComponent,
+    CompetitionComponent,
+    WallpapersComponent
   ],
   imports: [
     BrowserModule,
