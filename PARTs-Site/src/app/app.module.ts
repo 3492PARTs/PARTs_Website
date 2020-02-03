@@ -51,6 +51,7 @@ import { MediaComponent } from './components/webpages/media/media.component';
 import { BuildSeasonComponent } from './components/webpages/media/build-season/build-season.component';
 import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
 import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
+import { MediaCommunityOutreachComponent } from './components/webpages/media/community-outreach/community-outreach.component';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { WallpapersComponent } from './components/webpages/media/wallpapers/wall
     MediaComponent,
     BuildSeasonComponent,
     CompetitionComponent,
-    WallpapersComponent
+    WallpapersComponent,
+    MediaCommunityOutreachComponent
   ],
   imports: [
     BrowserModule,

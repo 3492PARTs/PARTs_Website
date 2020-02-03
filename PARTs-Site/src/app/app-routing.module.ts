@@ -16,6 +16,11 @@ import { MechanicalComponent } from './components/webpages/join/mechanical/mecha
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
 import { AboutComponent } from './components/webpages/about/about.component';
+import { MediaComponent } from './components/webpages/media/media.component';
+import { BuildSeasonComponent } from './components/webpages/media/build-season/build-season.component';
+import { MediaCommunityOutreachComponent } from './components/webpages/media/community-outreach/community-outreach.component';
+import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
+import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 
 
 
@@ -36,7 +41,12 @@ const routes: Routes = [
   { path: 'join/mechanical', component: MechanicalComponent },
   { path: 'join/electrical', component: ElectricalComponent },
   { path: 'sponsor', component: SponsoringComponent },
-  { path: 'about', component: AboutComponent }
+  { path: 'about', component: AboutComponent },
+  { path: 'media', component: MediaComponent },
+  { path: 'media/build-season', component: BuildSeasonComponent },
+  { path: 'media/community-outreach', component: MediaCommunityOutreachComponent },
+  { path: 'media/competition', component: CompetitionComponent },
+  { path: 'media/wallpapers', component: WallpapersComponent }
 ];
 
 @NgModule({
