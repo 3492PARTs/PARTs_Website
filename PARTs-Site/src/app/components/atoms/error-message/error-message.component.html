@@ -1,9 +1,9 @@
 <div class="overlay" [ngClass]="{'visible': visible}">
   <div class="popup">
     <div>
-      {{gs.ErrorMessage}}
+      {{gs.errorMessage}}
     </div>
-    <br/>
-    <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.AcceptError()">{{gs.ButtonText}}</app-button>
+    <br />
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.acceptError()">{{gs.buttonText}}</app-button>
   </div>
 </div>

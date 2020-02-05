@@ -9,7 +9,7 @@ export class ClickOutsideDirective {
   constructor(private eref: ElementRef) { }
 
   @HostListener('window:click', ['$event'])
-  private onClickBody($event: Event) {
+  onClickBody($event: Event) {
     if (!this.isClickInElement($event)) {
       this.appClickOutside.emit($event);
     }

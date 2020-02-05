@@ -30,11 +30,11 @@
       (ngModelChange)="change($event)">
 
     <ng-container *ngSwitchCase="'radio'">
-      <div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
+      <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
         <label for="{{ obj.name }}{{ i }}">{{ obj.name }}</label>
         <input type="radio" name="{{ RadioName }}" id="{{ obj.name }}{{ i }}" [value]="obj" [ngModel]="Model"
           (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
-      </div>
+      </div>-->
     </ng-container>
 
     <input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"

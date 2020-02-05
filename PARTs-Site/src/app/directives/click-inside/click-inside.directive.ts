@@ -9,7 +9,7 @@ export class ClickInsideDirective {
   constructor(private eref: ElementRef) { }
 
   @HostListener('window:click', ['$event'])
-  private onClickBody($event: Event) {
+  onClickBody($event: Event) {
     if (this.isClickInElement($event)) {
       this.appClickInside.emit($event);
     }
