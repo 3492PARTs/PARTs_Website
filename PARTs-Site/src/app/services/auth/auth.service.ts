@@ -49,9 +49,9 @@ export class AuthService {
         this.router.navigateByUrl('');
       },
       Error => {
-        const tmp = Error as { error: { non_field_errors: [1] } };
+        const tmp = Error as { error: { detail: string } };
         console.log('error', Error);
-        alert(tmp.error.non_field_errors[0]);
+        //alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
       }
     );
@@ -70,11 +70,11 @@ export class AuthService {
           this.gs.decrementOutstandingCalls();
         },
         Error => {
-          const tmp = Error as { error: { non_field_errors: [1] } };
+          const tmp = Error as { error: { detail: string } };
           console.log('error', Error);
-          alert(tmp.error.non_field_errors[0]);
-          this.internalToken = '';
+          //alert(tmp.error.detail);
           this.gs.decrementOutstandingCalls();
+          this.internalToken = '';
         }
       );
     }
@@ -92,9 +92,9 @@ export class AuthService {
           this.gs.decrementOutstandingCalls();
         },
         Error => {
-          const tmp = Error as { error: { non_field_errors: [1] } };
+          const tmp = Error as { error: { detail: string } };
           console.log('error', Error);
-          alert(tmp.error.non_field_errors[0]);
+          //alert(tmp.error.detail);
           this.gs.decrementOutstandingCalls();
         }
       );

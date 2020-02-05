@@ -35,8 +35,13 @@
           </p>
           <ng-template #hasLink>
             <p id="{{m.RouterLink}}">
-              <a routerLink="{{m.RouterLink}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+              <a *ngIf="!m.RouterLink.includes('.'); else hasAddress" routerLink="{{m.RouterLink}}"
+                routerLinkActive="active" [routerLinkActiveOptions]="{exact:
                 true}" class="menu-link">{{m.MenuName}}</a>
+
+              <ng-template #hasAddress>
+                <a target="_blank" [href]="m.RouterLink" class="menu-link">{{m.MenuName}}</a>
+              </ng-template>
             </p>
           </ng-template>
         </div>
