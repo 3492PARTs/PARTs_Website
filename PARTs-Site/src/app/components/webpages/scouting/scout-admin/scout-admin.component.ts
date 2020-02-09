@@ -289,12 +289,13 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   notifyUsers(ss: ScoutSchedule[]): void {
-    ss.forEach(el => {
+    let sstmp: ScoutSchedule[] = JSON.parse(JSON.stringify(ss)) as ScoutSchedule[];
+    sstmp.forEach(el => {
       el.time = new Date(el.time.toString());
     });
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_notify_users/', ss
+      'api/post_notify_users/', sstmp
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
