@@ -16,8 +16,9 @@
           [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
       </ng-container>
 
-      <ng-container *ngIf="BindingProperty === '' && DisplayProperty === ''">
-        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj }}</option>
+      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
+        </option>
       </ng-container>
 
     </select>

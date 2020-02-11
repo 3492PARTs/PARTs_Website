@@ -15,6 +15,8 @@ export class ScoutAdminComponent implements OnInit {
   delSeason: number;
   event: number;
   eventList: Event[] = [];
+  newPhoneType = false;
+  phoneType: PhoneType = new PhoneType();
 
   syncSeasonResponse = new RetMessage();
 
@@ -27,7 +29,8 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutScheduleTableCols: object[] = [
     { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },
     { PropertyName: 'notify', ColLabel: 'Notify', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
@@ -291,7 +294,8 @@ export class ScoutAdminComponent implements OnInit {
   notifyUsers(ss: ScoutSchedule[]): void {
     let sstmp: ScoutSchedule[] = JSON.parse(JSON.stringify(ss)) as ScoutSchedule[];
     sstmp.forEach(el => {
-      el.time = new Date(el.time.toString());
+      el.st_time = new Date(el.st_time.toString());
+      el.end_time = new Date(el.end_time.toString());
     });
     this.gs.incrementOutstandingCalls();
     this.http.post(
@@ -301,6 +305,33 @@ export class ScoutAdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
           this.adminInit();
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  toggleNewPhoneType(): void {
+    this.newPhoneType = !this.newPhoneType;
+    this.phoneType = new PhoneType();
+  }
+
+  savePhoneType(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'api/post_save_phone_type/', this.phoneType
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          alert((Response as RetMessage).retMessage);
+          this.adminInit();
+          this.phoneType = new PhoneType();
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -337,7 +368,8 @@ export class ScoutSchedule {
   user_id: number;
   sq_typ: string;
   sq_nm: string;
-  time: Date;
+  st_time: Date;
+  end_time: Date;
   notified: string;
   notify: string;
 }

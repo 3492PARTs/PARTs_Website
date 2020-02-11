@@ -55,7 +55,7 @@ export class ScoutPitComponent implements OnInit {
         alert((Response as RetMessage).retMessage);
         this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
         this.gs.decrementOutstandingCalls();
-        //this.savePicture();
+        this.savePicture();
         for (let i = 0; i < this.teams.length; i++) {
           if (this.teams[i].team_no === this.team) {
             this.teams.splice(i, 1);
@@ -85,13 +85,12 @@ export class ScoutPitComponent implements OnInit {
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        //this.robotPic = null;
+        this.robotPic = null;
         this.gs.decrementOutstandingCalls();
       },
       Error => {
         const tmp = Error as { error: { non_field_errors: [1] } };
         console.log('error', Error);
-        alert(tmp.error.non_field_errors[0]);
         this.gs.decrementOutstandingCalls();
       }
     );
