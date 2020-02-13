@@ -62,6 +62,11 @@ export class GeneralService {
   getNextGsId(): string {
     return 'gsID' + this.gsId++;
   }
+
+  /* helpwe functions */
+  strNoE(s: string) {
+    return s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
+  }
 }
 
 export class RetMessage {

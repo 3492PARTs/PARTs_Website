@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       email: ''
     };
 
-    this.authUrl = environment.baseUrl + '/auth/';
+    this.authUrl = environment.baseUrl + 'auth/';
   }
 
   login() {

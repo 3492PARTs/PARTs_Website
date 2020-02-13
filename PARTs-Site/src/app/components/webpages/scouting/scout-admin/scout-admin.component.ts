@@ -48,6 +48,9 @@ export class ScoutAdminComponent implements OnInit {
   scoutScheduleModalVisible = false;
   scoutSchedule: ScoutSchedule = new ScoutSchedule();
 
+  manageScoutFieldQuestions = false;
+  manageScoutPitQuestions = false;
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
@@ -111,6 +114,10 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setSeason(): void {
+    if (!this.season || !this.event) {
+      this.gs.triggerError('No season or event selected.');
+      return null;
+    }
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/get_set_season/', {

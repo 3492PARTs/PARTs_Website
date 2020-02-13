@@ -53,6 +53,7 @@ export class AuthService {
         console.log('error', Error);
         //alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
       }
     );
   }

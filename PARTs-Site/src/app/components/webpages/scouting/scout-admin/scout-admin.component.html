@@ -123,12 +123,14 @@
     </app-form-element-group>
   </app-modal>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'">
-    <app-question-admin-form [questionType]="'field'"></app-question-admin-form>
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'"
+    [(visible)]="manageScoutFieldQuestions">
+    <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
   </app-modal>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'">
-    <app-question-admin-form [questionType]="'pit'"></app-question-admin-form>
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'"
+    [(visible)]="manageScoutPitQuestions">
+    <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
   </app-modal>
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Phone Types'" [Title]="'Manage Phone Types'">

@@ -10,6 +10,12 @@ import { HttpClient } from '@angular/common/http';
 export class QuestionAdminFormComponent implements OnInit {
 
   @Input() questionType: string;
+  @Input()
+  public set runInit(val: boolean) {
+    if (val) {
+      this.questionInit();
+    }
+  }
 
   init: Init = new Init();
   scoutQuestion: ScoutQuestion = new ScoutQuestion();
@@ -22,7 +28,6 @@ export class QuestionAdminFormComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit() {
-    this.questionInit();
   }
 
   questionInit(): void {
