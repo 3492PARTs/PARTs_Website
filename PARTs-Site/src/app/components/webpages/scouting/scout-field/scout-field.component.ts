@@ -25,7 +25,7 @@ export class ScoutFieldComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           this.teams = (Response as ScoutAnswer).teams;
           this.scoutQuestions = (Response as ScoutAnswer).scoutQuestions;
-          this.scoutQuestionsCopy = (Response as ScoutAnswer).scoutQuestions;
+          this.scoutQuestionsCopy = JSON.parse(JSON.stringify(this.scoutQuestions)) as ScoutQuestion[];
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -46,7 +46,8 @@ export class ScoutFieldComponent implements OnInit {
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        //this.scoutQuestions = { ...this.scoutQuestionsCopy };
+        this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
+        this.team = '';
         this.gs.decrementOutstandingCalls();
       },
       Error => {

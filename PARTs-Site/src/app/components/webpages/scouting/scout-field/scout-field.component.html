@@ -1,7 +1,7 @@
 <app-box [Title]="'Scout Field Form'">
   <form>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
-      [BindingProperty]="'team_no'" [DisplayProperty]="'team_nm'" [(Model)]="team">
+      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="team">
     </app-form-element>
 
     <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"

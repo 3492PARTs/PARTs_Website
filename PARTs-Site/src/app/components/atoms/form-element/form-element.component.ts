@@ -33,6 +33,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   //@Input() SelectDisplayValue = '';
   @Input() BindingProperty = '';
   @Input() DisplayProperty = '';
+  @Input() DisplayProperty2 = '';
 
   @Input() Name = '';
 
@@ -74,7 +75,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   change(newValue) {
     this.Model = newValue;
     if (this.Type === 'checkbox') {
-      if (newValue) {
+      if (newValue.target.checked) {
         this.ModelChange.emit(this.TrueValue);
       } else {
         this.ModelChange.emit(this.FalseValue);
@@ -97,7 +98,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.positionMultiSelect()
+    this.positionMultiSelect();
   }
 
   @HostListener('window:resize', ['$event'])

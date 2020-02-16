@@ -11,12 +11,17 @@
       [ngModel]="Model" (ngModelChange)="change($event)">
       <option value="" *ngIf="DisplayEmptyOption"></option>
 
-      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
         <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
           [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
       </ng-container>
 
-      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
+      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}</option>
+      </ng-container>
+
+      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
         <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
         </option>
       </ng-container>
@@ -27,8 +32,9 @@
       placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
       maxlength="{{ FieldSize }}"></textarea>
 
-    <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" [ngModel]="Model"
-      (ngModelChange)="change($event)">
+    <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
+    <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
+      [checked]="TrueValue === Model">
 
     <ng-container *ngSwitchCase="'radio'">
       <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
@@ -38,8 +44,16 @@
       </div>-->
     </ng-container>
 
-    <input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
-      (ngModelChange)="change($event)">
+    <!--<input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
+      (ngModelChange)="change($event)">-->
+
+    <div>
+      <div style="display: inline-block;">
+        <ejs-datetimepicker *ngSwitchCase="'datetime'" id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
+          (ngModelChange)="change($event)"></ejs-datetimepicker>
+      </div>
+    </div>
+
 
     <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
       placeholder="Upload file">

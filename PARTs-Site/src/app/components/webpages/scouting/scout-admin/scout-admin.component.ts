@@ -29,10 +29,17 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutScheduleTableCols: object[] = [
     { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'st_time', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },
     { PropertyName: 'notify', ColLabel: 'Notify', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
+  ];
+
+  pastScoutScheduleTableCols: object[] = [
+    { PropertyName: 'user', ColLabel: 'Name' },
+    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
+    { PropertyName: 'notified', ColLabel: 'Notified' }
   ];
 
   manageUserModalVisible = false;
@@ -46,6 +53,7 @@ export class ScoutAdminComponent implements OnInit {
   ];
 
   scoutScheduleModalVisible = false;
+  scoutScheduleModalTitle = '';
   scoutSchedule: ScoutSchedule = new ScoutSchedule();
 
   manageScoutFieldQuestions = false;
@@ -272,7 +280,16 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  showSoutScheduleModal(): void {
+  showSoutScheduleModal(title: string, ss?: ScoutSchedule): void {
+    this.scoutScheduleModalTitle = title;
+    if (ss) {
+      //"2020-01-01T01:00"
+      ss.st_time = new Date(ss.st_time);
+      ss.end_time = new Date(ss.end_time);
+      this.scoutSchedule = ss;
+    } else {
+      this.scoutSchedule = new ScoutSchedule();
+    }
     this.scoutScheduleModalVisible = true;
   }
 
@@ -379,6 +396,10 @@ export class ScoutSchedule {
   end_time: Date;
   notified: string;
   notify: string;
+  void_ind = 'n';
+
+  st_time_str: string;
+  end_time_str: string;
 }
 
 export class ScoutQuestionType {

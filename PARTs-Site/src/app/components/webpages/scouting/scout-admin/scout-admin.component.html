@@ -44,7 +44,8 @@
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scout Schedule'" [Title]="'Manage Schedule'">
     <app-header [h]="3">Scout Field</app-header>
     <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true"
-      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal()">
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
+      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>
@@ -53,7 +54,8 @@
 
     <app-header [h]="3">Scout Pit</app-header>
     <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule" [Scrollable]="true"
-      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal()">
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
+      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>
@@ -61,21 +63,16 @@
     </app-button-ribbon>
 
     <app-header [h]="3">Scout Past</app-header>
-    <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pastSchedule" [Scrollable]="true"
-      [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ShowAddButton]="true"
-      (AddRecordCallBack)="showSoutScheduleModal()">
+    <app-table [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule" [Scrollable]="true">
     </app-table>
 
-    <app-modal [Title]="'Add Scout Entry'" [(visible)]="scoutScheduleModalVisible">
+    <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
       <app-form>
         <app-form-element-group [LabelText]="'New Entry'">
           <app-form-element [LabelText]="'Scout'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [(Model)]="scoutSchedule.user_id"
-            [FormGroupInline]="true">
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [(Model)]="scoutSchedule.user_id" [FormGroupInline]="true">
           </app-form-element>
-          <span *ngFor="let u of init.users">
-            <span *ngIf="u.id === scoutSchedule.user_id">{{ u.first_name + ' ' + u.last_name }}</span>
-          </span>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
             [(Model)]="scoutSchedule.st_time">
           </app-form-element>
@@ -87,12 +84,17 @@
             [(Model)]="scoutSchedule.sq_typ">
           </app-form-element>
 
+          <app-form-element *ngIf="scoutSchedule.scout_sch_id" [Type]="'checkbox'" [FormGroup]="true"
+            [LabelText]="'Delete?'" [(Model)]="scoutSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
+          </app-form-element>
+
           <app-button-ribbon>
             <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutScheduleEntry()">Save</app-button>
           </app-button-ribbon>
         </app-form-element-group>
       </app-form>
     </app-modal>
+
   </app-modal>
 
   <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">

@@ -14,8 +14,8 @@ export class ScoutPortalComponent implements OnInit {
 
   scoutScheduleTableCols: object[] = [
     { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'st_time', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' }
   ];
 

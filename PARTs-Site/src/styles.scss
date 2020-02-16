@@ -1,13 +1,14 @@
-@import './app/scss/_base/reset';
-@import './app/scss/_base/typography';
-@import './app/scss/_layout/screenSize';
+@import "./app/scss/_base/reset";
+@import "./app/scss/_base/typography";
+@import "./app/scss/_layout/screenSize";
+
+@import "./app/scss/_vendors/syncfusion.scss";
 
 /*TEXT*/
 
 #mainContact h2 {
   text-align: center;
 }
-
 
 /*FLUID MAP*/
 

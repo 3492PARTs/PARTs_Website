@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
+
 import { HTTPInterceptor } from './providers/http-interceptor';
 
 import { HomeComponent } from './components/webpages/home/home.component';
@@ -118,7 +120,8 @@ import { TabContainerComponent } from './components/atoms/tab-container/tab-cont
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    DateTimePickerModule
   ],
   providers: [
     {

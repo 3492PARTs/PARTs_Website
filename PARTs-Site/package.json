@@ -22,7 +22,8 @@
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1",
-    "blueimp-load-image": "^2.26.0"
+    "blueimp-load-image": "^2.26.0",
+    "@syncfusion/ej2-angular-calendars": "^17.4.49"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.23",

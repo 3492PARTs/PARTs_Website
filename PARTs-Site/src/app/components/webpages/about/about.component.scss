@@ -215,7 +215,13 @@
   > #mainAbout
   > #aboutParts
   > #coversContainer
-  > #beaniehemoth {
+  > #beaniehemoth,
+#gLoughRadio:checked
+  ~ #content
+  > #mainAbout
+  > #aboutParts
+  > #coversContainer
+  > #gLough {
   visibility: visible;
   opacity: 1;
   z-index: 16;
