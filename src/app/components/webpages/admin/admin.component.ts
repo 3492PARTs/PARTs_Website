@@ -88,12 +88,6 @@ export class AdminComponent implements OnInit {
     const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
       return ag.id === this.newAuthGroup.id;
     });
-    if (tmp[0]) {
-      if (tmp[0].name === 'lead_scout') {
-        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
-          return null;
-        }
-      }
       this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
       this.newAuthGroup = new AuthGroup();
       this.buildAvailableUserGroups();
@@ -101,12 +95,8 @@ export class AdminComponent implements OnInit {
   }
 
   removeUserGroup(ug: AuthGroup): void {
-    if (ug.name === 'lead_scout') {
-      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
-    } else {
-      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+    this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
       this.buildAvailableUserGroups();
-    }
   }
 
   saveUser(): void {
