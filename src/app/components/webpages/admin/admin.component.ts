@@ -28,6 +28,8 @@ export class AdminComponent implements OnInit {
   userGroupsTableCols: object[] = [
     { PropertyName: 'description', ColLabel: 'Description' }
   ];
+  
+  pgNum = 1;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
@@ -115,6 +117,29 @@ export class AdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+  
+  getErrors(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/get_error_log/', {
+      params: {
+        pg_num: this.pgNum;
+      }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          console.log(Response);
         }
         this.gs.decrementOutstandingCalls();
       },
