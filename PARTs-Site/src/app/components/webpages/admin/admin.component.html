@@ -1,1 +1,42 @@
-<app-box [Title]="'Admin'"></app-box>
+<app-box [Title]="'Admin'">
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Users'" [Title]="'Manage Users'">
+    <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+      (EditRecordCallBack)="showManageUserModal($event)">
+    </app-table>
+
+    <app-modal [Title]="'Manage User: ' + activeUser.first_name + ' ' + activeUser.last_name"
+      [(visible)]="manageUserModalVisible">
+      <app-header [h]="3">User Groups</app-header>
+      <div class="flex">
+        <div>
+          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+            [(Model)]="activeUser.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+          </app-form-element>
+        </div>
+        <div>
+          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
+            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
+            [DisplayProperty]="'description'" [DisplayEmptyOption]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
+        </div>
+      </div>
+      <app-table [TableCols]="userGroupsTableCols" [TableData]="userGroups" [Scrollable]="true"
+        [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+
+      <app-button-ribbon>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
+      </app-button-ribbon>
+    </app-modal>
+  </app-modal>
+</app-box>
