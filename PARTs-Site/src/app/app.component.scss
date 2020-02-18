@@ -1,0 +1,25 @@
+@import './scss/_helpers/variables';
+
+/*FOOTER> KEEP AT BOTTOM*/
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#wrapper {
+  min-height: 100%;
+  position: relative;
+}
+
+#content {
+  min-height: 100vh;
+  padding-bottom: 12em;
+  /* Height of the footer element */
+
+  @media only screen and (max-width: $screen_size_narrow) {
+    padding-top: 4em;
+  }
+}

@@ -1,0 +1,314 @@
+@import '../../scss/_helpers/variables';
+
+nav {
+  width: 100%;
+  height: 5em;
+  position: relative;
+  background-color: $main_color;
+  z-index: 16;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  text-transform: uppercase;
+  border-bottom: 3px solid $accent_color;
+}
+
+nav > #company_logo {
+  display: inline-block;
+  height: 90%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2em;
+  z-index: 3;
+}
+
+nav > #company_logo img {
+  height: 100%;
+}
+
+nav > #links ul {
+  background-color: $main_color;
+}
+
+nav > #links ul li:hover {
+  background-color: $accent_color;
+}
+
+nav > #links > ul > li {
+  list-style: none;
+  height: 100%;
+  transition: .25s linear;
+}
+
+nav p {
+  margin: 0;
+}
+
+.menu-link {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  letter-spacing: .1em;
+  padding: 0 .8em;
+  margin: 0;
+}
+
+nav > .sub_links {
+  background-color: $accent_color;
+}
+
+nav .sub_links > li {
+  list-style: none;
+  transition: .25s linear;
+}
+
+.active {
+  background-color: $accent_color !important;
+}
+
+#mobile-nav-toggle {
+  display: none;
+}
+
+/*DESKTOP NAV*/
+@media only screen and (min-width: $screen_size_wide) {
+  nav > #links {
+    right:  2em;
+    height: 100%;
+    position: absolute;
+  }
+
+  nav > #links > ul {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+  }
+
+  nav > #links > ul > li {
+    display: inline-block;
+    line-height: 5em;
+    position: relative;
+  }
+
+  nav > #links > ul li p {
+    font-size: 1em;
+  }
+
+  /*nav > #links > ul > li:hover > .sub_links {
+    top: 3em;
+    opacity: 1;
+    visibility: visible;
+  }*/
+
+  nav .sub_links {
+    position: absolute;
+    top: 5em;
+    height: 0;
+    padding: 0;
+    transition: .3s ease-in-out;
+    //opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    z-index: -1;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  }
+
+  nav .sub_links > li {
+    line-height: 4em;
+  }
+
+  nav .sub_links > li > a,
+  nav .sub_links > li > p {
+    white-space: nowrap;
+  }
+
+  .arrow {
+    display: none;
+  }
+}
+
+/*MOBILE NAV*/
+@media only screen and (max-width: $screen_size_narrow) {
+  body {
+    overflow-x: hidden;
+    padding-top: 3em;
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 4em;
+
+    &::before {
+      content: '';
+      width: 30em;
+      height: 4em;
+      background-color: $main_color;
+      position: absolute;
+      top: -3px;
+      right: 0;
+      z-index: 2;
+      border-bottom: 3px solid $accent_color;
+    }
+  }
+
+  nav > #links {
+    position: fixed;
+    top: 4em;
+    right: -25em;
+    height: calc(100vh - 4em);
+    width: 20em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: $main_color;
+    transition: .4s linear;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.5);
+    z-index: 16;
+    border-bottom: 1px solid #4e5486;
+  }
+
+  #mobile-nav-toggle:checked ~ #links {
+    right: 0;
+  }
+
+  nav > #links > ul {
+    padding: 0;
+    margin: 0;
+  }
+
+
+  nav > #links > ul > li {
+    line-height: 3em;
+    position: relative;
+    background-color: $main_color;
+  }
+
+  nav > #links > ul li p {
+    font-size: 1.2em;
+  }
+
+  nav p {
+    width: 100%;
+  }
+
+  nav .sub_links {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: .5s linear;
+  }
+
+  /* Pure CSS3 Hamburger*/
+
+  #ham-label {
+    cursor: pointer;
+  }
+
+  .clear-menu-btn {
+    position: fixed;
+    right: .75em;
+    top: .75em;
+    z-index: 12;
+    width: 2.5em;
+    height: 2.5em;
+    margin: 0 auto;
+}
+.nav-trigger:hover {
+    cursor: pointer;
+}
+.nav-trigger:checked~ label > .clear-menu-btn .top,
+.nav-trigger:checked~ label > .clear-menu-btn .bottom {
+    top: 50%;
+}
+.nav-trigger:checked~ label > .clear-menu-btn .top {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.nav-trigger:checked~ label > .clear-menu-btn .bottom {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.nav-trigger:checked~ label > .clear-menu-btn .middle {
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+.nav-trigger:checked~ label > .clear-menu-btn .circle {
+    filter: alpha(opacity=100);
+    opacity: 1;
+}
+.clear-menu-btn span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: .12em;
+    background-color: $navHam;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    z-index: -1;
+}
+.clear-menu-btn .top {
+    top: 15%;
+    z-index: 1;
+}
+.clear-menu-btn .middle {
+    top: 50%;
+    z-index: 1;
+}
+.clear-menu-btn .bottom {
+    top: 85%;
+    z-index: 1;
+}
+.clear-menu-btn .circle {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    filter: alpha(opacity=0);
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border-radius: 50%;
+    border: .14em solid $navHam;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    z-index: -1;
+}
+  .menu-item-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 0.5em;
+
+    &:hover > .arrow > g > path {
+      fill: $main_color;
+    }
+  }
+  .arrow {
+    width: 1.5em;
+    height: 1.5em;
+    transition: .25s linear;
+
+    path {
+      fill: $accent_color;
+    }
+  }
+}

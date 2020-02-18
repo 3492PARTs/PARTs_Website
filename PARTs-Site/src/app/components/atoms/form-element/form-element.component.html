@@ -1,0 +1,76 @@
+<div [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline}">
+  <label *ngIf="LabelText !== '' && Type !== 'radio'" for="{{ LabelID }}">{{ LabelText }}</label>
+  <ng-container [ngSwitch]="Type">
+    <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+      [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}">
+
+    <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
+      placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
+
+    <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}"
+      [ngModel]="Model" (ngModelChange)="change($event)">
+      <option value="" *ngIf="DisplayEmptyOption"></option>
+
+      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
+      </ng-container>
+
+      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}</option>
+      </ng-container>
+
+      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
+        </option>
+      </ng-container>
+
+    </select>
+
+    <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
+      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
+      maxlength="{{ FieldSize }}"></textarea>
+
+    <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
+    <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
+      [checked]="TrueValue === Model">
+
+    <ng-container *ngSwitchCase="'radio'">
+      <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
+        <label for="{{ obj.name }}{{ i }}">{{ obj.name }}</label>
+        <input type="radio" name="{{ RadioName }}" id="{{ obj.name }}{{ i }}" [value]="obj" [ngModel]="Model"
+          (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
+      </div>-->
+    </ng-container>
+
+    <!--<input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
+      (ngModelChange)="change($event)">-->
+
+    <div>
+      <div style="display: inline-block;">
+        <ejs-datetimepicker *ngSwitchCase="'datetime'" id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
+          (ngModelChange)="change($event)"></ejs-datetimepicker>
+      </div>
+    </div>
+
+
+    <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
+      placeholder="Upload file">
+
+    <div *ngSwitchCase="'multiselect'" class="form-control" id="multiSelect" [ngStyle]="{'width': Width}" #multiselect
+      (appClickOutside)="multiSelectClose()">
+      <p>{{ LabelText }}</p>
+      <div class="arrow-wrapper">
+        <i class="arrow down" (click)="multiSelectMenu()"></i>
+      </div>
+      <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
+        <div *ngFor="let obj of SelectList; let i = index">
+          <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
+            (ngModelChange)="multiChange($event, i)">
+          <label for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }}</label>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

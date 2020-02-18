@@ -1,0 +1,6 @@
+<div class="border">
+  <label class="tabs" [ngClass]="{'activeTab': t.active}" *ngFor="let t of tabs" (click)="showTab(t)">
+    {{ t.name }}
+  </label>
+</div>
+<ng-content select="app-tab"></ng-content>

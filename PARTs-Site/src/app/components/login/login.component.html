@@ -1,0 +1,27 @@
+<main>
+  <a id="home-btn" routerLink="">
+    <img src="../../../assets/icons/home.svg">
+  </a>
+  <div id="auth-wrapper">
+    <div class="box" id="auth">
+      <h2 class="title">Login</h2>
+      <form>
+        <input class="form-control" [(ngModel)]="input.username" placeholder="username" name="username"> <br>
+        <input class="form-control" [(ngModel)]="input.password" type="password" placeholder="password" name="password">
+        <br>
+
+        <div id="options">
+          <div>
+            <a [href]="authUrl + 'password_reset/'">Forgot password?</a>
+            |
+            <a [href]="authUrl + 'register/'">Register</a>
+          </div>
+          <input class="btn btn-primary submit" (click)="login()" type="submit" value="Login">
+        </div>
+        <div id="options">
+          <a [href]="authUrl + 'resend_activation/'">Resend Activation</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>

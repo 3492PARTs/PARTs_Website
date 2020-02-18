@@ -1,0 +1,168 @@
+@import "../../../scss/_helpers/variables";
+
+#joinHomeCover {
+  background-image: url(../../../../assets/joinPictures/join.jpg);
+}
+
+#subgroups {
+  width: 100%;
+}
+
+#subgroups tr td h4 {
+  text-align: center;
+}
+
+#subgroups td {
+  border: 2px solid $navHam;
+  overflow: hidden;
+}
+
+/*table nav:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+  #subgroups td {
+    display: block;
+  }
+  #joinPic {
+    overflow: hidden;
+  }
+}
+
+#joinPic {
+  position: relative;
+}
+
+/*TEXT*/
+
+#mainJoin h2,
+#mainJoin h3 {
+  text-align: center;
+}
+
+#mainJoin p {
+  text-align: center;
+}
+
+#joinText {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+}
+
+#joinH1,
+#joinCommOut {
+  text-align: center;
+  color: white;
+}
+
+#scrollForMoreInfo {
+  text-align: center;
+  color: white;
+}
+
+#returnArrow h4 {
+  display: none;
+}
+
+#subgroups a {
+  text-decoration: none;
+  display: block;
+  padding: 10em;
+  margin: -10em;
+}
+
+/*JOIN:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+  #joinH1,
+  #joinCommOut {
+    font-size: 4.6em;
+  }
+  #scrollForMoreInfo {
+    font-size: 2.4em;
+  }
+  #returnArrow {
+    position: absolute;
+    width: 10%;
+  }
+  #returnArrow img {
+    position: relative;
+    width: 50%;
+  }
+}
+
+/*JOIN:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+  #joinH1,
+  #joinCommOut {
+    font-size: 2.6em;
+  }
+  #scrollForMoreInfo {
+    font-size: 1.4em;
+  }
+  #returnArrow h4 {
+    display: inline-block;
+    text-align: center;
+    font-size: 1.1em;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  #returnArrow {
+    margin: auto;
+    width: 90%;
+    position: relative;
+  }
+  #returnArrow img {
+    width: 10%;
+  }
+}
+
+/*JOIN:EVEN NARROWER SCREEN*/
+
+@media (max-width: 280px) {
+  #joinH1 {
+    font-size: 2em;
+  }
+  #scrollForMoreInfo {
+    font-size: 1.2em;
+  }
+  #joinCommOut {
+    font-size: 1.5em;
+  }
+}
+
+/*IMAGES*/
+
+#joinPic {
+  width: 100%;
+  /*JOIN:WIDE SCREEN*/
+  @media only screen and (min-width: 1001px) {
+    height: calc(100vh - 5em);
+  }
+  /*JOIN:NARROW SCREEN*/
+  @media only screen and (max-width: 1000px) {
+    height: calc(100vh - 4em);
+  }
+}
+
+.joinCover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: brightness(50%);
+  -webkit-filter: brightness(50%);
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,187 @@
+@import "../../../scss/_helpers/variables";
+
+.Scrollable {
+  width: 100%;
+  margin-bottom: 1em;
+  font-size: 14px;
+  line-height: 1;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table {
+  border-collapse: collapse;
+}
+
+.table-normal {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table .thead tr th,
+.table .tbody tr td {
+  padding: 0.3em;
+  padding-left: 0.5em;
+}
+
+.table tr td {
+  vertical-align: bottom;
+}
+
+.table .thead th {
+  color: white;
+  background-color: $main_color;
+  border-bottom: 3px solid $accent_color;
+  vertical-align: middle;
+  text-align: left;
+  font-size: 14px;
+}
+
+.table .thead:first-child {
+  border-top-left-radius: 4px;
+}
+
+.table .thead:last-child {
+  border-top-right-radius: 4px;
+}
+
+.rightAlign {
+  text-align: right !important;
+}
+.centerAlign {
+  text-align: right !important;
+}
+.leftAlign {
+  text-align: left !important;
+}
+
+.table .tbody tr {
+  border-top: 1px solid $gray;
+}
+
+.table .tbody tr:first-child {
+  border-top: 0;
+}
+
+/* buttons*/
+.table tbody .btn-col {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+/*tables with stripes*/
+.table.striped .tbody tr:nth-child(even) {
+  background-color: $gray;
+}
+
+/*tables with full borders*/
+.table.bordered th,
+.table.bordered td {
+  border: 1px solid $gray;
+}
+
+/*tables with hilighting*/
+.table.hilight .tbody tr:hover {
+  background-color: lighten($gray, 10%);
+}
+
+/*tables with fixed headers*/
+.table.Scrollable tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table.Scrollable .tbody {
+  display: block;
+  overflow: auto;
+}
+
+/*tables that are responsive*/
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.table-responsive > .table {
+  width: auto !important;
+}
+
+.up-arrow svg,
+.down-arrow svg {
+  height: 1em;
+  margin-left: 0.5em;
+
+  path {
+    fill: white;
+  }
+}
+
+.ActiveRow {
+  background: $gray;
+}
+
+.TableContainer {
+  width: calc(100%);
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 12px;
+}
+
+.InfoContainer {
+  display: inline-block;
+  padding: 1em 0 1em 1em;
+  border-radius: 4px;
+  border-top-left-radius: 0px;
+  overflow-x: auto;
+
+  .Info {
+    display: inline-block;
+  }
+}
+
+.table-resizable {
+  &.resizing {
+    cursor: col-resize;
+    user-select: none;
+  }
+
+  th,
+  td {
+    position: relative;
+
+    // Show resize curson when hovering over column borders
+    &::before {
+      @extend .table-resizable, .resizing;
+      content: "";
+      display: block;
+      height: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 1em;
+    }
+
+    &:last-of-type::before {
+      display: none;
+    }
+  }
+
+  // Add `th` to the selector below to allow shrinking a column all the way
+  td {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.resize-lines th {
+  border-right: 1px solid $gray;
+
+  &:last-child {
+    border: none;
+  }
+}

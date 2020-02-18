@@ -1,0 +1,156 @@
+<app-box [Title]="'Scout Admin'">
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scouts'" [Title]="'Manage Scouts'">
+    <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+      (EditRecordCallBack)="showManageUserModal($event)">
+    </app-table>
+
+    <app-modal [Title]="'Manage User: ' + activeUser.first_name + ' ' + activeUser.last_name"
+      [(visible)]="manageUserModalVisible">
+      <app-header [h]="3">User Groups</app-header>
+      <div class="flex">
+        <div>
+          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+            [(Model)]="activeUser.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+          </app-form-element>
+        </div>
+        <div>
+          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
+            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
+            [DisplayProperty]="'description'" [DisplayEmptyOption]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
+        </div>
+      </div>
+      <app-table [TableCols]="userGroupsTableCols" [TableData]="userGroups" [Scrollable]="true"
+        [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+
+      <app-button-ribbon>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
+      </app-button-ribbon>
+    </app-modal>
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scout Schedule'" [Title]="'Manage Schedule'">
+    <app-header [h]="3">Scout Field</app-header>
+    <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true"
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
+      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+    </app-table>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
+    </app-button-ribbon>
+
+    <app-header [h]="3">Scout Pit</app-header>
+    <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule" [Scrollable]="true"
+      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
+      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+    </app-table>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.pitSchedule)">Notify</app-button>
+    </app-button-ribbon>
+
+    <app-header [h]="3">Scout Past</app-header>
+    <app-table [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule" [Scrollable]="true">
+    </app-table>
+
+    <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
+      <app-form>
+        <app-form-element-group [LabelText]="'New Entry'">
+          <app-form-element [LabelText]="'Scout'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [(Model)]="scoutSchedule.user_id" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
+            [(Model)]="scoutSchedule.st_time">
+          </app-form-element>
+          <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
+            [(Model)]="scoutSchedule.end_time">
+          </app-form-element>
+          <app-form-element [LabelText]="'Scout Type'" [FormGroup]="true" [Type]="'select'"
+            [SelectList]="init.scoutQuestionType" [BindingProperty]="'sq_typ'" [DisplayProperty]="'sq_nm'"
+            [(Model)]="scoutSchedule.sq_typ">
+          </app-form-element>
+
+          <app-form-element *ngIf="scoutSchedule.scout_sch_id" [Type]="'checkbox'" [FormGroup]="true"
+            [LabelText]="'Delete?'" [(Model)]="scoutSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
+          </app-form-element>
+
+          <app-button-ribbon>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutScheduleEntry()">Save</app-button>
+          </app-button-ribbon>
+        </app-form-element-group>
+      </app-form>
+    </app-modal>
+
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
+    <app-form-element-group [LabelText]="'Sync/Set Season'" [InlineElements]="true">
+      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"
+        (ModelChange)="buildEventList()">
+      </app-form-element>
+      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="eventList" [DisplayEmptyOption]="true"
+        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="event">
+      </app-form-element>
+      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
+      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season/Event</app-button>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Add/Delete Season'" [InlineElements]="true">
+      <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
+      </app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason">
+      </app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
+      <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
+    </app-form-element-group>
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'"
+    [(visible)]="manageScoutFieldQuestions">
+    <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'"
+    [(visible)]="manageScoutPitQuestions">
+    <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
+  </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Phone Types'" [Title]="'Manage Phone Types'">
+    <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+      [(Model)]="phoneType" [SelectList]="init.phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+    </app-form-element>
+    <app-button *ngIf="!newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">New Phone Type
+    </app-button>
+    <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone Type
+    </app-button>
+
+    <app-form-element [Type]="'text'" [LabelText]="'Carrier:'" [FormElementInline]="true" [(Model)]="phoneType.carrier">
+    </app-form-element>
+    <app-form-element [Type]="'text'" [LabelText]="'Address:'" [FormElementInline]="true"
+      [(Model)]="phoneType.phone_type"></app-form-element>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="savePhoneType()">Save</app-button>
+    </app-button-ribbon>
+  </app-modal>
+</app-box>
