@@ -62,6 +62,7 @@ import { CardComponent } from './components/atoms/card/card.component';
 import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
+import { AdminComponent } from './components/webpages/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -114,7 +115,8 @@ import { TabContainerComponent } from './components/atoms/tab-container/tab-cont
     WallpapersComponent,
     MediaCommunityOutreachComponent,
     ResourcesComponent,
-    FirstComponent
+    FirstComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

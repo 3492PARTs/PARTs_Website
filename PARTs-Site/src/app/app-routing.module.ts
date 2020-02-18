@@ -23,6 +23,7 @@ import { CompetitionComponent } from './components/webpages/media/competition/co
 import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
 import { FirstComponent } from './components/webpages/first/first.component';
+import { AdminComponent } from './components/webpages/admin/admin.component';
 
 
 
@@ -30,12 +31,12 @@ import { FirstComponent } from './components/webpages/first/first.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'scout-field', component: ScoutFieldComponent },
-  { path: 'scout-pit', component: ScoutPitComponent },
-  { path: 'scout-admin', component: ScoutAdminComponent },
-  { path: 'scout-field-results', component: ScoutFieldResultsComponent },
-  { path: 'scout-pit-results', component: ScoutPitResultsComponent },
-  { path: 'scout-portal', component: ScoutPortalComponent },
+  { path: 'scout/scout-field', component: ScoutFieldComponent },
+  { path: 'scout/scout-pit', component: ScoutPitComponent },
+  { path: 'scout/scout-admin', component: ScoutAdminComponent },
+  { path: 'scout/scout-field-results', component: ScoutFieldResultsComponent },
+  { path: 'scout/scout-pit-results', component: ScoutPitResultsComponent },
+  { path: 'scout/scout-portal', component: ScoutPortalComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'join', component: JoinComponent },
   { path: 'join/community-outreach', component: CommunityOutreachComponent },
@@ -50,7 +51,8 @@ const routes: Routes = [
   { path: 'media/competition', component: CompetitionComponent },
   { path: 'media/wallpapers', component: WallpapersComponent },
   { path: 'resources', component: ResourcesComponent },
-  { path: 'first', component: FirstComponent }
+  { path: 'first', component: FirstComponent },
+  { path: 'admin', component: AdminComponent }
 ];
 
 @NgModule({
