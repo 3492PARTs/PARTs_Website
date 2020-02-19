@@ -141,3 +141,15 @@ export class PhoneType {
   carrier: string;
   phone_type: string;
 }
+
+export class ErrorLog {
+  error_log_id: number;
+  user: User = new User();
+  user_name: string;
+  location: string;
+  message: string;
+  exception: string;
+  time: Date;
+  diplay_time: string;
+  void_ind = 'n';
+}

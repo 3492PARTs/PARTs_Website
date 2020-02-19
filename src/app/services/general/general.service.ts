@@ -73,3 +73,9 @@ export class RetMessage {
   retMessage: string;
   error: boolean;
 }
+
+export class Page {
+  count: number;
+  previous: number;
+  next: number;
+}
