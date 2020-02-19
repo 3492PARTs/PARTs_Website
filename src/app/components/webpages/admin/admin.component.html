@@ -44,22 +44,6 @@
     <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true">
     </app-table>
 
-    <nav>
-      <ul class="pagination">
-        <li class="page-item" [ngClass]="{'disabled': !pageInfo.previous}">
-          <p class="page-link" aria-label="Previous" (click)="getErrors(pageInfo.previous ? pageInfo.previous : 1)">
-            <span aria-hidden="true">&laquo;</span>
-          </p>
-        </li>
-        <li class="page-item" *ngFor="let pg of pages">
-          <p class="page-link" [ngClass]="{'active': pg === page}" (click)="getErrors(pg)">{{ pg }}</p>
-        </li>
-        <li class="page-item" [ngClass]="{'disabled': !pageInfo.next}">
-          <p class="page-link" aria-label="Next" (click)="getErrors(pageInfo.next ? pageInfo.next : pageInfo.count)">
-            <span aria-hidden="true">&raquo;</span>
-          </p>
-        </li>
-      </ul>
-    </nav>
+    <app-pagination [Page]="page" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
   </app-modal>
 </app-box>

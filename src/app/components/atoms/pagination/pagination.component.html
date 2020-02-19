@@ -1,0 +1,17 @@
+<nav>
+  <ul class="pagination">
+    <li class="page-item" [ngClass]="{'disabled': !_pageInfo.previous}">
+      <p class="page-link" aria-label="Previous" (click)="getPages(_pageInfo.previous ? _pageInfo.previous : 1)">
+        <span aria-hidden="true">&laquo;</span>
+      </p>
+    </li>
+    <li class="page-item" *ngFor="let pg of pages">
+      <p class="page-link" [ngClass]="{'active': pg === _page}" (click)="getPages(pg)">{{ pg }}</p>
+    </li>
+    <li class="page-item" [ngClass]="{'disabled': !_pageInfo.next}">
+      <p class="page-link" aria-label="Next" (click)="getPages(_pageInfo.next ? _pageInfo.next : _pageInfo.count)">
+        <span aria-hidden="true">&raquo;</span>
+      </p>
+    </li>
+  </ul>
+</nav>

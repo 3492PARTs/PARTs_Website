@@ -63,6 +63,7 @@ import { ErrorMessageComponent } from './components/atoms/error-message/error-me
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
+import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +117,8 @@ import { AdminComponent } from './components/webpages/admin/admin.component';
     MediaCommunityOutreachComponent,
     ResourcesComponent,
     FirstComponent,
-    AdminComponent
+    AdminComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

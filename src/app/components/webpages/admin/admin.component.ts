@@ -144,26 +144,6 @@ export class AdminComponent implements OnInit {
           this.errors = Response['errors'] as ErrorLog[];
           delete Response['errors'];
           this.pageInfo = Response as Page;
-
-          this.pages = [];
-          let len = (this.page + 5 < 10 ? 10 : this.page + 5);
-          for (let i = 0; i < this.pageInfo.count && i < 10; i++) {
-            let tmpPg = 0;
-            if (this.page + 4 > this.pageInfo.count) {
-              if (this.pageInfo.count - 9 < 1) {
-                tmpPg = i + 1;
-              } else {
-                tmpPg = i + this.pageInfo.count - 9;
-              }
-            } else if (this.page < 7) {
-              tmpPg = i + 1;
-            } else {
-              tmpPg = i + this.page - 5;
-            }
-
-            this.pages.push(tmpPg);
-          }
-
           this.errors.forEach(el => {
             el.user_name = el.user.first_name + ' ' + el.user.last_name;
             el.time = new Date(el.time);
