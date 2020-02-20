@@ -86,6 +86,7 @@ export class ScoutPitComponent implements OnInit {
       Response => {
         alert((Response as RetMessage).retMessage);
         this.robotPic = null;
+        this.previewUrl = null;
         this.gs.decrementOutstandingCalls();
       },
       Error => {

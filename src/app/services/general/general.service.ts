@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,11 @@ export class GeneralService {
   /* helpwe functions */
   strNoE(s: string) {
     return s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
+  }
+
+  downloadFileAs(filename, data, MimeType) {
+    const blob = new Blob([data], { type: MimeType });
+    saveAs(blob, filename);
   }
 }
 

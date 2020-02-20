@@ -47,9 +47,9 @@
     <!--<input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">-->
 
-    <div>
+    <div *ngSwitchCase="'datetime'">
       <div style="display: inline-block;">
-        <ejs-datetimepicker *ngSwitchCase="'datetime'" id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
+        <ejs-datetimepicker id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
           (ngModelChange)="change($event)"></ejs-datetimepicker>
       </div>
     </div>
