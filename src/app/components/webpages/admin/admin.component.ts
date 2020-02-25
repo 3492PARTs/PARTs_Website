@@ -32,7 +32,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'location', ColLabel: 'Location' },
     { PropertyName: 'message', ColLabel: 'Message' },
-    { PropertyName: 'exception', ColLabel: 'Exceptiation' },
+    { PropertyName: 'exception', ColLabel: 'Exception' },
     { PropertyName: 'diplay_time', ColLabel: 'Time' }
   ];
   errors: ErrorLog[] = [];
