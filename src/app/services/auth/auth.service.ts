@@ -13,7 +13,7 @@ export class AuthService {
   currentToken = this.token.asObservable();
   private internalToken = '';
 
-  private user = new BehaviorSubject<User>({ id: -1, username: '', email: '', first_name: '', last_name: '', phone: '', phone_type: -1 });
+  private user = new BehaviorSubject<User>({ id: -1, username: '', email: '', first_name: '', last_name: '', phone: '', phone_type: -1, has_phone: 'n' });
   currentUser = this.user.asObservable();
 
   private userLinks = new BehaviorSubject<UserLinks[]>([]);
@@ -123,6 +123,7 @@ export class User {
   last_name: string;
   phone: string;
   phone_type: number;
+  has_phone = 'n';
 }
 
 export class UserLinks {

@@ -13,10 +13,9 @@ export class AdminComponent implements OnInit {
   init: AdminInit = new AdminInit();
 
   userTableCols: object[] = [
-    { PropertyName: 'username', ColLabel: 'Username' },
-    { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'first_name', ColLabel: 'First' },
-    { PropertyName: 'last_name', ColLabel: 'Last' }
+    { PropertyName: 'last_name', ColLabel: 'Last' },
+    { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
   ];
 
   manageUserModalVisible = false;
@@ -56,6 +55,9 @@ export class AdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.init = Response as AdminInit;
+          this.init.users.forEach(el => {
+            el.has_phone = this.gs.strNoE(el.phone) ? 'n' : 'y';
+          });
         }
         this.gs.decrementOutstandingCalls();
       },
