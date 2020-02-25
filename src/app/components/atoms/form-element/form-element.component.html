@@ -56,7 +56,7 @@
 
 
     <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
-      placeholder="Upload file">
+      placeholder="Upload file" [ngModel]="Model">
 
     <div *ngSwitchCase="'multiselect'" class="form-control" id="multiSelect" [ngStyle]="{'width': Width}" #multiselect
       (appClickOutside)="multiSelectClose()">
