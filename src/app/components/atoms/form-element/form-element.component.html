@@ -60,10 +60,12 @@
 
     <div *ngSwitchCase="'multiselect'" class="form-control" id="multiSelect" [ngStyle]="{'width': Width}" #multiselect
       (appClickOutside)="multiSelectClose()">
-      <p>{{ LabelText }}</p>
-      <div class="arrow-wrapper">
-        <i class="arrow down" (click)="multiSelectMenu()"></i>
-      </div>
+      <span (click)="multiSelectMenu()">
+        <p>{{ LabelText }}</p>
+        <div class="arrow-wrapper">
+          <i class="arrow down"></i>
+        </div>
+      </span>
       <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
         <div *ngFor="let obj of SelectList; let i = index">
           <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"

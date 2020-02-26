@@ -106,6 +106,11 @@ export class FormElementComponent implements OnInit, AfterViewInit {
     this.positionMultiSelect();
   }
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    this.positionMultiSelect();
+  }
+
   private positionMultiSelect(): void {
     if (this.Type === 'multiselect') {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
@@ -157,6 +162,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   multiSelectMenu(): void {
+    this.positionMultiSelect();
     if (this.expanded) {
       this.renderer.setStyle(
         this.dropdown.nativeElement,

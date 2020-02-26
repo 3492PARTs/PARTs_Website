@@ -66,7 +66,7 @@ export class GeneralService {
 
   /* helpwe functions */
   strNoE(s: string) {
-    return s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
+    return s === undefined || s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
   }
 
   downloadFileAs(filename, data, MimeType) {

@@ -166,12 +166,6 @@ export class ScoutPitComponent implements OnInit {
       }
     );
   }
-
-  clear() {
-    this.robotPic = null;
-    this.previewUrl = null;
-    console.log(this.robotPic);
-  }
 }
 
 export class ScoutPitInit {
