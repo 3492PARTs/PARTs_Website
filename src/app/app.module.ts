@@ -64,6 +64,7 @@ import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
+import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
 
 @NgModule({
   declarations: [
@@ -118,7 +119,8 @@ import { PaginationComponent } from './components/atoms/pagination/pagination.co
     ResourcesComponent,
     FirstComponent,
     AdminComponent,
-    PaginationComponent
+    PaginationComponent,
+    OnCreateDirective
   ],
   imports: [
     BrowserModule,
