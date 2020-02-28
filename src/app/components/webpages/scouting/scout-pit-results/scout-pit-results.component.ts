@@ -72,18 +72,6 @@ export class ScoutPitResultsComponent implements OnInit {
         orientation: true
       }
     );
-    /*
-        window.setTimeout(() => {
-          let canv = document.querySelector('canvas');
-          console.log(canv);
-          canv.toBlob((blob) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onload = (_event) => {
-              this.previewUrl = reader.result;
-            };
-          });
-        }, 1000);*/
   }
 }
 export class ScoutPitResults {

@@ -4,6 +4,8 @@ import { GeneralService } from 'src/app/services/general/general.service';
 import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
+import * as LoadImg from 'blueimp-load-image';
+
 @Component({
   selector: 'app-scout-field-results',
   templateUrl: './scout-field-results.component.html',
@@ -108,6 +110,8 @@ export class ScoutFieldResultsComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           if ((Response as ScoutPitResults[])[0]) {
             this.scoutPitResult = (Response as ScoutPitResults[])[0];
+
+            this.preview(this.scoutPitResult.pic, 'team-pic');
           } else {
             this.scoutPitResult = new ScoutPitResults();
           }
@@ -119,6 +123,24 @@ export class ScoutFieldResultsComponent implements OnInit {
         console.log('error', Error);
         alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  preview(link: string, id: string) {
+    document.getElementById(id).innerHTML = '';
+    LoadImg(
+      link,
+      (img) => {
+        document.getElementById(id).appendChild(img);
+      },
+      {
+        maxWidth: 800,
+        maxHeight: 500,
+        minWidth: 300,
+        minHeight: 250,
+        //canvas: true,
+        orientation: true
       }
     );
   }
