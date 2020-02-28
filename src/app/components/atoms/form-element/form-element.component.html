@@ -70,7 +70,9 @@
         <div *ngFor="let obj of SelectList; let i = index">
           <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
             (ngModelChange)="multiChange($event, i)">
-          <label for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }}</label>
+          <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
+          <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }} -
+            {{ obj[DisplayProperty2] }}</label>
         </div>
       </div>
     </div>
