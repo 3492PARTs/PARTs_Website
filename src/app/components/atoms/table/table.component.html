@@ -11,7 +11,7 @@
       }">
     <thead class="thead">
       <tr [ngClass]="{ 'resize-lines': Resizable }">
-        <th *ngIf="ShowButtonColumn() && ButtonsFirstCol">
+        <th *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-add-col">
           <!--Table buttons as first column-->
           <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
@@ -40,7 +40,7 @@
             </svg>
           </span>
         </th>
-        <th *ngIf="ShowButtonColumn() && !ButtonsFirstCol">
+        <th *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-add-col">
           <!--Table buttons as last column-->
           <app-button *ngIf="ShowAddButton" [ButtonType]="'add'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
