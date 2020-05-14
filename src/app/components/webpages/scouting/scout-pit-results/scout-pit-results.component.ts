@@ -4,6 +4,8 @@ import { GeneralService } from 'src/app/services/general/general.service';
 import { ScoutAnswer, Team } from '../scout-field/scout-field.component';
 import { ScoutQuestion } from '../question-admin-form/question-admin-form.component';
 
+import * as LoadImg from 'blueimp-load-image';
+
 @Component({
   selector: 'app-scout-pit-results',
   templateUrl: './scout-pit-results.component.html',
@@ -55,8 +57,23 @@ export class ScoutPitResultsComponent implements OnInit {
     );
   }
 
+  preview(link: string, id: string) {
+    LoadImg(
+      link,
+      (img) => {
+        document.getElementById(id).appendChild(img);
+      },
+      {
+        maxWidth: 600,
+        maxHeight: 300,
+        minWidth: 100,
+        minHeight: 50,
+        //canvas: true,
+        orientation: true
+      }
+    );
+  }
 }
-
 export class ScoutPitResults {
   teamNo: string;
   teamNm: string;

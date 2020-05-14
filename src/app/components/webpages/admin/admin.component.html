@@ -39,4 +39,11 @@
       </app-button-ribbon>
     </app-modal>
   </app-modal>
+
+  <app-modal [ButtonType]="'main'" [ButtonText]="'Error Log'" [Title]="'Error Log'">
+    <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true">
+    </app-table>
+
+    <app-pagination [Page]="page" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
+  </app-modal>
 </app-box>

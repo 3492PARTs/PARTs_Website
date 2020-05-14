@@ -106,6 +106,11 @@ export class FormElementComponent implements OnInit, AfterViewInit {
     this.positionMultiSelect();
   }
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    this.positionMultiSelect();
+  }
+
   private positionMultiSelect(): void {
     if (this.Type === 'multiselect') {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
@@ -117,6 +122,11 @@ export class FormElementComponent implements OnInit, AfterViewInit {
         this.dropdown.nativeElement,
         'left', (rect.left + 1.2) + 'px'
       );
+      this.renderer.setStyle(
+        this.dropdown.nativeElement,
+        'max-height', 'calc( 100vh - ' + (rect.top + 38) + 'px - 16px)'
+      );
+
     }
   }
 
@@ -157,6 +167,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   multiSelectMenu(): void {
+    this.positionMultiSelect();
     if (this.expanded) {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
@@ -168,6 +179,10 @@ export class FormElementComponent implements OnInit, AfterViewInit {
           'visibility', 'hidden'
         );
       }, 150);
+      this.renderer.setStyle(
+        this.dropdown.nativeElement,
+        'overflow-y', 'hidden'
+      );
 
       this.expanded = !this.expanded;
     } else {
@@ -178,6 +193,10 @@ export class FormElementComponent implements OnInit, AfterViewInit {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
         'visibility', 'visible'
+      );
+      this.renderer.setStyle(
+        this.dropdown.nativeElement,
+        'overflow-y', 'auto'
       );
 
       this.expanded = !this.expanded;

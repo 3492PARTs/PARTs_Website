@@ -47,28 +47,32 @@
     <!--<input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
       (ngModelChange)="change($event)">-->
 
-    <div>
+    <div *ngSwitchCase="'datetime'">
       <div style="display: inline-block;">
-        <ejs-datetimepicker *ngSwitchCase="'datetime'" id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
+        <ejs-datetimepicker id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
           (ngModelChange)="change($event)"></ejs-datetimepicker>
       </div>
     </div>
 
 
     <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
-      placeholder="Upload file">
+      placeholder="Upload file" [ngModel]="Model">
 
     <div *ngSwitchCase="'multiselect'" class="form-control" id="multiSelect" [ngStyle]="{'width': Width}" #multiselect
       (appClickOutside)="multiSelectClose()">
-      <p>{{ LabelText }}</p>
-      <div class="arrow-wrapper">
-        <i class="arrow down" (click)="multiSelectMenu()"></i>
-      </div>
+      <span (click)="multiSelectMenu()">
+        <p>{{ LabelText }}</p>
+        <div class="arrow-wrapper">
+          <i class="arrow down"></i>
+        </div>
+      </span>
       <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
         <div *ngFor="let obj of SelectList; let i = index">
           <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
             (ngModelChange)="multiChange($event, i)">
-          <label for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }}</label>
+          <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
+          <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }} -
+            {{ obj[DisplayProperty2] }}</label>
         </div>
       </div>
     </div>

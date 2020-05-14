@@ -1,7 +1,7 @@
 <app-box [Title]="'Scout Pit Form'">
   <form>
     <app-form-element [LabelText]="'Team'" [Type]="'multiselect'" [FormGroup]="true" [SelectList]="teams"
-      [BindingProperty]="'team_no'" [DisplayProperty]="'team_nm'" [(MultiModel)]="teams">
+      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="teams">
     </app-form-element>
 
     <app-button-ribbon>
@@ -11,11 +11,11 @@
 </app-box>
 
 <div id="results">
-  <app-box *ngFor="let res of scoutPitResults" [Width]="'400px'" [MaxWidth]="'100%'">
-    <div class="team-pic">
-      <img [src]="res.pic">
+  <app-box *ngFor="let res of scoutPitResults" [Width]="'400px'" [MaxWidth]="'100%'" appOnCreate
+    (onCreate)="preview(res.pic, res.teamNo)">
+    <div class="team-pic" [id]="res.teamNo">
     </div>
-    <div>
+    <div class="team-nm">
       <p>{{ res.teamNm }} - {{ res.teamNo }}</p>
     </div>
 

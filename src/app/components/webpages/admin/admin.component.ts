@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
+import { GeneralService, RetMessage, Page } from 'src/app/services/general/general.service';
 import { HttpClient } from '@angular/common/http';
-import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth/auth.service';
+import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,10 +13,9 @@ export class AdminComponent implements OnInit {
   init: AdminInit = new AdminInit();
 
   userTableCols: object[] = [
-    { PropertyName: 'username', ColLabel: 'Username' },
-    { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'first_name', ColLabel: 'First' },
-    { PropertyName: 'last_name', ColLabel: 'Last' }
+    { PropertyName: 'last_name', ColLabel: 'Last' },
+    { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
   ];
 
   manageUserModalVisible = false;
@@ -29,10 +28,23 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'description', ColLabel: 'Description' }
   ];
 
+  errorTableCols: object[] = [
+    { PropertyName: 'user_name', ColLabel: 'User' },
+    { PropertyName: 'location', ColLabel: 'Location' },
+    { PropertyName: 'message', ColLabel: 'Message' },
+    { PropertyName: 'exception', ColLabel: 'Exception' },
+    { PropertyName: 'diplay_time', ColLabel: 'Time' }
+  ];
+  errors: ErrorLog[] = [];
+  pageInfo: Page = new Page();
+  pages = [];
+  page = 1;
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
     this.adminInit();
+    this.getErrors(this.page);
   }
 
   adminInit(): void {
@@ -43,6 +55,9 @@ export class AdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.init = Response as AdminInit;
+          this.init.users.forEach(el => {
+            el.has_phone = this.gs.strNoE(el.phone) ? 'n' : 'y';
+          });
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -86,25 +101,14 @@ export class AdminComponent implements OnInit {
     const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
       return ag.id === this.newAuthGroup.id;
     });
-    if (tmp[0]) {
-      if (tmp[0].name === 'lead_scout') {
-        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
-          return null;
-        }
-      }
-      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
-      this.newAuthGroup = new AuthGroup();
-      this.buildAvailableUserGroups();
-    }
+    this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
+    this.newAuthGroup = new AuthGroup();
+    this.buildAvailableUserGroups();
   }
 
   removeUserGroup(ug: AuthGroup): void {
-    if (ug.name === 'lead_scout') {
-      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
-    } else {
-      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
-      this.buildAvailableUserGroups();
-    }
+    this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+    this.buildAvailableUserGroups();
   }
 
   saveUser(): void {
@@ -115,6 +119,41 @@ export class AdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+
+  getErrors(pg: number): void {
+    this.gs.incrementOutstandingCalls();
+    this.page = pg;
+    this.http.get(
+      'api/get_error_log/', {
+      params: {
+        pg_num: pg.toString()
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.errors = Response['errors'] as ErrorLog[];
+          delete Response['errors'];
+          this.pageInfo = Response as Page;
+          this.errors.forEach(el => {
+            el.user_name = el.user.first_name + ' ' + el.user.last_name;
+            el.time = new Date(el.time);
+            el.diplay_time = el.time.getMonth() + '/' + el.time.getDate() + '/' +
+              el.time.getFullYear() + ' ' +
+              (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
+              el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
+          });
         }
         this.gs.decrementOutstandingCalls();
       },

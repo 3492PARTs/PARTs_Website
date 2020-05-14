@@ -39,6 +39,11 @@ export class ScoutFieldComponent implements OnInit {
   }
 
   save(): void {
+    if (this.gs.strNoE(this.team)) {
+      this.gs.triggerError('Must select a team to scout!');
+      return null;
+    }
+
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'api/post_save_scout_field_answers/',

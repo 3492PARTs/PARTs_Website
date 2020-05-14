@@ -18,26 +18,34 @@
 
 /*TEXT*/
 
-main h1 {
-    font-size: 2em;
+h1 {
+  font-size: 1.5em;
 }
 
-main h2 {
-    font-size: 1.8em;
+h2 {
+  font-size: 1.375em;
 }
 
-main h3 {
-    font-size: 1.7em;
+h3 {
+  font-size: 1.25em;
 }
 
-main h4 {
-    font-size: 1.6em;
+h4 {
+  font-size: 1.125em;
+}
+
+h5 {
+  font-size: 1em;
+}
+
+h6 {
+  font-size: 0.875em;
 }
 
 main p,
 main ul>li,
 main ol>li {
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 

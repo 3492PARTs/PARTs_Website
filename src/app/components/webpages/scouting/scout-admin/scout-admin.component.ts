@@ -21,10 +21,9 @@ export class ScoutAdminComponent implements OnInit {
   syncSeasonResponse = new RetMessage();
 
   userTableCols: object[] = [
-    { PropertyName: 'username', ColLabel: 'Username' },
-    { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'first_name', ColLabel: 'First' },
-    { PropertyName: 'last_name', ColLabel: 'Last' }
+    { PropertyName: 'last_name', ColLabel: 'Last' },
+    { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
   ];
 
   scoutScheduleTableCols: object[] = [
@@ -83,6 +82,10 @@ export class ScoutAdminComponent implements OnInit {
           }
 
           this.buildEventList();
+
+          this.init.users.forEach(el => {
+            el.has_phone = this.gs.strNoE(el.phone) ? 'n' : 'y';
+          });
 
         }
         this.gs.decrementOutstandingCalls();

@@ -12,6 +12,7 @@ import * as LoadImg from 'blueimp-load-image';
 })
 export class ScoutPitComponent implements OnInit {
   teams: Team[] = [];
+  compTeams: Team[] = [];
   team: string;
   robotPic: File;
   previewUrl: any = null;
@@ -27,9 +28,10 @@ export class ScoutPitComponent implements OnInit {
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
-          this.teams = (Response as ScoutAnswer).teams;
-          this.scoutQuestions = (Response as ScoutAnswer).scoutQuestions;
-          this.scoutQuestionsCopy = JSON.parse(JSON.stringify((Response as ScoutAnswer).scoutQuestions)) as ScoutQuestion[];
+          this.teams = (Response as ScoutPitInit).teams;
+          this.compTeams = (Response as ScoutPitInit).comp_teams;
+          this.scoutQuestions = (Response as ScoutPitInit).scoutQuestions;
+          this.scoutQuestionsCopy = JSON.parse(JSON.stringify((Response as ScoutPitInit).scoutQuestions)) as ScoutQuestion[];
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -58,7 +60,8 @@ export class ScoutPitComponent implements OnInit {
         this.savePicture();
         for (let i = 0; i < this.teams.length; i++) {
           if (this.teams[i].team_no === this.team) {
-            this.teams.splice(i, 1);
+            const tmpTeam = this.teams.splice(i, 1);
+            this.compTeams.push(tmpTeam[0]);
             break;
           }
         }
@@ -86,6 +89,7 @@ export class ScoutPitComponent implements OnInit {
       Response => {
         alert((Response as RetMessage).retMessage);
         this.robotPic = null;
+        this.previewUrl = null;
         this.gs.decrementOutstandingCalls();
       },
       Error => {
@@ -138,6 +142,36 @@ export class ScoutPitComponent implements OnInit {
 
 
   }
+
+  loadTeam(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/post_get_scout_pit_team_data/', {
+      params: {
+        team_num: this.team
+      }
+    }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.scoutQuestions = (Response as ScoutQuestion[]);
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        console.log('error', Error);
+        alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+  }
+}
+
+export class ScoutPitInit {
+  scoutQuestions: ScoutQuestion[] = [];
+  teams: Team[] = [];
+  comp_teams: Team[] = [];
 }
 
 export class ScoutAnswer {
