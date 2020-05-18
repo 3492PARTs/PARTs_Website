@@ -1,11 +1,9 @@
 <div class="box" #thisBox>
   <app-button *ngIf="Collapsible" [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
     [Direction]="false"></app-button>
-  <h4 *ngIf="Title !== ''" [ngClass]="{HeaderWithCollapse: Collapsible}">
-    {{
-        Title
-      }}
-  </h4>
+  <h2 *ngIf="Title !== ''" [ngClass]="{HeaderWithCollapse: Collapsible}">
+    {{ Title }}
+  </h2>
   <div #content class="box-content">
     <ng-content></ng-content>
   </div>

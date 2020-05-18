@@ -28,7 +28,7 @@ export class ScoutPortalComponent implements OnInit {
   portalInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_portal_init/'
+      'api/scoutPortal/GetInit/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
