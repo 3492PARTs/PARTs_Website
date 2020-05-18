@@ -250,6 +250,17 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
+  GetTableDisplayValue(rec: any, property: string) {
+    if (!property) {
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+    }
+    let ret = '';
+    const comand = 'ret = rec.' + property + ';';
+    eval(comand);
+    return ret;
+
+  }
+
   IsPropertyInColumnSettings(PropertyName) {
     return true;
   }

@@ -13,7 +13,7 @@ export class AuthService {
   currentToken = this.token.asObservable();
   private internalToken = '';
 
-  private user = new BehaviorSubject<User>({ id: -1, username: '', email: '', first_name: '', last_name: '', phone: '', phone_type: -1, has_phone: 'n' });
+  private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
 
   private userLinks = new BehaviorSubject<UserLinks[]>([]);
@@ -121,9 +121,16 @@ export class User {
   email: string;
   first_name: string;
   last_name: string;
+  has_phone = 'n';
+  profile: UserProfile = new UserProfile();
+}
+
+export class UserProfile {
+  id: number;
+  birth_date: string;
   phone: string;
   phone_type: number;
-  has_phone = 'n';
+  user: number;
 }
 
 export class UserLinks {
@@ -134,7 +141,14 @@ export class UserLinks {
 export class AuthGroup {
   id: number;
   name: string;
-  description: String;
+  permissions: AuthPermission[] = [];
+}
+
+export class AuthPermission {
+  id: number;
+  codename: string;
+  content_type: number;
+  name: string;
 }
 
 export class PhoneType {
@@ -147,7 +161,7 @@ export class ErrorLog {
   error_log_id: number;
   user: User = new User();
   user_name: string;
-  location: string;
+  path: string;
   message: string;
   exception: string;
   time: Date;

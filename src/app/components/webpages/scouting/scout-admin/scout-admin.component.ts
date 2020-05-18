@@ -84,7 +84,7 @@ export class ScoutAdminComponent implements OnInit {
           this.buildEventList();
 
           this.init.users.forEach(el => {
-            el.has_phone = this.gs.strNoE(el.phone) ? 'n' : 'y';
+            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'n' : 'y';
           });
 
         }
@@ -248,7 +248,7 @@ export class ScoutAdminComponent implements OnInit {
           return null;
         }
       }
-      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
+      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name });
       this.newAuthGroup = new AuthGroup();
       this.buildAvailableUserGroups();
     }

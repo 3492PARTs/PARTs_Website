@@ -69,7 +69,7 @@
         </td>
         <td *ngFor="let col of TableCols">
           <ng-container *ngIf="!col.Type; else Type">
-            {{ rec[col.PropertyName] | dateToStr }}
+            {{ GetTableDisplayValue(rec, col.PropertyName) }}
           </ng-container>
           <ng-template #Type>
             <ng-container [ngSwitch]="col.Type">

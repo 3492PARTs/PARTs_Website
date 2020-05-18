@@ -25,12 +25,12 @@ export class AdminComponent implements OnInit {
   newAuthGroup: AuthGroup = new AuthGroup();
 
   userGroupsTableCols: object[] = [
-    { PropertyName: 'description', ColLabel: 'Description' }
+    { PropertyName: 'name', ColLabel: 'Name' }
   ];
 
   errorTableCols: object[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
-    { PropertyName: 'location', ColLabel: 'Location' },
+    { PropertyName: 'path', ColLabel: 'Path' },
     { PropertyName: 'message', ColLabel: 'Message' },
     { PropertyName: 'exception', ColLabel: 'Exception' },
     { PropertyName: 'diplay_time', ColLabel: 'Time' }
@@ -50,13 +50,13 @@ export class AdminComponent implements OnInit {
   adminInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_admin_init/'
+      'api/admin/GetInit/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.init = Response as AdminInit;
           this.init.users.forEach(el => {
-            el.has_phone = this.gs.strNoE(el.phone) ? 'n' : 'y';
+            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'n' : 'y';
           });
         }
         this.gs.decrementOutstandingCalls();
@@ -101,7 +101,7 @@ export class AdminComponent implements OnInit {
     const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
       return ag.id === this.newAuthGroup.id;
     });
-    this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, description: tmp[0].description });
+    this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
     this.newAuthGroup = new AuthGroup();
     this.buildAvailableUserGroups();
   }
@@ -114,7 +114,7 @@ export class AdminComponent implements OnInit {
   saveUser(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_user/', { user: this.activeUser, groups: this.userGroups }
+      'api/admin/PostSaveUser', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -135,7 +135,7 @@ export class AdminComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.page = pg;
     this.http.get(
-      'api/get_error_log/', {
+      'api/admin/GetErrorLog/', {
       params: {
         pg_num: pg.toString()
       }
