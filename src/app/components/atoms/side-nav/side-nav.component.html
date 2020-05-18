@@ -1,3 +1,13 @@
-<div class="side-nav" #thisSideNav [ngStyle]="{'width': Width}">
-  <ng-content></ng-content>
+<div class="side-nav" #thisSideNav [ngClass]="{'hide': HideSideNav}" [ngStyle]="{'width': Width}">
+  <div id="title" [ngClass]="{'roundedCorners': collapsed}" #thisTitle>
+    <p>{{ Title }}</p>
+    <div id="collapseBtn" [ngClass]="{'hide': hide}">
+      <app-button [ButtonType]="'collapse'" [SymbolSize]="'2.4rem'" [InvertColor]="true" [Direction]="collapsed"
+        (FunctionCallBack)="collapseCard()">
+      </app-button>
+    </div>
+  </div>
+  <div id="nav" #thisNavContent>
+    <ng-content></ng-content>
+  </div>
 </div>

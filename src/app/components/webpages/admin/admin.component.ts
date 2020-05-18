@@ -10,6 +10,8 @@ import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/servi
 })
 export class AdminComponent implements OnInit {
 
+  page = 'errors';
+
   init: AdminInit = new AdminInit();
 
   userTableCols: object[] = [
@@ -33,18 +35,20 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'path', ColLabel: 'Path' },
     { PropertyName: 'message', ColLabel: 'Message' },
     { PropertyName: 'exception', ColLabel: 'Exception' },
-    { PropertyName: 'diplay_time', ColLabel: 'Time' }
+    { PropertyName: 'display_time', ColLabel: 'Time' }
   ];
   errors: ErrorLog[] = [];
   pageInfo: Page = new Page();
   pages = [];
-  page = 1;
+  errorPage = 1;
+  errorDetailModalVisible = false;
+  currentError: ErrorLog = new ErrorLog();
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
     this.adminInit();
-    this.getErrors(this.page);
+    this.getErrors(this.errorPage);
   }
 
   adminInit(): void {
@@ -133,7 +137,7 @@ export class AdminComponent implements OnInit {
 
   getErrors(pg: number): void {
     this.gs.incrementOutstandingCalls();
-    this.page = pg;
+    this.errorPage = pg;
     this.http.get(
       'api/admin/GetErrorLog/', {
       params: {
@@ -149,10 +153,10 @@ export class AdminComponent implements OnInit {
           this.errors.forEach(el => {
             el.user_name = el.user.first_name + ' ' + el.user.last_name;
             el.time = new Date(el.time);
-            el.diplay_time = el.time.getMonth() + '/' + el.time.getDate() + '/' +
+            el.display_time = el.time.getMonth() + '/' + el.time.getDate() + '/' +
               el.time.getFullYear() + ' ' +
               (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
-              el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
+              (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
           });
         }
         this.gs.decrementOutstandingCalls();
@@ -164,6 +168,11 @@ export class AdminComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       }
     );
+  }
+
+  showErrorModal(error: ErrorLog) {
+    this.errorDetailModalVisible = true;
+    this.currentError = error;
   }
 }
 

@@ -1,3 +1,5 @@
+@import "../../../scss/_helpers/variables";
+
 .inline {
   display: flex;
   align-items: flex-end;
@@ -12,4 +14,26 @@
   justify-content: space-between;
   align-items: center;
   align-content: center;
+}
+
+#side-nav {
+  padding: 0;
+
+  li {
+    list-style: none;
+    padding: 0.25em 0;
+    cursor: pointer;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.active {
+  color: $accent_color;
 }

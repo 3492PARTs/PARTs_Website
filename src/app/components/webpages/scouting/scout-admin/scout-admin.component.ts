@@ -248,7 +248,7 @@ export class ScoutAdminComponent implements OnInit {
           return null;
         }
       }
-      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name });
+      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
       this.newAuthGroup = new AuthGroup();
       this.buildAvailableUserGroups();
     }

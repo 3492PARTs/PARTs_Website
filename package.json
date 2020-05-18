@@ -24,7 +24,8 @@
     "zone.js": "~0.9.1",
     "blueimp-load-image": "^2.26.0",
     "@syncfusion/ej2-angular-calendars": "^17.4.49",
-    "file-saver": "^2.0.2"
+    "file-saver": "^2.0.2",
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.803.23",

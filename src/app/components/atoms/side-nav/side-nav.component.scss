@@ -12,11 +12,48 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.2s ease-in-out;
   background-color: #fff;
-  padding: 1px 1em 1em 1em;
   box-sizing: border-box;
   border-radius: 4px;
 
   z-index: -1;
+}
+
+#title {
+  background-color: $main_color;
+  width: 100%;
+  border-bottom: 3px solid $accent-color;
+  position: relative;
+  height: 3.5rem;
+  border-radius: 4px 4px 0 0;
+
+  p {
+    color: #fff;
+    display: block;
+    letter-spacing: 0.1em;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 3.5rem;
+  }
+
+  #collapseBtn {
+    position: absolute;
+    top: 0.1rem;
+    right: 0;
+  }
+}
+
+.roundedCorners {
+  border-radius: 4px !important;
+}
+
+#nav {
+  padding: 0 1em;
+  transition: all 0.2s ease-in-out;
+
+  max-height: calc(100vh - 7em);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .sticky {
@@ -28,4 +65,12 @@
   @media only screen and (max-width: $screen_size_narrow) {
     top: 3em;
   }
+
+  #nav {
+    max-height: calc(100vh - 4em);
+  }
+}
+
+.hide {
+  display: none;
 }

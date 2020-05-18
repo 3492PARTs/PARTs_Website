@@ -165,6 +165,6 @@ export class ErrorLog {
   message: string;
   exception: string;
   time: Date;
-  diplay_time: string;
+  display_time: string;
   void_ind = 'n';
 }

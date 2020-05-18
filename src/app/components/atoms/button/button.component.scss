@@ -126,3 +126,13 @@ button:not(:disabled) {
 .delete {
   @extend .btn-danger;
 }
+
+.collapse {
+  @extend .btn-main;
+
+  transition: 0.25s linear;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}

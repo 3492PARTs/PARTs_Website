@@ -1,5 +1,12 @@
-<app-box [Title]="'Admin'">
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Users'" [Title]="'Manage Users'">
+<app-box-side-nav-wrapper>
+  <app-side-nav [Width]="'12em'" [Title]="'Admin'">
+    <ul id="side-nav">
+      <li (click)="page = 'errors'" [ngClass]="{'active': page === 'errors'}">Error Log</li>
+      <li (click)="page = 'users'" [ngClass]="{'active': page === 'users'}">Manage Users</li>
+    </ul>
+  </app-side-nav>
+
+  <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
     <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
       (EditRecordCallBack)="showManageUserModal($event)">
     </app-table>
@@ -38,12 +45,21 @@
         <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
       </app-button-ribbon>
     </app-modal>
-  </app-modal>
+  </app-box>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Error Log'" [Title]="'Error Log'">
-    <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true">
+  <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
+    <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
+      (RecordClickCallBack)="showErrorModal($event)">
     </app-table>
 
-    <app-pagination [Page]="page" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
-  </app-modal>
-</app-box>
+    <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
+      <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
+      <p>Path: {{ currentError.path }}</p>
+      <p>Message: {{ currentError.message }}</p>
+      <p>Exception: {{ currentError.exception }}</p>
+      <p>Time: {{ currentError.display_time }}</p>
+    </app-modal>
+
+    <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
+  </app-box>
+</app-box-side-nav-wrapper>

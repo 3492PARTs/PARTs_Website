@@ -13,7 +13,7 @@ export class ButtonComponent implements OnInit {
   @Input() Disabled = false;
   @Input() TableButton = false;
   @Input() InvertColor = false;
-  @Input() SymbolSize = '2rem';
+  @Input() SymbolSize = '3rem';
   @Input() ElementID = '';
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button: ElementRef;
