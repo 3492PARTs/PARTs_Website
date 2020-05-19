@@ -28,12 +28,13 @@ export class QuestionAdminFormComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit() {
+    this.questionInit();
   }
 
   questionInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_question_init/', {
+      'api/scoutAdmin/GetScoutQuestionInit/', {
       params: {
         sq_typ: this.questionType
       }
@@ -58,7 +59,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.scoutQuestion.sq_typ = this.questionType;
     this.http.post(
-      'api/post_save_scout_question/', this.scoutQuestion
+      'api/scoutAdmin/PostSaveScoutQuestion/', this.scoutQuestion
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -80,7 +81,7 @@ export class QuestionAdminFormComponent implements OnInit {
   updateScoutQuestion(q: ScoutQuestion): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_update_scout_question/', q
+      'api/scoutAdmin/PostUpdateScoutQuestion/', q
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -106,7 +107,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_toggle_scout_question/', {
+      'api/scoutAdmin/GetToggleScoutQuestion/', {
       params: {
         sq_id: q.sq_id.toString()
       }
@@ -139,7 +140,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_toggle_option/', {
+      'api/scoutAdmin/GetToggleOption/', {
       params: {
         q_opt_id: op.q_opt_id.toString()
       }

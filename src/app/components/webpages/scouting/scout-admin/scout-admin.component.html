@@ -1,6 +1,17 @@
-<app-box [Title]="'Scout Admin'">
+<app-box-side-nav-wrapper>
+  <app-side-nav [Width]="'12em'" [Title]="'Scout Manager'">
+    <ul id="side-nav">
+      <li (click)="page = 'users'" [ngClass]="{'active': page === 'users'}">Users</li>
+      <li (click)="page = 'mngSch'" [ngClass]="{'active': page === 'mngSch'}">Schedule</li>
+      <li (click)="page = 'mngSeason'" [ngClass]="{'active': page === 'mngSeason'}">Season</li>
+      <li (click)="page = 'mngFldQ'" [ngClass]="{'active': page === 'mngFldQ'}">Field Questions</li>
+      <li (click)="page = 'mngPitQ'" [ngClass]="{'active': page === 'mngPitQ'}">Pit Questions</li>
+      <li (click)="page = 'mngPhnTyp'" [ngClass]="{'active': page === 'mngPhnTyp'}">Phone Types</li>
+    </ul>
+  </app-side-nav>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scouts'" [Title]="'Manage Scouts'">
+  <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
+
     <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
       (EditRecordCallBack)="showManageUserModal($event)">
     </app-table>
@@ -16,18 +27,18 @@
           <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
             [FormGroupInline]="true">
           </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.profile.phone"
             [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [(Model)]="activeUser.profile.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
         </div>
         <div>
           <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
             [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-            [DisplayProperty]="'description'" [DisplayEmptyOption]="true">
+            [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
           </app-form-element>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
         </div>
@@ -39,9 +50,11 @@
         <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
       </app-button-ribbon>
     </app-modal>
-  </app-modal>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Scout Schedule'" [Title]="'Manage Schedule'">
+  </app-box>
+
+
+  <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
     <app-header [h]="3">Scout Field</app-header>
     <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true"
       [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
@@ -95,9 +108,9 @@
       </app-form>
     </app-modal>
 
-  </app-modal>
+  </app-box>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Season'" [Title]="'Manage Season'">
+  <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
     <app-form-element-group [LabelText]="'Sync/Set Season'" [InlineElements]="true">
       <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="season"
@@ -123,19 +136,17 @@
     <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
       <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
     </app-form-element-group>
-  </app-modal>
+  </app-box>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Field Questions'" [Title]="'Manage Field Questions'"
-    [(visible)]="manageScoutFieldQuestions">
+  <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
     <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
-  </app-modal>
+  </app-box>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Pit Questions'" [Title]="'Manage Pit Questions'"
-    [(visible)]="manageScoutPitQuestions">
+  <app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
     <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
-  </app-modal>
+  </app-box>
 
-  <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Phone Types'" [Title]="'Manage Phone Types'">
+  <app-box *ngIf="page === 'mngPhnTyp'" [Title]="'Manage Phone Types'">
     <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
       [(Model)]="phoneType" [SelectList]="init.phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
     </app-form-element>
@@ -152,5 +163,6 @@
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="savePhoneType()">Save</app-button>
     </app-button-ribbon>
-  </app-modal>
-</app-box>
+  </app-box>
+
+</app-box-side-nav-wrapper>

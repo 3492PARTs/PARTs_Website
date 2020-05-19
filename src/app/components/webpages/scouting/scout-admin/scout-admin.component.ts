@@ -9,6 +9,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./scout-admin.component.scss']
 })
 export class ScoutAdminComponent implements OnInit {
+
+  page = 'users';
+
   init: ScoutAdminInit = new ScoutAdminInit();
   season: number;
   newSeason: number;
@@ -67,7 +70,7 @@ export class ScoutAdminComponent implements OnInit {
   adminInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_admin_init/'
+      'api/scoutAdmin/GetInit/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -102,7 +105,7 @@ export class ScoutAdminComponent implements OnInit {
   syncSeason(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_sync_season/', {
+      'api/scoutAdmin/GetSyncSeason/', {
       params: {
         season_id: this.season.toString()
       }
@@ -131,7 +134,7 @@ export class ScoutAdminComponent implements OnInit {
     }
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_set_season/', {
+      'api/scoutAdmin/GetSetSeason/', {
       params: {
         season_id: this.season.toString(),
         event_id: this.event.toString()
@@ -160,7 +163,7 @@ export class ScoutAdminComponent implements OnInit {
   addSeason(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_add_season/', {
+      'api/scoutAdmin/GetAddSeason/', {
       params: {
         season: this.newSeason.toString()
       }
@@ -189,7 +192,7 @@ export class ScoutAdminComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_delete_season/', {
+      'api/scoutAdmin/GetDeleteSeason/', {
       params: {
         season_id: this.delSeason.toString()
       }
@@ -266,7 +269,7 @@ export class ScoutAdminComponent implements OnInit {
   saveUser(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_user/', { user: this.activeUser, groups: this.userGroups }
+      'api/admin/PostSaveUser/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -299,7 +302,7 @@ export class ScoutAdminComponent implements OnInit {
   saveScoutScheduleEntry(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_scout_schedule_entry/', this.scoutSchedule
+      'api/scoutAdmin/PostSaveScoutScheduleEntry/', this.scoutSchedule
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -326,7 +329,7 @@ export class ScoutAdminComponent implements OnInit {
     });
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_notify_users/', sstmp
+      'api/scoutAdmin/PostNotifyUsers/', sstmp
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -352,7 +355,7 @@ export class ScoutAdminComponent implements OnInit {
   savePhoneType(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_phone_type/', this.phoneType
+      'api/scoutAdmin/PostSavePhoneType/', this.phoneType
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {

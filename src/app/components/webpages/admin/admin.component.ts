@@ -118,7 +118,7 @@ export class AdminComponent implements OnInit {
   saveUser(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/admin/PostSaveUser', { user: this.activeUser, groups: this.userGroups }
+      'api/admin/PostSaveUser/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {

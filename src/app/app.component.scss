@@ -1,4 +1,4 @@
-@import './scss/_helpers/variables';
+@import "./scss/_helpers/variables";
 
 /*FOOTER> KEEP AT BOTTOM*/
 
@@ -16,10 +16,20 @@ body {
 
 #content {
   min-height: 100vh;
-  padding-bottom: 12em;
+  padding-bottom: 13em;
   /* Height of the footer element */
 
   @media only screen and (max-width: $screen_size_narrow) {
     padding-top: 4em;
+  }
+}
+
+.clear {
+  clear: both;
+
+  &:after {
+    clear: both;
+    content: "";
+    display: table;
   }
 }

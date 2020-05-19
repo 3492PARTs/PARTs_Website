@@ -77,11 +77,13 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
     if (this.runStickyMethod) {
       const windowTop = $(window).scrollTop();
 
-      if (this.sideNav.nativeElement.offsetTop < windowTop + 16) {
+      //console.log('window top ' + windowTop + ' new top ' + (windowTop - ((4 * 16) + 16)));
+
+      if (windowTop - ((4 * 16) + 16) >= 0) {
         this.sideNav.nativeElement.classList.add('sticky');
       }
 
-      if (windowTop + 16 - (4 * 16) < 0) {
+      if (windowTop - ((4 * 16) + 16) < 0) {
         this.sideNav.nativeElement.classList.remove('sticky');
       }
     }

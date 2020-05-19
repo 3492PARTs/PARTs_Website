@@ -1,3 +1,27 @@
+@import "../../../../scss/_helpers/variables";
+
+#side-nav {
+  padding: 0;
+
+  li {
+    list-style: none;
+    padding: 0.25em 0;
+    cursor: pointer;
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+.active {
+  color: $accent_color;
+}
+
 .inline {
   display: flex;
   align-items: flex-end;
