@@ -100,7 +100,7 @@ export class ScoutFieldResultsComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_get_scout_pit_results/', [{
+      'api/scoutPit/PostGetResults/', [{
         team_no: String(row['team']),
         team_nm: 'no team lol',
         checked: true

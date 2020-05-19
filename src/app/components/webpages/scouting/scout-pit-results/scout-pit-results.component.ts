@@ -20,7 +20,7 @@ export class ScoutPitResultsComponent implements OnInit {
   ngOnInit() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_pit_results_init/'
+      'api/scoutPit/GetResultsInit/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -40,7 +40,7 @@ export class ScoutPitResultsComponent implements OnInit {
   search(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_get_scout_pit_results/', this.teams
+      'api/scoutPit/PostGetResults/', this.teams
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {

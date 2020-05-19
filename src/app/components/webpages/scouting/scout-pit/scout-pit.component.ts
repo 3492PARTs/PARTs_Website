@@ -24,7 +24,7 @@ export class ScoutPitComponent implements OnInit {
   ngOnInit() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_pit_questions/'
+      'api/scoutPit/GetQuestions/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -50,7 +50,7 @@ export class ScoutPitComponent implements OnInit {
     formData.append('file', this.robotPic);
     formData.append('team_no', this.team);
     this.http.post(
-      'api/post_save_scout_pit_answers/',
+      'api/scoutPit/PostSaveAnswers/',
       { scoutQuestions: this.scoutQuestions, team: this.team },
     ).subscribe(
       Response => {
@@ -84,7 +84,7 @@ export class ScoutPitComponent implements OnInit {
     formData.append('team_no', this.team);
 
     this.http.post(
-      'api/post_save_scout_pit_picture/', formData
+      'api/scoutPit/PostSavePicture/', formData
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
@@ -146,7 +146,7 @@ export class ScoutPitComponent implements OnInit {
   loadTeam(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/post_get_scout_pit_team_data/', {
+      'api/scoutPit/GetTeamData/', {
       params: {
         team_num: this.team
       }
