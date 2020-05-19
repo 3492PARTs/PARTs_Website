@@ -24,7 +24,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   ngOnInit() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_field_results/'
+      'api/scoutField/GetResults/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -77,7 +77,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   getTeamInfo(row: any) {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_field_results/', {
+      'api/scoutField/GetResults/', {
       params: {
         team: String(row['team'])
       }

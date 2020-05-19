@@ -19,7 +19,7 @@ export class ScoutFieldComponent implements OnInit {
   ngOnInit() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/get_scout_field_questions/'
+      'api/scoutField/GetQuestions/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -46,7 +46,7 @@ export class ScoutFieldComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/post_save_scout_field_answers/',
+      'api/scoutField/PostSaveAnswers/',
       { scoutQuestions: this.scoutQuestions, team: this.team }
     ).subscribe(
       Response => {
