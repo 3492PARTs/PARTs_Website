@@ -14,7 +14,7 @@ export class ModalComponent implements OnInit {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter();
 
-  @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent;
+  @ViewChild('thisButton', { read: ButtonComponent }) button: ButtonComponent;
 
   constructor() { }
 

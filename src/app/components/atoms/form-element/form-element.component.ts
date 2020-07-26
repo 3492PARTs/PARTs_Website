@@ -68,8 +68,8 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   LabelID: string;
   private fileData: File = null;
 
-  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef;
-  @ViewChild('multiselect', { read: ElementRef, static: false }) multiSelect: ElementRef;
+  @ViewChild('multiSelectDropdown', { read: ElementRef }) dropdown: ElementRef;
+  @ViewChild('multiselect', { read: ElementRef }) multiSelect: ElementRef;
   private expanded = false;
 
   change(newValue) {
