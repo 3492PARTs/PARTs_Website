@@ -1,17 +1,18 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { GeneralService } from '../general/general.service';
+import { share, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private token = new BehaviorSubject<string>('');
+  private token = new BehaviorSubject<Token>(new Token());
   currentToken = this.token.asObservable();
-  private internalToken = '';
+  private internalToken: Token = new Token();
 
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
@@ -19,31 +20,60 @@ export class AuthService {
   private userLinks = new BehaviorSubject<UserLinks[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
+  localStorageString = 'p-tkn-s';
+
+  private firstLoad = true;
+
   constructor(private http: HttpClient, private router: Router, private gs: GeneralService) { }
 
   logOut(): void {
-    this.token.next('');
+    this.token.next(new Token());
     this.user.next(new User());
     this.userLinks.next([]);
-    localStorage.removeItem('id_token');
+    localStorage.removeItem(this.localStorageString);
+    this.router.navigateByUrl('login');
   }
 
   previouslyAuthorized(): void {
-    this.token.next(localStorage.getItem('id_token'));
-    this.internalToken = localStorage.getItem('id_token');
-    this.getUser();
-    this.getUserLinks();
+    const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) };
+    this.token.next(tmpTkn);
+    this.internalToken = tmpTkn;
+    if (this.internalToken.refresh) {
+      //const header = new HttpHeaders({ authExempt: 'true', });
+
+      this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
+        data => {
+          this.internalToken.access = data['access'];
+          this.internalToken.refresh = data['refresh'];
+          this.getTokenExp(this.internalToken.access, 'New Access');
+          this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+          this.token.next(this.internalToken);
+          this.gs.decrementOutstandingCalls();
+
+          if (this.firstLoad) {
+            this.getUser();
+            this.getUserLinks();
+            this.firstLoad = false;
+          }
+        },
+        err => {
+          this.gs.decrementOutstandingCalls();
+          this.logOut();
+        }
+      );
+    }
   }
 
-  authorizeUser(userData): void {
+  authorizeUser(userData: UserData): void {
     this.gs.incrementOutstandingCalls();
-    this.http.post('auth/get_token/', userData).subscribe(
+    this.http.post('auth/token/', userData).subscribe(
       Response => {
         // console.log(Response);
-        const tmp = Response as { token: string };
-        this.token.next(tmp.token);
-        this.internalToken = tmp.token;
-        localStorage.setItem('id_token', tmp.token);
+        const tmp = Response as Token;
+        this.getTokenExp(tmp.access, 'Access');
+        this.token.next(tmp);
+        this.internalToken = tmp;
+        localStorage.setItem(this.localStorageString, tmp.refresh);
         this.getUser();
         this.gs.decrementOutstandingCalls();
         this.router.navigateByUrl('');
@@ -58,8 +88,68 @@ export class AuthService {
     );
   }
 
+  // Refreshes the JWT token, to extend the time the user is logged in
+  public refreshToken(): Observable<string> {
+    this.getTokenExp(this.internalToken.refresh, 'Refresh');
+    this.gs.incrementOutstandingCalls();
+
+    //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
+
+    return this.http
+      .post('auth/token/refresh/', { refresh: this.internalToken.refresh })
+      .pipe(
+        share(), // <========== YOU HAVE TO SHARE THIS OBSERVABLE TO AVOID MULTIPLE REQUEST BEING SENT SIMULTANEOUSLY
+        map(res => {
+          this.internalToken.access = res['access'];
+          this.internalToken.refresh = res['refresh'];
+          this.getTokenExp(this.internalToken.access, 'New Access');
+          this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+          this.token.next(this.internalToken);
+          this.gs.decrementOutstandingCalls();
+
+          /*if (this.firstLoad) {
+            this.getUser();
+            this.getUserLinks();
+            this.firstLoad = false;
+          }*/
+          this.gs.decrementOutstandingCalls();
+          return this.internalToken.access;
+        })
+      );
+    /*
+        this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
+          data => {
+            this.internalToken.access = data['access'];
+            this.internalToken.refresh = data['refresh'];
+            this.getTokenExp(this.internalToken.access, 'New Access');
+            this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+            this.token.next(this.internalToken);
+            this.gs.decrementOutstandingCalls();
+
+            if (this.firstLoad) {
+              this.getUser();
+              this.getUserLinks();
+              this.firstLoad = false;
+            }
+          },
+          err => {
+            this.gs.decrementOutstandingCalls();
+            this.logOut();
+          }
+        );
+        */
+  }
+
+  setToken(tkn: Token): void {
+    this.token.next(tkn);
+  }
+
+  getAccessToken(): Observable<string> {
+    return of(this.internalToken.access);
+  }
+
   getUser() {
-    if (this.internalToken) {
+    if (this.internalToken.access) {
       this.gs.incrementOutstandingCalls();
       this.http.get(
         'auth/user_data/'
@@ -71,18 +161,16 @@ export class AuthService {
           this.gs.decrementOutstandingCalls();
         },
         Error => {
-          const tmp = Error as { error: { detail: string } };
           console.log('error', Error);
-          //alert(tmp.error.detail);
           this.gs.decrementOutstandingCalls();
-          this.internalToken = '';
+          this.internalToken = new Token();
         }
       );
     }
   }
 
   getUserLinks() {
-    if (this.internalToken) {
+    if (this.internalToken.access) {
       this.gs.incrementOutstandingCalls();
       this.http.get(
         'auth/user_links/'
@@ -113,6 +201,41 @@ export class AuthService {
       );
     }
   }
+
+  getTokenLoad(tkn: string): TokenLoad {
+    const tokenParts = tkn.split(/\./);
+    const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
+    return tokenDecoded as TokenLoad;
+  }
+
+  getTokenExp(tkn: string, tknTyp = ''): Date {
+    const d = new Date(0);
+    d.setUTCSeconds(this.getTokenLoad(tkn).exp);
+    console.log(tknTyp);
+    console.log(d);
+    return d;
+  }
+
+  isTokenExpired(tkn: string): boolean {
+    return this.getTokenExp(tkn) <= new Date();
+  }
+}
+
+export class Token {
+  access: string;
+  refresh: string;
+}
+
+export class TokenLoad {
+  exp: number;
+  username: string;
+  email: string;
+  user_id: number;
+}
+
+export class UserData {
+  username: string;
+  password: string;
 }
 
 export class User {

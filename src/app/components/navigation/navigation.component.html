@@ -54,7 +54,7 @@
               </p>
             </li>
             <ng-template #login>
-              <li *ngIf="!token; else hasToken">
+              <li *ngIf="!token.refresh; else hasToken">
                 <p>
                   <a routerLink="login" routerLinkActive="active" class="menu-link">LOG IN</a>
                 </p>

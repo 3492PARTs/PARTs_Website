@@ -66,9 +66,7 @@ export class AdminComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       },
       Error => {
-        const tmp = Error as { error: { detail: string } };
         console.log('error', Error);
-        alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
       }
     );
@@ -127,9 +125,7 @@ export class AdminComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       },
       Error => {
-        const tmp = Error as { error: { detail: string } };
         console.log('error', Error);
-        alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
       }
     );
@@ -162,9 +158,7 @@ export class AdminComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       },
       Error => {
-        const tmp = Error as { error: { detail: string } };
         console.log('error', Error);
-        alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
       }
     );

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import { AuthService, UserData } from 'src/app/services/auth/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  input;
+  input: UserData;
   authUrl;
 
   constructor(private authService: AuthService, private router: Router) { }
@@ -18,8 +18,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.input = {
       username: '',
-      password: '',
-      email: ''
+      password: ''
     };
 
     this.authUrl = environment.baseUrl + 'auth/';
