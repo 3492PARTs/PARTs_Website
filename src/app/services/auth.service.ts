@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { GeneralService } from '../general/general.service';
+import { GeneralService } from './general/general.service';
 import { share, map } from 'rxjs/operators';
 
 @Injectable({
@@ -38,7 +38,7 @@ export class AuthService {
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) };
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
-    if (this.internalToken.refresh) {
+    if (this.internalToken && this.internalToken.refresh) {
       //const header = new HttpHeaders({ authExempt: 'true', });
 
       this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
@@ -89,55 +89,27 @@ export class AuthService {
   }
 
   // Refreshes the JWT token, to extend the time the user is logged in
-  public refreshToken(): Observable<string> {
+  public refreshToken(): Observable<Token> {
     this.getTokenExp(this.internalToken.refresh, 'Refresh');
     this.gs.incrementOutstandingCalls();
 
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
 
     return this.http
-      .post('auth/token/refresh/', { refresh: this.internalToken.refresh })
+      .post<Token>('auth/token/refresh/', { refresh: this.internalToken.refresh })
       .pipe(
-        share(), // <========== YOU HAVE TO SHARE THIS OBSERVABLE TO AVOID MULTIPLE REQUEST BEING SENT SIMULTANEOUSLY
         map(res => {
           this.internalToken.access = res['access'];
           this.internalToken.refresh = res['refresh'];
           this.getTokenExp(this.internalToken.access, 'New Access');
           this.getTokenExp(this.internalToken.refresh, 'New Refresh');
           this.token.next(this.internalToken);
+
           this.gs.decrementOutstandingCalls();
 
-          /*if (this.firstLoad) {
-            this.getUser();
-            this.getUserLinks();
-            this.firstLoad = false;
-          }*/
-          this.gs.decrementOutstandingCalls();
-          return this.internalToken.access;
+          return res as Token;
         })
       );
-    /*
-        this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
-          data => {
-            this.internalToken.access = data['access'];
-            this.internalToken.refresh = data['refresh'];
-            this.getTokenExp(this.internalToken.access, 'New Access');
-            this.getTokenExp(this.internalToken.refresh, 'New Refresh');
-            this.token.next(this.internalToken);
-            this.gs.decrementOutstandingCalls();
-
-            if (this.firstLoad) {
-              this.getUser();
-              this.getUserLinks();
-              this.firstLoad = false;
-            }
-          },
-          err => {
-            this.gs.decrementOutstandingCalls();
-            this.logOut();
-          }
-        );
-        */
   }
 
   setToken(tkn: Token): void {
@@ -157,6 +129,7 @@ export class AuthService {
         Response => {
           // console.log(Response);
           this.user.next(Response as User);
+
           this.getUserLinks();
           this.gs.decrementOutstandingCalls();
         },

@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+import { AuthGuard } from './helpers/auth.gaurd';
+
 import { HomeComponent } from './components/webpages/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
@@ -29,7 +32,7 @@ import { AdminComponent } from './components/webpages/admin/admin.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'scout/scout-field', component: ScoutFieldComponent },
   { path: 'scout/scout-pit', component: ScoutPitComponent },
@@ -52,7 +55,10 @@ const routes: Routes = [
   { path: 'media/wallpapers', component: WallpapersComponent },
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
-  { path: 'admin', component: AdminComponent }
+  { path: 'admin', component: AdminComponent },
+
+  // otherwise redirect to home
+  //{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({

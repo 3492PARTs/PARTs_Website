@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +8,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 import { HTTPInterceptor } from './providers/http-interceptor';
+
+import { appInitializer } from './helpers/app.initializer';
+import { ErrorInterceptor } from './helpers/error.interceptor';
 
 import { HomeComponent } from './components/webpages/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -65,6 +68,7 @@ import { TabContainerComponent } from './components/atoms/tab-container/tab-cont
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -130,11 +134,18 @@ import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
     DateTimePickerModule
   ],
   providers: [
+    /*{
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      multi: true,
+      deps: [AuthService]
+    },*/
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HTTPInterceptor,
       multi: true
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

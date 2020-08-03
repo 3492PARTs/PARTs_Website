@@ -1,20 +1,14 @@
-@import '../_helpers/variables';
+@import "../_helpers/variables";
 
 /*FONT IMPORT*/
-
-@font-face {
-    font-family: roboto-regular;
-    src: url(./assets/typography/roboto-regular.ttf);
-}
-
+//moved to font.scss in the assets/typography
 
 /*FONT*/
 
 * {
-    font-family: 'roboto-regular';
-    color: $fontColor;
+  font-family: "roboto-regular";
+  color: $fontColor;
 }
-
 
 /*TEXT*/
 
@@ -43,15 +37,14 @@ h6 {
 }
 
 main p,
-main ul>li,
-main ol>li {
-    font-size: 1em;
+main ul > li,
+main ol > li {
+  font-size: 1em;
 }
-
 
 /*LINK COLOR*/
 
 main a:hover {
-    color: $hoverColor;
-    transition: .25s linear;
+  color: $hoverColor;
+  transition: 0.25s linear;
 }

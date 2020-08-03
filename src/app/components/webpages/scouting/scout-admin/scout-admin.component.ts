@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
-import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth/auth.service';
+import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
