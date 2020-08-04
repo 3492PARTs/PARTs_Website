@@ -70,7 +70,8 @@ export class AuthService {
       Response => {
         // console.log(Response);
         const tmp = Response as Token;
-        this.getTokenExp(tmp.access, 'Access');
+        // this.getTokenExp(tmp.access, 'Log In Access');
+        // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
         this.token.next(tmp);
         this.internalToken = tmp;
         localStorage.setItem(this.localStorageString, tmp.refresh);
@@ -101,8 +102,8 @@ export class AuthService {
         map(res => {
           this.internalToken.access = res['access'];
           this.internalToken.refresh = res['refresh'];
-          this.getTokenExp(this.internalToken.access, 'New Access');
-          this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+          // this.getTokenExp(this.internalToken.access, 'Refreshed Access');
+          // this.getTokenExp(this.internalToken.refresh, 'Refreshed Refresh');
           this.token.next(this.internalToken);
 
           this.gs.decrementOutstandingCalls();

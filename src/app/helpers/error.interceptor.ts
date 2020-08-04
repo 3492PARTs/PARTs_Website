@@ -43,9 +43,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               return this.auth.logOut() as any;
             }),
             catchError(rfshErr => {
-              //return this.auth.logOut() as any;
               return this.tokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
-                console.log('i handled again');
                 return next.handle(this.addTokenToRequest(request, this.token.access));
               }));
             }),
@@ -55,7 +53,6 @@ export class ErrorInterceptor implements HttpInterceptor {
           );
         } else {
           return this.tokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
-            console.log('i handled again');
             return next.handle(this.addTokenToRequest(request, this.token.access));
           }));
         }
@@ -65,7 +62,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       }
 
       const error = (err && err.error && err.error.message) || err.statusText;
-      console.error('from err hndlr: ' + err);
+      //console.error(err);
       return throwError(error);
     }));
   }
