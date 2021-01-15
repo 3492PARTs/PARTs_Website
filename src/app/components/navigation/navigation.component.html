@@ -34,7 +34,7 @@
             {{m.MenuName}}
           </p>
           <ng-template #hasLink>
-            <p id="{{m.RouterLink}}">
+            <p id="{{m.RouterLink}}" *ngIf="m.RouterLink !== 'login'; else login">
               <a *ngIf="!m.RouterLink.includes('.'); else hasAddress" routerLink="{{m.RouterLink}}"
                 routerLinkActive="active" [routerLinkActiveOptions]="{exact:
                 true}" class="menu-link">{{m.MenuName}}</a>
@@ -43,26 +43,27 @@
                 <a target="_blank" [href]="m.RouterLink" class="menu-link">{{m.MenuName}}</a>
               </ng-template>
             </p>
+
+            <ng-template #login>
+              <p *ngIf="!token.refresh; else hasToken">
+                <a routerLink="login" routerLinkActive="active" class="menu-link">LOG IN</a>
+              </p>
+              <ng-template #hasToken>
+                <p><a class="menu-link">WELCOME: {{user.username}}</a></p>
+              </ng-template>
+            </ng-template>
           </ng-template>
         </div>
 
         <ul class="sub_links" *ngIf="m.MenuItems.length > 0">
           <ng-container *ngFor="let sm of m.MenuItems">
-            <li *ngIf="sm.RouterLink !== 'login'; else login">
+            <li *ngIf="m.RouterLink !== 'login'; else login">
               <p>
                 <a routerLink="{{sm.RouterLink}}" routerLinkActive="active" class="menu-link">{{sm.MenuName}}</a>
               </p>
             </li>
             <ng-template #login>
-              <li *ngIf="!token.refresh; else hasToken">
-                <p>
-                  <a routerLink="login" routerLinkActive="active" class="menu-link">LOG IN</a>
-                </p>
-              </li>
-              <ng-template #hasToken>
-                <li>
-                  <p><a class="menu-link">WELCOME: {{user.username}}</a></p>
-                </li>
+              <ng-container *ngIf="token.refresh">
                 <li *ngFor="let ul of userLinks">
                   <p>
                     <a routerLink="{{ul.RouterLink}}" routerLinkActive="active" class="menu-link">{{ul.MenuName}}</a>
@@ -71,7 +72,7 @@
                 <li>
                   <p (click)="logOut()"><a class="menu-link">LOG OUT</a></p>
                 </li>
-              </ng-template>
+              </ng-container>
             </ng-template>
           </ng-container>
         </ul>

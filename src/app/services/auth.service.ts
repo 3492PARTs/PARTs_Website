@@ -9,6 +9,8 @@ import { share, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
+  private authInFlightBS = new BehaviorSubject<string>('prcs');
+  authInFlight = this.authInFlightBS.asObservable();
 
   private token = new BehaviorSubject<Token>(new Token());
   currentToken = this.token.asObservable();
@@ -35,6 +37,8 @@ export class AuthService {
   }
 
   previouslyAuthorized(): void {
+    this.authInFlightBS.next('prcs');
+
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) };
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
@@ -44,7 +48,7 @@ export class AuthService {
       this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
         data => {
           this.internalToken.access = data['access'];
-          this.internalToken.refresh = data['refresh'];
+          //this.internalToken.refresh = data['refresh'];
           this.getTokenExp(this.internalToken.access, 'New Access');
           this.getTokenExp(this.internalToken.refresh, 'New Refresh');
           this.token.next(this.internalToken);
@@ -55,16 +59,20 @@ export class AuthService {
             this.getUserLinks();
             this.firstLoad = false;
           }
+
+          this.authInFlightBS.next('comp');
         },
         err => {
           this.gs.decrementOutstandingCalls();
+          this.authInFlightBS.next('err');
           this.logOut();
         }
       );
     }
   }
 
-  authorizeUser(userData: UserData): void {
+  authorizeUser(userData: UserData, returnUrl?: string): void {
+    this.authInFlightBS.next('prcs');
     this.gs.incrementOutstandingCalls();
     this.http.post('auth/token/', userData).subscribe(
       Response => {
@@ -76,13 +84,21 @@ export class AuthService {
         localStorage.setItem(this.localStorageString, tmp.refresh);
         this.getUser();
         this.gs.decrementOutstandingCalls();
-        this.router.navigateByUrl('');
+
+        if (this.gs.strNoE(returnUrl)) {
+          this.router.navigateByUrl('');
+        } else {
+          this.router.navigateByUrl(returnUrl);
+        }
+
+        this.authInFlightBS.next('comp');
       },
       Error => {
         const tmp = Error as { error: { detail: string } };
         console.log('error', Error);
         //alert(tmp.error.detail);
         this.gs.decrementOutstandingCalls();
+        this.authInFlightBS.next('err');
         this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
       }
     );

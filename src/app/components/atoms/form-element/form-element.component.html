@@ -66,7 +66,8 @@
           <i class="arrow down"></i>
         </div>
       </span>
-      <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
+      <div *ngIf="BindingProperty !== '' && DisplayProperty !== '' && SelectList.length > 0" id="dropdown"
+        #multiSelectDropdown>
         <div *ngFor="let obj of SelectList; let i = index">
           <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
             (ngModelChange)="multiChange($event, i)">

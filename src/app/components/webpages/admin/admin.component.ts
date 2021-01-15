@@ -47,8 +47,7 @@ export class AdminComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.adminInit();
-    this.getErrors(this.errorPage);
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
   }
 
   adminInit(): void {
@@ -70,6 +69,7 @@ export class AdminComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       }
     );
+    this.getErrors(this.errorPage);
   }
 
   showManageUserModal(u: User): void {

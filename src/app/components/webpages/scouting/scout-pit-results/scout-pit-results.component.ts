@@ -5,6 +5,7 @@ import { ScoutAnswer, Team } from '../scout-field/scout-field.component';
 import { ScoutQuestion } from '../question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-pit-results',
@@ -15,9 +16,13 @@ export class ScoutPitResultsComponent implements OnInit {
   teams: Team[] = [];
   scoutPitResults: ScoutPitResults[] = [];
 
-  constructor(private http: HttpClient, private gs: GeneralService) { }
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutPitResultsInit() : null);
+  }
+
+  scoutPitResultsInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/scoutPit/GetResultsInit/'

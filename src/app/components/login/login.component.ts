@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, UserData } from 'src/app/services/auth.service';
+import { GeneralService } from 'src/app/services/general/general.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -12,19 +13,22 @@ export class LoginComponent implements OnInit {
 
   input: UserData;
   authUrl;
+  returnUrl = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private gs: GeneralService, private route: ActivatedRoute) {
+    this.route.queryParamMap.subscribe(queryParams => {
+      this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+    });
+  }
 
   ngOnInit() {
     this.input = {
       username: '',
       password: ''
     };
-
-    this.authUrl = environment.baseUrl + 'auth/';
   }
 
   login() {
-    this.authService.authorizeUser(this.input);
+    this.authService.authorizeUser(this.input, this.returnUrl);
   }
 }

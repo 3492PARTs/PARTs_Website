@@ -5,6 +5,7 @@ import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -19,9 +20,13 @@ export class ScoutFieldResultsComponent implements OnInit {
   teamScoutResults: ScoutResults = new ScoutResults();
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
 
-  constructor(private http: HttpClient, private gs: GeneralService) { }
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldResultsInit() : null);
+  }
+
+  scoutFieldResultsInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/scoutField/GetResults/'
