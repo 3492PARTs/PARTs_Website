@@ -3,8 +3,8 @@ import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd } from '@angular/router'; // import Router and NavigationEnd
 
-// declare ga as a function to set and sent the events
-declare let ga: (arg1: string, arg2: string, arg3?: string) => void;
+// declare gtag as a function to set and sent the events
+declare let gtag: Function;
 
 @Component({
   selector: 'app-root',
@@ -18,9 +18,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(event => {
 
       if (environment.production && event instanceof NavigationEnd) {
-        ga('set', 'page', event.urlAfterRedirects);
-        ga('send', 'pageview');
-
+        gtag('config', '', { 'page_path': event.urlAfterRedirects });
       }
 
     });
