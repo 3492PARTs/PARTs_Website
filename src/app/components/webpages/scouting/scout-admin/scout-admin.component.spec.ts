@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ScoutAdminComponent } from './scout-admin.component';
 
@@ -6,7 +6,7 @@ describe('ScoutAdminComponent', () => {
   let component: ScoutAdminComponent;
   let fixture: ComponentFixture<ScoutAdminComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ScoutAdminComponent ]
     })
