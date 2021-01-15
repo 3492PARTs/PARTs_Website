@@ -20,9 +20,9 @@
     "@angular/platform-browser-dynamic": "^11.0.9",
     "@angular/router": "^11.0.9",
     "@syncfusion/ej2-angular-calendars": "^17.4.51",
-    "blueimp-load-image": "^2.31.0",
-    "file-saver": "^2.0.2",
-    "jquery": "^3.4.1",
+    "blueimp-load-image": "^5.14.0",
+    "file-saver": "^2.0.5",
+    "jquery": "^3.5.1",
     "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

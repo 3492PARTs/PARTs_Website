@@ -23,14 +23,10 @@ export class ScoutPitComponent implements OnInit {
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.init();
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.spInit() : null);
   }
 
-  init(): void {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutPitInit() : null);
-  }
-
-  scoutPitInit(): void {
+  spInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/scoutPit/GetQuestions/'
@@ -67,7 +63,7 @@ export class ScoutPitComponent implements OnInit {
         this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
         this.gs.decrementOutstandingCalls();
         this.savePicture();
-        this.init();
+        this.spInit();
         this.team = '';
       },
       Error => {

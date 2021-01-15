@@ -63,7 +63,7 @@ export class ScoutAdminComponent implements OnInit {
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
   }
 
