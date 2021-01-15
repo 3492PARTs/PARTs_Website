@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -14,9 +15,13 @@ export class ScoutFieldComponent implements OnInit {
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
 
-  constructor(private http: HttpClient, private gs: GeneralService) { }
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldInit() : null);
+  }
+
+  scoutFieldInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/scoutField/GetQuestions/'

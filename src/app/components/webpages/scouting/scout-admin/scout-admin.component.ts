@@ -63,8 +63,8 @@ export class ScoutAdminComponent implements OnInit {
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
-  ngOnInit() {
-    this.adminInit();
+  async ngOnInit() {
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
   }
 
   adminInit(): void {
@@ -158,6 +158,7 @@ export class ScoutAdminComponent implements OnInit {
 
   buildEventList(): void {
     this.eventList = this.init.events.filter(item => item.season === this.season);
+    this.event = null;
   }
 
   addSeason(): void {

@@ -32,14 +32,14 @@ import { AdminComponent } from './components/webpages/admin/admin.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'scout/scout-field', component: ScoutFieldComponent },
-  { path: 'scout/scout-pit', component: ScoutPitComponent },
-  { path: 'scout/scout-admin', component: ScoutAdminComponent },
-  { path: 'scout/scout-field-results', component: ScoutFieldResultsComponent },
-  { path: 'scout/scout-pit-results', component: ScoutPitResultsComponent },
-  { path: 'scout/scout-portal', component: ScoutPortalComponent },
+  { path: 'scout/scout-field', component: ScoutFieldComponent, canActivate: [AuthGuard] },
+  { path: 'scout/scout-pit', component: ScoutPitComponent, canActivate: [AuthGuard] },
+  { path: 'scout/scout-admin', component: ScoutAdminComponent, canActivate: [AuthGuard] },
+  { path: 'scout/scout-field-results', component: ScoutFieldResultsComponent, canActivate: [AuthGuard] },
+  { path: 'scout/scout-pit-results', component: ScoutPitResultsComponent, canActivate: [AuthGuard] },
+  { path: 'scout/scout-portal', component: ScoutPortalComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent },
   { path: 'join', component: JoinComponent },
   { path: 'join/community-outreach', component: CommunityOutreachComponent },
@@ -55,7 +55,7 @@ const routes: Routes = [
   { path: 'media/wallpapers', component: WallpapersComponent },
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
-  { path: 'admin', component: AdminComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
 
   // otherwise redirect to home
   //{ path: '**', redirectTo: '' }

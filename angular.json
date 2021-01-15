@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "PARTs-Site"
+    }
+  },
+  "defaultProject": "PARTs-Site",
+  "cli": {
+    "analytics": "c9d65078-459f-4fe5-8558-c4d5148e196f"
+  }
 }

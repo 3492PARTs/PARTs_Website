@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ScoutSchedule } from '../scout-admin/scout-admin.component';
 import { GeneralService } from 'src/app/services/general/general.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -19,10 +20,10 @@ export class ScoutPortalComponent implements OnInit {
     { PropertyName: 'notified', ColLabel: 'Notified' }
   ];
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.portalInit();
+    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.portalInit() : null);
   }
 
   portalInit(): void {

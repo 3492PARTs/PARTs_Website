@@ -13,7 +13,6 @@
 
     <app-modal [Title]="'Manage User: ' + activeUser.first_name + ' ' + activeUser.last_name"
       [(visible)]="manageUserModalVisible">
-      <app-header [h]="3">User Groups</app-header>
       <div class="flex">
         <div>
           <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
@@ -38,6 +37,8 @@
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
         </div>
       </div>
+
+      <app-header [h]="3">User Groups</app-header>
       <app-table [TableCols]="userGroupsTableCols" [TableData]="userGroups" [Scrollable]="true"
         [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
