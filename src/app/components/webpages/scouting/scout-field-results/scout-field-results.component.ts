@@ -19,6 +19,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   teamScoutResultsModalVisible = false;
   teamScoutResults: ScoutResults = new ScoutResults();
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
+  showScoutFieldCols: object[];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -34,6 +35,11 @@ export class ScoutFieldResultsComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.scoutResults = Response as ScoutResults;
+          this.showScoutFieldCols = this.scoutResults['scoutCols'];
+
+          for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+            this.showScoutFieldCols[i]['checked'] = true;
+          }
         }
         this.gs.decrementOutstandingCalls();
       },
@@ -148,6 +154,24 @@ export class ScoutFieldResultsComponent implements OnInit {
         orientation: true
       }
     );
+  }
+
+  showHideTableCols(): void {
+    let tmp: object[] = [];
+    for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+      if (this.showScoutFieldCols[i]['checked']) {
+        tmp.push(this.showScoutFieldCols[i]);
+      }
+    }
+
+    this.scoutResults['scoutCols'] = tmp;
+  }
+
+  resetTableColumns(): void {
+    for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+      this.showScoutFieldCols[i]['checked'] = true;
+    }
+    this.showHideTableCols();
   }
 }
 export class ScoutResults {

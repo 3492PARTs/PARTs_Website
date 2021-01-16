@@ -23,3 +23,18 @@
     }
   }
 }
+
+#table-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+  & > div {
+    display: flex;
+
+    app-form-element {
+      padding-right: 1.6rem;
+    }
+  }
+}

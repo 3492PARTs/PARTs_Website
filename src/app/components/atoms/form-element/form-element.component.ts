@@ -112,7 +112,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   private positionMultiSelect(): void {
-    if (this.Type === 'multiselect') {
+    if (this.Type === 'multiselect' && this.multiSelect && this.dropdown) {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
       this.renderer.setStyle(
         this.dropdown.nativeElement,
@@ -204,18 +204,20 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   multiSelectClose(): void {
-    this.renderer.setStyle(
-      this.dropdown.nativeElement,
-      'height', '0px'
-    );
-    window.setTimeout(() => {
+    if (this.dropdown) {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
-        'visibility', 'hidden'
+        'height', '0px'
       );
-    }, 150);
+      window.setTimeout(() => {
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'visibility', 'hidden'
+        );
+      }, 150);
 
-    this.expanded = false;
+      this.expanded = false;
+    }
   }
 
 }

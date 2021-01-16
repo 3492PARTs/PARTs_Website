@@ -1,7 +1,16 @@
 <app-box [Title]="'Scout Field Results'">
-  <app-button-ribbon>
+  <div id="table-buttons">
+    <div>
+      <app-form-element [Type]="'multiselect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
+        [BindingProperty]="'checked'" [SelectList]="showScoutFieldCols" [(MultiModel)]="showScoutFieldCols"
+        (ModelChange)="showHideTableCols()">
+      </app-form-element>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
+    </div>
+
     <app-button [ButtonType]="'main'" (FunctionCallBack)="download(false)">Download</app-button>
-  </app-button-ribbon>
+  </div>
+
   <app-table [TableCols]="scoutResults['scoutCols']" [TableData]="scoutResults['scoutAnswers']" [Scrollable]="true"
     [EnableFilter]="true" [Width]="'200%'" [Responsive]="'true'" (RecordClickCallBack)="getTeamInfo($event)">
   </app-table>
@@ -17,7 +26,7 @@
         </div>
 
         <div *ngFor="let r of scoutPitResult.results">
-          <p>{{ r.question }}: {{  r.answer }}</p>
+          <p>{{ r.question }}: {{ r.answer }}</p>
         </div>
       </div>
 
