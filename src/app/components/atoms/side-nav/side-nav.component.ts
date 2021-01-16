@@ -18,7 +18,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   private screenSizeWide = 1175;
   private resizeTimer;
-  private runStickyMethod = true;
+  runStickyMethod = true;
 
   collapsed = false;
   hide = true; // For the collapse btn, not needed in full screen mode
@@ -74,7 +74,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event) {
-    if (this.runStickyMethod) {
+    if (this.runStickyMethod && false) {
       const windowTop = $(window).scrollTop();
 
       //console.log('window top ' + windowTop + ' new top ' + (windowTop - ((4 * 16) + 16)));

@@ -13,8 +13,8 @@
   </label>
   <div id="links" #links>
     <ul>
-      <li *ngFor="let m of Menu" (mouseover)="showNavLinks(m.RouterLink, m.MenuItems.length > 0)"
-        (mouseleave)="hideNavLinks(m.RouterLink, m.MenuItems.length > 0)">
+      <li *ngFor="let m of Menu" (mouseover)="hoverShowNavLinks(m.RouterLink, m.MenuItems.length > 0)"
+        (mouseleave)="hoverHideNavLinks(m.RouterLink, m.MenuItems.length > 0)">
         <div class="menu-item-wrapper" id="{{m.RouterLink}}"
           (click)="expandNavLinks(m.RouterLink, m.MenuItems.length > 0)">
 

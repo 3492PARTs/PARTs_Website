@@ -57,10 +57,8 @@
 }
 
 .sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
+  position: sticky;
+  top: 1.6rem;
 
   /*MOBILE NAV*/
   @media only screen and (max-width: $screen_size_narrow) {

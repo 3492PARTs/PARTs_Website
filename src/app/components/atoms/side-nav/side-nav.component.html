@@ -1,4 +1,5 @@
-<div class="side-nav" #thisSideNav [ngClass]="{'hide': HideSideNav}" [ngStyle]="{'width': Width}">
+<div class="side-nav" #thisSideNav [ngClass]="{'hide': HideSideNav, 'sticky': runStickyMethod}"
+  [ngStyle]="{'width': Width}">
   <div id="title" [ngClass]="{'roundedCorners': collapsed}" #thisTitle>
     <p>{{ Title }}</p>
     <div id="collapseBtn" [ngClass]="{'hide': hide}">

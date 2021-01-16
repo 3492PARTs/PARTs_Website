@@ -149,7 +149,7 @@ export class AdminComponent implements OnInit {
           this.errors.forEach(el => {
             el.user_name = el.user.first_name + ' ' + el.user.last_name;
             el.time = new Date(el.time);
-            el.display_time = el.time.getMonth() + '/' + el.time.getDate() + '/' +
+            el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
               el.time.getFullYear() + ' ' +
               (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
               (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');

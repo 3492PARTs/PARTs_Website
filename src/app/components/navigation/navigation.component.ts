@@ -115,7 +115,7 @@ export class NavigationComponent implements OnInit, DoCheck {
     return (
       bounding.top >= 0 &&
       bounding.left >= 0 &&
-      bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+      //bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
       bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
   }
@@ -157,7 +157,7 @@ export class NavigationComponent implements OnInit, DoCheck {
     }
   }
 
-  showNavLinks(id: string, hasSubLinks: boolean) {
+  hoverShowNavLinks(id: string, hasSubLinks: boolean) {
     this.alignNavLinks();
     if (window.innerWidth >= this.screenSizeWide && hasSubLinks) {
       const arrow = document.querySelector('nav #' + id + ' > .arrow');
@@ -169,7 +169,7 @@ export class NavigationComponent implements OnInit, DoCheck {
     }
   }
 
-  hideNavLinks(id: string, hasSubLinks: boolean) {
+  hoverHideNavLinks(id: string, hasSubLinks: boolean) {
     if (window.innerWidth >= this.screenSizeWide && hasSubLinks) {
       const arrow = document.querySelector('nav #' + id + ' > .arrow');
       const subLinks = document.querySelector('nav #' + id + ' ~ .sub_links');
