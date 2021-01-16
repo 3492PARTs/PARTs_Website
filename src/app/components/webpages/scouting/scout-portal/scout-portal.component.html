@@ -1,13 +1,13 @@
 <app-box [Title]="'Scout Portal'">
-  <app-header [h]="3">Scout Field</app-header>
-  <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true">
+  <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule"
+    [Scrollable]="true">
   </app-table>
 
-  <app-header [h]="3">Scout Pit</app-header>
-  <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule" [Scrollable]="true">
+  <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
+    [Scrollable]="true">
   </app-table>
 
-  <app-header [h]="3">Scout Past</app-header>
-  <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pastSchedule" [Scrollable]="true">
+  <app-table [TableTitle]="'Scout Past'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pastSchedule"
+    [Scrollable]="true">
   </app-table>
 </app-box>

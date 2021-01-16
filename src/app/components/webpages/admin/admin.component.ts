@@ -10,7 +10,7 @@ import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/servi
 })
 export class AdminComponent implements OnInit {
 
-  page = 'errors';
+  page = 'users';
 
   init: AdminInit = new AdminInit();
 

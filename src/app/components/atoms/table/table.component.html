@@ -1,3 +1,4 @@
+<app-header *ngIf="TableTitle" [h]="3" [marginBottom]="false">{{ TableTitle }}</app-header>
 <app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'"
   [(Model)]="SearchText"></app-form-element>
 <div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>

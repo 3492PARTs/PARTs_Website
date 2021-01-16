@@ -201,8 +201,8 @@ export class AuthService {
   getTokenExp(tkn: string, tknTyp = ''): Date {
     const d = new Date(0);
     d.setUTCSeconds(this.getTokenLoad(tkn).exp);
-    console.log(tknTyp);
-    console.log(d);
+    this.gs.consoleLog(tknTyp)
+    this.gs.consoleLog(d);
     return d;
   }
 

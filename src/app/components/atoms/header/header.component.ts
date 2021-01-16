@@ -9,6 +9,7 @@ export class HeaderComponent implements OnInit {
   @Input() h: number;
   @Input() centered = false;
   @Input() underlined = true;
+  @Input() marginBottom = true;
 
   constructor() { }
 

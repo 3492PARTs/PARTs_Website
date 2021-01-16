@@ -55,28 +55,26 @@
 
 
   <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
-    <app-header [h]="3">Scout Field</app-header>
-    <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule" [Scrollable]="true"
-      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
-      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+    <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule"
+      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')"
+      [ShowEditButton]="true" (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
     </app-button-ribbon>
 
-    <app-header [h]="3">Scout Pit</app-header>
-    <app-table [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule" [Scrollable]="true"
-      [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')" [ShowEditButton]="true"
-      (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+    <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
+      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')"
+      [ShowEditButton]="true" (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.pitSchedule)">Notify</app-button>
     </app-button-ribbon>
 
-    <app-header [h]="3">Scout Past</app-header>
-    <app-table [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule" [Scrollable]="true">
+    <app-table [TableTitle]="'Scout Past'" [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule"
+      [Scrollable]="true">
     </app-table>
 
     <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">

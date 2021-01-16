@@ -1,8 +1,8 @@
 <app-box-side-nav-wrapper>
   <app-side-nav [Width]="'12em'" [Title]="'Admin'">
     <ul id="side-nav">
-      <li (click)="page = 'errors'" [ngClass]="{'active': page === 'errors'}">Error Log</li>
       <li (click)="page = 'users'" [ngClass]="{'active': page === 'users'}">Manage Users</li>
+      <li (click)="page = 'errors'" [ngClass]="{'active': page === 'errors'}">Error Log</li>
     </ul>
   </app-side-nav>
 

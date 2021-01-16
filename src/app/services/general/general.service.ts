@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { saveAs } from 'file-saver';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +73,12 @@ export class GeneralService {
   downloadFileAs(filename, data, MimeType) {
     const blob = new Blob([data], { type: MimeType });
     saveAs(blob, filename);
+  }
+
+  consoleLog(l: any): void {
+    if (!environment.production) {
+      console.log(l);
+    }
   }
 }
 

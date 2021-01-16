@@ -30,6 +30,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() TableData: any[];
   @Input() TableCols: any[] = [];
 
+  @Input() TableTitle: string;
+
   @Input() EnableFilter = false;
   @Input() DisableSort = false;
 
