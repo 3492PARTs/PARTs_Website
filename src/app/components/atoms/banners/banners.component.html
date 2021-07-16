@@ -1,0 +1,10 @@
+<div id="banner-wrapper">
+  <div *ngFor="let b of banners" class="banner">
+    <app-box>
+      <div class="banner-content">
+        <p>{{ b.message }}</p>
+        <app-button [ButtonType]="'close'" (FunctionCallBack)="dismissBanner(b)"></app-button>
+      </div>
+    </app-box>
+  </div>
+</div>

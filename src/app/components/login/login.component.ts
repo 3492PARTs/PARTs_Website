@@ -1,7 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, UserData } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { Banner, GeneralService } from 'src/app/services/general/general.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,8 +15,9 @@ export class LoginComponent implements OnInit {
   input: UserData;
   authUrl;
   returnUrl = '';
+  apiStatus = 'unknown';
 
-  constructor(private authService: AuthService, private gs: GeneralService, private route: ActivatedRoute) {
+  constructor(private authService: AuthService, private gs: GeneralService, private route: ActivatedRoute, private http: HttpClient) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
@@ -26,6 +28,22 @@ export class LoginComponent implements OnInit {
       username: '',
       password: ''
     };
+
+    this.gs.incrementOutstandingCalls();
+
+    this.http.get('auth/api_status/').subscribe(
+      Response => {
+        this.apiStatus = 'online';
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        const tmp = Error as { error: { detail: string } };
+        this.apiStatus = 'offline';
+        this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, dismissed: false });
+        this.gs.decrementOutstandingCalls();
+      }
+    );
+
   }
 
   login() {

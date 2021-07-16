@@ -69,6 +69,7 @@ import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
 import { AuthService } from './services/auth.service';
+import { BannersComponent } from './components/atoms/banners/banners.component';
 
 @NgModule({
   declarations: [
@@ -124,7 +125,8 @@ import { AuthService } from './services/auth.service';
     FirstComponent,
     AdminComponent,
     PaginationComponent,
-    OnCreateDirective
+    OnCreateDirective,
+    BannersComponent
   ],
   imports: [
     BrowserModule,

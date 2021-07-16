@@ -13,7 +13,12 @@ export class GeneralService {
   currentOutstandingCalls = this.outstandingCalls.asObservable();
   private internalOutstandingCalls = 0;
 
-  /* Error Handeling*/
+  /* Site Banners */
+  private siteBanners = new BehaviorSubject<Banner[]>([]);
+  currentSiteBanners = this.siteBanners.asObservable();
+  private internalSiteBanners: Banner[] = [];
+
+  /* Error Handling*/
   showErrorModal = false;
   errorMessage = '';
   buttonText = 'Ok';
@@ -34,6 +39,22 @@ export class GeneralService {
       this.internalOutstandingCalls--;
       this.outstandingCalls.next(this.internalOutstandingCalls);
     }
+  }
+
+  /* Site Banners */
+  addBanner(b: Banner) {
+    this.internalSiteBanners.push(b);
+    this.siteBanners.next(this.internalSiteBanners);
+  }
+
+  removeBanner(b: Banner): void {
+    let i = this.arrayObjectIndexOf(this.internalSiteBanners, b.message, 'message');
+
+    if (i !== -1) {
+      this.internalSiteBanners.splice(i, 1);
+      this.siteBanners.next(this.internalSiteBanners);
+    }
+
   }
 
   /* Error Service */
@@ -80,6 +101,24 @@ export class GeneralService {
       console.log(l);
     }
   }
+
+  // For one given propery and its value, get the value of another propery in the same object
+  propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
+    for (let i = 0; i < arr.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(arr[i], queryProperty) && arr[i][queryProperty] === queryValue) {
+        if (Object.prototype.hasOwnProperty.call(arr[i], findProperty)) {
+          return arr[i][findProperty];
+        }
+      }
+    }
+  }
+
+  arrayObjectIndexOf(arr: any[], searchTerm: string, property: string) {
+    for (let i = 0, len = arr.length; i < len; i++) {
+      if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
+    }
+    return -1;
+  }
 }
 
 export class RetMessage {
@@ -91,4 +130,10 @@ export class Page {
   count: number;
   previous: number;
   next: number;
+}
+
+export class Banner {
+  severity: number; // 1 - high, 2 - med, 3 - low
+  message: string;
+  dismissed: false;
 }
