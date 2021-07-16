@@ -276,6 +276,7 @@ export class ScoutAdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
         }
+        this.adminInit();
         this.gs.decrementOutstandingCalls();
       },
       Error => {
