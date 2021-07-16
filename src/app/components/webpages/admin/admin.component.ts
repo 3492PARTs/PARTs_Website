@@ -59,7 +59,7 @@ export class AdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           this.init = Response as AdminInit;
           this.init.users.forEach(el => {
-            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'n' : 'y';
+            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'no' : 'yes';
           });
         }
         this.gs.decrementOutstandingCalls();

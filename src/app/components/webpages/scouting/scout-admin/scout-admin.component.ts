@@ -51,7 +51,7 @@ export class ScoutAdminComponent implements OnInit {
   newAuthGroup: AuthGroup = new AuthGroup();
 
   userGroupsTableCols: object[] = [
-    { PropertyName: 'description', ColLabel: 'Description' }
+    { PropertyName: 'name', ColLabel: 'Name' }
   ];
 
   scoutScheduleModalVisible = false;
@@ -87,7 +87,7 @@ export class ScoutAdminComponent implements OnInit {
           this.buildEventList();
 
           this.init.users.forEach(el => {
-            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'n' : 'y';
+            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'no' : 'yes';
           });
 
         }
