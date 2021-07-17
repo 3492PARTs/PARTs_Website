@@ -43,8 +43,17 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
-    this.internalSiteBanners.push(b);
-    this.siteBanners.next(this.internalSiteBanners);
+    let add = true;
+    this.internalSiteBanners.forEach(el => {
+      if (el.message === b.message) {
+        add = false;
+      }
+    });
+
+    if (add) {
+      this.internalSiteBanners.push(b);
+      this.siteBanners.next(this.internalSiteBanners);
+    }
   }
 
   removeBanner(b: Banner): void {
@@ -133,7 +142,7 @@ export class Page {
 }
 
 export class Banner {
-  severity: number; // 1 - high, 2 - med, 3 - low
-  message: string;
-  dismissed: false;
+  severity: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
+  message: string; //
+  time: -1; // time in ms to show banner, -1 means until dismissed (Still needs implemented)
 }

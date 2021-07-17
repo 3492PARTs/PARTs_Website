@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
       Error => {
         const tmp = Error as { error: { detail: string } };
         this.apiStatus = 'offline';
-        this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, dismissed: false });
+        this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
         this.gs.decrementOutstandingCalls();
       }
     );
