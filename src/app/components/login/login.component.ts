@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
       password: ''
     };
 
+    this.authUrl = environment.authUrl;
+
     this.gs.incrementOutstandingCalls();
 
     this.http.get('auth/api_status/').subscribe(
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
         const tmp = Error as { error: { detail: string } };
         this.apiStatus = 'offline';
         this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
+
         this.gs.decrementOutstandingCalls();
       }
     );

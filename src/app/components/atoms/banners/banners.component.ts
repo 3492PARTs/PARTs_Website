@@ -15,7 +15,17 @@ export class BannersComponent implements OnInit, AfterViewInit {
   constructor(private gs: GeneralService, private router: Router) { }
 
   ngOnInit(): void {
-    this.gs.currentSiteBanners.subscribe(sb => this.banners = sb);
+    this.gs.currentSiteBanners.subscribe(sb => {
+      this.banners = sb;
+
+      this.banners.forEach(b => {
+        if (b.time > 0) {
+          window.setTimeout(() => {
+            this.dismissBanner(b);
+          }, b.time);
+        }
+      });
+    });
   }
 
   ngAfterViewInit(): void {
