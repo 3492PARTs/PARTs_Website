@@ -6,7 +6,7 @@
 
     <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
       [FormGroup]="true" [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-      [DisplayEmptyOption]="true" [(Model)]="sq.answer">
+      [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
     </app-form-element>
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="save()">Save</app-button>

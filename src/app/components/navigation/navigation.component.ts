@@ -60,7 +60,7 @@ export class NavigationComponent implements OnInit, DoCheck {
       MenuItems: []
     },
     {
-      MenuName: 'log in',
+      MenuName: 'members',
       RouterLink: 'login',
       MenuItems: [
         {

@@ -46,7 +46,7 @@
 
             <ng-template #login>
               <p *ngIf="!token.refresh; else hasToken">
-                <a routerLink="login" routerLinkActive="active" class="menu-link">LOG IN</a>
+                <a routerLink="login" routerLinkActive="active" class="menu-link">MEMBERS</a>
               </p>
               <ng-template #hasToken>
                 <p><a class="menu-link">WELCOME: {{user.first_name}}</a></p>
