@@ -15,6 +15,7 @@ export class ScoutPitComponent implements OnInit {
   teams: Team[] = [];
   compTeams: Team[] = [];
   team: string;
+  private previousTeam: string;
   robotPic: File;
   previewUrl: any = null;
   scoutQuestions: ScoutQuestion[] = [];
@@ -49,6 +50,30 @@ export class ScoutPitComponent implements OnInit {
     );
   }
 
+  changeTeam(load = false): void {
+    let dirty = false;
+
+    this.scoutQuestions.forEach(el => {
+      if (!this.gs.strNoE(el.answer)) {
+        dirty = true;
+      }
+    });
+
+    if (dirty && confirm("Are you sure you want to clear and change teams?")) {
+      this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
+      if (load) this.loadTeam();
+    }
+    else if (dirty) {
+      window.setTimeout(() => {
+        this.team = this.previousTeam;
+      }, 1);
+    }
+    else {
+      this.previousTeam = this.team;
+      if (load) this.loadTeam();
+    }
+  }
+
   save(): void {
     this.gs.incrementOutstandingCalls();
     const formData = new FormData();
@@ -76,6 +101,8 @@ export class ScoutPitComponent implements OnInit {
   }
 
   private savePicture(): void {
+    if (!this.robotPic) return null; // only process if there is a pic
+
     this.gs.incrementOutstandingCalls();
 
     const formData = new FormData();
