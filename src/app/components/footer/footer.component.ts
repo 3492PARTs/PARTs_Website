@@ -12,4 +12,8 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
   }
 
+  toTop(): void {
+    const top = document.getElementById('top');
+    top.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+  }
 }

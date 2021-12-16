@@ -2,11 +2,15 @@
 
 /*FOOTER*/
 
-#footerArrow img {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 30%;
+#footerArrow {
+  cursor: pointer;
+
+  img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 30%;
+  }
 }
 
 
@@ -25,8 +29,9 @@
 .connect>h2 {
   color: white;
   font-size: 1.8em;
+
   &>a {
-      color: white;
+    color: white;
   }
 }
 
@@ -42,11 +47,12 @@ footer>.social {
 
   /*FOOTER:WIDE SCREEN*/
   @media only screen and (min-width: 1001px) {
-      width: 80%;
+    width: 80%;
   }
+
   /*FOOTER:NARROW SCREEN*/
   @media only screen and (max-width: 1000px) {
-      width: 95%;
+    width: 95%;
   }
 }
 
