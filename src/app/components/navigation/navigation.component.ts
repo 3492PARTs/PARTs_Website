@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck } from '@angular/core';
 import { AuthService, User, UserLinks, Token } from 'src/app/services/auth.service';
+import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
   selector: 'app-navigation',
@@ -13,63 +14,7 @@ export class NavigationComponent implements OnInit, DoCheck {
   userLinks: UserLinks[] = [];
   previousUserLinks: UserLinks[] = [];
 
-  Menu = [
-    {
-      MenuName: 'home',
-      RouterLink: '',
-      MenuItems: []
-    },
-    {
-      MenuName: 'contact us',
-      RouterLink: 'contact',
-      MenuItems: [
-        {
-          MenuName: 'join',
-          RouterLink: 'join'
-        }
-      ]
-    },
-    {
-      MenuName: 'sponsoring',
-      RouterLink: 'sponsor',
-      MenuItems: []
-    },
-    {
-      MenuName: 'about',
-      RouterLink: 'about',
-      MenuItems: []
-    },
-    {
-      MenuName: 'media',
-      RouterLink: 'media',
-      MenuItems: []
-    },
-    {
-      MenuName: 'resources',
-      RouterLink: 'resources',
-      MenuItems: []
-    },
-    {
-      MenuName: 'first',
-      RouterLink: 'first',
-      MenuItems: []
-    },
-    {
-      MenuName: 'leads',
-      RouterLink: 'https://www.parts3492leads.org/',
-      MenuItems: []
-    },
-    {
-      MenuName: 'members',
-      RouterLink: 'login',
-      MenuItems: [
-        {
-          MenuName: 'calendar',
-          RouterLink: 'calendar'
-        }
-      ]
-    }
-  ];
+  Menu = [];
 
   screenSizeWide = 1175;
 
@@ -77,7 +22,7 @@ export class NavigationComponent implements OnInit, DoCheck {
 
   resizeTimer;
 
-  constructor(private authService: AuthService, private renderer: Renderer2) { }
+  constructor(private authService: AuthService, private renderer: Renderer2, private gs: GeneralService) { }
 
   ngOnInit() {
     this.authService.currentToken.subscribe(t => this.token = t);
@@ -85,6 +30,77 @@ export class NavigationComponent implements OnInit, DoCheck {
     this.authService.currentUserLinks.subscribe(ul => this.userLinks = ul);
     this.alignNavLinks();
     //this.closeOnLinkClick(); TODO COme back and fix
+
+    this.Menu = [
+      {
+        MenuName: 'home',
+        RouterLink: '',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'contact us',
+        RouterLink: 'contact',
+        ID: this.gs.getNextGsId(),
+        MenuItems: [
+          {
+            MenuName: 'join',
+            RouterLink: 'join'
+          }
+        ]
+      },
+      {
+        MenuName: 'sponsoring',
+        RouterLink: 'sponsor',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'about',
+        RouterLink: 'about',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'media',
+        RouterLink: 'media',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'resources',
+        RouterLink: 'resources',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'first',
+        RouterLink: 'first',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'leads',
+        RouterLink: 'https://www.parts3492leads.org/',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'members',
+        RouterLink: 'none', //'login',
+        ID: this.gs.getNextGsId(),
+        MenuItems: [
+          {
+            MenuName: 'login',
+            RouterLink: 'login'
+          },
+          {
+            MenuName: 'calendar',
+            RouterLink: 'calendar'
+          }
+        ]
+      }
+    ];
   }
 
   ngDoCheck() {
