@@ -91,7 +91,7 @@ export class NavigationComponent implements OnInit, DoCheck {
         ID: this.gs.getNextGsId(),
         MenuItems: [
           {
-            MenuName: 'login',
+            MenuName: 'login - this should not show',
             RouterLink: 'login'
           },
           {
