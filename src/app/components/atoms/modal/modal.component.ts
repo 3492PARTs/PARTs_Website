@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2 } from '@angular/core';
+import { Component, AfterViewInit, Input, EventEmitter, Output, ViewChild, HostListener } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { ButtonComponent } from '../button/button.component';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })
-export class ModalComponent implements OnInit {
+export class ModalComponent implements AfterViewInit {
   @Input() ButtonType = '';
   @Input() ButtonText = '';
   @Input() Title = '';
@@ -14,11 +14,16 @@ export class ModalComponent implements OnInit {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter();
 
+  private screenSizeWide = 1175;
+  private resizeTimer;
+  centered = true;
+
   @ViewChild('thisButton', { read: ButtonComponent }) button: ButtonComponent;
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    this.alignTitle();
   }
 
   open() {
@@ -29,5 +34,24 @@ export class ModalComponent implements OnInit {
   close() {
     this.visible = false;
     this.visibleChange.emit(this.visible);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.alignTitle();
+    }, 200);
+  }
+
+  alignTitle(): void {
+    if (window.innerWidth >= this.screenSizeWide) {
+      this.centered = true;
+    } else {
+      this.centered = false;
+    }
   }
 }

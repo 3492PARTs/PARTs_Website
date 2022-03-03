@@ -43,6 +43,7 @@ button:not(:disabled) {
   color: #fff;
   background-color: #28a745;
   border-color: #28a745;
+
   &:hover {
     box-shadow: 0px 0px 0px 0.2rem rgba(72, 180, 97, 0.5);
   }
@@ -129,6 +130,10 @@ button:not(:disabled) {
 
 .collapse {
   @extend .btn-main;
+
+  &>svg {
+    transform: rotate(180deg);
+  }
 
   transition: 0.25s linear;
 }

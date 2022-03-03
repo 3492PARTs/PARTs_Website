@@ -9,7 +9,7 @@
   margin-top: 20px;
 }
 
-.FormElementGroup + .FormElementGroup {
+.FormElementGroup+.FormElementGroup {
   margin-top: 20px;
 }
 
@@ -17,7 +17,7 @@
   display: inline-block;
 }
 
-.InlineGroup + .InlineGroup {
+.InlineGroup+.InlineGroup {
   margin-left: 10px;
 }
 
@@ -37,6 +37,7 @@
 
 .inline-elements {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
 }
 
