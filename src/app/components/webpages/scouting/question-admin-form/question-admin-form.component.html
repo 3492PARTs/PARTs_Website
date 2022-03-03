@@ -1,4 +1,4 @@
-<app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true" [WrapElements]="true">
+<app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true">
   <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="scoutQuestion.question">
   </app-form-element>
   <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="scoutQuestion.order" [Width]="'5em'">
@@ -16,7 +16,7 @@
   </div>
 </app-form-element-group>
 
-<app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true" [WrapElements]="true">
+<app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
   <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutQuestions"
     [DisplayProperty]="'question'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
     [(Model)]="scoutQuestion.sq_id">
