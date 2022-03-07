@@ -3,7 +3,7 @@
     <img src="../../../assets/icons/home.svg">
   </a>
   <div id="auth-wrapper">
-    <app-box *ngIf="page === 'login'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box *ngIf="page === 'login'" class="flex-item" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Login</h2>
       <app-form>
         <app-form-element [Type]="'text'" [(Model)]="input.username" [Placeholder]="'username'" [Name]="'username'"
@@ -30,7 +30,7 @@
       </app-form>
     </app-box>
 
-    <app-box id="reset" *ngIf="page === 'reset'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="reset" class="flex-item" *ngIf="page === 'reset'" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Password Reset</h2>
       <app-form>
         <app-form-element [Type]="'text'" [(Model)]="input.email" [Placeholder]="'email'" [Width]="'100%'">
@@ -53,7 +53,7 @@
       </app-form>
     </app-box>
 
-    <app-box id="resetFinish" *ngIf="page === 'resetFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="resetFinish" class="flex-item" *ngIf="page === 'resetFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Password Reset</h2>
       <p>
         If an account was found matching that email, check your inbox.
@@ -70,7 +70,7 @@
       </div>
     </app-box>
 
-    <app-box id="resetConfirm" *ngIf="page === 'resetConfirm'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="resetConfirm" class="flex-item" *ngIf="page === 'resetConfirm'" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Reset Password</h2>
       <app-form>
         <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'" [Width]="'100%'">
@@ -101,7 +101,7 @@
       </app-form>
     </app-box>
 
-    <app-box id="register" *ngIf="page === 'register'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="register" class="flex-item" *ngIf="page === 'register'" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Register</h2>
       <app-form>
         <app-form-element [Type]="'text'" [(Model)]="newUser.username" [Placeholder]="'username'" [Width]="'100%'"
@@ -152,7 +152,8 @@
       </app-form>
     </app-box>
 
-    <app-box id="registerFinish" *ngIf="page === 'registerFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="registerFinish" class="flex-item" *ngIf="page === 'registerFinish'" [Width]="'auto'"
+      [MaxWidth]="'100%'">
       <h2 class="title">Register</h2>
       <p>
         Account registered. You will be sent an email shortly.
@@ -167,7 +168,8 @@
       </div>
     </app-box>
 
-    <app-box id="resendConfirmation" *ngIf="page === 'resendConfirmation'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="resendConfirmation" class="flex-item" *ngIf="page === 'resendConfirmation'" [Width]="'auto'"
+      [MaxWidth]="'100%'">
       <h2 class="title">Resend Confirmation</h2>
       <app-form>
         <app-form-element [Type]="'text'" [(Model)]="input.email" [Placeholder]="'email'" [Width]="'100%'">
@@ -187,7 +189,8 @@
       </app-form>
     </app-box>
 
-    <app-box id="confirmationFinish" *ngIf="page === 'confirmationFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box id="confirmationFinish" class="flex-item" *ngIf="page === 'confirmationFinish'" [Width]="'auto'"
+      [MaxWidth]="'100%'">
       <h2 class="title">Activation Sent</h2>
       <p>
         Account activation sent.
@@ -204,7 +207,7 @@
       </div>
     </app-box>
 
-    <app-box *ngIf="page === 'activationConfirm'" [Width]="'auto'" [MaxWidth]="'100%'">
+    <app-box *ngIf="page === 'activationConfirm'" class="flex-item" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Account Activated</h2>
       <p>
         Account activated.
