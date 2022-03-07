@@ -13,25 +13,25 @@
 
   @include flex-center();
 
-  #auth {
-    width: initial;
-    display: inline-block;
-    max-width: 100%;
-
-    #options {
-      & > div {
-        padding-right: 1em;
-
-        a {
-          color: #007bff;
-        }
-      }
-
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+  #options {
+    a {
+      cursor: pointer;
     }
+
+    &>div {
+      padding-right: 1em;
+
+      a {
+        color: #007bff;
+        text-decoration: underline;
+
+      }
+    }
+
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
@@ -51,7 +51,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.box .title {
+.title {
   text-align: center;
 }
 
@@ -131,4 +131,21 @@
   width: 100%;
   height: 100%;
   padding: 0.5em;
+}
+
+
+.matching-pass {
+  margin: 0;
+
+  .do-not-match {
+    color: red;
+  }
+
+  .do-match {
+    color: green;
+  }
+}
+
+.hide {
+  display: none;
 }

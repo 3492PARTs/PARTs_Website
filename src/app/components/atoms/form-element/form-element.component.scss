@@ -1,3 +1,7 @@
+.form-element {
+  padding: 0.2rem;
+}
+
 .form-control {
   display: block;
   height: calc(1.5em + 0.75rem + 2px);
@@ -11,7 +15,6 @@
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  margin: 0.2rem;
 
   &:focus {
     color: #495057;
@@ -40,13 +43,14 @@ textarea.form-control {
   padding-right: 0.5em;
 }
 
-.form-control-inline > .form-control {
+.form-control-inline>.form-control {
   display: inline-block !important;
 }
 
 .required {
   position: relative;
 }
+
 .required::after {
   content: "*";
   color: red;

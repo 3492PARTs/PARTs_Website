@@ -105,6 +105,85 @@ export class AuthService {
     );
   }
 
+  registerUser(userData: RegisterUser, returnUrl?: string): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.put('auth/profile/', userData).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          if (this.gs.strNoE(returnUrl)) {
+            this.router.navigateByUrl('');
+          } else {
+            this.router.navigateByUrl(returnUrl);
+          }
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        console.log('error', Error);
+        //alert(tmp.error.detail);
+        this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t create user.');
+      }
+    );
+  }
+
+  resendConfirmation(input: UserData): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'auth/confirm/resend/',
+      { email: input.email }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.router.navigateByUrl('login?page=confirmationFinish');
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t request activation email.');
+      }
+    );
+  }
+
+  requestResetPassword(input: UserData): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'auth/request_reset_password/',
+      { email: input.email }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.router.navigateByUrl('login?page=resetFinish');
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t request password reset.');
+      }
+    );
+  }
+
+  resetPassword(input: UserData): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'auth/reset_password/',
+      { username: input.username, confirm: input.confirm, password: input.password }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.router.navigateByUrl('login?page=login');
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t reset password.');
+      }
+    );
+  }
+
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
     this.getTokenExp(this.internalToken.refresh, 'Refresh');
@@ -226,6 +305,9 @@ export class TokenLoad {
 export class UserData {
   username: string;
   password: string;
+  passwordConfirm: string;
+  confirm: string;
+  email: string;
 }
 
 export class User {
@@ -280,4 +362,13 @@ export class ErrorLog {
   time: Date;
   display_time: string;
   void_ind = 'n';
+}
+
+export class RegisterUser {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  password1: string;
+  password2: string;
 }

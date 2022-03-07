@@ -3,25 +3,222 @@
     <img src="../../../assets/icons/home.svg">
   </a>
   <div id="auth-wrapper">
-    <div class="box" id="auth">
+    <app-box *ngIf="page === 'login'" [Width]="'auto'" [MaxWidth]="'100%'">
       <h2 class="title">Login</h2>
-      <form>
-        <input class="form-control" [(ngModel)]="input.username" placeholder="username" name="username"> <br>
-        <input class="form-control" [(ngModel)]="input.password" type="password" placeholder="password" name="password">
+      <app-form>
+        <app-form-element [Type]="'text'" [(Model)]="input.username" [Placeholder]="'username'" [Name]="'username'"
+          [Width]="'100%'">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'" [Name]="'password'"
+          [Width]="'100%'">
+        </app-form-element>
+
         <br>
 
         <div id="options">
           <div>
-            <a [href]="authUrl + 'password_reset/'">Forgot password?</a>
+            <a (click)="changePage('reset')">Forgot password?</a>
             |
-            <a [href]="authUrl + 'register/'">Register</a>
+            <a (click)="page = 'register'">Register</a>
           </div>
-          <input class="btn btn-primary submit" (click)="login()" type="submit" value="Login">
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="login()">Login</app-button>
         </div>
         <div id="options">
-          <a [href]="authUrl + 'resend_activation/'">Resend Activation</a>
+          <a (click)="changePage('resendConfirmation')">Resend Activation</a>
         </div>
-      </form>
-    </div>
+      </app-form>
+    </app-box>
+
+    <app-box id="reset" *ngIf="page === 'reset'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Password Reset</h2>
+      <app-form>
+        <app-form-element [Type]="'text'" [(Model)]="input.email" [Placeholder]="'email'" [Width]="'100%'">
+        </app-form-element>
+        <br>
+
+        <div id="options">
+          <div>
+            <a (click)="changePage('login')">Log in</a>
+            |
+            <a (click)="changePage('register')">Register</a>
+          </div>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="resetPassword()">Reset</app-button>
+          </app-button-ribbon>
+        </div>
+        <div id="options">
+          <p (click)="changePage('resendConfirmation')">Resend Activation</p>
+        </div>
+      </app-form>
+    </app-box>
+
+    <app-box id="resetFinish" *ngIf="page === 'resetFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Password Reset</h2>
+      <p>
+        If an account was found matching that email, check your inbox.
+        <br>
+        If you do not see an email please check your spam folder.
+      </p>
+
+      <div id="options">
+        <div>
+          <a (click)="changePage('login')">Log in</a>
+          |
+          <a (click)="changePage('register')">Register</a>
+        </div>
+      </div>
+    </app-box>
+
+    <app-box id="resetConfirm" *ngIf="page === 'resetConfirm'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Reset Password</h2>
+      <app-form>
+        <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'" [Width]="'100%'">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'password'" [(Model)]="input.passwordConfirm" [Placeholder]="'confirm password'"
+          [Width]="'100%'">
+        </app-form-element>
+        <br>
+        <p class="matching-pass">
+          <span class="do-not-match" [ngClass]="{ hide : input.password === input.passwordConfirm }">passwords do not
+            match</span>
+          <span class="do-match"
+            [ngClass]="{ hide : input.password !== input.passwordConfirm || gs.strNoE(input.password) }">passwords
+            match</span>
+        </p>
+
+        <div id="options">
+          <div>
+            <a (click)="changePage('reset')">Forgot password?</a>
+            |
+            <a (click)="changePage('register')">Register</a>
+          </div>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="setNewPassword()">Submit</app-button>
+          </app-button-ribbon>
+        </div>
+      </app-form>
+    </app-box>
+
+    <app-box id="register" *ngIf="page === 'register'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Register</h2>
+      <app-form>
+        <app-form-element [Type]="'text'" [(Model)]="newUser.username" [Placeholder]="'username'" [Width]="'100%'"
+          [Required]="true">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'text'" [(Model)]="newUser.email" [Placeholder]="'email'" [Width]="'100%'"
+          [Required]="true">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'text'" [(Model)]="newUser.first_name" [Placeholder]="'first name'" [Width]="'100%'"
+          [Required]="true">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'text'" [(Model)]="newUser.last_name" [Placeholder]="'last name'" [Width]="'100%'"
+          [Required]="true">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'password'" [(Model)]="newUser.password1" [Placeholder]="'password'" [Width]="'100%'"
+          [Required]="true">
+        </app-form-element>
+        <br>
+        <app-form-element [Type]="'password'" [(Model)]="newUser.password2" [Placeholder]="'password confirm'"
+          [Width]="'100%'" [Required]="true">
+        </app-form-element>
+        <br>
+        <p class="matching-pass">
+          <span class="do-not-match" [ngClass]="{ hide : newUser.password1 === newUser.password2 }">passwords do not
+            match</span>
+          <span class="do-match"
+            [ngClass]="{ hide : input.password !== newUser.password1 || gs.strNoE(newUser.password1) }">passwords
+            match</span>
+        </p>
+
+        <div id="options">
+          <div>
+            <a (click)="changePage('reset')">Forgot password?</a>
+            |
+            <a (click)="changePage('login')">Log in</a>
+          </div>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="register()">Register</app-button>
+          </app-button-ribbon>
+        </div>
+        <div id="options">
+          <a (click)="changePage('resendConfirmation')">Resend Activation</a>
+        </div>
+      </app-form>
+    </app-box>
+
+    <app-box id="registerFinish" *ngIf="page === 'registerFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Register</h2>
+      <p>
+        Account registered. You will be sent an email shortly.
+        <br>
+        If you do not see an email be sure to check your spam folder.
+      </p>
+
+      <div id="options">
+        <div>
+          <a (click)="changePage('login')">Log in</a>
+        </div>
+      </div>
+    </app-box>
+
+    <app-box id="resendConfirmation" *ngIf="page === 'resendConfirmation'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Resend Confirmation</h2>
+      <app-form>
+        <app-form-element [Type]="'text'" [(Model)]="input.email" [Placeholder]="'email'" [Width]="'100%'">
+        </app-form-element>
+        <br>
+
+        <div id="options">
+          <div>
+            <a (click)="changePage('login')">Log in</a>
+            |
+            <a (click)="changePage('register')">Register</a>
+          </div>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="resendConfirmation()">Send</app-button>
+          </app-button-ribbon>
+        </div>
+      </app-form>
+    </app-box>
+
+    <app-box id="confirmationFinish" *ngIf="page === 'confirmationFinish'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Activation Sent</h2>
+      <p>
+        Account activation sent.
+        <br>
+        If you do not see an email be sure to check your spam folder.
+      </p>
+
+      <div id="options">
+        <div>
+          <a (click)="changePage('login')">Log in</a>
+          |
+          <a (click)="changePage('register')">Register</a>
+        </div>
+      </div>
+    </app-box>
+
+    <app-box *ngIf="page === 'activationConfirm'" [Width]="'auto'" [MaxWidth]="'100%'">
+      <h2 class="title">Account Activated</h2>
+      <p>
+        Account activated.
+        <br>
+        Click the link below to login.
+      </p>
+
+      <div id="options">
+        <div>
+          <a (click)="changePage('login')">Log in</a>
+          |
+          <a (click)="changePage('register')">Register</a>
+        </div>
+      </div>
+    </app-box>
   </div>
 </main>
