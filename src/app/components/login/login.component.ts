@@ -30,13 +30,15 @@ export class LoginComponent implements OnInit {
       username: '',
       password: '',
       passwordConfirm: '',
-      confirm: '',
+      uuid: '',
+      token: '',
       email: ''
     };
 
     this.route.queryParamMap.subscribe(queryParams => {
       this.page = this.gs.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
-      this.input.confirm = this.gs.strNoE(queryParams.get('confirm')) ? '' : queryParams.get('confirm');
+      this.input.uuid = this.gs.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
+      this.input.token = this.gs.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
       this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user');
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });

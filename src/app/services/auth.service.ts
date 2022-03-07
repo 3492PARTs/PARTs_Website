@@ -169,10 +169,15 @@ export class AuthService {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'auth/reset_password/',
-      { username: input.username, confirm: input.confirm, password: input.password }
+      { uuid: input.uuid, token: input.token, password: input.password }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
+          this.gs.addBanner({
+            severity: 3, // 1 - high, 2 - med, 3 - low (Still needs implemented)
+            message: 'Password reset successfully.', //
+            time: 10000 // time in ms to show banner, -1 means until dismissed (Still needs implemented)
+          })
           this.router.navigateByUrl('login?page=login');
         }
         this.gs.decrementOutstandingCalls();
@@ -306,7 +311,8 @@ export class UserData {
   username: string;
   password: string;
   passwordConfirm: string;
-  confirm: string;
+  uuid: string;
+  token: string;
   email: string;
 }
 
