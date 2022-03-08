@@ -56,8 +56,8 @@
 
   <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
     <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule"
-      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')"
-      [ShowEditButton]="true" (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
+      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>
@@ -65,8 +65,8 @@
     </app-button-ribbon>
 
     <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
-      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showSoutScheduleModal('Add Scout Entry')"
-      [ShowEditButton]="true" (EditRecordCallBack)="showSoutScheduleModal('Edit Scout Entry', $event)">
+      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
+      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <app-button-ribbon>

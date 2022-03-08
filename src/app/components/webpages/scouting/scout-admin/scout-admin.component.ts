@@ -158,7 +158,6 @@ export class ScoutAdminComponent implements OnInit {
 
   buildEventList(): void {
     this.eventList = this.init.events.filter(item => item.season === this.season);
-    this.event = null;
   }
 
   addSeason(): void {
@@ -288,7 +287,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  showSoutScheduleModal(title: string, ss?: ScoutSchedule): void {
+  showScoutScheduleModal(title: string, ss?: ScoutSchedule): void {
     this.scoutScheduleModalTitle = title;
     if (ss) {
       //"2020-01-01T01:00"
