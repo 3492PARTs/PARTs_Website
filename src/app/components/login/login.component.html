@@ -132,7 +132,7 @@
           <span class="do-not-match" [ngClass]="{ hide : newUser.password1 === newUser.password2 }">passwords do not
             match</span>
           <span class="do-match"
-            [ngClass]="{ hide : input.password !== newUser.password1 || gs.strNoE(newUser.password1) }">passwords
+            [ngClass]="{ hide : newUser.password1 !== newUser.password2 || gs.strNoE(newUser.password1) }">passwords
             match</span>
         </p>
 
