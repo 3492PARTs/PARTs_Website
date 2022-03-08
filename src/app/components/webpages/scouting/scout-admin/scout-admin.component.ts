@@ -374,6 +374,10 @@ export class ScoutAdminComponent implements OnInit {
       }
     );
   }
+
+  setEndTime() {
+    console.log(this.scoutSchedule.st_time);
+  }
 }
 
 export class Season {

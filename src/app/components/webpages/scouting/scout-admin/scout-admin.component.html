@@ -85,7 +85,7 @@
             [(Model)]="scoutSchedule.user_id" [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
-            [(Model)]="scoutSchedule.st_time">
+            [(Model)]="scoutSchedule.st_time" (FunctionCallBack)="setEndTime()">
           </app-form-element>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
             [(Model)]="scoutSchedule.end_time">
