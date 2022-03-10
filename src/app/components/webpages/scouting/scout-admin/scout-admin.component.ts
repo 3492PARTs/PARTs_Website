@@ -56,7 +56,7 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutScheduleModalVisible = false;
   scoutScheduleModalTitle = '';
-  scoutSchedule: ScoutSchedule = new ScoutSchedule();
+  scoutSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
 
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
@@ -287,7 +287,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  showScoutScheduleModal(title: string, ss?: ScoutSchedule): void {
+  showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
     this.scoutScheduleModalTitle = title;
     if (ss) {
       //"2020-01-01T01:00"
@@ -295,7 +295,7 @@ export class ScoutAdminComponent implements OnInit {
       ss.end_time = new Date(ss.end_time);
       this.scoutSchedule = ss;
     } else {
-      this.scoutSchedule = new ScoutSchedule();
+      this.scoutSchedule = new ScoutFieldSchedule();
     }
     this.scoutScheduleModalVisible = true;
   }
@@ -308,7 +308,7 @@ export class ScoutAdminComponent implements OnInit {
       Response => {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
-          this.scoutSchedule = new ScoutSchedule();
+          this.scoutSchedule = new ScoutFieldSchedule();
           this.adminInit();
         }
         this.gs.decrementOutstandingCalls();
@@ -322,8 +322,8 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  notifyUsers(ss: ScoutSchedule[]): void {
-    let sstmp: ScoutSchedule[] = JSON.parse(JSON.stringify(ss)) as ScoutSchedule[];
+  notifyUsers(ss: ScoutFieldSchedule[]): void {
+    let sstmp: ScoutFieldSchedule[] = JSON.parse(JSON.stringify(ss)) as ScoutFieldSchedule[];
     sstmp.forEach(el => {
       el.st_time = new Date(el.st_time.toString());
       el.end_time = new Date(el.end_time.toString());
@@ -376,7 +376,10 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setEndTime() {
-    console.log(this.scoutSchedule.st_time);
+    var dt = this.scoutSchedule.st_time;
+    dt.setHours(dt.getHours() + 1);
+    console.log(dt);
+    this.scoutSchedule.end_time = dt;
   }
 }
 
@@ -397,20 +400,35 @@ export class Event {
   void_ind: string;
 }
 
-export class ScoutSchedule {
-  scout_sch_id: number;
-  user: string;
-  user_id: number;
-  sq_typ: string;
-  sq_nm: string;
-  st_time: Date;
-  end_time: Date;
-  notified: string;
-  notify: string;
-  void_ind = 'n';
+export class ScoutFieldSchedule {
+  scout_field_sch_id: number;
+  event = new Event();
+  red_one = new User();
+  red_two = new User();
+  red_three = new User();
+  blue_one = new User();
+  blue_two = new User();
+  blue_three = new User();
+  st_time: Date = null;
+  end_time: Date = null;
+  notified = '';
+  void_ind = '';
 
-  st_time_str: string;
-  end_time_str: string;
+  st_time_str = '';
+  end_time_str = '';
+}
+
+export class ScoutPitSchedule {
+  scout_pit_sch_id: number;
+  event = new Event();
+  user = new User();
+  st_time: Date = null;
+  end_time: Date = null;
+  notified = '';
+  void_ind = '';
+
+  st_time_str = '';
+  end_time_str = '';
 }
 
 export class ScoutQuestionType {
@@ -426,8 +444,8 @@ export class ScoutAdminInit {
   users: User[] = [];
   userGroups: AuthGroup[] = [];
   phoneTypes: PhoneType[] = [];
-  fieldSchedule: ScoutSchedule[] = [];
-  pitSchedule: ScoutSchedule[] = [];
-  pastSchedule: ScoutSchedule[] = [];
+  fieldSchedule: ScoutFieldSchedule[] = [];
+  pitSchedule: ScoutPitSchedule[] = [];
+  //pastSchedule: ScoutSchedule[] = [];
   scoutQuestionType: ScoutQuestionType[] = [];
 }

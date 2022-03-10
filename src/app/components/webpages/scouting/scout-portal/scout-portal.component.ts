@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutSchedule } from '../scout-admin/scout-admin.component';
+import { ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
 import { GeneralService } from 'src/app/services/general/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
@@ -48,7 +48,7 @@ export class ScoutPortalComponent implements OnInit {
 }
 
 export class ScoutPortalInit {
-  fieldSchedule: ScoutSchedule[] = [];
-  pitSchedule: ScoutSchedule[] = [];
-  pastSchedule: ScoutSchedule[] = [];
+  fieldSchedule: ScoutFieldSchedule[] = [];
+  pitSchedule: ScoutPitSchedule[] = [];
+  //pastSchedule: ScoutSchedule[] = [];
 }

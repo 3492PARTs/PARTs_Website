@@ -70,16 +70,19 @@
     </app-table>
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.pitSchedule)">Notify</app-button>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
     </app-button-ribbon>
 
+    <!--
     <app-table [TableTitle]="'Scout Past'" [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule"
       [Scrollable]="true">
     </app-table>
+  -->
 
     <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
       <app-form>
         <app-form-element-group [LabelText]="'New Entry'">
+          <!--
           <app-form-element [LabelText]="'Scout'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
             [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
             [(Model)]="scoutSchedule.user_id" [FormGroupInline]="true">
@@ -98,7 +101,7 @@
           <app-form-element *ngIf="scoutSchedule.scout_sch_id" [Type]="'checkbox'" [FormGroup]="true"
             [LabelText]="'Delete?'" [(Model)]="scoutSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
           </app-form-element>
-
+          -->
           <app-button-ribbon>
             <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutScheduleEntry()">Save</app-button>
           </app-button-ribbon>
