@@ -10,7 +10,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private user: User = new User();
   private isRefreshingToken = false;
-  private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   private token: Token = new Token();
 
   constructor(private auth: AuthService) {

@@ -76,7 +76,7 @@ export class AdminComponent implements OnInit {
     this.manageUserModalVisible = true;
     this.activeUser = u;
     this.gs.incrementOutstandingCalls();
-    this.authService.getUserGroups(u.id.toString()).subscribe(
+    this.authService.getUserGroups(u.id.toString())!.subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
           this.userGroups = Response as AuthGroup[];
@@ -142,25 +142,28 @@ export class AdminComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.errors = Response['errors'] as ErrorLog[];
-          delete Response['errors'];
-          this.pageInfo = Response as Page;
-          this.errors.forEach(el => {
-            el.user_name = el.user.first_name + ' ' + el.user.last_name;
-            el.time = new Date(el.time);
-            el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
-              el.time.getFullYear() + ' ' +
-              (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
-              (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
-          });
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.errors = result['errors'] as ErrorLog[];
+            delete result['errors'];
+            this.pageInfo = result as Page;
+            this.errors.forEach(el => {
+              el.user_name = el.user.first_name + ' ' + el.user.last_name;
+              el.time = new Date(el.time);
+              el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
+                el.time.getFullYear() + ' ' +
+                (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
+                (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
+            });
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        console.log('error', Error);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

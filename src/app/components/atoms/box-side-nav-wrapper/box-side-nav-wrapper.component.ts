@@ -16,11 +16,11 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
     this.checkBoxesTimeout();
   }
 
-  @ContentChild(SideNavComponent, { read: SideNavComponent, static: true }) sideNav: SideNavComponent;
-  @ContentChildren(BoxComponent) boxes: QueryList<BoxComponent>;
+  @ContentChild(SideNavComponent, { read: SideNavComponent, static: true }) sideNav!: SideNavComponent;
+  @ContentChildren(BoxComponent) boxes!: QueryList<BoxComponent>;
 
   private screenSizeWide = 1175;
-  private resizeTimer;
+  private resizeTimer: number | null | undefined;
   private HideSideNav = false;
 
   constructor(private renderer: Renderer2) { }
@@ -36,7 +36,7 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }

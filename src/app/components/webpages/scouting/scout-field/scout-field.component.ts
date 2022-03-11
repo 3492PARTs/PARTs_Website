@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ScoutFieldComponent implements OnInit {
   teams: Team[] = [];
-  team: string;
+  team!: string;
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
 
@@ -43,7 +43,7 @@ export class ScoutFieldComponent implements OnInit {
     );
   }
 
-  save(): void {
+  save(): void | null {
     if (this.gs.strNoE(this.team)) {
       this.gs.triggerError('Must select a team to scout!');
       return null;
@@ -74,10 +74,10 @@ export class ScoutFieldComponent implements OnInit {
 export class ScoutAnswer {
   scoutQuestions: ScoutQuestion[] = [];
   teams: Team[] = [];
-  team: string;
+  team!: string;
 }
 
 export class Team {
-  team_no: string;
-  team_nm: string;
+  team_no!: string;
+  team_nm!: string;
 }

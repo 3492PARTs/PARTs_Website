@@ -3,6 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { environment } from 'src/environments/environment';
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -96,11 +98,11 @@ export class GeneralService {
   }
 
   /* helpwe functions */
-  strNoE(s: string) {
+  strNoE(s: string | undefined | null) {
     return s === undefined || s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
   }
 
-  downloadFileAs(filename, data, MimeType) {
+  downloadFileAs(filename: string, data: any, MimeType: string) {
     const blob = new Blob([data], { type: MimeType });
     saveAs(blob, filename);
   }
@@ -131,18 +133,18 @@ export class GeneralService {
 }
 
 export class RetMessage {
-  retMessage: string;
-  error: boolean;
+  retMessage!: string;
+  error!: boolean;
 }
 
 export class Page {
-  count: number;
-  previous: number;
-  next: number;
+  count!: number;
+  previous!: number;
+  next!: number;
 }
 
 export class Banner {
-  severity: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
-  message: string; //
+  severity!: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
+  message!: string; //
   time = -1; // time in ms to show banner, -1 means until dismissed (Still needs implemented)
 }

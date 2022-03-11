@@ -14,9 +14,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ScoutPitComponent implements OnInit {
   teams: Team[] = [];
   compTeams: Team[] = [];
-  team: string;
-  private previousTeam: string;
-  robotPic: File;
+  team!: string;
+  private previousTeam!: string;
+  robotPic!: File;
   previewUrl: any = null;
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
@@ -100,7 +100,7 @@ export class ScoutPitComponent implements OnInit {
     );
   }
 
-  private savePicture(): void {
+  private savePicture(): void | null {
     if (!this.robotPic) return null; // only process if there is a pic
 
     this.gs.incrementOutstandingCalls();
@@ -114,7 +114,7 @@ export class ScoutPitComponent implements OnInit {
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        this.robotPic = null;
+        this.robotPic = new File([], '');
         this.previewUrl = null;
         this.gs.decrementOutstandingCalls();
       },
@@ -203,11 +203,11 @@ export class ScoutPitInit {
 export class ScoutAnswer {
   scoutQuestions: ScoutQuestion[] = [];
   teams: Team[] = [];
-  team: string;
+  team!: string;
 }
 
 export class Team {
-  team_no: string;
-  team_nm: string;
+  team_no!: string;
+  team_nm!: string;
   checked = false;
 }

@@ -1,13 +1,19 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "PARTs-Site": {
+    "PARTs_Website": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "root": "",
@@ -17,67 +23,65 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/PARTs-Site",
+            "outputPath": "dist/parts-website",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "src/favicon.ico",
-              "src/assets", 
-              "src/.htaccess"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "inlineStyleLanguage": "scss",
+            "assets": ["src/favicon.ico", "src/assets", "src/.htaccess"],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "20kb",
-                  "maximumError": "25kb"
-                }
-              ]
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "PARTs-Site:build"
-          },
           "configurations": {
             "production": {
-              "browserTarget": "PARTs-Site:build:production"
+              "browserTarget": "PARTs_Website:build:production"
+            },
+            "development": {
+              "browserTarget": "PARTs_Website:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PARTs-Site:build"
+            "browserTarget": "PARTs_Website:build"
           }
         },
         "test": {
@@ -87,33 +91,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "inlineStyleLanguage": "scss",
+            "assets": ["src/favicon.ico", "src/assets"],
+            "styles": ["src/styles.scss"],
             "scripts": []
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "PARTs-Site:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "PARTs-Site:serve:production"
-            }
           }
         }
       }
     }
   },
-  "defaultProject": "PARTs-Site",
-  "cli": {
-    "analytics": "c9d65078-459f-4fe5-8558-c4d5148e196f"
-  }
+  "defaultProject": "PARTs_Website"
 }

@@ -7,17 +7,20 @@ import * as $ from 'jquery';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  @ViewChild('thisSideNav', { read: ElementRef, static: true }) sideNav: ElementRef;
-  @ViewChild('thisNavContent', { read: ElementRef, static: true }) navContainer: ElementRef;
+  @ViewChild('thisSideNav', { read: ElementRef, static: true })
+  sideNav!: ElementRef;
+  @ViewChild('thisNavContent', { read: ElementRef, static: true })
+  navContainer!: ElementRef;
 
-  @Input() Width: string;
-  startingWidth: string;
+  @Input()
+  Width!: string;
+  startingWidth!: string;
   @Input() HideSideNav = false;
 
   @Input() Title = '';
 
   private screenSizeWide = 1175;
-  private resizeTimer;
+  private resizeTimer: number | null | undefined;
   runStickyMethod = true;
 
   collapsed = false;
@@ -66,16 +69,16 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
       let height = 0;
       for (let i = 0; i < this.navContainer.nativeElement.children.length; i++) {
         const element = this.navContainer.nativeElement.children[i] as HTMLElement;
-        height += $(element).outerHeight(true);
+        height += $(element).outerHeight(true) || 0;
       }
       this.renderer.setStyle(this.navContainer.nativeElement, 'height', height + 'px');
     }
   }
 
   @HostListener('window:scroll', ['$event'])
-  onWindowScroll(event) {
+  onWindowScroll() {
     if (this.runStickyMethod && false) {
-      const windowTop = $(window).scrollTop();
+      const windowTop = $(window).scrollTop() || 0;
 
       //console.log('window top ' + windowTop + ' new top ' + (windowTop - ((4 * 16) + 16)));
 
@@ -90,7 +93,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }

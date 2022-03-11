@@ -10,7 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class QuestionAdminFormComponent implements OnInit {
 
-  @Input() questionType: string;
+  @Input()
+  questionType!: string;
   @Input()
   public set runInit(val: boolean) {
     if (val) {
@@ -101,7 +102,7 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  toggleScoutQuestion(q: ScoutQuestion): void {
+  toggleScoutQuestion(q: ScoutQuestion): void | null {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
@@ -134,7 +135,7 @@ export class QuestionAdminFormComponent implements OnInit {
     list.push(new QuestionOption());
   }
 
-  toggleOption(op: QuestionOption): void {
+  toggleOption(op: QuestionOption): void | null {
     if (!confirm('Are you sure you want to toggle this option?')) {
       return null;
     }
@@ -166,32 +167,32 @@ export class QuestionAdminFormComponent implements OnInit {
 }
 
 export class ScoutQuestion {
-  sq_id: number;
-  season: number;
-  sq_typ: string;
-  question_typ: string;
-  question: string;
-  order: number
+  sq_id!: number;
+  season!: number;
+  sq_typ!: string;
+  question_typ!: string;
+  question!: string;
+  order!: number;
   active = 'y';
-  void_ind: string;
+  void_ind!: string;
   answer = '';
 
   options: QuestionOption[] = [];
 }
 
 export class QuestionOption {
-  q_opt_id: number;
-  sfq_id: number;
-  spq_id: number;
-  option: string;
+  q_opt_id!: number;
+  sfq_id!: number;
+  spq_id!: number;
+  option!: string;
   active = 'y';
-  void_ind: string;
+  void_ind!: string;
 }
 
 export class QuestionType {
-  question_typ: string;
-  question_typ_nm: string;
-  void_ind: string;
+  question_typ!: string;
+  question_typ_nm!: string;
+  void_ind!: string;
 }
 
 export class Init {

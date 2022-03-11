@@ -10,17 +10,17 @@ import { GeneralService } from 'src/app/services/general/general.service';
 export class NavigationComponent implements OnInit, DoCheck {
 
   token: Token = new Token();
-  user: User;
+  user: User = new User;
   userLinks: UserLinks[] = [];
   previousUserLinks: UserLinks[] = [];
 
-  Menu = [];
+  menu: Menu[] = [];
 
   screenSizeWide = 1175;
 
-  @ViewChild('links', { read: ElementRef, static: true }) links: ElementRef;
+  @ViewChild('links', { read: ElementRef, static: true }) links!: ElementRef;
 
-  resizeTimer;
+  resizeTimer: number | null | undefined;
 
   mobileNavToggle = false;
 
@@ -33,7 +33,7 @@ export class NavigationComponent implements OnInit, DoCheck {
     this.alignNavLinks();
     //this.closeOnLinkClick(); TODO COme back and fix
 
-    this.Menu = [
+    this.menu = [
       {
         MenuName: 'home',
         RouterLink: '',
@@ -118,7 +118,7 @@ export class NavigationComponent implements OnInit, DoCheck {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }
@@ -228,4 +228,16 @@ export class NavigationComponent implements OnInit, DoCheck {
       });
     }
   }
+}
+
+export class Menu {
+  MenuName = '';
+  RouterLink = '';
+  ID = '';
+  MenuItems: MenuItem[] = []
+}
+
+export class MenuItem {
+  MenuName = '';
+  RouterLink = '';
 }

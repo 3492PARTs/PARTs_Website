@@ -19,7 +19,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   teamScoutResultsModalVisible = false;
   teamScoutResults: ScoutResults = new ScoutResults();
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
-  showScoutFieldCols: object[];
+  showScoutFieldCols!: any[];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -52,7 +52,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     );
   }
 
-  download(individual: boolean): void {
+  download(individual: boolean): void | null {
     let export_file = new ScoutResults();
 
     if (individual) {
@@ -139,11 +139,11 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   preview(link: string, id: string) {
-    document.getElementById(id).innerHTML = '';
+    document.getElementById(id)!.innerHTML = '';
     LoadImg(
       link,
-      (img) => {
-        document.getElementById(id).appendChild(img);
+      (img: any) => {
+        document.getElementById(id)!.appendChild(img);
       },
       {
         maxWidth: 800,

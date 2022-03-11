@@ -7,7 +7,7 @@ export class ObjectWildCardFilterPipe implements PipeTransform {
       return ObjectArray;
     }
 
-    return ObjectArray.filter(o => Object.keys(o).some(k => String(o[k]).toLowerCase().includes(searchText.toLowerCase())));
+    return ObjectArray.filter((o: { [x: string]: any; }) => Object.keys(o).some(k => String(o[k]).toLowerCase().includes(searchText.toLowerCase())));
   }
 }
 
@@ -15,7 +15,7 @@ export class ObjectWildCardFilterPipe implements PipeTransform {
 export class OrderBy implements PipeTransform {
   transform(obj: any, OrderByProperty: string, reverseOrder: boolean): any {
     // orderFields.forEach(function (currentField) {
-    obj.sort((a, b) => {
+    obj.sort((a: { [x: string]: number; }, b: { [x: string]: number; }) => {
       if (!reverseOrder) {
         // console.log(a[OrderByProperty] + " " + b[OrderByProperty]);
         if (a[OrderByProperty] < b[OrderByProperty]) { return -1; }
@@ -37,7 +37,7 @@ export class RemovedFilterPipe implements PipeTransform {
   transform(ObjectArray: any, Enabled: boolean = false, Property: string, Value: any = false): any {
     if (Property == null || !Enabled) { return ObjectArray; }
 
-    return ObjectArray.filter((ObjectItem) => {
+    return ObjectArray.filter((ObjectItem: { [x: string]: any; }) => {
       // let TextFound: boolean = false;
       const ret: boolean = ObjectItem[Property] === Value;
       console.log();

@@ -13,10 +13,10 @@ export class ScoutAdminComponent implements OnInit {
   page = 'users';
 
   init: ScoutAdminInit = new ScoutAdminInit();
-  season: number;
-  newSeason: number;
-  delSeason: number;
-  event: number;
+  season!: number;
+  newSeason!: number;
+  delSeason!: number;
+  event!: number;
   eventList: Event[] = [];
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
@@ -127,7 +127,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  setSeason(): void {
+  setSeason(): void | null {
     if (!this.season || !this.event) {
       this.gs.triggerError('No season or event selected.');
       return null;
@@ -185,7 +185,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  deleteSeason(): void {
+  deleteSeason(): void | null {
     if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being reomved.')) {
       return null;
     }
@@ -218,19 +218,20 @@ export class ScoutAdminComponent implements OnInit {
     this.manageUserModalVisible = true;
     this.activeUser = u;
     this.gs.incrementOutstandingCalls();
-    this.authService.getUserGroups(u.id.toString()).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.userGroups = Response as AuthGroup[];
-          this.buildAvailableUserGroups();
+    this.authService.getUserGroups(u.id.toString())!.subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userGroups = result as AuthGroup[];
+            this.buildAvailableUserGroups();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -241,7 +242,7 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
-  addUserGroup(): void {
+  addUserGroup(): void | null {
     const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
       return ag.id === this.newAuthGroup.id;
     });
@@ -384,24 +385,24 @@ export class ScoutAdminComponent implements OnInit {
 }
 
 export class Season {
-  season_id: number;
-  season: string;
-  current: string;
+  season_id!: number;
+  season!: string;
+  current!: string;
 }
 
 export class Event {
-  event_id: number;
-  season: number;
-  event_nm: string;
-  date_st: Date;
-  event_cd: string;
-  date_end: Date;
-  current: string;
-  void_ind: string;
+  event_id!: number;
+  season!: number;
+  event_nm!: string;
+  date_st!: Date;
+  event_cd!: string;
+  date_end!: Date;
+  current!: string;
+  void_ind!: string;
 }
 
 export class ScoutFieldSchedule {
-  scout_field_sch_id: number;
+  scout_field_sch_id!: number;
   event = new Event();
   red_one = new User();
   red_two = new User();
@@ -409,8 +410,8 @@ export class ScoutFieldSchedule {
   blue_one = new User();
   blue_two = new User();
   blue_three = new User();
-  st_time: Date = null;
-  end_time: Date = null;
+  st_time!: Date;
+  end_time!: Date;
   notified = '';
   void_ind = '';
 
@@ -419,11 +420,11 @@ export class ScoutFieldSchedule {
 }
 
 export class ScoutPitSchedule {
-  scout_pit_sch_id: number;
+  scout_pit_sch_id!: number;
   event = new Event();
   user = new User();
-  st_time: Date = null;
-  end_time: Date = null;
+  st_time!: Date;
+  end_time!: Date;
   notified = '';
   void_ind = '';
 
@@ -432,8 +433,8 @@ export class ScoutPitSchedule {
 }
 
 export class ScoutQuestionType {
-  sq_typ: string;
-  sq_nm: string;
+  sq_typ!: string;
+  sq_nm!: string;
 }
 
 export class ScoutAdminInit {

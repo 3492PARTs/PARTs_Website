@@ -13,9 +13,9 @@ export class CardComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() Collapsible = false;
 
-  @ViewChild('thisCard', { read: ElementRef, static: true }) card: ElementRef;
-  @ViewChildren(ButtonComponent) btn: QueryList<ButtonComponent>;
-  @ViewChild('content', { read: ElementRef, static: true }) content: ElementRef;
+  @ViewChild('thisCard', { read: ElementRef, static: true }) card!: ElementRef;
+  @ViewChildren(ButtonComponent) btn!: QueryList<ButtonComponent>;
+  @ViewChild('content', { read: ElementRef, static: true }) content!: ElementRef;
 
   private collapsed = false;
 

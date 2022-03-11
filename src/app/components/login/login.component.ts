@@ -12,11 +12,10 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  input: UserData;
-  authUrl;
-  returnUrl = '';
+  input: UserData = new UserData;
+  returnUrl: string | null = '';
   apiStatus = 'unknown';
-  page = 'login';
+  page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
 
   constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private http: HttpClient, private router: Router) {
@@ -42,8 +41,6 @@ export class LoginComponent implements OnInit {
       this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user');
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
-
-    this.authUrl = environment.authUrl;
 
     this.gs.incrementOutstandingCalls();
 
@@ -71,7 +68,7 @@ export class LoginComponent implements OnInit {
     this.authService.registerUser(this.newUser, 'login?page=registerFinish');
   }
 
-  resetPassword() {
+  resetPassword(): void | null {
     if (this.gs.strNoE(this.input.email)) {
       this.gs.triggerError('Email not provided.');
       return null;

@@ -39,8 +39,8 @@ export class FormElementComponent implements OnInit, AfterViewInit {
 
   @Input() Type = 'text';
 
-  @Input() SelectList: [] = [];
-  @Input() RadioList: [] = [];
+  @Input() SelectList: any[] = [];
+  @Input() RadioList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
   @Input() FormElementInline: boolean = true;
@@ -51,28 +51,32 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   @Input() Focused = false;
   @Input() Disabled = false;
 
-  @Input() ValidityFunction: Function;
+  @Input()
+  ValidityFunction!: Function;
 
-  @Input() Model;
+  @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
-  @Input() MultiModel;
+  @Input()
+  MultiModel!: any;
   @Output() MultiModelChange = new EventEmitter();
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
 
-  @Input() TrueValue = true;
-  @Input() FalseValue = false;
+  @Input() TrueValue: any = true;
+  @Input() FalseValue: any = false;
 
-  LabelID: string;
-  private fileData: File = null;
+  LabelID!: string;
+  private fileData!: File;
 
-  @ViewChild('multiSelectDropdown', { read: ElementRef }) dropdown: ElementRef;
-  @ViewChild('multiselect', { read: ElementRef }) multiSelect: ElementRef;
+  @ViewChild('multiSelectDropdown', { read: ElementRef })
+  dropdown!: ElementRef;
+  @ViewChild('multiselect', { read: ElementRef })
+  multiSelect!: ElementRef;
   private expanded = false;
 
-  change(newValue) {
+  change(newValue: any) {
     this.Model = newValue;
     if (this.Type === 'checkbox') {
       if (newValue.target.checked) {
@@ -87,7 +91,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
 
   }
 
-  multiChange(newValue, index) {
+  multiChange(newValue: any, index: string | number) {
     this.MultiModel[index]['checked'] = newValue;
     this.ModelChange.emit(this.MultiModel);
     this.FunctionCallBack.emit();
@@ -102,12 +106,12 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     this.positionMultiSelect();
   }
 
   @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
+  onScroll() {
     this.positionMultiSelect();
   }
 

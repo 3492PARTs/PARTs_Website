@@ -15,10 +15,11 @@ export class ModalComponent implements AfterViewInit {
   @Output() visibleChange = new EventEmitter();
 
   private screenSizeWide = 1175;
-  private resizeTimer;
+  private resizeTimer: number | null | undefined;
   centered = true;
 
-  @ViewChild('thisButton', { read: ButtonComponent }) button: ButtonComponent;
+  @ViewChild('thisButton', { read: ButtonComponent })
+  button: ButtonComponent = new ButtonComponent;
 
   constructor() { }
 
@@ -37,7 +38,7 @@ export class ModalComponent implements AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize() {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }

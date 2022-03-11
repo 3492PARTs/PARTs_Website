@@ -7,11 +7,12 @@ import { TabComponent } from '../tab/tab.component';
   styleUrls: ['./tab-container.component.scss']
 })
 export class TabContainerComponent implements AfterContentInit {
-  @ContentChildren(TabComponent) tabContainerTabs: QueryList<TabComponent>;
+  @ContentChildren(TabComponent)
+  tabContainerTabs!: QueryList<TabComponent>;
 
   tabs: TabElement[] = [];
 
-  activeTab: TabElement;
+  activeTab!: TabElement;
 
   constructor() { }
 
@@ -21,7 +22,7 @@ export class TabContainerComponent implements AfterContentInit {
 
   getTabs() {
     this.tabContainerTabs.forEach(el => {
-      this.tabs.push({ name: el.TabName, element: el , active: false });
+      this.tabs.push({ name: el.TabName, element: el, active: false });
     });
 
     this.tabContainerTabs.toArray()[0].visible = true;
@@ -41,4 +42,4 @@ export class TabContainerComponent implements AfterContentInit {
 
 }
 
-export class TabElement  { name: string; element: TabComponent; active: boolean; }
+export class TabElement { name!: string; element!: TabComponent; active!: boolean; }

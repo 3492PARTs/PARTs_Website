@@ -14,6 +14,6 @@ export class FooterComponent implements OnInit {
 
   toTop(): void {
     const top = document.getElementById('top');
-    top.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+    top!.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
   }
 }

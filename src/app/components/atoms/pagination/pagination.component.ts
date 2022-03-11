@@ -21,7 +21,7 @@ export class PaginationComponent implements OnInit {
     this.buildPages();
   }
 
-  pages = [];
+  pages: number[] = [];
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 

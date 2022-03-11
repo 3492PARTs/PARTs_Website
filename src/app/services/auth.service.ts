@@ -39,7 +39,7 @@ export class AuthService {
   previouslyAuthorized(): void {
     this.authInFlightBS.next('prcs');
 
-    const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) };
+    const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) || '' };
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
     if (this.internalToken && this.internalToken.refresh) {
@@ -47,7 +47,7 @@ export class AuthService {
 
       this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
         data => {
-          this.internalToken.access = data['access'];
+          this.internalToken.access = (data as Token).access;
           //this.internalToken.refresh = data['refresh'];
           this.getTokenExp(this.internalToken.access, 'New Access');
           this.getTokenExp(this.internalToken.refresh, 'New Refresh');
@@ -71,7 +71,7 @@ export class AuthService {
     }
   }
 
-  authorizeUser(userData: UserData, returnUrl?: string): void {
+  authorizeUser(userData: UserData, returnUrl?: string | null): void {
     this.authInFlightBS.next('prcs');
     this.gs.incrementOutstandingCalls();
     this.http.post('auth/token/', userData).subscribe(
@@ -89,7 +89,7 @@ export class AuthService {
         if (this.gs.strNoE(returnUrl)) {
           this.router.navigateByUrl('');
         } else {
-          this.router.navigateByUrl(returnUrl);
+          this.router.navigateByUrl(returnUrl || '');
         }
 
         this.authInFlightBS.next('comp');
@@ -113,7 +113,7 @@ export class AuthService {
           if (this.gs.strNoE(returnUrl)) {
             this.router.navigateByUrl('');
           } else {
-            this.router.navigateByUrl(returnUrl);
+            this.router.navigateByUrl(returnUrl || '');
           }
         }
         this.gs.decrementOutstandingCalls();
@@ -264,7 +264,7 @@ export class AuthService {
     }
   }
 
-  getUserGroups(userId: string): Observable<object> {
+  getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
       return this.http.get(
         'auth/get_user_groups/', {
@@ -274,6 +274,7 @@ export class AuthService {
       }
       );
     }
+    return null;
   }
 
   getTokenLoad(tkn: string): TokenLoad {
@@ -296,85 +297,85 @@ export class AuthService {
 }
 
 export class Token {
-  access: string;
-  refresh: string;
+  access!: string;
+  refresh!: string;
 }
 
 export class TokenLoad {
-  exp: number;
-  username: string;
-  email: string;
-  user_id: number;
+  exp!: number;
+  username!: string;
+  email!: string;
+  user_id!: number;
 }
 
 export class UserData {
-  username: string;
-  password: string;
-  passwordConfirm: string;
-  uuid: string;
-  token: string;
-  email: string;
+  username!: string | null;
+  password!: string;
+  passwordConfirm!: string;
+  uuid!: string | null;
+  token!: string | null;
+  email!: string | null;
 }
 
 export class User {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
+  id!: number;
+  username!: string;
+  email!: string;
+  first_name!: string;
+  last_name!: string;
   has_phone = 'n';
   profile: UserProfile = new UserProfile();
 }
 
 export class UserProfile {
-  id: number;
-  birth_date: string;
-  phone: string;
-  phone_type: number;
-  user: number;
+  id!: number;
+  birth_date!: string;
+  phone!: string;
+  phone_type!: number;
+  user!: number;
 }
 
 export class UserLinks {
-  MenuName: string;
-  RouterLink: string;
+  MenuName!: string;
+  RouterLink!: string;
 }
 
 export class AuthGroup {
-  id: number;
-  name: string;
+  id!: number;
+  name!: string;
   permissions: AuthPermission[] = [];
 }
 
 export class AuthPermission {
-  id: number;
-  codename: string;
-  content_type: number;
-  name: string;
+  id!: number;
+  codename!: string;
+  content_type!: number;
+  name!: string;
 }
 
 export class PhoneType {
-  phone_type_id: number;
-  carrier: string;
-  phone_type: string;
+  phone_type_id!: number;
+  carrier!: string;
+  phone_type!: string;
 }
 
 export class ErrorLog {
-  error_log_id: number;
+  error_log_id!: number;
   user: User = new User();
-  user_name: string;
-  path: string;
-  message: string;
-  exception: string;
-  time: Date;
-  display_time: string;
+  user_name!: string;
+  path!: string;
+  message!: string;
+  exception!: string;
+  time!: Date;
+  display_time!: string;
   void_ind = 'n';
 }
 
 export class RegisterUser {
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  password1: string;
-  password2: string;
+  username!: string;
+  email!: string;
+  first_name!: string;
+  last_name!: string;
+  password1!: string;
+  password2!: string;
 }

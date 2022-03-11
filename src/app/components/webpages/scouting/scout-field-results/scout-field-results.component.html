@@ -12,7 +12,7 @@
   </div>
 
   <app-table [TableCols]="scoutResults['scoutCols']" [TableData]="scoutResults['scoutAnswers']" [Scrollable]="true"
-    [EnableFilter]="true" [Width]="'200%'" [Responsive]="'true'" (RecordClickCallBack)="getTeamInfo($event)">
+    [EnableFilter]="true" [Width]="'200%'" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
@@ -35,7 +35,7 @@
       <app-button [ButtonType]="'main'" (FunctionCallBack)="download(true)">Download</app-button>
     </app-button-ribbon>
     <app-table [TableCols]="teamScoutResults['scoutCols']" [TableData]="teamScoutResults['scoutAnswers']"
-      [Scrollable]="true" [EnableFilter]="true" [Width]="'200%'" [Responsive]="'true'">
+      [Scrollable]="true" [EnableFilter]="true" [Width]="'200%'" [Responsive]="true">
     </app-table>
   </app-modal>
 </app-box>

@@ -24,13 +24,15 @@ import {
 export class TableComponent implements OnInit, OnChanges {
 
   private screenSizeWide = 1175;
-  private resizeTimer;
+  private resizeTimer: number | null | undefined;
 
   constructor(private renderer: Renderer2) { }
-  @Input() TableData: any[];
+  @Input()
+  TableData: any[] = [];
   @Input() TableCols: any[] = [];
 
-  @Input() TableTitle: string;
+  @Input()
+  TableTitle!: string;
 
   @Input() EnableFilter = false;
   @Input() DisableSort = false;
@@ -77,19 +79,23 @@ export class TableComponent implements OnInit, OnChanges {
   SearchText = '';
   OrderByProperty = '';
   OrderByReverse = false;
-  ActiveRec: object = null;
+  ActiveRec!: object;
   @Input()
   set SetActiveRec(rec: object) {
     this.ActiveRec = rec;
     this.SetTableContainerWidth();
   }
   FixedTableScrollColWidth = '0px';
-  @ViewChild('InfoContainer', { read: ElementRef, static: true }) InfoContainer: ElementRef;
+  @ViewChild('InfoContainer', { read: ElementRef, static: true })
+  InfoContainer!: ElementRef;
 
-  @ViewChild('TableContainer', { read: ElementRef, static: true }) TableContainer: ElementRef;
-  @ViewChild('MainTableBody', { read: ElementRef, static: true }) MainTableBody: ElementRef;
+  @ViewChild('TableContainer', { read: ElementRef, static: true })
+  TableContainer!: ElementRef;
+  @ViewChild('MainTableBody', { read: ElementRef, static: true })
+  MainTableBody!: ElementRef;
 
-  @ViewChild('Table', { read: ElementRef, static: true }) Table: ElementRef;
+  @ViewChild('Table', { read: ElementRef, static: true })
+  Table!: ElementRef;
 
   ngOnInit() {
     if (this.Width !== '') {
@@ -155,7 +161,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: any) {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }
@@ -183,7 +189,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
-  RecordClick(Rec) {
+  RecordClick(Rec: object) {
     this.RecordClickCallBack.emit(Rec);
     if (this.AllowActiveRecord) {
       this.ActiveRec = Rec;
@@ -191,7 +197,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
-  DblClkRecordClick(Rec) {
+  DblClkRecordClick(Rec: any) {
     this.DblClkRecordClickCallBack.emit(Rec);
   }
 
@@ -236,7 +242,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
-  SetOrder(PropertyName) {
+  SetOrder(PropertyName: string) {
     // console.log(this.EnableRemovedFiter + " | " + this.RemovedFiterProperty + " | " + this.RemovedFiterPropertyValue)
     if (this.DisableSort) {
       this.OrderByReverse = false;
@@ -263,7 +269,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   }
 
-  IsPropertyInColumnSettings(PropertyName) {
+  IsPropertyInColumnSettings(PropertyName: any) {
     return true;
   }
 
@@ -280,15 +286,15 @@ export class TableComponent implements OnInit, OnChanges {
     return false;
   }
 
-  Remove(rec) {
+  Remove(rec: any) {
     this.RemoveRecordCallBack.emit(rec);
   }
 
-  View(rec) {
+  View(rec: any) {
     this.ViewRecordCallBack.emit(rec);
   }
 
-  Edit(rec) {
+  Edit(rec: any) {
     this.EditRecordCallBack.emit(rec);
   }
 
@@ -312,7 +318,7 @@ export class TableComponent implements OnInit, OnChanges {
     const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
 
     // Removing temporary elements from the DOM
-    outer.parentNode.removeChild(outer);
+    outer.parentNode!.removeChild(outer);
 
     return scrollbarWidth;
   }

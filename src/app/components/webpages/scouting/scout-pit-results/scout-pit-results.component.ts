@@ -65,8 +65,8 @@ export class ScoutPitResultsComponent implements OnInit {
   preview(link: string, id: string) {
     LoadImg(
       link,
-      (img) => {
-        document.getElementById(id).appendChild(img);
+      (img: any) => {
+        document.getElementById(id)!.appendChild(img);
       },
       {
         maxWidth: 600,
@@ -80,13 +80,13 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 }
 export class ScoutPitResults {
-  teamNo: string;
-  teamNm: string;
-  pic: string;
+  teamNo!: string;
+  teamNm!: string;
+  pic!: string;
   results: ScoutPitResultAnswer[] = [];
 }
 
 export class ScoutPitResultAnswer {
-  question: string;
-  answer: string;
+  question!: string;
+  answer!: string;
 }

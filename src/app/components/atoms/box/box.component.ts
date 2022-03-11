@@ -25,9 +25,9 @@ export class BoxComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() Collapsible = false;
 
-  @ViewChild('thisBox', { read: ElementRef, static: true }) box: ElementRef;
-  @ViewChildren(ButtonComponent) btn: QueryList<ButtonComponent>;
-  @ViewChild('content', { read: ElementRef, static: true }) content: ElementRef;
+  @ViewChild('thisBox', { read: ElementRef, static: true }) box!: ElementRef;
+  @ViewChildren(ButtonComponent) btn!: QueryList<ButtonComponent>;
+  @ViewChild('content', { read: ElementRef, static: true }) content!: ElementRef;
 
   private collapsed = false;
 
