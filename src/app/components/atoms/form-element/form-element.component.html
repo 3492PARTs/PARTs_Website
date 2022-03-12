@@ -31,6 +31,11 @@
         </option>
       </ng-container>
 
+      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }} {{
+          obj[DisplayProperty2] }}
+        </option>
+      </ng-container>
     </select>
 
     <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"

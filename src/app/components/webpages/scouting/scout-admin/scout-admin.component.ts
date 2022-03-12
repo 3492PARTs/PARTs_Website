@@ -56,7 +56,7 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutScheduleModalVisible = false;
   scoutScheduleModalTitle = '';
-  scoutSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
+  scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
 
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
@@ -72,32 +72,33 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'api/scoutAdmin/GetInit/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.init = Response as ScoutAdminInit;
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.init = result as ScoutAdminInit;
 
-          if (this.init.currentSeason.season_id) {
-            this.season = this.init.currentSeason.season_id;
+            if (this.init.currentSeason.season_id) {
+              this.season = this.init.currentSeason.season_id;
+            }
+
+            if (this.init.currentEvent.event_id) {
+              this.event = this.init.currentEvent.event_id;
+            }
+
+            this.buildEventList();
+
+            this.init.users.forEach(el => {
+              el.has_phone = this.gs.strNoE(el.profile.phone) ? 'no' : 'yes';
+            });
+
           }
-
-          if (this.init.currentEvent.event_id) {
-            this.event = this.init.currentEvent.event_id;
-          }
-
-          this.buildEventList();
-
-          this.init.users.forEach(el => {
-            el.has_phone = this.gs.strNoE(el.profile.phone) ? 'no' : 'yes';
-          });
-
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -294,31 +295,37 @@ export class ScoutAdminComponent implements OnInit {
       //"2020-01-01T01:00"
       ss.st_time = new Date(ss.st_time);
       ss.end_time = new Date(ss.end_time);
-      this.scoutSchedule = ss;
+      this.scoutFieldSchedule = ss;
     } else {
-      this.scoutSchedule = new ScoutFieldSchedule();
+      this.scoutFieldSchedule = new ScoutFieldSchedule();
     }
     this.scoutScheduleModalVisible = true;
   }
 
-  saveScoutScheduleEntry(): void {
+  saveScoutFieldScheduleEntry(): void | null {
+    if (!this.event || this.event < 0) {
+      this.gs.triggerError('Event not set, can\'t schedule scouts.');
+      return null;
+    }
+    this.scoutFieldSchedule.event = this.event;
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/scoutAdmin/PostSaveScoutScheduleEntry/', this.scoutSchedule
+      'api/scoutAdmin/PostSaveScoutFieldScheduleEntry/', this.scoutFieldSchedule
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutSchedule = new ScoutFieldSchedule();
-          this.adminInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            alert((result as RetMessage).retMessage);
+            this.scoutFieldSchedule = new ScoutFieldSchedule();
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -377,10 +384,9 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setEndTime() {
-    var dt = this.scoutSchedule.st_time;
+    var dt = new Date(this.scoutFieldSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
-    console.log(dt);
-    this.scoutSchedule.end_time = dt;
+    this.scoutFieldSchedule.end_time = dt;
   }
 }
 
@@ -403,17 +409,17 @@ export class Event {
 
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
-  event = new Event();
-  red_one = new User();
-  red_two = new User();
-  red_three = new User();
-  blue_one = new User();
-  blue_two = new User();
-  blue_three = new User();
+  event: Event | number = new Event();
+  red_one: User | number | null = null;
+  red_two: User | number | null = null;
+  red_three: User | number | null = null;
+  blue_one: User | number | null = null;
+  blue_two: User | number | null = null;
+  blue_three: User | number | null = null;
   st_time!: Date;
   end_time!: Date;
-  notified = '';
-  void_ind = '';
+  notified = 'n';
+  void_ind = 'n';
 
   st_time_str = '';
   end_time_str = '';

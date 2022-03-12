@@ -82,28 +82,44 @@
     <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
       <app-form>
         <app-form-element-group [LabelText]="'New Entry'">
-          <!--
-          <app-form-element [LabelText]="'Scout'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+
+          <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
             [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [(Model)]="scoutSchedule.user_id" [FormGroupInline]="true">
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_one" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_two" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_three" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_one" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_two" [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
+            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_three" [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
-            [(Model)]="scoutSchedule.st_time" (FunctionCallBack)="setEndTime()">
+            [(Model)]="scoutFieldSchedule.st_time" (FunctionCallBack)="setEndTime()">
           </app-form-element>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
-            [(Model)]="scoutSchedule.end_time">
-          </app-form-element>
-          <app-form-element [LabelText]="'Scout Type'" [FormGroup]="true" [Type]="'select'"
-            [SelectList]="init.scoutQuestionType" [BindingProperty]="'sq_typ'" [DisplayProperty]="'sq_nm'"
-            [(Model)]="scoutSchedule.sq_typ">
+            [(Model)]="scoutFieldSchedule.end_time">
           </app-form-element>
 
-          <app-form-element *ngIf="scoutSchedule.scout_sch_id" [Type]="'checkbox'" [FormGroup]="true"
-            [LabelText]="'Delete?'" [(Model)]="scoutSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
+          <app-form-element *ngIf="scoutFieldSchedule.scout_field_sch_id" [Type]="'checkbox'" [FormGroup]="true"
+            [LabelText]="'Delete?'" [(Model)]="scoutFieldSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
           </app-form-element>
-          -->
+
           <app-button-ribbon>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutScheduleEntry()">Save</app-button>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
           </app-button-ribbon>
         </app-form-element-group>
       </app-form>
