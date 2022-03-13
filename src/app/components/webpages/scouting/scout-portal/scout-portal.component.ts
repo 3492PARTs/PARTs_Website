@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
 import { GeneralService } from 'src/app/services/general/general.service';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService, User } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -12,11 +12,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ScoutPortalComponent implements OnInit {
 
   init: ScoutPortalInit = new ScoutPortalInit();
+  user: User = new User();
 
-  scoutScheduleTableCols: object[] = [
-    { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
+  scoutFieldScheduleData: any[] = [];
+  scoutFieldScheduleTableCols: object[] = [
+    { PropertyName: 'position', ColLabel: 'Position' },
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' }
   ];
 
@@ -24,6 +26,7 @@ export class ScoutPortalComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.portalInit() : null);
+    this.authService.currentUser.subscribe(u => this.user = u);
   }
 
   portalInit(): void {
@@ -31,17 +34,47 @@ export class ScoutPortalComponent implements OnInit {
     this.http.get(
       'api/scoutPortal/GetInit/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.init = Response as ScoutPortalInit;
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.init = result as ScoutPortalInit;
+            this.scoutFieldScheduleData = [];
+            this.init.fieldSchedule.forEach(elem => {
+              let pos = '';
+              if ((elem?.red_one as User)?.id === this.user.id) {
+                pos = 'red one'
+              }
+              else if ((elem?.red_two as User)?.id === this.user.id) {
+                pos = 'red two'
+              }
+              else if ((elem?.red_three as User)?.id === this.user.id) {
+                pos = 'red three'
+              }
+              else if ((elem?.blue_one as User)?.id === this.user.id) {
+                pos = 'blue one'
+              }
+              else if ((elem?.blue_two as User)?.id === this.user.id) {
+                pos = 'blue two'
+              }
+              else if ((elem?.blue_three as User)?.id === this.user.id) {
+                pos = 'blue three'
+              }
+
+              this.scoutFieldScheduleData.push({
+                position: pos,
+                st_time: elem.st_time,
+                end_time: elem.end_time,
+                notified: elem.notified
+              });
+            })
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
