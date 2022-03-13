@@ -46,6 +46,9 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   @Input() FormElementInline: boolean = true;
   @Input() LabelOnTop: boolean = true;
 
+  @Input()
+  SelectValidityFunction!: (o1: any, o2: any) => boolean;
+
   @Input() Required = false;
   @Input() Touched = false;
   @Input() Focused = false;

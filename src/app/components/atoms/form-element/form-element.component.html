@@ -12,31 +12,47 @@
     <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
       placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
 
-    <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}"
-      [ngModel]="Model" (ngModelChange)="change($event)">
-      <option value="" *ngIf="DisplayEmptyOption"></option>
+    <ng-container *ngSwitchCase="'select'">
+      <ng-container *ngIf="!SelectValidityFunction; else hasFunction"><select class="form-control" id="{{ LabelID }}"
+          [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
+          <option value="" *ngIf="DisplayEmptyOption"></option>
 
-      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
-        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
-          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
-      </ng-container>
+          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+            <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+              [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
+          </ng-container>
 
-      <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-        <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
-          [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}</option>
-      </ng-container>
+          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+            <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+              [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}
+            </option>
+          </ng-container>
 
-      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
-        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
-        </option>
-      </ng-container>
+          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
+            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
+            </option>
+          </ng-container>
 
-      <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-        <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }} {{
-          obj[DisplayProperty2] }}
-        </option>
-      </ng-container>
-    </select>
+          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
+              obj[DisplayProperty] }} {{
+              obj[DisplayProperty2] }}
+            </option>
+          </ng-container>
+        </select></ng-container>
+      <ng-template #hasFunction>
+        <select class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}" [ngModel]="Model"
+          (ngModelChange)="change($event)" [compareWith]="SelectValidityFunction">
+          <option value="" *ngIf="DisplayEmptyOption"></option>
+          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
+              obj[DisplayProperty] }} {{
+              obj[DisplayProperty2] }}
+            </option>
+          </ng-container>
+        </select>
+      </ng-template>
+    </ng-container>
 
     <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
       placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"

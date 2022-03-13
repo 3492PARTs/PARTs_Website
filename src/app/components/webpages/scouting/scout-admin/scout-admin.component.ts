@@ -29,10 +29,9 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
   ];
 
-  scoutScheduleTableCols: object[] = [
-    { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
+  scoutFieldScheduleTableCols: object[] = [
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },
     { PropertyName: 'notify', ColLabel: 'Notify', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
@@ -86,10 +85,6 @@ export class ScoutAdminComponent implements OnInit {
             }
 
             this.buildEventList();
-
-            this.init.users.forEach(el => {
-              el.has_phone = this.gs.strNoE(el.profile.phone) ? 'no' : 'yes';
-            });
 
           }
         },
@@ -307,16 +302,24 @@ export class ScoutAdminComponent implements OnInit {
       this.gs.triggerError('Event not set, can\'t schedule scouts.');
       return null;
     }
-    this.scoutFieldSchedule.event = this.event;
+    let sfs = JSON.parse(JSON.stringify(this.scoutFieldSchedule));
+    sfs.event = this.event;
+    sfs.red_one = sfs.red_one && (sfs!.red_one as User).id ? (sfs!.red_one as User).id : null;
+    sfs.red_two = sfs.red_two && (sfs!.red_two as User).id ? (sfs!.red_two as User).id : null;
+    sfs.red_three = sfs.red_three && (sfs!.red_three as User).id ? (sfs!.red_three as User).id : null;
+    sfs.blue_one = sfs.blue_one && (sfs!.blue_one as User).id ? (sfs!.blue_one as User).id : null;
+    sfs.blue_two = sfs.blue_two && (sfs!.blue_two as User).id ? (sfs!.blue_two as User).id : null;
+    sfs.blue_three = sfs.blue_three && (sfs!.blue_three as User).id ? (sfs!.blue_three as User).id : null;
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/scoutAdmin/PostSaveScoutFieldScheduleEntry/', this.scoutFieldSchedule
+      'api/scoutAdmin/PostSaveScoutFieldScheduleEntry/', sfs
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             alert((result as RetMessage).retMessage);
             this.scoutFieldSchedule = new ScoutFieldSchedule();
+            this.scoutScheduleModalVisible = false;
             this.adminInit();
           }
         },
@@ -388,6 +391,13 @@ export class ScoutAdminComponent implements OnInit {
     dt.setHours(dt.getHours() + 1);
     this.scoutFieldSchedule.end_time = dt;
   }
+
+  compareUserObjects(u1: User, u2: User): boolean {
+    if (u1 && u2 && u1.id && u2.id) {
+      return u1.id === u2.id;
+    }
+    return false;
+  }
 }
 
 export class Season {
@@ -420,9 +430,6 @@ export class ScoutFieldSchedule {
   end_time!: Date;
   notified = 'n';
   void_ind = 'n';
-
-  st_time_str = '';
-  end_time_str = '';
 }
 
 export class ScoutPitSchedule {
@@ -431,11 +438,8 @@ export class ScoutPitSchedule {
   user = new User();
   st_time!: Date;
   end_time!: Date;
-  notified = '';
-  void_ind = '';
-
-  st_time_str = '';
-  end_time_str = '';
+  notified = 'n';
+  void_ind = 'n';
 }
 
 export class ScoutQuestionType {

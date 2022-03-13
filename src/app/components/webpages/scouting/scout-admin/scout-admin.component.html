@@ -55,7 +55,7 @@
 
 
   <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
-    <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutScheduleTableCols" [TableData]="init.fieldSchedule"
+    <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
       [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
       [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
@@ -63,11 +63,11 @@
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
     </app-button-ribbon>
-
+    <!--
     <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
       [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
       [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
-    </app-table>
+    </app-table>-->
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
@@ -84,28 +84,34 @@
         <app-form-element-group [LabelText]="'New Entry'">
 
           <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_one" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.red_one" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_two" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.red_two" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.red_three" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.red_three" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_one" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.blue_one" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_two" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.blue_two" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [BindingProperty]="'id'" [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'"
-            [DisplayEmptyOption]="true" [(Model)]="scoutFieldSchedule.blue_three" [FormGroupInline]="true">
+            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+            [(Model)]="scoutFieldSchedule.blue_three" [FormGroupInline]="true"
+            [SelectValidityFunction]="compareUserObjects">
           </app-form-element>
           <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
             [(Model)]="scoutFieldSchedule.st_time" (FunctionCallBack)="setEndTime()">
