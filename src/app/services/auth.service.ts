@@ -319,10 +319,10 @@ export class UserData {
 
 export class User {
   id!: number;
-  username!: string;
-  email!: string;
-  first_name!: string;
-  last_name!: string;
+  username = '';
+  email = '';
+  first_name = '';
+  last_name = '';
   profile: UserProfile = new UserProfile();
 }
 

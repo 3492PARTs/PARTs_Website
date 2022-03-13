@@ -1,0 +1,67 @@
+#scout-header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  #scouts {
+    display: flex;
+
+    #red {
+      background-color: red;
+
+      div {
+        border-top: 1px solid black;
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+
+        &:before {
+          content: "";
+          position: absolute;
+          left: -15px;
+          bottom: 0;
+          width: 0;
+          height: 0;
+          border-right: 15px solid red;
+          border-top: 15px solid transparent;
+          border-bottom: 15px solid transparent;
+        }
+
+      }
+    }
+
+    #blue {
+      background-color: blue;
+
+      div {
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+
+        &:before {
+          content: "";
+          position: absolute;
+          right: -15px;
+          bottom: 0;
+          width: 0;
+          height: 0;
+          border-left: 15px solid blue;
+          border-top: 15px solid transparent;
+          border-bottom: 15px solid transparent;
+        }
+
+      }
+    }
+
+    #red,
+    #blue {
+      div {
+        min-width: 60px;
+        height: 30px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: white;
+      }
+    }
+  }
+}

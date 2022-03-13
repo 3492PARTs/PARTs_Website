@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 import { AuthService } from 'src/app/services/auth.service';
+import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -13,6 +14,7 @@ export class ScoutFieldComponent implements OnInit {
   teams: Team[] = [];
   team!: string;
   scoutQuestions: ScoutQuestion[] = [];
+  scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   private scoutQuestionsCopy: ScoutQuestion[] = [];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
@@ -26,19 +28,21 @@ export class ScoutFieldComponent implements OnInit {
     this.http.get(
       'api/scoutField/GetQuestions/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.teams = (Response as ScoutAnswer).teams;
-          this.scoutQuestions = (Response as ScoutAnswer).scoutQuestions;
-          this.scoutQuestionsCopy = JSON.parse(JSON.stringify(this.scoutQuestions)) as ScoutQuestion[];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teams = result['teams'];
+            this.scoutFieldSchedule = result['scoutFieldSchedule'];
+            this.scoutQuestions = result['scoutQuestions'];
+            this.scoutQuestionsCopy = JSON.parse(JSON.stringify(this.scoutQuestions)) as ScoutQuestion[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -71,11 +75,11 @@ export class ScoutFieldComponent implements OnInit {
 
 }
 
-export class ScoutAnswer {
+/*export class ScoutAnswer {
   scoutQuestions: ScoutQuestion[] = [];
   teams: Team[] = [];
   team!: string;
-}
+}*/
 
 export class Team {
   team_no!: string;

@@ -426,12 +426,12 @@ export class Event {
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
   event: Event | number = new Event();
-  red_one: User | number | null = null;
-  red_two: User | number | null = null;
-  red_three: User | number | null = null;
-  blue_one: User | number | null = null;
-  blue_two: User | number | null = null;
-  blue_three: User | number | null = null;
+  red_one: User | number | null | any = new User();
+  red_two: User | number | null | any = new User();
+  red_three: User | number | null | any = new User();
+  blue_one: User | number | null | any = new User();
+  blue_two: User | number | null | any = new User();
+  blue_three: User | number | null | any = new User();
   st_time!: Date;
   end_time!: Date;
   notified = 'n';

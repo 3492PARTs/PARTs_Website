@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService } from 'src/app/services/general/general.service';
-import { ScoutAnswer, Team } from '../scout-field/scout-field.component';
+import { Team } from '../scout-field/scout-field.component';
 import { ScoutQuestion } from '../question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
