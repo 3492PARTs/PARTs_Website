@@ -151,6 +151,10 @@
       <app-button [ButtonType]="'main'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
     </app-form-element-group>
 
+    <app-form-element-group *ngIf="event" [LabelText]="'Sync Matches'" [InlineElements]="true">
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">Sync Matches</app-button>
+    </app-form-element-group>
+
     <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
       <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
     </app-form-element-group>
