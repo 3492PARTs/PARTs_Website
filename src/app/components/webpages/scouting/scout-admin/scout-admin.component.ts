@@ -33,7 +33,6 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },
-    { PropertyName: 'notify', ColLabel: 'Notify', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
 
   pastScoutScheduleTableCols: object[] = [
@@ -333,28 +332,35 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  notifyUsers(ss: ScoutFieldSchedule[]): void {
-    let sstmp: ScoutFieldSchedule[] = JSON.parse(JSON.stringify(ss)) as ScoutFieldSchedule[];
-    sstmp.forEach(el => {
-      el.st_time = new Date(el.st_time.toString());
-      el.end_time = new Date(el.end_time.toString());
+  notifyUsers(scout_field_sch_id: number): void {
+    let ss = JSON.parse(JSON.stringify(this.init.fieldSchedule));
+    ss.forEach((sfs: ScoutFieldSchedule) => {
+      sfs.red_one = sfs.red_one && (sfs!.red_one as User).id ? (sfs!.red_one as User).id : null;
+      sfs.red_two = sfs.red_two && (sfs!.red_two as User).id ? (sfs!.red_two as User).id : null;
+      sfs.red_three = sfs.red_three && (sfs!.red_three as User).id ? (sfs!.red_three as User).id : null;
+      sfs.blue_one = sfs.blue_one && (sfs!.blue_one as User).id ? (sfs!.blue_one as User).id : null;
+      sfs.blue_two = sfs.blue_two && (sfs!.blue_two as User).id ? (sfs!.blue_two as User).id : null;
+      sfs.blue_three = sfs.blue_three && (sfs!.blue_three as User).id ? (sfs!.blue_three as User).id : null;
     });
+
+
     this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'api/scoutAdmin/PostNotifyUsers/', sstmp
+    this.http.get(
+      'api/scoutAdmin/NotifyUsers/?id=' + scout_field_sch_id
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            alert((result as RetMessage).retMessage);
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

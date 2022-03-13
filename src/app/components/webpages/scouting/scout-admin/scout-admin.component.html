@@ -60,18 +60,11 @@
       [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
-    </app-button-ribbon>
     <!--
     <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
       [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
       [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>-->
-
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(init.fieldSchedule)">Notify</app-button>
-    </app-button-ribbon>
 
     <!--
     <app-table [TableTitle]="'Scout Past'" [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule"
@@ -126,6 +119,8 @@
 
           <app-button-ribbon>
             <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(scoutFieldSchedule.scout_field_sch_id)">
+              Notify</app-button>
           </app-button-ribbon>
         </app-form-element-group>
       </app-form>
