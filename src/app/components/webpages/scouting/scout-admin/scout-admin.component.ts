@@ -173,6 +173,47 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  toggleCompetitionPage(): void | null {
+    if (!this.event) {
+      this.gs.triggerError('No event set.');
+      return null;
+    }
+
+    if (!confirm('Are you sure you want to toggle the competition page?')) {
+      if (this.init.currentEvent.competition_page_active !== 'no') {
+        window.setTimeout(() => {
+          this.init.currentEvent.competition_page_active = 'no';
+        }, 1);
+      }
+      else {
+        window.setTimeout(() => {
+          this.init.currentEvent.competition_page_active = 'yes';
+        }, 1);
+      }
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'api/scoutAdmin/ToggleCompetitionPage/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            alert((result as RetMessage).retMessage);
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
   buildEventList(): void {
     this.eventList = this.init.events.filter(item => item.season === this.season);
   }
@@ -443,6 +484,7 @@ export class Event {
   date_end!: Date;
   current!: string;
   void_ind!: string;
+  competition_page_active!: string;
 }
 
 export class ScoutFieldSchedule {

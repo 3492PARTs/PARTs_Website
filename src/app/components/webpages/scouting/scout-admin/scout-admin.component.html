@@ -137,8 +137,14 @@
       <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="eventList" [DisplayEmptyOption]="true"
         [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="event">
       </app-form-element>
-      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
-      <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season/Event</app-button>
+      <app-form-element *ngIf="init.currentEvent && init.currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'yes'"
+        [FalseValue]="'no'" [LabelText]="'Competition Page Active'"
+        [(Model)]="init.currentEvent.competition_page_active" (FunctionCallBack)="toggleCompetitionPage()">
+      </app-form-element>
+      <app-button-ribbon>
+        <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">Sync Season</app-button>
+        <app-button *ngIf="season" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set Season/Event</app-button>
+      </app-button-ribbon>
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Add/Delete Season'" [InlineElements]="true">
