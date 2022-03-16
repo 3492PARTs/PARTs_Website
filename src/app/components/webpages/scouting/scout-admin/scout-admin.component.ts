@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { Team } from '../scout-field/scout-field.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -160,6 +161,7 @@ export class ScoutAdminComponent implements OnInit {
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
+          this.adminInit();
           alert((Response as RetMessage).retMessage);
         }
         this.gs.decrementOutstandingCalls();
@@ -482,11 +484,43 @@ export class Event {
   date_st!: Date;
   event_cd!: string;
   date_end!: Date;
+  event_url = ''
+  address = ''
+  city = ''
+  state_prov = ''
+  postal_code = ''
+  location_name = ''
+  gmaps_url = ''
+  webcast_url = ''
   current!: string;
   void_ind!: string;
   competition_page_active!: string;
 }
 
+export class Match {
+  match_id!: number;
+  match_number!: number;
+  event!: Event;
+  red_one!: Team | number;
+  red_two!: Team | number;
+  red_three!: Team | number;
+  blue_one!: Team | number;
+  blue_two!: Team | number;
+  blue_three!: Team | number;
+  red_score!: number;
+  blue_score!: number;
+  comp_level!: string | CompetitionLevel;
+  time!: Date;
+  void_ind!: string;
+
+}
+
+export class CompetitionLevel {
+  comp_lvl_typ = '';
+  comp_lvl_typ_nm = '';
+  comp_lvl_order = 0;
+  void_ind = '';
+}
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
   event: Event | number = new Event();

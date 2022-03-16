@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck } from '@angular/core';
-import { AuthService, User, UserLinks, Token } from 'src/app/services/auth.service';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck, Input } from '@angular/core';
+import { AuthService, User, Token } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
@@ -11,10 +11,10 @@ export class NavigationComponent implements OnInit, DoCheck {
 
   token: Token = new Token();
   user: User = new User;
-  userLinks: UserLinks[] = [];
-  previousUserLinks: UserLinks[] = [];
+  userLinks: Menu[] = [];
+  #previousUserLinks: Menu[] = [];
 
-  menu: Menu[] = [];
+  @Input() menu: Menu[] = [];
 
   screenSizeWide = 1175;
 
@@ -32,84 +32,13 @@ export class NavigationComponent implements OnInit, DoCheck {
     this.authService.currentUserLinks.subscribe(ul => this.userLinks = ul);
     this.alignNavLinks();
     //this.closeOnLinkClick(); TODO COme back and fix
-
-    this.menu = [
-      {
-        MenuName: 'home',
-        RouterLink: '',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'contact us',
-        RouterLink: 'contact',
-        ID: this.gs.getNextGsId(),
-        MenuItems: [
-          {
-            MenuName: 'join',
-            RouterLink: 'join'
-          }
-        ]
-      },
-      {
-        MenuName: 'sponsoring',
-        RouterLink: 'sponsor',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'about',
-        RouterLink: 'about',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'media',
-        RouterLink: 'media',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'resources',
-        RouterLink: 'resources',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'first',
-        RouterLink: 'first',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'leads',
-        RouterLink: 'https://www.parts3492leads.org/',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'members',
-        RouterLink: 'none', //'login',
-        ID: this.gs.getNextGsId(),
-        MenuItems: [
-          {
-            MenuName: 'login - this should not show',
-            RouterLink: 'login'
-          },
-          {
-            MenuName: 'calendar',
-            RouterLink: 'calendar'
-          }
-        ]
-      }
-    ];
   }
 
   ngDoCheck() {
-    if (this.userLinks !== this.previousUserLinks) {
+    /*if (this.userLinks !== this.previousUserLinks) {
       //this.closeOnLinkClick();
       this.previousUserLinks = Object.assign({}, this.userLinks);
-    }
+    }*/
   }
 
   logOut(): void {

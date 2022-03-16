@@ -1,0 +1,54 @@
+<div>
+    <app-box>
+        <h2>{{competitionInfo.event?.event_nm}}</h2>
+
+        <h4>We'll be playing at the <a target="_blank"
+                [href]="competitionInfo.event?.gmaps_url">{{competitionInfo.event?.location_name}}</a> in
+            {{competitionInfo.event?.city}}, {{competitionInfo.event?.state_prov}}</h4>
+        <h4>From {{competitionInfo.event?.date_st | dateToStr :false}} to {{competitionInfo.event?.date_end | dateToStr
+            :
+            false}}</h4>
+
+    </app-box>
+    <app-box [Title]="'Match Schedule'">
+        <h4><a target="_blank" [href]="'https://www.thebluealliance.com/event/' + competitionInfo.event?.event_cd">View
+                Live
+                Updates and Rankings</a></h4>
+        <div id="match-table-wrapper">
+            <table id="match-table">
+                <thead>
+                    <th>Match</th>
+                    <th>Type (Estimate)</th>
+                    <th>Time</th>
+                    <th>Red Alliance</th>
+                    <th>Blue Alliance</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let match of matchSchedule">
+                        <td>{{match.match_number}}</td>
+                        <td>{{match.comp_level}}</td>
+                        <td>{{match.time | dateToStr}}</td>
+                        <td>
+                            <span [ngClass]="{'us': match.red_one.us}">{{match.red_one.team}}</span>,
+                            <span [ngClass]="{'us': match.red_two.us}">{{match.red_two.team}}</span>,
+                            <span [ngClass]="{'us': match.red_three.us}">{{match.red_three.team}}</span>
+                        </td>
+                        <td>
+                            <span [ngClass]="{'us': match.blue_one.us}">{{match.blue_one.team}}</span>,
+                            <span [ngClass]="{'us': match.blue_two.us}">{{match.blue_two.team}}</span>,
+                            <span [ngClass]="{'us': match.blue_three.us}">{{match.blue_three.team}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </app-box>
+</div>
+
+<!--
+<p>{{ competitionInfo.event | json}}</p>
+
+<div *ngFor="let match of competitionInfo.matches">
+    {{match| json}}
+</div>
+-->

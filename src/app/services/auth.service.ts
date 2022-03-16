@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { GeneralService } from './general/general.service';
 import { share, map } from 'rxjs/operators';
+import { Menu } from '../components/navigation/navigation.component';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
 
-  private userLinks = new BehaviorSubject<UserLinks[]>([]);
+  private userLinks = new BehaviorSubject<Menu[]>([]);//UserLinks[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
   localStorageString = 'p-tkn-s';
@@ -251,7 +252,7 @@ export class AuthService {
       ).subscribe(
         Response => {
           // console.log(Response);
-          this.userLinks.next(Response as UserLinks[]);
+          this.userLinks.next(Response as Menu[]);//UserLinks[]);
           this.gs.decrementOutstandingCalls();
         },
         Error => {
@@ -333,11 +334,11 @@ export class UserProfile {
   phone_type!: number;
   user!: number;
 }
-
+/*
 export class UserLinks {
   MenuName!: string;
   RouterLink!: string;
-}
+}*/
 
 export class AuthGroup {
   id!: number;

@@ -22,11 +22,12 @@ import { AboutComponent } from './components/webpages/about/about.component';
 import { MediaComponent } from './components/webpages/media/media.component';
 import { BuildSeasonComponent } from './components/webpages/media/build-season/build-season.component';
 import { MediaCommunityOutreachComponent } from './components/webpages/media/community-outreach/community-outreach.component';
-import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
+import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
 import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
 import { FirstComponent } from './components/webpages/first/first.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
+import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
 
 
 
@@ -56,7 +57,7 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-
+  { path: 'competition', component: EventCompetitionComponent },
   // otherwise redirect to home
   //{ path: '**', redirectTo: '' }
 ];

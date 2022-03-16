@@ -1,0 +1,83 @@
+/**********BEGIN COMPETITION**********/
+
+#competitionTable,
+#competitionSchedule {
+  width: 100%;
+}
+
+
+/*TEXT*/
+
+#competitionTable h2,
+#competitionTable h3,
+#competitionTable h4 {
+  text-align: center;
+}
+
+.redAlliance {
+  color: red;
+}
+
+.blueAlliance {
+  color: blue;
+}
+
+
+/*BORDER*/
+
+#competitionTable td {
+  border: 2px solid black; //$navHam;
+}
+
+
+/*IMG*/
+
+#competitionTable img {
+  width: 100%;
+}
+
+
+/*COMPETITION:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+  .competitionTableDisplay {
+    display: block;
+  }
+}
+
+
+
+/**********END COMPETITION**********/
+@import '../../../scss/_helpers/variables';
+
+#match-table-wrapper {
+  overflow-x: auto;
+}
+
+#match-table {
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+
+  th,
+  td {
+    border-right: 2px solid $fontColor;
+    font-size: 1.1em;
+
+    padding-right: 1rem;
+    padding-left: 1rem;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  tr:nth-child(odd) {
+    background-color: lighten($gray, 50%);
+  }
+}
+
+.us {
+  font-weight: bold;
+  text-decoration: underline;
+}

@@ -70,7 +70,7 @@ import { PaginationComponent } from './components/atoms/pagination/pagination.co
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
 import { AuthService } from './services/auth.service';
 import { BannersComponent } from './components/atoms/banners/banners.component';
-
+import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -126,7 +126,8 @@ import { BannersComponent } from './components/atoms/banners/banners.component';
     AdminComponent,
     PaginationComponent,
     OnCreateDirective,
-    BannersComponent
+    BannersComponent,
+    EventCompetitionComponent
   ],
   imports: [
     BrowserModule,
