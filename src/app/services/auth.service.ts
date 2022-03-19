@@ -75,6 +75,7 @@ export class AuthService {
   authorizeUser(userData: UserData, returnUrl?: string | null): void {
     this.authInFlightBS.next('prcs');
     this.gs.incrementOutstandingCalls();
+    userData.username = userData.username.toLocaleLowerCase();
     this.http.post('auth/token/', userData).subscribe(
       Response => {
         // console.log(Response);
@@ -151,6 +152,25 @@ export class AuthService {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'auth/request_reset_password/',
+      { email: input.email }
+    ).subscribe(
+      Response => {
+        if (this.gs.checkResponse(Response)) {
+          this.router.navigateByUrl('login?page=resetFinish');
+        }
+        this.gs.decrementOutstandingCalls();
+      },
+      Error => {
+        this.gs.decrementOutstandingCalls();
+        this.gs.triggerError('Couldn\'t request password reset.');
+      }
+    );
+  }
+
+  forgotUsername(input: UserData): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'auth/request_username/',
       { email: input.email }
     ).subscribe(
       Response => {
@@ -310,7 +330,7 @@ export class TokenLoad {
 }
 
 export class UserData {
-  username!: string | null;
+  username = '';
   password!: string;
   passwordConfirm!: string;
   uuid!: string | null;

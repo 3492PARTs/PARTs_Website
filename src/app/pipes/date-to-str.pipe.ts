@@ -5,7 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DateToStrPipe implements PipeTransform {
 
   transform(elem: any, time = true): any {
-    if (!isNaN(Date.parse(elem))) {
+    const regex1 = /1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-9] ((AM)|(PM))/g;
+    const regex2 = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/g;
+    console.log(elem + ' elem typ ' + regex1.test(elem) + ' ' + regex2.test(elem));
+    if (regex1.test(elem) || regex2.test(elem)) {
       elem = elem.replace('Z', '');
       elem = new Date(elem);
       const mm = elem.getMonth() + 1; // getMonth() is zero-based
@@ -26,3 +29,8 @@ export class DateToStrPipe implements PipeTransform {
   }
 
 }
+/*
+3/18/2022 2:47 PM
+2020-02-26T00:00:00Z
+1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-0] ((AM)|(PM))
+*/

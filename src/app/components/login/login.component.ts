@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       this.page = this.gs.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
       this.input.uuid = this.gs.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
       this.input.token = this.gs.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
-      this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user');
+      this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
 
@@ -101,5 +101,17 @@ export class LoginComponent implements OnInit {
   changePage(s: string) {
     this.page = s;
     this.router.navigateByUrl('login?page=' + s);
+  }
+
+  forgotUsername(): void | null {
+    if (this.gs.strNoE(this.input.email)) {
+      this.gs.triggerError('Email not provided.');
+      return null;
+    } else {
+      this.authService.forgotUsername(this.input);
+      this.page = 'resetFinish';
+    }
+
+    this.input = new UserData();
   }
 }
