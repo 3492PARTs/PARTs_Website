@@ -50,9 +50,13 @@ export class ModalComponent implements AfterViewInit {
 
   alignTitle(): void {
     if (window.innerWidth >= this.screenSizeWide) {
-      this.centered = true;
+      window.setTimeout(() => {
+        this.centered = true;
+      }, 1);
     } else {
-      this.centered = false;
+      window.setTimeout(() => {
+        this.centered = false;
+      }, 1);
     }
   }
 }

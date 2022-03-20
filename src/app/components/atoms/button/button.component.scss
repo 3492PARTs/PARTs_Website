@@ -108,6 +108,10 @@ button:not(:disabled) {
   @extend .btn-success;
 }
 
+.minus {
+  @extend .btn-warning;
+}
+
 .edit {
   @extend .btn-warning;
 }

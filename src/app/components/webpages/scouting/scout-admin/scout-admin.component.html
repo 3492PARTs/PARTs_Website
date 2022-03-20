@@ -165,7 +165,9 @@
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
-      <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
+      <div id="respose">
+        <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
+      </div>
     </app-form-element-group>
   </app-box>
 
@@ -186,10 +188,9 @@
     <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone Type
     </app-button>
 
-    <app-form-element [Type]="'text'" [LabelText]="'Carrier:'" [FormElementInline]="true" [(Model)]="phoneType.carrier">
+    <app-form-element [Type]="'text'" [LabelText]="'Carrier:'" [(Model)]="phoneType.carrier">
     </app-form-element>
-    <app-form-element [Type]="'text'" [LabelText]="'Address:'" [FormElementInline]="true"
-      [(Model)]="phoneType.phone_type"></app-form-element>
+    <app-form-element [Type]="'text'" [LabelText]="'Address:'" [(Model)]="phoneType.phone_type"></app-form-element>
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="savePhoneType()">Save</app-button>

@@ -15,7 +15,9 @@ export class ScoutFieldComponent implements OnInit {
   team!: string;
   scoutQuestions: ScoutQuestion[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
-  private scoutQuestionsCopy: ScoutQuestion[] = [];
+  scoutAutoQuestions: ScoutQuestion[] = [];
+  scoutTeleopQuestions: ScoutQuestion[] = [];
+  scoutOtherQuestions: ScoutQuestion[] = [];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -34,7 +36,7 @@ export class ScoutFieldComponent implements OnInit {
             this.teams = result['teams'];
             this.scoutFieldSchedule = result['scoutFieldSchedule'];
             this.scoutQuestions = result['scoutQuestions'];
-            this.scoutQuestionsCopy = JSON.parse(JSON.stringify(this.scoutQuestions)) as ScoutQuestion[];
+            this.sortQuestions();
           }
         },
         error: (err: any) => {
@@ -47,6 +49,24 @@ export class ScoutFieldComponent implements OnInit {
     );
   }
 
+  sortQuestions(): void {
+    this.scoutAutoQuestions = [];
+    this.scoutTeleopQuestions = [];
+    this.scoutOtherQuestions = [];
+    this.scoutQuestions.forEach(sq => {
+      let sqCopy = JSON.parse(JSON.stringify(sq)) as ScoutQuestion;
+      if (sqCopy.sq_sub_typ === 'auto') {
+        this.scoutAutoQuestions.push(sqCopy);
+      }
+      else if (sqCopy.sq_sub_typ === 'teleop') {
+        this.scoutTeleopQuestions.push(sqCopy);
+      }
+      else {
+        this.scoutOtherQuestions.push(sqCopy);
+      }
+    });
+  }
+
   save(): void | null {
     if (this.gs.strNoE(this.team)) {
       this.gs.triggerError('Must select a team to scout!');
@@ -54,14 +74,26 @@ export class ScoutFieldComponent implements OnInit {
     }
 
     this.gs.incrementOutstandingCalls();
+
+    let response: any[] = [];
+    this.scoutAutoQuestions.forEach(sq => {
+      response.push(sq);
+    });
+    this.scoutTeleopQuestions.forEach(sq => {
+      response.push(sq);
+    });
+    this.scoutOtherQuestions.forEach(sq => {
+      response.push(sq);
+    });
+
     this.http.post(
       'api/scoutField/PostSaveAnswers/',
-      { scoutQuestions: this.scoutQuestions, team: this.team }
+      { scoutQuestions: response, team: this.team }
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
-        this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
         this.team = '';
+        this.sortQuestions();
         this.gs.decrementOutstandingCalls();
       },
       Error => {
@@ -71,6 +103,16 @@ export class ScoutFieldComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       }
     );
+  }
+
+  increment(sq: ScoutQuestion): void {
+    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
+    sq.answer = parseInt(sq.answer.toString()) + 1;
+  }
+
+  decrement(sq: ScoutQuestion): void {
+    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
+    if (parseInt(sq.answer.toString()) > 0) sq.answer = parseInt(sq.answer.toString()) - 1;
   }
 
 }

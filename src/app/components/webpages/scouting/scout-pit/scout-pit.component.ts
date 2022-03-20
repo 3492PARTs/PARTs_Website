@@ -54,7 +54,7 @@ export class ScoutPitComponent implements OnInit {
     let dirty = false;
 
     this.scoutQuestions.forEach(el => {
-      if (!this.gs.strNoE(el.answer)) {
+      if (!this.gs.strNoE(el.answer.toString())) {
         dirty = true;
       }
     });

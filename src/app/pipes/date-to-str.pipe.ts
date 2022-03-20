@@ -7,10 +7,13 @@ export class DateToStrPipe implements PipeTransform {
   transform(elem: any, time = true): any {
     const regex1 = /1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-9] ((AM)|(PM))/g;
     const regex2 = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/g;
-    console.log(elem + ' elem typ ' + regex1.test(elem) + ' ' + regex2.test(elem));
+    //console.log(elem + ' elem typ ' + regex1.test(elem) + ' ' + regex2.test(elem));
     if (regex1.test(elem) || regex2.test(elem)) {
-      elem = elem.replace('Z', '');
+      //console.log('hello');
+      //elem = elem.replace('Z', '');
+      //console.log(elem);
       elem = new Date(elem);
+      //console.log(elem);
       const mm = elem.getMonth() + 1; // getMonth() is zero-based
       const dd = elem.getDate();
       var hours = elem.getHours();
@@ -22,8 +25,7 @@ export class DateToStrPipe implements PipeTransform {
       var strTime = hours + ':' + minutes + ' ' + ampm;
       if (time)
         return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + elem.getFullYear() + ' ' + strTime;
-      else
-        return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + elem.getFullYear();
+      return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + elem.getFullYear();
     }
     return elem;
   }

@@ -345,6 +345,7 @@ export class ScoutAdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
         }
+        this.manageUserModalVisible = false;
         this.adminInit();
         this.gs.decrementOutstandingCalls();
       },
@@ -559,6 +560,7 @@ export class ScoutQuestionType {
   sq_typ!: string;
   sq_nm!: string;
 }
+
 
 export class ScoutAdminInit {
   seasons: Season[] = [];

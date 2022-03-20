@@ -18,10 +18,35 @@
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="team">
     </app-form-element>
 
-    <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
-      [FormGroup]="true" [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-      [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
-    </app-form-element>
+    <app-form-element-group [LabelText]="'Autonomous'">
+      <app-form-element *ngFor="let sq of scoutAutoQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
+        [FormGroup]="true" [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+        [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
+      </app-form-element>
+
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Teleoperated'">
+      <ng-container *ngFor="let sq of scoutTeleopQuestions">
+        <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
+          [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+          [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
+          [FormGroupInline]="sq.question_typ === 'number'">
+        </app-form-element>
+        <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
+          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
+        </div>
+      </ng-container>
+    </app-form-element-group>
+
+    <app-form-element-group *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'">
+      <app-form-element *ngFor="let sq of scoutOtherQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
+        [FormGroup]="true" [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+        [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
+      </app-form-element>
+    </app-form-element-group>
+
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="save()">Save</app-button>
     </app-button-ribbon>
