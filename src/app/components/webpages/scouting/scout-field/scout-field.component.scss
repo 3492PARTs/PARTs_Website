@@ -55,6 +55,7 @@
     #red,
     #blue {
       div {
+        padding: 0 1rem;
         min-width: 60px;
         height: 30px;
         position: relative;
@@ -64,4 +65,8 @@
       }
     }
   }
+}
+
+.number-stepper {
+  display: inline-block;
 }

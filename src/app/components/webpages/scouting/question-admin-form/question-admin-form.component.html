@@ -7,6 +7,11 @@
     [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="scoutQuestion.question_typ">
   </app-form-element>
 
+  <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
+    [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [DisplayProperty]="'sq_sub_nm'"
+    [BindingProperty]="'sq_sub_typ'" [(Model)]="scoutQuestion.sq_sub_typ" [DisplayEmptyOption]="true">
+  </app-form-element>
+
   <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutQuestion()">Save</app-button>
 
   <div *ngIf="scoutQuestion.question_typ === 'select'" class="optionsTableWrapper">
@@ -31,6 +36,11 @@
 
       <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
         [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ">
+      </app-form-element>
+      <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
+        [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes"
+        [DisplayProperty]="'sq_sub_nm'" [BindingProperty]="'sq_sub_typ'" [(Model)]="q.sq_sub_typ"
+        [DisplayEmptyOption]="true">
       </app-form-element>
       <p *ngIf="q.active === 'y'">Active</p>
       <p *ngIf="q.active === 'n'">Inactive</p>

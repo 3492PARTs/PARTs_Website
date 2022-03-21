@@ -13,9 +13,10 @@
       placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
 
     <ng-container *ngSwitchCase="'select'">
-      <ng-container *ngIf="!SelectValidityFunction; else hasFunction"><select class="form-control" id="{{ LabelID }}"
-          [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
-          <option value="" *ngIf="DisplayEmptyOption"></option>
+      <ng-container *ngIf="!SelectValidityFunction; else hasFunction">
+        <select class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}" [ngModel]="Model"
+          (ngModelChange)="change($event)">
+          <option [ngValue]="''" *ngIf="DisplayEmptyOption"></option>
 
           <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
             <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
@@ -39,7 +40,8 @@
               obj[DisplayProperty2] }}
             </option>
           </ng-container>
-        </select></ng-container>
+        </select>
+      </ng-container>
       <ng-template #hasFunction>
         <select class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}" [ngModel]="Model"
           (ngModelChange)="change($event)" [compareWith]="SelectValidityFunction">

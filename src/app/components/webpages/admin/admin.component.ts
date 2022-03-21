@@ -17,7 +17,8 @@ export class AdminComponent implements OnInit {
   userTableCols: object[] = [
     { PropertyName: 'first_name', ColLabel: 'First' },
     { PropertyName: 'last_name', ColLabel: 'Last' },
-    { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'profile.phone', ColLabel: 'Phone' }
   ];
 
   manageUserModalVisible = false;
@@ -119,6 +120,7 @@ export class AdminComponent implements OnInit {
         if (this.gs.checkResponse(Response)) {
           alert((Response as RetMessage).retMessage);
         }
+        this.manageUserModalVisible = false;
         this.adminInit();
         this.gs.decrementOutstandingCalls();
       },

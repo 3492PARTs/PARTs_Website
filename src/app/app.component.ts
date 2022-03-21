@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
       }
 
     });
+
+    console.log('prod: ' + environment.production);
   }
 
   ngOnInit() {
@@ -105,7 +107,6 @@ export class AppComponent implements OnInit {
   }
 
   competitionInit(): void {
-    this.gs.incrementOutstandingCalls();
     this.http.get(
       'api/competition/CompetitionInit/'
     ).subscribe(
@@ -124,7 +125,6 @@ export class AppComponent implements OnInit {
           console.log('error', err);
         },
         complete: () => {
-          this.gs.decrementOutstandingCalls();
         }
       }
     );

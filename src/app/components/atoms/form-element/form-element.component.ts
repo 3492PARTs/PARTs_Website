@@ -43,7 +43,7 @@ export class FormElementComponent implements OnInit, AfterViewInit {
   @Input() RadioList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
-  @Input() FormElementInline: boolean = true;
+  //@Input() FormElementInline: boolean = true;
   @Input() LabelOnTop: boolean = true;
 
   @Input()

@@ -170,12 +170,13 @@ export class ScoutQuestion {
   sq_id!: number;
   season!: number;
   sq_typ!: string;
+  sq_sub_typ!: string;
   question_typ!: string;
   question!: string;
   order!: number;
   active = 'y';
   void_ind!: string;
-  answer = '';
+  answer: string | number = '';
 
   options: QuestionOption[] = [];
 }
@@ -195,7 +196,14 @@ export class QuestionType {
   void_ind!: string;
 }
 
+export class ScoutQuestionSubType {
+  sq_sub_typ = ''
+  sq_sub_nm = ''
+  sq_typ_id = ''
+}
+
 export class Init {
   questionTypes: QuestionType[] = [];
   scoutQuestions: ScoutQuestion[] = [];
+  scoutQuestionSubTypes: ScoutQuestionSubType[] = [];
 }
