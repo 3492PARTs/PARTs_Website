@@ -48,9 +48,11 @@
 .rightAlign {
   text-align: right !important;
 }
+
 .centerAlign {
   text-align: right !important;
 }
+
 .leftAlign {
   text-align: left !important;
 }
@@ -105,8 +107,26 @@
   overflow-y: hidden;
 }
 
-.table-responsive > .table {
+.table-responsive>.table {
   width: auto !important;
+}
+
+.table-mobile {
+  width: auto !important;
+
+  table-layout: fixed;
+
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
+
+  @media only screen and (max-width: 480px) {
+    /* horizontal scrollbar for tables if mobile screen */
+    overflow-x: auto;
+    display: block;
+  }
 }
 
 .up-arrow svg,
@@ -154,7 +174,8 @@
 
     // Show resize curson when hovering over column borders
     &::before {
-      @extend .table-resizable, .resizing;
+      @extend .table-resizable,
+      .resizing;
       content: "";
       display: block;
       height: 100%;

@@ -69,6 +69,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() DisplayRecordInfo = false;
   @Input() Resizable = false;
   @Input() ButtonsFirstCol = false;
+  @Input() Mobile = false;
 
   @Input() DisableInputs = false;
   @Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?

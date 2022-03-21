@@ -24,7 +24,7 @@
 <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
   <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutQuestions"
     [DisplayProperty]="'question'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
-    [(Model)]="scoutQuestion.sq_id">
+    [(Model)]="scoutQuestion.sq_id" [Width]="'100%'">
   </app-form-element>
   <ng-container *ngFor="let q of init.scoutQuestions">
     <ng-container *ngIf="q.sq_id === scoutQuestion.sq_id">
@@ -35,10 +35,11 @@
       </app-form-element>
 
       <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.questionTypes"
-        [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ">
+        [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ"
+        [Width]="'100%'">
       </app-form-element>
       <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
-        [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes"
+        [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [Width]="'100%'"
         [DisplayProperty]="'sq_sub_nm'" [BindingProperty]="'sq_sub_typ'" [(Model)]="q.sq_sub_typ"
         [DisplayEmptyOption]="true">
       </app-form-element>
