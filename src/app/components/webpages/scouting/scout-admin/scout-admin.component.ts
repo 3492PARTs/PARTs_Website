@@ -28,7 +28,8 @@ export class ScoutAdminComponent implements OnInit {
   userTableCols: object[] = [
     { PropertyName: 'first_name', ColLabel: 'First' },
     { PropertyName: 'last_name', ColLabel: 'Last' },
-    { PropertyName: 'has_phone', ColLabel: 'Phone Set' }
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'profile.phone', ColLabel: 'Phone' }
   ];
 
   scoutFieldScheduleTableCols: object[] = [
