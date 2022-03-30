@@ -17,6 +17,8 @@ declare let gtag: Function;
 })
 export class AppComponent implements OnInit {
   appMenu: Menu[] = [];
+  private apiStatus = 'online';
+  private firstRun = true;
 
   constructor(private authService: AuthService, public router: Router, private gs: GeneralService, private http: HttpClient) {
     // subscribe to router events and send page views to Google Analytics
@@ -28,11 +30,20 @@ export class AppComponent implements OnInit {
 
     });
 
+    this.authService.apiStatus.subscribe(a => {
+      this.apiStatus = a;
+      if (a !== 'prcs' && a !== 'off' && this.firstRun) {
+        this.authService.previouslyAuthorized();
+        this.competitionInit();
+        this.firstRun = false;
+      }
+    })
+
     console.log('prod: ' + environment.production);
   }
 
   ngOnInit() {
-    this.authService.previouslyAuthorized();
+    this.authService.checkAPIStatus();
     this.appMenu = [
       /*{
         MenuName: 'home',
@@ -103,7 +114,6 @@ export class AppComponent implements OnInit {
         ]
       }
     ];
-    this.competitionInit();
   }
 
   competitionInit(): void {
@@ -113,12 +123,14 @@ export class AppComponent implements OnInit {
       {
         next: (result: any) => {
           if ((result as CompetitionInit).event) {
-            this.appMenu.unshift({
-              MenuName: 'competition',
-              RouterLink: 'competition',
-              ID: this.gs.getNextGsId(),
-              MenuItems: []
-            });
+            window.setTimeout(() => {
+              this.appMenu.unshift({
+                MenuName: 'competition',
+                RouterLink: 'competition',
+                ID: this.gs.getNextGsId(),
+                MenuItems: []
+              });
+            }, 1);
           }
         },
         error: (err: any) => {

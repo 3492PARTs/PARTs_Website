@@ -42,22 +42,10 @@ export class LoginComponent implements OnInit {
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
 
-    this.gs.incrementOutstandingCalls();
-
-    this.http.get('auth/api_status/').subscribe(
-      Response => {
-        this.apiStatus = 'online';
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        this.apiStatus = 'offline';
-        this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
-
-        this.gs.decrementOutstandingCalls();
-      }
-    );
-
+    this.authService.apiStatus.subscribe(a => {
+      this.apiStatus = a;
+      if (a === 'off') this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
+    });
   }
 
   login() {

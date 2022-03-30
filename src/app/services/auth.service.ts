@@ -13,6 +13,9 @@ export class AuthService {
   private authInFlightBS = new BehaviorSubject<string>('prcs');
   authInFlight = this.authInFlightBS.asObservable();
 
+  private apiStatusBS = new BehaviorSubject<string>('prcs');
+  apiStatus = this.apiStatusBS.asObservable();
+
   private token = new BehaviorSubject<Token>(new Token());
   currentToken = this.token.asObservable();
   private internalToken: Token = new Token();
@@ -240,6 +243,26 @@ export class AuthService {
 
   getAccessToken(): Observable<string> {
     return of(this.internalToken.access);
+  }
+
+  checkAPIStatus(): void {
+    this.http.get('auth/api_status/').subscribe(
+      Response => {
+        this.apiStatusBS.next('on');
+      },
+      Error => {
+        this.apiStatusBS.next('off');
+
+        this.http.get('auth/api_status/').subscribe(
+          Response => {
+            this.apiStatusBS.next('on-bkup');
+          },
+          Error => {
+            this.apiStatusBS.next('off');
+          }
+        );
+      }
+    );
   }
 
   getUser() {
