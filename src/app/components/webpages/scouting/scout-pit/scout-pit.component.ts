@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './scout-pit.component.html',
   styleUrls: ['./scout-pit.component.scss']
 })
-export class ScoutPitComponent implements OnInit {
+export class ScoutPitComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
   compTeams: Team[] = [];
   team!: string;
@@ -20,11 +20,33 @@ export class ScoutPitComponent implements OnInit {
   previewUrl: any = null;
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
+  private checkTeamTimer: number | undefined;
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.spInit() : null);
+    this.checkTeamTimer = window.setInterval(() => {
+      this.http.get(
+        'api/scoutPit/GetQuestions/'
+      ).subscribe(
+        Response => {
+          if (this.gs.checkResponse(Response)) {
+            this.teams = (Response as ScoutPitInit).teams;
+            this.compTeams = (Response as ScoutPitInit).comp_teams;
+          }
+        },
+        Error => {
+          const tmp = Error as { error: { detail: string } };
+          console.log('error', Error);
+          alert(tmp.error.detail);
+        }
+      );
+    }, 10000);
+  }
+
+  ngOnDestroy(): void {
+    window.clearInterval(this.checkTeamTimer);
   }
 
   spInit(): void {

@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
       return null;
     } else {
       this.authService.forgotUsername(this.input);
-      this.page = 'resetFinish';
+      this.page = 'forgotUsernameFinish';
     }
 
     this.input = new UserData();

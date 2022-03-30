@@ -107,10 +107,10 @@ export class AppComponent implements OnInit {
             MenuName: 'login - this should not show',
             RouterLink: 'login'
           },
-          {
+          /*{
             MenuName: 'calendar',
             RouterLink: 'calendar'
-          }
+          }*/
         ]
       }
     ];
