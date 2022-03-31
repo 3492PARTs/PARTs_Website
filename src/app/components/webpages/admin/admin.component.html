@@ -31,8 +31,9 @@
             [(Model)]="activeUser.profile.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
-        </div>
-        <div>
+          <app-form-element [Type]="'checkbox'" [LabelText]="'Active:'" [(Model)]="activeUser.is_active"
+            [FormGroupInline]="true">
+          </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
             [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
             [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
