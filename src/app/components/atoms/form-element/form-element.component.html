@@ -96,6 +96,11 @@
       </span>
       <div *ngIf="BindingProperty !== '' && DisplayProperty !== '' && SelectList && SelectList.length > 0" id="dropdown"
         #multiSelectDropdown>
+        <div>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
+          &nbsp;
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
+        </div>
         <div *ngFor="let obj of SelectList; let i = index">
           <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
             (ngModelChange)="multiChange($event, i)">

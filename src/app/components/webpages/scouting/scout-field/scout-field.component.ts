@@ -91,7 +91,7 @@ export class ScoutFieldComponent implements OnInit {
       { scoutQuestions: response, team: this.team }
     ).subscribe(
       Response => {
-        alert((Response as RetMessage).retMessage);
+        this.gs.addBanner({ message: (Response as RetMessage).retMessage, severity: 1, time: 5000 });
         this.team = '';
         this.sortQuestions();
         this.gs.decrementOutstandingCalls();

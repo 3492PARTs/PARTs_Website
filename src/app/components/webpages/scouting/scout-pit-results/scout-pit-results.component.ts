@@ -78,6 +78,37 @@ export class ScoutPitResultsComponent implements OnInit {
       }
     );
   }
+
+  download(): void | null {
+    let export_file = this.scoutPitResults;
+
+    if (export_file.length <= 0) {
+      this.gs.triggerError('Cannot export empty dataset.');
+      return null;
+    }
+
+    let csv = 'Team Number,';
+    export_file[0].results.forEach(r => {
+      csv += '"' + r.question + '"' + ',';
+    })
+
+    csv += 'Pic URL,';
+
+    csv = csv.substring(0, csv.length - 1);
+    csv += '\n';
+
+    export_file.forEach(element => {
+      csv += element.teamNo + ',';
+      element.results.forEach(r => {
+        csv += '"' + r.answer + '"' + ',';
+      });
+      csv += element.pic + ',';
+      csv = csv.substring(0, csv.length - 1);
+      csv += '\n';
+    });
+
+    this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
+  }
 }
 export class ScoutPitResults {
   teamNo!: string;

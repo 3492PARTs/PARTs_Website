@@ -367,6 +367,7 @@ export class User {
   email = '';
   first_name = '';
   last_name = '';
+  is_active = false
   profile: UserProfile = new UserProfile();
 }
 

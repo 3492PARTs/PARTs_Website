@@ -6,6 +6,7 @@
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="search()">Search</app-button>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="download()">Download</app-button>
     </app-button-ribbon>
   </form>
 </app-box>
@@ -20,7 +21,7 @@
     </div>
 
     <div *ngFor="let r of res.results">
-      <p>{{ r.question }}: {{  r.answer }}</p>
+      <p>{{ r.question }}: {{ r.answer }}</p>
     </div>
   </app-box>
 </div>

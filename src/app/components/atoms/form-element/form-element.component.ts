@@ -227,4 +227,16 @@ export class FormElementComponent implements OnInit, AfterViewInit {
     }
   }
 
+  selectAll(): void {
+    this.SelectList.forEach(e => {
+      e['checked'] = true;
+    })
+  }
+
+  deselectAll(): void {
+    this.SelectList.forEach(e => {
+      e['checked'] = false;
+    })
+  }
+
 }

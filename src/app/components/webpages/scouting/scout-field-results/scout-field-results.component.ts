@@ -68,17 +68,17 @@ export class ScoutFieldResultsComponent implements OnInit {
 
     let csv = '';
     export_file.scoutCols.forEach(element => {
-      csv += element['ColLabel'] + ', ';
+      csv += '"' + element['ColLabel'] + '"' + ',';
     });
 
-    csv = csv.substr(0, csv.length - 2);
+    csv = csv.substring(0, csv.length - 1);
     csv += '\n';
 
     export_file.scoutAnswers.forEach(el => {
       export_file.scoutCols.forEach(element => {
-        csv += el[element['PropertyName']] + ', ';
+        csv += '"' + el[element['PropertyName']] + '"' + ',';
       });
-      csv = csv.substr(0, csv.length - 2);
+      csv = csv.substring(0, csv.length - 1);
       csv += '\n';
     });
 
