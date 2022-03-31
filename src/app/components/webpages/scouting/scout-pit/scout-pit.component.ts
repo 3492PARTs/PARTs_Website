@@ -76,7 +76,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     let dirty = false;
 
     this.scoutQuestions.forEach(el => {
-      if (!this.gs.strNoE(el.answer.toString())) {
+      if (!this.gs.strNoE(el.answer?.toString())) {
         dirty = true;
       }
     });
