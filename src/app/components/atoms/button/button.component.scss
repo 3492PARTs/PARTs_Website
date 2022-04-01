@@ -145,3 +145,9 @@ button:not(:disabled) {
 .rotate {
   transform: rotate(180deg);
 }
+
+.dismiss {
+  color: $gray;
+  background-color: transparent;
+  font-size: 2.2rem;
+}

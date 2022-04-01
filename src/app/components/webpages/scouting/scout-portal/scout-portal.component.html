@@ -1,6 +1,11 @@
 <app-box [Title]="'Scout Portal'">
-  <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData"
-    [Scrollable]="true">
+
+  <div *ngIf="scoutFieldScheduleData.length <= 0">
+    <p>You do not currently have any scheduled scouting.</p>
+  </div>
+
+  <app-table *ngIf="scoutFieldScheduleData.length > 0" [TableTitle]="'Scout Field'"
+    [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData" [Scrollable]="true">
   </app-table>
 
   <!--<app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
