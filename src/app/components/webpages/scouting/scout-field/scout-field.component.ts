@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
@@ -10,7 +10,7 @@ import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
   templateUrl: './scout-field.component.html',
   styleUrls: ['./scout-field.component.scss']
 })
-export class ScoutFieldComponent implements OnInit {
+export class ScoutFieldComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
   team!: string;
   scoutQuestions: ScoutQuestion[] = [];
@@ -18,11 +18,35 @@ export class ScoutFieldComponent implements OnInit {
   scoutAutoQuestions: ScoutQuestion[] = [];
   scoutTeleopQuestions: ScoutQuestion[] = [];
   scoutOtherQuestions: ScoutQuestion[] = [];
+  private checkScoutInterval: number | undefined;
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldInit() : null);
+
+    this.checkScoutInterval = window.setInterval(() => {
+      this.http.get(
+        'api/scoutField/GetQuestions/'
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.scoutFieldSchedule = result['scoutFieldSchedule'];
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+          },
+          complete: () => {
+          }
+        }
+      );
+    }, 10000);
+  }
+
+  ngOnDestroy(): void {
+    window.clearInterval(this.checkScoutInterval);
   }
 
   scoutFieldInit(): void {

@@ -20,13 +20,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   previewUrl: any = null;
   scoutQuestions: ScoutQuestion[] = [];
   private scoutQuestionsCopy: ScoutQuestion[] = [];
-  private checkTeamTimer: number | undefined;
+  private checkTeamInterval: number | undefined;
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.spInit() : null);
-    this.checkTeamTimer = window.setInterval(() => {
+    this.checkTeamInterval = window.setInterval(() => {
       this.http.get(
         'api/scoutPit/GetQuestions/'
       ).subscribe(
@@ -46,7 +46,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    window.clearInterval(this.checkTeamTimer);
+    window.clearInterval(this.checkTeamInterval);
   }
 
   spInit(): void {
