@@ -92,12 +92,12 @@ export class AppComponent implements OnInit {
         ID: this.gs.getNextGsId(),
         MenuItems: []
       },
-      {
+      /*{
         MenuName: 'leads',
         RouterLink: 'https://www.parts3492leads.org/',
         ID: this.gs.getNextGsId(),
         MenuItems: []
-      },
+      },*/
       {
         MenuName: 'members',
         RouterLink: 'none', //'login',
