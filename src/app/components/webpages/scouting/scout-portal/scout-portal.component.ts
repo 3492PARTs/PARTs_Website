@@ -32,7 +32,7 @@ export class ScoutPortalComponent implements OnInit {
   portalInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutPortal/GetInit/'
+      'scouting/portal/init/'
     ).subscribe(
       {
         next: (result: any) => {

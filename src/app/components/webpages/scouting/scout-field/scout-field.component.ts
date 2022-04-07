@@ -27,7 +27,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     this.checkScoutInterval = window.setInterval(() => {
       this.http.get(
-        'api/scoutField/GetQuestions/'
+        'scouting/field/questions/'
       ).subscribe(
         {
           next: (result: any) => {
@@ -52,7 +52,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   scoutFieldInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutField/GetQuestions/'
+      'scouting/field/questions/'
     ).subscribe(
       {
         next: (result: any) => {
@@ -111,7 +111,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.http.post(
-      'api/scoutField/PostSaveAnswers/',
+      'scouting/field/save-answers/',
       { scoutQuestions: response, team: this.team }
     ).subscribe(
       Response => {

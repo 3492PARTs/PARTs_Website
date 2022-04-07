@@ -25,7 +25,7 @@ export class ScoutPitResultsComponent implements OnInit {
   scoutPitResultsInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutPit/GetResultsInit/'
+      'scouting/pit/results-init/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -45,7 +45,7 @@ export class ScoutPitResultsComponent implements OnInit {
   search(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/scoutPit/PostGetResults/', this.teams
+      'scouting/pit/results/', this.teams
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {

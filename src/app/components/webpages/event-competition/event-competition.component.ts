@@ -21,7 +21,7 @@ export class EventCompetitionComponent implements OnInit {
   competitionInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/competition/CompetitionInit/'
+      'public/competition/init/'
     ).subscribe(
       {
         next: (result: any) => {

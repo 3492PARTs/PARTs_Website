@@ -56,7 +56,7 @@ export class AdminComponent implements OnInit {
   adminInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/admin/GetInit/'
+      'admin/init/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -116,7 +116,7 @@ export class AdminComponent implements OnInit {
   saveUser(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/admin/PostSaveUser/', { user: this.activeUser, groups: this.userGroups }
+      'admin/save-user/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -137,7 +137,7 @@ export class AdminComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.errorPage = pg;
     this.http.get(
-      'api/admin/GetErrorLog/', {
+      'admin/error-log/', {
       params: {
         pg_num: pg.toString()
       }

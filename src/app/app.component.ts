@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
 
   competitionInit(): void {
     this.http.get(
-      'api/competition/CompetitionInit/'
+      'public/competition/init/'
     ).subscribe(
       {
         next: (result: any) => {

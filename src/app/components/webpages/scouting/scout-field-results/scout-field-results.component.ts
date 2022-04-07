@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService } from 'src/app/services/general/general.service';
-import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';
@@ -30,7 +29,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   scoutFieldResultsInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutField/GetResults/'
+      'scouting/field/results/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -88,7 +87,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   getTeamInfo(row: any) {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutField/GetResults/', {
+      'scouting/field/results/', {
       params: {
         team: String(row['team'])
       }
@@ -111,7 +110,7 @@ export class ScoutFieldResultsComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/scoutPit/PostGetResults/', [{
+      'scouting/pit/results/', [{
         team_no: String(row['team']),
         team_nm: 'no team lol',
         checked: true

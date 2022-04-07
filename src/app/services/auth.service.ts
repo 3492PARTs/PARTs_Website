@@ -23,7 +23,7 @@ export class AuthService {
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
 
-  private userLinks = new BehaviorSubject<Menu[]>([]);//UserLinks[]>([]);
+  private userLinks = new BehaviorSubject<UserLinks[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
   localStorageString = 'p-tkn-s';
@@ -49,7 +49,7 @@ export class AuthService {
     if (this.internalToken && this.internalToken.refresh) {
       //const header = new HttpHeaders({ authExempt: 'true', });
 
-      this.http.post('auth/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
+      this.http.post('user/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
         data => {
           this.internalToken.access = (data as Token).access;
           //this.internalToken.refresh = data['refresh'];
@@ -79,7 +79,7 @@ export class AuthService {
     this.authInFlightBS.next('prcs');
     this.gs.incrementOutstandingCalls();
     userData.username = userData.username.toLocaleLowerCase();
-    this.http.post('auth/token/', userData).subscribe(
+    this.http.post('user/token/', userData).subscribe(
       Response => {
         // console.log(Response);
         const tmp = Response as Token;
@@ -112,7 +112,7 @@ export class AuthService {
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.gs.incrementOutstandingCalls();
-    this.http.put('auth/profile/', userData).subscribe(
+    this.http.put('user/profile/', userData).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
           if (this.gs.strNoE(returnUrl)) {
@@ -135,7 +135,7 @@ export class AuthService {
   resendConfirmation(input: UserData): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'auth/confirm/resend/',
+      'user/confirm/resend/',
       { email: input.email }
     ).subscribe(
       Response => {
@@ -154,7 +154,7 @@ export class AuthService {
   requestResetPassword(input: UserData): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'auth/request_reset_password/',
+      'user/request-reset-password/',
       { email: input.email }
     ).subscribe(
       Response => {
@@ -173,7 +173,7 @@ export class AuthService {
   forgotUsername(input: UserData): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'auth/request_username/',
+      'user/request-username/',
       { email: input.email }
     ).subscribe(
       Response => {
@@ -192,7 +192,7 @@ export class AuthService {
   resetPassword(input: UserData): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'auth/reset_password/',
+      'user/reset-password/',
       { uuid: input.uuid, token: input.token, password: input.password }
     ).subscribe(
       Response => {
@@ -221,7 +221,7 @@ export class AuthService {
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
 
     return this.http
-      .post<Token>('auth/token/refresh/', { refresh: this.internalToken.refresh })
+      .post<Token>('user/token/refresh/', { refresh: this.internalToken.refresh })
       .pipe(
         map(res => {
           this.internalToken.access = res['access'];
@@ -246,14 +246,14 @@ export class AuthService {
   }
 
   checkAPIStatus(): void {
-    this.http.get('auth/api_status/').subscribe(
+    this.http.get('public/api-status/').subscribe(
       Response => {
         this.apiStatusBS.next('on');
       },
       Error => {
         this.apiStatusBS.next('off');
 
-        this.http.get('auth/api_status/').subscribe(
+        this.http.get('public/api-status/').subscribe(
           Response => {
             this.apiStatusBS.next('on-bkup');
           },
@@ -269,7 +269,7 @@ export class AuthService {
     if (this.internalToken.access) {
       this.gs.incrementOutstandingCalls();
       this.http.get(
-        'auth/user_data/'
+        'user/user-data/'
       ).subscribe(
         Response => {
           // console.log(Response);
@@ -291,11 +291,11 @@ export class AuthService {
     if (this.internalToken.access) {
       this.gs.incrementOutstandingCalls();
       this.http.get(
-        'auth/user_links/'
+        'user/user-links/'
       ).subscribe(
         Response => {
-          // console.log(Response);
-          this.userLinks.next(Response as Menu[]);//UserLinks[]);
+          //console.log(Response);
+          this.userLinks.next(Response as UserLinks[]);
           this.gs.decrementOutstandingCalls();
         },
         Error => {
@@ -311,7 +311,7 @@ export class AuthService {
   getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
       return this.http.get(
-        'auth/get_user_groups/', {
+        'user/user-groups/', {
         params: {
           user_id: userId
         }
@@ -368,21 +368,18 @@ export class User {
   first_name = '';
   last_name = '';
   is_active = false;
-  profile: UserProfile = new UserProfile();
+  phone = '';
+  phone_type = '';
+  groups: AuthGroup[] = [];
 }
 
-export class UserProfile {
-  id!: number;
-  birth_date!: string;
-  phone!: string;
-  phone_type!: number;
-  user!: number;
-}
-/*
 export class UserLinks {
-  MenuName!: string;
-  RouterLink!: string;
-}*/
+  menu_name = '';
+  order = -1;
+  permission = -1;
+  routerlink = '';
+  user_links_id = -1;
+}
 
 export class AuthGroup {
   id!: number;

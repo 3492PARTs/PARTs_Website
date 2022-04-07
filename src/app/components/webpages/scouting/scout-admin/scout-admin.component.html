@@ -27,11 +27,11 @@
           <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
             [FormGroupInline]="true">
           </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.profile.phone"
+          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
             [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-            [(Model)]="activeUser.profile.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [(Model)]="activeUser.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
         </div>

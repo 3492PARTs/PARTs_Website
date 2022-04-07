@@ -28,7 +28,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.spInit() : null);
     this.checkTeamInterval = window.setInterval(() => {
       this.http.get(
-        'api/scoutPit/GetQuestions/'
+        'scouting/pit/questions/'
       ).subscribe(
         Response => {
           if (this.gs.checkResponse(Response)) {
@@ -52,7 +52,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   spInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutPit/GetQuestions/'
+      'scouting/pit/questions/'
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -102,7 +102,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     formData.append('file', this.robotPic);
     formData.append('team_no', this.team);
     this.http.post(
-      'api/scoutPit/PostSaveAnswers/',
+      'scouting/pit/save-answers/',
       { scoutQuestions: this.scoutQuestions, team: this.team },
     ).subscribe(
       Response => {
@@ -132,7 +132,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     formData.append('team_no', this.team);
 
     this.http.post(
-      'api/scoutPit/PostSavePicture/', formData
+      'scouting/pit/save-picture/', formData
     ).subscribe(
       Response => {
         alert((Response as RetMessage).retMessage);
@@ -194,7 +194,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   loadTeam(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutPit/GetTeamData/', {
+      'scouting/pit/team-data/', {
       params: {
         team_num: this.team
       }

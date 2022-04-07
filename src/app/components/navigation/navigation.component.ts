@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck, Input } from '@angular/core';
-import { AuthService, User, Token } from 'src/app/services/auth.service';
+import { AuthService, User, Token, UserLinks } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general/general.service';
 
 @Component({
@@ -11,8 +11,8 @@ export class NavigationComponent implements OnInit, DoCheck {
 
   token: Token = new Token();
   user: User = new User;
-  userLinks: Menu[] = [];
-  #previousUserLinks: Menu[] = [];
+  userLinks: UserLinks[] = [];
+  #previousUserLinks: UserLinks[] = [];
 
   @Input() menu: Menu[] = [];
 

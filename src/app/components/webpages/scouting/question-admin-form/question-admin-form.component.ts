@@ -36,7 +36,7 @@ export class QuestionAdminFormComponent implements OnInit {
   questionInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutAdmin/GetScoutQuestionInit/', {
+      'scouting/admin/scout-question-init/', {
       params: {
         sq_typ: this.questionType
       }
@@ -61,7 +61,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.scoutQuestion.sq_typ = this.questionType;
     this.http.post(
-      'api/scoutAdmin/PostSaveScoutQuestion/', this.scoutQuestion
+      'scouting/admin/save-scout-question/', this.scoutQuestion
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -83,7 +83,7 @@ export class QuestionAdminFormComponent implements OnInit {
   updateScoutQuestion(q: ScoutQuestion): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'api/scoutAdmin/PostUpdateScoutQuestion/', q
+      'scouting/admin/update-scout-question/', q
     ).subscribe(
       Response => {
         if (this.gs.checkResponse(Response)) {
@@ -109,7 +109,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutAdmin/GetToggleScoutQuestion/', {
+      'scouting/admin/toggle-scout-question/', {
       params: {
         sq_id: q.sq_id.toString()
       }
@@ -142,7 +142,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'api/scoutAdmin/GetToggleOption/', {
+      'scouting/admin/toggle-option/', {
       params: {
         q_opt_id: op.q_opt_id.toString()
       }
