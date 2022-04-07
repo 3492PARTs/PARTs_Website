@@ -80,17 +80,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as ScoutAdminInit;
-
-            /*if (this.init.currentSeason.season_id) {
-              this.season = this.init.currentSeason.season_id;
-            }
-
-            if (this.init.currentEvent.event_id) {
-              this.event = this.init.currentEvent.event_id;
-            }*/
-
             this.buildEventList();
-
           }
         },
         error: (err: any) => {
@@ -112,18 +102,20 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.syncSeasonResponse = Response as RetMessage;
-          this.adminInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.syncSeasonResponse = result as RetMessage;
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -164,18 +156,20 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.adminInit();
-          alert((Response as RetMessage).retMessage);
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -242,18 +236,20 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -271,18 +267,20 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -345,19 +343,21 @@ export class ScoutAdminComponent implements OnInit {
     this.http.post(
       'admin/save-user/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          }
+          this.manageUserModalVisible = false;
+          this.adminInit();
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.manageUserModalVisible = false;
-        this.adminInit();
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -454,19 +454,21 @@ export class ScoutAdminComponent implements OnInit {
     this.http.post(
       'scouting/admin/save-phone-type/', this.phoneType
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.adminInit();
-          this.phoneType = new PhoneType();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+            this.phoneType = new PhoneType();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

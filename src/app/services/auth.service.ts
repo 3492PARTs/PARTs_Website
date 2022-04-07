@@ -47,29 +47,30 @@ export class AuthService {
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
     if (this.internalToken && this.internalToken.refresh) {
-      //const header = new HttpHeaders({ authExempt: 'true', });
-
       this.http.post('user/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
-        data => {
-          this.internalToken.access = (data as Token).access;
-          //this.internalToken.refresh = data['refresh'];
-          this.getTokenExp(this.internalToken.access, 'New Access');
-          this.getTokenExp(this.internalToken.refresh, 'New Refresh');
-          this.token.next(this.internalToken);
-          this.gs.decrementOutstandingCalls();
+        {
+          next: (result: any) => {
+            this.internalToken.access = (result as Token).access;
+            this.getTokenExp(this.internalToken.access, 'New Access');
+            this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+            this.token.next(this.internalToken);
 
-          if (this.firstLoad) {
-            this.getUser();
-            this.getUserLinks();
-            this.firstLoad = false;
+            if (this.firstLoad) {
+              this.getUser();
+              this.getUserLinks();
+              this.firstLoad = false;
+            }
+
+            this.authInFlightBS.next('comp');
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.authInFlightBS.next('err');
+            this.logOut();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
           }
-
-          this.authInFlightBS.next('comp');
-        },
-        err => {
-          this.gs.decrementOutstandingCalls();
-          this.authInFlightBS.next('err');
-          this.logOut();
         }
       );
     }
@@ -80,32 +81,33 @@ export class AuthService {
     this.gs.incrementOutstandingCalls();
     userData.username = userData.username.toLocaleLowerCase();
     this.http.post('user/token/', userData).subscribe(
-      Response => {
-        // console.log(Response);
-        const tmp = Response as Token;
-        // this.getTokenExp(tmp.access, 'Log In Access');
-        // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
-        this.token.next(tmp);
-        this.internalToken = tmp;
-        localStorage.setItem(this.localStorageString, tmp.refresh);
-        this.getUser();
-        this.gs.decrementOutstandingCalls();
+      {
+        next: (result: any) => {
+          // console.log(Response);
+          const tmp = result as Token;
+          // this.getTokenExp(tmp.access, 'Log In Access');
+          // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
+          this.token.next(tmp);
+          this.internalToken = tmp;
+          localStorage.setItem(this.localStorageString, tmp.refresh);
+          this.getUser();
 
-        if (this.gs.strNoE(returnUrl)) {
-          this.router.navigateByUrl('');
-        } else {
-          this.router.navigateByUrl(returnUrl || '');
+          if (this.gs.strNoE(returnUrl)) {
+            this.router.navigateByUrl('');
+          } else {
+            this.router.navigateByUrl(returnUrl || '');
+          }
+
+          this.authInFlightBS.next('comp');
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.authInFlightBS.next('err');
+          this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-
-        this.authInFlightBS.next('comp');
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        //alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-        this.authInFlightBS.next('err');
-        this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
       }
     );
   }
@@ -113,21 +115,23 @@ export class AuthService {
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.gs.incrementOutstandingCalls();
     this.http.put('user/profile/', userData).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          if (this.gs.strNoE(returnUrl)) {
-            this.router.navigateByUrl('');
-          } else {
-            this.router.navigateByUrl(returnUrl || '');
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            if (this.gs.strNoE(returnUrl)) {
+              this.router.navigateByUrl('');
+            } else {
+              this.router.navigateByUrl(returnUrl || '');
+            }
           }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError('Couldn\'t create user.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        console.log('error', Error);
-        //alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
-        this.gs.triggerError('Couldn\'t create user.');
       }
     );
   }
@@ -138,15 +142,19 @@ export class AuthService {
       'user/confirm/resend/',
       { email: input.email }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.router.navigateByUrl('login?page=confirmationFinish');
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.router.navigateByUrl('login?page=confirmationFinish');
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError('Couldn\'t request activation email.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        this.gs.decrementOutstandingCalls();
-        this.gs.triggerError('Couldn\'t request activation email.');
       }
     );
   }
@@ -157,15 +165,19 @@ export class AuthService {
       'user/request-reset-password/',
       { email: input.email }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.router.navigateByUrl('login?page=resetFinish');
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.router.navigateByUrl('login?page=resetFinish');
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError('Couldn\'t request password reset.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        this.gs.decrementOutstandingCalls();
-        this.gs.triggerError('Couldn\'t request password reset.');
       }
     );
   }
@@ -176,15 +188,19 @@ export class AuthService {
       'user/request-username/',
       { email: input.email }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.router.navigateByUrl('login?page=resetFinish');
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.router.navigateByUrl('login?page=forgotUsernameFinish');
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError('Couldn\'t request username reminder email.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        this.gs.decrementOutstandingCalls();
-        this.gs.triggerError('Couldn\'t request password reset.');
       }
     );
   }
@@ -195,20 +211,24 @@ export class AuthService {
       'user/reset-password/',
       { uuid: input.uuid, token: input.token, password: input.password }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.gs.addBanner({
-            severity: 3, // 1 - high, 2 - med, 3 - low (Still needs implemented)
-            message: 'Password reset successfully.', //
-            time: 10000 // time in ms to show banner, -1 means until dismissed (Still needs implemented)
-          })
-          this.router.navigateByUrl('login?page=login');
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({
+              severity: 3, // 1 - high, 2 - med, 3 - low (Still needs implemented)
+              message: 'Password reset successfully.', //
+              time: 10000 // time in ms to show banner, -1 means until dismissed (Still needs implemented)
+            })
+            this.router.navigateByUrl('login?page=login');
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError('Couldn\'t reset password.');
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        this.gs.decrementOutstandingCalls();
-        this.gs.triggerError('Couldn\'t reset password.');
       }
     );
   }
@@ -247,20 +267,24 @@ export class AuthService {
 
   checkAPIStatus(): void {
     this.http.get('public/api-status/').subscribe(
-      Response => {
-        this.apiStatusBS.next('on');
-      },
-      Error => {
-        this.apiStatusBS.next('off');
+      {
+        next: (result: any) => {
+          this.apiStatusBS.next('on');
+        },
+        error: (err: any) => {
+          this.apiStatusBS.next('off');
 
-        this.http.get('public/api-status/').subscribe(
-          Response => {
-            this.apiStatusBS.next('on-bkup');
-          },
-          Error => {
-            this.apiStatusBS.next('off');
-          }
-        );
+          this.http.get('public/api-status/').subscribe(
+            {
+              next: (result: any) => {
+                this.apiStatusBS.next('on-bkup');
+              },
+              error: (err: any) => {
+                this.apiStatusBS.next('off');
+              }
+            }
+          );
+        }
       }
     );
   }
@@ -271,17 +295,20 @@ export class AuthService {
       this.http.get(
         'user/user-data/'
       ).subscribe(
-        Response => {
-          // console.log(Response);
-          this.user.next(Response as User);
+        {
+          next: (result: any) => {
+            // console.log(Response);
+            this.user.next(result as User);
 
-          this.getUserLinks();
-          this.gs.decrementOutstandingCalls();
-        },
-        Error => {
-          console.log('error', Error);
-          this.gs.decrementOutstandingCalls();
-          this.internalToken = new Token();
+            this.getUserLinks();
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.internalToken = new Token();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
         }
       );
     }
@@ -293,16 +320,16 @@ export class AuthService {
       this.http.get(
         'user/user-links/'
       ).subscribe(
-        Response => {
-          //console.log(Response);
-          this.userLinks.next(Response as UserLinks[]);
-          this.gs.decrementOutstandingCalls();
-        },
-        Error => {
-          const tmp = Error as { error: { detail: string } };
-          console.log('error', Error);
-          //alert(tmp.error.detail);
-          this.gs.decrementOutstandingCalls();
+        {
+          next: (result: any) => {
+            this.userLinks.next(result as UserLinks[]);
+          },
+          error: (err: any) => {
+            console.log('error', err);
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
         }
       );
     }

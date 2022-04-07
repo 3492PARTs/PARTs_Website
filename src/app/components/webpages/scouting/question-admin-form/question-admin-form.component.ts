@@ -42,17 +42,19 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.init = Response as Init;
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.init = result as Init;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -63,19 +65,21 @@ export class QuestionAdminFormComponent implements OnInit {
     this.http.post(
       'scouting/admin/save-scout-question/', this.scoutQuestion
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutQuestion = new ScoutQuestion();
-          this.questionInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.scoutQuestion = new ScoutQuestion();
+            this.questionInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -85,19 +89,21 @@ export class QuestionAdminFormComponent implements OnInit {
     this.http.post(
       'scouting/admin/update-scout-question/', q
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.scoutQuestion = new ScoutQuestion();
-          this.questionInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.scoutQuestion = new ScoutQuestion();
+            this.questionInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -115,18 +121,20 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.questionInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.questionInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -148,18 +156,20 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
-          this.questionInit();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(Response)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.questionInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

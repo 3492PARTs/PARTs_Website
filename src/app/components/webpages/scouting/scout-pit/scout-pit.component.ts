@@ -30,16 +30,20 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       this.http.get(
         'scouting/pit/questions/'
       ).subscribe(
-        Response => {
-          if (this.gs.checkResponse(Response)) {
-            this.teams = (Response as ScoutPitInit).teams;
-            this.compTeams = (Response as ScoutPitInit).comp_teams;
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.teams = (result as ScoutPitInit).teams;
+              this.compTeams = (result as ScoutPitInit).comp_teams;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
           }
-        },
-        Error => {
-          const tmp = Error as { error: { detail: string } };
-          console.log('error', Error);
-          alert(tmp.error.detail);
         }
       );
     }, 10000);
@@ -54,20 +58,22 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.http.get(
       'scouting/pit/questions/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.teams = (Response as ScoutPitInit).teams;
-          this.compTeams = (Response as ScoutPitInit).comp_teams;
-          this.scoutQuestions = (Response as ScoutPitInit).scoutQuestions;
-          this.scoutQuestionsCopy = JSON.parse(JSON.stringify((Response as ScoutPitInit).scoutQuestions)) as ScoutQuestion[];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teams = (result as ScoutPitInit).teams;
+            this.compTeams = (result as ScoutPitInit).comp_teams;
+            this.scoutQuestions = (result as ScoutPitInit).scoutQuestions;
+            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as ScoutQuestion[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -105,19 +111,21 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       'scouting/pit/save-answers/',
       { scoutQuestions: this.scoutQuestions, team: this.team },
     ).subscribe(
-      Response => {
-        this.gs.addBanner({ message: (Response as RetMessage).retMessage, severity: 1, time: 5000 });
-        this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
-        this.gs.decrementOutstandingCalls();
-        this.savePicture();
-        this.spInit();
-        this.team = '';
-      },
-      Error => {
-        const tmp = Error as { error: { non_field_errors: [1] } };
-        console.log('error', Error);
-        alert(tmp.error.non_field_errors[0]);
-        this.gs.decrementOutstandingCalls();
+      {
+        next: (result: any) => {
+          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
+          this.savePicture();
+          this.spInit();
+          this.team = '';
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
       }
     );
   }
@@ -134,16 +142,19 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.http.post(
       'scouting/pit/save-picture/', formData
     ).subscribe(
-      Response => {
-        alert((Response as RetMessage).retMessage);
-        this.robotPic = new File([], '');
-        this.previewUrl = null;
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { non_field_errors: [1] } };
-        console.log('error', Error);
-        this.gs.decrementOutstandingCalls();
+      {
+        next: (result: any) => {
+          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          this.robotPic = new File([], '');
+          this.previewUrl = null;
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
       }
     );
   }
@@ -200,17 +211,19 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.scoutQuestions = (Response as ScoutQuestion[]);
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.scoutQuestions = (result as ScoutQuestion[]);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

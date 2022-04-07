@@ -27,17 +27,19 @@ export class ScoutPitResultsComponent implements OnInit {
     this.http.get(
       'scouting/pit/results-init/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.teams = Response as Team[];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teams = result as Team[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -47,17 +49,19 @@ export class ScoutPitResultsComponent implements OnInit {
     this.http.post(
       'scouting/pit/results/', this.teams
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.scoutPitResults = Response as ScoutPitResults[];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.scoutPitResults = result as ScoutPitResults[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

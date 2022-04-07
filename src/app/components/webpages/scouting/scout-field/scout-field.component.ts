@@ -114,17 +114,19 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       'scouting/field/save-answers/',
       { scoutQuestions: response, team: this.team }
     ).subscribe(
-      Response => {
-        this.gs.addBanner({ message: (Response as RetMessage).retMessage, severity: 1, time: 5000 });
-        this.team = '';
-        this.sortQuestions();
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { non_field_errors: [1] } };
-        console.log('error', Error);
-        alert(tmp.error.non_field_errors[0]);
-        this.gs.decrementOutstandingCalls();
+      {
+        next: (result: any) => {
+          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          this.team = '';
+          this.sortQuestions();
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
       }
     );
   }

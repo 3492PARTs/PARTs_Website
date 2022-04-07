@@ -31,22 +31,24 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.http.get(
       'scouting/field/results/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.scoutResults = Response as ScoutResults;
-          this.showScoutFieldCols = this.scoutResults['scoutCols'];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.scoutResults = result as ScoutResults;
+            this.showScoutFieldCols = this.scoutResults['scoutCols'];
 
-          for (let i = 0; i < this.showScoutFieldCols.length; i++) {
-            this.showScoutFieldCols[i]['checked'] = true;
+            for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+              this.showScoutFieldCols[i]['checked'] = true;
+            }
           }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -93,18 +95,20 @@ export class ScoutFieldResultsComponent implements OnInit {
       }
     }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.teamScoutResultsModalVisible = true;
-          this.teamScoutResults = Response as ScoutResults;
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teamScoutResultsModalVisible = true;
+            this.teamScoutResults = result as ScoutResults;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
 
@@ -116,23 +120,25 @@ export class ScoutFieldResultsComponent implements OnInit {
         checked: true
       }]
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          if ((Response as ScoutPitResults[])[0]) {
-            this.scoutPitResult = (Response as ScoutPitResults[])[0];
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            if ((result as ScoutPitResults[])[0]) {
+              this.scoutPitResult = (result as ScoutPitResults[])[0];
 
-            this.preview(this.scoutPitResult.pic, 'team-pic');
-          } else {
-            this.scoutPitResult = new ScoutPitResults();
+              this.preview(this.scoutPitResult.pic, 'team-pic');
+            } else {
+              this.scoutPitResult = new ScoutPitResults();
+            }
           }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
