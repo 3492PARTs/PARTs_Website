@@ -3,17 +3,18 @@
     <div>
       <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [(Model)]="team" (FunctionCallBack)="changeTeam()">
+        [(Model)]="team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)">
+        [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
+        [DisplayEmptyOption]="true">
       </app-form-element>
     </div>
 
     <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
-      [FormGroup]="true" [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+      [FormGroup]="true" [SelectList]="sq.questionoptions_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
       [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
     </app-form-element>
 

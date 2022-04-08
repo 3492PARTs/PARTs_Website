@@ -44,8 +44,9 @@ textarea.form-control {
   padding-right: 0.5em;
 }
 
-.form-control-inline>.form-control {
+.form-control-inline {
   display: inline-block !important;
+  vertical-align: top;
 }
 
 .required {

@@ -397,6 +397,7 @@ export class User {
   is_active = false;
   phone = '';
   phone_type = '';
+  phone_type_id = -1;
   groups: AuthGroup[] = [];
 }
 

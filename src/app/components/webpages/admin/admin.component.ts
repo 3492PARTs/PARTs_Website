@@ -19,7 +19,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'last_name', ColLabel: 'Last' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'profile.phone', ColLabel: 'Phone' },
+    { PropertyName: 'phone', ColLabel: 'Phone' },
     { PropertyName: 'is_active', ColLabel: 'Active' }
   ];
 
@@ -58,15 +58,20 @@ export class AdminComponent implements OnInit {
     this.http.get(
       'admin/init/'
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.init = Response as AdminInit;
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.init = result as AdminInit;
+            console.log(this.init);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        console.log('error', Error);
-        this.gs.decrementOutstandingCalls();
       }
     );
     this.getErrors(this.errorPage);
@@ -77,18 +82,20 @@ export class AdminComponent implements OnInit {
     this.activeUser = u;
     this.gs.incrementOutstandingCalls();
     this.authService.getUserGroups(u.id.toString())!.subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          this.userGroups = Response as AuthGroup[];
-          this.buildAvailableUserGroups();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userGroups = result as AuthGroup[];
+            this.buildAvailableUserGroups();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        const tmp = Error as { error: { detail: string } };
-        console.log('error', Error);
-        alert(tmp.error.detail);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }
@@ -118,17 +125,21 @@ export class AdminComponent implements OnInit {
     this.http.post(
       'admin/save-user/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
-      Response => {
-        if (this.gs.checkResponse(Response)) {
-          alert((Response as RetMessage).retMessage);
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.manageUserModalVisible = false;
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-        this.manageUserModalVisible = false;
-        this.adminInit();
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        console.log('error', Error);
-        this.gs.decrementOutstandingCalls();
       }
     );
   }

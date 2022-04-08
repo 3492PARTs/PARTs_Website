@@ -35,11 +35,14 @@
   width: 100%;
 }
 
+/*
 .inline-elements {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
+  justify-content: space-between;
 }
+*/
 
 .wrap {
   flex-flow: wrap;

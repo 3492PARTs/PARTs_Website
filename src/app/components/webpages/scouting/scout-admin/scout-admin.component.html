@@ -16,9 +16,7 @@
       [Mobile]="true" (EditRecordCallBack)="showManageUserModal($event)">
     </app-table>
 
-    <app-modal [Title]="'Manage User: ' + activeUser.first_name + ' ' + activeUser.last_name"
-      [(visible)]="manageUserModalVisible">
-      <app-header [h]="3">User Groups</app-header>
+    <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
       <div class="flex">
         <div>
           <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
@@ -31,7 +29,7 @@
             [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
         </div>
@@ -43,8 +41,9 @@
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
         </div>
       </div>
-      <app-table [TableCols]="userGroupsTableCols" [TableData]="userGroups" [Scrollable]="true"
-        [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+
+      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+        [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
       <app-button-ribbon>
         <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
@@ -153,11 +152,11 @@
     <app-form-element-group [LabelText]="'Add/Delete Season'" [InlineElements]="true">
       <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
       </app-form-element>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+      <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
       <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason">
       </app-form-element>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+      <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
     </app-form-element-group>
 
     <app-form-element-group *ngIf="init.currentEvent.event_id" [LabelText]="'Sync Matches'" [InlineElements]="true">

@@ -25,3 +25,12 @@
   height: 35em;
   margin: 2em auto 2em auto;
 }
+
+// TODO Move this some place better
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+}

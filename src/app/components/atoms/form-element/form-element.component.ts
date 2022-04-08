@@ -8,7 +8,8 @@ import {
   ElementRef,
   Renderer2,
   AfterViewInit,
-  HostListener
+  HostListener,
+  DoCheck
 } from '@angular/core';
 
 import { FormControl } from '@angular/forms';
@@ -19,7 +20,7 @@ import { GeneralService } from 'src/app/services/general/general.service';
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
 })
-export class FormElementComponent implements OnInit, AfterViewInit {
+export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
   @Input() FormGroup = false;
@@ -106,6 +107,14 @@ export class FormElementComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.positionMultiSelect();
+  }
+
+  ngDoCheck(): void {
+    if (this.Type === 'file') {
+      if (!this.Model) {
+        //this.fileUpload.nativeElement.value = '';
+      }
+    }
   }
 
   @HostListener('window:resize', ['$event'])

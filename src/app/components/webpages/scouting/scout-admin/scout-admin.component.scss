@@ -37,6 +37,10 @@
   align-items: center;
   align-content: center;
   flex-wrap: wrap;
+
+  &> div > app-button {
+    vertical-align: bottom;
+  }
 }
 
 #respose {

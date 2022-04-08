@@ -89,11 +89,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     if (dirty && confirm("Are you sure you want to clear and change teams?")) {
       this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
-      if (load) this.loadTeam();
+      this.previewUrl = '';
+      if (load && this.team) this.loadTeam();
     }
     else if (dirty) {
       window.setTimeout(() => {
         this.team = this.previousTeam;
+        this.previewUrl = '';
       }, 1);
     }
     else {
@@ -131,7 +133,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   private savePicture(): void | null {
-    if (!this.robotPic) return null; // only process if there is a pic
+    if (!this.robotPic || this.robotPic.size <= 0) {
+      this.previewUrl = null;
+      return null; // only process if there is a pic
+    }
 
     this.gs.incrementOutstandingCalls();
 
@@ -214,7 +219,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.scoutQuestions = (result as ScoutQuestion[]);
+            this.scoutQuestions = (result['questions'] as ScoutQuestion[]);
+            this.previewUrl = result['pic'];
           }
         },
         error: (err: any) => {

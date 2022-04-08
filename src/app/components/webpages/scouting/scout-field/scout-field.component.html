@@ -22,13 +22,14 @@
     <app-form-element-group [LabelText]="'Autonomous'">
       <ng-container *ngFor="let sq of scoutAutoQuestions">
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
-          [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+          [SelectList]="sq.questionoptions_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
           [FormGroupInline]="sq.question_typ === 'number'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
+          &nbsp;
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
         </div>
         <br>
       </ng-container>
@@ -37,13 +38,14 @@
     <app-form-element-group [LabelText]="'Teleoperated'">
       <ng-container *ngFor="let sq of scoutTeleopQuestions">
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
-          [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+          [SelectList]="sq.questionoptions_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
           [FormGroupInline]="sq.question_typ === 'number'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
+          &nbsp;
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
         </div>
         <br>
       </ng-container>
@@ -52,13 +54,14 @@
     <app-form-element-group *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'">
       <ng-container *ngFor="let sq of scoutOtherQuestions">
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
-          [SelectList]="sq.options" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+          [SelectList]="sq.questionoptions_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
           [FormGroupInline]="sq.question_typ === 'number'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
+          &nbsp;
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
         </div>
         <br>
       </ng-container>

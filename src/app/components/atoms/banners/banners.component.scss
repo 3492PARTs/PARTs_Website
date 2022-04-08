@@ -1,10 +1,9 @@
 @import '../../../scss/_helpers/variables';
 
 #banner-wrapper {
-  position: sticky;
-  float: right;
-  top: 0;
-  right: 1.6rem;
+  position: fixed;
+  top: 5em;
+  right: 0;
   z-index: 20;
   width: 40rem;
   max-width: calc(100% - (1.6rem * 2));
@@ -32,4 +31,15 @@
 
 .top-zero {
   top: 0 !important;
+}
+
+.sticky {
+  position: sticky;
+  top: 1.6rem;
+  z-index: 1;
+
+  /*MOBILE NAV*/
+  @media only screen and (max-width: $screen_size_narrow) {
+    top: 3em;
+  }
 }

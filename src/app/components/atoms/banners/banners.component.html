@@ -1,4 +1,4 @@
-<div id="banner-wrapper" [ngClass]="{'top-zero' : top0}">
+<div id="banner-wrapper" #thisBannerWrapper [ngClass]="{'top-zero' : top0}">
   <div *ngFor="let b of banners" class="banner">
     <app-box>
       <div class="banner-content">

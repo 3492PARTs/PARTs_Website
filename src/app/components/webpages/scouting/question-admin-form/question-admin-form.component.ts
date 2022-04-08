@@ -67,7 +67,7 @@ export class QuestionAdminFormComponent implements OnInit {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
+          if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.scoutQuestion = new ScoutQuestion();
             this.questionInit();
@@ -91,7 +91,7 @@ export class QuestionAdminFormComponent implements OnInit {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
+          if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.scoutQuestion = new ScoutQuestion();
             this.questionInit();
@@ -123,7 +123,7 @@ export class QuestionAdminFormComponent implements OnInit {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
+          if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.questionInit();
           }
@@ -158,7 +158,7 @@ export class QuestionAdminFormComponent implements OnInit {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
+          if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.questionInit();
           }
@@ -185,10 +185,11 @@ export class ScoutQuestion {
   question!: string;
   order!: number;
   active = 'y';
-  void_ind!: string;
+  void_ind = 'n';
   answer: string | number = '';
 
-  options: QuestionOption[] = [];
+  questionoptions_set: QuestionOption[] = [];
+  scoutpitanswer_set: ScoutPitAnswer[] = [];
 }
 
 export class QuestionOption {
@@ -197,13 +198,20 @@ export class QuestionOption {
   spq_id!: number;
   option!: string;
   active = 'y';
-  void_ind!: string;
+  void_ind = 'n';
 }
 
+export class ScoutPitAnswer {
+  spa_id!: number;
+  scout_pit!: any;
+  sq!: ScoutQuestion;
+  answer = '';
+  void_ind = 'n'
+}
 export class QuestionType {
   question_typ!: string;
   question_typ_nm!: string;
-  void_ind!: string;
+  void_ind = 'n';
 }
 
 export class ScoutQuestionSubType {
