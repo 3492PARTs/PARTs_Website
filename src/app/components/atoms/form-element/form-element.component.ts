@@ -12,8 +12,7 @@ import {
   DoCheck
 } from '@angular/core';
 
-import { FormControl } from '@angular/forms';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-form-element',
@@ -21,15 +20,14 @@ import { GeneralService } from 'src/app/services/general/general.service';
   styleUrls: ['./form-element.component.scss']
 })
 export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
-
-  constructor(private gs: GeneralService, private renderer: Renderer2) { }
   @Input() FormGroup = false;
   @Input() FormGroupInline = false;
   @Input() RadioGroupStacked = false;
   @Input() FormInline = false;
   @Input() LabelText = '';
   @Input() Width = 'auto';
-  @Input() Placeholder = ''; // TODO Still needed?
+  @Input() MinWidth = 'auto';
+  @Input() Placeholder = '';
   @Input() Rows = 0;
   //@Input() SelectDisplayValue = '';
   @Input() BindingProperty = '';
@@ -44,25 +42,23 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() RadioList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
-  //@Input() FormElementInline: boolean = true;
-  @Input() LabelOnTop: boolean = true;
+  @Input() FormElementInline: boolean = true;
 
-  @Input()
-  SelectValidityFunction!: (o1: any, o2: any) => boolean;
-
+  //@Input() Validation = false;
+  @Input() ValidationMessage = '';
   @Input() Required = false;
   @Input() Touched = false;
   @Input() Focused = false;
   @Input() Disabled = false;
+  valid = false;
 
-  @Input()
-  ValidityFunction!: Function;
+  @Input() ValidityFunction?: Function;
+  @Input() SelectValidityFunction!: (o1: any, o2: any) => boolean;
 
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
-  @Input()
-  MultiModel!: any;
+  @Input() MultiModel: any = [];
   @Output() MultiModelChange = new EventEmitter();
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
@@ -71,14 +67,48 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() TrueValue: any = true;
   @Input() FalseValue: any = false;
 
-  LabelID!: string;
-  private fileData!: File;
+  LabelID = '';
+  private fileData: File | null = null;
+  fileName = '';
 
-  @ViewChild('multiSelectDropdown', { read: ElementRef })
-  dropdown!: ElementRef;
-  @ViewChild('multiselect', { read: ElementRef })
-  multiSelect!: ElementRef;
+  @Input() ImageChangeEvent: (e: any) => void = () => { };
+
+  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelect', { read: ElementRef, static: false }) multiSelect: ElementRef = new ElementRef(null);
   private expanded = false;
+
+  @ViewChild('fileUpload') fileUpload: { nativeElement: { value: string; }; } = { nativeElement: { value: '' } };
+
+  @Input() IconOnly = false;
+
+
+  constructor(private gs: GeneralService, private renderer: Renderer2) { }
+
+  ngOnInit() {
+    this.LabelID = this.gs.getNextGsId();
+  }
+
+  ngDoCheck(): void {
+    if (this.Type === 'file') {
+      if (this.Model?.size <= 0) {
+        this.fileName = '';
+      }
+    }
+  }
+
+  ngAfterViewInit() {
+    this.positionMultiSelect();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.positionMultiSelect();
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any) {
+    this.positionMultiSelect();
+  }
 
   change(newValue: any) {
     this.Model = newValue;
@@ -92,7 +122,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       this.ModelChange.emit(newValue);
     }
     this.FunctionCallBack.emit();
-
+    this.isInvalid();
   }
 
   multiChange(newValue: any, index: string | number) {
@@ -101,34 +131,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     this.FunctionCallBack.emit();
   }
 
-  ngOnInit() {
-    this.LabelID = this.gs.getNextGsId();
-  }
-
-  ngAfterViewInit() {
-    this.positionMultiSelect();
-  }
-
-  ngDoCheck(): void {
-    if (this.Type === 'file') {
-      if (!this.Model) {
-        //this.fileUpload.nativeElement.value = '';
-      }
-    }
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.positionMultiSelect();
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll() {
-    this.positionMultiSelect();
-  }
-
   private positionMultiSelect(): void {
-    if (this.Type === 'multiselect' && this.multiSelect && this.dropdown) {
+    if (this.Type === 'multiselect' && this.multiSelect) {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
       this.renderer.setStyle(
         this.dropdown.nativeElement,
@@ -146,9 +150,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
-  IsInvalid(): boolean {
+  isInvalid(): boolean {
     let ret = false;
-    // console.log(this.Touched  + " " + this.Required);
     if (this.Touched && this.Required) {
       if (this.ValidityFunction != null) {
         ret = this.ValidityFunction();
@@ -156,30 +159,51 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
         ret = true;
       }
     }
+    this.valid = !ret;
     return ret;
   }
 
-  TouchIt() {
+  touchIt() {
     this.Touched = true;
   }
 
-  ResetFormElement() {
+  focusIn() {
+    this.Focused = true;
+    this.isInvalid();
+    this.touchIt();
+  }
+
+  focusOut() {
+    this.Focused = false;
+    this.isInvalid();
+    this.OnFocusOut.emit();
+  }
+
+  reset() {
     this.Touched = false;
     this.Focused = false;
   }
 
-
-  RunFunction() {
-    this.FunctionCallBack.emit();
-  }
-
-  focusOut() {
-    this.OnFocusOut.emit();
-  }
-
   fileProgress(fileInput: any) {
     this.fileData = <File>fileInput.target.files[0];
-    this.change(this.fileData);
+
+    if (this.fileData) {
+
+      let tmp = this.fileData.name;
+
+      let ext = tmp.split('.')[tmp.split('.').length - 1];
+
+      if (tmp.length > 18) {
+        this.fileName = tmp.substring(0, (17 - ext.length)).trim() + '....' + ext;
+      }
+      else {
+        this.fileName = tmp;
+      }
+
+      this.change(this.fileData);
+    }
+
+    this.fileUpload.nativeElement.value = '';
   }
 
   multiSelectMenu(): void {
@@ -220,32 +244,44 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   multiSelectClose(): void {
-    if (this.dropdown) {
+    this.renderer.setStyle(
+      this.dropdown.nativeElement,
+      'height', '0px'
+    );
+    window.setTimeout(() => {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
-        'height', '0px'
+        'visibility', 'hidden'
       );
-      window.setTimeout(() => {
-        this.renderer.setStyle(
-          this.dropdown.nativeElement,
-          'visibility', 'hidden'
-        );
-      }, 150);
+    }, 150);
 
-      this.expanded = false;
+    this.expanded = false;
+  }
+
+  formatMAC(value: string): void {
+    if (value) {
+      //we do not need the value, we just update the formattedMac using this.model.mac_address
+      const inputWithoutColon = value.replace(new RegExp(":", 'g'), "");
+      let blocks = inputWithoutColon.match(/.{1,2}/g) || [];
+      let formattedMac = blocks.shift() || '';
+      for (let block of blocks) {
+        formattedMac = formattedMac + ":" + block;
+      }
+      formattedMac = formattedMac.substring(0, 17);
+      this.change(formattedMac);
     }
   }
 
   selectAll(): void {
-    this.SelectList.forEach(e => {
-      e['checked'] = true;
-    })
+    for (let i = 0; i < this.SelectList.length; i++) {
+      this.multiChange(true, i);
+    }
   }
 
   deselectAll(): void {
-    this.SelectList.forEach(e => {
-      e['checked'] = false;
-    })
+    for (let i = 0; i < this.SelectList.length; i++) {
+      this.multiChange(false, i);
+    }
   }
 
 }

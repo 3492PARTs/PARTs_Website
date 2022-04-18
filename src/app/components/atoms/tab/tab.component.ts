@@ -8,7 +8,7 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 export class TabComponent implements OnInit {
   @Input() TabName = '';
 
-  @ViewChild('thisTab', { read: ElementRef, static: true }) tab!: ElementRef;
+  @ViewChild('thisTab', { read: ElementRef, static: true }) tab?: ElementRef;
 
   public visible = false;
 

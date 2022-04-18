@@ -1,15 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
-
 import { HTTPInterceptor } from './providers/http-interceptor';
 
-import { appInitializer } from './helpers/app.initializer';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 
 import { HomeComponent } from './components/webpages/home/home.component';
@@ -27,7 +24,6 @@ import { FormElementGroupComponent } from './components/atoms/form-element-group
 import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
 import { HeaderComponent } from './components/atoms/header/header.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
-import { TableComponent } from './components/atoms/table/table.component';
 import { FormComponent } from './components/atoms/form/form.component';
 
 import {
@@ -68,9 +64,21 @@ import { TabContainerComponent } from './components/atoms/tab-container/tab-cont
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
-import { AuthService } from './services/auth.service';
 import { BannersComponent } from './components/atoms/banners/banners.component';
 import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
+import { TableComponent } from './components/atoms/table/table.component';
+
+// Material
+import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -134,7 +142,17 @@ import { EventCompetitionComponent } from './components/webpages/event-competiti
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    DateTimePickerModule
+    MatIconModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    NgxMatNativeDateModule,
+    NgxMatMomentModule,
+    MatInputModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   providers: [
     /*{
@@ -152,4 +170,8 @@ import { EventCompetitionComponent } from './components/webpages/event-competiti
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) {
+    matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi.svg'));
+  }
+}

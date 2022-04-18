@@ -1,7 +1,7 @@
 <app-box [Title]="'Scout Field Results'">
   <div id="table-buttons">
     <div>
-      <app-form-element [Type]="'multiselect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
+      <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
         [BindingProperty]="'checked'" [SelectList]="showScoutFieldCols" [(MultiModel)]="showScoutFieldCols"
         (ModelChange)="showHideTableCols()">
       </app-form-element>

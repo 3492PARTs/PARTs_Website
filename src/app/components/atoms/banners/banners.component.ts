@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Banner, GeneralService } from 'src/app/services/general/general.service';
+import { Banner, GeneralService } from 'src/app/services/general.service';
 import * as $ from 'jquery';
 
 @Component({

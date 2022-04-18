@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd } from '@angular/router'; // import Router and NavigationEnd
-import { GeneralService, RetMessage } from './services/general/general.service';
+import { GeneralService, RetMessage } from './services/general.service';
 import { Menu } from './components/navigation/navigation.component';
 import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from './components/webpages/event-competition/event-competition.component';

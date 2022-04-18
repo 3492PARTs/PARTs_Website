@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/app/services/auth.service';
 

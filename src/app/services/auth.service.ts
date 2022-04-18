@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { GeneralService } from './general/general.service';
+import { GeneralService } from './general.service';
 import { share, map } from 'rxjs/operators';
 import { Menu } from '../components/navigation/navigation.component';
 

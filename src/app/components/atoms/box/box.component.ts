@@ -1,4 +1,3 @@
-import { ButtonComponent } from './../button/button.component';
 import {
   Component,
   OnInit,
@@ -6,10 +5,8 @@ import {
   ViewChild,
   ElementRef,
   Renderer2,
-  ViewChildren,
-  QueryList,
-  AfterViewInit,
-  DoCheck
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 @Component({
@@ -17,19 +14,20 @@ import {
   templateUrl: './box.component.html',
   styleUrls: ['./box.component.scss']
 })
-export class BoxComponent implements OnInit, AfterViewInit, DoCheck {
+export class BoxComponent implements OnInit {
   @Input() Width = '0';
   @Input() MaxWidth = '0';
 
   @Input() Title = '';
 
+  @Input() ID = '';
+
   @Input() Collapsible = false;
+  @Input() Collapsed = false;
+  @Output() CollapsedChange = new EventEmitter();
 
-  @ViewChild('thisBox', { read: ElementRef, static: true }) box!: ElementRef;
-  @ViewChildren(ButtonComponent) btn!: QueryList<ButtonComponent>;
-  @ViewChild('content', { read: ElementRef, static: true }) content!: ElementRef;
-
-  private collapsed = false;
+  @ViewChild('thisBox', { read: ElementRef, static: true }) box: ElementRef = new ElementRef(null);
+  @ViewChild('content', { read: ElementRef, static: true }) content: ElementRef = new ElementRef(null);
 
   constructor(private renderer: Renderer2) { }
 
@@ -41,41 +39,33 @@ export class BoxComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.MaxWidth !== '0') {
       this.renderer.setStyle(this.box.nativeElement, 'max-width', this.MaxWidth);
     }
-  }
 
-  ngAfterViewInit() {
-    if (this.Collapsible) {
-      this.renderer.setStyle(
-        this.content.nativeElement,
-        'height',
-        this.content.nativeElement.scrollHeight + 'px'
-      );
+    if (this.Collapsed) {
+      this.Collapsed = false;
+      this.collapseBox();
     }
   }
 
-  ngDoCheck() {
-    if (this.Collapsible && !this.collapsed) {
-      this.renderer.setStyle(
-        this.content.nativeElement,
-        'height',
-        this.content.nativeElement.scrollHeight + 'px'
-      );
-    }
+  private changeCollapsed(newValue: any) {
+    this.Collapsed = newValue;
+    this.CollapsedChange.emit(newValue);
   }
 
   collapseBox() {
-    if (this.collapsed) {
-      this.renderer.setStyle(
-        this.content.nativeElement,
-        'height',
-        this.content.nativeElement.scrollHeight + 'px'
-      );
-      this.btn.toArray()[0].Direction = false;
-      this.collapsed = false;
-    } else {
-      this.renderer.setStyle(this.content.nativeElement, 'height', '0px');
-      this.btn.toArray()[0].Direction = true;
-      this.collapsed = true;
+    if (this.Collapsible) {
+      if (this.Collapsed) {
+        this.renderer.setStyle(
+          this.content.nativeElement,
+          'height',
+          'calc(' + this.content.nativeElement.scrollHeight + 'px + 4rem)'
+        );
+        this.renderer.setStyle(this.content.nativeElement, 'padding', '2rem');
+        this.changeCollapsed(false);
+      } else {
+        this.renderer.setStyle(this.content.nativeElement, 'height', '0');
+        this.renderer.setStyle(this.content.nativeElement, 'padding', '0 2rem');
+        this.changeCollapsed(true);
+      }
     }
   }
 }

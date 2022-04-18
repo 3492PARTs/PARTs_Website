@@ -8,11 +8,10 @@
 
   <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
     <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-      (EditRecordCallBack)="showManageUserModal($event)" [Mobile]="true">
+      (EditRecordCallBack)="showManageUserModal($event)">
     </app-table>
 
-    <app-modal [Title]="'Manage User: ' + activeUser.first_name + ' ' + activeUser.last_name"
-      [(visible)]="manageUserModalVisible">
+    <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
       <div class="flex">
         <div>
           <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
@@ -31,11 +30,11 @@
             [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
-          <app-form-element [Type]="'checkbox'" [LabelText]="'Active:'" [(Model)]="activeUser.is_active"
+          <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
             [FormGroupInline]="true">
           </app-form-element>
         </div>
-        <div>
+        <div class="vertical-center">
           <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
             [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
             [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
@@ -55,7 +54,7 @@
 
   <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
     <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
-      (RecordClickCallBack)="showErrorModal($event)" [Mobile]="true">
+      (RecordClickCallBack)="showErrorModal($event)">
     </app-table>
 
     <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">

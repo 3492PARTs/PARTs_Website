@@ -7,6 +7,10 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+.btn-span {
+  display: inline-block;
+}
+
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -26,6 +30,13 @@ button:not(:disabled) {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   margin: 0.2rem;
+}
+
+.btn-sm {
+  padding: 0.1875rem 0.75rem;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
 }
 
 .btn-main {
@@ -90,7 +101,7 @@ button:not(:disabled) {
   }
 
   svg {
-    height: 1rem;
+    height: 1.4rem;
   }
 }
 
@@ -132,22 +143,55 @@ button:not(:disabled) {
   @extend .btn-danger;
 }
 
+.send {
+  color: #fff;
+  background-color: $main_color;
+  border-color: #007bff;
+
+  &:hover {
+    outline: 0;
+    box-shadow: 0px 0px 0px 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  svg {
+    height: 1.7rem;
+
+    path {
+      fill: #ffffffe0;
+    }
+  }
+}
+
+.save {
+  @extend .btn-success;
+
+  svg {
+    path {
+      fill: #ffffffe0;
+    }
+  }
+}
+
+.attach {
+  @extend .btn-main;
+
+  svg {
+    path {
+      fill: #ffffffe0;
+    }
+  }
+}
+
 .collapse {
   @extend .btn-main;
 
-  &>svg {
+  transition: 0.25s linear;
+
+  svg {
     transform: rotate(180deg);
   }
-
-  transition: 0.25s linear;
 }
 
 .rotate {
   transform: rotate(180deg);
-}
-
-.dismiss {
-  color: $gray;
-  background-color: transparent;
-  font-size: 2.2rem;
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page } from 'src/app/services/general/general.service';
+import { Page } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-pagination',

@@ -14,7 +14,7 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { AuthService, Token, User } from '../services/auth.service';
 import { environment } from '../../environments/environment';
-import { GeneralService } from '../services/general/general.service';
+import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
 
 @Injectable()

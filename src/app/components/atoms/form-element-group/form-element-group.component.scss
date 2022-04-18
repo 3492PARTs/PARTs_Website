@@ -7,6 +7,10 @@
   margin-top: 10px;
   position: relative;
   margin-top: 20px;
+
+  &>div {
+    color: #1a1d20;
+  }
 }
 
 .FormElementGroup+.FormElementGroup {
@@ -33,17 +37,4 @@
 
 .MaxWidth {
   width: 100%;
-}
-
-/*
-.inline-elements {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-*/
-
-.wrap {
-  flex-flow: wrap;
 }

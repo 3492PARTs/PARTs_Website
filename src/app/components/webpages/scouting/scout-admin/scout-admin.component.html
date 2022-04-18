@@ -13,7 +13,7 @@
   <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
 
     <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-      [Mobile]="true" (EditRecordCallBack)="showManageUserModal($event)">
+      (EditRecordCallBack)="showManageUserModal($event)">
     </app-table>
 
     <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
@@ -33,7 +33,7 @@
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
         </div>
-        <div>
+        <div class="vertical-center">
           <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
             [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
             [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
@@ -54,9 +54,9 @@
 
 
   <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
-    <app-table [TableTitle]="'Scout Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
+    <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
       [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
-      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)" [Mobile]="true">
+      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>
 
     <!--

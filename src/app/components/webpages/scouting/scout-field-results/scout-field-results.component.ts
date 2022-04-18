@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';

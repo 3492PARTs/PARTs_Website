@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService, User } from 'src/app/services/auth.service';
 

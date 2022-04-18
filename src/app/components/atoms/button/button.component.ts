@@ -15,8 +15,9 @@ export class ButtonComponent implements OnInit {
   @Input() InvertColor = false;
   @Input() SymbolSize = '3rem';
   @Input() ElementID = '';
+  @Input() SmallButton = false;
 
-  @ViewChild('thisButton', { read: ElementRef }) button!: ElementRef;
+  @ViewChild('thisButton', { read: ElementRef, static: false }) button: ElementRef = {} as ElementRef;
 
 
   constructor() { }

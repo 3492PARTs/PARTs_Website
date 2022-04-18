@@ -2,12 +2,12 @@
   {{ ButtonText }}
 </app-button>
 
-<div class="overlay" [ngClass]="{'visible': visible}">
+<div class="overlay" [ngClass]="{'visible': visible}" [ngStyle]="{'z-index': zIndex}">
   <div class="popup">
     <div class="popup-title">
-      <app-header [h]="2" [centered]="centered">{{ Title }}</app-header>
+      <app-header [h]="2" [centered]="true">{{ Title }}</app-header>
       <div class="close">
-        <app-button [ButtonType]="'close'" [SymbolSize]="'3rem'" (FunctionCallBack)="close()"></app-button>
+        <app-button [ButtonType]="'close'" [SymbolSize]="'2.2rem'" (FunctionCallBack)="close()"></app-button>
       </div>
     </div>
     <div class="popup-contents">

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
-import { Banner, GeneralService } from 'src/app/services/general/general.service';
+import { Banner, GeneralService } from 'src/app/services/general.service';
 import { environment } from 'src/environments/environment';
 
 @Component({

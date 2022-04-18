@@ -7,12 +7,11 @@ import { TabComponent } from '../tab/tab.component';
   styleUrls: ['./tab-container.component.scss']
 })
 export class TabContainerComponent implements AfterContentInit {
-  @ContentChildren(TabComponent)
-  tabContainerTabs!: QueryList<TabComponent>;
+  @ContentChildren(TabComponent) tabContainerTabs: QueryList<TabComponent> = new QueryList<TabComponent>();
 
   tabs: TabElement[] = [];
 
-  activeTab!: TabElement;
+  activeTab?: TabElement;
 
   constructor() { }
 
@@ -31,15 +30,17 @@ export class TabContainerComponent implements AfterContentInit {
   }
 
   showTab(tab: TabElement) {
-    this.activeTab.element.visible = false;
-    this.activeTab.active = false;
+    if (this.activeTab && this.activeTab.element && tab.element) {
+      this.activeTab.element.visible = false;
+      this.activeTab.active = false;
 
-    tab.active = true;
-    tab.element.visible = true;
+      tab.active = true;
+      tab.element.visible = true;
 
-    this.activeTab = tab;
+      this.activeTab = tab;
+    }
   }
 
 }
 
-export class TabElement { name!: string; element!: TabComponent; active!: boolean; }
+export class TabElement { name?: string; element?: TabComponent; active?: boolean; }

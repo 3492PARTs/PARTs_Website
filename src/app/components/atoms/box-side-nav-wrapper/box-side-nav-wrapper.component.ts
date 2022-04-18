@@ -11,13 +11,15 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
 
   @Input()
   set ShowSideNavigation(b: boolean) {
-    this.sideNav.HideSideNav = b;
-    this.HideSideNav = b;
-    this.checkBoxesTimeout();
+    if (this.sideNav) {
+      this.sideNav.HideSideNav = b;
+      this.HideSideNav = b;
+      this.checkBoxesTimeout();
+    }
   }
 
-  @ContentChild(SideNavComponent, { read: SideNavComponent, static: true }) sideNav!: SideNavComponent;
-  @ContentChildren(BoxComponent) boxes!: QueryList<BoxComponent>;
+  @ContentChild(SideNavComponent, { read: SideNavComponent, static: true }) sideNav?: SideNavComponent;
+  @ContentChildren(BoxComponent) boxes: QueryList<BoxComponent> = new QueryList<BoxComponent>();
 
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
@@ -36,7 +38,7 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize() {
+  onResize(event: any) {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }
@@ -69,7 +71,7 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
         let BoxFloat = 'none';
         let BoxMargin = '1em auto 0 auto';
 
-        if (!this.HideSideNav) {
+        if (!this.HideSideNav && this.sideNav) {
           // 3em is 2 em on either side of side nav and 1 em on the side of the box
           MaxWidthVal = 'calc(100% - ' + this.sideNav.Width + ' - 3em)';
           BoxFloat = 'right';

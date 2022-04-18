@@ -19,20 +19,22 @@
 }
 
 #title {
-  background-color: $main_color;
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
   width: 100%;
-  border-bottom: 3px solid $accent-color;
   position: relative;
   height: 3.5rem;
-  border-radius: 4px 4px 0 0;
+  border-top-left-radius: 0.35em;
+  border-top-right-radius: 0.35em;
 
-  p {
-    color: #fff;
+  h4 {
+    color: $main_color;
     display: block;
     letter-spacing: 0.1em;
     margin: 0;
-    text-transform: uppercase;
-    text-align: center;
+    padding: 0 1.25em;
+    //text-transform: uppercase;
+    text-align: left;
     line-height: 3.5rem;
   }
 
@@ -44,8 +46,9 @@
 }
 
 .roundedCorners {
-  border-radius: 4px !important;
+  border-radius: 0.35em !important;
 }
+
 
 #nav {
   padding: 0 1em;
@@ -57,12 +60,13 @@
 }
 
 .sticky {
-  position: sticky;
-  top: 1.6rem;
-  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
 
   /*MOBILE NAV*/
-  @media only screen and (max-width: $screen_size_narrow) {
+  @media only screen and (max-width: $screen-size-sm) {
     top: 3em;
   }
 

@@ -12,11 +12,8 @@ export class FormElementGroupComponent implements AfterContentInit {
   @Input() MaxWidth = false;
   @Input() LabelText = '';
   @Input() InlineElements = false;
-  //@Input() WrapElements = false;
-  @ContentChildren(FormElementComponent)
-  formElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
-  @ContentChildren(ButtonComponent)
-  buttons: QueryList<ButtonComponent> = new QueryList<ButtonComponent>();
+  @ContentChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
+  @ContentChildren(ButtonComponent) buttons: QueryList<ButtonComponent> = new QueryList<ButtonComponent>();
 
   constructor(private renderer: Renderer2) { }
 
@@ -24,6 +21,17 @@ export class FormElementGroupComponent implements AfterContentInit {
   ngAfterContentInit() {
     this.alignElements();
     this.formElements.changes.subscribe({
+      next: (result: any) => {
+        this.alignElements();
+      },
+      error: (err: any) => {
+        console.log('error', err);
+      },
+      complete: () => {
+        //console.log('comp');
+      }
+    });
+    this.buttons.changes.subscribe({
       next: (result: any) => {
         this.alignElements();
       },
@@ -49,10 +57,12 @@ export class FormElementGroupComponent implements AfterContentInit {
         if (this.buttons) {
           this.buttons.forEach(elem => {
             if (elem.button)
-              this.renderer.setStyle(elem.button.nativeElement, 'vertical-align', 'bottom');
+              this.renderer.setStyle(elem.button.nativeElement, 'vertical-align', 'top');
+            this.renderer.setStyle(elem.button.nativeElement, 'padding-top', '1rem');
           });
         }
       }
     }, 1);
   }
+
 }

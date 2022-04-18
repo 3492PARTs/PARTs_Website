@@ -6,7 +6,7 @@
   right: 0;
   background: #000000;
   background: rgba(0, 0, 0, 0.7);
-  transition: opacity .5s;
+  transition: opacity 0.5s;
   visibility: hidden;
   opacity: 0;
   display: flex;
@@ -17,12 +17,12 @@
 .popup {
   background-color: #fff;
   //border-radius: 6px;
-  box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   display: block;
   width: 80%;
   position: relative;
-  transition: all .5s ease-in-out;
-  border-radius:4px;
+  transition: all 0.5s ease-in-out;
+  border-radius: 4px;
 
   /*MOBILE */
   @media only screen and (max-width: 1174px) {
@@ -56,5 +56,5 @@
 .visible {
   visibility: visible;
   opacity: 1;
-  z-index: 100;
+  z-index: 101;
 }

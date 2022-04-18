@@ -70,7 +70,7 @@ nav .sub_links>li {
 }
 
 /*DESKTOP NAV*/
-@media only screen and (min-width: $screen_size_wide) {
+@media only screen and (min-width: $screen-size-xlg) {
   nav>#links {
     right: 2em;
     height: 100%;
@@ -127,7 +127,7 @@ nav .sub_links>li {
 }
 
 /*MOBILE NAV*/
-@media only screen and (max-width: $screen_size_narrow) {
+@media only screen and (max-width: $screen-size-xlg-lower-range) {
   body {
     overflow-x: hidden;
     padding-top: 3em;

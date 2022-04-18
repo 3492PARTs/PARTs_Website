@@ -6,8 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @Input()
-  h!: number;
+  @Input() h?: number;
   @Input() centered = false;
   @Input() underlined = true;
   @Input() marginBottom = true;

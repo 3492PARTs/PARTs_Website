@@ -6,14 +6,10 @@
   justify-content: space-between;
   padding-bottom: 1em;
   margin: 0 auto;
-
-  /*DESKTOP NAV*/
-  @media only screen and (min-width: $screen_size_wide) {
     width: 90%;
-  }
 
   /*MOBILE NAV*/
-  @media only screen and (max-width: $screen_size_narrow) {
+  @media only screen and (max-width: $screen-size-sm) {
     width: 100%;
   }
 }

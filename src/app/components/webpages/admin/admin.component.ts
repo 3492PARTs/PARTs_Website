@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService, RetMessage, Page } from 'src/app/services/general/general.service';
+import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth.service';
 
@@ -62,7 +62,7 @@ export class AdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as AdminInit;
-            console.log(this.init);
+            //console.log(this.init);
           }
         },
         error: (err: any) => {

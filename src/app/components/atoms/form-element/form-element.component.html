@@ -1,114 +1,202 @@
 <div class="form-element"
-  [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline}">
-  <label *ngIf="LabelText !== '' && Type !== 'radio'" for="{{ LabelID }}">{{ LabelText }}</label>
-  <ng-container [ngSwitch]="Type">
-    <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-      [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}">
+  [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox'}">
+  <label *ngIf="LabelText !== '' && Type !== 'radio'" [ngClass]="{'checkboxLabel': Type === 'checkbox'}"
+    for="{{ LabelID }}">{{ LabelText }}</label>
 
-    <input *ngSwitchCase="'password'" type="password" class="form-control" id="{{ LabelID }}"
-      placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)"
-      maxlength="{{ FieldSize }}">
+  <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
+    <div *ngIf="Required && Touched" class="validation"
+      [ngClass]="{'select': Type === 'select', 'area': Type === 'area'}">
+      <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid"></mat-icon>
+      <mat-icon class="icon-invalid" svgIcon="alert-circle-outline" *ngIf="!valid"></mat-icon>
+    </div>
 
-    <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
-      placeholder="{{ Placeholder }}" [ngStyle]="{'width': Width}" [ngModel]="Model" (ngModelChange)="change($event)">
+    <ng-container [ngSwitch]="Type">
+      <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
+        (focusout)="focusOut()">
 
-    <ng-container *ngSwitchCase="'select'">
-      <ng-container *ngIf="!SelectValidityFunction; else hasFunction">
-        <select class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}" [ngModel]="Model"
-          (ngModelChange)="change($event)">
-          <option [ngValue]="undefined" *ngIf="DisplayEmptyOption"></option>
+      <input *ngSwitchCase="'password'" type="password" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
-            <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
-              [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
-          </ng-container>
+      <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-            <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
-              [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}
-            </option>
-          </ng-container>
+      <input *ngSwitchCase="'mac'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17" (focus)="focusIn()"
+        (focusout)="focusOut()">
 
-          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
-            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty] }}
-            </option>
-          </ng-container>
+      <div *ngSwitchCase="'search'" id="search">
+        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+          [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+          (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()" (focusout)="focusOut()">
+        <button>
+          <mat-icon id="magnify-icon" svgIcon="magnify"></mat-icon>
+        </button>
+      </div>
 
-          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
-              obj[DisplayProperty] }} {{
-              obj[DisplayProperty2] }}
-            </option>
-          </ng-container>
-        </select>
+      <ng-container *ngSwitchCase="'select'">
+        <ng-container *ngIf="!SelectValidityFunction; else hasFunction">
+          <select class="form-control" id="{{ LabelID }}"
+            [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+            [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+            (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+            <option [ngValue]="''" *ngIf="DisplayEmptyOption"></option>
+
+            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+              <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
+            </ng-container>
+
+            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+              <option *ngFor="let obj of SelectList" [ngValue]="obj[BindingProperty]"
+                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}
+              </option>
+            </ng-container>
+
+            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
+              <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty]
+                }}
+              </option>
+            </ng-container>
+
+            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+              <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
+                obj[DisplayProperty] }} {{
+                obj[DisplayProperty2] }}
+              </option>
+            </ng-container>
+          </select>
+        </ng-container>
+        <ng-template #hasFunction>
+          <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}"
+            [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+            [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+            (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
+            [compareWith]="SelectValidityFunction">
+            <option value="" *ngIf="DisplayEmptyOption"></option>
+            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+              <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
+                obj[DisplayProperty] }} {{
+                obj[DisplayProperty2] }}
+              </option>
+            </ng-container>
+          </select>
+        </ng-template>
       </ng-container>
-      <ng-template #hasFunction>
-        <select class="form-control" id="{{ LabelID }}" [ngStyle]="{'width': Width}" [ngModel]="Model"
-          (ngModelChange)="change($event)" [compareWith]="SelectValidityFunction">
-          <option [ngValue]="undefined" *ngIf="DisplayEmptyOption"></option>
-          <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-            <option *ngFor="let obj of SelectList" [ngValue]="obj" [selected]="obj === Model">{{
-              obj[DisplayProperty] }} {{
-              obj[DisplayProperty2] }}
-            </option>
-          </ng-container>
-        </select>
-      </ng-template>
-    </ng-container>
 
-    <textarea *ngSwitchCase="'area'" class="form-control" [ngStyle]="{'width': Width}" rows="{{ Rows }}"
-      placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
-      maxlength="{{ FieldSize }}"></textarea>
+      <textarea *ngSwitchCase="'area'" class="form-control"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
+        placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
+        [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
 
-    <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
-    <input *ngSwitchCase="'checkbox'" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
-      [checked]="TrueValue === Model">
+      <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
+      <input *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
+        [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-    <ng-container *ngSwitchCase="'radio'">
-      <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
+      <ng-container *ngSwitchCase="'radio'">
+        <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
         <label for="{{ obj.name }}{{ i }}">{{ obj.name }}</label>
         <input type="radio" name="{{ RadioName }}" id="{{ obj.name }}{{ i }}" [value]="obj" [ngModel]="Model"
           (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
       </div>-->
-    </ng-container>
+      </ng-container>
 
-    <!--<input *ngSwitchCase="'datetime'" class="form-control" type="datetime-local" id="{{ LabelID }}" [ngModel]="Model"
-      (ngModelChange)="change($event)">-->
-
-    <div *ngSwitchCase="'datetime'">
-      <div style="display: inline-block;">
-        <ejs-datetimepicker id="{{ LabelID }}" placeholder="Select a date" [ngModel]="Model"
-          (ngModelChange)="change($event)"></ejs-datetimepicker>
-      </div>
-    </div>
-
-
-    <input *ngSwitchCase="'file'" class="form-control" type="file" id="{{ LabelID }}" (change)="fileProgress($event)"
-      placeholder="Upload file" [ngModel]="Model">
-
-    <div *ngSwitchCase="'multiselect'" class="form-control" id="multiSelect" [ngStyle]="{'width': Width}" #multiselect
-      (appClickOutside)="multiSelectClose()">
-      <span (click)="multiSelectMenu()">
-        <p>select</p>
-        <div class="arrow-wrapper">
-          <i class="arrow down"></i>
+      <div *ngSwitchCase="'datetime'" class="datetime form-control">
+        <div
+          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+          <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker" [(ngModel)]="Model">
+            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1"
+              [stepMinute]="30" [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false"
+              [hideTime]="false">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
         </div>
-      </span>
-      <div *ngIf="BindingProperty !== '' && DisplayProperty !== '' && SelectList && SelectList.length > 0" id="dropdown"
-        #multiSelectDropdown>
+      </div>
+
+      <div class="file-upload form-control" *ngSwitchCase="'file'">
+
+        <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none;"
+          [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
         <div>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
-          &nbsp;
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
+          <p>{{ Model ? (fileName || "No file uploaded yet.") : "No file uploaded yet."}}</p>
         </div>
-        <div *ngFor="let obj of SelectList; let i = index">
-          <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
-            (ngModelChange)="multiChange($event, i)">
-          <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
-          <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }} -
-            {{ obj[DisplayProperty2] }}</label>
+        <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()"></app-button>
+      </div>
+
+      <input *ngSwitchCase="'image'" class="form-control" type="file" id="{{ LabelID }}"
+        (change)="ImageChangeEvent($event)" placeholder="Upload file" [ngModel]="Model" [disabled]="Disabled"
+        (focus)="focusIn()" (focusout)="focusOut()">
+
+      <div *ngSwitchCase="'multiSelect'" class="form-control" id="multiSelect"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" #multiSelect
+        (appClickOutside)="multiSelectClose()">
+        <span (click)="multiSelectMenu()">
+          <p>{{ LabelText }}</p>
+          <div class="arrow-wrapper">
+            <i class="arrow down"></i>
+          </div>
+        </span>
+        <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
+          <div class="multi-select-buttons">
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
+            &nbsp;
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
+          </div>
+          <div *ngFor="let obj of SelectList; let i = index">
+            <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
+              (ngModelChange)="multiChange($event, i)" [disabled]="Disabled">
+            <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
+            <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }} -
+              {{ obj[DisplayProperty2] }}</label>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  </div>
+  <p *ngIf="Required && !valid && Touched" class="invalid-message">{{ ValidationMessage || 'required' }}</p>
 </div>
+
+<!--
+  Date time picker examples
+  <app-box>
+    <mat-form-field color="accent" appearance="fill">
+      <mat-label>Inherited calendar color</mat-label>
+      <input matInput [matDatepicker]="picker1">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" [(ngModel)]="Model">
+      <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1" [stepMinute]="30"
+        [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false" [hideTime]="false">
+      </ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field color="accent" appearance="fill">
+      <mat-label>Inherited calendar color</mat-label>
+      <input matInput [ngxMatDatetimePicker]="picker2">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matSuffix [for]="$any(picker2)"></mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker2 [showSpinners]="false" [showSeconds]="false" [stepHour]="1" [stepMinute]="30"
+        [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false" [hideTime]="false">
+      </ngx-mat-datetime-picker>
+    </mat-form-field>
+  </app-box>
+-->

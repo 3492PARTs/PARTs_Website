@@ -27,12 +27,10 @@ export class TableComponent implements OnInit, OnChanges {
   private resizeTimer: number | null | undefined;
 
   constructor(private renderer: Renderer2) { }
-  @Input()
-  TableData: any[] = [];
+  @Input() TableData: any[] = [];
   @Input() TableCols: any[] = [];
 
-  @Input()
-  TableTitle!: string;
+  @Input() TableTitle!: string;
 
   @Input() EnableFilter = false;
   @Input() DisableSort = false;
@@ -53,15 +51,15 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() RecordClickCallBack: EventEmitter<any> = new EventEmitter();
   @Output() DblClkRecordClickCallBack: EventEmitter<any> = new EventEmitter();
 
-  @Input() EnableRemovedFiter = false;
-  @Input() RemovedFiterProperty = 'Removed';
-  @Input() RemovedFiterPropertyValue: any = true;
+  @Input() EnableRemovedFilter = false;
+  @Input() RemovedFilterProperty = 'Removed';
+  @Input() RemovedFilterPropertyValue: any = true;
 
-  @Input() AppyRemovedFilter = true;
+  @Input() ApplyRemovedFilter = true;
 
   @Input() Stripes = false;
   @Input() Borders = false;
-  @Input() Hilighting = false;
+  @Input() Highlighting = false;
   @Input() Scrollable = false;
   @Input() ScrollHeight = '20em';
   @Input() Responsive = false;
@@ -69,7 +67,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() DisplayRecordInfo = false;
   @Input() Resizable = false;
   @Input() ButtonsFirstCol = false;
-  @Input() Mobile = false;
+  @Input() CursorPointer = false;
 
   @Input() DisableInputs = false;
   @Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
@@ -78,28 +76,26 @@ export class TableComponent implements OnInit, OnChanges {
 
 
   SearchText = '';
-  OrderByProperty = '';
-  OrderByReverse = false;
-  ActiveRec!: object;
+  @Input() OrderByProperty = '';
+  @Input() OrderByReverse = false;
+  ActiveRec: object | null = null;
   @Input()
   set SetActiveRec(rec: object) {
     this.ActiveRec = rec;
     this.SetTableContainerWidth();
   }
   FixedTableScrollColWidth = '0px';
-  @ViewChild('InfoContainer', { read: ElementRef, static: true })
-  InfoContainer!: ElementRef;
+  @ViewChild('InfoContainer', { read: ElementRef, static: true }) InfoContainer?: ElementRef;
 
-  @ViewChild('TableContainer', { read: ElementRef, static: true })
-  TableContainer!: ElementRef;
-  @ViewChild('MainTableBody', { read: ElementRef, static: true })
-  MainTableBody!: ElementRef;
+  @ViewChild('TableContainer', { read: ElementRef, static: true }) TableContainer?: ElementRef;
+  @ViewChild('MainTableBody', { read: ElementRef, static: true }) MainTableBody?: ElementRef;
 
-  @ViewChild('Table', { read: ElementRef, static: true })
-  Table!: ElementRef;
+  @ViewChild('Table', { read: ElementRef, static: true }) Table?: ElementRef;
+
+  buttonCellWidth = 'auto';
 
   ngOnInit() {
-    if (this.Width !== '') {
+    if (this.Width !== '' && this.Table) {
       this.renderer.setStyle(this.Table.nativeElement, 'width', this.Width, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
     }
 
@@ -109,7 +105,7 @@ export class TableComponent implements OnInit, OnChanges {
       If the table header is set to fixed, need width of scrollbar
       to add a col to fix spacing
     */
-    if (this.Scrollable) {
+    if (this.Scrollable && this.MainTableBody) {
       this.FixedTableScrollColWidth = this.getScrollbarWidth() + 'px';
       this.renderer.setStyle(
         this.MainTableBody.nativeElement,
@@ -190,7 +186,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
-  RecordClick(Rec: object) {
+  RecordClick(Rec: any) {
     this.RecordClickCallBack.emit(Rec);
     if (this.AllowActiveRecord) {
       this.ActiveRec = Rec;
@@ -203,7 +199,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   SetTableContainerWidth() {
-    if (this.DisplayRecordInfo && this.ActiveRec != null) {
+    if (this.InfoContainer && this.DisplayRecordInfo && this.ActiveRec != null) {
       this.renderer.setStyle(
         this.InfoContainer.nativeElement,
         'display',
@@ -212,7 +208,7 @@ export class TableComponent implements OnInit, OnChanges {
       const infopixels = this.InfoContainer.nativeElement.offsetWidth;
       const FinalCssVal = 'calc(100% - ' + infopixels + 'px)';
 
-      if (
+      if (this.TableContainer &&
         window.innerWidth >= this.screenSizeWide &&
         (window.innerWidth - (infopixels + 300) > 0)
       ) {
@@ -221,7 +217,7 @@ export class TableComponent implements OnInit, OnChanges {
           'width',
           FinalCssVal
         );
-      } else {
+      } else if (this.TableContainer) {
         this.renderer.setStyle(
           this.TableContainer.nativeElement,
           'width',
@@ -234,7 +230,7 @@ export class TableComponent implements OnInit, OnChanges {
         );
       }
 
-    } else {
+    } else if (this.InfoContainer) {
       this.renderer.setStyle(
         this.InfoContainer.nativeElement,
         'display',
@@ -263,15 +259,10 @@ export class TableComponent implements OnInit, OnChanges {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
     }
-    try {
-      let ret = '';
-      const comand = 'ret = rec.' + property + ';';
-      eval(comand);
-      return ret;
-    }
-    catch (err) {
-      return '';
-    }
+    let ret = '';
+    const comand = 'ret = rec.' + property + ';';
+    eval(comand);
+    return ret;
 
   }
 
@@ -280,6 +271,28 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn() {
+    let colWidth = 0;
+
+    if (this.ShowAddButton) {
+      colWidth += 3.4;
+    }
+
+    if (this.ShowEditButton) {
+      colWidth += 3.4;
+    }
+
+    if (this.ShowRemoveButton) {
+      colWidth += 3.4;
+    }
+
+    if (this.ShowViewButton) {
+      colWidth += 3.4;
+    }
+
+    if (colWidth > 0) {
+      this.buttonCellWidth = colWidth + 'rem';
+    }
+
     if (
       this.ShowAddButton ||
       this.ShowRemoveButton ||
@@ -324,7 +337,7 @@ export class TableComponent implements OnInit, OnChanges {
     const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
 
     // Removing temporary elements from the DOM
-    outer.parentNode!.removeChild(outer);
+    outer.parentNode?.removeChild(outer);
 
     return scrollbarWidth;
   }

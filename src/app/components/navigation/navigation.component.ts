@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, HostListener, DoCheck, Input } from '@angular/core';
 import { AuthService, User, Token, UserLinks } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-navigation',

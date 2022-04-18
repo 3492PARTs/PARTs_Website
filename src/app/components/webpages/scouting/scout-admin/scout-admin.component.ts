@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
@@ -10,7 +10,7 @@ import { Team } from '../scout-field/scout-field.component';
   styleUrls: ['./scout-admin.component.scss']
 })
 export class ScoutAdminComponent implements OnInit {
-
+  Model: any = {};
   page = 'users';
 
   init: ScoutAdminInit = new ScoutAdminInit();
@@ -366,9 +366,10 @@ export class ScoutAdminComponent implements OnInit {
     this.scoutScheduleModalTitle = title;
     if (ss) {
       //"2020-01-01T01:00"
-      ss.st_time = new Date(ss.st_time);
-      ss.end_time = new Date(ss.end_time);
-      this.scoutFieldSchedule = ss;
+      let ss1 = JSON.parse(JSON.stringify(ss));
+      ss1.st_time = new Date(ss1.st_time);
+      ss1.end_time = new Date(ss1.end_time);
+      this.scoutFieldSchedule = ss1;
     } else {
       this.scoutFieldSchedule = new ScoutFieldSchedule();
     }

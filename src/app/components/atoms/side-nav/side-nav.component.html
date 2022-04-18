@@ -1,7 +1,6 @@
-<div class="side-nav" #thisSideNav [ngClass]="{'hide': HideSideNav, 'sticky': runStickyMethod}"
-  [ngStyle]="{'width': Width}">
+<div class="side-nav" #thisSideNav [ngClass]="{'hide': HideSideNav}" [ngStyle]="{'width': Width}">
   <div id="title" [ngClass]="{'roundedCorners': collapsed}" #thisTitle>
-    <p>{{ Title }}</p>
+    <h4>{{ Title }}</h4>
     <div id="collapseBtn" [ngClass]="{'hide': hide}">
       <app-button [ButtonType]="'collapse'" [SymbolSize]="'2.4rem'" [InvertColor]="true" [Direction]="collapsed"
         (FunctionCallBack)="collapseCard()">

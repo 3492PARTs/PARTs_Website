@@ -7,24 +7,22 @@ import * as $ from 'jquery';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  @ViewChild('thisSideNav', { read: ElementRef, static: true })
-  sideNav!: ElementRef;
-  @ViewChild('thisNavContent', { read: ElementRef, static: true })
-  navContainer!: ElementRef;
+  @ViewChild('thisSideNav', { read: ElementRef, static: true }) sideNav: ElementRef = new ElementRef(null);
+  @ViewChild('thisNavContent', { read: ElementRef, static: true }) navContainer: ElementRef = new ElementRef(null);
 
-  @Input()
-  Width!: string;
-  startingWidth!: string;
+  @Input() Width = '';
+  startingWidth = '';
   @Input() HideSideNav = false;
 
   @Input() Title = '';
 
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
-  runStickyMethod = true;
+  private runStickyMethod = true;
 
   collapsed = false;
   hide = true; // For the collapse btn, not needed in full screen mode
+  mobile = false;
 
   constructor(private renderer: Renderer2) { }
 
@@ -76,24 +74,28 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
   }
 
   @HostListener('window:scroll', ['$event'])
-  onWindowScroll() {
-    if (this.runStickyMethod && false) {
-      const windowTop = $(window).scrollTop() || 0;
+  onWindowScroll(event: any) {
+    const windowTop = $(window).scrollTop() || 0;
 
-      //console.log('window top ' + windowTop + ' new top ' + (windowTop - ((4 * 16) + 16)));
+    const offsetWindowTop = windowTop - ((5 * 16) + 3);
 
-      if (windowTop - ((4 * 16) + 16) >= 0) {
-        this.sideNav.nativeElement.classList.add('sticky');
+    const navSpace = (5 * 16);
+    let offset = navSpace - windowTop;
+    offset = offset <= 0 ? 0 : offset > navSpace ? navSpace : offset;
+
+    //console.log('window top ' + windowTop + ' new top ' + offsetWindowTop + ' offset ' + offset);
+
+    if (this.sideNav && this.runStickyMethod) {
+      if (this.mobile) {
+        this.renderer.setStyle(this.sideNav.nativeElement, 'top', `${4}em`);
       }
-
-      if (windowTop - ((4 * 16) + 16) < 0) {
-        this.sideNav.nativeElement.classList.remove('sticky');
+      else {
+        this.renderer.setStyle(this.sideNav.nativeElement, 'top', `${offset}px`);
       }
     }
   }
-
   @HostListener('window:resize', ['$event'])
-  onResize() {
+  onResize(event: any) {
     if (this.resizeTimer != null) {
       window.clearTimeout(this.resizeTimer);
     }
@@ -110,6 +112,16 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
         this.hide = false;
       }
     }, 200);
+
+    this.mobile = !(window.innerWidth >= this.screenSizeWide);
+
+    if (this.mobile) {
+      this.renderer.setStyle(this.sideNav.nativeElement, 'top', `${4}em`);
+      this.renderer.setStyle(this.sideNav.nativeElement, 'position', 'unset');
+    }
+    else {
+      this.renderer.setStyle(this.sideNav.nativeElement, 'position', 'fixed');
+    }
   }
 
   collapseCard() {

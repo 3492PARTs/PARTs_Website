@@ -1,12 +1,13 @@
-import { Component, AfterViewInit, Input, EventEmitter, Output, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
+import { FormComponent } from '../form/form.component';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })
-export class ModalComponent implements AfterViewInit {
+export class ModalComponent implements OnInit {
   @Input() ButtonType = '';
   @Input() ButtonText = '';
   @Input() Title = '';
@@ -14,17 +15,14 @@ export class ModalComponent implements AfterViewInit {
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter();
 
-  private screenSizeWide = 1175;
-  private resizeTimer: number | null | undefined;
-  centered = true;
+  @Input() zIndex = 101;
 
-  @ViewChild('thisButton', { read: ButtonComponent })
-  button: ButtonComponent = new ButtonComponent;
+  @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
+  @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
 
   constructor() { }
 
-  ngAfterViewInit() {
-    this.alignTitle();
+  ngOnInit() {
   }
 
   open() {
@@ -35,28 +33,8 @@ export class ModalComponent implements AfterViewInit {
   close() {
     this.visible = false;
     this.visibleChange.emit(this.visible);
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
-    }
-
-    this.resizeTimer = window.setTimeout(() => {
-      this.alignTitle();
-    }, 200);
-  }
-
-  alignTitle(): void {
-    if (window.innerWidth >= this.screenSizeWide) {
-      window.setTimeout(() => {
-        this.centered = true;
-      }, 1);
-    } else {
-      window.setTimeout(() => {
-        this.centered = false;
-      }, 1);
-    }
+    this.form.forEach(elem => {
+      elem.reset();
+    });
   }
 }

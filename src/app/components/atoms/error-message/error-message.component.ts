@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GeneralService } from 'src/app/services/general/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 
 
 @Component({

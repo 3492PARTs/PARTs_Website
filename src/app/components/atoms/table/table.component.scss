@@ -13,6 +13,24 @@
   border-collapse: collapse;
 }
 
+.table { //}.table-mobile {
+  width: auto !important;
+
+  table-layout: fixed;
+
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+  }
+
+  @media only screen and (max-width: 480px) {
+    /* horizontal scrollbar for tables if mobile screen */
+    overflow-x: auto;
+    display: block;
+  }
+}
+
 .table-normal {
   table-layout: fixed;
   width: 100%;
@@ -21,7 +39,10 @@
 .table .thead tr th,
 .table .tbody tr td {
   padding: 0.3em;
-  padding-left: 0.5em;
+}
+
+.table .tbody tr td {
+  vertical-align: top;
 }
 
 .table tr td {
@@ -67,14 +88,17 @@
 
 /* buttons*/
 .table tbody .btn-col {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  &>div {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
 }
 
 /*tables with stripes*/
 .table.striped .tbody tr:nth-child(even) {
-  background-color: $gray;
+  background-color: #e2e2e2;
 }
 
 /*tables with full borders*/
@@ -83,9 +107,9 @@
   border: 1px solid $gray;
 }
 
-/*tables with hilighting*/
-.table.hilight .tbody tr:hover {
-  background-color: lighten($gray, 10%);
+/*tables with highlighting*/
+.table.highlighting .tbody tr:hover {
+  background-color: #e2e2e2;
 }
 
 /*tables with fixed headers*/
@@ -111,24 +135,6 @@
   width: auto !important;
 }
 
-.table-mobile {
-  width: auto !important;
-
-  table-layout: fixed;
-
-  td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-  }
-
-  @media only screen and (max-width: 480px) {
-    /* horizontal scrollbar for tables if mobile screen */
-    overflow-x: auto;
-    display: block;
-  }
-}
-
 .up-arrow svg,
 .down-arrow svg {
   height: 1em;
@@ -140,7 +146,11 @@
 }
 
 .ActiveRow {
-  background: $gray;
+  background: darken(#e2e2e2, 10%) !important;
+}
+
+.CursorPointer {
+  cursor: pointer;
 }
 
 .TableContainer {

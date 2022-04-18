@@ -41,3 +41,8 @@
 .active {
   color: $accent_color;
 }
+
+.vertical-center{
+  display: flex;
+    align-items: center;
+}

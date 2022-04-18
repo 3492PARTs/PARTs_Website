@@ -9,7 +9,8 @@
 
   <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
     [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [DisplayProperty]="'sq_sub_nm'"
-    [BindingProperty]="'sq_sub_typ'" [(Model)]="scoutQuestion.sq_sub_typ" [DisplayEmptyOption]="true">
+    [BindingProperty]="'sq_sub_typ'" [(Model)]="scoutQuestion.sq_sub_typ" [DisplayEmptyOption]="true"
+    [MinWidth]="'200px'">
   </app-form-element>
 
   <app-button-ribbon>
@@ -41,7 +42,7 @@
         [Width]="'100%'">
       </app-form-element>
       <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
-        [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [Width]="'100%'"
+        [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [MinWidth]="'200px'"
         [DisplayProperty]="'sq_sub_nm'" [BindingProperty]="'sq_sub_typ'" [(Model)]="q.sq_sub_typ"
         [DisplayEmptyOption]="true">
       </app-form-element>
