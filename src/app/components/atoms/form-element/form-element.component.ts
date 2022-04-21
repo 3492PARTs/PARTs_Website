@@ -81,6 +81,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() IconOnly = false;
 
+  @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
@@ -98,11 +99,27 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngAfterViewInit() {
     this.positionMultiSelect();
+
+    // This is to make sure the form element is the right width for the label
+    window.setTimeout(() => {
+      if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
+        const width = this.label.nativeElement.clientWidth + 32;
+        if (this.MinWidth != 'auto') {
+          this.gs.consoleLog('Developer your min width will be overwritten on your form element.');
+        }
+        this.MinWidth = width + 'px';
+      }
+    }, 1);
+
+    this.positionLabel();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.positionMultiSelect();
+
+    this.positionLabel();
+
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -282,6 +299,29 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     for (let i = 0; i < this.SelectList.length; i++) {
       this.multiChange(false, i);
     }
+  }
+
+  positionLabel(): void {
+    if (this.label) {
+      const { lineHeight } = getComputedStyle(this.label.nativeElement);
+      const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
+      const amountOfLinesTilAdjust = 2;
+
+      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+        console.log('your h1 now wrapped' + lineHeightParsed)
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'top', '-' + this.label.nativeElement.offsetHeight + 'px'
+        );
+      } else {
+        console.log('your h1 on one line')
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'top', '-7px'
+        );
+      }
+    }
+
   }
 
 }

@@ -18,7 +18,7 @@
 
   table-layout: fixed;
 
-  td {
+  th, td {
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
