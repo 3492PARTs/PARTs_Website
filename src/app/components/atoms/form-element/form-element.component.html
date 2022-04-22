@@ -1,4 +1,4 @@
-<div class="form-element"
+<div #formElement class="form-element"
   [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox'}">
   <label *ngIf="LabelText !== '' && Type !== 'radio'" #label [ngClass]="{'checkboxLabel': Type === 'checkbox'}"
     for="{{ LabelID }}">{{ LabelText }}</label>

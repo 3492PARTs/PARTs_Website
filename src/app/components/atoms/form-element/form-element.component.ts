@@ -81,6 +81,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() IconOnly = false;
 
+  @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
   @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
@@ -100,23 +101,22 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   ngAfterViewInit() {
     this.positionMultiSelect();
 
-    // This is to make sure the form element is the right width for the label
-    window.setTimeout(() => {
-      if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
-        const width = this.label.nativeElement.clientWidth + 32;
-        if (this.MinWidth != 'auto') {
-          this.gs.consoleLog('Developer your min width will be overwritten on your form element.');
-        }
-        this.MinWidth = width + 'px';
-      }
-    }, 1);
+    this.resizeFormElement();
 
     this.positionLabel();
+
+    window.setTimeout(() => {
+      if (this.Width === 'auto' && this.Type === 'number') {
+        this.Width = '100px';
+      }
+    }, 1);
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.positionMultiSelect();
+
+    this.resizeFormElement();
 
     this.positionLabel();
 
@@ -301,6 +301,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
+  resizeFormElement(): void {
+    // This is to make sure the form element is the right width for the label
+    window.setTimeout(() => {
+      if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
+        const width = this.label.nativeElement.clientWidth + 32;
+        if (this.MinWidth != 'auto') {
+          this.gs.consoleLog('Developer your min width will be overwritten on your form element.');
+        }
+        this.MinWidth = width + 'px';
+      }
+    }, 1);
+  }
+
   positionLabel(): void {
     if (this.label) {
       const { lineHeight } = getComputedStyle(this.label.nativeElement);
@@ -308,10 +321,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       const amountOfLinesTilAdjust = 2;
 
       if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-        console.log('your h1 now wrapped' + lineHeightParsed)
+        console.log('your h1 now wrapped ' + lineHeightParsed + ' ' + lineHeight);
+        const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(
           this.label.nativeElement,
-          'top', '-' + this.label.nativeElement.offsetHeight + 'px'
+          'top', '-' + labelOffset + 'px'
+        );
+        this.renderer.setStyle(
+          this.formElement.nativeElement,
+          'margin-top', labelOffset + 'px'
         );
       } else {
         console.log('your h1 on one line')
@@ -319,6 +337,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
           this.label.nativeElement,
           'top', '-7px'
         );
+        this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
       }
     }
 
