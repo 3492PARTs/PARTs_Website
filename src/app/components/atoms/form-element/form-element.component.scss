@@ -9,26 +9,26 @@
     //flex-direction: row-reverse;
     //justify-content: flex-end;
 
-    &>div {
+    & > div {
       order: 1;
       display: flex;
 
-      &>.validation {
+      & > .validation {
         display: none;
       }
     }
 
-    &>label {
+    & > label {
       order: 2;
     }
 
-    &>p {
+    & > p {
       order: 3;
       padding-left: 1.6rem;
     }
   }
 
-  &>label {
+  & > label {
     font-size: 13px;
     font-weight: 600;
     display: block;
@@ -80,7 +80,6 @@
   }
 }
 
-
 textarea.form-control {
   height: auto;
 }
@@ -99,7 +98,7 @@ textarea.form-control {
   vertical-align: top;
 }
 
-.form-control-inline>.form-control {
+.form-control-inline > .form-control {
   display: inline-block !important;
 }
 
@@ -112,7 +111,7 @@ textarea.form-control {
   z-index: 1;
   top: 50%;
   transform: translateY(-50%);
-  right: .5rem;
+  right: 0.5rem;
   height: 24px;
 
   &.select {
@@ -163,14 +162,14 @@ textarea.form-control {
 
 .valid,
 .invalid {
-  padding-right: calc(1.5em + .75rem);
+  padding-right: calc(1.5em + 0.75rem);
 }
 
 .invalid-message {
   margin-top: 0;
   margin-bottom: 0;
   margin-left: 0.32rem;
-  font-size: .875em;
+  font-size: 0.875em;
   color: #dc3545;
 }
 
@@ -206,7 +205,7 @@ textarea.form-control {
   }
 }
 
-.multi-select-buttons{
+.multi-select-buttons {
   display: flex;
   justify-content: space-evenly;
 }
@@ -252,14 +251,14 @@ textarea.form-control {
   display: flex;
   align-items: stretch;
 
-  &>input {
+  & > input {
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     margin-right: 0;
   }
 
-  &>button {
+  & > button {
     border-radius: 0 0.56rem 0.56rem 0;
     margin: 0.32rem 0.32rem 0.32rem 0;
     background-color: $main_color;
@@ -276,7 +275,7 @@ textarea.form-control {
       box-shadow: 0px 0px 0px 0.32rem rgba(0, 123, 255, 0.25);
     }
 
-    &>#magnify-icon {
+    & > #magnify-icon {
       fill: #fff;
     }
   }
@@ -288,27 +287,30 @@ textarea.form-control {
   align-items: center;
   min-width: 20rem;
 
-  div p {
-    margin: 0;
+  div {
+    padding-right: 1.2rem;
+    p {
+      margin: 0;
+    }
   }
 }
 
 .checkbox {
   width: 1em;
   height: 1em;
-  margin-top: .25em;
+  margin-top: 0.25em;
   vertical-align: top;
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  border: 1px solid rgba(0, 0, 0, .25);
+  border: 1px solid rgba(0, 0, 0, 0.25);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
-  border-radius: .25em;
+  border-radius: 0.25em;
 
   &:checked {
     background-color: #0d6efd;
@@ -334,7 +336,7 @@ textarea.form-control {
   height: 40px;
   overflow: hidden;
 
-  &> div {
+  & > div {
     position: absolute;
     //top: 50%;
     bottom: -17px;
@@ -345,17 +347,17 @@ textarea.form-control {
 
     &::after {
       content: " ";
-    display: block;
-    background-color: white;
-    width: 100%;
-    height: 10px;
-    position: absolute;
-    bottom: 12px;
-    left: 0;
+      display: block;
+      background-color: white;
+      width: 100%;
+      height: 10px;
+      position: absolute;
+      bottom: 12px;
+      left: 0;
     }
   }
 }
 
 select {
-  max-width: 100%;
+  max-width: calc(100% - 0.64rem);
 }
