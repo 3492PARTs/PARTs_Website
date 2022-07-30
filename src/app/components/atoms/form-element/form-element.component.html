@@ -127,6 +127,18 @@
         </div>
       </div>
 
+      <div *ngSwitchCase="'date'" class="datetime form-control">
+        <div
+          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+          <mat-form-field appearance="fill">
+            <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
       <div class="file-upload form-control" *ngSwitchCase="'file'">
 
         <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none;"
@@ -150,7 +162,7 @@
             <i class="arrow down"></i>
           </div>
         </span>
-        <div *ngIf="BindingProperty !== '' && DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
+        <div *ngIf="DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
           <div class="multi-select-buttons">
             <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
             &nbsp;
@@ -160,7 +172,7 @@
             <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="obj['checked']"
               (ngModelChange)="multiChange($event, i)" [disabled]="Disabled">
             <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
-            <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[BindingProperty] }} -
+            <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
               {{ obj[DisplayProperty2] }}</label>
           </div>
         </div>

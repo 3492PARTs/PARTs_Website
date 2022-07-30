@@ -142,14 +142,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     this.isInvalid();
   }
 
-  multiChange(newValue: any, index: string | number) {
+  multiChange(newValue: any, index: number) {
     this.MultiModel[index]['checked'] = newValue;
+    this.SelectList[index]['checked'] = newValue;
     this.ModelChange.emit(this.MultiModel);
     this.FunctionCallBack.emit();
   }
 
   private positionMultiSelect(): void {
-    if (this.Type === 'multiselect' && this.multiSelect) {
+    if (this.Type === 'multiSelect' && this.multiSelect) {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
       this.renderer.setStyle(
         this.dropdown.nativeElement,

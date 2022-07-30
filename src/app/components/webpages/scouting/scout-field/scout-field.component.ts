@@ -152,4 +152,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 export class Team {
   team_no!: string;
   team_nm!: string;
+  void_ind = 'n'
+  checked = false;
 }
