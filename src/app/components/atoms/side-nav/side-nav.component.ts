@@ -34,7 +34,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
     } else {
       this.runStickyMethod = false;
       this.hide = false;
-      this.sideNav.nativeElement.classList.remove('sticky');
+      this.onResize(null);
     }
 
     this.checkHeight();
