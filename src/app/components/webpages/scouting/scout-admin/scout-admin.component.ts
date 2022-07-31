@@ -17,7 +17,11 @@ export class ScoutAdminComponent implements OnInit {
   //season!: number;
   newSeason!: number;
   delSeason!: number;
-  //event!: number;
+  newEvent: Event = new Event();
+  delEvent!: number;
+  selectedEvent = new Event();
+  newTeam: Team = new Team();
+  eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
@@ -80,6 +84,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as ScoutAdminInit;
+            this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.buildEventList();
           }
         },
@@ -255,7 +260,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   deleteSeason(): void | null {
-    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being reomved.')) {
+    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.')) {
       return null;
     }
 
@@ -336,6 +341,147 @@ export class ScoutAdminComponent implements OnInit {
       this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
       this.buildAvailableUserGroups();
     }
+  }
+
+  saveEvent(): void {
+    this.gs.incrementOutstandingCalls();
+    this.newEvent.event_cd = (this.newEvent.season + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+    this.http.post(
+      'scouting/admin/add-event/', this.newEvent
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.adminInit();
+            this.newEvent = new Event();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  clearEvent() {
+    this.newEvent = new Event();
+  }
+
+  deleteEvent(): void | null {
+    if (!confirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.')) {
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/delete-event/', {
+      params: {
+        event_id: this.delEvent.toString()
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  saveTeam(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/admin/add-team/', this.newTeam
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.adminInit();
+            this.newTeam = new Team();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  clearTeam() {
+    this.newTeam = new Team();
+  }
+
+  addEventToTeams(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/admin/add-team-to-event/', this.eventToTeams
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.eventToTeams = new EventToTeams();
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  clearEventToTeams() {
+    this.eventToTeams = new EventToTeams();
+    this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+  }
+
+  removeEventToTeams(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/admin/remove-team-to-event/', this.selectedEvent
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.selectedEvent = new Event();
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  clearRemoveEventToTeams() {
+    this.selectedEvent.team_no.forEach(t => t.checked = true);
   }
 
   saveUser(): void {
@@ -509,9 +655,11 @@ export class Event {
   location_name = ''
   gmaps_url = ''
   webcast_url = ''
-  current!: string;
-  void_ind!: string;
-  competition_page_active!: string;
+  current = 'n';
+  timezone = 'America/New_York';
+  void_ind = 'n';
+  competition_page_active = 'n';
+  team_no: Team[] = [];
 }
 
 export class Match {
@@ -581,4 +729,10 @@ export class ScoutAdminInit {
   pitSchedule: ScoutPitSchedule[] = [];
   //pastSchedule: ScoutSchedule[] = [];
   scoutQuestionType: ScoutQuestionType[] = [];
+  teams: Team[] = [];
+}
+
+export class EventToTeams {
+  event_id = 0;
+  teams: Team[] = [];
 }
