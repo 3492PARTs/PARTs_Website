@@ -128,7 +128,7 @@
   </app-box>
 
   <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
-    <app-form-element-group [LabelText]="'Sync/Set Season'" [InlineElements]="true">
+    <app-form-element-group [LabelText]="'Season and Event'" [InlineElements]="true">
       <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
         [(Model)]="this.init.currentSeason.season_id" (ModelChange)="buildEventList(true)">
@@ -157,6 +157,11 @@
         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason">
       </app-form-element>
       <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+
+      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events" [DisplayEmptyOption]="true"
+        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="delEvent">
+      </app-form-element>
+      <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Add Event'" [InlineElements]="true">

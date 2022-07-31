@@ -18,6 +18,7 @@ export class ScoutAdminComponent implements OnInit {
   newSeason!: number;
   delSeason!: number;
   newEvent: Event = new Event();
+  delEvent!: number;
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
@@ -258,7 +259,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   deleteSeason(): void | null {
-    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being reomved.')) {
+    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.')) {
       return null;
     }
 
@@ -367,6 +368,37 @@ export class ScoutAdminComponent implements OnInit {
 
   clearEvent() {
     this.newEvent = new Event();
+  }
+
+  deleteEvent(): void | null {
+    if (!confirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.')) {
+      return null;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/delete-event/', {
+      params: {
+        event_id: this.delEvent.toString()
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   saveTeam(): void {
