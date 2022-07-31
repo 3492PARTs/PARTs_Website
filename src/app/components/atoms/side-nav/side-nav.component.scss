@@ -1,6 +1,7 @@
 @import "../../../scss/_helpers/variables";
 
 .side-nav {
+  position: fixed;
   /*position: fixed;
   top: 4em;
   left: 1em;*/
@@ -15,7 +16,7 @@
   box-sizing: border-box;
   border-radius: 4px;
 
-  z-index: -1;
+  //z-index: -1;
 }
 
 #title {
@@ -48,7 +49,6 @@
 .roundedCorners {
   border-radius: 0.35em !important;
 }
-
 
 #nav {
   padding: 0 1em;

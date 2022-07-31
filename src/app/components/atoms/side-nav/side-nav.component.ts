@@ -39,6 +39,8 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
 
     this.checkHeight();
     this.attachCheckHeight(this.navContainer.nativeElement.children, this.checkHeight);
+
+    this.onWindowScroll(null);
   }
 
   ngAfterViewInit() {
@@ -77,9 +79,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
   onWindowScroll(event: any) {
     const windowTop = $(window).scrollTop() || 0;
 
-    const offsetWindowTop = windowTop - ((5 * 16) + 3);
-
-    const navSpace = (5 * 16);
+    const navSpace = (5 * 16) - 16 + 3; // 5 x 16 for nav - 16 for side nav top margin + 3 for top nav underline
     let offset = navSpace - windowTop;
     offset = offset <= 0 ? 0 : offset > navSpace ? navSpace : offset;
 
@@ -122,6 +122,8 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
     else {
       this.renderer.setStyle(this.sideNav.nativeElement, 'position', 'fixed');
     }
+
+    this.onWindowScroll(null);
   }
 
   collapseCard() {
