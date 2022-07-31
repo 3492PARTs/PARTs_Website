@@ -19,6 +19,7 @@ export class ScoutAdminComponent implements OnInit {
   delSeason!: number;
   newEvent: Event = new Event();
   delEvent!: number;
+  selectedEvent = new Event();
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
@@ -428,7 +429,7 @@ export class ScoutAdminComponent implements OnInit {
     this.newTeam = new Team();
   }
 
-  saveEventToTeams(): void {
+  addEventToTeams(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'scouting/admin/add-team-to-event/', this.eventToTeams
@@ -454,6 +455,33 @@ export class ScoutAdminComponent implements OnInit {
   clearEventToTeams() {
     this.eventToTeams = new EventToTeams();
     this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+  }
+
+  removeEventToTeams(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/admin/remove-team-to-event/', this.selectedEvent
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.selectedEvent = new Event();
+            this.adminInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  clearRemoveEventToTeams() {
+    this.selectedEvent.team_no.forEach(t => t.checked = true);
   }
 
   saveUser(): void {
@@ -631,6 +659,7 @@ export class Event {
   timezone = 'America/New_York';
   void_ind = 'n';
   competition_page_active = 'n';
+  team_no: Team[] = [];
 }
 
 export class Match {

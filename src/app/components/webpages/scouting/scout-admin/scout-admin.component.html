@@ -230,7 +230,21 @@
 
 
       <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveEventToTeams()">Save</app-button>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Remove Team from Event'" [InlineElements]="true">
+      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events" [DisplayEmptyOption]="true"
+        [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
+      </app-form-element>
+
+      <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
+        [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
+      </app-form-element>
+
+
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
     </app-form-element-group>
 
     <app-form-element-group *ngIf="init.currentEvent.event_id" [LabelText]="'Sync Matches'" [InlineElements]="true">

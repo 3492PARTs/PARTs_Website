@@ -38,7 +38,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input() Type = 'text';
 
-  @Input() SelectList: any[] = [];
+  @Input()
+  set SelectList(sl: any) {
+    window.setTimeout(() => { this._SelectList = sl; }, 0);
+  }
+  _SelectList: any[] = [];
   @Input() RadioList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
@@ -144,7 +148,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   multiChange(newValue: any, index: number) {
     this.MultiModel[index]['checked'] = newValue;
-    this.SelectList[index]['checked'] = newValue;
+    this._SelectList[index]['checked'] = newValue;
     this.ModelChange.emit(this.MultiModel);
     this.FunctionCallBack.emit();
   }
@@ -291,13 +295,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   selectAll(): void {
-    for (let i = 0; i < this.SelectList.length; i++) {
+    for (let i = 0; i < this._SelectList.length; i++) {
       this.multiChange(true, i);
     }
   }
 
   deselectAll(): void {
-    for (let i = 0; i < this.SelectList.length; i++) {
+    for (let i = 0; i < this._SelectList.length; i++) {
       this.multiChange(false, i);
     }
   }
