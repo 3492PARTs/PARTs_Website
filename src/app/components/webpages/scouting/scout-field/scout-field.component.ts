@@ -32,7 +32,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.scoutFieldSchedule = result['scoutFieldSchedule'];
+              this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             }
           },
           error: (err: any) => {
@@ -58,7 +58,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.teams = result['teams'];
-            this.scoutFieldSchedule = result['scoutFieldSchedule'];
+            this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
             this.sortQuestions();
           }

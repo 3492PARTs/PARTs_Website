@@ -78,6 +78,6 @@ export class EventCompetitionComponent implements OnInit {
 }
 
 export class CompetitionInit {
-  event!: Event;
+  event!: Event | null;
   matches: Match[] = [];
 }

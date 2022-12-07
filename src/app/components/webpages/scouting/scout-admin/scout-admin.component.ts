@@ -647,14 +647,14 @@ export class Event {
   date_st!: Date;
   event_cd!: string;
   date_end!: Date;
-  event_url = ''
-  address = ''
-  city = ''
-  state_prov = ''
-  postal_code = ''
-  location_name = ''
-  gmaps_url = ''
-  webcast_url = ''
+  event_url!: string;
+  address!: string;
+  city!: string;
+  state_prov!: string;
+  postal_code!: string;
+  location_name!: string;
+  gmaps_url!: string;
+  webcast_url!: string;
   current = 'n';
   timezone = 'America/New_York';
   void_ind = 'n';
@@ -689,7 +689,7 @@ export class CompetitionLevel {
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
   event: Event | number = new Event();
-  red_one: User | number | null | any = new User();
+  red_one!: User | number | null | any;
   red_two: User | number | null | any = new User();
   red_three: User | number | null | any = new User();
   blue_one: User | number | null | any = new User();
