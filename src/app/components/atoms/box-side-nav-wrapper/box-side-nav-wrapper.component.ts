@@ -28,6 +28,9 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
   constructor(private renderer: Renderer2) { }
 
   ngAfterContentInit() {
+    this.boxes.changes.subscribe(() => {
+      this.checkBoxesTimeout();
+    });
     this.checkBoxesTimeout();
   }
 
