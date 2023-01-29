@@ -71,6 +71,7 @@ export class QuestionAdminFormComponent implements OnInit {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.scoutQuestion = new ScoutQuestion();
             this.questionInit();
+            console.log(this.scoutQuestion);
           }
         },
         error: (err: any) => {
@@ -117,7 +118,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.http.get(
       'scouting/admin/toggle-scout-question/', {
       params: {
-        sq_id: q.sq_id.toString()
+        sq_id: q.sq_id?.toString() || '-1'
       }
     }
     ).subscribe(
@@ -177,7 +178,7 @@ export class QuestionAdminFormComponent implements OnInit {
 }
 
 export class ScoutQuestion {
-  sq_id!: number;
+  sq_id: number | null = null;
   season!: number;
   sq_typ!: string;
   sq_sub_typ!: string;

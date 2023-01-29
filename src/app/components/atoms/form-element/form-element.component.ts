@@ -9,7 +9,8 @@ import {
   Renderer2,
   AfterViewInit,
   HostListener,
-  DoCheck
+  DoCheck,
+  SimpleChanges
 } from '@angular/core';
 
 import { GeneralService } from 'src/app/services/general.service';
@@ -93,6 +94,26 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   ngOnInit() {
     this.LabelID = this.gs.getNextGsId();
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'Model': {
+            if (this.Type === 'select') {
+              console.log(this.Model);
+              if (this.gs.strNoE(this.Model)) {
+                window.setTimeout(() => {
+                  this.change('');
+                }, 5);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
 
   ngDoCheck(): void {
     if (this.Type === 'file') {

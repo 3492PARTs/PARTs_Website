@@ -51,7 +51,7 @@
             [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
             [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
-            <option [ngValue]="''" *ngIf="DisplayEmptyOption"></option>
+            <option [ngValue]="''" [disabled]="!DisplayEmptyOption" [selected]="'' === Model"></option>
 
             <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
