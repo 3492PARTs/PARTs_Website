@@ -95,7 +95,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     this.LabelID = this.gs.getNextGsId();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  /*ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
@@ -112,7 +112,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
         }
       }
     }
-  }
+  }*/
 
 
   ngDoCheck(): void {
@@ -162,6 +162,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       }
     } else {
       this.ModelChange.emit(newValue);
+
     }
     this.FunctionCallBack.emit();
     this.isInvalid();
