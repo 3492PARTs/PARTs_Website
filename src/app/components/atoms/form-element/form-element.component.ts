@@ -370,4 +370,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   }
 
+  strNoE(a: any): boolean {
+    return this.gs.strNoE(a);
+  }
 }
