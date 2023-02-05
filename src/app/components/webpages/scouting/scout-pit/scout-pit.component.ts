@@ -40,6 +40,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           error: (err: any) => {
             console.log('error', err);
             this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
           },
           complete: () => {
             this.gs.decrementOutstandingCalls();
@@ -70,6 +71,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
@@ -124,6 +126,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
@@ -156,6 +159,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
@@ -226,6 +230,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();

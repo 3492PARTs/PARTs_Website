@@ -71,6 +71,8 @@ export class ScoutPortalComponent implements OnInit {
         },
         error: (err: any) => {
           console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
