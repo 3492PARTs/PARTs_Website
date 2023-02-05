@@ -182,6 +182,7 @@ export class ScoutQuestion {
   season!: number;
   sq_typ!: string;
   sq_sub_typ!: string;
+  sq_sub_nm!: string;
   question_typ!: string;
   question!: string;
   order!: number;
