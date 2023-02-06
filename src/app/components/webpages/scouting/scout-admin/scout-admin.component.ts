@@ -229,7 +229,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   buildEventList(clearActiveCompetition = false): void {
-    this.eventList = this.init.events.filter(item => item.season === this.init.currentSeason.season_id);
+    this.eventList = this.init.events.filter(item => item.season_id === this.init.currentSeason.season_id);
 
     if (clearActiveCompetition) {
       this.init.currentEvent.competition_page_active = 'n';
@@ -357,7 +357,7 @@ export class ScoutAdminComponent implements OnInit {
 
   saveEvent(): void {
     this.gs.incrementOutstandingCalls();
-    this.newEvent.event_cd = (this.newEvent.season + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+    this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
     this.http.post(
       'scouting/admin/add-event/', this.newEvent
     ).subscribe(
@@ -546,13 +546,13 @@ export class ScoutAdminComponent implements OnInit {
       return null;
     }
     let sfs = JSON.parse(JSON.stringify(this.scoutFieldSchedule));
-    sfs.event = this.init.currentEvent.event_id;
-    sfs.red_one = sfs.red_one && (sfs!.red_one as User).id ? (sfs!.red_one as User).id : null;
-    sfs.red_two = sfs.red_two && (sfs!.red_two as User).id ? (sfs!.red_two as User).id : null;
-    sfs.red_three = sfs.red_three && (sfs!.red_three as User).id ? (sfs!.red_three as User).id : null;
-    sfs.blue_one = sfs.blue_one && (sfs!.blue_one as User).id ? (sfs!.blue_one as User).id : null;
-    sfs.blue_two = sfs.blue_two && (sfs!.blue_two as User).id ? (sfs!.blue_two as User).id : null;
-    sfs.blue_three = sfs.blue_three && (sfs!.blue_three as User).id ? (sfs!.blue_three as User).id : null;
+    sfs.event_id = this.init.currentEvent.event_id;
+    sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
+    sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
+    sfs.red_three_id = sfs.red_three_id && (sfs!.red_three_id as User).id ? (sfs!.red_three_id as User).id : null;
+    sfs.blue_one_id = sfs.blue_one_id && (sfs!.blue_one_id as User).id ? (sfs!.blue_one_id as User).id : null;
+    sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
+    sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'scouting/admin/save-scout-field-schedule-entry/', sfs
@@ -581,12 +581,12 @@ export class ScoutAdminComponent implements OnInit {
   notifyUsers(scout_field_sch_id: number): void {
     let ss = JSON.parse(JSON.stringify(this.init.fieldSchedule));
     ss.forEach((sfs: ScoutFieldSchedule) => {
-      sfs.red_one = sfs.red_one && (sfs!.red_one as User).id ? (sfs!.red_one as User).id : null;
-      sfs.red_two = sfs.red_two && (sfs!.red_two as User).id ? (sfs!.red_two as User).id : null;
-      sfs.red_three = sfs.red_three && (sfs!.red_three as User).id ? (sfs!.red_three as User).id : null;
-      sfs.blue_one = sfs.blue_one && (sfs!.blue_one as User).id ? (sfs!.blue_one as User).id : null;
-      sfs.blue_two = sfs.blue_two && (sfs!.blue_two as User).id ? (sfs!.blue_two as User).id : null;
-      sfs.blue_three = sfs.blue_three && (sfs!.blue_three as User).id ? (sfs!.blue_three as User).id : null;
+      sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
+      sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
+      sfs.red_three_id = sfs.red_three_id && (sfs!.red_three_id as User).id ? (sfs!.red_three_id as User).id : null;
+      sfs.blue_one_id = sfs.blue_one_id && (sfs!.blue_one_id as User).id ? (sfs!.blue_one_id as User).id : null;
+      sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
+      sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
     });
 
 
@@ -665,7 +665,7 @@ export class Season {
 
 export class Event {
   event_id!: number;
-  season!: number;
+  season_id!: number;
   event_nm!: string;
   date_st!: Date;
   event_cd!: string;
@@ -711,13 +711,13 @@ export class CompetitionLevel {
 }
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
-  event: Event | number = new Event();
-  red_one!: User | number | null | any;
-  red_two: User | number | null | any = new User();
-  red_three: User | number | null | any = new User();
-  blue_one: User | number | null | any = new User();
-  blue_two: User | number | null | any = new User();
-  blue_three: User | number | null | any = new User();
+  event_id: Event | number = new Event();
+  red_one_id!: User | number | null | any;
+  red_two_id: User | number | null | any = new User();
+  red_three_id: User | number | null | any = new User();
+  blue_one_id: User | number | null | any = new User();
+  blue_two_id: User | number | null | any = new User();
+  blue_three_id: User | number | null | any = new User();
   st_time!: Date;
   end_time!: Date;
   notified = 'n';

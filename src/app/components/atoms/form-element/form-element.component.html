@@ -114,10 +114,10 @@
       </ng-container>
 
       <div *ngSwitchCase="'datetime'" class="datetime form-control">
-        <div
+        <div (focus)="focusIn()" (focusout)="focusOut()"
           [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
           <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker" [(ngModel)]="Model">
+            <input matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
             <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1"
               [stepMinute]="30" [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false"
