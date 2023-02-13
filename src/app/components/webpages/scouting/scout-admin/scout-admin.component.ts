@@ -84,6 +84,10 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as ScoutAdminInit;
+            this.init.fieldSchedule.forEach(fs => {
+              fs.st_time = new Date(fs.st_time),
+                fs.end_time = new Date(fs.end_time)
+            });
             this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.buildEventList();
           }
@@ -531,8 +535,8 @@ export class ScoutAdminComponent implements OnInit {
     if (ss) {
       //"2020-01-01T01:00"
       let ss1 = JSON.parse(JSON.stringify(ss));
-      ss1.st_time = new Date(ss1.st_time);
-      ss1.end_time = new Date(ss1.end_time);
+      //ss1.st_time = new Date(ss1.st_time);
+      //ss1.end_time = new Date(ss1.end_time);
       this.scoutFieldSchedule = ss1;
     } else {
       this.scoutFieldSchedule = new ScoutFieldSchedule();

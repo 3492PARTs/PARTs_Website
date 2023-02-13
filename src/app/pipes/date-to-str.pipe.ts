@@ -5,6 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DateToStrPipe implements PipeTransform {
 
   transform(elem: any, time = true): any {
+    let ret = null;
+
     const regex1 = /1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-9] ((AM)|(PM))/g;
     const regex2 = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z/g;
     //console.log(elem + ' elem typ ' + regex1.test(elem) + ' ' + regex2.test(elem));
@@ -12,21 +14,28 @@ export class DateToStrPipe implements PipeTransform {
       //console.log('hello');
       //elem = elem.replace('Z', '');
       //console.log(elem);
-      elem = new Date(elem);
+      ret = new Date(elem);
       //console.log(elem);
-      const mm = elem.getMonth() + 1; // getMonth() is zero-based
-      const dd = elem.getDate();
-      var hours = elem.getHours();
-      var minutes = elem.getMinutes();
+    }
+
+    if (elem instanceof Date) ret = elem;
+
+    if (ret != null) {
+      const mm = ret.getMonth() + 1; // getMonth() is zero-based
+      const dd = ret.getDate();
+      var hours = ret.getHours();
+      var minutes = ret.getMinutes();
       var ampm = hours >= 12 ? 'pm' : 'am';
       hours = hours % 12;
       hours = hours ? hours : 12; // the hour '0' should be '12'
-      minutes = minutes < 10 ? '0' + minutes : minutes;
-      var strTime = hours + ':' + minutes + ' ' + ampm;
+      let minutesStr = minutes < 10 ? '0' + minutes : minutes;
+      var strTime = hours + ':' + minutesStr + ' ' + ampm;
       if (time)
-        return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + elem.getFullYear() + ' ' + strTime;
-      return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + elem.getFullYear();
+        return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + ret.getFullYear() + ' ' + strTime;
+      return (mm > 9 ? '' : '0') + mm + '/' + (dd > 9 ? '' : '0') + dd + '/' + ret.getFullYear();
     }
+
+
     return elem;
   }
 

@@ -62,8 +62,8 @@ export class ScoutPortalComponent implements OnInit {
 
               this.scoutFieldScheduleData.push({
                 position: pos,
-                st_time: elem.st_time,
-                end_time: elem.end_time,
+                st_time: new Date(elem.st_time),
+                end_time: new Date(elem.end_time),
                 notified: elem.notified
               });
             })
