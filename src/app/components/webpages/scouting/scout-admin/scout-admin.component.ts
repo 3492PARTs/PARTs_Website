@@ -42,7 +42,9 @@ export class ScoutAdminComponent implements OnInit {
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification' },
+    { PropertyName: 'notification2', ColLabel: '5 min notification' },
+    { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
   pastScoutScheduleTableCols: object[] = [
@@ -724,7 +726,9 @@ export class ScoutFieldSchedule {
   blue_three_id: User | number | null | any = new User();
   st_time!: Date;
   end_time!: Date;
-  notified = 'n';
+  notification1 = false;
+  notification2 = false;
+  notification3 = false;
   void_ind = 'n';
 }
 

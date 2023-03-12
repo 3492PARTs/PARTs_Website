@@ -19,7 +19,9 @@ export class ScoutPortalComponent implements OnInit {
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' }
+    { PropertyName: 'notification1', ColLabel: '15 min notification' },
+    { PropertyName: 'notification2', ColLabel: '5 min notification' },
+    { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
@@ -64,7 +66,9 @@ export class ScoutPortalComponent implements OnInit {
                 position: pos,
                 st_time: new Date(elem.st_time),
                 end_time: new Date(elem.end_time),
-                notified: elem.notified
+                notification1: elem.notification1,
+                notification2: elem.notification2,
+                notification3: elem.notification3,
               });
             })
           }
