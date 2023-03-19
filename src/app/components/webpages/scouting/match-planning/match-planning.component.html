@@ -1,0 +1,5 @@
+<app-box [Title]="'Match Planning'">
+    <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches" (RecordClickCallBack)="planMatch($event)"
+        [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true">
+    </app-table>
+</app-box>

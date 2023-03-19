@@ -28,6 +28,7 @@ import { ResourcesComponent } from './components/webpages/resources/resources.co
 import { FirstComponent } from './components/webpages/first/first.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
+import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 
 
 
@@ -41,6 +42,7 @@ const routes: Routes = [
   { path: 'scout/scout-field-results', component: ScoutFieldResultsComponent, canActivate: [AuthGuard] },
   { path: 'scout/scout-pit-results', component: ScoutPitResultsComponent, canActivate: [AuthGuard] },
   { path: 'scout/scout-portal', component: ScoutPortalComponent, canActivate: [AuthGuard] },
+  { path: 'scout/match-planning', component: MatchPlanningComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent },
   { path: 'join', component: JoinComponent },
   { path: 'join/community-outreach', component: CommunityOutreachComponent },

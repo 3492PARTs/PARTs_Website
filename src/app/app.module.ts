@@ -78,6 +78,7 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 
 @NgModule({
   declarations: [
@@ -135,7 +136,8 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
     PaginationComponent,
     OnCreateDirective,
     BannersComponent,
-    EventCompetitionComponent
+    EventCompetitionComponent,
+    MatchPlanningComponent
   ],
   imports: [
     BrowserModule,
