@@ -158,6 +158,30 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  syncEventTeamInfo(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/sync-event-team-info/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.syncSeasonResponse = result as RetMessage;
+
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
   setSeason(): void | null {
     if (!this.init.currentSeason.season_id || !this.init.currentEvent.event_id) {
       this.gs.triggerError('No season or event selected.');

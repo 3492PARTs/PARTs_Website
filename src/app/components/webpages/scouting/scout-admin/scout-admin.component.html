@@ -141,114 +141,121 @@
         (FunctionCallBack)="toggleCompetitionPage()">
       </app-form-element>
       <app-button-ribbon>
-        <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
-          Sync Season</app-button>
         <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set
           Season/Event</app-button>
         <app-button [ButtonType]="'warning'" (FunctionCallBack)="resetSeasonForm()">Clear</app-button>
       </app-button-ribbon>
-    </app-form-element-group>
+      <app-button-ribbon>
+        <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+          Sync Season</app-button>
+        <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+          Sync Matches</app-button>
+        <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'"
+          (FunctionCallBack)="syncEventTeamInfo()">
+          Sync Event-Team Info</app-button>
+      </app-button-ribbon>
+      <app-button-ribbon>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Add/Delete Season'" [Title]="'Add/Delete Season'">
+          <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
+          </app-form-element>
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
+            [(Model)]="delSeason">
+          </app-form-element>
+          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
 
-    <app-form-element-group [LabelText]="'Add/Delete Season'" [InlineElements]="true">
-      <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
-      </app-form-element>
-      <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
-      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason">
-      </app-form-element>
-      <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+            [(Model)]="delEvent">
+          </app-form-element>
+          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+        </app-modal>
 
-      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events" [DisplayEmptyOption]="true"
-        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="delEvent">
-      </app-form-element>
-      <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
-    </app-form-element-group>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'">
+          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
+            [(Model)]="newEvent.season_id">
+          </app-form-element>
 
-    <app-form-element-group [LabelText]="'Add Event'" [InlineElements]="true">
-      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-        [(Model)]="newEvent.season_id">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm">
-      </app-form-element>
+          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st"></app-form-element>
+          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end"></app-form-element>
 
-      <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st"></app-form-element>
-      <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end"></app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Location Name'" [(Model)]="newEvent.location_name">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Location Name'" [(Model)]="newEvent.location_name">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url">
-      </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone">
+          </app-form-element>
 
-      <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone">
-      </app-form-element>
+          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEvent()">Clear</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveEvent()">Save</app-button>
+        </app-modal>
 
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEvent()">Clear</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveEvent()">Save</app-button>
-    </app-form-element-group>
-
-    <app-form-element-group [LabelText]="'Add Team'" [InlineElements]="true">
-      <app-form-element [Type]="'text'" [LabelText]="'Number'" [(Model)]="newTeam.team_no">
-      </app-form-element>
-      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newTeam.team_nm">
-      </app-form-element>
-
-
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearTeam()">Clear</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveTeam()">Save</app-button>
-    </app-form-element-group>
-
-    <app-form-element-group [LabelText]="'Link Team to Event'" [InlineElements]="true">
-      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events" [DisplayEmptyOption]="true"
-        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="eventToTeams.event_id">
-      </app-form-element>
-
-      <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
-        [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [(MultiModel)]="eventToTeams.teams">
-      </app-form-element>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Add Team'" [Title]="'Add Team'">
+          <app-form-element [Type]="'text'" [LabelText]="'Number'" [(Model)]="newTeam.team_no">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newTeam.team_nm">
+          </app-form-element>
 
 
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
-    </app-form-element-group>
+          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearTeam()">Clear</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveTeam()">Save</app-button>
+        </app-modal>
 
-    <app-form-element-group [LabelText]="'Remove Team from Event'" [InlineElements]="true">
-      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events" [DisplayEmptyOption]="true"
-        [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
-      </app-form-element>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'">
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+            [(Model)]="eventToTeams.event_id">
+          </app-form-element>
 
-      <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
-        [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
-      </app-form-element>
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [(MultiModel)]="eventToTeams.teams">
+          </app-form-element>
 
 
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
-    </app-form-element-group>
+          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
+        </app-modal>
 
-    <app-form-element-group *ngIf="init.currentEvent.event_id" [LabelText]="'Sync Matches'" [InlineElements]="true">
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">Sync Matches</app-button>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'">
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
+          </app-form-element>
+
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
+            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
+          </app-form-element>
+
+
+          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
+          <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
+        </app-modal>
+      </app-button-ribbon>
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
