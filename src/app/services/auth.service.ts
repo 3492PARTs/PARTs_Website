@@ -65,6 +65,7 @@ export class AuthService {
             this.authInFlightBS.next('comp');
           },
           error: (err: any) => {
+            this.gs.decrementOutstandingCalls();
             console.log('error', err);
             this.authInFlightBS.next('err');
             this.logOut();
@@ -102,6 +103,7 @@ export class AuthService {
           this.authInFlightBS.next('comp');
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.authInFlightBS.next('err');
           this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
@@ -127,6 +129,7 @@ export class AuthService {
           }
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.gs.triggerError('Couldn\'t create user.');
         },
@@ -150,6 +153,7 @@ export class AuthService {
           }
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.gs.triggerError('Couldn\'t request activation email.');
         },
@@ -173,6 +177,7 @@ export class AuthService {
           }
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.gs.triggerError('Couldn\'t request password reset.');
         },
@@ -196,6 +201,7 @@ export class AuthService {
           }
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.gs.triggerError('Couldn\'t request username reminder email.');
         },
@@ -224,6 +230,7 @@ export class AuthService {
           }
         },
         error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
           console.log('error', err);
           this.gs.triggerError('Couldn\'t reset password.');
         },
@@ -304,6 +311,7 @@ export class AuthService {
             this.getUserLinks();
           },
           error: (err: any) => {
+            this.gs.decrementOutstandingCalls();
             console.log('error', err);
             this.internalToken = new Token();
           },
@@ -326,6 +334,7 @@ export class AuthService {
             this.userLinks.next(result as UserLinks[]);
           },
           error: (err: any) => {
+            this.gs.decrementOutstandingCalls();
             console.log('error', err);
           },
           complete: () => {
