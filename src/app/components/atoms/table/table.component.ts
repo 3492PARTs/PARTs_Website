@@ -75,7 +75,9 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() Width = '';
 
 
-  SearchText = '';
+  @Input() FilterText = '';
+  @Output() FilterTextChange = new EventEmitter();
+
   @Input() OrderByProperty = '';
   @Input() OrderByReverse = false;
   ActiveRec: object | null = null;
@@ -340,5 +342,10 @@ export class TableComponent implements OnInit, OnChanges {
     outer.parentNode?.removeChild(outer);
 
     return scrollbarWidth;
+  }
+
+  filterTextChange(text: any): void {
+    this.FilterText = text;
+    this.FilterTextChange.emit(text);
   }
 }

@@ -47,6 +47,7 @@ export class AuthService {
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
     if (this.internalToken && this.internalToken.refresh) {
+      this.gs.incrementOutstandingCalls();
       this.http.post('user/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
         {
           next: (result: any) => {

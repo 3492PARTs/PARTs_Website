@@ -33,6 +33,8 @@
 
   & > div {
     display: flex;
+    align-items: center;
+    align-content: center;
 
     app-form-element {
       padding-right: 1.6rem;

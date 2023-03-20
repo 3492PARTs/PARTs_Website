@@ -20,6 +20,11 @@ export class ScoutFieldResultsComponent implements OnInit {
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
   showScoutFieldCols!: any[];
 
+  filterText = '';
+  rank!: number | null;
+  range!: number | null;
+  above = false;
+
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
@@ -180,6 +185,34 @@ export class ScoutFieldResultsComponent implements OnInit {
       this.showScoutFieldCols[i]['checked'] = true;
     }
     this.showHideTableCols();
+  }
+
+  filterByRank(): void {
+    if (!this.gs.strNoE(this.rank)) {
+      let temp = [];
+      if (!this.gs.strNoE(this.range)) {
+        for (let i = 0; i < this.scoutResults.scoutAnswers.length; i++) {
+          if (this.scoutResults.scoutAnswers[i].rank >= (this.rank || 0) && this.scoutResults.scoutAnswers[i].rank <= (this.range || 0)) {
+            temp.push(this.scoutResults.scoutAnswers[i]);
+          }
+        }
+      }
+      else {
+        for (let i = 0; i < this.scoutResults.scoutAnswers.length; i++) {
+          if ((this.above && this.scoutResults.scoutAnswers[i].rank >= (this.rank || 0)) || (!this.above && this.scoutResults.scoutAnswers[i].rank <= (this.rank || 0))) {
+            temp.push(this.scoutResults.scoutAnswers[i]);
+          }
+        }
+      }
+      this.scoutResults.scoutAnswers = temp;
+    }
+  }
+
+  resetRankFilter(): void {
+    this.scoutFieldResultsInit();
+    this.range = null;
+    this.rank = null;
+    this.above = false;
   }
 }
 export class ScoutResults {

@@ -1,6 +1,6 @@
 <app-header *ngIf="TableTitle" [h]="3" [marginBottom]="false">{{ TableTitle }}</app-header>
-<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'"
-  [(Model)]="SearchText"></app-form-element>
+<app-form-element *ngIf="EnableFilter" [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'" [Model]="FilterText"
+  (ModelChange)="filterTextChange($event)"></app-form-element>
 <div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>
   <table #Table class="table" [ngClass]="{
         striped: Stripes,
@@ -52,7 +52,7 @@
     <tbody class="tbody" #MainTableBody>
       <tr *ngFor="
             let rec of TableData
-              | ObjectWildCardFilterPipe: SearchText
+              | ObjectWildCardFilterPipe: FilterText
               | OrderBy: OrderByProperty:OrderByReverse
               | RemovedFilterPipe
                 :EnableRemovedFilter
