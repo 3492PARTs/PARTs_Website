@@ -117,9 +117,12 @@
           </app-form-element>
 
           <app-button-ribbon>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="notifyUsers(scoutFieldSchedule.scout_field_sch_id)">
+            <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'warning'"
+              (FunctionCallBack)="notifyUsers(scoutFieldSchedule.scout_field_sch_id)">
               Notify</app-button>
+            <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'main'"
+              (FunctionCallBack)="copyScoutFieldScheduleEntry()">Copy</app-button>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
           </app-button-ribbon>
         </app-form-element-group>
       </app-form>

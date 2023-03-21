@@ -13,15 +13,18 @@
   border-collapse: collapse;
 }
 
-.table { //}.table-mobile {
+.table {
+  //}.table-mobile {
   width: auto !important;
 
   table-layout: fixed;
 
-  th, td {
+  th,
+  td {
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
+    white-space: pre-line;
   }
 
   @media only screen and (max-width: 480px) {
@@ -88,7 +91,7 @@
 
 /* buttons*/
 .table tbody .btn-col {
-  &>div {
+  & > div {
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -131,7 +134,7 @@
   overflow-y: hidden;
 }
 
-.table-responsive>.table {
+.table-responsive > .table {
   width: auto !important;
 }
 
@@ -184,8 +187,7 @@
 
     // Show resize curson when hovering over column borders
     &::before {
-      @extend .table-resizable,
-      .resizing;
+      @extend .table-resizable, .resizing;
       content: "";
       display: block;
       height: 100%;

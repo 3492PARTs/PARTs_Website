@@ -42,6 +42,7 @@ export class ScoutAdminComponent implements OnInit {
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'scouts', ColLabel: 'Scouts' },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
@@ -570,6 +571,18 @@ export class ScoutAdminComponent implements OnInit {
     this.scoutScheduleModalVisible = true;
   }
 
+  copyScoutFieldScheduleEntry(): void {
+    let ss = new ScoutFieldSchedule();
+    ss.event_id = this.init.currentEvent.event_id;
+    ss.red_one_id = this.scoutFieldSchedule.red_one_id;
+    ss.red_two_id = this.scoutFieldSchedule.red_two_id;
+    ss.red_three_id = this.scoutFieldSchedule.red_three_id;
+    ss.blue_one_id = this.scoutFieldSchedule.blue_one_id;
+    ss.blue_two_id = this.scoutFieldSchedule.blue_two_id;
+    ss.blue_three_id = this.scoutFieldSchedule.blue_three_id;
+    this.scoutFieldSchedule = ss;
+  }
+
   saveScoutFieldScheduleEntry(): void | null {
     if (!this.init.currentEvent || this.init.currentEvent.event_id < 0) {
       this.gs.triggerError('Event not set, can\'t schedule scouts.');
@@ -754,6 +767,7 @@ export class ScoutFieldSchedule {
   notification2 = false;
   notification3 = false;
   void_ind = 'n';
+  scouts = '';
 }
 
 export class ScoutPitSchedule {
