@@ -1,15 +1,15 @@
-<app-box [Title]="'Scout Portal'">
+<app-box [Title]="'Portal'">
 
   <div *ngIf="scoutFieldScheduleData.length <= 0">
     <p>You do not currently have any scheduled scouting.</p>
   </div>
 
-  <app-table [TableTitle]="'Full Scouting Schedule'" *ngIf="init.allFieldSchedule.length > 0"
+  <app-table [TableTitle]="'Full Scouting Schedule'" *ngIf="init.allFieldSchedule && init.allFieldSchedule.length > 0"
     [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="init.allFieldSchedule" [Scrollable]="true">
   </app-table>
 
-  <app-table [TableTitle]="'Full Schedule'" *ngIf="init.users.length > 0" [TableCols]="expandedScheduleTableCols"
-    [TableData]="init.allSchedule" [Scrollable]="true" [ShowAddButton]="true"
+  <app-table [TableTitle]="'Full Schedule'" *ngIf="init.users && init.users.length > 0"
+    [TableCols]="expandedScheduleTableCols" [TableData]="init.allSchedule" [Scrollable]="true" [ShowAddButton]="true"
     (AddRecordCallBack)="showScoutScheduleModal()" [ShowEditButton]="true"
     (EditRecordCallBack)="showScoutScheduleModal($event)">
   </app-table>
@@ -46,11 +46,11 @@
     </app-form>
   </app-modal>
 
-  <app-table [TableTitle]="'Your Scouting Schedule'" *ngIf="scoutFieldScheduleData.length > 0"
+  <app-table [TableTitle]="'Your Scouting Schedule'" *ngIf="scoutFieldScheduleData && scoutFieldScheduleData.length > 0"
     [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData" [Scrollable]="true">
   </app-table>
 
-  <app-table [TableTitle]="'Schedule'" *ngIf="init.schedule.length > 0" [TableCols]="scheduleTableCols"
+  <app-table [TableTitle]="'Schedule'" *ngIf="init.schedule && init.schedule.length > 0" [TableCols]="scheduleTableCols"
     [TableData]="init.schedule" [Scrollable]="true">
   </app-table>
 
