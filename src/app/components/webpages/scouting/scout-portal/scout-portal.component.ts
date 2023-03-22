@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
+import { Event, ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
 import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService, User } from 'src/app/services/auth.service';
@@ -24,6 +24,32 @@ export class ScoutPortalComponent implements OnInit {
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
+  expandedScoutFieldScheduleTableCols: object[] = [
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'scouts', ColLabel: 'Scouts' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification' },
+    { PropertyName: 'notification2', ColLabel: '5 min notification' },
+    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+  ];
+
+  currentSchedule = new Schedule();
+  scheduleModalVisible = false;
+
+  scheduleTableCols: object[] = [
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'sch_nm', ColLabel: 'Type' },
+  ];
+
+  expandedScheduleTableCols: object[] = [
+    { PropertyName: 'user', ColLabel: 'User' },
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'sch_nm', ColLabel: 'Type' },
+  ];
+
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
@@ -40,6 +66,7 @@ export class ScoutPortalComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as ScoutPortalInit;
+            console.log(this.init);
             this.scoutFieldScheduleData = [];
             this.init.fieldSchedule.forEach(elem => {
               let pos = '';
@@ -84,10 +111,53 @@ export class ScoutPortalComponent implements OnInit {
       }
     );
   }
+
+  addScheduleEntry(): void {
+    this.currentSchedule = new Schedule();
+    this.scheduleModalVisible = true;
+  }
+
+  saveScheduleEntry(): void {
+
+  }
+
+  setEndTime() {
+    var dt = new Date(this.currentSchedule.st_time);
+    dt.setHours(dt.getHours() + 1);
+    this.currentSchedule.end_time = dt;
+  }
+
+  compareUserObjects(u1: User, u2: User): boolean {
+    if (u1 && u2 && u1.id && u2.id) {
+      return u1.id === u2.id;
+    }
+    return false;
+  }
 }
 
 export class ScoutPortalInit {
   fieldSchedule: ScoutFieldSchedule[] = [];
-  pitSchedule: ScoutPitSchedule[] = [];
-  //pastSchedule: ScoutSchedule[] = [];
+  schedule: Schedule[] = [];
+  allFieldSchedule: ScoutFieldSchedule[] = [];
+  allSchedule: Schedule[] = [];
+  users: User[] = [];
+  scheduleTypes: ScheduleType[] = [];
+}
+
+export class Schedule {
+  sch_id!: number;
+  sch_typ = ''
+  sch_nm = ''
+  event_id: Event | number = new Event();
+  red_one_id!: User | number | null | any;
+  user: User | number | null | any = new User();
+  st_time!: Date;
+  end_time!: Date;
+  notified = false;
+  void_ind = 'n';
+}
+
+export class ScheduleType {
+  sch_typ = '';
+  sch_nm = '';
 }
