@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
-import { GeneralService } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService, User } from 'src/app/services/auth.service';
 
@@ -43,10 +43,10 @@ export class ScoutPortalComponent implements OnInit {
   ];
 
   expandedScheduleTableCols: object[] = [
-    { PropertyName: 'user', ColLabel: 'User' },
+    { PropertyName: 'user_name', ColLabel: 'User' },
+    { PropertyName: 'sch_nm', ColLabel: 'Type' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
 
 
@@ -112,13 +112,45 @@ export class ScoutPortalComponent implements OnInit {
     );
   }
 
-  addScheduleEntry(): void {
-    this.currentSchedule = new Schedule();
+  showScoutScheduleModal(s?: Schedule): void {
+    if (s) {
+      //"2020-01-01T01:00"
+      let s1 = JSON.parse(JSON.stringify(s));
+      //ss1.st_time = new Date(ss1.st_time);
+      //ss1.end_time = new Date(ss1.end_time);
+      this.currentSchedule = s1;
+    } else {
+      this.currentSchedule = new Schedule();
+    }
     this.scheduleModalVisible = true;
   }
 
   saveScheduleEntry(): void {
-
+    let s = JSON.parse(JSON.stringify(this.currentSchedule));
+    s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/portal/save-schedule-entry/', s
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            alert((result as RetMessage).retMessage);
+            this.currentSchedule = new Schedule();
+            this.scheduleModalVisible = false;
+            this.portalInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   setEndTime() {
@@ -151,9 +183,10 @@ export class Schedule {
   event_id: Event | number = new Event();
   red_one_id!: User | number | null | any;
   user: User | number | null | any = new User();
+  user_name = '';
   st_time!: Date;
   end_time!: Date;
-  notified = false;
+  notified = 'n';
   void_ind = 'n';
 }
 

@@ -9,7 +9,9 @@
   </app-table>
 
   <app-table [TableTitle]="'Full Schedule'" *ngIf="init.users.length > 0" [TableCols]="expandedScheduleTableCols"
-    [TableData]="init.allSchedule" [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="addScheduleEntry()">
+    [TableData]="init.allSchedule" [Scrollable]="true" [ShowAddButton]="true"
+    (AddRecordCallBack)="showScoutScheduleModal()" [ShowEditButton]="true"
+    (EditRecordCallBack)="showScoutScheduleModal($event)">
   </app-table>
 
   <app-modal [(visible)]="scheduleModalVisible" [Title]="'Schedule'">
