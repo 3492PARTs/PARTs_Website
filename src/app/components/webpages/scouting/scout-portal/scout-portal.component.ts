@@ -195,7 +195,7 @@ export class Schedule {
   user_name = '';
   st_time!: Date;
   end_time!: Date;
-  notified = 'n';
+  notified = false;
   void_ind = 'n';
 }
 
