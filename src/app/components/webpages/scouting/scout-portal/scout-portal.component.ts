@@ -153,6 +153,15 @@ export class ScoutPortalComponent implements OnInit {
     );
   }
 
+  copyScoutScheduleEntry(): void {
+    let ss = new Schedule();
+    ss.user = this.currentSchedule.user;
+    ss.sch_typ = this.currentSchedule.sch_typ;
+    ss.st_time = this.currentSchedule.st_time;
+    ss.end_time = this.currentSchedule.end_time;
+    this.currentSchedule = ss;
+  }
+
   setEndTime() {
     var dt = new Date(this.currentSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
