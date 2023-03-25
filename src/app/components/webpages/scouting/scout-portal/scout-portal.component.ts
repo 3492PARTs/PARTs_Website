@@ -39,6 +39,7 @@ export class ScoutPortalComponent implements OnInit {
   scheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'notified', ColLabel: 'Notified' },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
 
@@ -47,6 +48,7 @@ export class ScoutPortalComponent implements OnInit {
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'notified', ColLabel: 'Notified' },
   ];
 
 
