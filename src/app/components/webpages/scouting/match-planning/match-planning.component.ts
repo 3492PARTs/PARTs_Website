@@ -31,6 +31,8 @@ export class MatchPlanningComponent implements OnInit {
 
   matchPlanningResults: MatchPlanning[] = [];
 
+  teamNotes: TeamNote[] = [];
+
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -69,6 +71,28 @@ export class MatchPlanningComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.currentTeamNote = new TeamNote();
             this.teamNoteModalVisible = false;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  loadTeamNotes(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/match-planning/load-team-notes/?team_no=' + this.currentTeamNote.team_no
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teamNotes = result as TeamNote[];
           }
         },
         error: (err: any) => {

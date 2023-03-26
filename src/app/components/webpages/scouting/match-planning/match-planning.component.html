@@ -18,6 +18,21 @@
                     <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Save</app-button>
                 </app-button-ribbon>
             </app-modal>
+
+            <app-modal [ButtonType]="'main'" [ButtonText]="'View team notes'" [Title]="'View Team Notes'">
+                <app-form>
+                    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true"
+                        [SelectList]="initData.teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
+                        [DisplayProperty2]="'team_nm'" [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no"
+                        (FunctionCallBack)="loadTeamNotes()">
+                    </app-form-element>
+
+                    <app-form-element-group *ngFor="let note of teamNotes">
+                        <p>{{ note.time | dateToStr }}</p>
+                        <p>{{ note.note }}</p>
+                    </app-form-element-group>
+                </app-form>
+            </app-modal>
         </app-button-ribbon>
 
         <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches"
