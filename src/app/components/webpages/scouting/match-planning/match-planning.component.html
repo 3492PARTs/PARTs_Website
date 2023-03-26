@@ -1,23 +1,69 @@
 <app-box [Title]="'Match Planning'">
 
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Take team note'" [Title]="'Team Note'"
-        [(visible)]="teamNoteModalVisible">
-        <app-form>
-            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="initData.teams"
-                [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no">
-            </app-form-element>
-
-            <app-form-element [LabelText]="'Note'" [Type]="'area'" [(Model)]="currentTeamNote.note" [Width]="'100%'"
-                [Rows]="5"></app-form-element>
-        </app-form>
-
+    <div *ngIf="matchPlanningResults.length <= 0">
         <app-button-ribbon>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Save</app-button>
-        </app-button-ribbon>
-    </app-modal>
+            <app-modal [ButtonType]="'main'" [ButtonText]="'Take team note'" [Title]="'Team Note'"
+                [(visible)]="teamNoteModalVisible">
+                <app-form>
+                    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true"
+                        [SelectList]="initData.teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
+                        [DisplayProperty2]="'team_nm'" [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no">
+                    </app-form-element>
 
-    <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches" (RecordClickCallBack)="planMatch($event)"
-        [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'">
-    </app-table>
+                    <app-form-element [LabelText]="'Note'" [Type]="'area'" [(Model)]="currentTeamNote.note"
+                        [Width]="'100%'" [Rows]="5"></app-form-element>
+                </app-form>
+
+                <app-button-ribbon>
+                    <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Save</app-button>
+                </app-button-ribbon>
+            </app-modal>
+        </app-button-ribbon>
+
+        <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches"
+            (RecordClickCallBack)="planMatch($event)" [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true"
+            [Width]="'100%'">
+        </app-table>
+    </div>
+
+    <div *ngIf="matchPlanningResults.length > 0">
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+        <app-tab-container>
+            <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">
+                <div class="team-results">
+                    <div *ngIf="mpr.pitData" class="team-pic" [id]="mpr.team.team_no" appOnCreate
+                        (onCreate)="preview(mpr.pitData.pic, mpr.team.team_no)">
+
+                    </div>
+                    <div class="team-info">
+                        <div class="team-nm">
+                            <p>{{ mpr.team.team_no }} - {{ mpr.team.team_nm }}</p>
+                        </div>
+
+                        <ng-container *ngIf="mpr.pitData">
+                            <div *ngFor="let r of mpr.pitData.results">
+                                <p>{{ r.question }}: {{ r.answer }}</p>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                </div>
+                <app-button-ribbon>
+                    <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Download</app-button>
+                </app-button-ribbon>
+
+                <app-form-element-group [title]="'Notes'">
+                    <div *ngFor="let note of mpr.notes">
+                        <p>{{ note.time }}</p>
+                        <p>{{ note.note }}</p>
+                    </div>
+                </app-form-element-group>
+
+                <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [Scrollable]="true"
+                    [EnableFilter]="true" [Width]="'200%'" [Responsive]="true">
+                </app-table>
+            </app-tab>
+        </app-tab-container>
+    </div>
+
 </app-box>

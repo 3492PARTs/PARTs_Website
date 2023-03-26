@@ -4,6 +4,8 @@ import { User } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { Team } from '../scout-field/scout-field.component';
+import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import * as LoadImg from 'blueimp-load-image';
 
 @Component({
   selector: 'app-match-planning',
@@ -27,6 +29,8 @@ export class MatchPlanningComponent implements OnInit {
     { PropertyName: 'blue_three_id', ColLabel: 'Blue Three' },
   ];
 
+  matchPlanningResults: MatchPlanning[] = [];
+
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit(): void {
@@ -46,6 +50,7 @@ export class MatchPlanningComponent implements OnInit {
         },
         error: (err: any) => {
           console.log('error', err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
@@ -68,6 +73,7 @@ export class MatchPlanningComponent implements OnInit {
         },
         error: (err: any) => {
           console.log('error', err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
@@ -79,20 +85,43 @@ export class MatchPlanningComponent implements OnInit {
   planMatch(match: Match): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'scouting/match-planning/plan-match/'
+      'scouting/match-planning/plan-match/?match_id=' + match.match_id
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.initData = (result as Init);
+            this.matchPlanningResults = result as MatchPlanning[];
           }
         },
         error: (err: any) => {
           console.log('error', err);
+          this.gs.decrementOutstandingCalls();
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
         }
+      }
+    );
+  }
+
+  clearResults(): void {
+    this.matchPlanningResults = [];
+  }
+
+  preview(link: string, id: string) {
+    document.getElementById(id)!.innerHTML = '';
+    LoadImg(
+      link,
+      (img: any) => {
+        document.getElementById(id)!.appendChild(img);
+      },
+      {
+        maxWidth: 800,
+        maxHeight: 500,
+        minWidth: 300,
+        minHeight: 250,
+        //canvas: true,
+        orientation: true
       }
     );
   }
@@ -131,4 +160,12 @@ export class TeamNote {
   note = '';
   time!: Date;
   void_ind = 'n';
+}
+
+export class MatchPlanning {
+  team!: Team;
+  pitData = new ScoutPitResults();
+  fieldCols!: any;
+  fieldAnswers!: any;
+  notes: TeamNote[] = [];
 }

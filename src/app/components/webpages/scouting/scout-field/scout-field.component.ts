@@ -41,6 +41,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.gs.decrementOutstandingCalls();
           },
           complete: () => {
+            this.gs.decrementOutstandingCalls();
           }
         }
       );
