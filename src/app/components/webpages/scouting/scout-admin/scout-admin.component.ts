@@ -34,6 +34,7 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'last_name', ColLabel: 'Last' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
     { PropertyName: 'phone', ColLabel: 'Phone' },
     { PropertyName: 'is_active', ColLabel: 'Active' }
 

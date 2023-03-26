@@ -37,6 +37,9 @@
         </app-form-element>
 
         <app-button-ribbon>
+          <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'warning'"
+            (FunctionCallBack)="notifyUser(currentSchedule.sch_id)">
+            Notify</app-button>
           <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'main'"
             (FunctionCallBack)="copyScoutScheduleEntry()">Copy</app-button>
           <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScheduleEntry()">Save</app-button>

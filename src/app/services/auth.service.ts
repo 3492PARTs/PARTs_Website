@@ -405,6 +405,7 @@ export class User {
   first_name = '';
   last_name = '';
   is_active = false;
+  discord_user_id = '';
   phone = '';
   phone_type = '';
   phone_type_id = -1;

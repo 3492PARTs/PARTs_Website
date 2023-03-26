@@ -155,6 +155,31 @@ export class ScoutPortalComponent implements OnInit {
     );
   }
 
+  notifyUser(sch_id: number): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/portal/notify-user/?id=' + sch_id
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            alert((result as RetMessage).retMessage);
+            this.scheduleModalVisible = false;
+            this.portalInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
   copyScoutScheduleEntry(): void {
     let ss = new Schedule();
     ss.user = this.currentSchedule.user;
