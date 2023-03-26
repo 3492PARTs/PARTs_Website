@@ -42,9 +42,17 @@
       </div>
 
     </div>
+
+    <app-form-element-group [LabelText]="'Notes'">
+      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr">
+        <p>{{ note.note }}</p>
+      </app-form-element-group>
+    </app-form-element-group>
+
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="download(true)">Download</app-button>
     </app-button-ribbon>
+
     <app-table [TableCols]="teamScoutResults['scoutCols']" [TableData]="teamScoutResults['scoutAnswers']"
       [Scrollable]="true" [EnableFilter]="true" [Width]="'200%'" [Responsive]="true">
     </app-table>

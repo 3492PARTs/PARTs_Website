@@ -5,6 +5,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 
 import * as LoadImg from 'blueimp-load-image';
 import { AuthService } from 'src/app/services/auth.service';
+import { TeamNote } from '../match-planning/match-planning.component';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -24,6 +25,8 @@ export class ScoutFieldResultsComponent implements OnInit {
   rank!: number | null;
   range!: number | null;
   above = false;
+
+  teamNotes: TeamNote[] = [];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -138,10 +141,34 @@ export class ScoutFieldResultsComponent implements OnInit {
               this.scoutPitResult = new ScoutPitResults();
             }
           }
+          else {
+            this.scoutPitResult = new ScoutPitResults();
+            this.preview(this.scoutPitResult.pic, 'team-pic');
+          }
         },
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/match-planning/load-team-notes/?team_no=' + String(row['team'])
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.teamNotes = result as TeamNote[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
           this.gs.decrementOutstandingCalls();
         },
         complete: () => {
