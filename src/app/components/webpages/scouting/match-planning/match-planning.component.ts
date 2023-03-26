@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { Team } from '../scout-field/scout-field.component';
@@ -11,6 +12,9 @@ import { Team } from '../scout-field/scout-field.component';
 })
 export class MatchPlanningComponent implements OnInit {
   initData = new Init();
+
+  currentTeamNote = new TeamNote();
+  teamNoteModalVisible = false;
 
   matchesTableCols: object[] = [
     { PropertyName: 'match_number', ColLabel: 'Match' },
@@ -38,6 +42,28 @@ export class MatchPlanningComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.initData = (result as Init);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  saveNote(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'scouting/match-planning/save-note/', this.currentTeamNote
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.currentTeamNote = new TeamNote();
+            this.teamNoteModalVisible = false;
           }
         },
         error: (err: any) => {
@@ -93,4 +119,16 @@ export class Match {
 export class Init {
   event!: Event | null;
   matches: Match[] = [];
+  teams: Team[] = [];
+}
+
+export class TeamNote {
+  team_note_id!: number;
+  event!: Event | number;
+  team_no!: Team | number;
+  match!: Match | number;
+  user!: User | number;
+  note = '';
+  time!: Date;
+  void_ind = 'n';
 }
