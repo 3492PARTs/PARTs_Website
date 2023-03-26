@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
+  padding-top: 1rem;
 
   .team-info {
     padding-left: 1em;
@@ -15,8 +16,11 @@
   }
 
   .team-pic {
-    //width: 50%;
-    //min-width: 360px;
+    width: 250px;
+
+    @media only screen and (max-width: 400px) {
+      width: 100%;
+    }
 
     img {
       width: 100%;

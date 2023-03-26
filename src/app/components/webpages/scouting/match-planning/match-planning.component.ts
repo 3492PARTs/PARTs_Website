@@ -137,13 +137,15 @@ export class MatchPlanningComponent implements OnInit {
     LoadImg(
       link,
       (img: any) => {
+        img.style.width = '100%';
+        img.style.height = 'auto';
         document.getElementById(id)!.appendChild(img);
       },
       {
-        maxWidth: 800,
-        maxHeight: 500,
-        minWidth: 300,
-        minHeight: 250,
+        //maxWidth: 800,
+        //maxHeight: 500,
+        //minWidth: 300,
+        //minHeight: 250,
         //canvas: true,
         orientation: true
       }

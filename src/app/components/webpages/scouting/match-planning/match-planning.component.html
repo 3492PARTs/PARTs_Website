@@ -63,15 +63,11 @@
                     </div>
 
                 </div>
-                <app-button-ribbon>
-                    <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Download</app-button>
-                </app-button-ribbon>
 
-                <app-form-element-group [title]="'Notes'">
-                    <div *ngFor="let note of mpr.notes">
-                        <p>{{ note.time }}</p>
+                <app-form-element-group [LabelText]="'Notes'">
+                    <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="note.time | dateToStr">
                         <p>{{ note.note }}</p>
-                    </div>
+                    </app-form-element-group>
                 </app-form-element-group>
 
                 <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [Scrollable]="true"
