@@ -26,8 +26,8 @@
 
 <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
   <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutQuestions"
-    [DisplayProperty]="'sq_sub_nm'" [DisplayProperty2]="'question'" [BindingProperty]="'sq_id'"
-    [DisplayEmptyOption]="true" [(Model)]="scoutQuestion.sq_id">
+    [DisplayProperty]="'display_value'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
+    [(Model)]="scoutQuestion.sq_id">
   </app-form-element>
   <ng-container *ngFor="let q of init.scoutQuestions">
     <ng-container *ngIf="q.sq_id === scoutQuestion.sq_id">

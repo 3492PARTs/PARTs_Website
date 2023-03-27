@@ -194,6 +194,7 @@ export class ScoutQuestion {
   active = 'y';
   void_ind = 'n';
   answer: string | number = '';
+  display_value = '';
 
   questionoptions_set: QuestionOption[] = [];
   scoutpitanswer_set: ScoutPitAnswer[] = [];
