@@ -32,7 +32,7 @@ export class PaginationComponent implements OnInit {
   ngOnInit() {
   }
 
-  getPages(val: number): void {
+  getPage(val: number): void {
     this.FunctionCallBack.emit(val);
   }
 

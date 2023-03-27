@@ -1,14 +1,10 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
 [type="submit"]:not(:disabled),
 button:not(:disabled) {
   cursor: pointer;
-}
-
-.btn-span {
-  display: inline-block;
 }
 
 .btn {
@@ -119,10 +115,6 @@ button:not(:disabled) {
   @extend .btn-success;
 }
 
-.minus {
-  @extend .btn-warning;
-}
-
 .edit {
   @extend .btn-warning;
 }
@@ -186,18 +178,8 @@ button:not(:disabled) {
   @extend .btn-main;
 
   transition: 0.25s linear;
-
-  svg {
-    transform: rotate(180deg);
-  }
 }
 
 .rotate {
   transform: rotate(180deg);
-}
-
-.dismiss {
-  color: $gray;
-  background-color: transparent;
-  font-size: 2.2rem;
 }

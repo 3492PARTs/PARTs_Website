@@ -1,7 +1,6 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 .side-nav {
-  position: fixed;
   /*position: fixed;
   top: 4em;
   left: 1em;*/
@@ -16,26 +15,24 @@
   box-sizing: border-box;
   border-radius: 4px;
 
-  //z-index: -1;
+  z-index: -1;
 }
 
 #title {
-  background-color: #f8f9fc;
-  border-bottom: 1px solid #e3e6f0;
+  background-color: $main_color;
   width: 100%;
+  border-bottom: 3px solid $accent-color;
   position: relative;
   height: 3.5rem;
-  border-top-left-radius: 0.35em;
-  border-top-right-radius: 0.35em;
+  border-radius: 4px 4px 0 0;
 
-  h4 {
-    color: $main_color;
+  p {
+    color: #fff;
     display: block;
     letter-spacing: 0.1em;
     margin: 0;
-    padding: 0 1.25em;
-    //text-transform: uppercase;
-    text-align: left;
+    text-transform: uppercase;
+    text-align: center;
     line-height: 3.5rem;
   }
 
@@ -47,7 +44,7 @@
 }
 
 .roundedCorners {
-  border-radius: 0.35em !important;
+  border-radius: 4px !important;
 }
 
 #nav {

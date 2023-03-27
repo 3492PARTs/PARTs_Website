@@ -334,7 +334,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
         const width = this.label.nativeElement.clientWidth + 32;
         if (this.MinWidth != 'auto') {
-          this.gs.consoleLog('Developer your min width will be overwritten on your form element.');
+          this.gs.devConsoleLog('Developer your min width will be overwritten on your form element.');
         }
         this.MinWidth = width + 'px';
       }

@@ -1,0 +1,23 @@
+@import '../../scss/abstracts/variables.scss';
+
+.full-width {
+  width: 100%;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.responsive-width {
+  width: 90%;
+
+  /*MOBILE */
+  @media only screen and (max-width: $screen-size-xlg) {
+    width: 100%;
+  }
+
+}
+
+.center-width {
+  margin: 0 auto;
+}

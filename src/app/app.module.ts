@@ -5,15 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { HTTPInterceptor } from './providers/http-interceptor';
-
+import { HTTPInterceptor } from './helpers/http.interceptor';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 
 import { HomeComponent } from './components/webpages/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { FooterComponent } from './components/footer/footer.component';
+//import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/login/login.component';
-import { LoadingScreenComponent } from './components/loading-screen/loading-screen.component';
+import { LoadingComponent } from './components/atoms/loading/loading.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
 import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
 import { BoxComponent } from './components/atoms/box/box.component';
@@ -58,7 +57,7 @@ import { FirstComponent } from './components/webpages/first/first.component';
 import { SideNavComponent } from './components/atoms/side-nav/side-nav.component';
 import { BoxSideNavWrapperComponent } from './components/atoms/box-side-nav-wrapper/box-side-nav-wrapper.component';
 import { CardComponent } from './components/atoms/card/card.component';
-import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
+//import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
@@ -85,9 +84,9 @@ import { MatchPlanningComponent } from './components/webpages/scouting/match-pla
     AppComponent,
     HomeComponent,
     NavigationComponent,
-    FooterComponent,
+    //FooterComponent,
     LoginComponent,
-    LoadingScreenComponent,
+    LoadingComponent,
     BoxComponent,
     ScoutFieldComponent,
     ButtonComponent,
@@ -108,7 +107,7 @@ import { MatchPlanningComponent } from './components/webpages/scouting/match-pla
     SideNavComponent,
     BoxSideNavWrapperComponent,
     CardComponent,
-    ErrorMessageComponent,
+    //ErrorMessageComponent,
     TabComponent,
     TabContainerComponent,
     ScoutPitComponent,

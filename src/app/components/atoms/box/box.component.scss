@@ -1,4 +1,4 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 .box {
   width: 90%;
@@ -33,7 +33,6 @@ h2 {
   border-top-left-radius: 0.35em;
   border-top-right-radius: 0.35em;
   font-size: 1.8rem;
-  margin: 0;
 
   span {
     color: $main_color;

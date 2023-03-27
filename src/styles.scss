@@ -4,21 +4,31 @@
 $my-palette: mat.$indigo-palette;
 
 /*imports*/
-@import "./app/scss/_base/reset";
-@import "./app/scss/_base/typography";
-@import "./app/scss/_layout/screenSize";
+//@import "./app/scss/_base/reset";
+//@import "./app/scss/_base/typography";
+//@import "./app/scss/_layout/screenSize";
 
-@import "./app/scss/_vendors/syncfusion.scss";
+@import "./scss/vendors/syncfusion.scss";
+@import "./scss/vendors/_cssSliderScss/_cssSlider";
 
-@import "./assets//typography/font.scss";
+/* You can add global styles to this file, and also import other style files */
+@import "./scss/modules/font.scss";
+@import "./scss/abstracts/variables.scss";
+@import "./scss/base/reset.scss";
+@import "./scss/base/typography.scss";
+@import "./scss/abstracts/flex-box.scss";
+@import "./scss/abstracts/width.scss";
+@import "./scss/modules/generics.scss";
 
-/*TEXT*/
+//@import "./assets//typography/font.scss";
+
+/*TEXT
 
 #mainContact h2 {
   text-align: center;
 }
 
-/*FLUID MAP*/
+/*FLUID MAP
 
 #map {
   width: 100%;
@@ -48,7 +58,7 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+}*/
 
 //form element
 

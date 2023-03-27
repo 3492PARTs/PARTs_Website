@@ -1,12 +1,12 @@
-@import "../../scss/_helpers/variables";
-@import "../../scss/_helpers/mixins";
+@import "../../../scss/abstracts/variables.scss";
+@import "../../../scss/abstracts/mixins";
 
 #auth-wrapper {
   background-color: $background;
-  position: fixed;
+  //position: fixed;
   width: 100%;
-  height: 100vh;
-  z-index: 18;
+  height: 80vh;
+  //z-index: 18;
   top: 0;
   left: 0;
   overflow: auto;
@@ -18,13 +18,12 @@
       cursor: pointer;
     }
 
-    &>div {
+    & > div {
       padding-right: 1em;
 
       a {
         color: #007bff;
         text-decoration: underline;
-
       }
     }
 
@@ -111,6 +110,7 @@
 
 /*Home Button*/
 #home-btn {
+  display: none;
   height: 4em;
   position: fixed;
   top: 1em;
@@ -132,7 +132,6 @@
   height: 100%;
   padding: 0.5em;
 }
-
 
 .matching-pass {
   margin: 0;

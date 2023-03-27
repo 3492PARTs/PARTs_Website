@@ -367,8 +367,8 @@ export class AuthService {
   getTokenExp(tkn: string, tknTyp = ''): Date {
     const d = new Date(0);
     d.setUTCSeconds(this.getTokenLoad(tkn).exp);
-    this.gs.consoleLog(tknTyp)
-    this.gs.consoleLog(d);
+    this.gs.devConsoleLog(tknTyp)
+    this.gs.devConsoleLog(d);
     return d;
   }
 
@@ -410,6 +410,7 @@ export class User {
   phone_type = '';
   phone_type_id = -1;
   groups: AuthGroup[] = [];
+  image = '';
 }
 
 export class UserLinks {

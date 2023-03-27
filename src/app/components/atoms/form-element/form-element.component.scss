@@ -1,11 +1,11 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 .form-element {
   position: relative;
   margin: 7px;
 
   &.checkboxElement {
-    display: inline-flex;
+    display: flex;
     //flex-direction: row-reverse;
     //justify-content: flex-end;
 
@@ -91,11 +91,6 @@ textarea.form-control {
 .form-group-inline {
   display: inline-block;
   padding-right: 0.5em;
-}
-
-.form-control-inline {
-  display: inline-block !important;
-  vertical-align: top;
 }
 
 .form-control-inline > .form-control {
@@ -205,11 +200,6 @@ textarea.form-control {
   }
 }
 
-.multi-select-buttons {
-  display: flex;
-  justify-content: space-evenly;
-}
-
 .arrow-wrapper {
   width: 0.96rem;
   height: 0.96rem;
@@ -282,16 +272,13 @@ textarea.form-control {
 }
 
 .file-upload {
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   min-width: 20rem;
 
-  div {
-    padding-right: 1.2rem;
-    p {
-      margin: 0;
-    }
+  div p {
+    margin: 0;
   }
 }
 
@@ -327,39 +314,4 @@ textarea.form-control {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
   }
-}
-
-.datetime {
-  position: relative;
-  display: inline-block;
-  width: 220px;
-  height: 40px;
-  overflow: hidden;
-
-  & > div {
-    position: absolute;
-    //top: 50%;
-    bottom: -17px;
-    left: 50%;
-    //transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%);
-    background-color: white;
-
-    &::after {
-      content: " ";
-      display: block;
-      //background-color: white;
-      width: 100%;
-      height: 10px;
-      position: absolute;
-      bottom: 12px;
-      left: 0;
-    }
-  }
-}
-
-// See main scss file for date
-
-select {
-  max-width: calc(100% - 0.64rem);
 }

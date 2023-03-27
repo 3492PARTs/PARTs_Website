@@ -1,4 +1,4 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 .center {
   text-align: center;
@@ -31,8 +31,4 @@ h4,
 h5,
 h6 {
   color: $main_color;
-}
-
-.no-margin-bottom {
-  margin-bottom: 0;
 }

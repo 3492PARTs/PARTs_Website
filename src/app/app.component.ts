@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   private apiStatus = 'online';
   private firstRun = true;
 
-  constructor(private authService: AuthService, public router: Router, private gs: GeneralService, private http: HttpClient) {
+  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
 

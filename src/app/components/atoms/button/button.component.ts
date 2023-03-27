@@ -17,7 +17,7 @@ export class ButtonComponent implements OnInit {
   @Input() ElementID = '';
   @Input() SmallButton = false;
 
-  @ViewChild('thisButton', { read: ElementRef, static: false }) button: ElementRef = {} as ElementRef;
+  @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 
 
   constructor() { }

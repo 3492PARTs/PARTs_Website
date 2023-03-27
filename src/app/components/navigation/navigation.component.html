@@ -1,81 +1,217 @@
-<nav (appClickOutside)="closeMobileNav()">
-  <div id="company_logo">
-    <a routerLink=""><img src="./assets/webImages/Robots/BeanieBot.svg"></a>
-  </div>
-  <input type="checkbox" id="mobile-nav-toggle" class="nav-trigger" [(ngModel)]="mobileNavToggle" />
-  <label for="mobile-nav-toggle" id="ham-label">
-    <div class="clear-menu-btn">
-      <span class="top"></span>
-      <span class="middle"></span>
-      <span class="bottom"></span>
-      <span class="circle"></span>
+<div #thisWrapper id="wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+  <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+    <div class="height" id="logo">
+      <a routerLink="">
+        <img src="../../../assets/img/app_icon/app_icon.svg">
+      </a>
     </div>
-  </label>
-  <div id="links" #links>
-    <ul>
-      <li *ngFor="let m of menu" (mouseover)="hoverShowNavLinks(m.ID, m.MenuItems.length > 0)"
-        (mouseleave)="hoverHideNavLinks(m.ID, m.MenuItems.length > 0)">
-        <div class="menu-item-wrapper" id="{{m.ID}}" (click)="expandNavLinks(m.ID, m.MenuItems.length > 0)">
 
-          <svg *ngIf="m.MenuItems.length > 0; else noArrow" class="arrow" xmlns="http://www.w3.org/2000/svg" x="0px"
-            y="0px" viewBox="0 0 50 50">
-            <g id="surface1">
-              <path
-                d="M 25 2 C 12.308594 2 2 12.308594 2 25 C 2 37.691406 12.308594 48 25 48 C 37.691406 48 48 37.691406 48 25 C 48 12.308594 37.691406 2 25 2 Z M 25 4 C 36.609375 4 46 13.390625 46 25 C 46 36.609375 36.609375 46 25 46 C 13.390625 46 4 36.609375 4 25 C 4 13.390625 13.390625 4 25 4 Z M 24.875 17 C 24.652344 17.023438 24.441406 17.125 24.28125 17.28125 L 14.28125 27.28125 C 13.882813 27.679688 13.882813 28.320313 14.28125 28.71875 C 14.679688 29.117188 15.320313 29.117188 15.71875 28.71875 L 25 19.4375 L 34.28125 28.71875 C 34.679688 29.117188 35.320313 29.117188 35.71875 28.71875 C 36.117188 28.320313 36.117188 27.679688 35.71875 27.28125 L 25.71875 17.28125 C 25.496094 17.0625 25.183594 16.957031 24.875 17 Z ">
-              </path>
-            </g>
-          </svg>
-          <ng-template #noArrow>
-            <div class="arrow"></div>
-          </ng-template>
+    <hr>
 
-          <p id="i{{m.ID}}" *ngIf="m.RouterLink === 'none'; else hasLink" class="menu-link">
-            {{m.MenuName}}
-          </p>
-          <ng-template #hasLink>
-            <p id="i{{m.ID}}" (click)="closeMobileNav()">
-              <a *ngIf="!m.RouterLink.includes('.'); else hasAddress" routerLink="{{m.RouterLink}}"
-                routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-                true}" class="menu-link">{{m.MenuName}}</a>
+    <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}">
+      <ul>
+        <li class="height">
+          <a routerLinkActive="active" (click)="page = 'Pages'">
+            <mat-icon class="icon" svgIcon="speedometer"></mat-icon>
+            <span>Dashboard</span>
+          </a>
+        </li>
 
-              <ng-template #hasAddress>
-                <a target="_blank" [href]="m.RouterLink" class="menu-link">{{m.MenuName}}</a>
-              </ng-template>
-            </p>
-          </ng-template>
+        <hr>
+
+        <li id="{{ pagesID }}" class="height" (click)="openSubNav(pagesID, pagesID + '-1')" appClickOutside
+          (appClickOutside)="closeSubNav()">
+          <a [ngClass]="{ active : page !== 'Pages'}">
+            <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
+            <span>{{ page }}</span>
+            <mat-icon [ngStyle]="{'color':'white'}" class="icon page-options"
+              [ngClass]="{ rotate : subNav === pagesID + '-1'}" svgIcon="menu-right"></mat-icon>
+          </a>
+
+          <div id="{{ pagesID + '-1' }}" class="side-sidebar" [ngClass]="{ show : subNav === pagesID + '-1'}">
+            <span class="header">Pages</span>
+            <ul>
+              <li>
+                <a routerLink="devices" routerLinkActive="active-link" (click)="page = 'Devices'">
+                  Devices
+                </a>
+              </li>
+              <li>
+                <a routerLink="firmware" routerLinkActive="active-link" (click)="page = 'Firmware'">
+                  Firmware
+                </a>
+              </li>
+              <li>
+                <a routerLink="support" routerLinkActive="active-link" (click)="page = 'Support'">Support</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+      </ul>
+
+      <hr class="darker" *ngIf="this.pages.indexOf(page) >= 0">
+
+      <div id="page-nav">
+        <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
+        </app-support-nav>
+        <app-firmware-nav *ngIf="page === 'Firmware'" [setNavExpanded]="navExpanded"
+          [hideNavExpander]="hideNavExpander">
+        </app-firmware-nav>
+        <app-devices-nav *ngIf="page === 'Devices'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
+        </app-devices-nav>-->
+      </div>
+    </div>
+
+    <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander }">
+      <div (click)="toggleForceNavExpand()">
+        <mat-icon id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" svgIcon="menu-right"></mat-icon>
+      </div>
+    </div>
+
+  </nav>
+
+  <header #thisHeader [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+    <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
+      <mat-icon class="icon" svgIcon="menu"></mat-icon>
+    </div>
+
+    <div id="menu-bar" [ngClass]="{ small_search : screenXs}">
+      <div id="search-icon-wrapper" *ngIf="screenXs">
+        <mat-icon class="icon" id="search-icon" svgIcon="magnify" (click)="xsToggleSearch()" appClickOutside
+          (appClickOutside)="xsShowSearch = false"></mat-icon>
+      </div>
+
+      <div id="search-wrapper" [ngClass]="{ xsShowSearch : xsShowSearch, full_width: !showNav}">
+        <app-form-element [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
+        </app-form-element>
+      </div>
+
+      <div id="user-center-wrapper" *ngIf="user && user.id;else login">
+        <div class="icon-wrapper">
+          <mat-icon class="icon" svgIcon="bell" (click)="toggleShowNotificationModal()" appClickOutside
+            (appClickOutside)="showNotificationModal = false"></mat-icon>
         </div>
 
-        <ul class="sub_links" *ngIf="m.MenuItems.length > 0">
-          <ng-container *ngFor="let sm of m.MenuItems">
-            <li *ngIf="sm.RouterLink !== 'login'; else login">
-              <p (click)="closeMobileNav()">
-                <a routerLink="{{sm.RouterLink}}" routerLinkActive="active" class="menu-link">{{sm.MenuName}}</a>
-              </p>
-            </li>
-            <ng-template #login>
-              <ng-container>
-                <li *ngFor="let ul of userLinks">
-                  <p (click)="closeMobileNav()">
-                    <a routerLink="{{ul.routerlink}}" routerLinkActive="active" class="menu-link">{{ul.menu_name}}</a>
+        <div id="notification-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showNotificationModal }">
+          <h6>Notification Center</h6>
+          <div id="notification-list">
+            <div class="notification">
+              <div class="notification-icon-wrapper">
+                <div class="notification-icon">
+                  <mat-icon class="icon" svgIcon="bell">
+                  </mat-icon>
+                </div>
+              </div>
+
+              <div class="notification-content">
+                <div class="notification-time">
+                  <p>December 12, 2019</p>
+                </div>
+                <div class="notification-message">
+                  <p>
+                    This is a test of our new notification system.
+                    The plan for this test is to see if out testing test tests out.
                   </p>
-                </li>
-                <li>
-                  <ng-container *ngIf="!token.refresh; else hasToken">
-                    <p (click)="closeMobileNav()">
-                      <a routerLink="login" routerLinkActive="active" class="menu-link">LOGIN</a>
-                    </p>
-                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div id="notifications-view-all">
+              <p>View All Notifications</p>
+            </div>
+          </div>
+        </div>
 
-                  <ng-template #hasToken>
-                    <p (click)="logOut(); closeMobileNav()"><a class="menu-link">LOG OUT</a></p>
-                  </ng-template>
-                </li>
-              </ng-container>
-            </ng-template>
-          </ng-container>
-        </ul>
+        <div class="icon-wrapper no-padding">
+          <mat-icon class="icon" svgIcon="email" (click)="toggleShowMessageModal()" appClickOutside
+            (appClickOutside)="showMessageModal = false"></mat-icon>
+        </div>
 
-      </li>
-    </ul>
+        <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModal }">
+          <h6>Message Center</h6>
+          <div id="notification-list">
+            <div class="notification">
+              <div class="notification-icon-wrapper">
+                <div class="notification-icon">
+                  <mat-icon class="icon" svgIcon="bell">
+                  </mat-icon>
+                </div>
+              </div>
+
+              <div class="notification-content">
+                <div class="notification-message">
+                  <p>
+                    This is a test of our new message system.
+                    The plan for this test is to see if out testing test tests out.
+                  </p>
+                </div>
+                <div class="notification-time">
+                  <p>Person &middot; 1hr</p>
+                </div>
+              </div>
+            </div>
+            <div id="notifications-view-all">
+              <p>View All Messages</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+
+        <div id="profile" (click)="toggleShowUserModal()" appClickOutside (appClickOutside)="showUserModal = false">
+          <p>{{ user.first_name }} {{ user.last_name }}</p>
+          <div id="profile-picture">
+            <img [src]="user.image">
+          </div>
+        </div>
+      </div>
+      <div *ngIf="user && user.id" id="user-modal"
+        [ngClass]="{ full_width: !showNav, growInAnimation : showUserModal }">
+        <div class="profile-option">
+          <div>
+            <mat-icon class="icon" svgIcon="human-greeting"></mat-icon>
+          </div>
+          <div>
+            <a routerLink="user/profile">Profile</a>
+          </div>
+        </div>
+        <div class="profile-option">
+          <div>
+            <mat-icon class="icon" svgIcon="cogs"></mat-icon>
+          </div>
+          <div>
+            <p>Settings</p>
+          </div>
+        </div>
+        <div id="user-profile-divider"></div>
+        <div class="profile-option" id="logout">
+          <div>
+            <mat-icon class="icon" svgIcon="logout"></mat-icon>
+          </div>
+          <div>
+            <p (click)='auth.logOut(); showUserModal = false'>Logout</p>
+          </div>
+        </div>
+      </div>
+      <ng-template #login>
+        <div id="login-link">
+          <a routerLink="login">Log In</a>
+        </div>
+      </ng-template>
+
+    </div>
+  </header>
+
+  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+      <ng-content>
+
+      </ng-content>
+    </main>
+
+    <footer #thisFooter [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+
+    </footer>
   </div>
-</nav>
+
+</div>
