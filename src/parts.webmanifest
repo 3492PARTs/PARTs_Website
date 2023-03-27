@@ -1,0 +1,50 @@
+{
+  "name": "PARTs App",
+  "short_name": "PARTs",
+  "description": "Application to support the Putnam Area Robotics Team",
+  "icons": [
+    {
+      "src": "assets/appIcons/icon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-60.png",
+      "sizes": "60x60",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-196.png",
+      "sizes": "196x196",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/appIcons/icon-310.png",
+      "sizes": "310x310",
+      "type": "image/png"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": ["focus-existing, auto"]
+  },
+  "start_url": "/",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "display": "browser",
+  "theme_color": "#2E3094",
+  "background_color": "#FF6A00"
+}
