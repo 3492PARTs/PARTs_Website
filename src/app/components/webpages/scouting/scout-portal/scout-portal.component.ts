@@ -137,7 +137,7 @@ export class ScoutPortalComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            alert((result as RetMessage).retMessage);
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.currentSchedule = new Schedule();
             this.scheduleModalVisible = false;
             this.portalInit();
@@ -163,7 +163,7 @@ export class ScoutPortalComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            alert((result as RetMessage).retMessage);
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.scheduleModalVisible = false;
             this.portalInit();
           }

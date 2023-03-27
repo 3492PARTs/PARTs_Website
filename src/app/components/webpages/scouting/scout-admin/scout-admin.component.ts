@@ -244,7 +244,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            alert((result as RetMessage).retMessage);
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.adminInit();
           }
         },
@@ -604,7 +604,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            alert((result as RetMessage).retMessage);
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.scoutFieldSchedule = new ScoutFieldSchedule();
             this.scoutScheduleModalVisible = false;
             this.adminInit();
@@ -641,7 +641,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            alert((result as RetMessage).retMessage);
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.adminInit();
           }
         },

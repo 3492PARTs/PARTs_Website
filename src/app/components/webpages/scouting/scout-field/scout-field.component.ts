@@ -121,7 +121,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     ).subscribe(
       {
         next: (result: any) => {
-          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
           this.team = '';
           this.sortQuestions();
         },
