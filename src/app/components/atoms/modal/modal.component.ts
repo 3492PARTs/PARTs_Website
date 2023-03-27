@@ -17,11 +17,19 @@ export class ModalComponent implements OnInit {
   set visible(v: boolean) {
     this._visible = v;
     this.ms.setModalVisible(this._visible);
+
+    if (this._visible) {
+      window.setTimeout(() => {
+        this.clickOutsideCapture = false;
+      }, 500);
+    }
   }
   @Output() visibleChange = new EventEmitter();
   _visible = false;
 
   @Input() zIndex = 16;
+
+  private clickOutsideCapture = true;
 
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
@@ -35,6 +43,10 @@ export class ModalComponent implements OnInit {
     this._visible = true;
     this.ms.setModalVisible(this._visible);
     this.visibleChange.emit(this._visible);
+
+    window.setTimeout(() => {
+      this.clickOutsideCapture = false;
+    }, 500);
   }
 
   close() {
@@ -44,5 +56,12 @@ export class ModalComponent implements OnInit {
     this.form.forEach(elem => {
       elem.reset();
     });
+  }
+
+  clickOutsideClose() {
+    if (!this.clickOutsideCapture) {
+      this.close();
+      this.clickOutsideCapture = true;
+    }
   }
 }
