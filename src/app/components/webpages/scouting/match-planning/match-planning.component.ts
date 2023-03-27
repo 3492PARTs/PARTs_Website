@@ -19,14 +19,15 @@ export class MatchPlanningComponent implements OnInit {
   teamNoteModalVisible = false;
 
   matchesTableCols: object[] = [
+    { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
     { PropertyName: 'match_number', ColLabel: 'Match' },
     { PropertyName: 'time', ColLabel: 'Time' },
-    { PropertyName: 'red_one_id', ColLabel: 'Red One' },
-    { PropertyName: 'red_two_id', ColLabel: 'Red Two' },
-    { PropertyName: 'red_three_id', ColLabel: 'Red Three' },
-    { PropertyName: 'blue_one_id', ColLabel: 'Blue One' },
-    { PropertyName: 'blue_two_id', ColLabel: 'Blue Two' },
-    { PropertyName: 'blue_three_id', ColLabel: 'Blue Three' },
+    { PropertyName: 'red_one_id', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'red_two_id', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'red_three_id', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_one_id', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_two_id', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_three_id', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this) },
   ];
 
   matchPlanningResults: MatchPlanning[] = [];
@@ -151,6 +152,39 @@ export class MatchPlanningComponent implements OnInit {
       }
     );
   }
+
+  rankToColor(team: number): string {
+    console.log(team);
+
+    if (this.initData) {
+      for (let m of this.initData.matches) {
+        if (m.blue_one_id === team)
+          return this.rankToColorConverter(m.blue_one_rank);
+        if (m.blue_two_id === team)
+          return this.rankToColorConverter(m.blue_two_rank);
+        if (m.blue_three_id === team)
+          return this.rankToColorConverter(m.blue_three_rank);
+
+        if (m.red_one_id === team)
+          return this.rankToColorConverter(m.red_one_rank);
+        if (m.red_two_id === team)
+          return this.rankToColorConverter(m.red_two_rank);
+        if (m.red_three_id === team)
+          return this.rankToColorConverter(m.red_three_rank);
+      }
+    }
+
+    return 'initial'
+
+  }
+
+  private rankToColorConverter(rank: number): string {
+    if (rank <= 10) return '#3333ff';
+    else if (rank <= 15) return '#33cc33';
+    else if (rank <= 20) return '#ffcc00';
+    else if (rank <= 30) return '#ff6600';
+    else return '#ff0000'
+  }
 }
 
 export class Match {
@@ -158,11 +192,17 @@ export class Match {
   match_number!: number;
   event!: Event;
   red_one_id!: Team | number;
+  red_one_rank!: number;
   red_two_id!: Team | number;
+  red_two_rank!: number;
   red_three_id!: Team | number;
+  red_three_rank!: number;
   blue_one_id!: Team | number;
+  blue_one_rank!: number;
   blue_two_id!: Team | number;
+  blue_two_rank!: number;
   blue_three_id!: Team | number;
+  blue_three_rank!: number;
   red_score!: number;
   blue_score!: number;
   comp_level!: string | CompetitionLevel;

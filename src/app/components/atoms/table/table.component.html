@@ -73,7 +73,8 @@
               (FunctionCallBack)="Remove(rec)"></app-button>
           </div>
         </td>
-        <td *ngFor="let col of TableCols">
+        <td *ngFor="let col of TableCols" [ngStyle]="{ 'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
+          'color': !col.ColorFunction ? 'initial' : 'white' }">
           <ng-container *ngIf="!col.Type; else Type">
             {{ GetTableDisplayValue(rec, col.PropertyName) | dateToStr }}
           </ng-container>
