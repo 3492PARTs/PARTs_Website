@@ -154,8 +154,6 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   rankToColor(team: number): string {
-    console.log(team);
-
     if (this.initData) {
       for (let m of this.initData.matches) {
         if (m.blue_one_id === team)
