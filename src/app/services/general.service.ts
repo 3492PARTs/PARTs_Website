@@ -87,7 +87,7 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.triggerError(response.retMessage);
+      this.addBanner({ message: response.retMessage, severity: 1, time: 2500 });
       return false;
     }
     return true;

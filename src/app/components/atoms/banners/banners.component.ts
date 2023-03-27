@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, 
 import { Router } from '@angular/router';
 import { Banner, GeneralService } from 'src/app/services/general.service';
 import * as $ from 'jquery';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-banners',
@@ -16,8 +17,14 @@ export class BannersComponent implements OnInit, AfterViewInit {
   bannerWrapper!: ElementRef;
   private screenSizeWide = 1175;
   mobile = false;
+  zIndex = 15;
 
-  constructor(private gs: GeneralService, private router: Router, private renderer: Renderer2) { }
+  constructor(private gs: GeneralService, private router: Router, private renderer: Renderer2, private ms: ModalService) {
+    this.ms.currentModalVisible.subscribe(m => {
+      if (m) this.zIndex = 17;
+      else this.zIndex = 15;
+    })
+  }
 
   ngOnInit(): void {
     this.gs.currentSiteBanners.subscribe(sb => {

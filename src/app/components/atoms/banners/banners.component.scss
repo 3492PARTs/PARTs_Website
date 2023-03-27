@@ -1,15 +1,15 @@
-@import '../../../scss/_helpers/variables';
+@import "../../../scss/_helpers/variables";
 
 #banner-wrapper {
   position: fixed;
   top: 5em;
-  right: 0;
-  z-index: 20;
+  right: 1rem;
+  //z-index: 15;
   width: 40rem;
   max-width: calc(100% - (1.6rem * 2));
 
   @media only screen and (max-width: $screen-size-xlg-lower-range) {
-    top: 4em
+    top: 4em;
   }
 
   .banner {
@@ -21,7 +21,7 @@
       align-items: center;
       padding-top: 1.6rem;
 
-      &>p {
+      & > p {
         padding-right: 1.6rem;
         font-weight: bold;
       }
@@ -31,6 +31,7 @@
 
 .top-zero {
   top: 0 !important;
+  right: 0 !important;
 }
 
 .sticky {
