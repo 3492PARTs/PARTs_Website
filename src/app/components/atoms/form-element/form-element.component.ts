@@ -347,7 +347,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
         console.log('your h1 now wrapped ' + lineHeightParsed + ' ' + lineHeight);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(

@@ -134,11 +134,13 @@
       [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="init.currentEvent.competition_page_active"
       (FunctionCallBack)="toggleCompetitionPage()">
     </app-form-element>
+
     <app-button-ribbon>
       <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set
         Season/Event</app-button>
       <app-button [ButtonType]="'warning'" (FunctionCallBack)="resetSeasonForm()">Clear</app-button>
     </app-button-ribbon>
+
     <app-button-ribbon>
       <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
         Sync Season</app-button>
@@ -148,6 +150,7 @@
         (FunctionCallBack)="syncEventTeamInfo()">
         Sync Event-Team Info</app-button>
     </app-button-ribbon>
+
     <app-button-ribbon>
       <app-modal [ButtonType]="'main'" [ButtonText]="'Add/Delete Season'" [Title]="'Add/Delete Season'">
         <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">

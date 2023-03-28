@@ -8,12 +8,12 @@
   position: relative;
   margin-top: 20px;
 
-  &>div {
+  & > div {
     color: #1a1d20;
   }
 }
 
-.FormElementGroup+.FormElementGroup {
+.FormElementGroup + .FormElementGroup {
   margin-top: 20px;
 }
 
@@ -21,7 +21,7 @@
   display: inline-block;
 }
 
-.InlineGroup+.InlineGroup {
+.InlineGroup + .InlineGroup {
   margin-left: 10px;
 }
 
@@ -42,6 +42,7 @@
 .inline-elements {
   display: flex;
   align-items: flex-end;
+  flex-wrap: wrap;
 }
 
 .wrap {
