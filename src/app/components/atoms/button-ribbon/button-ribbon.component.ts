@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-button-ribbon',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./button-ribbon.component.scss']
 })
 export class ButtonRibbonComponent implements OnInit {
+
+  @Input() TextAlign = 'right';
 
   constructor() { }
 

@@ -1,51 +1,46 @@
-<div id="content">
-  <main id="mainResources">
-    <div class="resourceTabs"> <img src="../../../../assets/resourceIcons/tba.png" />
-      <h3>The Blue Alliance (TBA)</h3>
-      <h4>FIRST Robotics Competition team information, event results, and videos. Click <a target="_blank"
-          href="http://www.thebluealliance.com/team/3492">here</a> for the Blue Alliance page for Team 3492.</h4>
-      <div class="resourceTakeALook">
-        <h3><a target="_blank" href="http://www.thebluealliance.com/team/3492">CHECK IT OUT</a></h3>
-      </div>
-      <div class="resourceSpacer"></div>
-    </div>
-    <div class="resourceTabs"> <img src="../../../../assets/resourceIcons/collaboration.svg" />
-      <h3>Chief Delphi</h3>
-      <h4>Forums and discussions created by FRC&reg; teams to talk about the FRC&reg; game and robots. Great for
-        answering any questions you may have.</h4>
-      <div class="resourceTakeALook">
-        <h3><a target="_blank" href="https://www.chiefdelphi.com/">CHECK IT OUT</a></h3>
-      </div>
-      <div class="resourceSpacer"></div>
-    </div>
-    <div class="resourceTabs"> <img src="../../../../assets/resourceIcons/book.svg" />
-      <h3>FRC&reg; 2020 Game Manual</h3>
-      <h4>Manual including all rules and regulations for the 2020 game, FIRST&reg; INFINITE RECHARGE, as well as,
-        field drawings and other documents. You can download any as a PDF for future reference.</h4>
-      <div class="resourceTakeALook">
-        <h3><a target="_blank"
-            href="https://firstfrc.blob.core.windows.net/frc2020/Manual/2020FRCGameSeasonManual.pdf">CHECK IT OUT</a>
-        </h3>
-      </div>
-      <div class="resourceSpacer"></div>
-    </div>
-    <div class="resourceTabs"> <img src="../../../../assets/resourceIcons/survey.svg" />
-      <h3>ScreenSteps Live</h3>
-      <h4>The documentation on this site encompasses a number of helpful documents including control system manual and
-        resources to help teams get started on programming a robot.</h4>
-      <div class="resourceTakeALook">
-        <h3><a target="_blank" href="https://docs.wpilib.org">CHECK IT OUT</a></h3>
-      </div>
-      <div class="resourceSpacer"></div>
-    </div>
-    <div class="resourceTabs"> <img src="../../../../assets/webImages/SocialIcons/GitHub.svg" />
-      <h3>PARTs 3492 GitHub Repository</h3>
-      <h4>This is where you can look at the code we have created for our robots and other various projects over the
-        years.</h4>
-      <div class="resourceTakeALook">
-        <h3><a target="_blank" href="https://github.com/3492PARTs">CHECK IT OUT</a></h3>
-      </div>
-      <div class="resourceSpacer"></div>
-    </div>
-  </main>
-</div>
+<app-box [Title]="'The Blue Alliance (TBA)'">
+  <img class="icon" src="../../../../assets/resourceIcons/tba.png" />
+  <h4>FIRST Robotics Competition team information, event results, and videos. Click <a target="_blank"
+      href="http://www.thebluealliance.com/team/3492">here</a> for the Blue Alliance page for Team 3492.</h4>
+  <app-button-ribbon [TextAlign]="'center'">
+    <app-button (FunctionCallBack)="openURL('http://www.thebluealliance.com/team/3492')">CHECK IT OUT</app-button>
+  </app-button-ribbon>
+</app-box>
+
+<app-box [Title]="'Chief Delphi'">
+  <img class="icon" src="../../../../assets/resourceIcons/collaboration.svg" />
+  <h4>Forums and discussions created by FRC&reg; teams to talk about the FRC&reg; game and robots. Great for
+    answering any questions you may have.</h4>
+  <app-button-ribbon [TextAlign]="'center'">
+    <app-button (FunctionCallBack)="openURL('https://www.chiefdelphi.com/')">CHECK IT OUT</app-button>
+  </app-button-ribbon>
+</app-box>
+
+<app-box [Title]="'FRC&reg; 2023 Game Manual'">
+  <img class="icon" src="../../../../assets/resourceIcons/book.svg" />
+  <h4>Manual including all rules and regulations for the 2020 game, FIRST&reg; INFINITE RECHARGE, as well as,
+    field drawings and other documents. You can download any as a PDF for future reference.</h4>
+  <app-button-ribbon [TextAlign]="'center'">
+    <app-button
+      (FunctionCallBack)="openURL('https://firstfrc.blob.core.windows.net/frc2023/Manual/2023FRCGameManual.pdf')">CHECK
+      IT OUT</app-button>
+  </app-button-ribbon>
+</app-box>
+
+<app-box [Title]="'ScreenSteps Live'">
+  <img class="icon" src="../../../../assets/resourceIcons/survey.svg" />
+  <h4>The documentation on this site encompasses a number of helpful documents including control system manual and
+    resources to help teams get started on programming a robot.</h4>
+  <app-button-ribbon [TextAlign]="'center'">
+    <app-button (FunctionCallBack)="openURL('https://docs.wpilib.org')">CHECK IT OUT</app-button>
+  </app-button-ribbon>
+</app-box>
+
+<app-box [Title]="'PARTs 3492 GitHub Repository'">
+  <img class="icon" src="../../../../assets/webImages/SocialIcons/GitHub.svg" />
+  <h4>This is where you can look at the code we have created for our robots and other various projects over the
+    years.</h4>
+  <app-button-ribbon [TextAlign]="'center'">
+    <app-button (FunctionCallBack)="openURL('https://github.com/3492PARTs')">CHECK IT OUT</app-button>
+  </app-button-ribbon>
+</app-box>
