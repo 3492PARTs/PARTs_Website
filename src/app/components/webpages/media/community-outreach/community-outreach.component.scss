@@ -1,4 +1,4 @@
-@import "../../../../scss/_helpers/variables";
+@import "../../../../../scss/abstracts/variables.scss";
 
 /*ALBUM COVERS*/
 
@@ -132,7 +132,7 @@
 }
 
 .wallpapers .article.ac-small .downloadLine {
-  border-bottom: 1px solid $navHam;
+  border-bottom: 1px solid $gray;
 }
 
 /*DROP DOWN ACTION*/
