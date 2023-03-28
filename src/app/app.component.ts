@@ -16,7 +16,7 @@ declare let gtag: Function;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  appMenu: Menu[] = [];
+
   private apiStatus = 'online';
   private firstRun = true;
 
@@ -34,7 +34,6 @@ export class AppComponent implements OnInit {
       this.apiStatus = a;
       if (a !== 'prcs' && a !== 'off' && this.firstRun) {
         this.authService.previouslyAuthorized();
-        this.competitionInit();
         this.firstRun = false;
       }
     })
@@ -44,101 +43,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authService.checkAPIStatus();
-    this.appMenu = [
-      /*{
-        MenuName: 'home',
-        RouterLink: '',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },*/
-      {
-        MenuName: 'contact us',
-        RouterLink: 'contact',
-        ID: this.gs.getNextGsId(),
-        MenuItems: [
-          {
-            MenuName: 'join',
-            RouterLink: 'join'
-          }
-        ]
-      },
-      {
-        MenuName: 'sponsoring',
-        RouterLink: 'sponsor',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'about',
-        RouterLink: 'about',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'media',
-        RouterLink: 'media',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'resources',
-        RouterLink: 'resources',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'first',
-        RouterLink: 'first',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      /*{
-        MenuName: 'leads',
-        RouterLink: 'https://www.parts3492leads.org/',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },*/
-      {
-        MenuName: 'members',
-        RouterLink: 'none', //'login',
-        ID: this.gs.getNextGsId(),
-        MenuItems: [
-          {
-            MenuName: 'login - this should not show',
-            RouterLink: 'login'
-          },
-          /*{
-            MenuName: 'calendar',
-            RouterLink: 'calendar'
-          }*/
-        ]
-      }
-    ];
   }
 
-  competitionInit(): void {
-    this.http.get(
-      'public/competition/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if ((result as CompetitionInit).event) {
-            window.setTimeout(() => {
-              this.appMenu.unshift({
-                MenuName: 'competition',
-                RouterLink: 'competition',
-                ID: this.gs.getNextGsId(),
-                MenuItems: []
-              });
-            }, 1);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-        }
-      }
-    );
-  }
+
 }

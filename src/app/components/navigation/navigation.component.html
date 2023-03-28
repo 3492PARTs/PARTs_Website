@@ -10,10 +10,17 @@
 
     <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}">
       <ul>
-        <li class="height">
+        <li class="height" *ngFor="let mi of appMenu">
           <a routerLinkActive="active" (click)="page = 'Pages'">
             <mat-icon class="icon" svgIcon="speedometer"></mat-icon>
-            <span>Dashboard</span>
+            <span *ngIf="!mi.RouterLink.includes('.'); else hasAddress" routerLink="{{mi.RouterLink}}"
+              routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+            true}" class="menu-link">{{mi.MenuName}}</span>
+
+            <ng-template #hasAddress>
+              <span><a target="_blank" [href]="mi.RouterLink" class="menu-link">{{mi.MenuName}}</a></span>
+            </ng-template>
+
           </a>
         </li>
 
@@ -21,7 +28,7 @@
 
         <li id="{{ pagesID }}" class="height" (click)="openSubNav(pagesID, pagesID + '-1')" appClickOutside
           (appClickOutside)="closeSubNav()">
-          <a [ngClass]="{ active : page !== 'Pages'}">
+          <a [ngClass]="{ active : page !== 'Members'}">
             <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
             <span>{{ page }}</span>
             <mat-icon [ngStyle]="{'color':'white'}" class="icon page-options"
@@ -29,20 +36,22 @@
           </a>
 
           <div id="{{ pagesID + '-1' }}" class="side-sidebar" [ngClass]="{ show : subNav === pagesID + '-1'}">
-            <span class="header">Pages</span>
+            <span class="header">Members Area</span>
             <ul>
-              <li>
-                <a routerLink="devices" routerLinkActive="active-link" (click)="page = 'Devices'">
-                  Devices
+              <li *ngIf="userLinks.length <= 0">
+                <a routerLink="login" routerLinkActive="active-link" (click)="page = 'Login'">
+                  Login
                 </a>
               </li>
-              <li>
-                <a routerLink="firmware" routerLinkActive="active-link" (click)="page = 'Firmware'">
-                  Firmware
+              <li *ngFor="let ul of userLinks">
+                <a routerLink="{{ ul.routerlink }}" routerLinkActive="active-link" (click)="page = ul.menu_name">
+                  {{ ul.menu_name }}
                 </a>
               </li>
-              <li>
-                <a routerLink="support" routerLinkActive="active-link" (click)="page = 'Support'">Support</a>
+              <li *ngIf="userLinks.length > 0">
+                <a (click)="logOut()" routerLinkActive="active-link">
+                  Logout
+                </a>
               </li>
             </ul>
           </div>

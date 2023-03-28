@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
-import { AuthService, User } from 'src/app/services/auth.service';
+import { AuthService, User, UserLinks } from 'src/app/services/auth.service';
 import { Router, NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 
 @Component({
   selector: 'app-navigation',
@@ -16,8 +18,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   private scrollPosition = 0;
   private userScrolling = false;
 
-  page = 'Pages';
-  pages = ['Devices', 'Firmware', 'Support']
+  page = 'Members';
+  pages: string[] = []; //['Devices', 'Firmware', 'Support']
 
   @ViewChild('thisHeader', { read: ElementRef, static: true }) header!: ElementRef;
   @ViewChild('thisMain', { read: ElementRef, static: true }) main!: ElementRef;
@@ -37,8 +39,18 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router) {
+  appMenu: Menu[] = [];
+  userLinks: UserLinks[] = [];
+
+  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient) {
     this.auth.currentUser.subscribe(u => this.user = u);
+    this.auth.currentUserLinks.subscribe((ul) => {
+      this.userLinks = ul;
+      this.pages = [];
+      this.userLinks.forEach(ul => {
+        this.pages.push(ul.menu_name);
+      });
+    });
     this.router.events
       .subscribe(
         (event: NavigationEvent) => {
@@ -46,8 +58,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             let urlEnd = event.url.substr(1, event.url.length - 1);
             urlEnd = urlEnd.charAt(0).toUpperCase() + urlEnd.slice(1);
 
+            //TODO Handle the below line
             if (this.pages.indexOf(urlEnd) >= 0) this.page = urlEnd;
-            else this.page = 'Pages';
+            else this.page = 'Members';
           }
         });
     this.gs.scrollPosition$.subscribe(scrollY => {
@@ -63,10 +76,93 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.hideNavExpander = this.gs.screenSize() !== 'lg';
 
     this.screenXs = this.gs.screenSize() === 'xs';
+
+    this.appMenu = [
+      /*{
+        MenuName: 'home',
+        RouterLink: '',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },*/
+      {
+        MenuName: 'contact us',
+        RouterLink: 'contact',
+        ID: this.gs.getNextGsId(),
+        MenuItems: [
+          {
+            MenuName: 'join',
+            RouterLink: 'join'
+          }
+        ]
+      },
+      {
+        MenuName: 'sponsoring',
+        RouterLink: 'sponsor',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'about',
+        RouterLink: 'about',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'media',
+        RouterLink: 'media',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'resources',
+        RouterLink: 'resources',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },
+      {
+        MenuName: 'first',
+        RouterLink: 'first',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      }
+      /*{
+        MenuName: 'leads',
+        RouterLink: 'https://www.parts3492leads.org/',
+        ID: this.gs.getNextGsId(),
+        MenuItems: []
+      },*/
+    ];
+    this.competitionInit();
   }
 
   ngAfterViewInit(): void {
     this.scrollPosition = window.scrollY;
+  }
+
+  competitionInit(): void {
+    this.http.get(
+      'public/competition/init/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if ((result as CompetitionInit).event) {
+            window.setTimeout(() => {
+              this.appMenu.unshift({
+                MenuName: 'competition',
+                RouterLink: 'competition',
+                ID: this.gs.getNextGsId(),
+                MenuItems: []
+              });
+            }, 1);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+        }
+      }
+    );
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events
@@ -260,6 +356,11 @@ let max = document.documentElement.scrollHeight;
       return topShown;
     }
     return false;
+  }
+
+  logOut(): void {
+    this.auth.logOut();
+    this.page = 'Members';
   }
 }
 
