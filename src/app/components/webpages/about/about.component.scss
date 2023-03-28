@@ -35,6 +35,40 @@
   }
 }
 
+#robot-history {
+  max-width: 1900px;
+  width: 90%;
+  margin: 1em auto 1em auto;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  align-content: stretch;
+
+  /*MOBILE */
+  @media only screen and (max-width: $screen-size-xlg) {
+    .box {
+      width: 100%;
+    }
+  }
+  app-box {
+    cursor: pointer;
+  }
+
+  .robot-image {
+    margin-left: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    height: 18em;
+    border-radius: 0.5em;
+  }
+}
+
+//
+//old
 /*TEXT*/
 
 #aboutStart h1,

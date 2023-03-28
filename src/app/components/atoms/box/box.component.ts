@@ -17,6 +17,7 @@ import {
 export class BoxComponent implements OnInit {
   @Input() Width = '0';
   @Input() MaxWidth = '0';
+  @Input() InlineBlock = false;
 
   @Input() Title = '';
 
@@ -38,6 +39,11 @@ export class BoxComponent implements OnInit {
 
     if (this.MaxWidth !== '0') {
       this.renderer.setStyle(this.box.nativeElement, 'max-width', this.MaxWidth);
+    }
+
+    if (this.InlineBlock) {
+      this.renderer.setStyle(this.box.nativeElement, 'width', 'auto');
+      this.renderer.setStyle(this.box.nativeElement, 'display', 'inline-block');
     }
 
     if (this.Collapsed) {
