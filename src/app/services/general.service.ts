@@ -156,7 +156,7 @@ export class GeneralService {
 
   /* helpwe functions */
   strNoE(s: any) {
-    return s === undefined || s === null || s.trim() === '' || s.length === 0 || s.length === null || s.length === undefined;
+    return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';
   }
 
   downloadFileAs(filename: string, data: any, MimeType: string) {
