@@ -12,7 +12,7 @@
       <ul>
         <li class="height" *ngFor="let mi of appMenu">
           <a routerLinkActive="active" (click)="page = 'Pages'">
-            <mat-icon class="icon" svgIcon="speedometer"></mat-icon>
+            <mat-icon class="icon" [svgIcon]="mi.icon"></mat-icon>
             <span *ngIf="!mi.routerlink.includes('.'); else hasAddress" routerLink="{{mi.routerlink}}"
               routerLinkActive="active" [routerLinkActiveOptions]="{exact:
             true}" class="menu-link">{{mi.menu_name}}</span>

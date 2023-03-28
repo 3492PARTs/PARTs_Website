@@ -116,7 +116,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         next: (result: any) => {
           if ((result as CompetitionInit).event) {
             window.setTimeout(() => {
-              this.appMenu.unshift(new MenuItem('Competition', 'competition', 'icon'));
+              this.appMenu.unshift(new MenuItem('Competition', 'competition', 'robot-excited-outline'));
             }, 1);
           }
         },
