@@ -18,6 +18,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   private scrollPosition = 0;
   private userScrolling = false;
 
+  urlEnd = '';
   page = 'Members';
   pages: string[] = []; //['Devices', 'Firmware', 'Support']
 
@@ -49,17 +50,20 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.pages = [];
       this.userLinks.forEach(ul => {
         this.pages.push(ul.menu_name);
+        if (ul.menu_name === this.urlEnd.toUpperCase()) {
+          this.page = ul.menu_name;
+        }
       });
     });
     this.router.events
       .subscribe(
         (event: NavigationEvent) => {
           if (event instanceof NavigationEnd) {
-            let urlEnd = event.url.substr(1, event.url.length - 1);
-            urlEnd = urlEnd.charAt(0).toUpperCase() + urlEnd.slice(1);
+            this.urlEnd = event.url.substr(1, event.url.length - 1);
+            this.urlEnd = this.urlEnd.charAt(0).toUpperCase() + this.urlEnd.slice(1);
 
             //TODO Handle the below line
-            if (this.pages.indexOf(urlEnd) >= 0) this.page = urlEnd;
+            if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) this.page = this.urlEnd.toUpperCase();
             else this.page = 'Members';
           }
         });

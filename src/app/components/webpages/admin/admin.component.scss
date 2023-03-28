@@ -1,4 +1,4 @@
-@import "../../../scss/_helpers/variables";
+@import "../../../../scss/abstracts/variables.scss";
 
 .inline {
   display: flex;
@@ -15,7 +15,7 @@
   align-items: center;
   align-content: center;
   flex-wrap: wrap;
-  &> div > app-button {
+  & > div > app-button {
     vertical-align: bottom;
   }
 }
@@ -42,7 +42,7 @@
   color: $accent_color;
 }
 
-.vertical-center{
+.vertical-center {
   display: flex;
-    align-items: center;
+  align-items: center;
 }
