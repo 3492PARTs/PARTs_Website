@@ -1,6 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
 import { GeneralService, Page } from 'src/app/services/general.service';
-import { NavigationService, NavItem } from 'src/app/services/navigation.service';
+import { NavigationService, MenuItem } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-sub-navigation',
@@ -18,7 +18,7 @@ export class SubNavigationComponent {
   @Input() hideNavExpander = false;
 
   page = 'users'
-  @Input() navItems: NavItem[] = [];
+  @Input() navItems: MenuItem[] = [];
 
 
   constructor(private ns: NavigationService) {

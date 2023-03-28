@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
-import { AuthService, User, UserLinks } from 'src/app/services/auth.service';
+import { AuthService, User } from 'src/app/services/auth.service';
 import { Router, NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -40,8 +40,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: Menu[] = [];
-  userLinks: UserLinks[] = [];
+  appMenu: MenuItem[] = [];
+  userLinks: MenuItem[] = [];
 
   constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient) {
     this.auth.currentUser.subscribe(u => this.user = u);
@@ -93,59 +93,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.screenSize() === 'xs';
 
     this.appMenu = [
-      /*{
-        MenuName: 'home',
-        RouterLink: '',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },*/
-      {
-        MenuName: 'contact us',
-        RouterLink: 'contact',
-        ID: this.gs.getNextGsId(),
-        MenuItems: [
-          {
-            MenuName: 'join',
-            RouterLink: 'join'
-          }
-        ]
-      },
-      {
-        MenuName: 'sponsoring',
-        RouterLink: 'sponsor',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'about',
-        RouterLink: 'about',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'media',
-        RouterLink: 'media',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'resources',
-        RouterLink: 'resources',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },
-      {
-        MenuName: 'first',
-        RouterLink: 'first',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      }
-      /*{
-        MenuName: 'leads',
-        RouterLink: 'https://www.parts3492leads.org/',
-        ID: this.gs.getNextGsId(),
-        MenuItems: []
-      },*/
+      new MenuItem('Contact Us', 'contact', 'icon'),
+      new MenuItem('Join PARTs', 'join', 'icon'),
+      new MenuItem('Sponsoring', 'sponsor', 'icon'),
+      new MenuItem('About', 'about', 'icon'),
+      new MenuItem('Media', 'media', 'icon'),
+      new MenuItem('Resources', 'resources', 'icon'),
+      new MenuItem('FIRST', 'first', 'icon'),
     ];
     this.competitionInit();
   }
@@ -162,12 +116,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         next: (result: any) => {
           if ((result as CompetitionInit).event) {
             window.setTimeout(() => {
-              this.appMenu.unshift({
-                MenuName: 'competition',
-                RouterLink: 'competition',
-                ID: this.gs.getNextGsId(),
-                MenuItems: []
-              });
+              this.appMenu.unshift(new MenuItem('Competition', 'competition', 'icon'));
             }, 1);
           }
         },
@@ -384,14 +333,17 @@ export class PageSpecificNavOption {
   optionFunction!: () => void;
 }
 
-export class Menu {
-  MenuName = '';
-  RouterLink = '';
-  ID = '';
-  MenuItems: MenuItem[] = []
-}
-
 export class MenuItem {
-  MenuName = '';
-  RouterLink = '';
+  menu_name = '';
+  order = -1;
+  permission = -1;
+  routerlink = '';
+  user_links_id = -1;
+  icon = 'clipboard-text-multiple-outline';
+
+  constructor(menu_name: string, routerlink: string, icon?: string) {
+    this.menu_name = menu_name;
+    this.routerlink = routerlink;
+    this.icon = icon || 'clipboard-text-multiple-outline';
+  }
 }

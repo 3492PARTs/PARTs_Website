@@ -23,7 +23,7 @@ export class AuthService {
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
 
-  private userLinks = new BehaviorSubject<UserLinks[]>([]);
+  private userLinks = new BehaviorSubject<MenuItem[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
   localStorageString = 'p-tkn-s';
@@ -331,7 +331,7 @@ export class AuthService {
       ).subscribe(
         {
           next: (result: any) => {
-            this.userLinks.next(result as UserLinks[]);
+            this.userLinks.next(result as MenuItem[]);
           },
           error: (err: any) => {
             this.gs.decrementOutstandingCalls();
@@ -413,13 +413,6 @@ export class User {
   image = '';
 }
 
-export class UserLinks {
-  menu_name = '';
-  order = -1;
-  permission = -1;
-  routerlink = '';
-  user_links_id = -1;
-}
 
 export class AuthGroup {
   id!: number;

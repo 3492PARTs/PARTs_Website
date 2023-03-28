@@ -13,12 +13,12 @@
         <li class="height" *ngFor="let mi of appMenu">
           <a routerLinkActive="active" (click)="page = 'Pages'">
             <mat-icon class="icon" svgIcon="speedometer"></mat-icon>
-            <span *ngIf="!mi.RouterLink.includes('.'); else hasAddress" routerLink="{{mi.RouterLink}}"
+            <span *ngIf="!mi.routerlink.includes('.'); else hasAddress" routerLink="{{mi.routerlink}}"
               routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-            true}" class="menu-link">{{mi.MenuName}}</span>
+            true}" class="menu-link">{{mi.menu_name}}</span>
 
             <ng-template #hasAddress>
-              <span><a target="_blank" [href]="mi.RouterLink" class="menu-link">{{mi.MenuName}}</a></span>
+              <span><a target="_blank" [href]="mi.routerlink" class="menu-link">{{mi.menu_name}}</a></span>
             </ng-template>
 
           </a>

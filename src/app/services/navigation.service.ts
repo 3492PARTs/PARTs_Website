@@ -11,7 +11,7 @@ export class NavigationService {
   currentSubPage = this.subPage.asObservable();
 
   /* Sub Pages */
-  private subPages = new BehaviorSubject<NavItem[]>([]);
+  private subPages = new BehaviorSubject<MenuItem[]>([]);
   currentSubPages = this.subPages.asObservable();
 
   constructor() { }
@@ -20,18 +20,7 @@ export class NavigationService {
     this.subPage.next(s);
   }
 
-  setSubPages(s: NavItem[]): void {
+  setSubPages(s: MenuItem[]): void {
     this.subPages.next(s);
-  }
-}
-
-export class NavItem {
-  label = '';
-  code = '';
-  icon = 'clipboard-text-multiple-outline';
-
-  constructor(label: string, code: string) {
-    this.label = label;
-    this.code = code;
   }
 }
