@@ -3,6 +3,7 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
+import { NavigationService, NavItem } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-scout-admin',
@@ -73,10 +74,20 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService) {
+    this.ns.currentSubPage.subscribe(p => this.page = p);
+  }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
+    this.ns.setSubPages([
+      new NavItem('Users', 'users'),
+      new NavItem('Schedule', 'mngSch'),
+      new NavItem('Season', 'mngSeason'),
+      new NavItem('Field Questions', 'mngFldQ'),
+      new NavItem('Pit Questions', 'mngPitQ'),
+      new NavItem('Phone Types', 'mngPhnTyp'),
+    ]);
   }
 
   adminInit(): void {

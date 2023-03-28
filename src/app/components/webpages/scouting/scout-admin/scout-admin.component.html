@@ -1,300 +1,286 @@
-<app-box-side-nav-wrapper>
-  <app-side-nav [Width]="'12em'" [Title]="'Manage'">
-    <ul id="side-nav">
-      <li (click)="page = 'users'" [ngClass]="{'active': page === 'users'}">Users</li>
-      <li (click)="page = 'mngSch'" [ngClass]="{'active': page === 'mngSch'}">Schedule</li>
-      <li (click)="page = 'mngSeason'" [ngClass]="{'active': page === 'mngSeason'}">Season</li>
-      <li (click)="page = 'mngFldQ'" [ngClass]="{'active': page === 'mngFldQ'}">Field Questions</li>
-      <li (click)="page = 'mngPitQ'" [ngClass]="{'active': page === 'mngPitQ'}">Pit Questions</li>
-      <li (click)="page = 'mngPhnTyp'" [ngClass]="{'active': page === 'mngPhnTyp'}">Phone Types</li>
-    </ul>
-  </app-side-nav>
+<app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
 
-  <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
+  <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+    (EditRecordCallBack)="showManageUserModal($event)">
+  </app-table>
 
-    <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-      (EditRecordCallBack)="showManageUserModal($event)">
-    </app-table>
-
-    <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
-      <div class="flex">
-        <div>
-          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
-            [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
-          </app-form-element>
-        </div>
-        <div class="vertical-center">
-          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
-            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-            [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
-          </app-form-element>
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
-        </div>
+  <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
+    <div class="flex">
+      <div>
+        <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+          [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+          [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+        </app-form-element>
       </div>
+      <div class="vertical-center">
+        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
+          [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
+          [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+        </app-form-element>
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
+      </div>
+    </div>
 
-      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
-        [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+    <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+      [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
-      <app-button-ribbon>
-        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
-      </app-button-ribbon>
-    </app-modal>
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
+    </app-button-ribbon>
+  </app-modal>
 
-  </app-box>
+</app-box>
 
 
-  <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
-    <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
-      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
-      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
-    </app-table>
+<app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
+  <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
+    [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
+    [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
+  </app-table>
 
-    <!--
+  <!--
     <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
       [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
       [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
     </app-table>-->
 
-    <!--
+  <!--
     <app-table [TableTitle]="'Scout Past'" [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule"
       [Scrollable]="true">
     </app-table>
   -->
 
-    <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
-      <app-form>
-        <app-form-element-group [LabelText]="'New Entry'">
+  <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
+    <app-form>
+      <app-form-element-group [LabelText]="'New Entry'">
 
-          <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.red_one_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.red_two_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.red_three_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.blue_one_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.blue_two_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-            [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-            [(Model)]="scoutFieldSchedule.blue_three_id" [FormGroupInline]="true"
-            [SelectValidityFunction]="compareUserObjects">
-          </app-form-element>
-          <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
-            [(Model)]="scoutFieldSchedule.st_time" (FunctionCallBack)="setEndTime()">
-          </app-form-element>
-          <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
-            [(Model)]="scoutFieldSchedule.end_time">
-          </app-form-element>
+        <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.red_one_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.red_two_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.red_three_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.blue_one_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.blue_two_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+          [(Model)]="scoutFieldSchedule.blue_three_id" [FormGroupInline]="true"
+          [SelectValidityFunction]="compareUserObjects">
+        </app-form-element>
+        <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
+          [(Model)]="scoutFieldSchedule.st_time" (FunctionCallBack)="setEndTime()">
+        </app-form-element>
+        <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
+          [(Model)]="scoutFieldSchedule.end_time">
+        </app-form-element>
 
-          <app-form-element *ngIf="scoutFieldSchedule.scout_field_sch_id" [Type]="'checkbox'" [FormGroup]="true"
-            [LabelText]="'Delete?'" [(Model)]="scoutFieldSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
-          </app-form-element>
+        <app-form-element *ngIf="scoutFieldSchedule.scout_field_sch_id" [Type]="'checkbox'" [FormGroup]="true"
+          [LabelText]="'Delete?'" [(Model)]="scoutFieldSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
+        </app-form-element>
 
-          <app-button-ribbon>
-            <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'warning'"
-              (FunctionCallBack)="notifyUsers(scoutFieldSchedule.scout_field_sch_id)">
-              Notify</app-button>
-            <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'main'"
-              (FunctionCallBack)="copyScoutFieldScheduleEntry()">Copy</app-button>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
-          </app-button-ribbon>
-        </app-form-element-group>
-      </app-form>
-    </app-modal>
+        <app-button-ribbon>
+          <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'warning'"
+            (FunctionCallBack)="notifyUsers(scoutFieldSchedule.scout_field_sch_id)">
+            Notify</app-button>
+          <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'main'"
+            (FunctionCallBack)="copyScoutFieldScheduleEntry()">Copy</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
+        </app-button-ribbon>
+      </app-form-element-group>
+    </app-form>
+  </app-modal>
 
-  </app-box>
+</app-box>
 
-  <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
-    <app-form-element-group [LabelText]="'Season and Event'" [InlineElements]="true">
-      <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-        [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-        [(Model)]="this.init.currentSeason.season_id" (ModelChange)="buildEventList(true)">
-      </app-form-element>
-      <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="eventList" [DisplayEmptyOption]="true"
-        [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="init.currentEvent.event_id">
-      </app-form-element>
-      <app-form-element *ngIf="init.currentEvent && init.currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
-        [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="init.currentEvent.competition_page_active"
-        (FunctionCallBack)="toggleCompetitionPage()">
-      </app-form-element>
-      <app-button-ribbon>
-        <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set
-          Season/Event</app-button>
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="resetSeasonForm()">Clear</app-button>
-      </app-button-ribbon>
-      <app-button-ribbon>
-        <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
-          Sync Season</app-button>
-        <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
-          Sync Matches</app-button>
-        <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'"
-          (FunctionCallBack)="syncEventTeamInfo()">
-          Sync Event-Team Info</app-button>
-      </app-button-ribbon>
-      <app-button-ribbon>
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Add/Delete Season'" [Title]="'Add/Delete Season'">
-          <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
-          </app-form-element>
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
-          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="delSeason">
-          </app-form-element>
-          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
-
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-            [(Model)]="delEvent">
-          </app-form-element>
-          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
-        </app-modal>
-
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'">
-          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="newEvent.season_id">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm">
-          </app-form-element>
-
-          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st"></app-form-element>
-          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end"></app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Location Name'" [(Model)]="newEvent.location_name">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone">
-          </app-form-element>
-
-          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEvent()">Clear</app-button>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveEvent()">Save</app-button>
-        </app-modal>
-
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Add Team'" [Title]="'Add Team'">
-          <app-form-element [Type]="'text'" [LabelText]="'Number'" [(Model)]="newTeam.team_no">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newTeam.team_nm">
-          </app-form-element>
-
-
-          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearTeam()">Clear</app-button>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveTeam()">Save</app-button>
-        </app-modal>
-
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'">
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-            [(Model)]="eventToTeams.event_id">
-          </app-form-element>
-
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-            [(MultiModel)]="eventToTeams.teams">
-          </app-form-element>
-
-
-          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
-        </app-modal>
-
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'">
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
-          </app-form-element>
-
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
-            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
-          </app-form-element>
-
-
-          <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
-          <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
-        </app-modal>
-      </app-button-ribbon>
-    </app-form-element-group>
-
-    <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
-      <div id="respose">
-        <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
-      </div>
-    </app-form-element-group>
-  </app-box>
-
-  <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
-    <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
-  </app-box>
-
-  <app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
-    <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
-  </app-box>
-
-  <app-box *ngIf="page === 'mngPhnTyp'" [Title]="'Manage Phone Types'">
-    <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-      [(Model)]="phoneType" [SelectList]="init.phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+<app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
+  <app-form-element-group [LabelText]="'Season and Event'" [InlineElements]="true">
+    <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons" [DisplayEmptyOption]="true"
+      [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="this.init.currentSeason.season_id"
+      (ModelChange)="buildEventList(true)">
     </app-form-element>
-    <app-button *ngIf="!newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">New Phone Type
-    </app-button>
-    <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone Type
-    </app-button>
-
-    <app-form-element [Type]="'text'" [LabelText]="'Carrier:'" [(Model)]="phoneType.carrier">
+    <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="eventList" [DisplayEmptyOption]="true"
+      [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="init.currentEvent.event_id">
     </app-form-element>
-    <app-form-element [Type]="'text'" [LabelText]="'Address:'" [(Model)]="phoneType.phone_type"></app-form-element>
-
+    <app-form-element *ngIf="init.currentEvent && init.currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
+      [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="init.currentEvent.competition_page_active"
+      (FunctionCallBack)="toggleCompetitionPage()">
+    </app-form-element>
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="savePhoneType()">Save</app-button>
+      <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Set
+        Season/Event</app-button>
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="resetSeasonForm()">Clear</app-button>
     </app-button-ribbon>
-  </app-box>
+    <app-button-ribbon>
+      <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+        Sync Season</app-button>
+      <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+        Sync Matches</app-button>
+      <app-button *ngIf="this.init.currentEvent.event_id" [ButtonType]="'main'"
+        (FunctionCallBack)="syncEventTeamInfo()">
+        Sync Event-Team Info</app-button>
+    </app-button-ribbon>
+    <app-button-ribbon>
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Add/Delete Season'" [Title]="'Add/Delete Season'">
+        <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
+        </app-form-element>
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+        <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
+          [(Model)]="delSeason">
+        </app-form-element>
+        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
 
-</app-box-side-nav-wrapper>
+        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+          [(Model)]="delEvent">
+        </app-form-element>
+        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+      </app-modal>
+
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'">
+        <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
+          [(Model)]="newEvent.season_id">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm">
+        </app-form-element>
+
+        <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st"></app-form-element>
+        <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end"></app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Location Name'" [(Model)]="newEvent.location_name">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone">
+        </app-form-element>
+
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEvent()">Clear</app-button>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveEvent()">Save</app-button>
+      </app-modal>
+
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Add Team'" [Title]="'Add Team'">
+        <app-form-element [Type]="'text'" [LabelText]="'Number'" [(Model)]="newTeam.team_no">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newTeam.team_nm">
+        </app-form-element>
+
+
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearTeam()">Clear</app-button>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveTeam()">Save</app-button>
+      </app-modal>
+
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'">
+        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+          [(Model)]="eventToTeams.event_id">
+        </app-form-element>
+
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+          [(MultiModel)]="eventToTeams.teams">
+        </app-form-element>
+
+
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
+      </app-modal>
+
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'">
+        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
+        </app-form-element>
+
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
+          [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
+        </app-form-element>
+
+
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
+      </app-modal>
+    </app-button-ribbon>
+  </app-form-element-group>
+
+  <app-form-element-group [LabelText]="'Response'" *ngIf="syncSeasonResponse.retMessage">
+    <div id="respose">
+      <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
+    </div>
+  </app-form-element-group>
+</app-box>
+
+<app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
+  <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
+</app-box>
+
+<app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
+  <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
+</app-box>
+
+<app-box *ngIf="page === 'mngPhnTyp'" [Title]="'Manage Phone Types'">
+  <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+    [(Model)]="phoneType" [SelectList]="init.phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+  </app-form-element>
+  <app-button *ngIf="!newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">New Phone Type
+  </app-button>
+  <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone Type
+  </app-button>
+
+  <app-form-element [Type]="'text'" [LabelText]="'Carrier:'" [(Model)]="phoneType.carrier">
+  </app-form-element>
+  <app-form-element [Type]="'text'" [LabelText]="'Address:'" [(Model)]="phoneType.phone_type"></app-form-element>
+
+  <app-button-ribbon>
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="savePhoneType()">Save</app-button>
+  </app-button-ribbon>
+</app-box>

@@ -1,4 +1,4 @@
-@import "../../../../scss/_helpers/variables";
+@import "../../../../../scss/abstracts/variables.scss";
 
 #side-nav {
   padding: 0;
@@ -43,7 +43,7 @@
   overflow-x: auto;
 }
 
-.vertical-center{
+.vertical-center {
   display: flex;
-    align-items: center;
+  align-items: center;
 }
