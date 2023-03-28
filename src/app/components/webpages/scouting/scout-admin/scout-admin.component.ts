@@ -81,12 +81,12 @@ export class ScoutAdminComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
     this.ns.setSubPages([
-      new MenuItem('Users', 'users'),
-      new MenuItem('Schedule', 'mngSch'),
-      new MenuItem('Season', 'mngSeason'),
-      new MenuItem('Field Questions', 'mngFldQ'),
-      new MenuItem('Pit Questions', 'mngPitQ'),
-      new MenuItem('Phone Types', 'mngPhnTyp'),
+      new MenuItem('Users', 'users', 'account-group'),
+      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
+      new MenuItem('Season', 'mngSeason', 'card-bulleted-settings-outline'),
+      new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
+      new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
+      new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
   }
 
