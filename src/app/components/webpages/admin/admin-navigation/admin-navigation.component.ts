@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { GeneralService, Page } from 'src/app/services/general.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-admin-navigation',
@@ -24,6 +25,9 @@ export class AdminNavigationComponent {
 
   @Input() hideNavExpander = false;
 
+  page = 'users'
+
+
   firmwareModalVisible = false;
   firmwareModalMode = 'Add';
   activeFirmware: Firmware = new Firmware();
@@ -43,7 +47,10 @@ export class AdminNavigationComponent {
   ];
 
   constructor(//private fs: FirmwareService, 
-    private gs: GeneralService) {
+    private gs: GeneralService,
+    private ns: NavigationService) {
+    this.ns.setSubPage(this.page);
+    this.ns.currentSubPage.subscribe(p => this.page = p);
     /*this.fs.firmware$.subscribe((f) => {
       this.firmware = JSON.parse(JSON.stringify(f));
       this.firmware.forEach(f => {
@@ -60,13 +67,17 @@ export class AdminNavigationComponent {
   }
 
   ngOnInit(): void {
-    //this.fs.getFirmware();
+    //this.fs.getFirmware();;
     this.firmware = [
       { name: 'te1', updated_at: new Date(), description: 'fdsgds' },
       { name: 'te2', updated_at: new Date(), description: '2345235' },
       { name: 'te3', updated_at: new Date(), description: 'fsa4' },
       { name: 'te4', updated_at: new Date(), description: 'dfsdfsdffffff' }
     ]
+  }
+
+  setPage(s: string): void {
+    this.ns.setSubPage(s);
   }
 
   openFirmwareModal(f?: Firmware): void {

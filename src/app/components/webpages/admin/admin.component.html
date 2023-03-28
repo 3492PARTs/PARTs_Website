@@ -1,73 +1,63 @@
-<app-box-side-nav-wrapper>
-  <app-side-nav [Width]="'12em'" [Title]="'Admin'">
-    <ul id="side-nav">
-      <li (click)="page = 'users'" [ngClass]="{'active': page === 'users'}">Manage Users</li>
-      <li (click)="page = 'errors'" [ngClass]="{'active': page === 'errors'}">Error Log</li>
-    </ul>
-  </app-side-nav>
+<app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
+  <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+    (EditRecordCallBack)="showManageUserModal($event)">
+  </app-table>
 
-  <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
-    <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-      (EditRecordCallBack)="showManageUserModal($event)">
-    </app-table>
-
-    <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
-      <div class="flex">
-        <div>
-          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Email:'" [(Model)]="activeUser.email"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
-            [FormGroupInline]="true">
-          </app-form-element>
-          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
-            [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
-          </app-form-element>
-          <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
-            [FormGroupInline]="true">
-          </app-form-element>
-        </div>
-        <div class="vertical-center">
-          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
-            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-            [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
-          </app-form-element>
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
-        </div>
+  <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
+    <div class="flex">
+      <div>
+        <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Email:'" [(Model)]="activeUser.email" [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+          [FormGroupInline]="true">
+        </app-form-element>
+        <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+          [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+          [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+        </app-form-element>
+        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
+          [FormGroupInline]="true">
+        </app-form-element>
       </div>
+      <div class="vertical-center">
+        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
+          [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
+          [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+        </app-form-element>
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
+      </div>
+    </div>
 
-      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
-        [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+    <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+      [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
-      <app-button-ribbon>
-        <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
-      </app-button-ribbon>
-    </app-modal>
-  </app-box>
+    <app-button-ribbon>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
+    </app-button-ribbon>
+  </app-modal>
+</app-box>
 
-  <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
-    <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
-      (RecordClickCallBack)="showErrorModal($event)">
-    </app-table>
+<app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
+  <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
+    (RecordClickCallBack)="showErrorModal($event)">
+  </app-table>
 
-    <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
-      <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
-      <p>Path: {{ currentError.path }}</p>
-      <p>Message: {{ currentError.message }}</p>
-      <p>Exception: {{ currentError.exception }}</p>
-      <p>Time: {{ currentError.display_time }}</p>
-    </app-modal>
+  <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
+    <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
+    <p>Path: {{ currentError.path }}</p>
+    <p>Message: {{ currentError.message }}</p>
+    <p>Exception: {{ currentError.exception }}</p>
+    <p>Time: {{ currentError.display_time }}</p>
+  </app-modal>
 
-    <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
-  </app-box>
-</app-box-side-nav-wrapper>
+  <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
+</app-box>

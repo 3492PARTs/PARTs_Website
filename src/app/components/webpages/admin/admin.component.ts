@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-admin',
@@ -48,7 +49,9 @@ export class AdminComponent implements OnInit {
   errorDetailModalVisible = false;
   currentError: ErrorLog = new ErrorLog();
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService) {
+    this.ns.currentSubPage.subscribe(p => this.page = p);
+  }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);

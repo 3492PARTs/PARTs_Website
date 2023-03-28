@@ -1,20 +1,30 @@
-<div id="firmware-nav">
-    <div id="firmware-title" class="nav-item" [ngClass]="{ expanded : navExpanded}" (click)="showSearchModal()">
+<div id="admin-nav">
+    <div id="admin-title" class="nav-item" [ngClass]="{ expanded : navExpanded, active: page === 'users'}"
+        (click)="setPage('users')">
         <mat-icon class="icon" svgIcon="clipboard-text-multiple-outline"></mat-icon>
-        <span [ngClass]="{ expanded : navExpanded}">My Firmware</span>
+        <span [ngClass]="{ expanded : navExpanded}">Manage Users</span>
     </div>
 
     <hr>
-    <div id="firmware-nav-main"
+
+    <div id="admin-title" class="nav-item" [ngClass]="{ expanded : navExpanded, active: page === 'errors'}"
+        (click)="setPage('errors')">
+        <mat-icon class="icon" svgIcon="clipboard-text-multiple-outline"></mat-icon>
+        <span [ngClass]="{ expanded : navExpanded}">Error Log</span>
+    </div>
+    <!--
+    <hr>
+
+    <div id="admin-nav-main"
         [ngClass]="{ expanded : navExpanded, collapsedWideScreen : !hideNavExpander && !navExpanded }">
         <ng-container *ngFor="let f of firmware; last as isLast">
-            <div class="firmware nav-item" [ngClass]="{ expanded : navExpanded}" (click)="setFirmware(f)">
-                <div class="firmware-image" [ngClass]="{ expanded : navExpanded}">
+            <div class="admin nav-item" [ngClass]="{ expanded : navExpanded}" (click)="setFirmware(f)">
+                <div class="admin-image" [ngClass]="{ expanded : navExpanded}">
                     <mat-icon class="icon" svgIcon="chip"></mat-icon>
                 </div>
-                <div class="firmware-details">
+                <div class="admin-details">
                     <span [ngClass]="{ expanded : navExpanded}">{{ f.name }}</span>
-                    <span class="firmware-time" [ngClass]="{ expanded : navExpanded}">{{ f.updated_at | date:'short'
+                    <span class="admin-time" [ngClass]="{ expanded : navExpanded}">{{ f.updated_at | date:'short'
                         }}</span>
                 </div>
             </div>
@@ -23,26 +33,26 @@
         </ng-container>
     </div>
 
-    <div id="firmware-page-nav"
+    <div id="admin-page-nav"
         [ngClass]="{ expanded : navExpanded, collapsedWideScreen : !hideNavExpander && !navExpanded }">
-        <div id="firmware-back" class="firmware-page-nav-item" [ngClass]="{ disabled : !firmwarePages.previous}"
+        <div id="admin-back" class="admin-page-nav-item" [ngClass]="{ disabled : !firmwarePages.previous}"
             (click)="previousPage()">
             <mat-icon class="nav-icon" svgIcon="menu-left"></mat-icon>
         </div>
-        <div id="firmware-add" class="firmware-page-nav-item" (click)="openFirmwareModal()">
+        <div id="admin-add" class="admin-page-nav-item" (click)="openFirmwareModal()">
             <mat-icon class="nav-icon" svgIcon="plus"></mat-icon>
         </div>
-        <div id="firmware-next" class="firmware-page-nav-item" [ngClass]="{ disabled : !firmwarePages.next}"
+        <div id="admin-next" class="admin-page-nav-item" [ngClass]="{ disabled : !firmwarePages.next}"
             (click)="nextPage()">
             <mat-icon class="nav-icon" svgIcon="menu-right"></mat-icon>
         </div>
-    </div>
+    </div>-->
 </div>
 
 <app-modal [Title]="firmwareModalMode + ' Firmware'" [(visible)]="firmwareModalVisible">
-    <div id="firmware-modal">
+    <div id="admin-modal">
         <app-form (SubmitFunction)="saveFirmware()">
-            <div id="firmware-form">
+            <div id="admin-form">
                 <div>
                     <app-form-element [Type]="'text'" [(Model)]="activeFirmware.name" [LabelText]="'Name'"
                         [Required]="true">
@@ -68,7 +78,7 @@
 <!--
 <app-modal [(visible)]="searchfirmwareModalVisible" [Title]="'Search firmwares'">
     <app-form>
-        <app-form-element [Type]="'number'" [LabelText]="'firmware #'" [FormGroupInline]="true"
+        <app-form-element [Type]="'number'" [LabelText]="'admin #'" [FormGroupInline]="true"
             [FormElementInline]="true">
         </app-form-element>
 
@@ -76,7 +86,7 @@
             [(Model)]="activeFirmwarefirmware.title" [FormGroupInline]="true" [FormElementInline]="true">
         </app-form-element>
 
-        <app-form-element [Type]="'select'" [LabelText]="'firmware Type'" [SelectList]="firmwareTypes"
+        <app-form-element [Type]="'select'" [LabelText]="'admin Type'" [SelectList]="firmwareTypes"
             [DisplayProperty]="'name'" [BindingProperty]="'id'" [(Model)]="activeFirmwarefirmware.request_type"
             [DisplayEmptyOption]="true" [FormGroupInline]="true" [FormElementInline]="true">
         </app-form-element>
