@@ -89,6 +89,7 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
+    this.ns.setSubPage('users');
   }
 
   adminInit(): void {

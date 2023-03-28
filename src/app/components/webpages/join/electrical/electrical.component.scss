@@ -1,4 +1,4 @@
-@import "../../../../scss/_helpers/variables";
+@import "../../../../../scss/abstracts/variables.scss";
 
 #subgroups {
   width: 100%;
@@ -9,7 +9,7 @@
 }
 
 #subgroups td {
-  border: 2px solid $navHam;
+  border: 2px solid $gray;
   overflow: hidden;
 }
 
