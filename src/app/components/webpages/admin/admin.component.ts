@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth.service';
-import { NavigationService, MenuItem } from 'src/app/services/navigation.service';
+import { NavigationService } from 'src/app/services/navigation.service';
+import { MenuItem } from '../../navigation/navigation.component';
 
 @Component({
   selector: 'app-admin',

@@ -3,7 +3,7 @@
         <div class="nav-item title" [ngClass]="{ expanded : navExpanded, active: page === ni.routerlink}"
             (click)="setPage(ni.routerlink)">
             <mat-icon class="icon" [svgIcon]="ni.icon"></mat-icon>
-            <span [ngClass]="{ expanded : navExpanded}">{{ ni.menu_item }}</span>
+            <span [ngClass]="{ expanded : navExpanded}">{{ ni.menu_name }}</span>
         </div>
 
         <hr *ngIf="!isLast">

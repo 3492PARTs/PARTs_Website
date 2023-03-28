@@ -1,6 +1,6 @@
 import { Component, Input, Output } from '@angular/core';
-import { GeneralService, Page } from 'src/app/services/general.service';
-import { NavigationService, MenuItem } from 'src/app/services/navigation.service';
+import { NavigationService } from 'src/app/services/navigation.service';
+import { MenuItem } from '../../navigation/navigation.component';
 
 @Component({
   selector: 'app-sub-navigation',

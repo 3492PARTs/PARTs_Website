@@ -94,11 +94,11 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.appMenu = [
       new MenuItem('Contact Us', 'contact', 'card-account-details'),
-      new MenuItem('Join PARTs', 'join', 'account-group'),
-      new MenuItem('Sponsoring', 'sponsor', 'account-arrow-up'),
-      new MenuItem('About', 'about', 'information-slab-box-outline'),
+      new MenuItem('Join PARTs', 'join', 'account-supervisor'),
+      new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
+      new MenuItem('About', 'about', 'information'),
       new MenuItem('Media', 'media', 'image-multiple'),
-      new MenuItem('Resources', 'resources', 'archive-outline'), //book clipboard-text-outline folder-open-outline
+      new MenuItem('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
       new MenuItem('FIRST', 'first', 'first'),
     ];
     this.competitionInit();

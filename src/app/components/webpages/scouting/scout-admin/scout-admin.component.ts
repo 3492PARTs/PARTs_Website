@@ -3,7 +3,8 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
-import { NavigationService, MenuItem } from 'src/app/services/navigation.service';
+import { NavigationService } from 'src/app/services/navigation.service';
+import { MenuItem } from 'src/app/components/navigation/navigation.component';
 
 @Component({
   selector: 'app-scout-admin',
