@@ -93,13 +93,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.screenSize() === 'xs';
 
     this.appMenu = [
-      new MenuItem('Contact Us', 'contact', 'icon'),
-      new MenuItem('Join PARTs', 'join', 'icon'),
-      new MenuItem('Sponsoring', 'sponsor', 'icon'),
-      new MenuItem('About', 'about', 'icon'),
-      new MenuItem('Media', 'media', 'icon'),
-      new MenuItem('Resources', 'resources', 'icon'),
-      new MenuItem('FIRST', 'first', 'icon'),
+      new MenuItem('Contact Us', 'contact', 'card-account-details'),
+      new MenuItem('Join PARTs', 'join', 'account-group'),
+      new MenuItem('Sponsoring', 'sponsor', 'account-arrow-up'),
+      new MenuItem('About', 'about', 'information-slab-box-outline'),
+      new MenuItem('Media', 'media', 'image-multiple'),
+      new MenuItem('Resources', 'resources', 'archive-outline'), //book clipboard-text-outline folder-open-outline
+      new MenuItem('FIRST', 'first', 'first'),
     ];
     this.competitionInit();
   }
