@@ -2,7 +2,7 @@
   {{ ButtonText }}
 </app-button>
 
-<div class="overlay" [ngClass]="{'visible': visible}" [ngStyle]="{'z-index': zIndex}">
+<div class="overlay" [ngClass]="{'visible': _visible}" [ngStyle]="{'z-index': zIndex}">
   <div class="popup">
     <div class="popup-title">
       <app-header [h]="2" [centered]="true">{{ Title }}</app-header>
