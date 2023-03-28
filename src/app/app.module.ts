@@ -78,7 +78,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
-import { AdminNavigationComponent } from './components/webpages/admin/admin-navigation/admin-navigation.component';
+import { SubNavigationComponent } from './components/atoms/sub-navigation/sub-navigation.component';
 
 @NgModule({
   declarations: [
@@ -138,7 +138,7 @@ import { AdminNavigationComponent } from './components/webpages/admin/admin-navi
     BannersComponent,
     EventCompetitionComponent,
     MatchPlanningComponent,
-    AdminNavigationComponent
+    SubNavigationComponent
   ],
   imports: [
     BrowserModule,

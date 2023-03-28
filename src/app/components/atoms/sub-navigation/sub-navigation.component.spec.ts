@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminNavigationComponent } from './admin-navigation.component';
+import { AdminNavigationComponent } from './sub-navigation.component';
 
 describe('AdminNavigationComponent', () => {
   let component: AdminNavigationComponent;
@@ -8,9 +8,9 @@ describe('AdminNavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminNavigationComponent ]
+      declarations: [AdminNavigationComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminNavigationComponent);
     component = fixture.componentInstance;

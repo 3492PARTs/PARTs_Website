@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import { NavigationService, NavItem } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-admin',
@@ -55,6 +55,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
+    this.ns.setSubPages([new NavItem('Manage Users', 'users'), new NavItem('Error Log', 'errors')]);
   }
 
   adminInit(): void {

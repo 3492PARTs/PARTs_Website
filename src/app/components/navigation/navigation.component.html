@@ -62,9 +62,8 @@
       <hr class="darker" *ngIf="this.pages.indexOf(page) >= 0">
 
       <div id="page-nav">
-        <app-admin-navigation *ngIf="page === 'ADMIN'" [setNavExpanded]="navExpanded"
-          [hideNavExpander]="hideNavExpander">
-        </app-admin-navigation>
+        <app-sub-navigation *ngIf="page === 'ADMIN'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
+        </app-sub-navigation>
         <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
         </app-support-nav>
         <app-firmware-nav *ngIf="page === 'Firmware'" [setNavExpanded]="navExpanded"
