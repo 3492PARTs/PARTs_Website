@@ -50,20 +50,31 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.pages = [];
       this.userLinks.forEach(ul => {
         this.pages.push(ul.menu_name);
-        if (ul.menu_name === this.urlEnd.toUpperCase()) {
+        if (ul.menu_name === this.urlEnd.toUpperCase() || this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink') > -1) {
           this.page = ul.menu_name;
         }
       });
+
+      let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
+      if (userLinkLoc > -1) {
+        this.page = this.userLinks[userLinkLoc].menu_name
+      }
     });
     this.router.events
       .subscribe(
         (event: NavigationEvent) => {
           if (event instanceof NavigationEnd) {
             this.urlEnd = event.url.substr(1, event.url.length - 1);
-            this.urlEnd = this.urlEnd.charAt(0).toUpperCase() + this.urlEnd.slice(1);
+            //this.urlEnd = this.urlEnd.charAt(0).toUpperCase() + this.urlEnd.slice(1);
 
             //TODO Handle the below line
-            if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) this.page = this.urlEnd.toUpperCase();
+            if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) {
+              this.page = this.urlEnd.toUpperCase();
+            }
+            let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
+            if (userLinkLoc > -1) {
+              this.page = this.userLinks[userLinkLoc].menu_name
+            }
             else this.page = 'Members';
           }
         });
