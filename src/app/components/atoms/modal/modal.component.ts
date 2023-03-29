@@ -17,6 +17,7 @@ export class ModalComponent implements OnInit {
   set visible(v: boolean) {
     this._visible = v;
     this.ms.setModalVisible(this._visible);
+    this.clickOutsideCapture = true;
 
     if (this._visible) {
       window.setTimeout(() => {
@@ -43,6 +44,7 @@ export class ModalComponent implements OnInit {
     this._visible = true;
     this.ms.setModalVisible(this._visible);
     this.visibleChange.emit(this._visible);
+    this.clickOutsideCapture = true;
 
     window.setTimeout(() => {
       this.clickOutsideCapture = false;
