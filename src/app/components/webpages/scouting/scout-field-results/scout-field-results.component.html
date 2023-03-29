@@ -23,7 +23,7 @@
   </app-form-element-group>
 
   <app-table [TableCols]="scoutResults['scoutCols']" [TableData]="scoutResults['scoutAnswers']" [Scrollable]="true"
-    [(FilterText)]="filterText" [Width]="'200%'" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)">
+    [(FilterText)]="filterText" [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">

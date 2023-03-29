@@ -28,10 +28,14 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   teamNotes: TeamNote[] = [];
 
+  tableWidth = '200%';
+
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldResultsInit() : null);
+
+    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
   }
 
   scoutFieldResultsInit(): void {
