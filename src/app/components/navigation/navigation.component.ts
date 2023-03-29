@@ -98,6 +98,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.hideNavExpander = this.gs.screenSize() !== 'lg';
 
+    if (this.hideNavExpander) this.showNav = false;
+
     this.screenXs = this.gs.screenSize() === 'xs';
 
     this.appMenu = [
@@ -309,6 +311,12 @@ let max = document.documentElement.scrollHeight;
 
   toggleNav(): void {
     this.showNav = !this.showNav;
+  }
+
+  closeNavOnMobile(): void {
+    if (this.hideNavExpander) {
+      this.showNav = false;
+    }
   }
 
   xsToggleSearch(): void {

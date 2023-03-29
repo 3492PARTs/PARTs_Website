@@ -259,7 +259,8 @@
     </div>
   </header>
 
-  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
+  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}"
+    (appClickInside)="closeNavOnMobile()">
     <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}">
       <ng-content>
 
