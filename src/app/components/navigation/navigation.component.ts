@@ -260,7 +260,8 @@ let max = document.documentElement.scrollHeight;
       this.subNav = elemID;
 
       if (!this.navExpanded && parent && child) {
-        child.style.top = parent.offsetTop + 'px';
+        let rect = parent.getBoundingClientRect();
+        child.style.top = rect.top + 'px';
       }
       else {
         if (parent && child) parent.style.height = 'calc(6.8rem + ' + child.offsetHeight + 'px + 32px)';
