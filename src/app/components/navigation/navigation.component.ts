@@ -38,6 +38,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   showMessageModal = false;
   showUserModal = false;
 
+  rightHandNav = true;
+
   user: User = new User();
 
   appMenu: MenuItem[] = [];

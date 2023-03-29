@@ -1,5 +1,5 @@
 <div #thisWrapper id="wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
-  <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+  <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
     <div class="height" id="logo">
       <a routerLink="">
         <img src="../../../assets/appIcons/BeanieBotWhite.svg">
@@ -121,7 +121,7 @@
       </div>
     </div>
 
-    <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander }">
+    <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
       <div (click)="toggleForceNavExpand()">
         <mat-icon id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" svgIcon="menu-right"></mat-icon>
       </div>
@@ -129,7 +129,7 @@
 
   </nav>
 
-  <header #thisHeader [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+  <header #thisHeader [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
       <mat-icon class="icon" svgIcon="menu"></mat-icon>
     </div>
@@ -261,7 +261,7 @@
     </div>
   </header>
 
-  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
     <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
       <ng-content>
 

@@ -17,6 +17,11 @@ nav {
   overflow: hidden;
   transition: width 0.15s ease;
 
+  &.right-hand-nav {
+    left: unset;
+    right: 0;
+  }
+
   &.hideNav {
     width: 0;
   }
@@ -259,6 +264,10 @@ nav {
   #navExpand {
     position: relative;
 
+    &.right-hand-nav {
+      rotate: 180deg;
+    }
+
     & > div {
       position: absolute;
       top: 50%;
@@ -310,6 +319,11 @@ header {
   padding-left: 1.6rem;
   width: calc(100% - 10.4rem);
   transition: width 0.15s ease, top 0.15s linear;
+
+  &.right-hand-nav {
+    right: unset;
+    left: 0;
+  }
 
   &.expanded {
     width: calc(100% - 22.4rem) !important;
@@ -487,9 +501,19 @@ header {
   //transition: width 0.15s ease;
   transition: padding 0.15s ease;
 
+  &.right-hand-nav {
+    padding-left: 0;
+    padding-right: 10.4rem;
+  }
+
   &.expanded {
     //width: calc(100% - 22.4rem) !important;
     padding-left: 22.4rem;
+
+    &.right-hand-nav {
+      padding-left: 0;
+      padding-right: 22.4rem;
+    }
   }
 
   &.hideNav {
