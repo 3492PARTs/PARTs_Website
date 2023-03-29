@@ -46,6 +46,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   appMenu: MenuItem[] = [];
   userLinks: MenuItem[] = [];
 
+  removeHeader = false;
+
   constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient) {
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {

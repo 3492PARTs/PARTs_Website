@@ -334,6 +334,10 @@ header {
   width: calc(100% - 10.4rem);
   transition: width 0.15s ease, top 0.15s linear;
 
+  &.remove-header {
+    display: none;
+  }
+
   &.right-hand-nav {
     right: unset;
     left: 0;
@@ -541,6 +545,10 @@ header {
     width: 100%;
     min-height: 100%;
     position: relative;
+
+    &.remove-header {
+      padding-top: 0;
+    }
   }
 
   footer {

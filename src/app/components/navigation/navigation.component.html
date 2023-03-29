@@ -126,7 +126,8 @@
 
   </nav>
 
-  <header #thisHeader [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
+  <header #thisHeader id="site-header"
+    [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}">
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
       <mat-icon class="icon" svgIcon="menu"></mat-icon>
     </div>
@@ -259,7 +260,7 @@
   </header>
 
   <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
-    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}">
       <ng-content>
 
       </ng-content>
