@@ -51,15 +51,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   tokenString = '';
 
   constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient) {
-    this.tokenString = environment.tokenString;
-
-    let token = localStorage.getItem(this.tokenString) || '';
-    let loggedInBefore = localStorage.getItem(environment.loggedInHereBefore) || '';
-
-    if (this.gs.strNoE(token) && this.gs.strNoE(loggedInBefore)) {
-      this.removeHeader = true;
-    }
-
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
@@ -119,6 +110,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       new MenuItem('FIRST', 'first', 'first'),
     ];
     this.competitionInit();
+
+    this.tokenString = environment.tokenString;
+
+    let token = localStorage.getItem(this.tokenString) || '';
+    let loggedInBefore = localStorage.getItem(environment.loggedInHereBefore) || '';
+
+    if (this.gs.strNoE(token) && this.gs.strNoE(loggedInBefore) && !this.hideNavExpander) {
+      this.removeHeader = true;
+    }
   }
 
   ngAfterViewInit(): void {
