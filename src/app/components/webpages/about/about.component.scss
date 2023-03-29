@@ -30,9 +30,7 @@
 
   /*MOBILE */
   @media only screen and (max-width: $screen-size-xlg) {
-    .box {
-      width: 100%;
-    }
+    width: 100%;
   }
   app-box {
     cursor: pointer;

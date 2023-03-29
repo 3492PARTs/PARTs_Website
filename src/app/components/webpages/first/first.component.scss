@@ -1,73 +1,30 @@
-/*TABLE SIZE*/
+@import "../../../../scss/abstracts/variables.scss";
 
-#mainFirst table {
-  width: 100%;
-}
+#first-logos {
+  max-width: 1900px;
+  width: 90%;
+  margin: 1em auto 1em auto;
 
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  align-content: center;
 
-/*TABLE TEXT*/
-
-#mainFirst thead h1 {
-  text-align: center;
-}
-
-#mainFirst ul li {
-  text-align: left;
-}
-
-
-/*IMAGE ALIGNMENT*/
-
-#mainFirst td {
-  text-align: center;
-}
-
-
-/*FIRST:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-  #mainFirst h1,
-  #mainFirst h2,
-  #mainFirst p {
-      text-align: left
+  /*MOBILE */
+  @media only screen and (max-width: $screen-size-xlg) {
+    width: 100%;
   }
-  /*LOGOS*/
-  #first {
-      width: 70%;
-      margin-bottom: 10%;
-  }
-  #frc {
-      width: 70%;
-      margin-top: 10%;
-  }
-  #gameLogo {
-      width: 70%;
-  }
-}
 
+  & > div {
+    text-align: center;
+  }
 
-/*FIRST:NARROW SCREEN*/
+  img {
+    width: 50%;
 
-@media only screen and (max-width: 1000px) {
-  #mainFirst h1,
-  #mainFirst h2,
-  #mainFirst p {
-      text-align: center;
-  }
-  /*LOGOS*/
-  #first {
-      margin: 1em;
-      width: 40%;
-  }
-  #frc {
-      width: 40%;
-      margin: 1em;
-  }
-  #gameLogo {
+    @media only screen and (max-width: $screen-size-xs) {
       width: 80%;
-  }
-  /*TABLE DISPLAY*/
-  #mainFirst td {
-      display: block;
+    }
   }
 }
