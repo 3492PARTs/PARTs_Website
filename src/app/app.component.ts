@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   private firstRun = true;
 
   constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient) {
+    this.gs.addBanner({ message: 'test', severity: 1, time: 0 });
+
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
 
