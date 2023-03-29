@@ -260,8 +260,15 @@ let max = document.documentElement.scrollHeight;
       this.subNav = elemID;
 
       if (!this.navExpanded && parent && child) {
-        let rect = parent.getBoundingClientRect();
-        child.style.top = rect.top + 'px';
+        let parentRect = parent.getBoundingClientRect();
+        let childRect = child.getBoundingClientRect();
+        let winHeight = window.innerHeight;
+
+        if (childRect.bottom > winHeight) {
+          let offScreen = childRect.bottom - winHeight;
+          child.style.top = winHeight - child.offsetHeight - (25 / 2) + 'px';//parentRect.top - offScreen + 'px';
+        }
+        else child.style.top = parentRect.top + 'px';
       }
       else {
         if (parent && child) parent.style.height = 'calc(6.8rem + ' + child.offsetHeight + 'px + 32px)';

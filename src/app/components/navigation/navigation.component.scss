@@ -218,10 +218,12 @@ nav {
   }
 
   .collapsed .side-sidebar {
-    display: none;
+    //display: none;
+    visibility: hidden;
 
     &.show {
-      display: block;
+      //display: block;
+      visibility: visible;
       position: fixed;
       left: calc(10.4rem + 2.5rem / 2);
       z-index: 2;

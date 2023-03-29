@@ -3,6 +3,9 @@
 //@import '../../../scss/_pages/join';
 @import "../../../../scss/abstracts/variables.scss";
 
+#cssSlider {
+  max-height: calc(100vh - 7rem);
+}
 /*HOME*/
 
 #mainHome {
