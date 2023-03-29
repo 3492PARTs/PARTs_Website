@@ -48,12 +48,24 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   removeHeader = false;
 
+  tokenString = '';
+
   constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient) {
+    this.tokenString = environment.tokenString;
+
+    let token = localStorage.getItem(this.tokenString) || '';
+    let loggedInBefore = localStorage.getItem(environment.loggedInHereBefore) || '';
+
+    if (this.gs.strNoE(token) && this.gs.strNoE(loggedInBefore)) {
+      this.removeHeader = true;
+    }
+
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
       this.pages = [];
       this.userLinks.forEach(ul => {
+        this.removeHeader = false;
         this.pages.push(ul.menu_name);
         if (ul.menu_name === this.urlEnd.toUpperCase() || this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink') > -1) {
           this.page = ul.menu_name;

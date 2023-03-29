@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,13 @@ export class AuthService {
   private userLinks = new BehaviorSubject<MenuItem[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
-  localStorageString = 'p-tkn-s';
+  localStorageString = '';
 
   private firstLoad = true;
 
-  constructor(private http: HttpClient, private router: Router, private gs: GeneralService) { }
+  constructor(private http: HttpClient, private router: Router, private gs: GeneralService) {
+    this.localStorageString = environment.tokenString;
+  }
 
   logOut(): void {
     this.token.next(new Token());
@@ -92,6 +95,7 @@ export class AuthService {
           this.token.next(tmp);
           this.internalToken = tmp;
           localStorage.setItem(this.localStorageString, tmp.refresh);
+          localStorage.setItem(environment.loggedInHereBefore, 'hi');
           this.getUser();
 
           if (this.gs.strNoE(returnUrl)) {
