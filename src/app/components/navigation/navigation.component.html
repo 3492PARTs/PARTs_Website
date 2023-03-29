@@ -11,9 +11,12 @@
     <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}">
       <ul>
         <li class="height" *ngFor="let mi of appMenu">
-          <a routerLinkActive="active" (click)="page = 'Pages'">
-            <mat-icon class="icon" [svgIcon]="mi.icon" *ngIf="mi.icon !== 'first'"></mat-icon>
-            <svg class="icon" *ngIf="mi.icon === 'first'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
+          <a routerLink="{{mi.routerlink}}" routerLinkActive="active" (click)="page = 'Members'"
+            [ngClass]="{'right-hand-nav': rightHandNav}">
+            <mat-icon class="icon" [svgIcon]="mi.icon" *ngIf="mi.icon !== 'first'"
+              [ngClass]="{'right-hand-nav': rightHandNav}"></mat-icon>
+            <svg class="icon" *ngIf="mi.icon === 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
               <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
                 <path d="M811 3984 c-62 -7 -116 -16 -119 -19 -7 -6 -693 -3748 -688 -3752 1
               -1 72 -10 158 -19 l155 -16 726 317 725 317 69 -55 c227 -183 526 -321 848
@@ -59,14 +62,8 @@
               330 159 l337 151 115 -108 c63 -60 146 -140 184 -178z" />
               </g>
             </svg>
-            <span *ngIf="!mi.routerlink.includes('.'); else hasAddress" routerLink="{{mi.routerlink}}"
-              routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+            <span routerLinkActive="active" [routerLinkActiveOptions]="{exact:
             true}" class="menu-link">{{mi.menu_name}}</span>
-
-            <ng-template #hasAddress>
-              <span><a target="_blank" [href]="mi.routerlink" class="menu-link">{{mi.menu_name}}</a></span>
-            </ng-template>
-
           </a>
         </li>
 
@@ -76,7 +73,7 @@
           (appClickOutside)="closeSubNav()">
           <a [ngClass]="{ active : page !== 'Members'}">
             <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
-            <span>{{ page }}</span>
+            <span>{{ pages.includes(page) ? page : 'Members' }}</span>
             <mat-icon [ngStyle]="{'color':'white'}" class="icon page-options"
               [ngClass]="{ rotate : subNav === pagesID + '-1'}" svgIcon="menu-right"></mat-icon>
           </a>
@@ -136,12 +133,12 @@
 
     <div id="menu-bar" [ngClass]="{ small_search : screenXs}">
       <div id="search-icon-wrapper" *ngIf="screenXs">
-        <mat-icon class="icon" id="search-icon" svgIcon="magnify" (click)="xsToggleSearch()" appClickOutside
-          (appClickOutside)="xsShowSearch = false"></mat-icon>
+        <mat-icon *ngIf="false" class="icon" id="search-icon" svgIcon="magnify" (click)="xsToggleSearch()"
+          appClickOutside (appClickOutside)="xsShowSearch = false"></mat-icon>
       </div>
 
       <div id="search-wrapper" [ngClass]="{ xsShowSearch : xsShowSearch, full_width: !showNav}">
-        <app-form-element [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
+        <app-form-element *ngIf="false" [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
         </app-form-element>
       </div>
 

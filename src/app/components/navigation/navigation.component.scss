@@ -95,8 +95,20 @@ nav {
           justify-content: start;
           padding-left: 1.6rem;
 
+          &.right-hand-nav {
+            flex-direction: row-reverse;
+            justify-content: end;
+            padding-left: 0;
+            padding-right: 1.6rem;
+          }
+
           .icon {
             padding-right: 0.4rem;
+
+            &.right-hand-nav {
+              padding-right: 0;
+              padding-left: 0.4rem;
+            }
           }
 
           span {

@@ -38,7 +38,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   showMessageModal = false;
   showUserModal = false;
 
-  rightHandNav = true;
+  //TODO this is a wip
+  rightHandNav = false;
 
   user: User = new User();
 
