@@ -8,11 +8,9 @@
   width: 40rem;
   max-width: calc(100% - (1.6rem * 2));
 
-  /*
   @media only screen and (max-width: $screen-size-xs) {
-    top: 8rem;
+    max-width: 100%;
   }
-  */
 
   .banner {
     width: 100%;
