@@ -30,7 +30,7 @@
 
         <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches"
             (RecordClickCallBack)="planMatch($event)" [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true"
-            [Width]="'100%'">
+            [Width]="'100%'" [ScrollHeight]="'50rem'">
         </app-table>
 
         <app-form-element-group [LabelText]="'Notes'">

@@ -4,7 +4,7 @@
       <div>
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
           [BindingProperty]="'checked'" [SelectList]="showScoutFieldCols" [(MultiModel)]="showScoutFieldCols"
-          (ModelChange)="showHideTableCols()">
+          (ModelChange)="showHideTableCols()" [Width]="'200px'">
         </app-form-element>
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
       </div>
@@ -23,7 +23,8 @@
   </app-form-element-group>
 
   <app-table [TableCols]="scoutResults['scoutCols']" [TableData]="scoutResults['scoutAnswers']" [Scrollable]="true"
-    [(FilterText)]="filterText" [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)">
+    [(FilterText)]="filterText" [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
+    [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">

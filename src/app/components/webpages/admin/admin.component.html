@@ -1,6 +1,6 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
   <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)">
+    (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
@@ -48,7 +48,7 @@
 
 <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
   <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
-    (RecordClickCallBack)="showErrorModal($event)">
+    (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">

@@ -1,7 +1,7 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
 
   <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)">
+    (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
@@ -47,7 +47,8 @@
 <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
   <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
     [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
-    [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
+    [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)"
+    [ScrollHeight]="'50rem'">
   </app-table>
 
   <!--
