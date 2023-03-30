@@ -3,6 +3,11 @@
 .form-element {
   position: relative;
   margin: 7px;
+  max-width: 100%;
+
+  & > div {
+    max-width: 100%;
+  }
 
   &.checkboxElement {
     display: flex;
@@ -65,6 +70,7 @@
   border-radius: 0.4rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   margin: 0.32rem;
+  max-width: 100%;
 
   &:focus {
     color: #495057;
