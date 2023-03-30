@@ -1,9 +1,13 @@
 @import "../../../../scss/abstracts/variables.scss";
 
+:host {
+  max-width: 100%;
+}
+
 .form-element {
   position: relative;
   margin: 7px;
-  max-width: 100%;
+  max-width: calc(100% - 14px);
 
   & > div {
     max-width: 100%;
@@ -70,7 +74,7 @@
   border-radius: 0.4rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   margin: 0.32rem;
-  max-width: 100%;
+  max-width: calc(100% - (2 * 0.32rem));
 
   &:focus {
     color: #495057;
