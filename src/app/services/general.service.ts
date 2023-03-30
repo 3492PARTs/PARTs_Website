@@ -156,6 +156,9 @@ export class GeneralService {
 
   /* helpwe functions */
   strNoE(s: any) {
+    if (typeof s === 'number') {
+      s = s.toString();
+    }
     return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';
   }
 
