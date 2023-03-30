@@ -105,8 +105,8 @@
       <hr class="darker" *ngIf="this.pages.indexOf(page) >= 0">
 
       <div id="page-nav">
-        <app-sub-navigation *ngIf="['ADMIN', 'SCOUTING ADMIN'].includes(page)" [setNavExpanded]="navExpanded"
-          [hideNavExpander]="hideNavExpander">
+        <app-sub-navigation *ngIf="['admin', 'scouting admin'].includes(page.toLocaleLowerCase())"
+          [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
         <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
         </app-support-nav>
