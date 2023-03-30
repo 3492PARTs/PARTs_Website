@@ -28,9 +28,10 @@
           [FormGroupInline]="sq.question_typ === 'number'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
-          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
-          &nbsp;
           <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
+          &nbsp;
+          &nbsp;
+          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
         </div>
         <br>
       </ng-container>
@@ -44,9 +45,10 @@
           [FormGroupInline]="sq.question_typ === 'number'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
-          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
-          &nbsp;
           <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
+          &nbsp;
+          &nbsp;
+          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
         </div>
         <br>
       </ng-container>

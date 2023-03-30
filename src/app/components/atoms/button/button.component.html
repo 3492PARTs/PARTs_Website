@@ -26,6 +26,10 @@
     (click)="RunFunction()">
     +
   </button>
+  <button *ngSwitchCase="'minus'" class="btn-symbol minus" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()">
+    -
+  </button>
   <button *ngSwitchCase="'edit'" class="btn-symbol edit" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
     (click)="RunFunction()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
