@@ -47,6 +47,13 @@ export class ScoutPitResultsComponent implements OnInit {
 
   search(): void {
     this.gs.incrementOutstandingCalls();
+
+    this.teams.forEach((t) => {
+      if (!t.checked) {
+        t.checked = false;
+      }
+    });
+
     this.http.post(
       'scouting/pit/results/', this.teams
     ).subscribe(
