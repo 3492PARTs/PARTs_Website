@@ -2,7 +2,7 @@
 
     <div *ngIf="matchPlanningResults.length <= 0">
         <app-form-element-group [LabelText]="'Legend'">
-            <table>
+            <table id="legend">
                 <tr>
                     <td>top 10</td>
                     <td>
@@ -61,8 +61,7 @@
                             [(Model)]="currentTeamNote.team_no" (FunctionCallBack)="loadTeamNotes()">
                         </app-form-element>
 
-                        <app-form-element-group *ngFor="let note of teamNotes">
-                            <p>{{ note.time | dateToStr }}</p>
+                        <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr ">
                             <p>{{ note.note }}</p>
                         </app-form-element-group>
                     </app-form>
@@ -76,14 +75,15 @@
         <app-tab-container>
             <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">
                 <div class="team-results">
-                    <div *ngIf="mpr.pitData" class="team-pic" [id]="mpr.team.team_no" appOnCreate
-                        (onCreate)="preview(mpr.pitData.pic, mpr.team.team_no)">
+                    <div>
+                        <app-header [h]="1">{{ mpr.team.team_no }} - {{ mpr.team.team_nm }}</app-header>
 
+                        <div *ngIf="mpr.pitData" class="team-pic" [id]="mpr.team.team_no" appOnCreate
+                            (onCreate)="preview(mpr.pitData.pic, mpr.team.team_no)">
+
+                        </div>
                     </div>
                     <div class="team-info">
-                        <div class="team-nm">
-                            <p>{{ mpr.team.team_no }} - {{ mpr.team.team_nm }}</p>
-                        </div>
 
                         <ng-container *ngIf="mpr.pitData">
                             <div *ngFor="let r of mpr.pitData.results">

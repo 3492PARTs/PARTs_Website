@@ -9,12 +9,6 @@
     padding-left: 1em;
   }
 
-  .team-nm {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-  }
-
   .team-pic {
     width: 250px;
 
@@ -52,4 +46,16 @@
 
 .left-overs {
   background-color: #ff0000;
+}
+
+#legend {
+  width: 100%;
+  overflow: hidden;
+  th,
+  td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    white-space: pre-line;
+  }
 }
