@@ -34,10 +34,13 @@ export class MatchPlanningComponent implements OnInit {
 
   teamNotes: TeamNote[] = [];
 
+  tableWidth = '200%';
+
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.init();
+    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
   }
 
   init(): void {

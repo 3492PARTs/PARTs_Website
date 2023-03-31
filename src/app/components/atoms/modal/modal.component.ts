@@ -62,7 +62,7 @@ export class ModalComponent implements OnInit {
 
   clickOutsideClose() {
     if (!this.clickOutsideCapture) {
-      this.close();
+      //this.close();
       this.clickOutsideCapture = true;
     }
   }
