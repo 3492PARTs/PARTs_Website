@@ -177,7 +177,8 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   private rankToColorConverter(rank: number): string {
-    if (rank <= 10) return '#3333ff';
+    if (!rank) return 'initial'
+    else if (rank <= 10) return '#3333ff';
     else if (rank <= 15) return '#33cc33';
     else if (rank <= 20) return '#ffcc00';
     else if (rank <= 30) return '#ff6600';

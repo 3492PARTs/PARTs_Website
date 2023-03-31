@@ -15,11 +15,13 @@ import { AuthService } from 'src/app/services/auth.service';
 export class ScoutPitResultsComponent implements OnInit {
   teams: Team[] = [];
   scoutPitResults: ScoutPitResults[] = [];
+  resultWidth = '350px';
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutPitResultsInit() : null);
+    this.resultWidth = this.gs.screenSize() === 'xs' ? '100%' : '350px';
   }
 
   scoutPitResultsInit(): void {
@@ -79,13 +81,15 @@ export class ScoutPitResultsComponent implements OnInit {
     LoadImg(
       link,
       (img: any) => {
+        img.style.width = '100%';
+        img.style.height = 'auto';
         document.getElementById(id)!.appendChild(img);
       },
       {
-        maxWidth: 600,
-        maxHeight: 300,
-        minWidth: 100,
-        minHeight: 50,
+        //maxWidth: 600,
+        //maxHeight: 300,
+        //minWidth: 100,
+        //minHeight: 50,
         //canvas: true,
         orientation: true
       }
