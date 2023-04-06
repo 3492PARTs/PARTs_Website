@@ -33,18 +33,20 @@
               "src/favicon.ico",
               "src/assets",
               "src/.htaccess",
-              "src/parts.webmanifest",
               {
                 "glob": "mdi.svg",
                 "input": "node_modules/@mdi/angular-material/",
                 "output": "./assets"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -136,7 +138,8 @@
                 "glob": "mdi.svg",
                 "input": "node_modules/@mdi/angular-material/",
                 "output": "./assets"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
