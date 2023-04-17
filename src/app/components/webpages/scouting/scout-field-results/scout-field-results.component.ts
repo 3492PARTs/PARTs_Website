@@ -111,7 +111,6 @@ export class ScoutFieldResultsComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.teamScoutResultsModalVisible = true;
             this.teamScoutResults = result as ScoutResults;
           }
         },
@@ -149,6 +148,8 @@ export class ScoutFieldResultsComponent implements OnInit {
             this.scoutPitResult = new ScoutPitResults();
             this.preview(this.scoutPitResult.pic, 'team-pic');
           }
+
+          this.teamScoutResultsModalVisible = true;
         },
         error: (err: any) => {
           console.log('error', err);
@@ -183,13 +184,16 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   preview(link: string, id: string) {
-    document.getElementById(id)!.innerHTML = '';
+    let elem = document.getElementById(id);
+    if (elem)
+      elem.innerHTML = '';
     LoadImg(
       link,
       (img: any) => {
         img.style.width = '100%';
         img.style.height = 'auto';
-        document.getElementById(id)!.appendChild(img);
+        if (elem)
+          elem.appendChild(img);
       },
       {
         //maxWidth: 800,

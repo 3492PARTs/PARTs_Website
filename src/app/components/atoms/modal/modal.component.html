@@ -3,7 +3,7 @@
 </app-button>
 
 <div class="overlay" [ngClass]="{'visible': _visible}" [ngStyle]="{'z-index': zIndex}">
-  <div class="popup" *ngIf="_visible" (appClickOutside)="clickOutsideClose()">
+  <div class="popup" (appClickOutside)="clickOutsideClose()">
     <div class="popup-title">
       <app-header [h]="2" [centered]="true">{{ Title }}</app-header>
       <div class="close">
