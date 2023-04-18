@@ -70,7 +70,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const navSpace = appHeader.offsetHeight;
     let offset = navSpace - windowTop;
-    offset = offset <= 0 ? 0 : offset > navSpace ? navSpace : offset;
+    offset = offset <= 0 ? 0 : offset > navSpace ? offset : navSpace;
 
     this.renderer.setStyle(this.bannerWrapper.nativeElement, 'top', `${offset}px`);
   }
