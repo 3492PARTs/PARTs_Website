@@ -17,7 +17,12 @@
   <form>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="team">
+      [DisplayEmptyOption]="true" [(Model)]="team" (FunctionCallBack)="buildMatchList()">
+    </app-form-element>
+
+    <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamMatches"
+      [BindingProperty]="'match_id'" [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true"
+      [(Model)]="teamMatchId">
     </app-form-element>
 
     <app-form-element-group [LabelText]="'Autonomous'">

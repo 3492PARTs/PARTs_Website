@@ -4,6 +4,7 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
+import { Match } from '../match-planning/match-planning.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -13,6 +14,9 @@ import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 export class ScoutFieldComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
   team!: string;
+  private matches: Match[] = [];
+  teamMatches: Match[] = [];
+  teamMatchId!: string;
   scoutQuestions: ScoutQuestion[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: ScoutQuestion[] = [];
@@ -63,6 +67,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.teams = result['teams'];
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
+            this.matches = result['matches'];
             this.sortQuestions();
           }
         },
@@ -94,6 +99,14 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         this.scoutOtherQuestions.push(sqCopy);
       }
     });
+  }
+
+  buildMatchList(): void {
+    this.teamMatches = [];
+    this.matches.forEach((m) => {
+      if ([m.red_one_id, m.red_two_id, m.red_three_id, m.blue_one_id, m.blue_two_id, m.blue_three_id].includes(parseInt(this.team)))
+        this.teamMatches.push(m);
+    })
   }
 
   save(): void | null {
