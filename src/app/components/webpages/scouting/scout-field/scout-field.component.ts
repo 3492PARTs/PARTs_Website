@@ -13,7 +13,7 @@ import { Match } from '../match-planning/match-planning.component';
 })
 export class ScoutFieldComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
-  team!: string;
+  team!: number;
   private matches: Match[] = [];
   teamMatches: Match[] = [];
   teamMatchId!: string;
@@ -104,7 +104,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   buildMatchList(): void {
     this.teamMatches = [];
     this.matches.forEach((m) => {
-      if ([m.red_one_id, m.red_two_id, m.red_three_id, m.blue_one_id, m.blue_two_id, m.blue_three_id].includes(parseInt(this.team)))
+      if ([m.red_one_id, m.red_two_id, m.red_three_id, m.blue_one_id, m.blue_two_id, m.blue_three_id].includes(this.team))
         this.teamMatches.push(m);
     })
   }
@@ -130,13 +130,29 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     this.http.post(
       'scouting/field/save-answers/',
-      { scoutQuestions: response, team: this.team }
+      { scoutQuestions: response, team: this.team, match: this.teamMatchId }
     ).subscribe(
       {
         next: (result: any) => {
-          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
-          this.team = '';
-          this.sortQuestions();
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+
+            this.sortQuestions();
+
+            this.matches.forEach(m => {
+              if (m.match_id === this.teamMatchId) {
+                if (m.red_one_id as number || 0 === this.team) m.red_one_id = 0;
+                if (m.red_two_id as number || 0 === this.team) m.red_two_id = 0;
+                if (m.red_three_id as number || 0 === this.team) m.red_three_id = 0;
+                if (m.blue_one_id as number || 0 === this.team) m.blue_one_id = 0;
+                if (m.blue_two_id as number || 0 === this.team) m.blue_two_id = 0;
+                if (m.blue_three_id as number || 0 === this.team) m.blue_three_id = 0;
+              }
+            });
+
+            this.team = 0;
+            this.teamMatchId = '';
+          }
         },
         error: (err: any) => {
           console.log('error', err);
