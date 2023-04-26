@@ -1,13 +1,11 @@
 /**********IMAGE/SLIDER STYLING **********/
 
-
 /*don't show the other images*/
 
 #cssSlider {
   position: relative;
   overflow: hidden;
 }
-
 
 /*the size of the responsive slider*/
 
@@ -17,12 +15,12 @@
     background: $sliderBackground;
 
     #sliderImages {
-      left: calc((#{$width} - 100vw) / -2);
+      left: calc((#{$width} - 100%) / -2);
       width: $width * 6;
 
       /*size of the images*/
       img,
-      a>img {
+      a > img {
         width: $width;
         height: 100%;
         float: left;
@@ -33,7 +31,7 @@
 
 @mixin off($width) {
   #cssSlider {
-    padding-bottom: calc(900/2048)*100%;
+    padding-bottom: calc(1365 / 2048) * 100%;
     /*to find % aspect ratio, (height/width)100*/
     height: 0;
 
@@ -43,7 +41,7 @@
 
       /*size of the images*/
       img,
-      a>img {
+      a > img {
         width: $width;
         height: 100%;
         float: left;
@@ -53,11 +51,9 @@
 }
 
 @mixin animationMode($type) {
-  #cssSlider>#sliderImages {
-
+  #cssSlider > #sliderImages {
     /* IE 10+ hack - cant animate translate */
-    @media screen and (-ms-high-contrast: active),
-    (-ms-high-contrast: none) {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
       animation-name: slider-ie#{$type} !important;
       animation-duration: 40s;
       animation-timing-function: ease-in-out;
@@ -66,16 +62,13 @@
   }
 }
 
-
 /*which mode to use*/
 
-@if($MODE=='immersive') {
+@if ($MODE== "immersive") {
   /*immersive mode*/
   @include immersive($IMMERSIVE_WIDTH);
-  @include animationMode('');
-}
-
-@else if($MODE=='mixed') {
+  @include animationMode("");
+} @else if($MODE== "mixed") {
   @media screen and (min-width: 1001px) {
     /*wide*/
     @include immersive($IMMERSIVE_WIDTH);
@@ -87,24 +80,19 @@
     @include off(100vw);
     @include animationMode(-narrow);
   }
-}
-
-@else {
+} @else {
   /*normal display*/
   @include off(100vw);
-  @include animationMode('');
+  @include animationMode("");
 }
-
 
 /*animation to use*/
 
-
 /*animation parameters*/
-
 
 /*not ie use these animations*/
 
-#cssSlider>#sliderImages {
+#cssSlider > #sliderImages {
   -webkit-animation-name: slider;
   -webkit-animation-duration: 40s;
   -webkit-animation-timing-function: ease-in-out;
@@ -115,7 +103,7 @@
   animation-iteration-count: infinite;
 }
 
-#cssSlider>#sliderImages {
+#cssSlider > #sliderImages {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -123,6 +111,5 @@
     when using the arrows*/
   transition: 2.66666666667s;
 }
-
 
 /********** END IMAGE/SLIDER STYLING **********/

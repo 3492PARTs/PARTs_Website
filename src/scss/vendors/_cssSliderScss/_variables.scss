@@ -1,13 +1,12 @@
-$sliderBackground: #5B5B5B;
-$indicatorColor: #F2F1EF;
+$sliderBackground: #5b5b5b;
+$indicatorColor: #f2f1ef;
 $descTextColor: black;
-$blurbBox: #ABB7B7;
+$blurbBox: #abb7b7;
 
 /*sizing*/
-
 
 /*for full screen calculate (desired height of slider in vh * width of img) / height of img with vh as units
 for normal slider just uncomment the second width*/
 
-$IMMERSIVE_WIDTH: calc((100vh * 2048) / 900);
+$IMMERSIVE_WIDTH: calc((100vh * 2048) / 1365);
 $MODE: mixed;
