@@ -72,11 +72,11 @@
 
           <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar" *ngIf="mi.menu_items.length > 0"
             [ngClass]="{ show : subNav === getNavPageID(mi.menu_name) + '-1'}">
-            <span class="header">Members Area</span>
+            <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
                 <a routerLink="{{ mii.routerlink }}" routerLinkActive="active-link"
-                  (click)="setActiveMenuItem(mi, mii)">
+                  (click)="mii.routerlink !== 'logout' ? setActiveMenuItem(mi, mii) : logOut()">
                   {{ mii.menu_name }}
                 </a>
               </li>

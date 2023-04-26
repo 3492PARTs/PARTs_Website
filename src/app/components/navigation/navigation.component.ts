@@ -58,7 +58,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          mi.menu_items.push(new MenuItem('Logout', 'logout'))
+          if (ul.length > 0) mi.menu_items.push(new MenuItem('Logout', 'logout'));
+          else mi.menu_items.push(new MenuItem('Login', 'login'))
         }
       });
 
@@ -71,17 +72,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
           });
         });
-
-        /*this.pages.push(ul.menu_name);
-        if (ul.menu_name === this.urlEnd.toUpperCase() || this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink') > -1) {
-          this.page = ul.menu_name;
-        }*/
       });
-
-      /*let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
-      if (userLinkLoc > -1) {
-        this.page = this.userLinks[userLinkLoc].menu_name
-      }*/
     });
 
     this.router.events
@@ -90,24 +81,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           if (event instanceof NavigationEnd) {
             this.urlEnd = event.url.substr(1, event.url.length - 1);
 
-
+            this.resetMenuItemNames();
             this.appMenu.forEach(mi => {
               mi.menu_items.forEach(mii => {
                 if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
               });
             });
-
-            //TODO Handle the below line
-            /*if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) {
-              this.page = this.urlEnd.toUpperCase();
-            }
-            let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
-            if (userLinkLoc > -1) {
-              this.page = this.userLinks[userLinkLoc].menu_name
-            }
-            else this.page = 'Members';*/
           }
         });
+
     this.gs.scrollPosition$.subscribe(scrollY => {
       this.scrollEvents(scrollY, true);
     });
@@ -137,7 +119,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       new MenuItem('FIRST', 'first', 'first'),
       new MenuItem('Members', '', 'folder', [
         new MenuItem('Login', 'login'),
-      ]),
+      ], 'Members Area'),
     ];
     this.competitionInit();
 
@@ -429,6 +411,7 @@ export class PageSpecificNavOption {
 export class MenuItem {
   menu_name = '';
   menu_name_active_item = '';
+  menu_header = '';
   order = -1;
   permission = -1;
   routerlink = '';
@@ -436,10 +419,11 @@ export class MenuItem {
   icon = 'clipboard-text-multiple-outline';
   menu_items: MenuItem[] = [];
 
-  constructor(menu_name: string, routerlink: string, icon?: string, menu_items?: MenuItem[]) {
+  constructor(menu_name: string, routerlink: string, icon?: string, menu_items?: MenuItem[], menu_header?: string) {
     this.menu_name = menu_name;
     this.routerlink = routerlink;
     this.icon = icon || 'clipboard-text-multiple-outline';
     this.menu_items = menu_items || [];
+    this.menu_header = menu_header || '';
   }
 }
