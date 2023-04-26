@@ -27,7 +27,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   @ViewChild('thisWrapper', { read: ElementRef, static: true }) wrapper!: ElementRef;
 
   subNav = '';
-  pagesID = '';
+  pageIDs: any = {};
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;
@@ -92,8 +92,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.pagesID = this.gs.getNextGsId();
-
     this.navExpanded = this.gs.screenSize() === 'lg';
 
     this.hideNavExpander = this.gs.screenSize() !== 'lg';
@@ -358,6 +356,11 @@ let max = document.documentElement.scrollHeight;
   logOut(): void {
     this.auth.logOut();
     this.page = 'Members';
+  }
+
+  getNavPageID(key: string): string {
+    if (!this.pageIDs[key]) this.pageIDs[key] = this.gs.getNextGsId();
+    return this.pageIDs[key];
   }
 }
 

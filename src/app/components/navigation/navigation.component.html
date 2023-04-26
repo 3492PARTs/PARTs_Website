@@ -69,16 +69,18 @@
 
         <hr>
 
-        <li id="{{ pagesID }}" class="height" (click)="openSubNav(pagesID, pagesID + '-1')" appClickOutside
+        <li id="{{ getNavPageID('bottom-nav') }}" class="height"
+          (click)="openSubNav(getNavPageID('bottom-nav'), getNavPageID('bottom-nav') + '-1')" appClickOutside
           (appClickOutside)="closeSubNav()">
           <a [ngClass]="{ active : page !== 'Members'}">
             <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
             <span>{{ pages.includes(page) ? page : 'Members' }}</span>
             <mat-icon [ngStyle]="{'color':'white'}" class="icon page-options"
-              [ngClass]="{ rotate : subNav === pagesID + '-1'}" svgIcon="menu-right"></mat-icon>
+              [ngClass]="{ rotate : subNav === getNavPageID('bottom-nav') + '-1'}" svgIcon="menu-right"></mat-icon>
           </a>
 
-          <div id="{{ pagesID + '-1' }}" class="side-sidebar" [ngClass]="{ show : subNav === pagesID + '-1'}">
+          <div id="{{ getNavPageID('bottom-nav') + '-1' }}" class="side-sidebar"
+            [ngClass]="{ show : subNav === getNavPageID('bottom-nav') + '-1'}">
             <span class="header">Members Area</span>
             <ul>
               <li *ngIf="userLinks.length <= 0">
