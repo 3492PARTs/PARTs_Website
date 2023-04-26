@@ -19,8 +19,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   private userScrolling = false;
 
   urlEnd = '';
-  page = 'Members';
-  pages: string[] = []; //['Devices', 'Firmware', 'Support']
+  //page = 'Members';
+  //pages: string[] = []; //['Devices', 'Firmware', 'Support']
 
   @ViewChild('thisHeader', { read: ElementRef, static: true }) header!: ElementRef;
   @ViewChild('thisMain', { read: ElementRef, static: true }) main!: ElementRef;
@@ -54,36 +54,58 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
-      this.pages = [];
-      this.userLinks.forEach(ul => {
-        this.removeHeader = false;
-        this.pages.push(ul.menu_name);
-        if (ul.menu_name === this.urlEnd.toUpperCase() || this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink') > -1) {
-          this.page = ul.menu_name;
+
+      this.appMenu.forEach(mi => {
+        if (mi.menu_name == 'Members') {
+          mi.menu_items = ul;
+          mi.menu_items.push(new MenuItem('Logout', 'logout'))
         }
       });
 
-      let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
+      //this.pages = [];
+      this.userLinks.forEach(ul => {
+        this.removeHeader = false;
+
+        this.appMenu.forEach(mi => {
+          mi.menu_items.forEach(mii => {
+            if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+          });
+        });
+
+        /*this.pages.push(ul.menu_name);
+        if (ul.menu_name === this.urlEnd.toUpperCase() || this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink') > -1) {
+          this.page = ul.menu_name;
+        }*/
+      });
+
+      /*let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
       if (userLinkLoc > -1) {
         this.page = this.userLinks[userLinkLoc].menu_name
-      }
+      }*/
     });
+
     this.router.events
       .subscribe(
         (event: NavigationEvent) => {
           if (event instanceof NavigationEnd) {
             this.urlEnd = event.url.substr(1, event.url.length - 1);
-            //this.urlEnd = this.urlEnd.charAt(0).toUpperCase() + this.urlEnd.slice(1);
+
+
+            this.appMenu.forEach(mi => {
+              mi.menu_items.forEach(mii => {
+                if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+              });
+            });
 
             //TODO Handle the below line
-            if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) {
+            /*if (this.pages.indexOf(this.urlEnd.toUpperCase()) >= 0) {
               this.page = this.urlEnd.toUpperCase();
             }
             let userLinkLoc = this.gs.arrayObjectIndexOf(this.userLinks, this.urlEnd, 'routerlink');
             if (userLinkLoc > -1) {
               this.page = this.userLinks[userLinkLoc].menu_name
             }
-            else this.page = 'Members';
+            else this.page = 'Members';*/
           }
         });
     this.gs.scrollPosition$.subscribe(scrollY => {
@@ -102,12 +124,20 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.appMenu = [
       new MenuItem('Contact Us', 'contact', 'card-account-details'),
-      new MenuItem('Join PARTs', 'join', 'account-supervisor'),
+      new MenuItem('Join PARTs', 'join', 'account-supervisor', [
+        new MenuItem('Mechanical', 'join/mechanical'),
+        new MenuItem('Electrical', 'join/electrical'),
+        new MenuItem('Programming', 'join/programming'),
+        new MenuItem('Impact', 'join/community-outreach')
+      ]),
       new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
       new MenuItem('About', 'about', 'information'),
       new MenuItem('Media', 'media', 'image-multiple'),
       new MenuItem('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
       new MenuItem('FIRST', 'first', 'first'),
+      new MenuItem('Members', '', 'folder', [
+        new MenuItem('Login', 'login'),
+      ]),
     ];
     this.competitionInit();
 
@@ -292,7 +322,7 @@ let max = document.documentElement.scrollHeight;
     }
   }
 
-  closeSubNav(): void {
+  closeSubNav(resetNames = false): void {
     if (!this.gs.strNoE(this.subNav)) {
       const id = this.subNav.substr(0, this.subNav.length - 2);
       const parent = document.getElementById(id);
@@ -300,6 +330,7 @@ let max = document.documentElement.scrollHeight;
     }
 
     this.subNav = '';
+    if (resetNames) this.resetMenuItemNames();
   }
 
   toggleForceNavExpand(): void {
@@ -355,12 +386,38 @@ let max = document.documentElement.scrollHeight;
 
   logOut(): void {
     this.auth.logOut();
-    this.page = 'Members';
+    //this.page = 'Members';
+    this.resetMenuItemNames();
   }
 
   getNavPageID(key: string): string {
     if (!this.pageIDs[key]) this.pageIDs[key] = this.gs.getNextGsId();
     return this.pageIDs[key];
+  }
+
+  setActiveMenuItem(parent: MenuItem, child: MenuItem): void {
+    this.resetMenuItemNames();
+    this.appMenu.forEach(mi => {
+      if (mi.menu_name === parent.menu_name) {
+        mi.menu_name_active_item = child.menu_name;
+      }
+    });
+  }
+
+  resetMenuItemNames(): void {
+    this.appMenu.forEach(mi => mi.menu_name_active_item = '');
+  }
+
+  isActiveMenuItem(): boolean {
+    let active = false;
+    this.appMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
+    return active;
+  }
+
+  getActiveMenuItemName(): string {
+    let active = '';
+    this.appMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
+    return active;
   }
 }
 
@@ -371,15 +428,18 @@ export class PageSpecificNavOption {
 
 export class MenuItem {
   menu_name = '';
+  menu_name_active_item = '';
   order = -1;
   permission = -1;
   routerlink = '';
   user_links_id = -1;
   icon = 'clipboard-text-multiple-outline';
+  menu_items: MenuItem[] = [];
 
-  constructor(menu_name: string, routerlink: string, icon?: string) {
+  constructor(menu_name: string, routerlink: string, icon?: string, menu_items?: MenuItem[]) {
     this.menu_name = menu_name;
     this.routerlink = routerlink;
     this.icon = icon || 'clipboard-text-multiple-outline';
+    this.menu_items = menu_items || [];
   }
 }

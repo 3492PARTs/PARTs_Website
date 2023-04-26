@@ -8,10 +8,12 @@
 
     <hr>
 
-    <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}">
+    <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}"
+      appClickOutside (appClickOutside)="closeSubNav()">
       <ul>
-        <li class="height" *ngFor="let mi of appMenu">
-          <a routerLink="{{mi.routerlink}}" routerLinkActive="active" (click)="page = 'Members'"
+        <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of appMenu"
+          (click)="mi.menu_items.length > 0 ? openSubNav(getNavPageID(mi.menu_name), getNavPageID(mi.menu_name) + '-1') : closeSubNav(true)">
+          <a [routerLink]="mi.routerlink ? mi.routerlink : null" routerLinkActive="active"
             [ngClass]="{'right-hand-nav': rightHandNav}">
             <mat-icon class="icon" [svgIcon]="mi.icon" *ngIf="mi.icon !== 'first'"
               [ngClass]="{'right-hand-nav': rightHandNav}"></mat-icon>
@@ -63,15 +65,29 @@
               </g>
             </svg>
             <span routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-            true}" class="menu-link">{{mi.menu_name}}</span>
+            true}" class="menu-link">{{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}</span>
+            <mat-icon *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}" class="icon page-options"
+              [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}" svgIcon="menu-right"></mat-icon>
           </a>
+
+          <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar" *ngIf="mi.menu_items.length > 0"
+            [ngClass]="{ show : subNav === getNavPageID(mi.menu_name) + '-1'}">
+            <span class="header">Members Area</span>
+            <ul>
+              <li *ngFor="let mii of mi.menu_items">
+                <a routerLink="{{ mii.routerlink }}" routerLinkActive="active-link"
+                  (click)="setActiveMenuItem(mi, mii)">
+                  {{ mii.menu_name }}
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
 
-        <hr>
+        <!--<hr>
 
         <li id="{{ getNavPageID('bottom-nav') }}" class="height"
-          (click)="openSubNav(getNavPageID('bottom-nav'), getNavPageID('bottom-nav') + '-1')" appClickOutside
-          (appClickOutside)="closeSubNav()">
+          (click)="openSubNav(getNavPageID('bottom-nav'), getNavPageID('bottom-nav') + '-1')">
           <a [ngClass]="{ active : page !== 'Members'}">
             <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
             <span>{{ pages.includes(page) ? page : 'Members' }}</span>
@@ -100,14 +116,14 @@
               </li>
             </ul>
           </div>
-        </li>
+        </li>-->
 
       </ul>
 
-      <hr class="darker" *ngIf="this.pages.indexOf(page) >= 0">
+      <hr [ngClass]="{'darker' : isActiveMenuItem()}">
 
       <div id="page-nav">
-        <app-sub-navigation *ngIf="['admin', 'scouting admin'].includes(page.toLocaleLowerCase())"
+        <app-sub-navigation *ngIf="['admin', 'scouting admin'].includes(getActiveMenuItemName())"
           [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
         <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
