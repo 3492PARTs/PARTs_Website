@@ -111,8 +111,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new MenuItem('Mechanical', 'join/mechanical'),
         new MenuItem('Electrical', 'join/electrical'),
         new MenuItem('Programming', 'join/programming'),
-        new MenuItem('Impact', 'join/community-outreach')
-      ]),
+        new MenuItem('Community Outreach', 'join/community-outreach')
+      ], 'Our Subteams'),
       new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
       new MenuItem('About', 'about', 'information'),
       new MenuItem('Media', 'media', 'image-multiple'),
