@@ -120,11 +120,11 @@
 
       </ul>
 
-      <hr [ngClass]="{'darker' : isActiveMenuItem()}">
+      <hr [ngClass]="{'darker' : pagesWithNavs.includes(getActiveMenuItemName())}">
 
       <div id="page-nav">
-        <app-sub-navigation *ngIf="['admin', 'scouting admin'].includes(getActiveMenuItemName())"
-          [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
+        <app-sub-navigation *ngIf="pagesWithNavs.includes(getActiveMenuItemName())" [setNavExpanded]="navExpanded"
+          [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
         <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
         </app-support-nav>

@@ -39,30 +39,8 @@
           href="http://goo.gl/forms/C2plkMRYTwPuYka53">here</a>.</h4>
     </app-box>
 
-    <h3>Check out the links below to learn more about each sub-group within our team!</h3>
-    <table id="subgroups">
-      <tr>
-        <td>
-          <h4>
-            <a routerLink="mechanical">Mechanical</a>
-          </h4>
-        </td>
-        <td>
-          <h4>
-            <a routerLink="electrical">Electrical</a>
-          </h4>
-        </td>
-        <td>
-          <h4>
-            <a routerLink="programming">Programming</a>
-          </h4>
-        </td>
-        <td>
-          <h4>
-            <a routerLink="community-outreach">Community Outreach</a>
-          </h4>
-        </td>
-      </tr>
-    </table>
+    <app-box [Title]="'Learn more about each sub-group within our team!'">
+      <h4>Click "Join PARTs" on the navigation to see each group in detail.</h4>
+    </app-box>
   </main>
 </div>

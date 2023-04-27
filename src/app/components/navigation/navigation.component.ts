@@ -28,6 +28,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   subNav = '';
   pageIDs: any = {};
+  pagesWithNavs = ['admin', 'scouting admin'];
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;
