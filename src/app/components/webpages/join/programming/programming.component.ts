@@ -12,4 +12,8 @@ export class ProgrammingComponent implements OnInit {
   ngOnInit() {
   }
 
+  openURL(url: string): void {
+    window.open(url, '_blank');
+  }
+
 }

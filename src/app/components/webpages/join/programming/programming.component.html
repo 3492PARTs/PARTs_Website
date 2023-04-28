@@ -9,8 +9,34 @@
     </p>
   </div>
   <main id="mainJoin">
-    <app-box [Title]="'We are the Programming Team!'">
-      <h4>The Programming Team within PARTs is composed of a mentor and multiple students.</h4>
+    <app-box [Title]="'Sign up for PARTs Summer Programming Class'">
+      <h4>This summer PARTs is offering a class to students interested in programming for our team. In the class you
+        will learn the
+        basics of Java programming and how to apply that knowledge to programming a FIRST Robotics robot. When we are
+        done each student will
+        program the robot to drive and get to test their code.
+      </h4>
+      <h4>
+        The dates for our class is: July 8th & 9th and 15th & 16th, from 9am to 5pm @ Winfield Middle School. Room 11 at
+        the back drop off loop.
+      </h4>
+      <h4>Please be available for all 4 days as we will be building our knowledge each day. Also, there is the
+        potential for a (1) weekday study session which will be announced during the first two days, this will be
+        optional
+        but highly
+        recommended. Everyday please bring either your
+        personal pc (you are responsible for it)
+        or your Putnam Co issued school pc. If you are a non-public Putnam Co student and have neither please let us
+        know and arrangements
+        will be made. Lunch is not provided any of the days so please pack a lunch or bring money and be comfortable
+        with students walking to
+        to get lunch.
+      </h4>
+      <app-button-ribbon [TextAlign]="'center'">
+        <app-button
+          (FunctionCallBack)="openURL('https://docs.google.com/forms/d/e/1FAIpQLScO23DWoslplYOSNvB0pMO2U7QgIsfIPSg-UoB9rVUfe2kNug/viewform?usp=sf_link')">
+          REGISTER</app-button>
+      </app-button-ribbon>
     </app-box>
 
     <app-box [Title]="'What Do We Do?'">
