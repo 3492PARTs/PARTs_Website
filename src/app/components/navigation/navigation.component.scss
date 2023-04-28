@@ -543,14 +543,14 @@ header {
   main {
     //margin here is equal to height of footer
     padding-top: 7rem;
-    margin-bottom: calc(100vh - 7rem + 1.6rem); //11.6rem;
+    padding-bottom: calc(100vh - 7rem + 1.6rem); //11.6rem;
     width: 100%;
     min-height: 100%;
     position: relative;
 
     &.remove-header {
       padding-top: 0;
-      margin-bottom: calc(100vh + 1.6rem);
+      padding-bottom: calc(100vh + 1.6rem);
     }
   }
 
@@ -578,13 +578,19 @@ header {
     @include flex-center;
 
     div > div {
-      margin: 2em auto;
+      margin: 0 auto;
+      padding: 2em 0;
       /*SCREEN SIZE:NARROW SCREEN*/
       width: 90%;
 
       /*SCREEN SIZE:WIDE SCREEN*/
       @media only screen and (min-width: $screen-size-xlg) {
         width: 70%;
+      }
+
+      /*SCREEN SIZE:EXTRA WIDE SCREEN*/
+      @media only screen and (min-width: $screen-size-xxlg) {
+        width: 50%;
       }
 
       display: grid;
