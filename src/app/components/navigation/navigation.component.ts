@@ -351,7 +351,7 @@ let max = document.documentElement.scrollHeight;
     if (er) {
       const rect = er.nativeElement.getBoundingClientRect();
       //const topShown = rect.top >= 0;
-      const bottomShown = rect.bottom <= window.innerHeight;
+      const bottomShown = rect.bottom <= window.innerHeight + 2;
       return bottomShown;
     }
     return false;

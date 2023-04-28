@@ -3,7 +3,7 @@
 //@import '../../../scss/_pages/join';
 @import "../../../../scss/abstracts/variables.scss";
 
-#cssSlider {
+/*#cssSlider {
   //max-height: calc(100vh - 7rem);
 }
 /*HOME*/
@@ -255,12 +255,12 @@
   }
 }
 
-/*FLUID SPONSORS*/
+/*FLUID SPONSORS
 
 .imgWrapper40 {
   position: relative;
   padding-bottom: 40%;
-  /*to find % aspect ratio, (height/width)100*/
+  /*to find % aspect ratio, (height/width)100
   height: 0;
 }
 
@@ -294,7 +294,7 @@
   }
 }
 
-/*photos:WIDE SCREEN*/
+/*photos:WIDE SCREEN
 
 @media only screen and (min-width: 1001px) {
   #toyota,
@@ -309,7 +309,7 @@
   }
 }
 
-/*photos:NARROW SCREEN*/
+/*photos:NARROW SCREEN
 
 @media only screen and (max-width: 1000px) {
   #toyota,
@@ -322,4 +322,4 @@
   #homeDepot {
     padding-left: 0.5em;
   }
-}
+}*/
