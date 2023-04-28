@@ -541,24 +541,39 @@ header {
   }
 
   main {
+    //margin here is equal to height of footer
     padding-top: 7rem;
-    margin-bottom: calc(100vh + 1.6rem); //11.6rem;
+    margin-bottom: calc(100vh - 7rem + 1.6rem); //11.6rem;
     width: 100%;
     min-height: 100%;
     position: relative;
 
     &.remove-header {
       padding-top: 0;
+      margin-bottom: calc(100vh + 1.6rem);
     }
   }
 
   footer {
     position: absolute;
     bottom: 0;
-    left: 0;
-    height: 100vh;
+    right: 0;
+    height: calc(100vh - 7rem);
     background-color: $accent_color;
-    width: 100%;
+
+    width: calc(100% - 10.4rem);
+
+    &.expanded {
+      width: calc(100% - 22.4rem);
+    }
+
+    &.hideNav {
+      width: 100%;
+    }
+
+    &.full-height {
+      height: 100vh;
+    }
 
     @include flex-center;
 
@@ -583,7 +598,7 @@ header {
         grid-column-start: 1;
         grid-column-end: span 2;
         //grid-row-start: 1;
-        font-size: 2.5em;
+        font-size: 2.7em;
         text-align: center;
       }
 

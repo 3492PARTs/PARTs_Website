@@ -285,7 +285,8 @@
       </ng-content>
     </main>
 
-    <footer #thisFooter [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+    <footer #thisFooter
+      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'full-height': hideNavExpander || removeHeader}">
       <div>
         <div>
           <h1>OUR PARTners</h1>
