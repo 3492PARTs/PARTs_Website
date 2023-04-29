@@ -6,6 +6,7 @@ import { GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
+import { PushService } from './push.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class AuthService {
 
   private firstLoad = true;
 
-  constructor(private http: HttpClient, private router: Router, private gs: GeneralService) {
+  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: PushService) {
     this.localStorageString = environment.tokenString;
   }
 
@@ -97,6 +98,7 @@ export class AuthService {
           localStorage.setItem(this.localStorageString, tmp.refresh);
           localStorage.setItem(environment.loggedInHereBefore, 'hi');
           this.getUser();
+          this.ps.subscribeToNotifications();
 
           if (this.gs.strNoE(returnUrl)) {
             this.router.navigateByUrl('');
