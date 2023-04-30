@@ -1,0 +1,40 @@
+@import "../../../../../scss/abstracts/variables.scss";
+
+#profile-header {
+  width: 100%;
+
+  min-height: 270px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  #profile-picture {
+    -webkit-box-shadow: 0px 15px 23px -5px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 15px 23px -5px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 15px 23px -5px rgba(0, 0, 0, 0.75);
+    position: relative;
+
+    #profile-edit-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  #profile-picture,
+  #profile-picture img {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+  }
+}
+
+#cropper-size {
+  margin: 0 auto;
+}
+
+#cropper-wrapper {
+  //height: calc(100vh - (1em + 2.813em + 2em));
+  width: 100%;
+}

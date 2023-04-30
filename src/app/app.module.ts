@@ -80,6 +80,8 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { SubNavigationComponent } from './components/atoms/sub-navigation/sub-navigation.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ProfileComponent } from './components/webpages/user/profile/profile.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -139,7 +141,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BannersComponent,
     EventCompetitionComponent,
     MatchPlanningComponent,
-    SubNavigationComponent
+    SubNavigationComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -162,7 +165,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    ImageCropperModule
   ],
   providers: [
     /*{

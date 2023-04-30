@@ -29,6 +29,7 @@ import { FirstComponent } from './components/webpages/first/first.component';
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
+import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 
 
 
@@ -60,6 +61,7 @@ const routes: Routes = [
   { path: 'first', component: FirstComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'competition', component: EventCompetitionComponent },
+  { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
   //{ path: '**', redirectTo: '' }
 ];
