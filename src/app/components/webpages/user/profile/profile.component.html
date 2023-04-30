@@ -1,7 +1,7 @@
 <app-box [Title]="'Welcome ' + user.first_name + '!'">
   <div id="profile-header">
     <div id="profile-picture">
-      <img [src]="user.image">
+      <img [src]="user.image ? user.image : '../../../../../assets/icons/BeanieBot40x40.png'">
       <div id="profile-edit-btn">
         <app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>
       </div>
@@ -59,7 +59,8 @@
     </app-form-element>
     <br>
     <p class="matching-pass">
-      <span class="do-not-match" [ngClass]="{ hide : input.password === input.passwordConfirm }">passwords do not
+      <span class="do-not-match"
+        [ngClass]="{ hide : gs.strNoE(input.password) || input.password === input.passwordConfirm }">passwords do not
         match</span>
       <span class="do-match"
         [ngClass]="{ hide : input.password !== input.passwordConfirm || gs.strNoE(input.password) }">passwords

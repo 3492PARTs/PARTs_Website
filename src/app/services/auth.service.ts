@@ -123,7 +123,7 @@ export class AuthService {
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.gs.incrementOutstandingCalls();
-    this.http.put('user/profile/', userData).subscribe(
+    this.http.post('user/profile/', userData).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {

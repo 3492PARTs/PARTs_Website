@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthService, User, UserData } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  saveProfile() {
+  saveProfile(): null | undefined | void {
     this.closeEditProfileImageModal();
     let form = new FormData();
 
@@ -45,42 +45,46 @@ export class ProfileComponent implements OnInit {
       const imageBlob = this.dataURItoBlob(imgStr);
       const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
 
-      form.append('first_name', this.editUser.first_name);
-      form.append('last_name', this.editUser.last_name);
-      form.append('email', this.editUser.email);
       form.append('image', imageFile, imageFile.name);
-    } else {
-      form.append('first_name', this.editUser.first_name);
-      form.append('last_name', this.editUser.last_name);
-      form.append('email', this.editUser.email);
     }
+    else if (!this.gs.strNoE(this.input.password)) {
+      if (this.input.password === this.input.passwordConfirm) {
+        form.append('password', this.input.password);
+      } else {
+        this.gs.triggerError('Passwords do not match.');
+        return null;
+      }
+    }
+    form.append('first_name', this.editUser.first_name);
+    form.append('last_name', this.editUser.last_name);
+    form.append('email', this.editUser.email);
+
 
     this.gs.incrementOutstandingCalls();
     this.http.put(
-      'profile/' + this.editUser.id + '/',
+      'user/profile/',
       form
     ).subscribe(
-      Response => {
-        this.gs.devConsoleLog(Response);
-        this.auth.getUser();
-        this.userProfileImage = null;
-        this.gs.decrementOutstandingCalls();
-      },
-      Error => {
-        console.log('error', Error);
-        this.gs.triggerError(JSON.stringify(Error));
-        this.gs.decrementOutstandingCalls();
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+
+            this.auth.getUser();
+            this.userProfileImage = null;
+            this.input = new UserData();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
       }
     );
-  }
-
-  changePassword() {
-    if (this.input.password === this.input.passwordConfirm) {
-      this.auth.resetPassword(this.input);
-      this.input = new UserData();
-    } else {
-      this.gs.triggerError('Passwords do not match.');
-    }
   }
 
   /*---- Profile Image Helpers ----*/
