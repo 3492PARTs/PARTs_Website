@@ -287,6 +287,7 @@ export class AuthService {
         },
         error: (err: any) => {
           this.apiStatusBS.next(APIStatus.off);
+          this.authInFlightBS.next(AuthCallStates.err);
         }
       }
     );

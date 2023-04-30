@@ -42,7 +42,6 @@ export class BannersComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.router.events.subscribe((val) => {
       const currentPage = this.router.url; // Current page route
-      this.top0 = currentPage === '/login';
     });
     this.positionBannerWrapper();
   }
