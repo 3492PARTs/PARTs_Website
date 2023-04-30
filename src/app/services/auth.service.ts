@@ -373,7 +373,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !this.gs.strNoE(this.internalToken.access) && !this.gs.strNoE(this.internalToken.refresh) && !this.isTokenExpired;
+    return !this.gs.strNoE(this.internalToken.access) && !this.isTokenExpired(this.internalToken.access);
   }
 }
 
