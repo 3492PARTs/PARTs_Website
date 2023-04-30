@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { User, AuthGroup, AuthService, PhoneType } from 'src/app/services/auth.service';
+import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
 import { NavigationService } from 'src/app/services/navigation.service';
@@ -80,7 +80,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.adminInit() : null);
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
       new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),

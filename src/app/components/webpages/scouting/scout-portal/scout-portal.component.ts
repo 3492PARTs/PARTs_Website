@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Event, ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { AuthService, User } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -55,7 +55,7 @@ export class ScoutPortalComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.portalInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
     this.authService.currentUser.subscribe(u => this.user = u);
   }
 

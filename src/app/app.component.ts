@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { APIStatus, AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd } from '@angular/router'; // import Router and NavigationEnd
 import { GeneralService, RetMessage } from './services/general.service';
@@ -15,7 +15,7 @@ declare let gtag: Function;
 })
 export class AppComponent implements OnInit {
 
-  private apiStatus = 'online';
+  private apiStatus = APIStatus.prcs;
   private firstRun = true;
 
   constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient) {
@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
 
     this.authService.apiStatus.subscribe(a => {
       this.apiStatus = a;
-      if (a !== 'prcs' && a !== 'off' && this.firstRun) {
+      if (a !== APIStatus.prcs && a !== APIStatus.off && this.firstRun) {
         this.authService.previouslyAuthorized();
         this.firstRun = false;
       }

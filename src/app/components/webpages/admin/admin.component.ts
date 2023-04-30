@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { User, AuthGroup, AuthService, PhoneType, ErrorLog } from 'src/app/services/auth.service';
+import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 
@@ -55,7 +55,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.adminInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.adminInit() : null);
     this.ns.setSubPages([new MenuItem('Manage Users', 'users', 'account-group'), new MenuItem('Error Log', 'errors', 'alert-circle-outline')]);
     this.ns.setSubPage('users');
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -30,7 +30,7 @@ export class QuestionAdminFormComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.questionInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
   }
 
   questionInit(): void {

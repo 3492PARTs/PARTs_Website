@@ -12,7 +12,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { AuthService, Token, User } from '../services/auth.service';
+import { APIStatus, AuthService, Token, User } from '../services/auth.service';
 import { environment } from '../../environments/environment';
 import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 export class HTTPInterceptor implements HttpInterceptor {
   private token: Token = new Token();
   private user: User = new User();
-  private apiStatus = 'prcs';
+  private apiStatus = APIStatus.prcs;
 
   constructor(private auth: AuthService, private gs: GeneralService, private injector: Injector, private router: Router) {
     this.auth.currentToken.subscribe((t) => (this.token = t));
@@ -34,7 +34,8 @@ export class HTTPInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
-    const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
+    //const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
+    const baseURL = environment.baseUrl;
 
     if (request.url.includes('./assets')) { // this is for the icons used on the front end
       return next.handle(request);

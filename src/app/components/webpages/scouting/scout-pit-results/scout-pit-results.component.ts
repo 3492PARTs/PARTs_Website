@@ -5,7 +5,7 @@ import { Team } from '../scout-field/scout-field.component';
 import { ScoutQuestion } from '../question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-pit-results',
@@ -20,7 +20,7 @@ export class ScoutPitResultsComponent implements OnInit {
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutPitResultsInit() : null);
+    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
     this.resultWidth = this.gs.screenSize() === 'xs' ? '100%' : '350px';
   }
 

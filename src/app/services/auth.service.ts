@@ -12,10 +12,10 @@ import { PushService } from './push.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private authInFlightBS = new BehaviorSubject<string>('prcs');
+  private authInFlightBS = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
   authInFlight = this.authInFlightBS.asObservable();
 
-  private apiStatusBS = new BehaviorSubject<string>('prcs');
+  private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.prcs);
   apiStatus = this.apiStatusBS.asObservable();
 
   private token = new BehaviorSubject<Token>(new Token());
@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   previouslyAuthorized(): void {
-    this.authInFlightBS.next('prcs');
+    this.authInFlightBS.next(AuthCallStates.prcs);
 
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) || '' };
     this.token.next(tmpTkn);
@@ -66,12 +66,12 @@ export class AuthService {
               this.firstLoad = false;
             }
 
-            this.authInFlightBS.next('comp');
+            this.authInFlightBS.next(AuthCallStates.comp);
           },
           error: (err: any) => {
             this.gs.decrementOutstandingCalls();
             console.log('error', err);
-            this.authInFlightBS.next('err');
+            this.authInFlightBS.next(AuthCallStates.err);
             this.logOut();
           },
           complete: () => {
@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   authorizeUser(userData: UserData, returnUrl?: string | null): void {
-    this.authInFlightBS.next('prcs');
+    this.authInFlightBS.next(AuthCallStates.prcs);
     this.gs.incrementOutstandingCalls();
     userData.username = userData.username.toLocaleLowerCase();
     this.http.post('user/token/', userData).subscribe(
@@ -106,12 +106,12 @@ export class AuthService {
             this.router.navigateByUrl(returnUrl || '');
           }
 
-          this.authInFlightBS.next('comp');
+          this.authInFlightBS.next(AuthCallStates.comp);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
           console.log('error', err);
-          this.authInFlightBS.next('err');
+          this.authInFlightBS.next(AuthCallStates.err);
           this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
         },
         complete: () => {
@@ -283,21 +283,10 @@ export class AuthService {
     this.http.get('public/api-status/').subscribe(
       {
         next: (result: any) => {
-          this.apiStatusBS.next('on');
+          this.apiStatusBS.next(APIStatus.on);
         },
         error: (err: any) => {
-          this.apiStatusBS.next('off');
-
-          this.http.get('public/api-status/').subscribe(
-            {
-              next: (result: any) => {
-                this.apiStatusBS.next('on-bkup');
-              },
-              error: (err: any) => {
-                this.apiStatusBS.next('off');
-              }
-            }
-          );
+          this.apiStatusBS.next(APIStatus.off);
         }
       }
     );
@@ -381,6 +370,10 @@ export class AuthService {
   isTokenExpired(tkn: string): boolean {
     return this.getTokenExp(tkn) <= new Date();
   }
+
+  isAuthenticated(): boolean {
+    return !this.gs.strNoE(this.internalToken.access) && !this.gs.strNoE(this.internalToken.refresh) && !this.isTokenExpired;
+  }
 }
 
 export class Token {
@@ -458,4 +451,16 @@ export class RegisterUser {
   last_name!: string;
   password1!: string;
   password2!: string;
+}
+
+export enum AuthCallStates {
+  prcs,
+  comp,
+  err
+}
+
+export enum APIStatus {
+  prcs,
+  on,
+  off
 }

@@ -4,7 +4,7 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -25,7 +25,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.spInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.spInit() : null);
     this.checkTeamInterval = window.setInterval(() => {
       this.http.get(
         'scouting/pit/questions/'

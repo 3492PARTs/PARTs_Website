@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 
@@ -27,7 +27,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldInit() : null);
+    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
 
     this.checkScoutInterval = window.setInterval(() => {
       this.http.get(

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
+import { APIStatus, AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
 import { Banner, GeneralService } from 'src/app/services/general.service';
 import { environment } from 'src/environments/environment';
 
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   input: UserData = new UserData;
   returnUrl: string | null = '';
-  apiStatus = 'unknown';
+  apiStatus = APIStatus.prcs;
   page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
 
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.apiStatus.subscribe(a => {
       this.apiStatus = a;
-      if (a === 'off') this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
+      if (a === APIStatus.off) this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
     });
   }
 

@@ -4,7 +4,7 @@ import { GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 
 @Component({
@@ -33,7 +33,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === 'comp' ? this.scoutFieldResultsInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
 
     if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
   }
