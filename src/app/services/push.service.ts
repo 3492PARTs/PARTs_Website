@@ -25,6 +25,21 @@ export class PushService {
     });
 
     if (!this.swPush.subscription) this.requestSubscription();*/
+
+    this.swPush.messages.subscribe(m => {
+      console.log('message');
+      console.log(m);
+    });
+
+    this.swPush.subscription.subscribe(s => {
+      console.log('subscription');
+      console.log(s);
+    });
+
+    this.swPush.notificationClicks.subscribe(n => {
+      console.log('notificationClicks');
+      console.log(n);
+    });
   }
 
   requestSubscription(): void {
