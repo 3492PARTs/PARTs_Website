@@ -20,7 +20,8 @@
     <div *ngIf="editProfileImageModalVisible" id="cropper-size" #EditProfileImageModalCropper>
       <image-cropper *ngIf="showCropper" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
         [aspectRatio]="1 / 1" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [roundCropper]="true"></image-cropper>
+        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [roundCropper]="true" [imageQuality]="60">
+      </image-cropper>
     </div>
 
     <app-button-ribbon [ngStyle]="{'visibility': showCropper ? 'visible' : 'hidden'}"
