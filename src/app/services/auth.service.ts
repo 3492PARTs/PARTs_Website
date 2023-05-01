@@ -65,7 +65,7 @@ export class AuthService {
               this.getUserLinks();
               this.firstLoad = false;
             }
-
+            this.ps.subscribeToNotifications();
             this.authInFlightBS.next(AuthCallStates.comp);
           },
           error: (err: any) => {

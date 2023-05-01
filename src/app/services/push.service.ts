@@ -13,7 +13,22 @@ export class PushService {
   constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient) { }
 
   subscribeToNotifications() {
+    this.requestSubscription();
+    // Below i was worried it would try to resub each time the user logs in.
+    /*console.log('push: ' + this.swPush.isEnabled);
+    console.log(this.swPush.subscription);
+    this.swPush.subscription.subscribe(s => {
+      console.log(s?.endpoint);
+      console.log(s?.expirationTime);
 
+      if (!s?.endpoint) this.requestSubscription();
+    });
+
+    if (!this.swPush.subscription) this.requestSubscription();*/
+  }
+
+  requestSubscription(): void {
+    this.gs.devConsoleLog('call requestSubscription for push');
     this.swPush.requestSubscription({
       serverPublicKey: this.VAPID_PUBLIC_KEY
     })
@@ -27,6 +42,7 @@ export class PushService {
           browser: browser,
           user_agent: window.navigator.userAgent
         };
+        this.gs.devConsoleLog('got push subscription');
         this.http.post(
           'user/webpush-save/',
           data
@@ -34,7 +50,7 @@ export class PushService {
           {
             next: (result: any) => {
               if (this.gs.checkResponse(result)) {
-                this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+                //this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
               }
             },
             error: (err: any) => {
