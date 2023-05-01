@@ -1,16 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { GeneralService, RetMessage } from './general.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PushService {
+export class NotificationsService {
 
   readonly VAPID_PUBLIC_KEY = 'BLVq-lZnTul8qRwtujYKBwWOqiqh7d60JTrL7RRjPvneBDPO5lkY7Gq_c5cSbAhkZ-wdKXUaYS17L6_V7WrTQHU';
 
-  constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient) { }
+  constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient, private router: Router) { }
 
   subscribeToNotifications() {
     this.requestSubscription();
@@ -39,6 +40,7 @@ export class PushService {
     this.swPush.notificationClicks.subscribe(n => {
       console.log('notificationClicks');
       console.log(n);
+      if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
     });
   }
 
