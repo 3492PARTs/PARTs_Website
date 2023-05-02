@@ -14,38 +14,39 @@ export class NotificationsService {
   constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient, private router: Router) { }
 
   subscribeToNotifications() {
-    this.requestSubscription();
-    // Below i was worried it would try to resub each time the user logs in.
-    /*console.log('push: ' + this.swPush.isEnabled);
-    console.log(this.swPush.subscription);
-    this.swPush.subscription.subscribe(s => {
-      console.log(s?.endpoint);
-      console.log(s?.expirationTime);
+    if (this.swPush.isEnabled) {
+      this.requestSubscription();
+      // Below i was worried it would try to resub each time the user logs in.
+      /*console.log('push: ' + this.swPush.isEnabled);
+      console.log(this.swPush.subscription);
+      this.swPush.subscription.subscribe(s => {
+        console.log(s?.endpoint);
+        console.log(s?.expirationTime);
+  
+        if (!s?.endpoint) this.requestSubscription();
+      });
+  
+      if (!this.swPush.subscription) this.requestSubscription();*/
 
-      if (!s?.endpoint) this.requestSubscription();
-    });
+      this.swPush.messages.subscribe(m => {
+        this.gs.devConsoleLog('message');
+        this.gs.devConsoleLog(m);
+      });
 
-    if (!this.swPush.subscription) this.requestSubscription();*/
+      /*this.swPush.subscription.subscribe(s => {
+        console.log('subscription');
+        console.log(s);
+      });*/
 
-    this.swPush.messages.subscribe(m => {
-      console.log('message');
-      console.log(m);
-    });
-
-    this.swPush.subscription.subscribe(s => {
-      console.log('subscription');
-      console.log(s);
-    });
-
-    this.swPush.notificationClicks.subscribe(n => {
-      console.log('notificationClicks');
-      console.log(n);
-      if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
-    });
+      this.swPush.notificationClicks.subscribe(n => {
+        this.gs.devConsoleLog('notificationClicks');
+        this.gs.devConsoleLog(n);
+        if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
+      });
+    }
   }
 
   requestSubscription(): void {
-    this.gs.devConsoleLog('call requestSubscription for push');
     this.swPush.requestSubscription({
       serverPublicKey: this.VAPID_PUBLIC_KEY
     })
@@ -59,7 +60,6 @@ export class NotificationsService {
           browser: browser,
           user_agent: window.navigator.userAgent
         };
-        this.gs.devConsoleLog('got push subscription');
         this.http.post(
           'user/webpush-save/',
           data
