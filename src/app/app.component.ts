@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
     console.log('prod: ' + environment.production);
 
     if (this.swUpdate.isEnabled) {
-      this.gs.devConsoleLog(this.VERSION + ' running...');
+      console.log(this.VERSION + ' running...');
     }
   }
 
