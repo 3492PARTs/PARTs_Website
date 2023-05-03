@@ -60,7 +60,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (ul.length > 0) mi.menu_items.push(new MenuItem('Logout', 'logout'));
+          if (ul.length > 0) mi.menu_items.push(new MenuItem('Logout', ''));
           else mi.menu_items.push(new MenuItem('Login', 'login'))
         }
       });
@@ -71,7 +71,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
         this.appMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
-            if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+            if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
           });
         });
       });
@@ -79,11 +79,11 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.pwa.installEligible.subscribe(e => {
         this.appMenu.forEach(mi => {
           if (mi.menu_name === 'Members') {
-            let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'routerLink', 'install');
+            let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
               window.setTimeout(() => {
-                mi.menu_items.push(new MenuItem('Install', 'install', 'install'));
+                mi.menu_items.push(new MenuItem('Install', ''));
               }, 1);
             }
             else {
@@ -107,7 +107,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             this.resetMenuItemNames();
             this.appMenu.forEach(mi => {
               mi.menu_items.forEach(mii => {
-                if (mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+                if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
               });
             });
           }
@@ -128,13 +128,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.screenSize() === 'xs';
 
     this.appMenu = [
-      new MenuItem('Contact Us', 'contact', 'card-account-details'),
       new MenuItem('Join PARTs', 'join', 'account-supervisor', [
         new MenuItem('Mechanical', 'join/mechanical'),
         new MenuItem('Electrical', 'join/electrical'),
         new MenuItem('Programming', 'join/programming'),
-        new MenuItem('Community Outreach', 'join/community-outreach')
+        new MenuItem('Community Outreach', 'join/community-outreach'),
+        new MenuItem('Application Form', ''),
       ], 'Our Subteams'),
+      new MenuItem('Contact Form', 'https://forms.gle/BNFNufYAmo1HU4Hs8', 'card-account-details'),
       new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
       new MenuItem('About', 'about', 'information'),
       new MenuItem('Media', 'media', 'image-multiple'),
@@ -402,8 +403,9 @@ let max = document.documentElement.scrollHeight;
 
   setActiveMenuItem(parent: MenuItem, child: MenuItem): void {
     this.resetMenuItemNames();
-    if (child.routerlink === 'logout') this.auth.logOut();
-    else if (child.routerlink === 'install') this.pwa.installPwa();
+    if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
+    else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
+    else if (child.menu_name.toLocaleLowerCase() === 'application form') window.open('https://forms.gle/cW3oFZXFL8yoJUsC9', 'noopener');
     else this.appMenu.forEach(mi => {
       if (mi.menu_name === parent.menu_name) {
         mi.menu_name_active_item = child.menu_name;
@@ -425,6 +427,10 @@ let max = document.documentElement.scrollHeight;
     let active = '';
     this.appMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
     return active;
+  }
+
+  openURL(url: string): void {
+    window.open(url, 'noopener');
   }
 }
 

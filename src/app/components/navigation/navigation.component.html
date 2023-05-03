@@ -13,8 +13,11 @@
       <ul>
         <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of appMenu"
           (click)="mi.menu_items.length > 0 ? openSubNav(getNavPageID(mi.menu_name), getNavPageID(mi.menu_name) + '-1') : closeSubNav(true)">
-          <a [routerLink]="mi.routerlink ? mi.routerlink : null" routerLinkActive="active"
-            [ngClass]="{'right-hand-nav': rightHandNav}">
+
+          <a [routerLink]="mi.routerlink && !mi.routerlink.includes('https') ? mi.routerlink : null"
+            routerLinkActive="active" [ngClass]="{'right-hand-nav': rightHandNav}"
+            (click)="mi.routerlink && mi.routerlink.includes('https') ? openURL(mi.routerlink) : null">
+
             <mat-icon class="icon" [svgIcon]="mi.icon" *ngIf="mi.icon !== 'first'"
               [ngClass]="{'right-hand-nav': rightHandNav}"></mat-icon>
             <svg class="icon" *ngIf="mi.icon === 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
@@ -64,8 +67,12 @@
               330 159 l337 151 115 -108 c63 -60 146 -140 184 -178z" />
               </g>
             </svg>
+
             <span routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-            true}" class="menu-link">{{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}</span>
+            true}" class="menu-link">
+              {{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}
+            </span>
+
             <mat-icon *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}" class="icon page-options"
               [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}" svgIcon="menu-right"></mat-icon>
           </a>
@@ -76,7 +83,7 @@
             <ul>
               <li *ngFor="let mii of mi.menu_items">
                 <a routerLink="{{ mii.routerlink }}" routerLinkActive="active-link"
-                  (click)="mii.routerlink !== 'logout' ? setActiveMenuItem(mi, mii) : logOut()">
+                  (click)="setActiveMenuItem(mi, mii)">
                   {{ mii.menu_name }}
                 </a>
               </li>

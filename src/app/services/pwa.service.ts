@@ -18,7 +18,7 @@ export class PwaService {
 
   public initPwaPrompt() {
     window.addEventListener('beforeinstallprompt', (event: any) => {
-      this.gs.devConsoleLog('init pwa prompt');
+      console.log('init pwa');
       event.preventDefault();
       this.promptEvent = event;
       this.setInstallEligible(true);
@@ -30,9 +30,9 @@ export class PwaService {
     this.promptEvent.prompt();
     this.promptEvent.userChoice.then((choiceResult: { outcome: string; }) => {
       if (choiceResult.outcome === 'accepted') {
-        this.gs.devConsoleLog('User chose install pwa');
+        console.log('install pwa');
       } else {
-        this.gs.devConsoleLog('User not install pwa');
+        console.log('not install pwa');
       }
       this.promptEvent = null;
     });

@@ -13,7 +13,7 @@ export class ResourcesComponent implements OnInit {
   }
 
   openURL(url: string): void {
-    window.open(url, '_blank');
+    window.open(url, 'noopener');
   }
 
 }

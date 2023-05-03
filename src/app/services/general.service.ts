@@ -256,6 +256,10 @@ export class GeneralService {
     }
     return page;
   }
+
+  openURL(url: string): void {
+    window.open(url, 'noopener');
+  }
 }
 
 export class RetMessage {

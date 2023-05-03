@@ -15,6 +15,7 @@ export class NotificationsService {
 
   subscribeToNotifications() {
     if (this.swPush.isEnabled) {
+      console.log('pwa push available')
       this.requestSubscription();
       // Below i was worried it would try to resub each time the user logs in.
       /*console.log('push: ' + this.swPush.isEnabled);
