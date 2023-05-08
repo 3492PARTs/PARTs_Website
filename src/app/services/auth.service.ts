@@ -124,7 +124,7 @@ export class AuthService {
     if (this.internalToken.access) {
       this.getUser();
       this.getUserLinks();
-      this.getUserNotifications();
+      this.ns.getUserNotifications();
     }
   }
 
@@ -330,29 +330,6 @@ export class AuthService {
       {
         next: (result: any) => {
           this.userLinks.next(result as MenuItem[]);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
-  }
-
-  getUserNotifications() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/notifications/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          console.log(result);
-          for (let n of result as Alert[]) {
-            this.ns.pushNotification(n);
-          }
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();

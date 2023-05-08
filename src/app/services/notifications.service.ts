@@ -37,6 +37,7 @@ export class NotificationsService {
       this.swPush.messages.subscribe(m => {
         this.gs.devConsoleLog('message');
         this.gs.devConsoleLog(m);
+        this.getUserNotifications();
       });
 
       /*this.swPush.subscription.subscribe(s => {
@@ -98,6 +99,30 @@ export class NotificationsService {
   removeNotification(i: number): void {
     this.notifications_.splice(i, 1);
     this.notificationsBS.next(this.notifications_);
+  }
+
+  getUserNotifications() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/notifications/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.notifications_ = [];
+          this.notificationsBS.next(this.notifications_);
+          for (let n of result as Alert[]) {
+            this.pushNotification(n);
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 }
 

@@ -661,8 +661,15 @@ header {
       border-left: 1px solid #e3e6f0;
       border-right: 1px solid #e3e6f0;
       border-bottom: 1px solid #e3e6f0;
+      position: relative;
 
-      & > .notification-icon-wrapper {
+      .notification-dismiss {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+      .notification-icon-wrapper {
         width: 4rem;
         display: flex;
         justify-content: center;
@@ -685,11 +692,11 @@ header {
         }
       }
 
-      & > .notification-content {
+      .notification-content {
         width: calc(100% - 4rem);
         padding-left: 1.6rem;
 
-        & > .notification-time {
+        .notification-time {
           p {
             color: #b7b9cc !important;
             font-size: 80%;
@@ -698,7 +705,7 @@ header {
           }
         }
 
-        & > .notification-message {
+        .notification-message {
           p {
             line-height: 1.3;
             font-size: 1.36rem;

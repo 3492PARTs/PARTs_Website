@@ -37,7 +37,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   showNav = true;
   screenXs = false;
   xsShowSearch = false;
-  showNotificationModal = false;
+  showNotificationModalVisible = false;
   showMessageModal = false;
   showUserModal = false;
 
@@ -359,8 +359,16 @@ let max = document.documentElement.scrollHeight;
     this.xsShowSearch = !this.xsShowSearch;
   }
 
-  toggleShowNotificationModal(): void {
-    this.showNotificationModal = !this.showNotificationModal;
+  showNotificationModal(): void {
+    this.showNotificationModalVisible = true;
+  }
+
+  hideNotificationModal(): void {
+    this.showNotificationModalVisible = false;
+  }
+
+  dismissNotification(n: Alert): void {
+
   }
 
   toggleShowMessageModal(): void {
