@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 import { PwaService } from 'src/app/services/pwa.service';
+import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-navigation',
@@ -52,7 +53,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   tokenString = '';
 
-  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService) {
+  notifications: Alert[] = [];
+
+  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService) {
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
@@ -75,43 +78,41 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           });
         });
       });
+    });
 
-      this.pwa.installEligible.subscribe(e => {
+    this.pwa.installEligible.subscribe(e => {
+      window.setTimeout(() => {
         this.appMenu.forEach(mi => {
           if (mi.menu_name === 'Members') {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
-              window.setTimeout(() => {
-                mi.menu_items.push(new MenuItem('Install', ''));
-              }, 1);
+              mi.menu_items.push(new MenuItem('Install', ''));
             }
-            else {
-              if (!e) {
-                window.setTimeout(() => {
-                  mi.menu_items.splice(index, 1);
-                }, 1);
-              }
+            else if (!e && index !== -1) {
+              mi.menu_items.splice(index, 1);
             }
           }
         });
-      })
+      }, 1);
     });
 
-    this.router.events
-      .subscribe(
-        (event: NavigationEvent) => {
-          if (event instanceof NavigationEnd) {
-            this.urlEnd = event.url.substr(1, event.url.length - 1);
+    this.router.events.subscribe(
+      (event: NavigationEvent) => {
+        if (event instanceof NavigationEnd) {
+          this.urlEnd = event.url.substr(1, event.url.length - 1);
 
-            this.resetMenuItemNames();
-            this.appMenu.forEach(mi => {
-              mi.menu_items.forEach(mii => {
-                if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
-              });
+          this.resetMenuItemNames();
+          this.appMenu.forEach(mi => {
+            mi.menu_items.forEach(mii => {
+              if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
             });
-          }
-        });
+          });
+        }
+      });
+
+    this.ns.notifications.subscribe(n => this.notifications = n);
+
 
     this.gs.scrollPosition$.subscribe(scrollY => {
       this.scrollEvents(scrollY, true);

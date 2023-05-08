@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { GeneralService, RetMessage } from './general.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,10 @@ import { GeneralService, RetMessage } from './general.service';
 export class NotificationsService {
 
   readonly VAPID_PUBLIC_KEY = 'BLVq-lZnTul8qRwtujYKBwWOqiqh7d60JTrL7RRjPvneBDPO5lkY7Gq_c5cSbAhkZ-wdKXUaYS17L6_V7WrTQHU';
+
+  private notifications_: Alert[] = [];
+  private notificationsBS = new BehaviorSubject<Alert[]>(this.notifications_);
+  notifications = this.notificationsBS.asObservable();
 
   constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient, private router: Router) { }
 
@@ -84,10 +89,27 @@ export class NotificationsService {
       })
       .catch(err => console.error("Could not subscribe to notifications", err));
   }
+
+  pushNotification(n: Alert): void {
+    this.notifications_.push(n);
+    this.notificationsBS.next(this.notifications_);
+  }
+
+  removeNotification(i: number): void {
+    this.notifications_.splice(i, 1);
+    this.notificationsBS.next(this.notifications_);
+  }
 }
 
 export class UserPushNotificationSubscriptionObject {
   endpoint = '';
   p256dh = '';
   auth = '';
+}
+
+export class Alert {
+  alert_id = 0;
+  alert_body = '';
+  alert_subject = '';
+  staged_time = new Date();
 }

@@ -90,41 +90,6 @@
             </ul>
           </div>
         </li>
-
-        <!--<hr>
-
-        <li id="{{ getNavPageID('bottom-nav') }}" class="height"
-          (click)="openSubNav(getNavPageID('bottom-nav'), getNavPageID('bottom-nav') + '-1')">
-          <a [ngClass]="{ active : page !== 'Members'}">
-            <mat-icon [ngStyle]="{'color':'white'}" class="icon" svgIcon="folder"></mat-icon>
-            <span>{{ pages.includes(page) ? page : 'Members' }}</span>
-            <mat-icon [ngStyle]="{'color':'white'}" class="icon page-options"
-              [ngClass]="{ rotate : subNav === getNavPageID('bottom-nav') + '-1'}" svgIcon="menu-right"></mat-icon>
-          </a>
-
-          <div id="{{ getNavPageID('bottom-nav') + '-1' }}" class="side-sidebar"
-            [ngClass]="{ show : subNav === getNavPageID('bottom-nav') + '-1'}">
-            <span class="header">Members Area</span>
-            <ul>
-              <li *ngIf="userLinks.length <= 0">
-                <a routerLink="login" routerLinkActive="active-link" (click)="page = 'Login'">
-                  Login
-                </a>
-              </li>
-              <li *ngFor="let ul of userLinks">
-                <a routerLink="{{ ul.routerlink }}" routerLinkActive="active-link" (click)="page = ul.menu_name">
-                  {{ ul.menu_name }}
-                </a>
-              </li>
-              <li *ngIf="userLinks.length > 0">
-                <a (click)="logOut()" routerLinkActive="active-link">
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>-->
-
       </ul>
 
       <hr [ngClass]="{'darker' : pagesWithNavs.includes(getActiveMenuItemName())}">
@@ -177,7 +142,7 @@
         <div id="notification-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showNotificationModal }">
           <h6>Notification Center</h6>
           <div id="notification-list">
-            <div class="notification">
+            <div class="notification" *ngFor="let n of notifications">
               <div class="notification-icon-wrapper">
                 <div class="notification-icon">
                   <mat-icon class="icon" svgIcon="bell">
@@ -187,13 +152,11 @@
 
               <div class="notification-content">
                 <div class="notification-time">
-                  <p>December 12, 2019</p>
+                  <p>December 12, 2019 {{ n.staged_time }}</p>
                 </div>
                 <div class="notification-message">
-                  <p>
-                    This is a test of our new notification system.
-                    The plan for this test is to see if out testing test tests out.
-                  </p>
+                  <p>{{ n.alert_subject }}</p>
+                  <p>{{ n.alert_body }}</p>
                 </div>
               </div>
             </div>

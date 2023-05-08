@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
-import { NotificationsService } from './notifications.service';
+import { Alert, NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class AuthService {
 
   private firstLoad = true;
 
-  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService) {
+  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService) {
     this.localStorageString = environment.tokenString;
   }
 
@@ -61,8 +61,7 @@ export class AuthService {
             this.token.next(this.internalToken);
 
             if (this.firstLoad) {
-              this.getUser();
-              this.getUserLinks();
+              this.getAllUserInfo();
               this.firstLoad = false;
             }
             this.ps.subscribeToNotifications();
@@ -97,7 +96,7 @@ export class AuthService {
           this.internalToken = tmp;
           localStorage.setItem(this.localStorageString, tmp.refresh);
           localStorage.setItem(environment.loggedInHereBefore, 'hi');
-          this.getUser();
+          this.getAllUserInfo();
           this.ps.subscribeToNotifications();
 
           if (this.gs.strNoE(returnUrl)) {
@@ -119,6 +118,14 @@ export class AuthService {
         }
       }
     );
+  }
+
+  getAllUserInfo(): void {
+    if (this.internalToken.access) {
+      this.getUser();
+      this.getUserLinks();
+      this.getUserNotifications();
+    }
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
@@ -294,51 +301,68 @@ export class AuthService {
   }
 
   getUser() {
-    if (this.internalToken.access) {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'user/user-data/'
-      ).subscribe(
-        {
-          next: (result: any) => {
-            // console.log(Response);
-            this.user.next(result as User);
-
-            this.getUserLinks();
-          },
-          error: (err: any) => {
-            this.gs.decrementOutstandingCalls();
-            console.log('error', err);
-            this.internalToken = new Token();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/user-data/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          // console.log(Response);
+          this.user.next(result as User);
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+          this.internalToken = new Token();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-      );
-    }
+      }
+    );
   }
 
   getUserLinks() {
-    if (this.internalToken.access) {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'user/user-links/'
-      ).subscribe(
-        {
-          next: (result: any) => {
-            this.userLinks.next(result as MenuItem[]);
-          },
-          error: (err: any) => {
-            this.gs.decrementOutstandingCalls();
-            console.log('error', err);
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/user-links/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.userLinks.next(result as MenuItem[]);
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
         }
-      );
-    }
+      }
+    );
+  }
+
+  getUserNotifications() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/notifications/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          console.log(result);
+          for (let n of result as Alert[]) {
+            this.ns.pushNotification(n);
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   getUserGroups(userId: string): Observable<object> | null {
