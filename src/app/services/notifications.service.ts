@@ -124,6 +124,35 @@ export class NotificationsService {
       }
     );
   }
+
+  dismissAlert(a: Alert): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'alerts/dismiss/', {
+      params: {
+        alert_channel_send_id: a.alert_channel_send_id.toString()
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            let index = this.gs.arrayObjectIndexOf(this.notifications_, 'alert_channel_send_id', a.alert_channel_send_id.toString());
+            this.notifications_.splice(index, 1);
+            this.notificationsBS.next(this.notifications_);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
 }
 
 export class UserPushNotificationSubscriptionObject {
@@ -134,6 +163,7 @@ export class UserPushNotificationSubscriptionObject {
 
 export class Alert {
   alert_id = 0;
+  alert_channel_send_id = 0;
   alert_body = '';
   alert_subject = '';
   staged_time = new Date();

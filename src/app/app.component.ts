@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { APIStatus, AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
-import { Router, NavigationEnd } from '@angular/router'; // import Router and NavigationEnd
+import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
 import { GeneralService, RetMessage } from './services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { SwUpdate } from '@angular/service-worker';
 import { PwaService } from './services/pwa.service';
+import { DOCUMENT } from '@angular/common';
 
 // declare gtag as a function to set and sent the events
 declare let gtag: Function;
@@ -21,15 +22,19 @@ export class AppComponent implements OnInit {
   private firstRun = true;
   private VERSION = environment.version;
 
-  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient, private swUpdate: SwUpdate, private pwa: PwaService) {
+  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient, private swUpdate: SwUpdate, private pwa: PwaService, @Inject(DOCUMENT) private document: Document) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
-
       if (environment.production && event instanceof NavigationEnd) {
-        gtag('config', '', { 'page_path': event.urlAfterRedirects });
+        const title = this.getTitle(this.router.routerState, this.router.routerState.root).join('-');
+        gtag('event', 'page_view', {
+          page_title: title,
+          page_path: event.urlAfterRedirects,
+          page_location: this.document.location.href
+        })
       }
-
     });
+
 
     this.authService.apiStatus.subscribe(a => {
       this.apiStatus = a;
@@ -50,5 +55,14 @@ export class AppComponent implements OnInit {
     this.authService.checkAPIStatus();
   }
 
-
+  getTitle(state: RouterState, parent: ActivatedRoute): string[] {
+    const data = [];
+    if (parent && parent.snapshot.data && parent.snapshot.data['title']) {
+      data.push(parent.snapshot.data['title']);
+    }
+    if (state && parent && parent.firstChild) {
+      data.push(...this.getTitle(state, parent.firstChild));
+    }
+    return data;
+  }
 }

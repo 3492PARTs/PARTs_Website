@@ -368,7 +368,7 @@ let max = document.documentElement.scrollHeight;
   }
 
   dismissNotification(n: Alert): void {
-
+    this.ns.dismissAlert(n);
   }
 
   toggleShowMessageModal(): void {

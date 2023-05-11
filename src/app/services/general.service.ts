@@ -103,7 +103,7 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner({ message: response.retMessage, severity: 1, time: 2500 });
+      this.addBanner({ message: response.retMessage, severity: 1, time: 5000 });
       return false;
     }
     return true;

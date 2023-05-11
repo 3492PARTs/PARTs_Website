@@ -40,6 +40,7 @@
     "@angular/compiler-cli": "^15.2.5",
     "@types/blueimp-load-image": "^5.14.4",
     "@types/file-saver": "^2.0.5",
+    "@types/gtag.js": "^0.0.12",
     "@types/jasmine": "^3.10.0",
     "@types/jquery": "^3.5.14",
     "jasmine-core": "^4.0.0",
