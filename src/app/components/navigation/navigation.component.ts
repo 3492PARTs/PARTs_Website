@@ -54,6 +54,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   tokenString = '';
 
   notifications: Alert[] = [];
+  messages: Alert[] = [];
 
   constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService) {
     this.auth.currentUser.subscribe(u => this.user = u);
@@ -112,6 +113,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       });
 
     this.ns.notifications.subscribe(n => this.notifications = n);
+    this.ns.messages.subscribe(m => this.messages = m);
 
 
     this.gs.scrollPosition$.subscribe(scrollY => {

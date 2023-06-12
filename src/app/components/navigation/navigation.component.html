@@ -180,7 +180,7 @@
         <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModal }">
           <h6>Message Center</h6>
           <div id="notification-list">
-            <div class="notification">
+            <div class="notification" *ngFor="let m of messages">
               <div class="notification-icon-wrapper">
                 <div class="notification-icon">
                   <mat-icon class="icon" svgIcon="bell">
@@ -190,13 +190,11 @@
 
               <div class="notification-content">
                 <div class="notification-message">
-                  <p>
-                    This is a test of our new message system.
-                    The plan for this test is to see if out testing test tests out.
-                  </p>
+                  <p>{{ m.alert_subject }}</p>
+                  <p>{{ m.alert_body }}</p>
                 </div>
                 <div class="notification-time">
-                  <p>Person &middot; 1hr</p>
+                  <p>Person &middot; {{ m.staged_time | dateToStr:true:true }}</p>
                 </div>
               </div>
             </div>

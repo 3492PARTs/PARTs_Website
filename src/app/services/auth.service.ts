@@ -124,7 +124,8 @@ export class AuthService {
     if (this.internalToken.access) {
       this.getUser();
       this.getUserLinks();
-      this.ns.getUserNotifications();
+      this.ns.getUserAlerts('notification');
+      this.ns.getUserAlerts('message');
     }
   }
 

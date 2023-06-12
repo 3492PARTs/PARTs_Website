@@ -16,6 +16,10 @@ export class NotificationsService {
   private notificationsBS = new BehaviorSubject<Alert[]>(this.notifications_);
   notifications = this.notificationsBS.asObservable();
 
+  private messages_: Alert[] = [];
+  private messagesBS = new BehaviorSubject<Alert[]>(this.messages_);
+  messages = this.messagesBS.asObservable();
+
   constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient, private router: Router) { }
 
   subscribeToNotifications() {
@@ -37,7 +41,7 @@ export class NotificationsService {
       this.swPush.messages.subscribe(m => {
         this.gs.devConsoleLog('message');
         this.gs.devConsoleLog(m);
-        this.getUserNotifications();
+        this.getUserAlerts('notification');
       });
 
       /*this.swPush.subscription.subscribe(s => {
@@ -101,17 +105,36 @@ export class NotificationsService {
     this.notificationsBS.next(this.notifications_);
   }
 
-  getUserNotifications() {
+  pusMessage(m: Alert): void {
+    this.messages_.push(m);
+    this.messagesBS.next(this.messages_);
+  }
+
+  getUserAlerts(alert_comm_typ_id: string) {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'user/notifications/'
+      'user/alerts/', {
+      params: {
+        alert_comm_typ_id: alert_comm_typ_id
+      }
+    }
     ).subscribe(
       {
         next: (result: any) => {
-          this.notifications_ = [];
-          this.notificationsBS.next(this.notifications_);
-          for (let n of result as Alert[]) {
-            this.pushNotification(n);
+          if (alert_comm_typ_id === 'notification') {
+            this.notifications_ = [];
+            this.notificationsBS.next(this.notifications_);
+            for (let n of result as Alert[]) {
+              this.pushNotification(n);
+            }
+          }
+
+          if (alert_comm_typ_id === 'message') {
+            this.messages_ = [];
+            this.messagesBS.next(this.messages_);
+            for (let m of result as Alert[]) {
+              this.pusMessage(m);
+            }
           }
         },
         error: (err: any) => {
