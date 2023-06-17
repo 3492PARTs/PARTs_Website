@@ -38,8 +38,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   screenXs = false;
   xsShowSearch = false;
   showNotificationModalVisible = false;
-  showMessageModal = false;
-  showUserModal = false;
+  showMessageModalVisible = false;
+  showUserModalVisible = false;
 
   //TODO this is a wip
   rightHandNav = false;
@@ -362,7 +362,8 @@ let max = document.documentElement.scrollHeight;
   }
 
   showNotificationModal(): void {
-    this.showNotificationModalVisible = true;
+    if (this.showNotificationModalVisible) this.showNotificationModalVisible = false;
+    else this.showNotificationModalVisible = true;
   }
 
   hideNotificationModal(): void {
@@ -373,12 +374,23 @@ let max = document.documentElement.scrollHeight;
     this.ns.dismissAlert(n);
   }
 
-  toggleShowMessageModal(): void {
-    this.showMessageModal = !this.showMessageModal;
+  showMessageModal(): void {
+    if (this.showMessageModalVisible) this.showMessageModalVisible = false;
+    else this.showMessageModalVisible = true;
   }
 
-  toggleShowUserModal(): void {
-    this.showUserModal = !this.showUserModal;
+  hideMessageModal(): void {
+    this.showMessageModalVisible = false;
+  }
+
+
+  showUserModal(): void {
+    if (this.showUserModalVisible) this.showUserModalVisible = false;
+    else this.showUserModalVisible = true;
+  }
+
+  hideUserModal(): void {
+    this.showUserModalVisible = false;
   }
 
   isBottomInView(er: ElementRef): boolean {
