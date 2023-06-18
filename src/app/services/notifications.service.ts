@@ -160,9 +160,8 @@ export class NotificationsService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            let index = this.gs.arrayObjectIndexOf(this.notifications_, 'alert_channel_send_id', a.alert_channel_send_id.toString());
-            this.notifications_.splice(index, 1);
-            this.notificationsBS.next(this.notifications_);
+            this.getUserAlerts('notification');
+            this.getUserAlerts('message');
           }
         },
         error: (err: any) => {

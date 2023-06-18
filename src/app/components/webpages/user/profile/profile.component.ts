@@ -3,6 +3,7 @@ import { AuthService, User, UserData } from 'src/app/services/auth.service';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,11 +26,26 @@ export class ProfileComponent implements OnInit {
 
   input: UserData = new UserData();
 
-  constructor(private auth: AuthService, public gs: GeneralService, private http: HttpClient, private renderer: Renderer2) {
+  alertTableCols: object[] = [
+    { PropertyName: 'alert_subject', ColLabel: 'Subject' },
+    { PropertyName: 'alert_body', ColLabel: 'Message' },
+    { PropertyName: 'staged_time', ColLabel: 'Sent' },
+
+  ];
+  notifications: Alert[] = [];
+  messages: Alert[] = [];
+
+  alertModalVisible = false;
+  activeAlert = new Alert();
+
+  constructor(private auth: AuthService, public gs: GeneralService, private http: HttpClient, private renderer: Renderer2, private ns: NotificationsService) {
     this.auth.currentUser.subscribe(u => {
       this.user = u;
       this.editUser = JSON.parse(JSON.stringify(u));
     });
+
+    this.ns.notifications.subscribe(ns => this.notifications = ns);
+    this.ns.messages.subscribe(ms => this.messages = ms);
   }
 
   ngOnInit(): void {
@@ -139,5 +155,16 @@ export class ProfileComponent implements OnInit {
     }
     const blob = new Blob([int8Array], { type: 'image/png' });
     return blob;
+  }
+
+  dismissAlert(a: Alert) {
+    this.ns.dismissAlert(a);
+    this.alertModalVisible = false;
+    this.activeAlert = new Alert();
+  }
+
+  viewAlert(a: Alert) {
+    this.alertModalVisible = true;
+    this.activeAlert = a;
   }
 }
