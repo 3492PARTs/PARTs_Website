@@ -166,7 +166,8 @@
                 </div>
               </div>
             </div>
-            <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Notifications'}">
+            <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Notifications'}"
+              (click)="hideNotificationModal()">
               <p>View All Notifications</p>
             </div>
           </div>
@@ -196,7 +197,8 @@
                   </div>
                 </div>
               </div>
-              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Messages'}">
+              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Messages'}"
+                (click)="hideMessageModal()">
                 <p>View All Messages</p>
               </div>
             </div>
@@ -222,7 +224,8 @@
                 <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
               </div>
             </div>
-            <div class="profile-option" routerLink="user/profile" [queryParams]="{'tab': 'General'}">
+            <div class="profile-option" routerLink="user/profile" [queryParams]="{'tab': 'General'}"
+              (click)="hideUserModal()">
               <div>
                 <mat-icon class="icon" svgIcon="cogs"></mat-icon>
               </div>
