@@ -1,5 +1,21 @@
 @import "../../../../../scss/abstracts/variables.scss";
 
+#profile-wrapper {
+  @media screen and (min-width: $screen-size-xlg) {
+    display: flex;
+    column-gap: 1.6rem;
+    padding: 0 1.6rem;
+
+    #profile-header-box {
+      width: 300px;
+    }
+
+    #profile-tabs {
+      flex-grow: 2;
+    }
+  }
+}
+
 #profile-header {
   width: 100%;
 

@@ -1,13 +1,70 @@
-<app-box [Title]="'Welcome ' + user.first_name + '!'">
-  <div id="profile-header">
-    <div id="profile-picture">
-      <img [src]="user.image ? user.image : '../../../../../assets/icons/BeanieBot40x40.png'">
-      <div id="profile-edit-btn">
-        <app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>
+<div id="profile-wrapper">
+  <div id="profile-header-box">
+    <app-box [Title]="'Welcome ' + user.first_name + '!'" [Width]="'100%'">
+      <div id="profile-header">
+        <div id="profile-picture">
+          <img [src]="user.image ? user.image : '../../../../../assets/icons/BeanieBot40x40.png'">
+          <div id="profile-edit-btn">
+            <app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>
+          </div>
+        </div>
       </div>
-    </div>
+    </app-box>
   </div>
-</app-box>
+  <div id="profile-tabs">
+    <app-box [Width]="'100%'">
+      <app-tab-container>
+        <app-tab [TabName]="'General'">
+          <app-form>
+            <app-form-element [Type]="'text'" [(Model)]="editUser.first_name" [LabelText]="'First Name'">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [(Model)]="editUser.last_name" [LabelText]="'Last Name'">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [(Model)]="editUser.email" [LabelText]="'Email'">
+            </app-form-element>
+
+
+
+            <app-button-ribbon>
+              <app-button [ButtonType]="'main'" (FunctionCallBack)="saveProfile()">Save</app-button>
+            </app-button-ribbon>
+          </app-form>
+        </app-tab>
+
+        <app-tab [TabName]="'Security'">
+          <app-form>
+            <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'"
+              [Width]="'100%'">
+            </app-form-element>
+            <br>
+            <app-form-element [Type]="'password'" [(Model)]="input.passwordConfirm" [Placeholder]="'confirm password'"
+              [Width]="'100%'">
+            </app-form-element>
+            <br>
+            <p class="matching-pass">
+              <span class="do-not-match"
+                [ngClass]="{ hide : gs.strNoE(input.password) || input.password === input.passwordConfirm }">passwords
+                do
+                not
+                match</span>
+              <span class="do-match"
+                [ngClass]="{ hide : input.password !== input.passwordConfirm || gs.strNoE(input.password) }">passwords
+                match</span>
+            </p>
+
+
+
+            <app-button-ribbon>
+              <app-button [ButtonType]="'main'" (FunctionCallBack)="saveProfile()">Save</app-button>
+            </app-button-ribbon>
+          </app-form>
+        </app-tab>
+      </app-tab-container>
+    </app-box>
+  </div>
+</div>
 
 <app-modal [Title]="'Edit Profile Image'" [(visible)]="editProfileImageModalVisible">
   <app-form-element *ngIf="!showCropper" [Type]="'image'" [LabelText]="'Profile Image'"
@@ -30,48 +87,3 @@
     </app-button-ribbon>
   </div>
 </app-modal>
-
-<app-box [Title]="'General'" [Collapsible]="true" [Collapsed]="true">
-  <app-form>
-    <app-form-element [Type]="'text'" [(Model)]="editUser.first_name" [LabelText]="'First Name'">
-    </app-form-element>
-
-    <app-form-element [Type]="'text'" [(Model)]="editUser.last_name" [LabelText]="'Last Name'">
-    </app-form-element>
-
-    <app-form-element [Type]="'text'" [(Model)]="editUser.email" [LabelText]="'Email'">
-    </app-form-element>
-
-
-
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveProfile()">Save</app-button>
-    </app-button-ribbon>
-  </app-form>
-</app-box>
-
-<app-box [Title]="'Security and Login'" [Collapsible]="true" [Collapsed]="true">
-  <app-form>
-    <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'" [Width]="'100%'">
-    </app-form-element>
-    <br>
-    <app-form-element [Type]="'password'" [(Model)]="input.passwordConfirm" [Placeholder]="'confirm password'"
-      [Width]="'100%'">
-    </app-form-element>
-    <br>
-    <p class="matching-pass">
-      <span class="do-not-match"
-        [ngClass]="{ hide : gs.strNoE(input.password) || input.password === input.passwordConfirm }">passwords do not
-        match</span>
-      <span class="do-match"
-        [ngClass]="{ hide : input.password !== input.passwordConfirm || gs.strNoE(input.password) }">passwords
-        match</span>
-    </p>
-
-
-
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveProfile()">Save</app-button>
-    </app-button-ribbon>
-  </app-form>
-</app-box>
