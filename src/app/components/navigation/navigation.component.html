@@ -166,7 +166,7 @@
                 </div>
               </div>
             </div>
-            <div id="notifications-view-all">
+            <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Notifications'}">
               <p>View All Notifications</p>
             </div>
           </div>
@@ -196,7 +196,7 @@
                   </div>
                 </div>
               </div>
-              <div id="notifications-view-all">
+              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Messages'}">
                 <p>View All Messages</p>
               </div>
             </div>
@@ -222,7 +222,7 @@
                 <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
               </div>
             </div>
-            <div class="profile-option">
+            <div class="profile-option" routerLink="user/profile" [queryParams]="{'tab': 'General'}">
               <div>
                 <mat-icon class="icon" svgIcon="cogs"></mat-icon>
               </div>

@@ -4,6 +4,7 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -38,7 +39,13 @@ export class ProfileComponent implements OnInit {
   alertModalVisible = false;
   activeAlert = new Alert();
 
-  constructor(private auth: AuthService, public gs: GeneralService, private http: HttpClient, private renderer: Renderer2, private ns: NotificationsService) {
+  activeTab = '';
+
+  constructor(private auth: AuthService, public gs: GeneralService, private http: HttpClient, private renderer: Renderer2, private ns: NotificationsService, private route: ActivatedRoute) {
+    this.route.queryParamMap.subscribe(queryParams => {
+      this.activeTab = queryParams.get('tab') || '';
+    });
+
     this.auth.currentUser.subscribe(u => {
       this.user = u;
       this.editUser = JSON.parse(JSON.stringify(u));

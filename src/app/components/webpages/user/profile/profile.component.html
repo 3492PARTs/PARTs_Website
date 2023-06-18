@@ -37,7 +37,7 @@
 
   <div id="profile-tabs">
     <app-box [Width]="'100%'">
-      <app-tab-container>
+      <app-tab-container [DefaultTab]="activeTab">
         <app-tab [TabName]="'Notifications'">
           <app-table [TableCols]="alertTableCols" [TableData]="notifications" [ShowRemoveButton]="true"
             (RemoveRecordCallBack)="dismissAlert($event)" [Width]="'100%'"></app-table>

@@ -13,10 +13,14 @@ export class TabContainerComponent implements AfterContentInit {
 
   activeTab?: TabElement;
 
+  @Input() DefaultTab = '';
+
   constructor() { }
 
   ngAfterContentInit() {
     this.getTabs();
+
+    if (this.DefaultTab !== '') this.tabs.forEach(t => t.name === this.DefaultTab ? this.showTab(t) : null);
   }
 
   getTabs() {
