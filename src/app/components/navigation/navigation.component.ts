@@ -364,6 +364,9 @@ let max = document.documentElement.scrollHeight;
   showNotificationModal(): void {
     if (this.showNotificationModalVisible) this.showNotificationModalVisible = false;
     else this.showNotificationModalVisible = true;
+
+    this.hideMessageModal();
+    this.hideUserModal();
   }
 
   hideNotificationModal(): void {
@@ -377,6 +380,9 @@ let max = document.documentElement.scrollHeight;
   showMessageModal(): void {
     if (this.showMessageModalVisible) this.showMessageModalVisible = false;
     else this.showMessageModalVisible = true;
+
+    this.hideNotificationModal();
+    this.hideUserModal();
   }
 
   hideMessageModal(): void {
@@ -387,6 +393,9 @@ let max = document.documentElement.scrollHeight;
   showUserModal(): void {
     if (this.showUserModalVisible) this.showUserModalVisible = false;
     else this.showUserModalVisible = true;
+
+    this.hideNotificationModal();
+    this.hideMessageModal();
   }
 
   hideUserModal(): void {

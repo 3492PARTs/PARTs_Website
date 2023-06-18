@@ -172,9 +172,8 @@
           </div>
         </div>
 
-        <div class="icon-wrapper no-padding">
-          <mat-icon class="icon" svgIcon="email" (click)="showMessageModal()" appClickOutside
-            (appClickOutside)="hideMessageModal()"></mat-icon>
+        <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
+          <mat-icon class="icon" svgIcon="email" (click)="showMessageModal()"></mat-icon>
 
           <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModalVisible }">
             <h6>Message Center</h6>
@@ -206,37 +205,39 @@
 
         <div class="vertical-divider"></div>
 
-        <div id="profile" (click)="showUserModal()" appClickOutside (appClickOutside)="hideUserModal()">
-          <p>{{ user.first_name }} {{ user.last_name }}</p>
-          <div id="profile-picture">
-            <img [src]="user.image ? user.image : '../../../assets/icons/BeanieBot40x40.png'">
-          </div>
-        </div>
-        <div *ngIf="user && user.id" id="user-modal"
-          [ngClass]="{ full_width: !showNav, growInAnimation : showUserModalVisible }">
-          <div class="profile-option">
-            <div>
-              <mat-icon class="icon" svgIcon="human-greeting"></mat-icon>
-            </div>
-            <div>
-              <a routerLink="user/profile">Profile</a>
+        <div id="profile" appClickOutside (appClickOutside)="hideUserModal()">
+          <div id="profile-info" (click)="showUserModal()">
+            <p>{{ user.first_name }} {{ user.last_name }}</p>
+            <div id="profile-picture">
+              <img [src]="user.image ? user.image : '../../../assets/icons/BeanieBot40x40.png'">
             </div>
           </div>
-          <div class="profile-option">
-            <div>
-              <mat-icon class="icon" svgIcon="cogs"></mat-icon>
+          <div *ngIf="user && user.id" id="user-modal"
+            [ngClass]="{ full_width: !showNav, growInAnimation : showUserModalVisible }">
+            <div class="profile-option">
+              <div>
+                <mat-icon class="icon" svgIcon="human-greeting"></mat-icon>
+              </div>
+              <div>
+                <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
+              </div>
             </div>
-            <div>
-              <p>Settings</p>
+            <div class="profile-option">
+              <div>
+                <mat-icon class="icon" svgIcon="cogs"></mat-icon>
+              </div>
+              <div>
+                <p>Settings</p>
+              </div>
             </div>
-          </div>
-          <div id="user-profile-divider"></div>
-          <div class="profile-option" id="logout">
-            <div>
-              <mat-icon class="icon" svgIcon="logout"></mat-icon>
-            </div>
-            <div>
-              <p (click)='auth.logOut(); hideUserModal()'>Logout</p>
+            <div id="user-profile-divider"></div>
+            <div class="profile-option" id="logout">
+              <div>
+                <mat-icon class="icon" svgIcon="logout"></mat-icon>
+              </div>
+              <div>
+                <p (click)="auth.logOut(); hideUserModal()">Logout</p>
+              </div>
             </div>
           </div>
         </div>

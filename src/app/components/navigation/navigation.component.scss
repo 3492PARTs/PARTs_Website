@@ -437,7 +437,7 @@ header {
   }
 
   .icon-wrapper,
-  #profile {
+  #profile > #profile-info {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -459,7 +459,11 @@ header {
   }
 
   #profile {
-    & > p {
+    #profile-info {
+      height: 100%;
+    }
+
+    & > #profile-info > p {
       color: #858796 !important;
       font-size: 80%;
       font-weight: 400;
