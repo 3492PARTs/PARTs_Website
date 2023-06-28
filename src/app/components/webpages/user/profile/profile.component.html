@@ -36,8 +36,8 @@
   </div>
 
   <div id="profile-tabs">
-    <app-box [Width]="'100%'">
-      <app-tab-container [DefaultTab]="activeTab">
+    <app-box [Width]="'100%'" [Height]="'calc(100% - 2em)'">
+      <app-tab-container [ActiveTab]="activeTab">
         <app-tab [TabName]="'Notifications'">
           <app-table [TableCols]="alertTableCols" [TableData]="notifications" [ShowRemoveButton]="true"
             (RemoveRecordCallBack)="dismissAlert($event)" [Width]="'100%'"></app-table>
@@ -78,11 +78,10 @@
 
         <app-tab [TabName]="'Security'">
           <app-form>
-            <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'"
-              [Width]="'100%'">
+            <app-form-element [Type]="'password'" [(Model)]="input.password" [LabelText]="'Password'" [Width]="'100%'">
             </app-form-element>
             <br>
-            <app-form-element [Type]="'password'" [(Model)]="input.passwordConfirm" [Placeholder]="'confirm password'"
+            <app-form-element [Type]="'password'" [(Model)]="input.passwordConfirm" [LabelText]="'Confirm Password'"
               [Width]="'100%'">
             </app-form-element>
             <br>
