@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class TeamApplicationComponent {
 
+  gradeRadioOptions = [
+    { option: 'Freshman', value: 'f' },
+    { option: 'Sophomore', value: 'so' },
+    { option: 'Junior', value: 'j' },
+    { option: 'Senior', value: 'sn' }
+  ];
 }

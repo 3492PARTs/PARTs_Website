@@ -18,8 +18,9 @@
         </app-form-element-group>
 
         <app-form-element-group [LabelText]="'Team Questions'">
-            <app-form-element [Type]="'text'" [LabelText]="'Have you participated in any of the following before?'"
-                [Required]="true"></app-form-element>
+            <app-form-element [Type]="'radio'" [LabelText]="'Have you participated in any of the following before?'"
+                [Required]="true" [RadioList]="gradeRadioOptions" [DisplayProperty]="'option'"
+                [BindingProperty]="'value'" [RadioGroupStacked]="true"></app-form-element>
 
             <app-form-element [Type]="'area'"
                 [LabelText]="'Please describe your experiences and skills that would be of relevance to the team, e.g., design experience, skill with tools, programming experience, graphic art experience, etc.'"

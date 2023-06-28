@@ -106,11 +106,15 @@
         [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <ng-container *ngSwitchCase="'radio'">
-        <!--<div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': RadioGroupInline}">
-        <label for="{{ obj.name }}{{ i }}">{{ obj.name }}</label>
-        <input type="radio" name="{{ RadioName }}" id="{{ obj.name }}{{ i }}" [value]="obj" [ngModel]="Model"
-          (ngModelChange)="change($event)" [checked]="obj.name == Selected" />
-      </div>-->
+        <div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': !RadioGroupStacked}">
+
+          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+            <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj[BindingProperty]"
+              [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model" />
+            <label for="radio{{ i }}">{{ obj[DisplayProperty] }}</label>
+          </ng-container>
+
+        </div>
       </ng-container>
 
       <div *ngSwitchCase="'datetime'" class="datetime form-control">
