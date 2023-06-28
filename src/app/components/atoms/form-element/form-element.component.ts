@@ -347,8 +347,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-        console.log('your h1 now wrapped ' + lineHeightParsed + ' ' + lineHeight);
+      if (this.LabelText.includes('Please describe')) {
+        let x = 0;
+      }
+
+      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+        this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + lineHeightParsed + ' ' + lineHeight);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(
           this.label.nativeElement,
@@ -359,7 +363,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
           'margin-top', labelOffset + 'px'
         );
       } else {
-        console.log('your h1 on one line')
+        this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10));
         this.renderer.setStyle(
           this.label.nativeElement,
           'top', '-7px'
