@@ -136,7 +136,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new MenuItem('Electrical', 'join/electrical'),
         new MenuItem('Programming', 'join/programming'),
         new MenuItem('Community Outreach', 'join/community-outreach'),
-        new MenuItem('Application Form', ''),
+        new MenuItem('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
       new MenuItem('Contact Us', 'contact', 'card-account-details'),
       new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
@@ -437,7 +437,6 @@ let max = document.documentElement.scrollHeight;
     this.resetMenuItemNames();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
-    else if (child.menu_name.toLocaleLowerCase() === 'application form') window.open('https://forms.gle/cW3oFZXFL8yoJUsC9', 'noopener');
     else this.appMenu.forEach(mi => {
       if (mi.menu_name === parent.menu_name) {
         mi.menu_name_active_item = child.menu_name;
