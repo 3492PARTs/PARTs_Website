@@ -138,7 +138,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new MenuItem('Community Outreach', 'join/community-outreach'),
         new MenuItem('Application Form', ''),
       ], 'Our Subteams'),
-      new MenuItem('Contact Form', 'https://forms.gle/BNFNufYAmo1HU4Hs8', 'card-account-details'),
+      new MenuItem('Contact Us', 'contact', 'card-account-details'),
       new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
       new MenuItem('About', 'about', 'information'),
       new MenuItem('Media', 'media', 'image-multiple'),
