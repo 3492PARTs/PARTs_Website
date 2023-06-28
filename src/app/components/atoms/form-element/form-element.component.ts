@@ -347,7 +347,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.LabelText.includes('Please describe')) {
+      if (this.LabelText.includes('Please describe your experiences')) {
         let x = 0;
       }
 
