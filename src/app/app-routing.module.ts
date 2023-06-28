@@ -30,6 +30,7 @@ import { AdminComponent } from './components/webpages/admin/admin.component';
 import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
+import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
 
 
 
@@ -50,6 +51,7 @@ const routes: Routes = [
   { path: 'join/programming', component: ProgrammingComponent },
   { path: 'join/mechanical', component: MechanicalComponent },
   { path: 'join/electrical', component: ElectricalComponent },
+  { path: 'join/team-application', component: TeamApplicationComponent },
   { path: 'sponsor', component: SponsoringComponent },
   { path: 'about', component: AboutComponent },
   { path: 'media', component: MediaComponent },

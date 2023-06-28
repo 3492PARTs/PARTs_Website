@@ -82,6 +82,7 @@ import { SubNavigationComponent } from './components/atoms/sub-navigation/sub-na
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
 
 @NgModule({
   declarations: [
@@ -142,7 +143,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     EventCompetitionComponent,
     MatchPlanningComponent,
     SubNavigationComponent,
-    ProfileComponent
+    ProfileComponent,
+    TeamApplicationComponent
   ],
   imports: [
     BrowserModule,
