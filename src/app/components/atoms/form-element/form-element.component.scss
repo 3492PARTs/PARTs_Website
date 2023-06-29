@@ -329,7 +329,11 @@ textarea.form-control {
 }
 
 .radio {
-  margin: 7px 0;
+  margin-bottom: 7px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   input {
     border-radius: 50%;

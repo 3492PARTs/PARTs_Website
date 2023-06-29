@@ -13,4 +13,13 @@ export class TeamApplicationComponent {
     { option: 'Junior', value: 'j' },
     { option: 'Senior', value: 'sn' }
   ];
+
+  participationCheckboxOptions = [
+    { option: 'Jr FIRST Lego League', value: 'f' },
+    { option: 'FIRST Lego League', value: 'so' },
+    { option: 'FIRST Tech Challenge', value: 'j' },
+    { option: 'VEX', value: 'sn' },
+    { option: 'None', value: 'sn' },
+    { option: 'Other', value: 'sn' },
+  ];
 }

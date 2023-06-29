@@ -55,17 +55,23 @@ export class AuthService {
       this.http.post('user/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
         {
           next: (result: any) => {
-            this.internalToken.access = (result as Token).access;
-            this.getTokenExp(this.internalToken.access, 'New Access');
-            this.getTokenExp(this.internalToken.refresh, 'New Refresh');
-            this.token.next(this.internalToken);
+            if (this.gs.checkResponse(result)) {
+              this.internalToken.access = (result as Token).access;
+              this.getTokenExp(this.internalToken.access, 'New Access');
+              this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+              this.token.next(this.internalToken);
 
-            if (this.firstLoad) {
-              this.getAllUserInfo();
-              this.firstLoad = false;
+              if (this.firstLoad) {
+                this.getAllUserInfo();
+                this.firstLoad = false;
+              }
+              this.ps.subscribeToNotifications();
+              this.authInFlightBS.next(AuthCallStates.comp);
             }
-            this.ps.subscribeToNotifications();
-            this.authInFlightBS.next(AuthCallStates.comp);
+            else {
+              this.authInFlightBS.next(AuthCallStates.err);
+              this.logOut();
+            }
           },
           error: (err: any) => {
             this.gs.decrementOutstandingCalls();

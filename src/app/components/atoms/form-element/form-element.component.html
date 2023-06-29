@@ -1,7 +1,8 @@
 <div #formElement class="form-element"
   [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox'}">
   <label *ngIf="LabelText !== ''" #label
-    [ngClass]="{'checkboxLabel': Type === 'checkbox', 'radioLabel': Type === 'radio'}" for="{{ LabelID }}">{{
+    [ngClass]="{'checkboxLabel': ['checkbox', 'multiCheckbox'].includes(Type), 'radioLabel': Type === 'radio'}"
+    for="{{ LabelID }}">{{
     LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
@@ -105,6 +106,14 @@
       <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
       <input *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
         [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+
+      <div *ngSwitchCase="'multiCheckbox'" (focus)="focusIn()" (focusout)="focusOut()">
+        <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+          <app-form-element *ngFor="let c of CheckboxList" [Type]="'checkbox'" [LabelText]="c[DisplayProperty]"
+            [(Model)]="c[BindingProperty]" [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
+          </app-form-element>
+        </ng-container>
+      </div>
 
       <ng-container *ngSwitchCase="'radio'">
         <div *ngFor="let obj of RadioList; let i = index" class="radio"

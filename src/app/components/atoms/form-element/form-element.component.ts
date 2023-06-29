@@ -45,6 +45,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
   _SelectList: any[] = [];
   @Input() RadioList: any[] = [];
+  @Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
   @Input() FormElementInline: boolean = true;
@@ -342,7 +343,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   positionLabel(): void {
-    if (this.label) {
+    if (this.label && this.Type !== 'checkbox') {
       const { lineHeight } = getComputedStyle(this.label.nativeElement);
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
