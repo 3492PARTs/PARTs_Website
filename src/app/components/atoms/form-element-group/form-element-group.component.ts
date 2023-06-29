@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ContentChildren, QueryList } from '@angular/core';
+import { Component, Input, ContentChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormElementComponent } from '../form-element/form-element.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { FormElementComponent } from '../form-element/form-element.component';
   templateUrl: './form-element-group.component.html',
   styleUrls: ['./form-element-group.component.scss']
 })
-export class FormElementGroupComponent implements OnInit {
+export class FormElementGroupComponent implements AfterViewInit {
   @Input() Inline = false;
   @Input() MaxWidth = false;
   @Input() LabelText = '';
@@ -14,10 +14,27 @@ export class FormElementGroupComponent implements OnInit {
   @Input() WrapElements = false;
   @ContentChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
 
-  constructor() { }
-
-
-  ngOnInit() {
+  constructor() {
+    this.formElements.changes.subscribe(() => {
+      this.setFormGroup();
+    });
   }
 
+
+  ngAfterViewInit() {
+    this.setFormGroup();
+  }
+
+  setFormGroup() {
+    window.setTimeout(() => {
+
+      for (let i = 0; i <= this.formElements.length - 1; i++) {
+        let fe = this.formElements.get(i);
+
+        if (fe && i < this.formElements.length - 1) {
+          fe.FormGroup = true;
+        }
+      }
+    }, 1);
+  }
 }
