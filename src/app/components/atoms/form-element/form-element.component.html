@@ -1,7 +1,8 @@
 <div #formElement class="form-element"
   [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox'}">
-  <label *ngIf="LabelText !== '' && Type !== 'radio'" #label [ngClass]="{'checkboxLabel': Type === 'checkbox'}"
-    for="{{ LabelID }}">{{ LabelText }}</label>
+  <label *ngIf="LabelText !== ''" #label
+    [ngClass]="{'checkboxLabel': Type === 'checkbox', 'radioLabel': Type === 'radio'}" for="{{ LabelID }}">{{
+    LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
     <div *ngIf="Required && Touched" class="validation"
@@ -106,7 +107,8 @@
         [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <ng-container *ngSwitchCase="'radio'">
-        <div *ngFor="let obj of RadioList; let i = index" [ngClass]="{'form-group-inline': !RadioGroupStacked}">
+        <div *ngFor="let obj of RadioList; let i = index" class="radio"
+          [ngClass]="{'form-group-inline': !RadioGroupStacked}">
 
           <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
             <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj[BindingProperty]"
