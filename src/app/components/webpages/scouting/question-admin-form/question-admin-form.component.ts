@@ -20,7 +20,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   init: Init = new Init();
-  scoutQuestion: ScoutQuestion = new ScoutQuestion();
+  scoutQuestion: Question = new Question();
 
   optionsTableCols: object[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
@@ -62,7 +62,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   saveScoutQuestion(): void {
     this.gs.incrementOutstandingCalls();
-    this.scoutQuestion.sq_typ = this.questionType;
+    this.scoutQuestion.form_typ = this.questionType;
     this.http.post(
       'scouting/admin/save-scout-question/', this.scoutQuestion
     ).subscribe(
@@ -70,7 +70,7 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.scoutQuestion = new ScoutQuestion();
+            this.scoutQuestion = new Question();
             this.questionInit();
             console.log(this.scoutQuestion);
           }
@@ -87,7 +87,7 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  updateScoutQuestion(q: ScoutQuestion): void {
+  updateScoutQuestion(q: Question): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'scouting/admin/update-scout-question/', q
@@ -96,7 +96,7 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.scoutQuestion = new ScoutQuestion();
+            this.scoutQuestion = new Question();
             this.questionInit();
           }
         },
@@ -112,7 +112,7 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  toggleScoutQuestion(q: ScoutQuestion): void | null {
+  toggleScoutQuestion(q: Question): void | null {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
@@ -121,7 +121,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.http.get(
       'scouting/admin/toggle-scout-question/', {
       params: {
-        sq_id: q.sq_id?.toString() || '-1'
+        sq_id: q.question_id?.toString() || '-1'
       }
     }
     ).subscribe(
@@ -157,7 +157,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.http.get(
       'scouting/admin/toggle-option/', {
       params: {
-        q_opt_id: op.q_opt_id.toString()
+        q_opt_id: op.question_opt_id.toString()
       }
     }
     ).subscribe(
@@ -182,12 +182,12 @@ export class QuestionAdminFormComponent implements OnInit {
 
 }
 
-export class ScoutQuestion {
-  sq_id: number | null = null;
+export class Question {
+  question_id: number | null = null;
   season!: number;
-  sq_typ!: string;
-  sq_sub_typ!: string;
-  sq_sub_nm!: string;
+  form_typ!: string;
+  form_sub_typ!: string;
+  form_sub_nm!: string;
   question_typ!: string;
   question!: string;
   order!: number;
@@ -197,11 +197,11 @@ export class ScoutQuestion {
   display_value = '';
 
   questionoptions_set: QuestionOption[] = [];
-  scoutpitanswer_set: ScoutPitAnswer[] = [];
+  scoutpitanswer_set: QuestionAnswer[] = [];
 }
 
 export class QuestionOption {
-  q_opt_id!: number;
+  question_opt_id!: number;
   sfq_id!: number;
   spq_id!: number;
   option!: string;
@@ -209,10 +209,12 @@ export class QuestionOption {
   void_ind = 'n';
 }
 
-export class ScoutPitAnswer {
-  spa_id!: number;
+export class QuestionAnswer {
+  question_answer_id!: number;
+  scout_field!: any;
   scout_pit!: any;
-  sq!: ScoutQuestion;
+  response!: any;
+  question!: Question;
   answer = '';
   void_ind = 'n'
 }
@@ -222,14 +224,14 @@ export class QuestionType {
   void_ind = 'n';
 }
 
-export class ScoutQuestionSubType {
-  sq_sub_typ = ''
-  sq_sub_nm = ''
-  sq_typ_id = ''
+export class FormSubType {
+  form_sub_typ = ''
+  form_sub_nm = ''
+  form_typ_id = ''
 }
 
 export class Init {
   questionTypes: QuestionType[] = [];
-  scoutQuestions: ScoutQuestion[] = [];
-  scoutQuestionSubTypes: ScoutQuestionSubType[] = [];
+  scoutQuestions: Question[] = [];
+  scoutQuestionSubTypes: FormSubType[] = [];
 }

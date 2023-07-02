@@ -794,9 +794,9 @@ export class ScoutPitSchedule {
   void_ind = 'n';
 }
 
-export class ScoutQuestionType {
-  sq_typ!: string;
-  sq_nm!: string;
+export class FormType {
+  form_typ!: string;
+  form_nm!: string;
 }
 
 
@@ -811,7 +811,7 @@ export class ScoutAdminInit {
   fieldSchedule: ScoutFieldSchedule[] = [];
   pitSchedule: ScoutPitSchedule[] = [];
   //pastSchedule: ScoutSchedule[] = [];
-  scoutQuestionType: ScoutQuestionType[] = [];
+  scoutQuestionType: FormType[] = [];
   teams: Team[] = [];
 }
 

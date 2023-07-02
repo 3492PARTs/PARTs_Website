@@ -8,8 +8,8 @@
   </app-form-element>
 
   <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
-    [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [DisplayProperty]="'sq_sub_nm'"
-    [BindingProperty]="'sq_sub_typ'" [(Model)]="scoutQuestion.sq_sub_typ" [DisplayEmptyOption]="true"
+    [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [DisplayProperty]="'form_sub_nm'"
+    [BindingProperty]="'form_sub_typ'" [(Model)]="scoutQuestion.form_sub_typ" [DisplayEmptyOption]="true"
     [MinWidth]="'200px'">
   </app-form-element>
 
@@ -26,11 +26,11 @@
 
 <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
   <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.scoutQuestions"
-    [DisplayProperty]="'display_value'" [BindingProperty]="'sq_id'" [DisplayEmptyOption]="true"
-    [(Model)]="scoutQuestion.sq_id">
+    [DisplayProperty]="'display_value'" [BindingProperty]="'question_id'" [DisplayEmptyOption]="true"
+    [(Model)]="scoutQuestion.question_id">
   </app-form-element>
   <ng-container *ngFor="let q of init.scoutQuestions">
-    <ng-container *ngIf="q.sq_id === scoutQuestion.sq_id">
+    <ng-container *ngIf="q.question_id === scoutQuestion.question_id">
       <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="q.question">
       </app-form-element>
 
@@ -43,7 +43,7 @@
       </app-form-element>
       <app-form-element *ngIf="init.scoutQuestionSubTypes && init.scoutQuestionSubTypes.length > 0" [Type]="'select'"
         [LabelText]="'Scout Question Sub Type'" [SelectList]="init.scoutQuestionSubTypes" [MinWidth]="'200px'"
-        [DisplayProperty]="'sq_sub_nm'" [BindingProperty]="'sq_sub_typ'" [(Model)]="q.sq_sub_typ"
+        [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="q.form_sub_typ"
         [DisplayEmptyOption]="true">
       </app-form-element>
       <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { Question } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
@@ -17,11 +17,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   private matches: Match[] = [];
   teamMatches: Match[] = [];
   teamMatchId!: string;
-  scoutQuestions: ScoutQuestion[] = [];
+  scoutQuestions: Question[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
-  scoutAutoQuestions: ScoutQuestion[] = [];
-  scoutTeleopQuestions: ScoutQuestion[] = [];
-  scoutOtherQuestions: ScoutQuestion[] = [];
+  scoutAutoQuestions: Question[] = [];
+  scoutTeleopQuestions: Question[] = [];
+  scoutOtherQuestions: Question[] = [];
   private checkScoutInterval: number | undefined;
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
@@ -88,11 +88,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.scoutTeleopQuestions = [];
     this.scoutOtherQuestions = [];
     this.scoutQuestions.forEach(sq => {
-      let sqCopy = JSON.parse(JSON.stringify(sq)) as ScoutQuestion;
-      if (sqCopy.sq_sub_typ === 'auto') {
+      let sqCopy = JSON.parse(JSON.stringify(sq)) as Question;
+      if (sqCopy.form_sub_typ === 'auto') {
         this.scoutAutoQuestions.push(sqCopy);
       }
-      else if (sqCopy.sq_sub_typ === 'teleop') {
+      else if (sqCopy.form_sub_typ === 'teleop') {
         this.scoutTeleopQuestions.push(sqCopy);
       }
       else {
@@ -166,12 +166,12 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     );
   }
 
-  increment(sq: ScoutQuestion): void {
+  increment(sq: Question): void {
     if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
     sq.answer = parseInt(sq.answer.toString()) + 1;
   }
 
-  decrement(sq: ScoutQuestion): void {
+  decrement(sq: Question): void {
     if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
     if (parseInt(sq.answer.toString()) > 0) sq.answer = parseInt(sq.answer.toString()) - 1;
   }

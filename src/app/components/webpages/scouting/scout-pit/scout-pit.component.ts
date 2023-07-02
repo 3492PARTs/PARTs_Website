@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { ScoutQuestion } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { Question } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
@@ -18,8 +18,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   private previousTeam!: string;
   robotPic!: File;
   previewUrl: any = null;
-  scoutQuestions: ScoutQuestion[] = [];
-  private scoutQuestionsCopy: ScoutQuestion[] = [];
+  scoutQuestions: Question[] = [];
+  private scoutQuestionsCopy: Question[] = [];
   private checkTeamInterval: number | undefined;
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
@@ -65,7 +65,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
             this.teams = (result as ScoutPitInit).teams;
             this.compTeams = (result as ScoutPitInit).comp_teams;
             this.scoutQuestions = (result as ScoutPitInit).scoutQuestions;
-            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as ScoutQuestion[];
+            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as Question[];
           }
         },
         error: (err: any) => {
@@ -90,7 +90,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     });
 
     if (dirty && confirm("Are you sure you want to clear and change teams?")) {
-      this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
+      this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
       this.previewUrl = '';
       if (load && this.team) this.loadTeam();
     }
@@ -118,7 +118,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-          this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as ScoutQuestion[];
+          this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
           this.savePicture();
           this.spInit();
           this.team = '';
@@ -223,7 +223,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.scoutQuestions = (result['questions'] as ScoutQuestion[]);
+            this.scoutQuestions = (result['questions'] as Question[]);
             this.previewUrl = result['pic'];
           }
         },
@@ -241,13 +241,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 }
 
 export class ScoutPitInit {
-  scoutQuestions: ScoutQuestion[] = [];
+  scoutQuestions: Question[] = [];
   teams: Team[] = [];
   comp_teams: Team[] = [];
 }
 
 export class ScoutAnswer {
-  scoutQuestions: ScoutQuestion[] = [];
+  scoutQuestions: Question[] = [];
   teams: Team[] = [];
   team!: string;
 }
