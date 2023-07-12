@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { Question } from 'src/app/components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';

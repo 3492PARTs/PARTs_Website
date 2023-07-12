@@ -20,7 +20,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   init: Init = new Init();
-  scoutQuestion: Question = new Question();
+  question: Question = new Question();
 
   optionsTableCols: object[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
@@ -36,9 +36,9 @@ export class QuestionAdminFormComponent implements OnInit {
   questionInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'scouting/admin/scout-question-init/', {
+      'form/form-init/', {
       params: {
-        sq_typ: this.questionType
+        form_typ: this.questionType
       }
     }
     ).subscribe(
@@ -60,19 +60,20 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  saveScoutQuestion(): void {
+  saveQuestion(q?: Question): void {
     this.gs.incrementOutstandingCalls();
-    this.scoutQuestion.form_typ = this.questionType;
+    this.question.form_typ = this.questionType;
+
     this.http.post(
-      'scouting/admin/save-scout-question/', this.scoutQuestion
+      'form/save-question/', q ? q : this.question
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.scoutQuestion = new Question();
+            this.question = new Question();
             this.questionInit();
-            console.log(this.scoutQuestion);
+            console.log(this.question);
           }
         },
         error: (err: any) => {
@@ -87,32 +88,7 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  updateScoutQuestion(q: Question): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/update-scout-question/', q
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.scoutQuestion = new Question();
-            this.questionInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
-  }
-
-  toggleScoutQuestion(q: Question): void | null {
+  toggleQuestion(q: Question): void | null {
     if (!confirm('Are you sure you want to toggle this question?')) {
       return null;
     }
@@ -231,7 +207,7 @@ export class FormSubType {
 }
 
 export class Init {
-  questionTypes: QuestionType[] = [];
-  scoutQuestions: Question[] = [];
-  scoutQuestionSubTypes: FormSubType[] = [];
+  question_types: QuestionType[] = [];
+  questions: Question[] = [];
+  form_sub_types: FormSubType[] = [];
 }

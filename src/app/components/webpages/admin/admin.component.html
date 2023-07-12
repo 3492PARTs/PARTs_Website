@@ -61,3 +61,11 @@
 
   <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
 </app-box>
+
+<app-box *ngIf="page ==='team-app-form'" [Title]="'Manage Team Application Form'">
+  <app-question-admin-form [questionType]="'team-app'"></app-question-admin-form>
+</app-box>
+
+<app-box *ngIf="page ==='team-cntct-form'" [Title]="'Manage Team Application Form'">
+  <app-question-admin-form [questionType]="'team-cntct'"></app-question-admin-form>
+</app-box>

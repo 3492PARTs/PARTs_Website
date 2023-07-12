@@ -32,7 +32,7 @@ import {
 } from './pipes/ObjectWildcardFilter';
 import { StrToTypePipe } from './pipes/str-to-type.pipe';
 import { DateToStrPipe } from './pipes/date-to-str.pipe';
-import { QuestionAdminFormComponent } from './components/webpages/scouting/question-admin-form/question-admin-form.component';
+import { QuestionAdminFormComponent } from './components/elements/question-admin-form/question-admin-form.component';
 import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
 import { ScoutPitResultsComponent } from './components/webpages/scouting/scout-pit-results/scout-pit-results.component';
 

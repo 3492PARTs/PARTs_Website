@@ -56,7 +56,12 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.adminInit() : null);
-    this.ns.setSubPages([new MenuItem('Manage Users', 'users', 'account-group'), new MenuItem('Error Log', 'errors', 'alert-circle-outline')]);
+    this.ns.setSubPages([
+      new MenuItem('Manage Users', 'users', 'account-group'),
+      new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
+      new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
+      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline')
+    ]);
     this.ns.setSubPage('users');
   }
 
