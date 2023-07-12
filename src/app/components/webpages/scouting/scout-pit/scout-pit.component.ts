@@ -112,16 +112,18 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     formData.append('file', this.robotPic);
     formData.append('team_no', this.team);
     this.http.post(
-      'scouting/pit/save-answers/',
-      { scoutQuestions: this.scoutQuestions, team: this.team },
+      //'scouting/pit/save-answers/',
+      'form/save-answers/',
+      { question_answers: this.scoutQuestions, team: this.team, form_typ: 'pit' },
     ).subscribe(
       {
         next: (result: any) => {
-          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-          this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
-          this.savePicture();
-          this.spInit();
-          this.team = '';
+          if (this.gs.checkResponse(result)) {
+            this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
+            this.savePicture();
+            this.spInit();
+            this.team = '';
+          }
         },
         error: (err: any) => {
           console.log('error', err);

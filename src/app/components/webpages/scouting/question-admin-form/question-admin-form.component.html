@@ -18,8 +18,8 @@
   </app-button-ribbon>
 
   <div *ngIf="scoutQuestion.question_typ === 'select'" class="optionsTableWrapper">
-    <app-table [TableCols]="optionsTableCols" [TableData]="scoutQuestion.questionoptions_set" [ShowAddButton]="true"
-      (AddRecordCallBack)="addOption(scoutQuestion.questionoptions_set)" [Scrollable]="true">
+    <app-table [TableCols]="optionsTableCols" [TableData]="scoutQuestion.questionoption_set" [ShowAddButton]="true"
+      (AddRecordCallBack)="addOption(scoutQuestion.questionoption_set)" [Scrollable]="true">
     </app-table>
   </div>
 </app-form-element-group>
@@ -53,8 +53,8 @@
       </app-button-ribbon>
 
       <div *ngIf="q.question_typ === 'select'" class="optionsTableWrapper">
-        <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="q.questionoptions_set"
-          [ShowAddButton]="true" (AddRecordCallBack)="addOption(q.questionoptions_set)" [Scrollable]="true"
+        <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="q.questionoption_set"
+          [ShowAddButton]="true" (AddRecordCallBack)="addOption(q.questionoption_set)" [Scrollable]="true"
           [ShowEditButton]="true" (EditRecordCallBack)="toggleOption($event)">
         </app-table>
       </div>

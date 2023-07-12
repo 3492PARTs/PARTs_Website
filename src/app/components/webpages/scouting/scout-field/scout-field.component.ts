@@ -129,8 +129,9 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.http.post(
-      'scouting/field/save-answers/',
-      { scoutQuestions: response, team: this.team, match: this.teamMatchId }
+      //'scouting/field/save-answers/',
+      'form/save-answers/',
+      { question_answers: response, team: this.team, match: this.teamMatchId, form_typ: 'field' }
     ).subscribe(
       {
         next: (result: any) => {

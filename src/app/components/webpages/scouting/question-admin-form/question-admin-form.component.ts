@@ -196,7 +196,7 @@ export class Question {
   answer: string | number = '';
   display_value = '';
 
-  questionoptions_set: QuestionOption[] = [];
+  questionoption_set: QuestionOption[] = [];
   scoutpitanswer_set: QuestionAnswer[] = [];
 }
 
