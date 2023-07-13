@@ -7,7 +7,8 @@
 .form-element {
   position: relative;
   margin: 7px 0;
-  max-width: calc(100% - 14px);
+  padding-right: 14px;
+  max-width: 100%;
 
   & > div {
     max-width: 100%;

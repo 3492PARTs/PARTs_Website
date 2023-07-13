@@ -26,15 +26,16 @@ export class FormElementGroupComponent implements AfterViewInit {
   }
 
   setFormGroup() {
-    window.setTimeout(() => {
+    if (!this.InlineElements)
+      window.setTimeout(() => {
 
-      for (let i = 0; i <= this.formElements.length - 1; i++) {
-        let fe = this.formElements.get(i);
+        for (let i = 0; i <= this.formElements.length - 1; i++) {
+          let fe = this.formElements.get(i);
 
-        if (fe && i < this.formElements.length - 1) {
-          fe.FormGroup = true;
+          if (fe && i < this.formElements.length - 1) {
+            fe.FormGroup = true;
+          }
         }
-      }
-    }, 1);
+      }, 1);
   }
 }

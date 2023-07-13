@@ -352,6 +352,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
         let x = 0;
       }
 
+      // i need this to be . if i find a place where i need it to be
+      // strictly this is my reminder that i need to find another solution
       if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
         this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + lineHeightParsed + ' ' + lineHeight);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
