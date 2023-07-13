@@ -65,6 +65,9 @@ export class QuestionAdminFormComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.question.form_typ = this.questionType;
 
+    // if q is null saving a new question, null out id incase someone was editing before
+    if (!q) this.question.question_id = null;
+
     this.http.post(
       'form/save-question/', q ? q : this.question
     ).subscribe(
@@ -168,6 +171,7 @@ export class Question {
   question_typ!: string;
   question!: string;
   order!: number;
+  required = 'n';
   active = 'y';
   void_ind = 'n';
   answer: string | number = '';

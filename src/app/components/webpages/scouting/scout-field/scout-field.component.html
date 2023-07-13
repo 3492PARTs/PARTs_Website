@@ -14,15 +14,15 @@
     </div>
   </div>
   <br>
-  <form>
+  <app-form (SubmitFunction)="save()">
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="team" (FunctionCallBack)="buildMatchList()">
+      [DisplayEmptyOption]="true" [(Model)]="team" (FunctionCallBack)="buildMatchList()" [Required]="true">
     </app-form-element>
 
     <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamMatches"
       [BindingProperty]="'match_id'" [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true"
-      [(Model)]="teamMatchId">
+      [(Model)]="teamMatchId" [Required]="true">
     </app-form-element>
 
     <app-form-element-group [LabelText]="'Autonomous'">
@@ -30,7 +30,7 @@
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
           [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
-          [FormGroupInline]="sq.question_typ === 'number'">
+          [FormGroupInline]="sq.question_typ === 'number'" [Required]="sq.required === 'y'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
           <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
@@ -47,7 +47,7 @@
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
           [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
-          [FormGroupInline]="sq.question_typ === 'number'">
+          [FormGroupInline]="sq.question_typ === 'number'" [Required]="sq.required === 'y'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
           <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
@@ -64,7 +64,7 @@
         <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ" [FormGroup]="true"
           [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
           [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
-          [FormGroupInline]="sq.question_typ === 'number'">
+          [FormGroupInline]="sq.question_typ === 'number'" [Required]="sq.required === 'y'">
         </app-form-element>
         <div class="number-stepper" *ngIf="sq.question_typ === 'number'">
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
@@ -76,8 +76,8 @@
     </app-form-element-group>
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="save()">Save</app-button>
+      <app-button [ButtonType]="'main'">Save</app-button>
     </app-button-ribbon>
 
-  </form>
+  </app-form>
 </app-box>

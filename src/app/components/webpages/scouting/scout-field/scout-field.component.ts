@@ -110,7 +110,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   save(): void | null {
-    if (this.gs.strNoE(this.team.toString())) {
+    if (this.gs.strNoE(this.team)) {
       this.gs.triggerError('Must select a team to scout!');
       return null;
     }

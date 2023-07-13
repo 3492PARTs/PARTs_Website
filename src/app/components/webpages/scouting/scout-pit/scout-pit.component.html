@@ -15,7 +15,8 @@
 
     <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ"
       [FormGroup]="true" [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-      [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'">
+      [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
+      [Required]="sq.required === 'y'">
     </app-form-element>
 
     <app-form-element [LabelText]="'Robot Picture'" [Type]="'file'" [FormGroup]="true" [(Model)]="robotPic"

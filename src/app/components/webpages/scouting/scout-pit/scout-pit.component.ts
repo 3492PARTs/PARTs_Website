@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 
 import * as LoadImg from 'blueimp-load-image';
@@ -106,7 +106,12 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     }
   }
 
-  save(): void {
+  save(): void | null {
+    if (this.gs.strNoE(this.team)) {
+      this.gs.addBanner(new Banner("Must select a team.", 500));
+      return null;
+    }
+
     this.gs.incrementOutstandingCalls();
     const formData = new FormData();
     formData.append('file', this.robotPic);

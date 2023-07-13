@@ -7,6 +7,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef }
 })
 export class ButtonComponent implements OnInit {
   @Input() ButtonType = 'main';
+  @Input() Type = 'submit';
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 
   @Input() Direction = false;

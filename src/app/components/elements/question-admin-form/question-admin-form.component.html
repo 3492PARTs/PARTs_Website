@@ -17,6 +17,9 @@
       [MinWidth]="'200px'">
     </app-form-element>
 
+    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
+      [(Model)]="question.required"></app-form-element>
+
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion()">Save</app-button>
     </app-button-ribbon>
@@ -54,6 +57,9 @@
           [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="q.form_sub_typ"
           [DisplayEmptyOption]="true">
         </app-form-element>
+
+        <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
+          [(Model)]="q.required"></app-form-element>
 
         <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"
           [(Model)]="q.active"></app-form-element>

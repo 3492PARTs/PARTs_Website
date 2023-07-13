@@ -3,6 +3,13 @@
   <br>
 
   <app-form>
+    <app-form-element *ngFor="let q of questions" [LabelText]="q.question" [Type]="q.question_typ" [FormGroup]="true"
+      [SelectList]="q.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+      [DisplayEmptyOption]="true" [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'"
+      [Required]="q.required === 'y'"
+      [Width]="q.question_typ === 'area' ? '100%' : q.question_typ === 'checkbox' ? 'auto' : '300px'">
+    </app-form-element>
+
     <app-form-element [Type]="'text'" [LabelText]="'Name'" [Required]="true" [Width]="'300px'"></app-form-element>
 
     <app-form-element [Type]="'text'" [LabelText]="'Email'" [Required]="true" [Width]="'300px'"></app-form-element>

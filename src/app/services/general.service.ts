@@ -277,5 +277,10 @@ export class Banner {
   severity!: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
   message!: string; //
   time = -1; // time in ms to show banner, -1 means until dismissed (Still needs implemented)
+
+  constructor(message = '', time = 0) {
+    this.message = message;
+    this.time = time;
+  }
 }
 
