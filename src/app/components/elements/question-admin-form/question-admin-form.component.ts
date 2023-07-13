@@ -24,7 +24,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   optionsTableCols: object[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
-    { PropertyName: 'active', ColLabel: 'Active' }
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
@@ -46,6 +46,7 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as Init;
+            this.gs.devConsoleLog(this.init);
           }
         },
         error: (err: any) => {
@@ -87,38 +88,38 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     );
   }
-
-  toggleQuestion(q: Question): void | null {
-    if (!confirm('Are you sure you want to toggle this question?')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/toggle-scout-question/', {
-      params: {
-        sq_id: q.question_id?.toString() || '-1'
+  /*
+    toggleQuestion(q: Question): void | null {
+      if (!confirm('Are you sure you want to toggle this question?')) {
+        return null;
       }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.questionInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+  
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/toggle-scout-question/', {
+        params: {
+          sq_id: q.question_id?.toString() || '-1'
         }
       }
-    );
-  }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.questionInit();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }*/
 
   addOption(list: any): void {
     list.push(new QuestionOption());
