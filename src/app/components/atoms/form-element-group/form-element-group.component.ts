@@ -1,5 +1,6 @@
 import { Component, Input, ContentChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormElementComponent } from '../form-element/form-element.component';
+import { FormComponent } from '../form/form.component';
 
 @Component({
   selector: 'app-form-element-group',

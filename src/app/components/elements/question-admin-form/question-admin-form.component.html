@@ -29,8 +29,8 @@
   </app-form-element-group>
 </app-form>
 
-<app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
-  <app-form>
+<app-form>
+  <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
     <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.questions"
       [DisplayProperty]="'display_value'" [BindingProperty]="'question_id'" [DisplayEmptyOption]="true"
       [(Model)]="question.question_id">
@@ -69,5 +69,5 @@
         </div>
       </ng-container>
     </ng-container>
-  </app-form>
-</app-form-element-group>
+  </app-form-element-group>
+</app-form>
