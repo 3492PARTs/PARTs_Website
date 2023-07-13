@@ -12,7 +12,7 @@
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Scout Question Sub Type'" [SelectList]="init.form_sub_types" [DisplayProperty]="'form_sub_nm'"
+      [LabelText]="'Form Sub Type'" [SelectList]="init.form_sub_types" [DisplayProperty]="'form_sub_nm'"
       [BindingProperty]="'form_sub_typ'" [(Model)]="question.form_sub_typ" [DisplayEmptyOption]="true"
       [MinWidth]="'200px'">
     </app-form-element>

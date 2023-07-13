@@ -59,7 +59,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   valid = false;
 
   @Input() ValidityFunction?: Function;
-  @Input() SelectValidityFunction!: (o1: any, o2: any) => boolean;
+  @Input() SelectComparatorFunction!: (o1: any, o2: any) => boolean;
 
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
