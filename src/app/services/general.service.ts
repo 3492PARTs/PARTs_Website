@@ -278,7 +278,7 @@ export class Banner {
   message!: string; //
   time = -1; // time in ms to show banner, -1 means until dismissed (Still needs implemented)
 
-  constructor(message = '', time = 0) {
+  constructor(message = '', time = -1) {
     this.message = message;
     this.time = time;
   }

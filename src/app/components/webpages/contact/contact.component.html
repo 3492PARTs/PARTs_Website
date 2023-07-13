@@ -2,21 +2,12 @@
   <p class="important">Click <a target="_blank" href="">here</a> for our team application form</p>
   <br>
 
-  <app-form>
+  <app-form (SubmitFunction)="save()">
     <app-form-element *ngFor="let q of questions" [LabelText]="q.question" [Type]="q.question_typ" [FormGroup]="true"
       [SelectList]="q.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
       [DisplayEmptyOption]="true" [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'"
       [Required]="q.required === 'y'"
-      [Width]="q.question_typ === 'area' ? '100%' : q.question_typ === 'checkbox' ? 'auto' : '300px'">
-    </app-form-element>
-
-    <app-form-element [Type]="'text'" [LabelText]="'Name'" [Required]="true" [Width]="'300px'"></app-form-element>
-
-    <app-form-element [Type]="'text'" [LabelText]="'Email'" [Required]="true" [Width]="'300px'"></app-form-element>
-
-    <app-form-element [Type]="'text'" [LabelText]="'Phone'"></app-form-element>
-
-    <app-form-element [Type]="'area'" [LabelText]="'Message'" [Required]="true" [Width]="'100%'" [Rows]="5">
+      [Width]="q.question_typ === 'area' ? '100%' : q.question_typ === 'checkbox' ? 'auto' : '300px'" [Rows]="5">
     </app-form-element>
 
     <app-button-ribbon>

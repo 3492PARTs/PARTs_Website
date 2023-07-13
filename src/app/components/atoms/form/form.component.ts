@@ -2,6 +2,7 @@ import { Component, OnInit, ContentChildren, QueryList, EventEmitter, Input, Out
 import { NgForm } from '@angular/forms';
 import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { FormElementComponent } from '../form-element/form-element.component';
+import { Banner, GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-form',
@@ -14,7 +15,7 @@ export class FormComponent implements OnInit {
   @ContentChildren(FormElementComponent, { descendants: true }) formElements = new QueryList<FormElementComponent>();
   //@ContentChildren(FormElementGroupComponent) formElementGroups = new QueryList<FormElementGroupComponent>();
 
-  constructor() { }
+  constructor(private gs: GeneralService) { }
 
   ngOnInit() { }
 
@@ -30,14 +31,17 @@ export class FormComponent implements OnInit {
     });*/
   }
 
-  validateAllFelids(): boolean {
+  validateAllFelids(): string {
+    let ret = '';
     // Returns true if all fields ARE valid
-    let valid = true;
+    //let valid = true;
     this.formElements.forEach(eachObj => {
       const v = eachObj.isInvalid();
-      if (valid && v) {
+      /*if (valid && v) {
         valid = false;
-      }
+      }*/
+      if (v)
+        ret += eachObj.LabelText + ' is invalid\n'
     });
 
     /*this.formElementGroups.forEach(eachObj => {
@@ -48,7 +52,7 @@ export class FormComponent implements OnInit {
         }
       });
     });*/
-    return valid;
+    return ret;
   }
 
   onSubmit(f: NgForm) {
@@ -61,10 +65,14 @@ export class FormComponent implements OnInit {
         eachObj2.Touched = true;
       });
     });*/
+    let ret = this.validateAllFelids();
 
-    if (this.validateAllFelids()) {
+    if (this.gs.strNoE(ret)) {
       this.SubmitFunction.emit();
       this.reset();
+    }
+    else {
+      this.gs.addBanner(new Banner(ret, 3500));
     }
   }
 }
