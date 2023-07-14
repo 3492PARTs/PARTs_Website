@@ -47,7 +47,8 @@
         </app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
-          [DisplayProperty]="'question_typ_nm'" [(Model)]="q.question_typ" [Width]="'100%'">
+          [DisplayProperty]="'question_typ_nm'" [(Model)]="q.question_typ"
+          [SelectComparatorFunction]="compareQuestionTypeObjects" [Width]="'100%'" [MinWidth]="'200px'">
         </app-form-element>
 
         <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"

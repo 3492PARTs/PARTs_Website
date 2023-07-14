@@ -68,8 +68,10 @@ export class QuestionAdminFormComponent implements OnInit {
     // if q is null saving a new question, null out id incase someone was editing before
     if (!q) this.question.question_id = null;
 
+    let save = q ? q : this.question;
+
     this.http.post(
-      'form/save-question/', q ? q : this.question
+      'form/save-question/', save
     ).subscribe(
       {
         next: (result: any) => {
@@ -128,37 +130,44 @@ export class QuestionAdminFormComponent implements OnInit {
     list.push(new QuestionOption());
   }
 
-  toggleOption(op: QuestionOption): void | null {
-    if (!confirm('Are you sure you want to toggle this option?')) {
-      return null;
+  compareQuestionTypeObjects(qt1: QuestionType, qt2: QuestionType): boolean {
+    if (qt1 && qt2 && qt1.question_typ && qt2.question_typ) {
+      return qt1.question_typ === qt2.question_typ;
     }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/toggle-option/', {
-      params: {
-        q_opt_id: op.question_opt_id.toString()
+    return false;
+  }
+  /*
+    toggleOption(op: QuestionOption): void | null {
+      if (!confirm('Are you sure you want to toggle this option?')) {
+        return null;
       }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.questionInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+  
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/toggle-option/', {
+        params: {
+          q_opt_id: op.question_opt_id.toString()
         }
       }
-    );
-  }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.questionInit();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }*/
 
 }
 
@@ -168,7 +177,7 @@ export class Question {
   form_typ!: string;
   form_sub_typ!: string;
   form_sub_nm!: string;
-  question_typ!: any;
+  question_typ!: QuestionType;
   question!: string;
   order!: number;
   required = 'n';

@@ -55,27 +55,17 @@
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
             <option [ngValue]="strNoE(Model) ? Model : ''" [disabled]="!DisplayEmptyOption"></option>
 
-            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
+            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
-                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }}</option>
-            </ng-container>
-
-            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
-                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] }}
+                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] ?
+                obj[DisplayProperty2] : '' }}
               </option>
             </ng-container>
 
-            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''&& DisplayProperty2 === ''">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{ obj[DisplayProperty]
-                }}
-              </option>
-            </ng-container>
-
-            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{
                 obj[DisplayProperty] }} {{
-                obj[DisplayProperty2] }}
+                obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
               </option>
             </ng-container>
           </select>
@@ -87,10 +77,9 @@
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
             [compareWith]="SelectComparatorFunction">
             <option value="" *ngIf="DisplayEmptyOption"></option>
-            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
+            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{
-                obj[DisplayProperty] }} {{
-                obj[DisplayProperty2] }}
+                obj[DisplayProperty] }} {{ obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
               </option>
             </ng-container>
           </select>
