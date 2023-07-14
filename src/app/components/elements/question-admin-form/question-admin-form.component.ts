@@ -70,6 +70,13 @@ export class QuestionAdminFormComponent implements OnInit {
 
     let save = q ? q : this.question;
 
+    for (let i = 0; i < save.questionoption_set.length; i++) {
+      if (this.gs.strNoE(save.questionoption_set[i].question_opt_id) && this.gs.strNoE(save.questionoption_set[i].option)) {
+        save.questionoption_set.splice(i, 1);
+        i--;
+      }
+    }
+
     this.http.post(
       'form/save-question/', save
     ).subscribe(
