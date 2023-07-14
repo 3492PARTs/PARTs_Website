@@ -7,8 +7,7 @@
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
-      [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="question.question_typ"
-      [MinWidth]="'300px'">
+      [DisplayProperty]="'question_typ_nm'" [(Model)]="question.question_typ" [MinWidth]="'300px'">
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
@@ -24,7 +23,7 @@
       <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion()">Save</app-button>
     </app-button-ribbon>
 
-    <div *ngIf="question.question_typ === 'select'" class="optionsTableWrapper">
+    <div *ngIf="question.question_typ && question.question_typ.is_list === 'y'" class="optionsTableWrapper">
       <app-table [TableCols]="optionsTableCols" [TableData]="question.questionoption_set" [ShowAddButton]="true"
         (AddRecordCallBack)="addOption(question.questionoption_set)" [Scrollable]="true">
       </app-table>
@@ -48,8 +47,7 @@
         </app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
-          [DisplayProperty]="'question_typ_nm'" [BindingProperty]="'question_typ'" [(Model)]="q.question_typ"
-          [Width]="'100%'">
+          [DisplayProperty]="'question_typ_nm'" [(Model)]="q.question_typ" [Width]="'100%'">
         </app-form-element>
 
         <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
@@ -68,7 +66,7 @@
           <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion(q)">Update</app-button>
         </app-button-ribbon>
 
-        <div *ngIf="q.question_typ === 'select'" class="optionsTableWrapper">
+        <div *ngIf="q.question_typ && q.question_typ.is_list === 'y'" class="optionsTableWrapper">
           <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="q.questionoption_set"
             [ShowAddButton]="true" (AddRecordCallBack)="addOption(q.questionoption_set)" [Scrollable]="true">
           </app-table>

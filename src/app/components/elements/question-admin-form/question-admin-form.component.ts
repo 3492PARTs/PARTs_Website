@@ -168,7 +168,7 @@ export class Question {
   form_typ!: string;
   form_sub_typ!: string;
   form_sub_nm!: string;
-  question_typ!: string;
+  question_typ!: any;
   question!: string;
   order!: number;
   required = 'n';
@@ -202,6 +202,7 @@ export class QuestionAnswer {
 export class QuestionType {
   question_typ!: string;
   question_typ_nm!: string;
+  is_list = 'n';
   void_ind = 'n';
 }
 

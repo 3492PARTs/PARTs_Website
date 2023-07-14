@@ -48,7 +48,7 @@
       </div>
 
       <ng-container *ngSwitchCase="'select'">
-        <ng-container *ngIf="!SelectValidityFunction; else hasFunction">
+        <ng-container *ngIf="!SelectComparatorFunction; else hasFunction">
           <select class="form-control" id="{{ LabelID }}"
             [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
             [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
@@ -85,7 +85,7 @@
             [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
             [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
-            [compareWith]="SelectValidityFunction">
+            [compareWith]="SelectComparatorFunction">
             <option value="" *ngIf="DisplayEmptyOption"></option>
             <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== '' && DisplayProperty2 !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{

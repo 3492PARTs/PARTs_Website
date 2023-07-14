@@ -17,7 +17,7 @@
 
         <app-form-element [LabelText]="'User'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-          [(Model)]="currentSchedule.user" [FormGroupInline]="true" [SelectValidityFunction]="compareUserObjects">
+          [(Model)]="currentSchedule.user" [FormGroupInline]="true" [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
 
         <app-form-element [LabelText]="'Type'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.scheduleTypes"
