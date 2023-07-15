@@ -82,7 +82,7 @@ export class TeamApplicationComponent implements OnInit {
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
-      { question_answers: this.questions, form_typ: 'team-app' }
+      { question_answers: this.questions.map(q => { return q.questions }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app' }
     ).subscribe(
       {
         next: (result: any) => {
