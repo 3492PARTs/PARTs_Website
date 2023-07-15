@@ -1,4 +1,21 @@
 <app-box [Title]="'Team Application'">
+    <app-form (SubmitFunction)="save()">
+        <app-form-element-group *ngFor="let formSubType of questions" [LabelText]="formSubType.form_sub_typ">
+            <app-form-element *ngFor="let q of formSubType.questions" [LabelText]="q.question"
+                [Type]="q.question_typ.question_typ" [FormGroup]="true" [SelectList]="q.questionoption_set"
+                [BindingProperty]="'option'" [DisplayProperty]="'option'" [DisplayEmptyOption]="true"
+                [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'" [Required]="q.required === 'y'"
+                [Width]="q.question_typ.question_typ === 'area' ? '100%' : q.question_typ.question_typ === 'checkbox' ? 'auto' : '300px'"
+                [Rows]="5">
+            </app-form-element>
+        </app-form-element-group>
+
+
+        <app-button-ribbon>
+            <app-button>Submit</app-button>
+        </app-button-ribbon>
+    </app-form>
+
     <app-form>
         <app-form-element-group [LabelText]="'Student Information'">
             <app-form-element [Type]="'text'" [LabelText]="'Name'" [Required]="true" [Width]="'300px'">

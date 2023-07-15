@@ -27,7 +27,7 @@ export class TeamApplicationComponent implements OnInit {
     { option: 'Other', value: 'sn' },
   ];
 
-  questions: Question[] = [];
+  questions: FormSubTypeWrapper[] = []
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
@@ -47,7 +47,13 @@ export class TeamApplicationComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.questions = result as Question[];
+            let qs = result as Question[];
+
+            let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+
+            form_sub_typs.forEach(fst => {
+              this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+            });
             this.gs.devConsoleLog(this.questions);
           }
         },
@@ -89,5 +95,15 @@ export class TeamApplicationComponent implements OnInit {
         }
       }
     );
+  }
+}
+
+class FormSubTypeWrapper {
+  form_sub_typ = '';
+  questions: Question[] = [];
+
+  constructor(form_sub_typ: string, questions: Question[] = []) {
+    this.form_sub_typ = form_sub_typ;
+    this.questions = questions;
   }
 }
