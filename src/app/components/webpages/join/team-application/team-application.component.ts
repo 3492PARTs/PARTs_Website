@@ -47,8 +47,15 @@ export class TeamApplicationComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
+            this.questions = [];
             let qs = result as Question[];
 
+            /*
+            let form_sub_typs: string[] = [];
+            qs.forEach(q => {
+              if (!form_sub_typs.includes(q.form_sub_typ))
+                form_sub_typs.push(q.form_sub_typ);
+            });*/
             let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
             form_sub_typs.forEach(fst => {

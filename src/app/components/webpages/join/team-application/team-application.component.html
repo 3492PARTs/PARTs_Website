@@ -5,6 +5,7 @@
                 [Type]="q.question_typ.question_typ" [FormGroup]="true" [SelectList]="q.questionoption_set"
                 [BindingProperty]="'option'" [DisplayProperty]="'option'" [DisplayEmptyOption]="true"
                 [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'" [Required]="q.required === 'y'"
+                [RadioGroupStacked]="true"
                 [Width]="q.question_typ.question_typ === 'area' ? '100%' : q.question_typ.question_typ === 'checkbox' ? 'auto' : '300px'"
                 [Rows]="5">
             </app-form-element>
@@ -15,7 +16,7 @@
             <app-button>Submit</app-button>
         </app-button-ribbon>
     </app-form>
-
+    <!--
     <app-form>
         <app-form-element-group [LabelText]="'Student Information'">
             <app-form-element [Type]="'text'" [LabelText]="'Name'" [Required]="true" [Width]="'300px'">
@@ -31,7 +32,7 @@
             <app-form-element [Type]="'date'" [LabelText]="'Date of Birth'" [Required]="true"></app-form-element>
 
             <app-form-element [Type]="'radio'" [LabelText]="'What grade will you be?'" [Required]="true"
-                [RadioList]="gradeRadioOptions" [DisplayProperty]="'option'" [BindingProperty]="'value'"
+                [SelectList]="gradeRadioOptions" [DisplayProperty]="'option'" [BindingProperty]="'value'"
                 [RadioGroupStacked]="true">
             </app-form-element>
         </app-form-element-group>
@@ -39,7 +40,7 @@
         <app-form-element-group [LabelText]="'Team Questions'">
             <app-form-element [Type]="'multiCheckbox'"
                 [LabelText]="'Have you participated in any of the following before?'"
-                [CheckboxList]="participationCheckboxOptions" [BindingProperty]="'value'" [DisplayProperty]="'option'">
+                [SelectList]="participationCheckboxOptions" [BindingProperty]="'value'" [DisplayProperty]="'option'">
             </app-form-element>
 
             <app-form-element [Type]="'area'"
@@ -82,4 +83,5 @@
             <app-button>Submit</app-button>
         </app-button-ribbon>
     </app-form>
+-->
 </app-box>

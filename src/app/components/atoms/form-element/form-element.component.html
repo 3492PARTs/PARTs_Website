@@ -98,14 +98,14 @@
 
       <div *ngSwitchCase="'multiCheckbox'" (focus)="focusIn()" (focusout)="focusOut()">
         <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
-          <app-form-element *ngFor="let c of CheckboxList" [Type]="'checkbox'" [LabelText]="c[DisplayProperty]"
+          <app-form-element *ngFor="let c of _SelectList" [Type]="'checkbox'" [LabelText]="c[DisplayProperty]"
             [(Model)]="c[BindingProperty]" [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
           </app-form-element>
         </ng-container>
       </div>
 
       <ng-container *ngSwitchCase="'radio'">
-        <div *ngFor="let obj of RadioList; let i = index" class="radio"
+        <div *ngFor="let obj of _SelectList; let i = index" class="radio"
           [ngClass]="{'form-group-inline': !RadioGroupStacked}">
 
           <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">

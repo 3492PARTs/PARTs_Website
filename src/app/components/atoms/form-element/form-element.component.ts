@@ -44,8 +44,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     window.setTimeout(() => { this._SelectList = sl; }, 0);
   }
   _SelectList: any[] = [];
-  @Input() RadioList: any[] = [];
-  @Input() CheckboxList: any[] = [];
+  //@Input() RadioList: any[] = [];
+  //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
   @Input() FormElementInline: boolean = true;
