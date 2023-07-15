@@ -190,7 +190,7 @@ export class Question {
   required = 'n';
   active = 'y';
   void_ind = 'n';
-  answer: string | number = '';
+  answer: any = '';
   display_value = '';
 
   questionoption_set: QuestionOption[] = [];

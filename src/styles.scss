@@ -70,6 +70,12 @@ body {
   height: 40px;
   overflow: hidden;
 
+  .mat-datepicker-toggle {
+    position: absolute;
+    top: -33px;
+    right: -20px;
+  }
+
   & > div > mat-form-field > div > div {
     background-color: white !important;
 
@@ -81,7 +87,7 @@ body {
   & > div {
     position: absolute;
     //top: 50%;
-    bottom: -32px;
+    bottom: -3px;
     left: 50%;
     //transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%);
