@@ -64,8 +64,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
-  @Input() MultiModel: any = [];
-  @Output() MultiModelChange = new EventEmitter();
+  //@Input() ModelProperty = '';
+
+  //@Input() MultiModel: any = [];
+  //@Output() MultiModelChange = new EventEmitter();
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
@@ -170,9 +172,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   multiChange(newValue: any, index: number) {
-    this.MultiModel[index]['checked'] = newValue;
+    if (!this.Model || this.Model.length !== this._SelectList.length)
+      this.Model = JSON.parse(JSON.stringify(this._SelectList));
+
+    this.Model[index]['checked'] = newValue;
     this._SelectList[index]['checked'] = newValue;
-    this.ModelChange.emit(this.MultiModel);
+    this.ModelChange.emit(this.Model);
     this.FunctionCallBack.emit();
   }
 

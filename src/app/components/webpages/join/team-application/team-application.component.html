@@ -1,5 +1,6 @@
 <app-box [Title]="'Team Application'">
-    <app-form (SubmitFunction)="save()">
+    <app-form>
+        <!--</app-form>(SubmitFunction)="save()">-->
         <app-form-element-group *ngFor="let formSubType of questions" [LabelText]="formSubType.form_sub_typ">
             <app-form-element *ngFor="let q of formSubType.questions" [LabelText]="q.question"
                 [Type]="q.question_typ.question_typ" [FormGroup]="true" [SelectList]="q.questionoption_set"
@@ -13,7 +14,7 @@
 
 
         <app-button-ribbon>
-            <app-button>Submit</app-button>
+            <app-button (FunctionCallBack)="print()">Submit</app-button>
         </app-button-ribbon>
     </app-form>
     <!--

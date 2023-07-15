@@ -232,7 +232,7 @@
 
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
           [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-          [(MultiModel)]="eventToTeams.teams">
+          [(Model)]="eventToTeams.teams">
         </app-form-element>
 
 
@@ -246,7 +246,7 @@
         </app-form-element>
 
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
-          [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="selectedEvent.team_no">
+          [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="selectedEvent.team_no">
         </app-form-element>
 
 

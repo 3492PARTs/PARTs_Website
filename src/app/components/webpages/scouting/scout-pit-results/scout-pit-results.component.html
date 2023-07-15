@@ -1,7 +1,7 @@
 <app-box [Title]="'Scout Pit Form'">
   <form>
     <app-form-element [LabelText]="'Team'" [Type]="'multiSelect'" [FormGroup]="true" [SelectList]="teams"
-      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(MultiModel)]="teams">
+      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="teams">
     </app-form-element>
 
     <app-button-ribbon>

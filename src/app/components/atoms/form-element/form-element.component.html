@@ -85,7 +85,7 @@
           </select>
         </ng-template>
       </ng-container>
-
+      <!--TODO Fix display property 2 using ternary operator-->
       <textarea *ngSwitchCase="'area'" class="form-control"
         [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
@@ -97,9 +97,10 @@
         [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <div *ngSwitchCase="'multiCheckbox'" (focus)="focusIn()" (focusout)="focusOut()">
-        <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
-          <app-form-element *ngFor="let c of _SelectList" [Type]="'checkbox'" [LabelText]="c[DisplayProperty]"
-            [(Model)]="c[BindingProperty]" [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
+        <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+          <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
+            [LabelText]="c[DisplayProperty]" [Model]="c[BindingProperty]" (ModelChange)="multiChange($event, i)"
+            [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
           </app-form-element>
         </ng-container>
       </div>
