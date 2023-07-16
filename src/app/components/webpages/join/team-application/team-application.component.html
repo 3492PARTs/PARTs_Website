@@ -7,7 +7,7 @@
                 [BindingProperty]="'option'" [DisplayProperty]="'option'" [DisplayEmptyOption]="true"
                 [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'" [Required]="q.required === 'y'"
                 [RadioGroupStacked]="true"
-                [Width]="['area', 'multiCheckbox'].includes(q.question_typ.question_typ) ? '100%' :  ['checkbox', 'date'].includes(q.question_typ.question_typ) ? 'auto' : '300px'"
+                [Width]="['area', 'multiCheckbox'].includes(q.question_typ.question_typ) ? '100%' :  ['checkbox', 'date', 'phone'].includes(q.question_typ.question_typ) ? 'auto' : '300px'"
                 [Rows]="5">
             </app-form-element>
         </app-form-element-group>

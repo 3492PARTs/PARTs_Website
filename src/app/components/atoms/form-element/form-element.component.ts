@@ -226,6 +226,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
         ret = this.ValidityFunction();
       } else if (!this.Model) {
         ret = true;
+      } else if (this.Type === 'phone') {
+        ret = this.Model.length !== 10;
       }
     }
     this.valid = !ret;
