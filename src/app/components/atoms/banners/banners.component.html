@@ -2,7 +2,7 @@
   <div *ngFor="let b of banners" class="banner">
     <app-box>
       <div class="banner-content">
-        <p>{{ b.message }}</p>
+        <p [innerHTML]="b.message"></p>
         <app-button [ButtonType]="'dismiss'" (FunctionCallBack)="dismissBanner(b)"></app-button>
       </div>
     </app-box>

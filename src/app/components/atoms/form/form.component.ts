@@ -41,7 +41,7 @@ export class FormComponent implements OnInit {
         valid = false;
       }*/
       if (v)
-        ret += eachObj.LabelText + ' is invalid\n'
+        ret += '&bull;  ' + eachObj.LabelText + ' is invalid\n'
     });
 
     /*this.formElementGroups.forEach(eachObj => {
