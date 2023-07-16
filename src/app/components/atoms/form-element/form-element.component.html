@@ -92,14 +92,28 @@
         placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
         [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
 
-      <input *ngSwitchCase="'checkbox'" type="hidden" name="toggle" [(ngModel)]="Model">
-      <input *ngSwitchCase="'checkbox'" class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
-        [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+      <ng-container *ngSwitchCase="'checkbox'">
+        <input type="hidden" name="toggle" [(ngModel)]="Model">
+
+        <input *ngIf="LabelText.toLowerCase() !== 'other'; else other" class="checkbox" type="checkbox"
+          id="{{ LabelID }}" (change)="change($event)" [checked]="TrueValue === Model" [disabled]="Disabled"
+          (focus)="focusIn()" (focusout)="focusOut()">
+        <ng-template #other>
+          <input class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
+            [checked]="Model && Model.trim().length > 0" [disabled]="Disabled" (focus)="focusIn()"
+            (focusout)="focusOut()">
+        </ng-template>
+
+        <app-form-element *ngIf="LabelText.toLowerCase() === 'other'" [Type]="'area'" [(Model)]="Model"
+          [Disabled]="Disabled" [Required]="Required" [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5">
+        </app-form-element>
+      </ng-container>
+
 
       <div *ngSwitchCase="'multiCheckbox'" (focus)="focusIn()" (focusout)="focusOut()">
         <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
-            [LabelText]="c[DisplayProperty]" [Model]="c[BindingProperty]" (ModelChange)="multiChange($event, i)"
+            [LabelText]="c[DisplayProperty]" [Model]="Model[i]['checked']" (ModelChange)="multiChange($event, i)"
             [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
           </app-form-element>
         </ng-container>

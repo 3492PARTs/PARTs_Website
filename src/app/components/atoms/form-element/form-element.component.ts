@@ -41,7 +41,22 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   @Input()
   set SelectList(sl: any) {
-    window.setTimeout(() => { this._SelectList = sl; }, 0);
+    window.setTimeout(() => {
+      this._SelectList = sl;
+
+      if (this.Type === 'multiCheckbox' && (!this.Model || this.Model.length !== this._SelectList.length)) {
+        let tmp = JSON.parse(JSON.stringify(this._SelectList));
+        tmp.forEach((e: any) => {
+          if (this.Model)
+            this.Model.forEach((m: any) => {
+              if (e[this.BindingProperty] === m[this.BindingProperty])
+                e['checked'] = m['checked'];
+            });
+        });
+
+        this.change(tmp);
+      }
+    }, 0);
   }
   _SelectList: any[] = [];
   //@Input() RadioList: any[] = [];
@@ -172,9 +187,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   multiChange(newValue: any, index: number) {
-    if (!this.Model || this.Model.length !== this._SelectList.length)
-      this.Model = JSON.parse(JSON.stringify(this._SelectList));
-
     this.Model[index]['checked'] = newValue;
     this._SelectList[index]['checked'] = newValue;
     this.ModelChange.emit(this.Model);
