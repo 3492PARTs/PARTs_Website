@@ -44,9 +44,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     window.setTimeout(() => {
       this._SelectList = sl;
 
-      if (this.Type === 'multiCheckbox' && (!this.Model || this.Model.length !== this._SelectList.length)) {
+      if (this.Type === 'multiCheckbox') {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
         tmp.forEach((e: any) => {
+          tmp['checked'] = '';
           if (this.Model)
             this.Model.forEach((m: any) => {
               if (e[this.BindingProperty] === m[this.BindingProperty])
@@ -174,10 +175,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   onScroll(event: any) {
     this.positionMultiSelect();
   }
-
+  //(ModelChange)="multiChange($event, i)"
   change(newValue: any) {
     this.Model = newValue;
-    if (this.Type === 'checkbox') {
+    if (this.Type === 'checkbox' && this.LabelText.toLowerCase() !== 'other') {
       if (newValue.target.checked) {
         this.ModelChange.emit(this.TrueValue);
       } else {
