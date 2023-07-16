@@ -47,7 +47,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       if (this.Type === 'multiCheckbox') {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
         tmp.forEach((e: any) => {
-          tmp['checked'] = '';
+          e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
           if (this.Model)
             this.Model.forEach((m: any) => {
               if (e[this.BindingProperty] === m[this.BindingProperty])
