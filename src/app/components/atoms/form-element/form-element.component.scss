@@ -38,6 +38,10 @@
     }
   }
 
+  &.otherOptionCheckboxElement > div {
+    display: block;
+  }
+
   & > label {
     font-size: 13px;
     text-align: justify;
@@ -59,6 +63,12 @@
     &.radioLabel {
       position: initial;
       padding: 0;
+
+      &.otherOptionCheckboxLabel {
+        position: absolute;
+        top: 0px;
+        left: 20px;
+      }
     }
   }
 }

@@ -111,6 +111,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   ngOnInit() {
     this.LabelID = this.gs.getNextGsId();
+
+    if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
+      this.Width = '100%';
+      console.log('run');
+    }
   }
 
   /*ngOnChanges(changes: SimpleChanges) {
