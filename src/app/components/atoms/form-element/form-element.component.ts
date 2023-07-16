@@ -80,6 +80,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
+  phoneMaskModel = '';
   //@Input() ModelProperty = '';
 
   //@Input() MultiModel: any = [];
@@ -403,4 +404,22 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   strNoE(a: any): boolean {
     return this.gs.strNoE(a);
   }
+
+  phoneMaskFn(value: string) {
+    window.setTimeout(() => {
+      this.phoneMaskModel = '';
+    }, 1);
+    // This code manipulates the input to look like a phone number.
+    let phone = value.replace(/\D/g, '');
+    phone = phone.slice(0, 10);
+    const areaCode = phone.slice(0, 3);
+    const prefix = phone.slice(3, 6);
+    const suffix = phone.slice(6, 10);
+
+    window.setTimeout(() => {
+      this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
+    }, 1);
+
+    this.change(phone);
+  };
 }

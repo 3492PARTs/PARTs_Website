@@ -31,6 +31,12 @@
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
+      <input *ngSwitchCase="'phone'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="phoneMaskModel"
+        (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
+        (focusout)="focusOut()">
+
       <input *ngSwitchCase="'mac'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
         [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
