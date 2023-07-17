@@ -77,7 +77,7 @@ export class TeamApplicationComponent implements OnInit {
   }
 
   print() {
-    console.log(this.questions.map(q => { return q.questions }).reduce((x, y) => { return x.concat(y) }));
+    this.gs.devConsoleLog(this.questions.map(q => { return q.questions }).reduce((x, y) => { return x.concat(y) }));
   }
 
   save(): void | null {
