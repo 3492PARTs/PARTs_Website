@@ -76,6 +76,10 @@
       display: table;
       background: unset;
     }
+
+    &.checkboxLabel {
+      display: inline-block;
+    }
   }
 }
 
@@ -151,8 +155,9 @@ textarea.form-control {
     right: 4.3rem;
   }
 
-  &.radio {
-    top: -8px;
+  &.radio,
+  &.multiCheckbox {
+    top: -11px;
   }
 
   .icon-valid {

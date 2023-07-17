@@ -225,20 +225,38 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     if (this.Touched && this.Required) {
       if (this.ValidityFunction != null) {
         ret = this.ValidityFunction();
-      } else if (!this.Model) {
+      }
+      else if (!this.Model) {
         ret = true;
-      } else if (this.Type === 'phone') {
+      }
+      else if (this.Type === 'phone') {
         ret = this.Model.length !== 10;
+      }
+      else if (this.Type === 'multiCheckbox') {
+        let has = false;
+        this.Model.forEach((e: any) => {
+          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '');
+          if (!this.strNoE(s))
+            has = true;
+        });
+        ret = !has;
       }
     }
     this.valid = !ret;
 
-    window.setTimeout(() => {
-      if (this.Type === 'radio' && this.label && this.validationIndicator) {
-        console.log(this.label.nativeElement);
-        this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', 'calc(' + this.label.nativeElement.scrollWidth + 'px - 2.2rem)');
-      }
-    }, 1);
+    if (['radio'].includes(this.Type))
+      window.setTimeout(() => {
+        if (this.label && this.validationIndicator) {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', 'calc(' + this.label.nativeElement.scrollWidth + 'px - 2.2rem)');
+        }
+      }, 1);
+
+    if (['radio', 'multiCheckbox'].includes(this.Type))
+      window.setTimeout(() => {
+        if (this.label && this.validationIndicator) {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
+        }
+      }, 1);
 
     return ret;
   }
@@ -390,7 +408,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       // i need this to be . if i find a place where i need it to be
       // strictly this is my reminder that i need to find another solution
       if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-        this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+        //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(
           this.label.nativeElement,
@@ -401,7 +419,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
           'margin-top', labelOffset + 'px'
         );
       } else {
-        this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+        //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
         this.renderer.setStyle(
           this.label.nativeElement,
           'top', '-7px'

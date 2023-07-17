@@ -7,7 +7,7 @@
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
     <div *ngIf="Required && Touched" class="validation" #validationIndicator
-      [ngClass]="{'select': Type === 'select', 'area': Type === 'area', 'date': Type === 'date', 'radio': Type === 'radio'}">
+      [ngClass]="{'select': Type === 'select', 'area': Type === 'area', 'date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox'}">
       <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid"></mat-icon>
       <mat-icon class="icon-invalid" svgIcon="alert-circle-outline" *ngIf="!valid"></mat-icon>
     </div>
@@ -112,7 +112,7 @@
             (focusout)="focusOut()">
 
           <app-form-element [Type]="'area'" [Model]="Model" (ModelChange)="change($event)" [Disabled]="Disabled"
-            [Required]="Required" [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5">
+            [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5">
           </app-form-element>
         </ng-template>
       </ng-container>
