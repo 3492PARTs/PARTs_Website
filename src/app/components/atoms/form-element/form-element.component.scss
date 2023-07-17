@@ -71,6 +71,11 @@
         left: 20px;
       }
     }
+
+    &.radioLabel {
+      display: table;
+      background: unset;
+    }
   }
 }
 
@@ -142,6 +147,14 @@ textarea.form-control {
     transform: initial;
   }
 
+  &.date {
+    right: 4.3rem;
+  }
+
+  &.radio {
+    top: -8px;
+  }
+
   .icon-valid {
     fill: #198754;
   }
@@ -182,6 +195,10 @@ textarea.form-control {
 .valid,
 .invalid {
   padding-right: calc(1.5em + 0.75rem);
+
+  &.date {
+    padding-right: 0;
+  }
 }
 
 .invalid-message {

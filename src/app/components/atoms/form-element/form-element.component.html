@@ -6,8 +6,8 @@
     LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
-    <div *ngIf="Required && Touched" class="validation"
-      [ngClass]="{'select': Type === 'select', 'area': Type === 'area'}">
+    <div *ngIf="Required && Touched" class="validation" #validationIndicator
+      [ngClass]="{'select': Type === 'select', 'area': Type === 'area', 'date': Type === 'date', 'radio': Type === 'radio'}">
       <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid"></mat-icon>
       <mat-icon class="icon-invalid" svgIcon="alert-circle-outline" *ngIf="!valid"></mat-icon>
     </div>
@@ -154,9 +154,9 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="'date'" class="date form-control">
-        <div
-          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+      <div *ngSwitchCase="'date'" class="date-form-control form-control"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+        <div class="date" [ngClass]="{'disabled': Disabled}">
           <mat-form-field appearance="fill">
             <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
             <mat-hint>MM/DD/YYYY</mat-hint>

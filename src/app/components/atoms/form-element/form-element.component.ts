@@ -108,6 +108,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
   @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
   @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
+  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
@@ -231,6 +232,14 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
       }
     }
     this.valid = !ret;
+
+    window.setTimeout(() => {
+      if (this.Type === 'radio' && this.label && this.validationIndicator) {
+        console.log(this.label.nativeElement);
+        this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', 'calc(' + this.label.nativeElement.scrollWidth + 'px - 2.2rem)');
+      }
+    }, 1);
+
     return ret;
   }
 
