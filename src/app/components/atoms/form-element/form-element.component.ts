@@ -117,7 +117,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
-      console.log('run');
     }
   }
 
@@ -240,6 +239,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
             has = true;
         });
         ret = !has;
+      }
+      else if (this.Type === 'email') {
+        const emailRegex =
+          new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
+        ret = !emailRegex.test(this.Model);
       }
     }
     this.valid = !ret;
