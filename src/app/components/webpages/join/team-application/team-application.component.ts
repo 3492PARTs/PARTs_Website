@@ -76,30 +76,31 @@ export class TeamApplicationComponent implements OnInit {
     );
   }
 
-  print() {
-    this.gs.devConsoleLog(this.questions.map(q => {
-      q.questions.forEach(tmp => {
-        if (Array.isArray(tmp.answer)) {
-          let str = '';
-          tmp.answer.forEach(val => {
-            if (val.checked === 'false') {
-              str += val.checked;
-            }
-          })
-          console.log(str);
-        }
-      })
-      return q.questions
-    }).reduce((x, y) => { return x.concat(y) }));
-  }
-
   save(): void | null {
     this.gs.incrementOutstandingCalls();
 
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
-      { question_answers: this.questions.map(q => { return q.questions }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app' }
+      {
+        question_answers: this.questions.map(subForm => {
+          subForm.questions.forEach(q => {
+            if (Array.isArray(q.answer)) {
+              let str = '';
+              q.answer.forEach(opt => {
+                if (!this.gs.strNoE(opt.checked) && opt.checked !== 'false')
+                  if (opt.checked === 'true')
+                    str += opt.option + ', ';
+                  else
+                    str += opt.checked + ', ';
+              });
+              str = str.substring(0, str.length - 2);
+              q.answer = str;
+            }
+          })
+          return subForm.questions
+        }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
+      }
     ).subscribe(
       {
         next: (result: any) => {
