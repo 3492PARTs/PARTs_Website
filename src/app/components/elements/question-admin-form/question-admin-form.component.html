@@ -37,34 +37,37 @@
       [DisplayProperty]="'display_value'" [DisplayEmptyOption]="true" [(Model)]="editQuestion">
     </app-form-element>
 
-    <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="editQuestion.question">
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'area'" [LabelText]="'Question'"
+      [(Model)]="editQuestion.question">
     </app-form-element>
 
-    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="editQuestion.order" [Width]="'5em'">
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'number'" [LabelText]="'Order'"
+      [(Model)]="editQuestion.order" [Width]="'5em'">
     </app-form-element>
 
-    <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
-      [DisplayProperty]="'question_typ_nm'" [(Model)]="editQuestion.question_typ"
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'select'" [LabelText]="'Question Type'"
+      [SelectList]="init.question_types" [DisplayProperty]="'question_typ_nm'" [(Model)]="editQuestion.question_typ"
       [SelectComparatorFunction]="compareQuestionTypeObjects" [Width]="'100%'" [MinWidth]="'200px'">
     </app-form-element>
 
-    <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
+    <app-form-element *ngIf="editQuestion.question_id && init.form_sub_types && init.form_sub_types.length > 0"
+      [Type]="'select'" [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="editQuestion.form_sub_typ"
       [DisplayEmptyOption]="true">
     </app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
-      [(Model)]="editQuestion.required"></app-form-element>
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
+      [LabelText]="'Required'" [(Model)]="editQuestion.required"></app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"
-      [(Model)]="editQuestion.active"></app-form-element>
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
+      [LabelText]="'Active'" [(Model)]="editQuestion.active"></app-form-element>
 
-    <app-button-ribbon>
+    <app-button-ribbon *ngIf="editQuestion.question_id">
       <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion()">Update</app-button>
     </app-button-ribbon>
 
-    <div *ngIf="editQuestion.question_typ && editQuestion.question_typ.is_list === 'y'" class="optionsTableWrapper">
+    <div *ngIf="editQuestion.question_id && editQuestion.question_typ && editQuestion.question_typ.is_list === 'y'"
+      class="optionsTableWrapper">
       <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="editQuestion.questionoption_set"
         [ShowAddButton]="true" (AddRecordCallBack)="addOption(editQuestion.questionoption_set)" [Scrollable]="true">
       </app-table>
