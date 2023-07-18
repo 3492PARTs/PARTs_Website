@@ -6,21 +6,24 @@
     LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
-    <div *ngIf="Required && Touched" class="validation" #validationIndicator
-      [ngClass]="{'select': Type === 'select', 'area': Type === 'area', 'date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox'}">
-      <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid"></mat-icon>
-      <mat-icon class="icon-invalid" svgIcon="alert-circle-outline" *ngIf="!valid"></mat-icon>
+    <div *ngIf="(Required && Touched) || !valid" class="validation" #validationIndicator
+      [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox'}">
+      <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid && hasValue; else invalid"></mat-icon>
+      <ng-template #invalid>
+        <mat-icon class="icon-invalid" svgIcon="alert-circle-outline">
+        </mat-icon>
+      </ng-template>
     </div>
 
     <ng-container [ngSwitch]="Type">
       <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Touched,'required': Required && Touched && hasValue}"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <input *ngSwitchCase="'email'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
+        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Touched,'required': Required && Touched && hasValue}"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
@@ -212,7 +215,12 @@
       </div>
     </ng-container>
   </div>
-  <p *ngIf="Required && !valid && Touched" class="invalid-message">{{ ValidationMessage || 'required' }}</p>
+  <p *ngIf="Required && !hasValue && Touched; else invalidMessage" class="invalid-message">{{ ValidationMessage ||
+    'required' }}
+  </p>
+  <ng-template #invalidMessage>
+    <p *ngIf="!valid && Touched" class="invalid-message">{{ ValidationMessage || 'invalid' }}</p>
+  </ng-template>
 </div>
 
 <!--

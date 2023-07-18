@@ -72,7 +72,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() Touched = false;
   @Input() Focused = false;
   @Input() Disabled = false;
-  valid = false;
+  valid = true;
+  hasValue = false;
 
   @Input() ValidityFunction?: Function;
   @Input() SelectComparatorFunction!: (o1: any, o2: any) => boolean;
@@ -220,34 +221,42 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   isInvalid(): boolean {
+    // validate if the element is a valid one or not
     let ret = false;
-    if (this.Touched && this.Required) {
+    if (this.Touched) {
       if (this.ValidityFunction != null) {
-        ret = this.ValidityFunction();
+        ret = !this.ValidityFunction();
       }
-      else if (!this.Model) {
-        ret = true;
+      else if (this.Type === 'phone' && this.Model.length > 0) {
+        ret = !(this.Model.length === 10);
       }
-      else if (this.Type === 'phone') {
-        ret = this.Model.length !== 10;
-      }
-      else if (this.Type === 'multiCheckbox') {
-        let has = false;
-        this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '');
-          if (!this.strNoE(s))
-            has = true;
-        });
-        ret = !has;
-      }
-      else if (this.Type === 'email') {
+      else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
         const emailRegex =
           new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
         ret = !emailRegex.test(this.Model);
       }
     }
+
+    // if the element is populated or not
+    if (this.Model && !this.strNoE(this.Model)) {
+      if (this.Type === 'multiCheckbox') {
+        this.Model.forEach((e: any) => {
+          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '');
+          if (!this.strNoE(s))
+            this.hasValue = true;
+        });
+      }
+      else
+        this.hasValue = true;
+    }
+    else {
+      this.hasValue = false;
+      ret = this.Required;
+    }
+
     this.valid = !ret;
 
+    // move indicator for certain types
     if (['radio'].includes(this.Type))
       window.setTimeout(() => {
         if (this.label && this.validationIndicator) {
