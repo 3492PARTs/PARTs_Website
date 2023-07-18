@@ -17,45 +17,70 @@
 
     <ng-container [ngSwitch]="Type">
       <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Touched,'required': Required && Touched && hasValue}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <input *ngSwitchCase="'email'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Touched,'required': Required && Touched && hasValue}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <input *ngSwitchCase="'password'" type="password" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        placeholder="{{ Placeholder }}" [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        placeholder="{{ Placeholder }}" [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'phone'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="phoneMaskModel"
+        [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="phoneMaskModel"
         (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <input *ngSwitchCase="'mac'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <div *ngSwitchCase="'search'" id="search">
-        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-          [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
           (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()" (focusout)="focusOut()">
         <button>
           <mat-icon id="magnify-icon" svgIcon="magnify"></mat-icon>
@@ -64,9 +89,12 @@
 
       <ng-container *ngSwitchCase="'select'">
         <ng-container *ngIf="!SelectComparatorFunction; else hasFunction">
-          <select class="form-control" id="{{ LabelID }}"
-            [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-            [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+          <select class="form-control" id="{{ LabelID }}" [ngClass]="{
+            'disabled': Disabled, 
+            'valid': valid && Required && Touched, 
+            'invalid': !valid && Touched,
+            'required': Required && Touched && hasValue
+          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
             <option [ngValue]="strNoE(Model) ? Model : ''" [disabled]="!DisplayEmptyOption"></option>
 
@@ -86,9 +114,12 @@
           </select>
         </ng-container>
         <ng-template #hasFunction>
-          <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}"
-            [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-            [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+          <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngClass]="{
+            'disabled': Disabled, 
+            'valid': valid && Required && Touched, 
+            'invalid': !valid && Touched,
+            'required': Required && Touched && hasValue
+          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
             [compareWith]="SelectComparatorFunction">
             <option value="" *ngIf="DisplayEmptyOption"></option>
@@ -101,9 +132,12 @@
         </ng-template>
       </ng-container>
       <!--TODO Fix display property 2 using ternary operator-->
-      <textarea *ngSwitchCase="'area'" class="form-control"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
+      <textarea *ngSwitchCase="'area'" class="form-control" [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
         placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
         [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
 
@@ -150,8 +184,12 @@
       </ng-container>
 
       <div *ngSwitchCase="'datetime'" class="datetime form-control">
-        <div (focus)="focusIn()" (focusout)="focusOut()"
-          [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+        <div (focus)="focusIn()" (focusout)="focusOut()" [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }">
           <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
             <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
@@ -163,11 +201,16 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="'date'" class="date-form-control form-control"
-        [ngClass]="{'disabled': Disabled, 'valid': valid && Required && Touched, 'invalid': !valid && Required && Touched}">
+      <div *ngSwitchCase="'date'" class="date-form-control form-control" [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }">
         <div class="date" [ngClass]="{'disabled': Disabled}">
           <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
+            <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)"
+              (focus)="focusIn()" (focusout)="focusOut()">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
@@ -189,8 +232,12 @@
         (change)="ImageChangeEvent($event)" placeholder="Upload file" [ngModel]="Model" [disabled]="Disabled"
         (focus)="focusIn()" (focusout)="focusOut()">
 
-      <div *ngSwitchCase="'multiSelect'" class="form-control" id="multiSelect"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" #multiSelect
+      <div *ngSwitchCase="'multiSelect'" class="form-control" id="multiSelect" [ngClass]="{
+        'disabled': Disabled, 
+        'valid': valid && Required && Touched, 
+        'invalid': !valid && Touched,
+        'required': Required && Touched && hasValue
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" #multiSelect
         (appClickOutside)="multiSelectClose()">
         <span (click)="multiSelectMenu()">
           <p>{{ LabelText }}</p>
