@@ -16,14 +16,15 @@ export class FormElementGroupComponent implements AfterViewInit {
   @ContentChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
 
   constructor() {
-    this.formElements.changes.subscribe(() => {
-      this.setFormGroup();
-    });
   }
 
 
   ngAfterViewInit() {
     this.setFormGroup();
+
+    this.formElements.changes.subscribe(() => {
+      this.setFormGroup();
+    });
   }
 
   setFormGroup() {
