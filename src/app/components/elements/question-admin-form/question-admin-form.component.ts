@@ -21,6 +21,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   init: Init = new Init();
   question: Question = new Question();
+  editQuestion: Question = new Question();
 
   optionsTableCols: object[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
@@ -46,6 +47,8 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as Init;
+            this.question = new Question();
+            this.editQuestion = new Question();
             this.gs.devConsoleLog(this.init);
           }
         },
@@ -61,14 +64,12 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  saveQuestion(q?: Question): void {
+  saveQuestion(): void {
     this.gs.incrementOutstandingCalls();
     this.question.form_typ = this.questionType;
 
-    // if q is null saving a new question, null out id incase someone was editing before
-    if (!q) this.question.question_id = null;
 
-    let save = q ? q : this.question;
+    let save = this.editQuestion ? this.editQuestion : this.question;
 
     for (let i = 0; i < save.questionoption_set.length; i++) {
       if (this.gs.strNoE(save.questionoption_set[i].question_opt_id) && this.gs.strNoE(save.questionoption_set[i].option)) {

@@ -64,7 +64,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
-  @Input() FormElementInline: boolean = true;
+  //@Input() FormElementInline: boolean = true;
 
   //@Input() Validation = false;
   @Input() ValidationMessage = '';
