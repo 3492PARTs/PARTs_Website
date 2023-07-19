@@ -155,7 +155,7 @@
             (focusout)="focusOut()">
 
           <app-form-element [Type]="'area'" [Model]="Model" (ModelChange)="change($event)" [Disabled]="Disabled"
-            [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5">
+            [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5" [FieldSize]="FieldSize">
           </app-form-element>
         </ng-template>
       </ng-container>
@@ -165,7 +165,7 @@
         <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
             [LabelText]="c[DisplayProperty]" [Model]="Model[i]['checked']" (ModelChange)="change($event, i)"
-            [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
+            [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled" [FieldSize]="FieldSize">
           </app-form-element>
         </ng-container>
       </div>
