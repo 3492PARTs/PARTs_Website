@@ -161,11 +161,11 @@
       </ng-container>
 
 
-      <div *ngSwitchCase="'multiCheckbox'" (focus)="focusIn()" (focusout)="focusOut()">
+      <div *ngSwitchCase="'multiCheckbox'" (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
         <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
-            [LabelText]="c[DisplayProperty]" [(Model)]="Model[i]['checked']" [TrueValue]="TrueValue"
-            [FalseValue]="FalseValue" [Disabled]="Disabled">
+            [LabelText]="c[DisplayProperty]" [Model]="Model[i]['checked']" (ModelChange)="change($event, i)"
+            [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled">
           </app-form-element>
         </ng-container>
       </div>
@@ -176,8 +176,9 @@
 
           <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== '' && DisplayProperty2 === ''">
             <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj[BindingProperty]"
-              [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model" />
-            <label for="radio{{ i }}">{{ obj[DisplayProperty] }}</label>
+              [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model"
+              (focus)="focusIn()" (focusout)="focusOut()" />
+            <label for="radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{ obj[DisplayProperty] }}</label>
           </ng-container>
 
         </div>

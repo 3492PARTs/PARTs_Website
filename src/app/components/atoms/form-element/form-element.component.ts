@@ -10,7 +10,8 @@ import {
   AfterViewInit,
   HostListener,
   DoCheck,
-  SimpleChanges
+  SimpleChanges,
+  OnChanges
 } from '@angular/core';
 
 import { GeneralService } from 'src/app/services/general.service';
@@ -20,7 +21,7 @@ import { GeneralService } from 'src/app/services/general.service';
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
 })
-export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
+export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   @Input() FormGroup = false;
   @Input() FormGroupInline = false;
   @Input() RadioGroupStacked = false;
@@ -121,24 +122,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
     }
   }
 
-  /*ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'Model': {
-            if (this.Type === 'select') {
+            if (this.Type === 'multiCheckbox') {
               console.log(this.Model);
-              if (this.gs.strNoE(this.Model)) {
-                window.setTimeout(() => {
-                  this.change('');
-                }, 5);
-              }
             }
           }
         }
       }
     }
-  }*/
+  }
 
 
   ngDoCheck(): void {
@@ -177,19 +173,25 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   onScroll(event: any) {
     this.positionMultiSelect();
   }
-  //(ModelChange)="multiChange($event, i)"
-  change(newValue: any) {
-    this.Model = newValue;
+
+  change(newValue: any, index = -1) {
     if (this.Type === 'checkbox' && this.LabelText.toLowerCase() !== 'other') {
+      this.Model = newValue;
       if (newValue.target.checked) {
         this.ModelChange.emit(this.TrueValue);
       } else {
         this.ModelChange.emit(this.FalseValue);
       }
-    } else {
-      this.ModelChange.emit(newValue);
-
     }
+    else if (index !== -1) {
+      this.Model[index]['checked'] = newValue;
+      this.ModelChange.emit(this.Model);
+    }
+    else {
+      this.Model = newValue;
+      this.ModelChange.emit(newValue);
+    }
+
     this.FunctionCallBack.emit();
     this.isInvalid();
   }
@@ -239,9 +241,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
 
     // if the element is populated or not
     if (this.Model && !this.strNoE(this.Model)) {
+      this.hasValue = false;
       if (this.Type === 'multiCheckbox') {
         this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '');
+          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '').replace('false', '');
           if (!this.strNoE(s))
             this.hasValue = true;
         });
@@ -279,15 +282,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck {
   }
 
   focusIn() {
-    this.Focused = true;
-    this.isInvalid();
-    this.touchIt();
+    if (!this.Focused) {
+      this.Focused = true;
+      this.isInvalid();
+      this.touchIt();
+    }
   }
 
   focusOut() {
-    this.Focused = false;
-    this.isInvalid();
-    this.OnFocusOut.emit();
+    if (this.Focused) {
+      this.Focused = false;
+      this.isInvalid();
+      this.OnFocusOut.emit();
+    }
   }
 
   reset() {
