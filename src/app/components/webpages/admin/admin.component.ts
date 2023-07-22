@@ -59,6 +59,7 @@ export class AdminComponent implements OnInit {
     this.ns.setSubPages([
       new MenuItem('Manage Users', 'users', 'account-group'),
       new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
+      new MenuItem('Requested Items', 'req-items', 'view-grid-plus'),
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline')
     ]);
