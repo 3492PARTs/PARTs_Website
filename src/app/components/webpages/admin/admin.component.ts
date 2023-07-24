@@ -59,10 +59,20 @@ export class AdminComponent implements OnInit {
   ];
   items: Item[] = [];
   activeItem = new Item();
-  itemModalVisible = true;
+  itemModalVisible = false;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService) {
-    this.ns.currentSubPage.subscribe(p => this.page = p);
+    this.ns.currentSubPage.subscribe(p => {
+      this.page = p;
+      switch (this.page) {
+        case 'errors':
+          this.getErrors(this.errorPage);
+          break;
+        case 'req-items':
+          this.getItems();
+          break;
+      }
+    });
   }
 
   ngOnInit() {
@@ -98,7 +108,6 @@ export class AdminComponent implements OnInit {
         }
       }
     );
-    this.getErrors(this.errorPage);
   }
 
   showManageUserModal(u: User): void {
@@ -265,7 +274,7 @@ export class AdminInit {
 }
 
 export class Item {
-  item_id = '';
+  item_id!: number;
   item_nm = '';
   item_desc = '';
   quantity = '';
@@ -275,7 +284,7 @@ export class Item {
 }
 
 export class Sponsor {
-  sponsor_id = '';
+  sponsor_id!: number;
   sponsor_nm = '';
   phone = '';
   email = '';
