@@ -157,7 +157,7 @@ export class GeneralService {
   /* helper functions */
   strNoE(s: any) {
     let type = typeof s;
-    if (s && !['undefined', 'string'].includes(type)) {
+    if (s !== null && !['undefined', 'string'].includes(type)) {
       s = s.toString();
     }
     return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';

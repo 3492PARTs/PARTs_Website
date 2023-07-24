@@ -65,6 +65,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
   @Input() FieldSize = 524288;
+  @Input() MinValue!: number;
+  @Input() MaxValue!: number;
   //@Input() FormElementInline: boolean = true;
 
   //@Input() Validation = false;
@@ -119,6 +121,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
+    }
+
+    if (this.Type === 'number' && this.MinValue !== null && this.MinValue !== undefined) {
+      this.change(this.MinValue);
     }
   }
 
@@ -183,6 +189,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.ModelChange.emit(this.FalseValue);
       }
     }
+    else if (this.Type == 'number') {
+      if (this.MinValue !== null && this.MinValue !== undefined) {
+        this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
+      }
+      if (this.MaxValue !== null && this.MaxValue !== undefined) {
+        this.Model = newValue <= this.MaxValue ? newValue : this.MaxValue;
+      }
+      this.ModelChange.emit(this.Model);
+    }
     else if (index !== -1) {
       this.Model[index]['checked'] = newValue;
       this.ModelChange.emit(this.Model);
@@ -240,7 +255,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
 
     // if the element is populated or not
-    if (this.Model && !this.strNoE(this.Model)) {
+    if (!this.strNoE(this.Model)) {
       this.hasValue = false;
       if (this.Type === 'multiCheckbox') {
         this.Model.forEach((e: any) => {

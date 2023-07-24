@@ -50,6 +50,17 @@ export class AdminComponent implements OnInit {
   errorDetailModalVisible = false;
   currentError: ErrorLog = new ErrorLog();
 
+  itemTableCols: object[] = [
+    { PropertyName: 'item_nm', ColLabel: 'Item' },
+    { PropertyName: 'item_desc', ColLabel: 'Description' },
+    { PropertyName: 'quantity', ColLabel: 'Quantity' },
+    { PropertyName: 'img_id', ColLabel: 'Image' },
+    { PropertyName: 'active', ColLabel: 'Active' },
+  ];
+  items: Item[] = [];
+  activeItem = new Item();
+  itemModalVisible = true;
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService) {
     this.ns.currentSubPage.subscribe(p => this.page = p);
   }
@@ -197,10 +208,76 @@ export class AdminComponent implements OnInit {
     this.errorDetailModalVisible = true;
     this.currentError = error;
   }
+
+  getItems(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'sponsoring/get-items/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.items = result as Item[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  editItem(i = new Item()): void {
+    this.activeItem = i;
+    this.itemModalVisible = true;
+  }
+
+  saveItem(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'sponsoring/save-item/', this.activeItem
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.activeItem = new Item();
+            this.itemModalVisible = false;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
 }
 
 export class AdminInit {
   users: User[] = [];
   userGroups: AuthGroup[] = [];
   phoneTypes: PhoneType[] = [];
+}
+
+export class Item {
+  item_id = '';
+  item_nm = '';
+  item_desc = '';
+  quantity = '';
+  reset_date = new Date();
+  active = 'y';
+  void_ind = '';
+}
+
+export class Sponsor {
+  sponsor_id = '';
+  sponsor_nm = '';
+  phone = '';
+  email = '';
+  void_ind = '';
 }
