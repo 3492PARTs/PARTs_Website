@@ -79,9 +79,9 @@
       </app-form-element>
       <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeItem.active" [Required]="true"
         [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
-      <app-form-element [Type]="'file'" [LabelText]="'Image'"></app-form-element>
+      <app-form-element [Type]="'file'" [LabelText]="'Image'" [(Model)]="activeItem.img"></app-form-element>
 
-      <app-button>Save</app-button>
+      <app-button [Type]="'submit'">Save</app-button>
     </app-form>
   </app-modal>
 </app-box>

@@ -246,8 +246,14 @@ export class AdminComponent implements OnInit {
 
   saveItem(): void {
     this.gs.incrementOutstandingCalls();
+    let formData = new FormData();
+    //formData.append('file', this.form.get('profile').value);
+    for (const [k, v] of Object.entries(this.activeItem)) {
+      formData.append(k, v);
+    }
+
     this.http.post(
-      'sponsoring/save-item/', this.activeItem
+      'sponsoring/save-item/', formData
     ).subscribe(
       {
         next: (result: any) => {
@@ -280,6 +286,8 @@ export class Item {
   quantity = '';
   reset_date = new Date();
   active = 'y';
+  img!: any;
+  img_url = '';
   void_ind = '';
 }
 
