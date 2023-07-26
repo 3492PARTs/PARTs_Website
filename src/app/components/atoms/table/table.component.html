@@ -73,7 +73,7 @@
               (FunctionCallBack)="Remove(rec)"></app-button>
           </div>
         </td>
-        <td *ngFor="let col of TableCols"
+        <td *ngFor="let col of TableCols; let i = index"
           [ngStyle]="{ 'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
           'color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)) === 'initial' ? 'initial' : 'white' }">
           <ng-container *ngIf="!col.Type; else Type">
@@ -92,6 +92,10 @@
 
               <span *ngSwitchCase="'function'">
                 {{ col.ColValueFn(rec[col.PropertyName])}}
+              </span>
+
+              <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate
+                (onCreate)="previewImage(rec[col.PropertyName], 'image' + i)">
               </span>
 
               <app-form-element *ngSwitchDefault [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"

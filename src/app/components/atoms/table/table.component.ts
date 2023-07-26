@@ -12,6 +12,7 @@ import {
   HostListener,
   RendererStyleFlags2
 } from '@angular/core';
+import { GeneralService } from 'src/app/services/general.service';
 
 
 //import * as $ from 'jquery';
@@ -26,7 +27,6 @@ export class TableComponent implements OnInit, OnChanges {
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
 
-  constructor(private renderer: Renderer2) { }
   @Input() TableData: any[] = [];
   @Input() TableCols: any[] = [];
 
@@ -95,6 +95,8 @@ export class TableComponent implements OnInit, OnChanges {
   @ViewChild('Table', { read: ElementRef, static: true }) Table?: ElementRef;
 
   buttonCellWidth = 'auto';
+
+  constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
     if (this.Width !== '' && this.Table) {
@@ -347,5 +349,9 @@ export class TableComponent implements OnInit, OnChanges {
   filterTextChange(text: any): void {
     this.FilterText = text;
     this.FilterTextChange.emit(text);
+  }
+
+  previewImage(link: string, id: string): void {
+    this.gs.previewImage(link, id);
   }
 }

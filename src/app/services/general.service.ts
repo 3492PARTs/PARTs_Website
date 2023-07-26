@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as saveAs from 'file-saver';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import * as LoadImg from 'blueimp-load-image';
 //import { saveAs } from 'file-saver';
 
 @Injectable({
@@ -178,6 +179,25 @@ export class GeneralService {
     else {
       return 'xs';
     }
+  }
+
+  previewImage(link: string, id: string) {
+    LoadImg(
+      link,
+      (img: any) => {
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        document.getElementById(id)!.appendChild(img);
+      },
+      {
+        //maxWidth: 600,
+        //maxHeight: 300,
+        //minWidth: 100,
+        //minHeight: 50,
+        //canvas: true,
+        orientation: true
+      }
+    );
   }
 
   devConsoleLog(x: any): void {

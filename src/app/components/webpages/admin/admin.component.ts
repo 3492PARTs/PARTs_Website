@@ -54,7 +54,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'item_desc', ColLabel: 'Description' },
     { PropertyName: 'quantity', ColLabel: 'Quantity' },
-    { PropertyName: 'img_url', ColLabel: 'Image' },
+    { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
   items: Item[] = [];
