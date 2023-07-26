@@ -1,5 +1,5 @@
 <div #formElement class="form-element"
-  [ngClass]="{'form-group': FormGroup, 'form-control-inline': FormInline, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox', 'otherOptionCheckboxElement': Type === 'checkbox' && LabelText.toLowerCase() === 'other' }">
+  [ngClass]="{'form-group': FormGroup, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox', 'otherOptionCheckboxElement': Type === 'checkbox' && LabelText.toLowerCase() === 'other' }">
   <label *ngIf="LabelText !== ''" #label
     [ngClass]="{'checkboxLabel': ['checkbox', 'multiCheckbox'].includes(Type), 'otherOptionCheckboxLabel': Type === 'checkbox' && LabelText.toLowerCase() === 'other', 'radioLabel': Type === 'radio'}"
     for="{{ LabelID }}">{{

@@ -29,9 +29,9 @@
         </app-form-element>
       </div>
       <div class="vertical-center">
-        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
-          [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-          [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormGroupInline]="true" [(Model)]="newAuthGroup.id"
+          [SelectList]="availableAuthGroups" [BindingProperty]="'id'" [DisplayProperty]="'name'"
+          [DisplayEmptyOption]="true">
         </app-form-element>
         <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
       </div>
@@ -70,23 +70,28 @@
 
   <app-modal [Title]="'Item'" [(visible)]="itemModalVisible">
     <app-form (SubmitFunction)="saveItem()">
-      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeItem.item_nm" [Required]="true">
+      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeItem.item_nm" [Required]="true"
+        [FormGroupInline]="true">
       </app-form-element>
-      <app-form-element [Type]="'area'" [LabelText]="'Description'" [FieldSize]="1000" [Width]="'100%'" [Rows]="5"
-        [(Model)]="activeItem.item_desc" [Required]="true"></app-form-element>
+
       <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="activeItem.quantity" [Required]="true"
-        [MinValue]="0">
+        [MinValue]="0" [FormGroupInline]="true">
       </app-form-element>
 
       <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeItem.active" [Required]="true"
-        [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
+        [TrueValue]="'y'" [FalseValue]="'n'" [FormGroupInline]="true"></app-form-element>
+
+      <app-form-element [Type]="'area'" [LabelText]="'Description'" [FieldSize]="1000" [Width]="'100%'" [Rows]="5"
+        [(Model)]="activeItem.item_desc" [Required]="true"></app-form-element>
 
       <app-form-element [Type]="'file'" [LabelText]="'Image'" [(Model)]="activeItem.img"
         (FunctionCallBack)="previewImageFile()"></app-form-element>
       <img *ngIf="activeItem.img_url" [src]="activeItem.img_url" height="300" />
       <div *ngIf="!activeItem.img_url" id="item-image"></div>
 
-      <app-button [Type]="'submit'">Save</app-button>
+      <app-button-ribbon>
+        <app-button [Type]="'submit'">Save</app-button>
+      </app-button-ribbon>
     </app-form>
   </app-modal>
 </app-box>

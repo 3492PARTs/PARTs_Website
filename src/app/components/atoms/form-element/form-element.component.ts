@@ -25,7 +25,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() FormGroup = false;
   @Input() FormGroupInline = false;
   @Input() RadioGroupStacked = false;
-  @Input() FormInline = false;
+  //@Input() FormInline = false;
   @Input() LabelText = '';
   @Input() Width = 'auto';
   @Input() MinWidth = 'auto';

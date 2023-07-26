@@ -25,9 +25,9 @@
         </app-form-element>
       </div>
       <div class="vertical-center">
-        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormInline]="true" [FormGroupInline]="true"
-          [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-          [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormGroupInline]="true" [(Model)]="newAuthGroup.id"
+          [SelectList]="availableAuthGroups" [BindingProperty]="'id'" [DisplayProperty]="'name'"
+          [DisplayEmptyOption]="true">
         </app-form-element>
         <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
       </div>
