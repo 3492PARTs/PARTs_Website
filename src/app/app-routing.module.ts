@@ -31,6 +31,7 @@ import { CompetitionComponent } from './components/webpages/media/competition/co
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
+import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
 
 
 
@@ -53,6 +54,7 @@ const routes: Routes = [
   { path: 'join/electrical', component: ElectricalComponent },
   { path: 'join/team-application', component: TeamApplicationComponent },
   { path: 'sponsor', component: SponsoringComponent },
+  { path: 'sponsor/shop', component: SponsorShopComponent },
   { path: 'about', component: AboutComponent },
   { path: 'media', component: MediaComponent },
   { path: 'media/build-season', component: BuildSeasonComponent },

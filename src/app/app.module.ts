@@ -83,6 +83,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
+import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
 
 @NgModule({
   declarations: [
@@ -144,7 +145,8 @@ import { TeamApplicationComponent } from './components/webpages/join/team-applic
     MatchPlanningComponent,
     SubNavigationComponent,
     ProfileComponent,
-    TeamApplicationComponent
+    TeamApplicationComponent,
+    SponsorShopComponent
   ],
   imports: [
     BrowserModule,
