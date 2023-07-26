@@ -1,1 +1,11 @@
-<p>shop works!</p>
+<div id="item-grid">
+    <div class="item-grid-item">
+        <app-box *ngFor="let item of items" [Title]="item.item_nm">
+            <div [id]="'item' + item.item_id" appOnCreate
+                (onCreate)="previewImage(item.img_url, 'item' + item.item_id)">
+            </div>
+            <p>Requested: {{ item.quantity }}</p>
+            <p>{{ item.item_desc }}</p>
+        </app-box>
+    </div>
+</div>
