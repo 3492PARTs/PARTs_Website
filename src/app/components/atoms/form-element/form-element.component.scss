@@ -124,6 +124,7 @@ textarea.form-control {
 .form-group-inline {
   display: inline-block;
   padding-right: 0.5em;
+  vertical-align: top;
 
   &.checkboxElement {
     display: inline-flex;

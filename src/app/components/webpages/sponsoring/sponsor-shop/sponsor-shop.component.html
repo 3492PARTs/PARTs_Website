@@ -1,6 +1,6 @@
 <div id="item-grid">
     <div *ngFor="let item of items" class="item-grid-item">
-        <app-box [Title]="item.item_nm">
+        <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
             <div [id]="'item' + item.item_id" appOnCreate
                 (onCreate)="previewImage(item.img_url, 'item' + item.item_id)">
             </div>
