@@ -57,7 +57,7 @@
               | RemovedFilterPipe
                 :EnableRemovedFilter
                 :RemovedFilterProperty
-                :RemovedFilterPropertyValue
+                :RemovedFilterPropertyValue; let i = index
           " (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)"
         [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer }">
         <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
@@ -73,7 +73,7 @@
               (FunctionCallBack)="Remove(rec)"></app-button>
           </div>
         </td>
-        <td *ngFor="let col of TableCols; let i = index"
+        <td *ngFor="let col of TableCols"
           [ngStyle]="{ 'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
           'color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)) === 'initial' ? 'initial' : 'white' }">
           <ng-container *ngIf="!col.Type; else Type">
