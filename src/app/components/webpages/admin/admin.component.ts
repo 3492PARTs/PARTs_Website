@@ -261,6 +261,7 @@ export class AdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.activeItem = new Item();
             this.itemModalVisible = false;
+            this.getItems();
           }
         },
         error: (err: any) => {
