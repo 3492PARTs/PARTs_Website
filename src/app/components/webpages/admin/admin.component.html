@@ -77,9 +77,14 @@
       <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="activeItem.quantity" [Required]="true"
         [MinValue]="0">
       </app-form-element>
+
       <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeItem.active" [Required]="true"
         [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
-      <app-form-element [Type]="'file'" [LabelText]="'Image'" [(Model)]="activeItem.img"></app-form-element>
+
+      <app-form-element [Type]="'file'" [LabelText]="'Image'" [(Model)]="activeItem.img"
+        (FunctionCallBack)="previewImageFile()"></app-form-element>
+      <img *ngIf="activeItem.img_url" [src]="activeItem.img_url" height="300" />
+      <div *ngIf="!activeItem.img_url" id="item-image"></div>
 
       <app-button [Type]="'submit'">Save</app-button>
     </app-form>

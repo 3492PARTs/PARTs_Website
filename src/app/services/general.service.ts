@@ -200,6 +200,18 @@ export class GeneralService {
     );
   }
 
+  previewImageFile(image: File, onLoad: any) {
+    // Show preview
+    const mimeType = image.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = onLoad;
+  }
+
   devConsoleLog(x: any): void {
     if (!environment.production) {
       console.log(x);

@@ -241,6 +241,7 @@ export class AdminComponent implements OnInit {
 
   editItem(i = new Item()): void {
     this.activeItem = i;
+    this.gs.previewImage(this.activeItem.img_url, 'item-image');
     this.itemModalVisible = true;
   }
 
@@ -270,6 +271,18 @@ export class AdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  previewImage(link: string, id: string): void {
+    this.gs.previewImage(link, id);
+  }
+
+  previewImageFile(): void {
+    this.gs.previewImageFile(this.activeItem.img, this.loadImage.bind(this))
+  }
+
+  loadImage(ev: ProgressEvent<FileReader>): any {
+    this.activeItem.img_url = ev.target?.result as string;
   }
 }
 
