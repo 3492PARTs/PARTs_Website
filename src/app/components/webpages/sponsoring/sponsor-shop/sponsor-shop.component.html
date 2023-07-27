@@ -16,11 +16,11 @@
             <mat-icon class="icon" [svgIcon]="cart.length > 0 ? 'cart' : 'cart-outline'"></mat-icon>
             <p>Cart</p>
         </span>
-        <app-button>View Cart</app-button>
+        <app-button (FunctionCallBack)="openCartModal()">View Cart</app-button>
     </app-button-ribbon>
 </app-box>
 
-<app-modal [Title]="'Cart'">
+<app-modal [Title]="'Cart'" [(visible)]="cartModalVisible">
 
 </app-modal>
 
@@ -33,7 +33,7 @@
             <p>Requested: {{ item.quantity }}</p>
             <p>{{ item.item_desc }}</p>
             <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
-                [MinValue]="0">
+                [MinValue]="0" [FormGroupInline]="true">
             </app-form-element>
             <app-button [ButtonType]="'cart-plus'" (FunctionCallBack)="addItemToCart(item)"></app-button>
         </app-box>

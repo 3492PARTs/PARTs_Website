@@ -297,8 +297,8 @@ export class Item {
   item_id!: number;
   item_nm = '';
   item_desc = '';
-  quantity = '';
-  sponsor_quantity = '';
+  quantity!: number;
+  sponsor_quantity!: number;
   reset_date = new Date();
   active = 'y';
   img!: any;
