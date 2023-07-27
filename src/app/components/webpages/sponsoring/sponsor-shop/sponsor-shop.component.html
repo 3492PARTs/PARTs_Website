@@ -4,15 +4,26 @@
         Use this shop as a way to know exactly what we need and donate towards specific items.
         We greatly appreciate all parts donated!
     </p>
+    <p>
+        Select a quantity of each item to donate and add it to your cart then check out and supply your information.
+        Your cart count will reflect the amount of unique items selected, also you can donate more than the requested
+        amount
+        of an item below.
+    </p>
     <app-button-ribbon>
         <span>
             {{ cart.length }}
             <mat-icon class="icon" [svgIcon]="cart.length > 0 ? 'cart' : 'cart-outline'"></mat-icon>
             <p>Cart</p>
         </span>
-        <app-button>Checkout</app-button>
+        <app-button>View Cart</app-button>
     </app-button-ribbon>
 </app-box>
+
+<app-modal [Title]="'Cart'">
+
+</app-modal>
+
 <div id="item-grid">
     <div *ngFor="let item of items" class="item-grid-item">
         <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
@@ -21,9 +32,10 @@
             </div>
             <p>Requested: {{ item.quantity }}</p>
             <p>{{ item.item_desc }}</p>
-            <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity">
+            <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
+                [MinValue]="0">
             </app-form-element>
-            <app-button [ButtonType]="'cart-plus'"></app-button>
+            <app-button [ButtonType]="'cart-plus'" (FunctionCallBack)="addItemToCart(item)"></app-button>
         </app-box>
     </div>
 </div>

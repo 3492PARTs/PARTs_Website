@@ -13,6 +13,8 @@ export class SponsorShopComponent implements OnInit {
   items: Item[] = [];
   cart: Item[] = [];
 
+  cartModalVisible = false;
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit(): void {
@@ -39,6 +41,26 @@ export class SponsorShopComponent implements OnInit {
         }
       }
     );
+  }
+
+  addItemToCart(item: Item): void {
+    let match = false;
+    this.cart.forEach(cartItem => {
+      if (cartItem.item_id === item.item_id) {
+        match = true;
+        cartItem.sponsor_quantity += item.sponsor_quantity;
+      }
+    });
+
+    if (!match)
+      this.cart.push(item);
+
+    item.quantity -= item.sponsor_quantity;
+    item.sponsor_quantity = 0;
+  }
+
+  openCartModal(): void {
+    this.cartModalVisible = true;
   }
 
   previewImage(link: string, id: string): void {
