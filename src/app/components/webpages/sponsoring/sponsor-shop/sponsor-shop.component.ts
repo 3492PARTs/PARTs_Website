@@ -11,6 +11,7 @@ import { Item } from '../../admin/admin.component';
 })
 export class SponsorShopComponent implements OnInit {
   items: Item[] = [];
+  cart: Item[] = [];
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 

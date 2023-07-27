@@ -298,6 +298,7 @@ export class Item {
   item_nm = '';
   item_desc = '';
   quantity = '';
+  sponsor_quantity = '';
   reset_date = new Date();
   active = 'y';
   img!: any;

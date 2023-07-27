@@ -90,4 +90,8 @@
     [ngStyle]="{ width: SymbolSize, height: SymbolSize }" (click)="RunFunction()" type="{{ Type }}">
     &times;
   </button>
+  <button #thisButton *ngSwitchDefault="" class="btn-symbol" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()" type="{{ Type }}">
+    <mat-icon class="icon" [svgIcon]="ButtonType"></mat-icon>
+  </button>
 </ng-container>
