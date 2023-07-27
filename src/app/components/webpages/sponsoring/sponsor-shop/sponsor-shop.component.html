@@ -27,15 +27,21 @@
 <div id="item-grid">
     <div *ngFor="let item of items" class="item-grid-item">
         <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
-            <div [id]="'item' + item.item_id" appOnCreate
-                (onCreate)="previewImage(item.img_url, 'item' + item.item_id)">
+            <div class="item-info">
+                <div>
+                    <div [id]="'item' + item.item_id" appOnCreate
+                        (onCreate)="previewImage(item.img_url, 'item' + item.item_id)">
+                    </div>
+                    <p>Requested: {{ item.quantity }}</p>
+                    <p>{{ item.item_desc }}</p>
+                </div>
+                <div class="item-quantity">
+                    <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
+                        [MinValue]="0" [FormGroupInline]="true">
+                    </app-form-element>
+                    <app-button [ButtonType]="'cart-plus'" (FunctionCallBack)="addItemToCart(item)"></app-button>
+                </div>
             </div>
-            <p>Requested: {{ item.quantity }}</p>
-            <p>{{ item.item_desc }}</p>
-            <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
-                [MinValue]="0" [FormGroupInline]="true">
-            </app-form-element>
-            <app-button [ButtonType]="'cart-plus'" (FunctionCallBack)="addItemToCart(item)"></app-button>
         </app-box>
     </div>
 </div>

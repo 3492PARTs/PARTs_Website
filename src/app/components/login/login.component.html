@@ -24,7 +24,7 @@
             |
             <a (click)="page = 'register'">Register</a>
           </div>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="login()">Login</app-button>
+          <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="login()">Login</app-button>
         </div>
         <div id="options">
           <a (click)="changePage('resendConfirmation')">Resend Activation</a>

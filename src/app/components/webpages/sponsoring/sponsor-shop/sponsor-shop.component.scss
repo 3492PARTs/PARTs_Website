@@ -5,5 +5,12 @@
   //grid-auto-rows: 50rem;
 
   .item-grid-item {
+    .item-info {
+      .item-quantity {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
   }
 }
