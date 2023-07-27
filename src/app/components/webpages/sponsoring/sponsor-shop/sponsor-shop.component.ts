@@ -12,6 +12,11 @@ import { Item } from '../../admin/admin.component';
 export class SponsorShopComponent implements OnInit {
   items: Item[] = [];
   cart: Item[] = [];
+  cartTableCols: object[] = [
+    { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '100px' },
+    { PropertyName: 'item_nm', ColLabel: 'Item' },
+    { PropertyName: 'sponsor_quantity', ColLabel: 'Quantity' },
+  ];
 
   cartModalVisible = false;
 
@@ -44,19 +49,21 @@ export class SponsorShopComponent implements OnInit {
   }
 
   addItemToCart(item: Item): void {
-    let match = false;
-    this.cart.forEach(cartItem => {
-      if (cartItem.item_id === item.item_id) {
-        match = true;
-        cartItem.sponsor_quantity += item.sponsor_quantity;
-      }
-    });
+    if (item.sponsor_quantity > 0) {
+      let match = false;
+      this.cart.forEach(cartItem => {
+        if (cartItem.item_id === item.item_id) {
+          match = true;
+          cartItem.sponsor_quantity += item.sponsor_quantity;
+        }
+      });
 
-    if (!match)
-      this.cart.push(item);
+      if (!match)
+        this.cart.push(item);
 
-    item.quantity -= item.sponsor_quantity;
-    item.sponsor_quantity = 0;
+      item.quantity -= item.sponsor_quantity;
+      item.sponsor_quantity = 0;
+    }
   }
 
   openCartModal(): void {

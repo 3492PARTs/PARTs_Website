@@ -21,7 +21,9 @@
 </app-box>
 
 <app-modal [Title]="'Cart'" [(visible)]="cartModalVisible">
-
+    <app-table [TableCols]="cartTableCols" [TableData]="cart" [Scrollable]="true" [Responsive]="true"
+        [ScrollHeight]="'50rem'">
+    </app-table>
 </app-modal>
 
 <div id="item-grid">

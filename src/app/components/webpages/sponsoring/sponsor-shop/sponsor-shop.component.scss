@@ -6,6 +6,11 @@
 
   .item-grid-item {
     .item-info {
+      height: 100%;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+
       .item-quantity {
         display: flex;
         align-items: center;
