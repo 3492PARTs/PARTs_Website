@@ -218,6 +218,10 @@ export class GeneralService {
     }
   }
 
+  cloneObject(o: any): any {
+    return JSON.parse(JSON.stringify(o));
+  }
+
   // For one given propery and its value, get the value of another propery in the same object
   propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
     for (let i = 0; i < arr.length; i++) {

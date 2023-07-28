@@ -123,8 +123,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.Width = '100%';
     }
 
-    if (this.Type === 'number' && this.MinValue !== null && this.MinValue !== undefined) {
-      this.change(this.MinValue);
+    if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
+      window.setTimeout(() => { this.change(this.MinValue); }, 1);
     }
   }
 

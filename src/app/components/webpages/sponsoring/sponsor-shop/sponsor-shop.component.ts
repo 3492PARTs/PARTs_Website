@@ -13,9 +13,9 @@ export class SponsorShopComponent implements OnInit {
   items: Item[] = [];
   cart: Item[] = [];
   cartTableCols: object[] = [
-    { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '100px' },
+    { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '125px' },
     { PropertyName: 'item_nm', ColLabel: 'Item' },
-    { PropertyName: 'sponsor_quantity', ColLabel: 'Quantity' },
+    { PropertyName: 'sponsor_quantity', ColLabel: 'Quantity', Type: 'number', MinValue: 0, Width: '100px', FunctionCallBack: this.removeEmptyCartItem.bind(this) },
   ];
 
   cartModalVisible = false;
@@ -59,7 +59,7 @@ export class SponsorShopComponent implements OnInit {
       });
 
       if (!match)
-        this.cart.push(item);
+        this.cart.push(this.gs.cloneObject(item));
 
       item.quantity -= item.sponsor_quantity;
       item.sponsor_quantity = 0;
@@ -68,6 +68,20 @@ export class SponsorShopComponent implements OnInit {
 
   openCartModal(): void {
     this.cartModalVisible = true;
+  }
+
+  removeCartItem(item: Item): void {
+    this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
+    this.addItemBack(item, item.sponsor_quantity);
+  }
+
+  removeEmptyCartItem(item: Item): void {
+    if (item.sponsor_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
+    //this.addItemBack(item, 1);
+  }
+
+  addItemBack(item: Item, quantity: number): void {
+    this.items[this.gs.arrayObjectIndexOf(this.items, item.item_id, 'item_id')].quantity += quantity;
   }
 
   previewImage(link: string, id: string): void {

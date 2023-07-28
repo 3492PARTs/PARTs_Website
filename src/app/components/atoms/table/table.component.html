@@ -85,11 +85,13 @@
             <ng-container [ngSwitch]="col.Type">
               <app-form-element *ngSwitchCase="'select'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
                 [Width]="'100%'" [Disabled]="DisableInputs" [SelectList]="col.SelectList"
-                [DisplayProperty]="col.DisplayProperty" [BindingProperty]="col.BindingProperty">
+                [DisplayProperty]="col.DisplayProperty" [BindingProperty]="col.BindingProperty"
+                (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
               <app-form-element *ngSwitchCase="'checkbox'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
-                [TrueValue]="col.TrueValue" [FalseValue]="col.FalseValue" [Disabled]="DisableInputs">
+                [TrueValue]="col.TrueValue" [FalseValue]="col.FalseValue" [Disabled]="DisableInputs"
+                (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
               <span *ngSwitchCase="'function'">
@@ -101,7 +103,9 @@
               </span>
 
               <app-form-element *ngSwitchDefault [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"
-                [Disabled]="DisableInputs" [FieldSize]="col.FieldSize" [Rows]="col.Rows ? col.Rows : null">
+                [Disabled]="DisableInputs" [FieldSize]="col.FieldSize" [Rows]="col.Rows ? col.Rows : null"
+                [MinValue]="col.MinValue" [MaxValue]="col.MaxValue"
+                (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
             </ng-container>
           </ng-template>

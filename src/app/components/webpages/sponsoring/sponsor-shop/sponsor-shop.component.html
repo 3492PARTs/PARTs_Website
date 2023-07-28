@@ -22,7 +22,7 @@
 
 <app-modal [Title]="'Cart'" [(visible)]="cartModalVisible">
     <app-table [TableCols]="cartTableCols" [TableData]="cart" [Scrollable]="true" [Responsive]="true"
-        [ScrollHeight]="'50rem'">
+        [ScrollHeight]="'50rem'" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeCartItem($event)">
     </app-table>
 </app-modal>
 
