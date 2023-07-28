@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general.service';
-import { Item } from '../../admin/admin.component';
+import { Item, Sponsor } from '../../admin/admin.component';
 
 @Component({
   selector: 'app-sponsor-shop',
@@ -10,6 +10,8 @@ import { Item } from '../../admin/admin.component';
   styleUrls: ['./sponsor-shop.component.scss']
 })
 export class SponsorShopComponent implements OnInit {
+  sponsors: Sponsor[] = [];
+
   items: Item[] = [];
   cart: Item[] = [];
   cartTableCols: object[] = [
@@ -36,6 +38,27 @@ export class SponsorShopComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.items = result as Item[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getSponsors(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'sponsoring/get-sponsors/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.sponsors = result as Sponsor[];
           }
         },
         error: (err: any) => {
