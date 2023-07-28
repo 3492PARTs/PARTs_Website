@@ -11,6 +11,7 @@ import { Item, Sponsor } from '../../admin/admin.component';
 })
 export class SponsorShopComponent implements OnInit {
   sponsors: Sponsor[] = [];
+  activeSponsor = new Sponsor();
 
   items: Item[] = [];
   cart: Item[] = [];
