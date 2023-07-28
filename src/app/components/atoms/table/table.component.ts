@@ -70,7 +70,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() CursorPointer = false;
 
   @Input() DisableInputs = false;
-  @Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
+  //@Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
 
   @Input() Width = '';
 
