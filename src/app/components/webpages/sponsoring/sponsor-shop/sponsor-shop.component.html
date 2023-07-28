@@ -1,4 +1,4 @@
-<app-box [Title]="'Welcome to PARTs Pit Shop!'">
+<app-box [Title]="'Welcome to the PARTs Sponsor Shop!'">
     <p>Help up by sponsoring some parts, choose some parts, give us your information and well contact you for your
         donation.
         Use this shop as a way to know exactly what we need and donate towards specific items.
@@ -25,7 +25,7 @@
         [ScrollHeight]="'50rem'" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeCartItem($event)">
     </app-table>
 
-    <app-form>
+    <app-form (SubmitFunction)="saveSponsorOrder()">
         <app-form-element-group [LabelText]="'Information'">
             <app-form-element [Type]="'select'" [SelectList]="sponsors" [LabelText]="'Existing Sponsors'">
             </app-form-element>

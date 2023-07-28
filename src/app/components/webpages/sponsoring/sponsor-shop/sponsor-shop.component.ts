@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
+import { Banner, GeneralService } from 'src/app/services/general.service';
 import { Item, Sponsor } from '../../admin/admin.component';
 
 @Component({
@@ -26,9 +26,13 @@ export class SponsorShopComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getItems() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.initSponsorShop() : null);
   }
 
+  initSponsorShop(): void {
+    this.getItems();
+    this.getSponsors();
+  }
 
   getItems(): void {
     this.gs.incrementOutstandingCalls();
@@ -106,6 +110,40 @@ export class SponsorShopComponent implements OnInit {
 
   addItemBack(item: Item, quantity: number): void {
     this.items[this.gs.arrayObjectIndexOf(this.items, item.item_id, 'item_id')].quantity += quantity;
+  }
+
+  saveSponsorOrder(): void {
+    let hasItem = false;
+    this.cart.forEach(i => {
+      if (i.sponsor_quantity > 0) hasItem = true;
+    });
+
+    if (!hasItem) {
+      this.gs.addBanner(new Banner('Must have items to submit an order.', 3500));
+      return;
+    }
+
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
+            this.cart = [];
+            this.activeSponsor = new Sponsor();
+            this.initSponsorShop();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   previewImage(link: string, id: string): void {
