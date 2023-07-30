@@ -84,6 +84,7 @@ import { ProfileComponent } from './components/webpages/user/profile/profile.com
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
 import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
+import { MainViewComponent } from './components/atoms/main-view/main-view.component';
 
 @NgModule({
   declarations: [
@@ -146,7 +147,8 @@ import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-s
     SubNavigationComponent,
     ProfileComponent,
     TeamApplicationComponent,
-    SponsorShopComponent
+    SponsorShopComponent,
+    MainViewComponent
   ],
   imports: [
     BrowserModule,

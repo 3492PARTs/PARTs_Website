@@ -1,7 +1,7 @@
 @import "../../../../scss/abstracts/variables.scss";
 
 .box {
-  width: 90%;
+  width: 100%;
   max-width: 1900px;
   box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
   transition: height 0.2s ease-in-out;
@@ -47,11 +47,4 @@ h2 {
 
 .HeaderWithCollapse {
   margin-left: calc(1.25em + 34px);
-}
-
-/*MOBILE */
-@media only screen and (max-width: $screen-size-xlg) {
-  .box {
-    width: 100%;
-  }
 }
