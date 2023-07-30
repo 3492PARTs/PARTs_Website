@@ -31,7 +31,7 @@ export class SponsorShopComponent implements OnInit {
 
   initSponsorShop(): void {
     this.getItems();
-    this.getSponsors();
+    //this.getSponsors();
   }
 
   getItems(): void {
@@ -120,6 +120,11 @@ export class SponsorShopComponent implements OnInit {
 
     if (!hasItem) {
       this.gs.addBanner(new Banner('Must have items to submit an order.', 3500));
+      return;
+    }
+
+    if (!this.gs.strNoE(this.activeSponsor.sponsor_nm) && !this.gs.strNoE(this.activeSponsor.email) && !this.gs.strNoE(this.activeSponsor.phone)) {
+      this.gs.addBanner(new Banner('Please fill out all contact information.', 3500));
       return;
     }
 
