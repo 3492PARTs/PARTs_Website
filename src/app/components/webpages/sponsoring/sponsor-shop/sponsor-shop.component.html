@@ -13,12 +13,12 @@
             of an item below.
         </p>
         <app-button-ribbon>
-            <span>
-                {{ cart.length }}
-                <mat-icon class="icon" [svgIcon]="cart.length > 0 ? 'cart' : 'cart-outline'"></mat-icon>
-                <p>Cart</p>
-            </span>
-            <app-button (FunctionCallBack)="openCartModal()">View Cart</app-button>
+            <app-button (FunctionCallBack)="openCartModal()">
+                <span id="checkout">
+                    <mat-icon class="icon" [svgIcon]="cart.length > 0 ? 'cart' : 'cart-outline'"></mat-icon>
+                    {{ cart.length }}
+                </span>
+            </app-button>
         </app-button-ribbon>
     </app-box>
 

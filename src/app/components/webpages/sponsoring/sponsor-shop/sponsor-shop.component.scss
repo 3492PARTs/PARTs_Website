@@ -1,5 +1,15 @@
 @import "../../../../../scss/abstracts/variables.scss";
 
+#checkout {
+  display: flex;
+  align-items: center;
+  color: white;
+
+  .icon {
+    fill: white;
+  }
+}
+
 #item-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);

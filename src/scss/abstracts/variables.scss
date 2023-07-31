@@ -7,6 +7,8 @@ $gray: #676767;
 
 $fontColor: #000;
 $hover_color: #0065c4;
+//TODO come back and fix these ranges now that i know i can use
+//calc() in the media queries to add one to a range
 $screen-size-xxxxlg: 2000px;
 $screen-size-xxxlg: 1400px;
 $screen-size-xxlg: 1200px;
