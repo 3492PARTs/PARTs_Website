@@ -48,7 +48,7 @@
             <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
                 <div class="item-info">
                     <div>
-                        <div [id]="'item' + item.item_id" appOnCreate
+                        <div class="item-pic" [id]="'item' + item.item_id" appOnCreate
                             (onCreate)="previewImage(item.img_url, 'item' + item.item_id)">
                         </div>
                         <p>Requested: {{ item.quantity }}</p>

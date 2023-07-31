@@ -1,8 +1,37 @@
+@import "../../../../../scss/abstracts/variables.scss";
+
 #item-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 1rem;
   //grid-auto-rows: 50rem;
+
+  @media screen and (max-width: calc($screen-size-xs - 1px)) {
+    .item-pic {
+      width: 20rem;
+      margin: 0 auto;
+    }
+  }
+
+  @media screen and (min-width: $screen-size-xs) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media screen and (min-width: $screen-size-sm) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media screen and (min-width: $screen-size-xxlg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media screen and (min-width: $screen-size-xxxlg) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  @media screen and (min-width: $screen-size-xxxxlg) {
+    grid-template-columns: repeat(6, 1fr);
+  }
 
   .item-grid-item {
     .item-info {
