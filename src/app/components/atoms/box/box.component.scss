@@ -12,14 +12,19 @@
   //min-height: calc(100vh - 7em);
   border-radius: 0.35em;
   position: relative;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
 .box-content {
   transition: 0.2s ease-in-out;
   overflow: hidden;
   width: 100%;
-  height: calc(100% - (0.75em * 2) - 4rem);
+  //height: calc(100% - (0.75em * 2) - 4rem);
   padding: 2rem;
+  flex-grow: 2;
 }
 
 h2 {
