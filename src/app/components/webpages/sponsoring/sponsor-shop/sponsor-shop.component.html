@@ -52,8 +52,10 @@
                             <div class="item-pic-img" [id]="'item' + item.item_id" appOnCreate
                                 (onCreate)="previewImage(item.img_url, 'item' + item.item_id)"></div>
                         </div>
-                        <p>Requested: {{ item.quantity }}</p>
-                        <p>{{ item.item_desc }}</p>
+                        <div class="item-desc">
+                            <p>Requested: {{ item.quantity }}</p>
+                            <p>{{ item.item_desc }}</p>
+                        </div>
                     </div>
                     <div class="item-quantity">
                         <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
