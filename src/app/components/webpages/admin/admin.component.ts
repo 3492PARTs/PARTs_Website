@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-admin',
@@ -250,7 +251,11 @@ export class AdminComponent implements OnInit {
     let formData = new FormData();
     //formData.append('file', this.form.get('profile').value);
     for (const [k, v] of Object.entries(this.activeItem)) {
-      formData.append(k, v);
+      if (moment.isMoment(v)) {
+        formData.append(k, v.format('YYYY-MM-DD'));
+      }
+      else
+        formData.append(k, v);
     }
 
     this.http.post(

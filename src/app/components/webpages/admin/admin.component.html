@@ -78,6 +78,10 @@
         [MinValue]="0" [FormGroupInline]="true">
       </app-form-element>
 
+      <app-form-element [Type]="'date'" [LabelText]="'Reset'" [(Model)]="activeItem.reset_date" [Required]="true"
+        [FormGroupInline]="true">
+      </app-form-element>
+
       <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeItem.active" [Required]="true"
         [TrueValue]="'y'" [FalseValue]="'n'" [FormGroupInline]="true"></app-form-element>
 

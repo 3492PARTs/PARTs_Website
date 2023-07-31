@@ -185,9 +185,11 @@ export class GeneralService {
     LoadImg(
       link,
       (img: any) => {
-        img.style.width = '100%';
-        img.style.height = 'auto';
-        document.getElementById(id)!.appendChild(img);
+        if (img) {
+          img.style.width = '100%';
+          img.style.height = 'auto';
+          document.getElementById(id)!.appendChild(img);
+        }
       },
       {
         //maxWidth: 600,
