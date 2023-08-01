@@ -78,6 +78,10 @@
         [MinValue]="0" [FormGroupInline]="true">
       </app-form-element>
 
+      <app-form-element [Type]="'number'" [LabelText]="'Donated'" [(Model)]="activeItem.sponsor_quantity"
+        [Required]="true" [MinValue]="0" [FormGroupInline]="true" [Disabled]="true">
+      </app-form-element>
+
       <app-form-element [Type]="'date'" [LabelText]="'Reset'" [(Model)]="activeItem.reset_date" [Required]="true"
         [FormGroupInline]="true">
       </app-form-element>

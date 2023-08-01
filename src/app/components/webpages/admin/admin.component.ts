@@ -55,6 +55,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'item_desc', ColLabel: 'Description' },
     { PropertyName: 'quantity', ColLabel: 'Quantity' },
+    { PropertyName: 'sponsor_quantity', ColLabel: 'Donated' },
     { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];

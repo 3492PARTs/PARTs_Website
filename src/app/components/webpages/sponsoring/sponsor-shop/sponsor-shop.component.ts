@@ -123,7 +123,7 @@ export class SponsorShopComponent implements OnInit {
       return;
     }
 
-    if (!this.gs.strNoE(this.activeSponsor.sponsor_nm) && !this.gs.strNoE(this.activeSponsor.email) && !this.gs.strNoE(this.activeSponsor.phone)) {
+    if (this.gs.strNoE(this.activeSponsor.sponsor_nm) || this.gs.strNoE(this.activeSponsor.email) || this.gs.strNoE(this.activeSponsor.phone)) {
       this.gs.addBanner(new Banner('Please fill out all contact information.', 3500));
       return;
     }

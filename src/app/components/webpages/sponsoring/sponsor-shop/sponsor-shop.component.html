@@ -53,7 +53,7 @@
                                 (onCreate)="previewImage(item.img_url, 'item' + item.item_id)"></div>
                         </div>
                         <div class="item-desc">
-                            <p>Requested: {{ item.quantity }}</p>
+                            <p>Requested: {{ item.quantity - item.sponsor_quantity }}</p>
                             <p>{{ item.item_desc }}</p>
                         </div>
                     </div>
