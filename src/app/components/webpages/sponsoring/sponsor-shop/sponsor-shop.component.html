@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="item-quantity">
-                        <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.sponsor_quantity"
+                        <app-form-element [Type]="'number'" [LabelText]="'Quantity'" [(Model)]="item.cart_quantity"
                             [MinValue]="0" [FormGroupInline]="true">
                         </app-form-element>
                         <app-button [ButtonType]="'cart-plus'" (FunctionCallBack)="addItemToCart(item)"></app-button>

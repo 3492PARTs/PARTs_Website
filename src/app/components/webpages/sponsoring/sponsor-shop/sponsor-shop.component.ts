@@ -18,7 +18,7 @@ export class SponsorShopComponent implements OnInit {
   cartTableCols: object[] = [
     { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '125px' },
     { PropertyName: 'item_nm', ColLabel: 'Item' },
-    { PropertyName: 'sponsor_quantity', ColLabel: 'Quantity', Type: 'number', MinValue: 0, Width: '100px', FunctionCallBack: this.removeEmptyCartItem.bind(this) },
+    { PropertyName: 'cart_quantity', ColLabel: 'Quantity', Type: 'number', MinValue: 0, Width: '100px', FunctionCallBack: this.removeEmptyCartItem.bind(this) },
   ];
 
   cartModalVisible = false;
@@ -77,20 +77,20 @@ export class SponsorShopComponent implements OnInit {
   }
 
   addItemToCart(item: Item): void {
-    if (item.sponsor_quantity > 0) {
+    if (item.cart_quantity > 0) {
       let match = false;
       this.cart.forEach(cartItem => {
         if (cartItem.item_id === item.item_id) {
           match = true;
-          cartItem.sponsor_quantity += item.sponsor_quantity;
+          cartItem.cart_quantity += item.cart_quantity;
         }
       });
 
       if (!match)
         this.cart.push(this.gs.cloneObject(item));
 
-      item.quantity -= item.sponsor_quantity;
-      item.sponsor_quantity = 0;
+      item.sponsor_quantity += item.cart_quantity;
+      item.cart_quantity = 0;
     }
   }
 
@@ -100,22 +100,22 @@ export class SponsorShopComponent implements OnInit {
 
   removeCartItem(item: Item): void {
     this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
-    this.addItemBack(item, item.sponsor_quantity);
+    this.addItemBack(item, item.cart_quantity);
   }
 
   removeEmptyCartItem(item: Item): void {
-    if (item.sponsor_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
+    if (item.cart_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
     //this.addItemBack(item, 1);
   }
 
   addItemBack(item: Item, quantity: number): void {
-    this.items[this.gs.arrayObjectIndexOf(this.items, item.item_id, 'item_id')].quantity += quantity;
+    this.items[this.gs.arrayObjectIndexOf(this.items, item.item_id, 'item_id')].sponsor_quantity -= quantity;
   }
 
   saveSponsorOrder(): void {
     let hasItem = false;
     this.cart.forEach(i => {
-      if (i.sponsor_quantity > 0) hasItem = true;
+      if (i.cart_quantity > 0) hasItem = true;
     });
 
     if (!hasItem) {

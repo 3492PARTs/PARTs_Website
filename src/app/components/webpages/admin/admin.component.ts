@@ -305,6 +305,7 @@ export class Item {
   item_desc = '';
   quantity!: number;
   sponsor_quantity!: number;
+  cart_quantity!: number;
   reset_date = new Date();
   active = 'y';
   img!: any;
