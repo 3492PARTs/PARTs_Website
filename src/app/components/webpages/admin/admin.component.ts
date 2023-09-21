@@ -16,6 +16,7 @@ export class AdminComponent implements OnInit {
   page = 'users';
 
   init: AdminInit = new AdminInit();
+  users: User[] = [];
 
   userTableCols: object[] = [
     { PropertyName: 'first_name', ColLabel: 'First' },
@@ -298,7 +299,6 @@ export class AdminComponent implements OnInit {
 }
 
 export class AdminInit {
-  users: User[] = [];
   userGroups: AuthGroup[] = [];
   phoneTypes: PhoneType[] = [];
 }
