@@ -22,9 +22,9 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'last_name', ColLabel: 'Last' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
-    { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'is_active', ColLabel: 'Active' }
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
+    { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
+    { PropertyName: 'is_active', ColLabel: 'Active', Type: 'checkbox', FunctionCallBack: this.saveUser.bind(this) }
   ];
 
   manageUserModalVisible = false;
@@ -155,8 +155,11 @@ export class AdminComponent implements OnInit {
     this.buildAvailableUserGroups();
   }
 
-  saveUser(): void {
+  saveUser(u?: User): void {
     this.gs.incrementOutstandingCalls();
+
+    if (u) this.activeUser = u;
+
     this.http.post(
       'admin/save-user/', { user: this.activeUser, groups: this.userGroups }
     ).subscribe(
@@ -165,6 +168,7 @@ export class AdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.manageUserModalVisible = false;
+            this.activeUser = new User();
             this.adminInit();
           }
         },

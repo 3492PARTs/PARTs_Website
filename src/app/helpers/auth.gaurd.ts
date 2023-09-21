@@ -6,7 +6,7 @@ import { map, skipWhile } from 'rxjs/operators';
 import { AuthCallStates, AuthService, User } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard  {
+export class AuthGuard {
   private authInFlight = AuthCallStates.prcs;
 
   constructor(
