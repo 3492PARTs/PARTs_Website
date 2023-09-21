@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sponsoring',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SponsoringComponent implements OnInit {
 
+  test = false;
+
   constructor() { }
 
   ngOnInit() {
+    this.test = !environment.production;
   }
 
 }
