@@ -209,8 +209,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.ModelChange.emit(newValue);
     }
 
-    this.FunctionCallBack.emit();
-    this.isInvalid();
+    if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
 
   multiChange(newValue: any, index: number) {
