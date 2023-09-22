@@ -30,6 +30,9 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'is_active', ColLabel: 'Active', Type: 'checkbox', FunctionCallBack: this.saveUser.bind(this) }
   ];
 
+  userOptions = ['Active', 'Inactive'];
+  userOption = 'Active';
+
   manageUserModalVisible = false;
   activeUser: User = new User();
   userGroups: AuthGroup[] = [];
@@ -86,7 +89,7 @@ export class AdminComponent implements OnInit {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers();
+        this.us.getUsers(this.userOption === 'Active');
       }
     });
 
@@ -122,6 +125,10 @@ export class AdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  getUsers() {
+    this.us.getUsers(this.userOption === 'Active');
   }
 
   showManageUserModal(u: User): void {
