@@ -33,13 +33,14 @@ export class ScoutAdminComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  userTableCols: object[] = [
+  userTableCols: any[] = [
     { PropertyName: 'first_name', ColLabel: 'First' },
     { PropertyName: 'last_name', ColLabel: 'Last' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
     { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
     { PropertyName: 'is_active', ColLabel: 'Active', Type: 'checkbox', FunctionCallBack: this.saveUser.bind(this) }
 
   ];
@@ -116,6 +117,7 @@ export class ScoutAdminComponent implements OnInit {
             });
             this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.buildEventList();
+            this.userTableCols[this.gs.arrayObjectIndexOf(this.userTableCols, 'phone_type_id', 'PropertyName')]['SelectList'] = this.init.phoneTypes;
           }
         },
         error: (err: any) => {
