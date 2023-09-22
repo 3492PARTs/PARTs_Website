@@ -597,6 +597,11 @@ header {
         width: 50%;
       }
 
+      /*SCREEN SIZE:ULTRA WIDE SCREEN*/
+      @media only screen and (min-width: $screen-size-xxxlg) {
+        width: 40%;
+      }
+
       display: grid;
       grid-template-columns: 50% 50%;
       grid-template-rows: auto auto auto auto;
