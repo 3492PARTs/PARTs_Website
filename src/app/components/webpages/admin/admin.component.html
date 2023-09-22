@@ -1,5 +1,5 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
-  <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+  <app-table [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true" [ShowEditButton]="true"
     (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
