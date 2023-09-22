@@ -166,14 +166,13 @@ export class AdminComponent implements OnInit {
   }
 
   saveUser(u?: User): void {
-    this.gs.incrementOutstandingCalls();
-
     if (u) this.activeUser = u;
 
     this.us.saveUser(this.activeUser, this.userGroups, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
+      this.us.getUsers();
     });
   }
 

@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-scout-admin',
@@ -16,6 +17,7 @@ export class ScoutAdminComponent implements OnInit {
   page = 'users';
 
   init: ScoutAdminInit = new ScoutAdminInit();
+  users: User[] = [];
   //season!: number;
   newSeason!: number;
   delSeason!: number;
@@ -75,12 +77,19 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService) {
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => this.page = p);
+    this.us.currentUsers.subscribe(u => this.users = u);
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.adminInit() : null);
+    this.authService.authInFlight.subscribe(r => {
+      if (r === AuthCallStates.comp) {
+        this.adminInit();
+        this.us.getUsers();
+      }
+    });
+
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
       new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
@@ -547,32 +556,14 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   saveUser(u?: User): void {
-    this.gs.incrementOutstandingCalls();
-
     if (u) this.activeUser = u;
 
-    this.http.post(
-      'admin/save-user/', { user: this.activeUser, groups: this.userGroups }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-          }
-          this.manageUserModalVisible = false;
-          this.activeUser = new User();
-          this.adminInit();
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.us.saveUser(this.activeUser, this.userGroups, () => {
+      this.manageUserModalVisible = false;
+      this.activeUser = new User();
+      this.adminInit();
+      this.us.getUsers();
+    });
   }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
@@ -809,7 +800,6 @@ export class ScoutAdminInit {
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
-  users: User[] = [];
   userGroups: AuthGroup[] = [];
   phoneTypes: PhoneType[] = [];
   fieldSchedule: ScoutFieldSchedule[] = [];
