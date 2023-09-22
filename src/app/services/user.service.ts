@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private http: HttpClient, private gs: GeneralService) { }
 
-  getUsers(is_active = true) {
+  getUsers(is_active = 0) {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'user/users/',

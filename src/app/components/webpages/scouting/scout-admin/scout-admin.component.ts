@@ -41,7 +41,6 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
     { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
     { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
-    { PropertyName: 'is_active', ColLabel: 'Active', Type: 'checkbox', FunctionCallBack: this.saveUser.bind(this) }
 
   ];
 
@@ -87,7 +86,7 @@ export class ScoutAdminComponent implements OnInit {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers();
+        this.us.getUsers(1);
       }
     });
 
@@ -564,7 +563,7 @@ export class ScoutAdminComponent implements OnInit {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
-      this.us.getUsers();
+      this.us.getUsers(1);
     });
   }
 

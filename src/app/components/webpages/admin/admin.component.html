@@ -1,6 +1,6 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
   <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
-    (FunctionCallBack)="getUsers()"></app-form-element>
+    [DisplayProperty]="'property'" [BindingProperty]="'value'" (FunctionCallBack)="getUsers()"></app-form-element>
   <app-table [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true" [ShowEditButton]="true"
     (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
