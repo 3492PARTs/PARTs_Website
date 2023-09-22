@@ -1,6 +1,6 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
 
-  <app-table [TableCols]="userTableCols" [TableData]="init.users" [Scrollable]="true" [ShowEditButton]="true"
+  <app-table [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true" [ShowEditButton]="true"
     (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
@@ -67,32 +67,32 @@
     <app-form>
       <app-form-element-group [LabelText]="'New Entry'">
 
-        <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Red One'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.red_one_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
-        <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Red Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.red_two_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
-        <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Red Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.red_three_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
-        <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Blue One'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.blue_one_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
-        <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Blue Two'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.blue_two_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">
         </app-form-element>
-        <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+        <app-form-element [LabelText]="'Blue Three'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
           [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
           [(Model)]="scoutFieldSchedule.blue_three_id" [FormGroupInline]="true"
           [SelectComparatorFunction]="compareUserObjects">

@@ -122,9 +122,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
     }
-
-    if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
+    else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
       window.setTimeout(() => { this.change(this.MinValue); }, 1);
+    }
+    else if (this.Type === 'phone') {
+      this.phoneMaskFn(this.Model, true);
     }
   }
 
@@ -207,8 +209,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.ModelChange.emit(newValue);
     }
 
-    this.FunctionCallBack.emit();
-    this.isInvalid();
+    if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
 
   multiChange(newValue: any, index: number) {
@@ -469,7 +470,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     return this.gs.strNoE(a);
   }
 
-  phoneMaskFn(value: string) {
+  phoneMaskFn(value: string, init = false) {
     window.setTimeout(() => {
       this.phoneMaskModel = '';
     }, 1);
@@ -484,6 +485,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
     }, 1);
 
-    this.change(phone);
+    if (!init) this.change(phone);
   };
 }
