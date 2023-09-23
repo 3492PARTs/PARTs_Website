@@ -410,6 +410,7 @@ export class User {
   id!: number;
   username = '';
   email = '';
+  name = '';
   first_name = '';
   last_name = '';
   is_active = false;

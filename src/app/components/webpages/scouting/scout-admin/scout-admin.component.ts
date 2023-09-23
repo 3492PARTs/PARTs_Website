@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
@@ -33,16 +33,7 @@ export class ScoutAdminComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  userTableCols: any[] = [
-    { PropertyName: 'first_name', ColLabel: 'First' },
-    { PropertyName: 'last_name', ColLabel: 'Last' },
-    { PropertyName: 'username', ColLabel: 'Username' },
-    { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
-    { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
-
-  ];
+  userTableCols: any[] = [];
 
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
@@ -99,6 +90,12 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
     this.ns.setSubPage('users');
+    this.buildUserColumns();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.buildUserColumns();
   }
 
   adminInit(): void {
@@ -116,7 +113,7 @@ export class ScoutAdminComponent implements OnInit {
             });
             this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.buildEventList();
-            this.userTableCols[this.gs.arrayObjectIndexOf(this.userTableCols, 'phone_type_id', 'PropertyName')]['SelectList'] = this.init.phoneTypes;
+            this.buildUserColumns();
           }
         },
         error: (err: any) => {
@@ -355,6 +352,29 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  buildUserColumns(): void {
+    this.userTableCols = [
+      { PropertyName: 'name', ColLabel: 'User' },
+      { PropertyName: 'username', ColLabel: 'Username' },
+      { PropertyName: 'email', ColLabel: 'Email' },
+    ];
+
+    if (this.gs.screenSize() === 'xs') {
+      this.userTableCols = this.userTableCols.concat([
+        { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+        { PropertyName: 'phone', ColLabel: 'Phone' },
+        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+      ]);
+    }
+    else {
+      this.userTableCols = this.userTableCols.concat([
+        { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
+        { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
+        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', SelectList: this.init.phoneTypes, BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
+      ]);
+    }
+  }
+
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = u;
@@ -408,6 +428,26 @@ export class ScoutAdminComponent implements OnInit {
       this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
       this.buildAvailableUserGroups();
     }
+  }
+
+  saveUser(u?: User): void {
+    if (u) this.activeUser = u;
+
+    this.us.saveUser(this.activeUser, this.userGroups, () => {
+      this.manageUserModalVisible = false;
+      this.activeUser = new User();
+      this.adminInit();
+      this.us.getUsers(1);
+    });
+  }
+
+  getPhoneType(type: number): string {
+    if (this.init)
+      for (let pt of this.init.phoneTypes) {
+        if (pt.phone_type_id === type) return pt.carrier;
+      }
+
+    return '';
   }
 
   saveEvent(): void {
@@ -554,17 +594,6 @@ export class ScoutAdminComponent implements OnInit {
 
   clearRemoveEventToTeams() {
     this.selectedEvent.team_no.forEach(t => t.checked = true);
-  }
-
-  saveUser(u?: User): void {
-    if (u) this.activeUser = u;
-
-    this.us.saveUser(this.activeUser, this.userGroups, () => {
-      this.manageUserModalVisible = false;
-      this.activeUser = new User();
-      this.adminInit();
-      this.us.getUsers(1);
-    });
   }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
