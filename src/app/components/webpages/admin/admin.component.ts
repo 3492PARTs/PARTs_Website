@@ -23,6 +23,7 @@ export class AdminComponent implements OnInit {
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
   userOption = 1;
+  filterText = '';
 
   manageUserModalVisible = false;
   activeUser: User = new User();
