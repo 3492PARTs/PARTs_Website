@@ -355,5 +355,6 @@ export class Sponsor {
   sponsor_nm = '';
   phone = '';
   email = '';
+  can_send_emails = false;
   void_ind = '';
 }
