@@ -250,7 +250,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       }
       else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
         const emailRegex =
-          new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm");
+          new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
         ret = !emailRegex.test(this.Model);
       }
     }
@@ -475,7 +475,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel = '';
     }, 1);
     // This code manipulates the input to look like a phone number.
-    let phone = value.replace(/\D/g, '');
+    let phone = (value || '').replace(/\D/g, '');
     phone = phone.slice(0, 10);
     const areaCode = phone.slice(0, 3);
     const prefix = phone.slice(3, 6);
