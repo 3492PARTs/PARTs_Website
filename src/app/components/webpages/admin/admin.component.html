@@ -1,8 +1,13 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
-  <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
-    [DisplayProperty]="'property'" [BindingProperty]="'value'" (FunctionCallBack)="getUsers()"></app-form-element>
-  <app-table [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
+  <app-form-element-group [LabelText]="'Filter'" [InlineElements]="true">
+    <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+
+    <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
+      [DisplayProperty]="'property'" [BindingProperty]="'value'" (FunctionCallBack)="getUsers()"></app-form-element>
+  </app-form-element-group>
+
+  <app-table [(FilterText)]="filterText" [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true"
+    [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
