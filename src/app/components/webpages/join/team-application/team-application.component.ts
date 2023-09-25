@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
 import { GeneralService, Banner, RetMessage } from 'src/app/services/general.service';
@@ -27,12 +28,25 @@ export class TeamApplicationComponent implements OnInit {
     { option: 'Other', value: 'sn' },
   ];
 
-  questions: FormSubTypeWrapper[] = []
+  questions: FormSubTypeWrapper[] = [];
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  disabled = false;
+
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.applicationInit() : null);
+    this.authService.authInFlight.subscribe(r => {
+      if (r === AuthCallStates.comp) {
+        let response = false;
+        this.route.queryParamMap.subscribe(queryParams => {
+          if (!this.gs.strNoE(queryParams.get('response_id'))) {
+            this.getResponse(queryParams.get('response_id') || '');
+            response = true;
+          }
+        });
+        if (!response) this.applicationInit();
+      }
+    });
   }
 
   applicationInit(): void {
@@ -108,6 +122,48 @@ export class TeamApplicationComponent implements OnInit {
             this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
 
             this.applicationInit();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getResponse(response_id: string): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/get-response/', {
+      params: {
+        response_id: response_id
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.questions = [];
+            let qs = result as Question[];
+
+            /*
+            let form_sub_typs: string[] = [];
+            qs.forEach(q => {
+              if (!form_sub_typs.includes(q.form_sub_typ))
+                form_sub_typs.push(q.form_sub_typ);
+            });*/
+            let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+
+            form_sub_typs.forEach(fst => {
+              this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+            });
+            this.gs.devConsoleLog(this.questions);
+            this.disabled = true;
           }
         },
         error: (err: any) => {
