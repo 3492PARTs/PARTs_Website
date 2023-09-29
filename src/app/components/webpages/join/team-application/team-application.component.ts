@@ -162,6 +162,13 @@ export class TeamApplicationComponent implements OnInit {
             form_sub_typs.forEach(fst => {
               this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
             });
+            /*
+                        this.questions.forEach(fst => fst.questions.filter(q => q.question_typ.question_typ === 'multiCheckbox').forEach(q => {
+                          let qo = this.gs.cloneObject(q.questionoption_set);
+                          qo.forEach((o: { [x: string]: any; }) => o['checked'] = q.answer.split(',').includes(o['option']).toString());
+                          q.answer = qo;
+                        }));*/
+
             this.gs.devConsoleLog(this.questions);
             this.disabled = true;
           }

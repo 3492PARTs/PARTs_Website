@@ -49,11 +49,32 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
-          if (this.Model)
-            this.Model.forEach((m: any) => {
-              if (e[this.BindingProperty] === m[this.BindingProperty])
-                e['checked'] = m['checked'];
-            });
+          if (this.Model) {
+            if (typeof this.Model === 'string') {
+              if (e[this.DisplayProperty] === 'Other') {
+                let other = '';
+                this.Model.split(',').forEach((option: any) => {
+                  let match = false;
+                  tmp.forEach((element: any) => {
+                    if (option === element[this.BindingProperty]) match = true;
+                  });
+
+                  if (!match)
+                    e['checked'] = option;
+                });
+
+              }
+              else
+                e['checked'] = this.Model.split(',').includes(e[this.BindingProperty]).toString();
+            }
+            else
+              this.Model.forEach((m: any) => {
+                if (e[this.BindingProperty] === m[this.BindingProperty])
+                  e['checked'] = m['checked'];
+              });
+
+
+          }
         });
 
         this.change(tmp);
