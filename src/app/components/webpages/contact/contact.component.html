@@ -8,7 +8,7 @@
       [DisplayEmptyOption]="true" [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'"
       [Required]="q.required === 'y'"
       [Width]="q.question_typ.question_typ === 'area' ? '100%' : q.question_typ.question_typ === 'checkbox' ? 'auto' : '300px'"
-      [Rows]="5">
+      [Rows]="5" [Disabled]="disabled">
     </app-form-element>
 
     <app-button-ribbon>

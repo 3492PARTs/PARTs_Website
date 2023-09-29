@@ -63,13 +63,6 @@ export class TeamApplicationComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.questions = [];
             let qs = result as Question[];
-
-            /*
-            let form_sub_typs: string[] = [];
-            qs.forEach(q => {
-              if (!form_sub_typs.includes(q.form_sub_typ))
-                form_sub_typs.push(q.form_sub_typ);
-            });*/
             let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
             form_sub_typs.forEach(fst => {
@@ -150,24 +143,11 @@ export class TeamApplicationComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.questions = [];
             let qs = result as Question[];
-
-            /*
-            let form_sub_typs: string[] = [];
-            qs.forEach(q => {
-              if (!form_sub_typs.includes(q.form_sub_typ))
-                form_sub_typs.push(q.form_sub_typ);
-            });*/
             let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
             form_sub_typs.forEach(fst => {
               this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
             });
-            /*
-                        this.questions.forEach(fst => fst.questions.filter(q => q.question_typ.question_typ === 'multiCheckbox').forEach(q => {
-                          let qo = this.gs.cloneObject(q.questionoption_set);
-                          qo.forEach((o: { [x: string]: any; }) => o['checked'] = q.answer.split(',').includes(o['option']).toString());
-                          q.answer = qo;
-                        }));*/
 
             this.gs.devConsoleLog(this.questions);
             this.disabled = true;
