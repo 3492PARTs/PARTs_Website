@@ -35,18 +35,7 @@ export class TeamApplicationComponent implements OnInit {
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => {
-      if (r === AuthCallStates.comp) {
-        let response = false;
-        this.route.queryParamMap.subscribe(queryParams => {
-          if (!this.gs.strNoE(queryParams.get('response_id'))) {
-            this.getResponse(queryParams.get('response_id') || '');
-            response = true;
-          }
-        });
-        if (!response) this.applicationInit();
-      }
-    });
+    this.applicationInit();
   }
 
   applicationInit(): void {
@@ -69,6 +58,18 @@ export class TeamApplicationComponent implements OnInit {
               this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
             });
             this.gs.devConsoleLog(this.questions);
+
+            this.authService.authInFlight.subscribe(r => {
+              if (r === AuthCallStates.comp) {
+                let response = false;
+                this.route.queryParamMap.subscribe(queryParams => {
+                  if (!this.gs.strNoE(queryParams.get('response_id'))) {
+                    this.getResponse(queryParams.get('response_id') || '');
+                    response = true;
+                  }
+                });
+              }
+            });
           }
         },
         error: (err: any) => {
