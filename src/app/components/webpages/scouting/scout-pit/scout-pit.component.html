@@ -26,7 +26,7 @@
     <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="save()">Save</app-button>
+      <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="save()">Save</app-button>
     </app-button-ribbon>
   </form>
 </app-box>

@@ -1,7 +1,7 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
 
-  <app-table [TableCols]="userTableCols" [TableData]="users" [EnableFilter]="true" [Scrollable]="true" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
+  <app-table [TableCols]="userTableCols" [TableData]="users" [EnableFilter]="true" [Scrollable]="true"
+    [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
@@ -114,7 +114,8 @@
             Notify</app-button>
           <app-button *ngIf="scoutFieldSchedule.scout_field_sch_id" [ButtonType]="'main'"
             (FunctionCallBack)="copyScoutFieldScheduleEntry()">Copy</app-button>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save</app-button>
+          <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="saveScoutFieldScheduleEntry()">Save
+          </app-button>
         </app-button-ribbon>
       </app-form-element-group>
     </app-form>
