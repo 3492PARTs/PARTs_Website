@@ -19,9 +19,9 @@ export class LoginComponent implements OnInit {
   newUser: RegisterUser = new RegisterUser();
 
   constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private http: HttpClient, private router: Router) {
-    this.route.queryParamMap.subscribe(queryParams => {
+    /*this.route.queryParamMap.subscribe(queryParams => {
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
-    });
+    });*/
   }
 
   ngOnInit() {

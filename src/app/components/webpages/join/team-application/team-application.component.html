@@ -8,12 +8,13 @@
                 [RadioGroupStacked]="true"
                 [Width]="['area', 'multiCheckbox'].includes(q.question_typ.question_typ) ? '100%' :  ['checkbox', 'date', 'phone'].includes(q.question_typ.question_typ) ? 'auto' : '300px'"
                 [Rows]="5"
-                [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 524288">
+                [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 524288"
+                [Disabled]="disabled">
             </app-form-element>
         </app-form-element-group>
 
 
-        <app-button-ribbon>
+        <app-button-ribbon *ngIf="!disabled">
             <app-button [Type]="'submit'">Submit</app-button>
         </app-button-ribbon>
     </app-form>

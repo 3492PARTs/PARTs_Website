@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from '../../elements/question-admin-form/question-admin-form.component';
@@ -12,11 +13,12 @@ import { Question } from '../../elements/question-admin-form/question-admin-form
 export class ContactComponent implements OnInit {
 
   questions: Question[] = [];
+  disabled = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.contactInit() : null);
+    this.contactInit();
   }
 
   contactInit(): void {
@@ -33,6 +35,18 @@ export class ContactComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.questions = result as Question[];
             this.gs.devConsoleLog(this.questions);
+
+            this.authService.authInFlight.subscribe(r => {
+              if (r === AuthCallStates.comp) {
+                let response = false;
+                this.route.queryParamMap.subscribe(queryParams => {
+                  if (!this.gs.strNoE(queryParams.get('response_id'))) {
+                    this.getResponse(queryParams.get('response_id') || '');
+                    response = true;
+                  }
+                });
+              }
+            });
           }
         },
         error: (err: any) => {
@@ -75,4 +89,31 @@ export class ContactComponent implements OnInit {
     );
   }
 
+  getResponse(response_id: string): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/get-response/', {
+      params: {
+        response_id: response_id
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.questions = result as Question[];
+            this.disabled = true;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
 }
