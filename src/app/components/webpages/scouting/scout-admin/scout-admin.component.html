@@ -155,20 +155,28 @@
 
     <app-button-ribbon>
       <app-modal [ButtonType]="'main'" [ButtonText]="'Add/Delete Season'" [Title]="'Add/Delete Season'">
-        <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason">
-        </app-form-element>
-        <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
-        <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-          [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-          [(Model)]="delSeason">
-        </app-form-element>
-        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+        <div class="inline-flex align-items-center padding-right-half-em">
+          <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+        </div>
 
-        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-          [(Model)]="delEvent">
-        </app-form-element>
-        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+        <div class="inline-flex align-items-center padding-right-half-em">
+          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
+            [(Model)]="delSeason" [FormGroupInline]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+        </div>
+
+        <div class="inline-flex align-items-center padding-right-half-em">
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+            [(Model)]="delEvent" [FormGroupInline]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+        </div>
       </app-modal>
 
       <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'">
