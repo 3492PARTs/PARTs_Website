@@ -12,7 +12,6 @@ export class FormElementGroupComponent implements AfterViewInit {
   @Input() MaxWidth = false;
   @Input() LabelText = '';
   @Input() InlineElements = false;
-  @Input() WrapElements = false;
   @ContentChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
 
   constructor() {
@@ -25,6 +24,10 @@ export class FormElementGroupComponent implements AfterViewInit {
     this.formElements.changes.subscribe(() => {
       this.setFormGroup();
     });
+
+    if (this.InlineElements) {
+      this.formElements.forEach(fe => fe.FormGroupInline = true);
+    }
   }
 
   setFormGroup() {
