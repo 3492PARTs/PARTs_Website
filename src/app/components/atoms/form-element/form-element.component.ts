@@ -460,13 +460,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.LabelText.includes('Please describe your experiences')) {
+      if (this.LabelText.includes('Red')) {
         let x = 0;
       }
 
       // i need this to be . if i find a place where i need it to be
       // strictly this is my reminder that i need to find another solution
-      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
         //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(
