@@ -215,6 +215,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       }
     }
     else if (this.Type == 'number') {
+      this.Model = newValue;
       if (this.MinValue !== null && this.MinValue !== undefined) {
         this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
       }
