@@ -1,28 +1,65 @@
 <app-box [Title]="'Scout Field Form'">
   <div id="scout-header">
     <div id="scouts">
-      <div id="red">
-        <div>{{ scoutFieldSchedule.red_one_id?.first_name }} {{ scoutFieldSchedule.red_one_id?.last_name }}</div>
-        <div>{{ scoutFieldSchedule.red_two_id?.first_name }} {{ scoutFieldSchedule.red_two_id?.last_name }}</div>
-        <div>{{ scoutFieldSchedule.red_three_id?.first_name }} {{ scoutFieldSchedule.red_three_id?.last_name }}</div>
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_one_id?.first_name }} {{ scoutFieldSchedule.red_one_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.red_one_id">
+          <hr>
+          <p>{{teamMatch.red_one_id}}</p>
+        </div>
       </div>
-      <div id="blue">
-        <div>{{ scoutFieldSchedule.blue_one_id?.first_name }} {{ scoutFieldSchedule.blue_one_id?.last_name }}</div>
-        <div>{{ scoutFieldSchedule.blue_two_id?.first_name }} {{ scoutFieldSchedule.blue_two_id?.last_name }}</div>
-        <div>{{ scoutFieldSchedule.blue_three_id?.first_name }} {{ scoutFieldSchedule.blue_three_id?.last_name }}</div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_one_id?.first_name }} {{ scoutFieldSchedule.blue_one_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.blue_one_id">
+          <hr>
+          <p>{{teamMatch.blue_one_id}}</p>
+        </div>
+      </div>
+
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_two_id?.first_name }} {{ scoutFieldSchedule.red_two_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.red_two_id">
+          <hr>
+          <p>{{teamMatch.red_two_id}}</p>
+        </div>
+      </div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_two_id?.first_name }} {{ scoutFieldSchedule.blue_two_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.blue_two_id">
+          <hr>
+          <p>{{teamMatch.blue_two_id}}</p>
+        </div>
+      </div>
+
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_three_id?.first_name }} {{ scoutFieldSchedule.red_three_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.red_three_id">
+          <hr>
+          <p>{{teamMatch.red_three_id}}</p>
+        </div>
+      </div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_three_id?.first_name }} {{ scoutFieldSchedule.blue_three_id?.last_name }}</p>
+        <div *ngIf="teamMatch?.blue_three_id">
+          <hr>
+          <p>{{teamMatch.blue_three_id}}</p>
+        </div>
       </div>
     </div>
   </div>
   <br>
   <app-form (SubmitFunction)="save()">
-    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
-      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="team" (FunctionCallBack)="buildMatchList()" [Required]="true">
+    <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="matches"
+      [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch" [Required]="true"
+      (FunctionCallBack)="buildTeamList()">
     </app-form-element>
 
-    <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamMatches"
-      [BindingProperty]="'match_id'" [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true"
-      [(Model)]="teamMatchId" [Required]="true">
+    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamList"
+      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+      [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true">
     </app-form-element>
 
     <app-form-element-group [LabelText]="'Autonomous'">
