@@ -181,7 +181,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    this.positionLabel();
+    //this.positionLabel();
 
     window.setTimeout(() => {
       if (this.Width === 'auto' && this.Type === 'number') {
@@ -196,7 +196,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    this.positionLabel();
+    //this.positionLabel();
 
   }
 
@@ -451,6 +451,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           this.MinWidth = width + 'px';
         }
       }
+
+      window.setTimeout(() => {
+        this.positionLabel();
+      }, 1);
     }, 1);
   }
 
@@ -460,13 +464,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.LabelText.includes('Red')) {
+      if (this.LabelText.includes('Top Row Cubes Scored')) {
         let x = 0;
       }
 
       // i need this to be . if i find a place where i need it to be
       // strictly this is my reminder that i need to find another solution
-      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
         //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
         const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
         this.renderer.setStyle(
