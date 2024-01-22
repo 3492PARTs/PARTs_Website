@@ -85,6 +85,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
 import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
 import { MainViewComponent } from './components/atoms/main-view/main-view.component';
+import { QuestionDisplayFormComponent } from './components/elements/question-display-form/question-display-form.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { MainViewComponent } from './components/atoms/main-view/main-view.compon
     ProfileComponent,
     TeamApplicationComponent,
     SponsorShopComponent,
-    MainViewComponent
+    MainViewComponent,
+    QuestionDisplayFormComponent
   ],
   imports: [
     BrowserModule,
