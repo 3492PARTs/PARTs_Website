@@ -794,7 +794,7 @@ export class CompetitionLevel {
 export class ScoutFieldSchedule {
   scout_field_sch_id!: number;
   event_id: Event | number = new Event();
-  red_one_id!: User | number | null | any;
+  red_one_id: User | number | null | any = new User();
   red_two_id: User | number | null | any = new User();
   red_three_id: User | number | null | any = new User();
   blue_one_id: User | number | null | any = new User();
