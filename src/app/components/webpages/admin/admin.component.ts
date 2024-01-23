@@ -6,6 +6,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
+import { Question } from '../../elements/question-admin-form/question-admin-form.component';
 
 @Component({
   selector: 'app-admin',
@@ -49,6 +50,22 @@ export class AdminComponent implements OnInit {
   errorDetailModalVisible = false;
   currentError: ErrorLog = new ErrorLog();
 
+  teamApplicationResponsesCols = [
+    { PropertyName: 'response_id', ColLabel: 'ID' },
+    { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+  ];
+  teamApplicationResponses: Response[] = [];
+
+  teamContactResponsesCols = [
+    { PropertyName: 'response_id', ColLabel: 'ID' },
+    { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
+    { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+  ];
+  teamContactResponses: Response[] = [];
+
+  //---------------------
   itemTableCols: object[] = [
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'item_desc', ColLabel: 'Description' },
@@ -70,6 +87,12 @@ export class AdminComponent implements OnInit {
           break;
         case 'req-items':
           this.getItems();
+          break;
+        case 'team-app-form':
+          this.getResponses('team-app');
+          break;
+        case 'team-cntct-form':
+          this.getResponses('team-cntct');
           break;
       }
     });
@@ -258,6 +281,54 @@ export class AdminComponent implements OnInit {
     this.currentError = error;
   }
 
+  getResponses(form_typ: string): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/get-responses/', {
+      params: {
+        form_typ: form_typ
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            if (form_typ === 'team-app')
+              this.teamApplicationResponses = result as Response[];
+            else
+              this.teamContactResponses = result as Response[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  openResponse(res: Response): void {
+    if (res.form_typ === 'team-app')
+      this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
+    else
+      this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+  }
+
+
+
+
+
+
+
+
+
+
+  //----------------------------------------------------------------------------------------------------
+
   getItems(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
@@ -336,6 +407,12 @@ export class AdminInit {
   phoneTypes: PhoneType[] = [];
 }
 
+export class Response {
+  response_id!: number;
+  form_typ = '';
+  time = new Date();
+  questionanswer_set: Question[] = [];
+}
 export class Item {
   item_id!: number;
   item_nm = '';

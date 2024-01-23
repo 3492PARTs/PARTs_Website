@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
+import { Router } from '@angular/router';
 //import { saveAs } from 'file-saver';
 
 @Injectable({
@@ -44,7 +45,7 @@ export class GeneralService {
 
   private gsId = 0;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
 
   /* Loading Screen */
@@ -301,6 +302,9 @@ export class GeneralService {
     window.open(url, 'noopener');
   }
 
+  navigateByUrl(s: string) {
+    this.router.navigateByUrl(s);
+  }
   /*scrollTo(id: string) {
     this.scrollTo($('#' + id).offset().top - 200);
   }
