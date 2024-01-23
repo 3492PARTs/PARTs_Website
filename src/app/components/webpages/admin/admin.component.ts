@@ -57,6 +57,13 @@ export class AdminComponent implements OnInit {
   ];
   teamApplicationResponses: Response[] = [];
 
+  teamContactResponsesCols = [
+    { PropertyName: 'response_id', ColLabel: 'ID' },
+    { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+  ];
+  teamContactResponses: Response[] = [];
+
   //---------------------
   itemTableCols: object[] = [
     { PropertyName: 'item_nm', ColLabel: 'Item' },
@@ -82,6 +89,9 @@ export class AdminComponent implements OnInit {
           break;
         case 'team-app-form':
           this.getResponses('team-app');
+          break;
+        case 'team-cntct-form':
+          this.getResponses('team-cntct');
           break;
       }
     });
@@ -282,9 +292,11 @@ export class AdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.teamApplicationResponses = result as Response[];
-            let x = this.teamApplicationResponses[0].questionanswer_set[0].answer;
-            let h = x;
+            if (form_typ === 'team-app')
+              this.teamApplicationResponses = result as Response[];
+            else
+              this.teamContactResponses = result as Response[];
+            let h = 5;
           }
         },
         error: (err: any) => {
@@ -300,7 +312,10 @@ export class AdminComponent implements OnInit {
   }
 
   openResponse(res: Response): void {
-    this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
+    if (res.form_typ === 'team-app')
+      this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
+    else
+      this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
   }
 
 

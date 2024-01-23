@@ -122,4 +122,9 @@
 
 <app-box *ngIf="page ==='team-cntct-form'" [Title]="'Manage Team Contact Form'">
   <app-question-admin-form [questionType]="'team-cntct'"></app-question-admin-form>
+
+  <app-form-element-group [LabelText]="'Responses'">
+    <app-table [TableCols]="teamContactResponsesCols" [TableData]="teamContactResponses"
+      (RecordClickCallBack)="openResponse($event)"></app-table>
+  </app-form-element-group>
 </app-box>
