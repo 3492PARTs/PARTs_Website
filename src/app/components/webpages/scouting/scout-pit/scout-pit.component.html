@@ -9,7 +9,7 @@
       <app-form-element [LabelText]="'Edit Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true">
+        [DisplayEmptyOption]="true" [MinWidth]="'90px'">
       </app-form-element>
     </div>
 

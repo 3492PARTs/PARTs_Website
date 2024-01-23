@@ -79,6 +79,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
         this.change(tmp);
       }
+      this.positionLabel();
     }, 0);
   }
   _SelectList: any[] = [];
@@ -451,6 +452,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           this.MinWidth = width + 'px';
         }
       }
+      if (this.LabelText.includes('Edit Team')) {
+        let x = 0;
+      }
 
       window.setTimeout(() => {
         this.positionLabel();
@@ -464,7 +468,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
       const amountOfLinesTilAdjust = 2;
 
-      if (this.LabelText.includes('Top Row Cubes Scored')) {
+      if (this.LabelText.includes('Edit Team')) {
         let x = 0;
       }
 
