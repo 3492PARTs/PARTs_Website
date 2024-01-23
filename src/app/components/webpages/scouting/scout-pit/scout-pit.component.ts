@@ -124,10 +124,12 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
             this.savePicture();
             this.spInit();
             this.team = '';
+            this.gs.scrollTo(0);
           }
         },
         error: (err: any) => {
