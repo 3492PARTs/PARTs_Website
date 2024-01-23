@@ -60,6 +60,7 @@ export class AdminComponent implements OnInit {
   teamContactResponsesCols = [
     { PropertyName: 'response_id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
+    { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message' },
     { PropertyName: 'time', ColLabel: 'Time' },
   ];
   teamContactResponses: Response[] = [];
@@ -296,7 +297,6 @@ export class AdminComponent implements OnInit {
               this.teamApplicationResponses = result as Response[];
             else
               this.teamContactResponses = result as Response[];
-            let h = 5;
           }
         },
         error: (err: any) => {
