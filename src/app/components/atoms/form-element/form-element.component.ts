@@ -456,45 +456,44 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         let x = 0;
       }
 
-      window.setTimeout(() => {
-        this.positionLabel();
-      }, 1);
-    }, 1);
+      this.positionLabel();
+    }, 0);
   }
 
   positionLabel(): void {
-    if (this.label && this.Type !== 'checkbox') {
-      const { lineHeight } = getComputedStyle(this.label.nativeElement);
-      const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
-      const amountOfLinesTilAdjust = 2;
+    window.setTimeout(() => {
+      if (this.label && this.Type !== 'checkbox') {
+        const { lineHeight } = getComputedStyle(this.label.nativeElement);
+        const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
+        const amountOfLinesTilAdjust = 2;
 
-      if (this.LabelText.includes('Edit Team')) {
-        let x = 0;
+        if (this.LabelText.includes('Edit Team')) {
+          let x = 0;
+        }
+
+        // i need this to be . if i find a place where i need it to be
+        // strictly this is my reminder that i need to find another solution
+        if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+          //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-' + labelOffset + 'px'
+          );
+          this.renderer.setStyle(
+            this.formElement.nativeElement,
+            'margin-top', labelOffset + 'px'
+          );
+        } else {
+          //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-7px'
+          );
+          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+        }
       }
-
-      // i need this to be . if i find a place where i need it to be
-      // strictly this is my reminder that i need to find another solution
-      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-        //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-' + labelOffset + 'px'
-        );
-        this.renderer.setStyle(
-          this.formElement.nativeElement,
-          'margin-top', labelOffset + 'px'
-        );
-      } else {
-        //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-7px'
-        );
-        this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
-      }
-    }
-
+    }, 0);
   }
 
   strNoE(a: any): boolean {
