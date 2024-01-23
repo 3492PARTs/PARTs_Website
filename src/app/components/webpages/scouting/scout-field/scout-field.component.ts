@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 
@@ -12,19 +12,22 @@ import { Match } from '../match-planning/match-planning.component';
   styleUrls: ['./scout-field.component.scss']
 })
 export class ScoutFieldComponent implements OnInit, OnDestroy {
-  teams: Team[] = [];
+  private teams: Team[] = [];
+  teamList: Team[] = [];
   team!: number;
-  private matches: Match[] = [];
-  teamMatches: Match[] = [];
-  teamMatchId!: string;
+  matches: Match[] = [];
+  teamMatch!: Match;
   scoutQuestions: Question[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: Question[] = [];
   scoutTeleopQuestions: Question[] = [];
   scoutOtherQuestions: Question[] = [];
   private checkScoutInterval: number | undefined;
+  user!: User;
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) {
+    this.authService.currentUser.subscribe(u => this.user = u);
+  }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
@@ -69,6 +72,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.scoutQuestions = result['scoutQuestions'];
             this.matches = result['matches'];
             this.sortQuestions();
+            this.buildTeamList();
+            this.gs.devConsoleLog(this.scoutQuestions);
           }
         },
         error: (err: any) => {
@@ -101,12 +106,57 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
   }
 
-  buildMatchList(): void {
-    this.teamMatches = [];
-    this.matches.forEach((m) => {
-      if ([m.red_one_id, m.red_two_id, m.red_three_id, m.blue_one_id, m.blue_two_id, m.blue_three_id].includes(this.team))
-        this.teamMatches.push(m);
-    })
+  buildTeamList(): void {
+    this.teamList = [];
+    // only run if a match is selected
+    if (!this.gs.strNoE(this.teamMatch)) {
+
+      // get the teams for the match from the teams list
+      if (this.teamMatch.blue_one_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_one_id.toString()) this.teamList.push(t) });
+      }
+      if (this.teamMatch.blue_two_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_two_id.toString()) this.teamList.push(t) });
+      }
+      if (this.teamMatch.blue_three_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_three_id.toString()) this.teamList.push(t) });
+      }
+
+      if (this.teamMatch.red_one_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_one_id.toString()) this.teamList.push(t) });
+      }
+      if (this.teamMatch.red_two_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_two_id.toString()) this.teamList.push(t) });
+      }
+      if (this.teamMatch.red_three_id) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_three_id.toString()) this.teamList.push(t) });
+      }
+
+      // set the selected team based on which user is assigned to which team
+      if (this.user.id === this.scoutFieldSchedule.blue_one_id.id) {
+        this.team = this.teamMatch.blue_one_id as number;
+      }
+
+      if (this.user.id === this.scoutFieldSchedule.blue_two_id.id) {
+        this.team = this.teamMatch.blue_two_id as number;
+      }
+
+      if (this.user.id === this.scoutFieldSchedule.blue_three_id.id) {
+        this.team = this.teamMatch.blue_three_id as number;
+      }
+
+      if (this.user.id === this.scoutFieldSchedule.red_one_id.id) {
+        this.team = this.teamMatch.red_one_id as number;
+      }
+
+      if (this.user.id === this.scoutFieldSchedule.red_two_id.id) {
+        this.team = this.teamMatch.red_two_id as number;
+      }
+
+      if (this.user.id === this.scoutFieldSchedule.red_three_id.id) {
+        this.team = this.teamMatch.red_three_id as number;
+      }
+    }
   }
 
   save(): void | null {
@@ -131,28 +181,15 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
-      { question_answers: response, team: this.team, match: this.teamMatchId, form_typ: 'field' }
+      { question_answers: response, team: this.team, match: this.teamMatch.match_id, form_typ: 'field' }
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
-
-            this.sortQuestions();
-
-            this.matches.forEach(m => {
-              if (m.match_id === this.teamMatchId) {
-                if (m.red_one_id as number || 0 === this.team) m.red_one_id = 0;
-                if (m.red_two_id as number || 0 === this.team) m.red_two_id = 0;
-                if (m.red_three_id as number || 0 === this.team) m.red_three_id = 0;
-                if (m.blue_one_id as number || 0 === this.team) m.blue_one_id = 0;
-                if (m.blue_two_id as number || 0 === this.team) m.blue_two_id = 0;
-                if (m.blue_three_id as number || 0 === this.team) m.blue_three_id = 0;
-              }
-            });
-
-            this.team = 0;
-            this.teamMatchId = '';
+            this.teamMatch = new Match();
+            this.scoutFieldInit();
+            this.gs.scrollTo(0);
           }
         },
         error: (err: any) => {
@@ -166,17 +203,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       }
     );
   }
-
-  increment(sq: Question): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    sq.answer = parseInt(sq.answer.toString()) + 1;
-  }
-
-  decrement(sq: Question): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    if (parseInt(sq.answer.toString()) > 0) sq.answer = parseInt(sq.answer.toString()) - 1;
-  }
-
 }
 
 /*export class ScoutAnswer {

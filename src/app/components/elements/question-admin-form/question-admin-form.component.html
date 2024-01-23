@@ -1,9 +1,9 @@
 <app-form>
-  <app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true" [WrapElements]="true">
+  <app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true">
     <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="question.question" [Width]="'100%'">
     </app-form-element>
 
-    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="question.order" [Width]="'5em'">
+    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="question.order">
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
@@ -32,7 +32,7 @@
 </app-form>
 
 <app-form>
-  <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true" [WrapElements]="true">
+  <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
     <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.questions"
       [DisplayProperty]="'display_value'" [DisplayEmptyOption]="true" [(Model)]="editQuestion">
     </app-form-element>

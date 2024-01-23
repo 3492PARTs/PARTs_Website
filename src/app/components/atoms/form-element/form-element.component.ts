@@ -79,6 +79,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
         this.change(tmp);
       }
+      this.positionLabel();
     }, 0);
   }
   _SelectList: any[] = [];
@@ -181,7 +182,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    this.positionLabel();
+    //this.positionLabel();
 
     window.setTimeout(() => {
       if (this.Width === 'auto' && this.Type === 'number') {
@@ -196,7 +197,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    this.positionLabel();
+    //this.positionLabel();
 
   }
 
@@ -215,6 +216,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       }
     }
     else if (this.Type == 'number') {
+      this.Model = newValue;
       if (this.MinValue !== null && this.MinValue !== undefined) {
         this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
       }
@@ -446,47 +448,52 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     window.setTimeout(() => {
       if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
         const width = this.label.nativeElement.clientWidth + 32;
-        if (this.MinWidth != 'auto') {
-          this.gs.devConsoleLog('Developer your min width will be overwritten on your form element.');
+        if (this.MinWidth === 'auto') {
+          this.MinWidth = width + 'px';
         }
-        this.MinWidth = width + 'px';
       }
-    }, 1);
-  }
-
-  positionLabel(): void {
-    if (this.label && this.Type !== 'checkbox') {
-      const { lineHeight } = getComputedStyle(this.label.nativeElement);
-      const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
-      const amountOfLinesTilAdjust = 2;
-
-      if (this.LabelText.includes('Please describe your experiences')) {
+      if (this.LabelText.includes('Edit Team')) {
         let x = 0;
       }
 
-      // i need this to be . if i find a place where i need it to be
-      // strictly this is my reminder that i need to find another solution
-      if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-        //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-' + labelOffset + 'px'
-        );
-        this.renderer.setStyle(
-          this.formElement.nativeElement,
-          'margin-top', labelOffset + 'px'
-        );
-      } else {
-        //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-7px'
-        );
-        this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
-      }
-    }
+      this.positionLabel();
+    }, 0);
+  }
 
+  positionLabel(): void {
+    window.setTimeout(() => {
+      if (this.label && this.Type !== 'checkbox') {
+        const { lineHeight } = getComputedStyle(this.label.nativeElement);
+        const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
+        const amountOfLinesTilAdjust = 2;
+
+        if (this.LabelText.includes('Edit Team')) {
+          let x = 0;
+        }
+
+        // i need this to be . if i find a place where i need it to be
+        // strictly this is my reminder that i need to find another solution
+        if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
+          //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-' + labelOffset + 'px'
+          );
+          this.renderer.setStyle(
+            this.formElement.nativeElement,
+            'margin-top', labelOffset + 'px'
+          );
+        } else {
+          //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-7px'
+          );
+          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+        }
+      }
+    }, 0);
   }
 
   strNoE(a: any): boolean {

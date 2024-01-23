@@ -4,65 +4,42 @@
   justify-content: center;
 
   #scouts {
-    display: flex;
+    display: grid;
+    grid-template-columns: 120px 120px;
+    grid-template-rows: repeat(6, auto);
 
-    #red {
-      background-color: red;
+    .red,
+    .blue {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 30px;
+      border-bottom: 1px solid black;
 
-      div {
-        border-top: 1px solid black;
-        border-right: 1px solid black;
-        border-bottom: 1px solid black;
-
-        &:before {
-          content: "";
-          position: absolute;
-          left: -15px;
-          bottom: 0;
-          width: 0;
-          height: 0;
-          border-right: 15px solid red;
-          border-top: 15px solid transparent;
-          border-bottom: 15px solid transparent;
-        }
-
+      &:nth-child(5),
+      &:nth-child(6) {
+        border-bottom: none;
       }
-    }
 
-    #blue {
-      background-color: blue;
-
-      div {
-        border-top: 1px solid black;
-        border-left: 1px solid black;
-        border-bottom: 1px solid black;
-
-        &:before {
-          content: "";
-          position: absolute;
-          right: -15px;
-          bottom: 0;
-          width: 0;
-          height: 0;
-          border-left: 15px solid blue;
-          border-top: 15px solid transparent;
-          border-bottom: 15px solid transparent;
-        }
-
+      & > div {
+        width: 80%;
       }
-    }
 
-    #red,
-    #blue {
-      div {
-        padding: 0 1rem;
-        min-width: 60px;
-        height: 30px;
-        position: relative;
-        display: flex;
-        align-items: center;
+      p {
         color: white;
+        margin: 0;
+        text-align: center;
       }
+    }
+
+    .red {
+      background-color: red;
+      border-right: 1px solid black;
+    }
+
+    .blue {
+      background-color: blue;
     }
   }
 }

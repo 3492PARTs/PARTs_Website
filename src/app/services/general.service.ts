@@ -4,6 +4,7 @@ import * as saveAs from 'file-saver';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as LoadImg from 'blueimp-load-image';
+import $ from 'jquery';
 //import { saveAs } from 'file-saver';
 
 @Injectable({
@@ -298,6 +299,21 @@ export class GeneralService {
 
   openURL(url: string): void {
     window.open(url, 'noopener');
+  }
+
+  /*scrollTo(id: string) {
+    this.scrollTo($('#' + id).offset().top - 200);
+  }
+*/
+
+  scrollTo(y: number) {
+    $('html, body').animate(
+      {
+        scrollTop: y,
+      },
+      500,
+      'linear'
+    );
   }
 }
 

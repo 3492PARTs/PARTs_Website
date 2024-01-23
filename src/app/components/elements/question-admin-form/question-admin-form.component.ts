@@ -69,7 +69,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.question.form_typ = this.questionType;
 
 
-    let save = this.editQuestion ? this.editQuestion : this.question;
+    let save = this.editQuestion && this.editQuestion.question_id ? this.editQuestion : this.question;
 
     for (let i = 0; i < save.questionoption_set.length; i++) {
       if (this.gs.strNoE(save.questionoption_set[i].question_opt_id) && this.gs.strNoE(save.questionoption_set[i].option)) {

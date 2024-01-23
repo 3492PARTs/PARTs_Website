@@ -1,0 +1,17 @@
+.question {
+  align-items: flex-end;
+}
+
+.number-stepper,
+.increment,
+.decrement {
+  display: inline-block;
+}
+
+.number-stepper {
+  padding-bottom: calc(1em + 14px);
+}
+
+.increment {
+  padding: 0 1rem;
+}
