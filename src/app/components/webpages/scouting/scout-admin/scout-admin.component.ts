@@ -835,6 +835,6 @@ export class ScoutAdminInit {
 }
 
 export class EventToTeams {
-  event_id = 0;
+  event_id!: number;
   teams: Team[] = [];
 }

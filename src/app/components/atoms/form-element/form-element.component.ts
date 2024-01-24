@@ -282,9 +282,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     // if the element is populated or not
     if (!this.strNoE(this.Model)) {
       this.hasValue = false;
-      if (this.Type === 'multiCheckbox') {
+      if (['multiCheckbox', 'multiSelect'].includes(this.Type)) {
         this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '').replace('false', '');
+          let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
           if (!this.strNoE(s))
             this.hasValue = true;
         });

@@ -257,13 +257,13 @@
         [(visible)]="linkTeamToEventModalVisible" [MaxWidth]="'400px'">
         <app-form (SubmitFunction)="addEventToTeams()">
           <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-            [(Model)]="eventToTeams.event_id" [Required]="true">
+            [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="eventToTeams.event_id"
+            [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-            [(Model)]="eventToTeams.teams" [Required]="true">
+            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="eventToTeams.teams"
+            [Required]="true">
           </app-form-element>
 
           <app-button-ribbon>
