@@ -24,6 +24,7 @@ export class AdminComponent implements OnInit {
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
   userOption = 1;
+  adminOption = 1;
   filterText = '';
 
   manageUserModalVisible = false;
@@ -104,7 +105,7 @@ export class AdminComponent implements OnInit {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers(this.userOption);
+        this.us.getUsers(this.userOption, this.adminOption);
       }
     });
 
@@ -174,7 +175,7 @@ export class AdminComponent implements OnInit {
   }
 
   getUsers() {
-    this.us.getUsers(this.userOption);
+    this.us.getUsers(this.userOption, this.adminOption);
   }
 
   showManageUserModal(u: User): void {
@@ -227,7 +228,7 @@ export class AdminComponent implements OnInit {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
-      this.us.getUsers(this.userOption);
+      this.us.getUsers(this.userOption, this.adminOption);
     });
   }
 

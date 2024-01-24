@@ -14,13 +14,14 @@ export class UserService {
 
   constructor(private http: HttpClient, private gs: GeneralService) { }
 
-  getUsers(is_active = 0) {
+  getUsers(is_active = 0, is_admin = 0) {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'user/users/',
       {
         params: {
-          is_active: is_active
+          is_active: is_active,
+          is_admin: is_admin
         }
       }
     ).subscribe(
