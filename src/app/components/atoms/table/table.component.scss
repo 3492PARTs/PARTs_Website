@@ -27,6 +27,10 @@
     white-space: pre-line;
   }
 
+  td {
+    vertical-align: middle;
+  }
+
   @media only screen and (max-width: 480px) {
     /* horizontal scrollbar for tables if mobile screen */
     overflow-x: auto;
@@ -42,14 +46,6 @@
 .table .thead tr th,
 .table .tbody tr td {
   padding: 0.3em;
-}
-
-.table .tbody tr td {
-  vertical-align: top;
-}
-
-.table tr td {
-  vertical-align: bottom;
 }
 
 .table .thead th {
