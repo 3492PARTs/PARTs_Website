@@ -188,7 +188,7 @@
       </app-modal>
 
       <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'"
-        [(visible)]="manageEventsModalVisible">
+        [(visible)]="manageEventsModalVisible" [MaxWidth]="'500px'">
         <app-form (SubmitFunction)="saveEvent()">
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
             [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
@@ -253,34 +253,43 @@
         </app-form>
       </app-modal>
 
-      <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'">
-        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-          [(Model)]="eventToTeams.event_id">
-        </app-form-element>
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'"
+        [(visible)]="linkTeamToEventModalVisible" [MaxWidth]="'400px'">
+        <app-form (SubmitFunction)="addEventToTeams()">
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
+            [(Model)]="eventToTeams.event_id" [Required]="true">
+          </app-form-element>
 
-        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
-          [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-          [(Model)]="eventToTeams.teams">
-        </app-form-element>
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [(Model)]="eventToTeams.teams" [Required]="true">
+          </app-form-element>
 
-
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
-        <app-button [ButtonType]="'main'" (FunctionCallBack)="addEventToTeams()">Save</app-button>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearEventToTeams()">Clear</app-button>
+            <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+          </app-button-ribbon>
+        </app-form>
       </app-modal>
 
-      <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'">
-        <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
-          [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent">
-        </app-form-element>
+      <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'"
+        [(visible)]="removeTeamFromEventModalVisible" [MaxWidth]="'400px'">
+        <app-form (SubmitFunction)="removeEventToTeams()">
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+            [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent" [Required]="true">
+          </app-form-element>
 
-        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
-          [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="selectedEvent.team_no">
-        </app-form-element>
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
+            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="selectedEvent.team_no"
+            [Required]="true">
+          </app-form-element>
 
-
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeEventToTeams()">Remove</app-button>
+          <app-button-ribbon>
+            <app-button [ButtonType]="'warning'" (FunctionCallBack)="clearRemoveEventToTeams()">Clear</app-button>
+            <app-button [ButtonType]="'danger'" [Type]="'submit'">Remove</app-button>
+          </app-button-ribbon>
+        </app-form>
       </app-modal>
     </div>
   </app-form-element-group>

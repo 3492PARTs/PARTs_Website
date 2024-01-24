@@ -541,6 +541,8 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.eventToTeams = new EventToTeams();
             this.adminInit();
+            this.linkTeamToEventModalVisible = false;
+            this.eventToTeams = new EventToTeams();
           }
         },
         error: (err: any) => {
@@ -570,6 +572,7 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.selectedEvent = new Event();
             this.adminInit();
+            this.removeTeamFromEventModalVisible = false;
           }
         },
         error: (err: any) => {
