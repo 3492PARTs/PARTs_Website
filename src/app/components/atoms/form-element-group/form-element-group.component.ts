@@ -36,7 +36,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
       for (let i = 0; i <= this.formElements.length - 1; i++) {
         let fe = this.formElements.get(i);
 
-        if (fe && i < this.formElements.length - 1) {
+        if (fe) {
           if (!this.InlineElements)
             fe.FormGroup = true;
           else
@@ -44,7 +44,5 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
         }
       }
     }, 1);
-
-
   }
 }
