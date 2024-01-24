@@ -12,11 +12,6 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class GeneralService {
-  /* App Sizes */
-  private screenSizeLg = 768;
-  private screenSizeSm = 767;
-  private screenSixeXs = 576;
-
   /* Loading Screen */
   private outstandingCalls = new BehaviorSubject<number>(0);
   currentOutstandingCalls = this.outstandingCalls.asObservable();
@@ -171,15 +166,38 @@ export class GeneralService {
     saveAs(blob, filename);
   }
 
-  screenSize(): string {
-    if (window.innerWidth >= this.screenSizeLg) {
-      return 'lg';
+  screenSize(): AppSize {
+    const width = window.innerWidth;
+
+    if (width >= AppSize._7XLG) {
+      return AppSize._7XLG;
     }
-    else if (this.screenSizeLg > window.innerWidth && window.innerWidth > this.screenSixeXs) {
-      return 'sm';
+    else if (width >= AppSize._6XLG) {
+      return AppSize._6XLG;
+    }
+    else if (width >= AppSize._5XLG) {
+      return AppSize._5XLG;
+    }
+    else if (width >= AppSize._4XLG) {
+      return AppSize._4XLG;
+    }
+    else if (width >= AppSize._3XLG) {
+      return AppSize._3XLG;
+    }
+    else if (width >= AppSize._2XLG) {
+      return AppSize._2XLG;
+    }
+    else if (width >= AppSize.XLG) {
+      return AppSize.XLG;
+    }
+    else if (width >= AppSize.LG) {
+      return AppSize.LG;
+    }
+    else if (width >= AppSize.SM) {
+      return AppSize.SM;
     }
     else {
-      return 'xs';
+      return AppSize.XS;
     }
   }
 
@@ -343,3 +361,15 @@ export class Banner {
   }
 }
 
+export enum AppSize {
+  _7XLG = 3000,
+  _6XLG = 2650,
+  _5XLG = 2350,
+  _4XLG = 2000,
+  _3XLG = 1400,
+  _2XLG = 1200,
+  XLG = 922,
+  LG = 768,
+  SM = 767,
+  XS = 576,
+}

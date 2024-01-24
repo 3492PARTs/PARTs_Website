@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';
@@ -35,7 +35,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
 
-    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
+    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   scoutFieldResultsInit(): void {

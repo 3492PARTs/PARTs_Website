@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener } from '@angular/core';
 import { ModalService } from 'src/app/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-modal',
@@ -9,9 +10,15 @@ import { FormComponent } from '../form/form.component';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
+  private resizeTimer: number | null | undefined;
+
   @Input() ButtonType = '';
   @Input() ButtonText = '';
   @Input() Title = '';
+
+  @Input() Width = '80%';
+  @Input() MinWidth = 'auto';
+  @Input() MaxWidth = 'auto';
 
   @Input()
   set visible(v: boolean) {
@@ -35,9 +42,26 @@ export class ModalComponent implements OnInit {
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
 
-  constructor(private ms: ModalService) { }
+  constructor(private ms: ModalService, private gs: GeneralService) { }
 
   ngOnInit() {
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      if (this.gs.screenSize() >= AppSize._3XLG) {
+        this.Width = '90%';
+      }
+      else {
+        this.Width = '80%';
+      }
+
+    }, 200);
   }
 
   open() {

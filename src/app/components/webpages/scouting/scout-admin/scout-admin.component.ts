@@ -19,8 +19,8 @@ export class ScoutAdminComponent implements OnInit {
   init: ScoutAdminInit = new ScoutAdminInit();
   users: User[] = [];
   //season!: number;
-  newSeason!: number;
-  delSeason!: number;
+  newSeason!: number | null;
+  delSeason!: number | null;
   newEvent: Event = new Event();
   delEvent!: number;
   selectedEvent = new Event();
@@ -72,6 +72,12 @@ export class ScoutAdminComponent implements OnInit {
   scoutScheduleModalVisible = false;
   scoutScheduleModalTitle = '';
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
+
+  manageSeasonModalVisible = false;
+  manageEventsModalVisible = false;
+  manageTeamModalVisible = false;
+  linkTeamToEventModalVisible = false;
+  removeTeamFromEventModalVisible = false;
 
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
@@ -299,7 +305,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/add-season/', {
       params: {
-        season: this.newSeason.toString()
+        season: this.newSeason?.toString() || ''
       }
     }
     ).subscribe(
@@ -308,6 +314,8 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
+            this.newSeason = null;
+            this.manageSeasonModalVisible = false;
           }
         },
         error: (err: any) => {
@@ -331,7 +339,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/delete-season/', {
       params: {
-        season_id: this.delSeason.toString()
+        season_id: this.delSeason?.toString() || ''
       }
     }
     ).subscribe(
@@ -340,6 +348,8 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
+            this.delSeason = null;
+            this.manageSeasonModalVisible = false;
           }
         },
         error: (err: any) => {
@@ -438,6 +448,8 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.manageEventsModalVisible = false;
             this.adminInit();
             this.newEvent = new Event();
           }
@@ -499,6 +511,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.adminInit();
+            this.manageTeamModalVisible = false;
             this.newTeam = new Team();
           }
         },

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
@@ -40,7 +40,7 @@ export class MatchPlanningComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
+    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(): void {
