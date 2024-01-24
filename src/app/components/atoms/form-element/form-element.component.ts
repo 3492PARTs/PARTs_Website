@@ -153,19 +153,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    /*
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'Model': {
-            if (this.Type === 'multiCheckbox') {
-              console.log(this.Model);
+            if (this.Type === 'phone') {
+              //console.log(changes);
+              if (this.gs.strNoE(changes['Model'].previousValue) && !this.gs.strNoE(changes['Model'].currentValue)) this.phoneMaskFn(changes['Model'].currentValue);
             }
           }
         }
       }
     }
-    */
   }
 
 
@@ -503,18 +502,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   phoneMaskFn(value: string, init = false) {
     window.setTimeout(() => {
       this.phoneMaskModel = '';
-    }, 1);
-    // This code manipulates the input to look like a phone number.
-    let phone = (value || '').replace(/\D/g, '');
-    phone = phone.slice(0, 10);
-    const areaCode = phone.slice(0, 3);
-    const prefix = phone.slice(3, 6);
-    const suffix = phone.slice(6, 10);
 
-    window.setTimeout(() => {
-      this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
-    }, 1);
+      // This code manipulates the input to look like a phone number.
+      let phone = (value || '').replace(/\D/g, '');
+      phone = phone.slice(0, 10);
+      const areaCode = phone.slice(0, 3);
+      const prefix = phone.slice(3, 6);
+      const suffix = phone.slice(6, 10);
 
-    if (!init) this.change(phone);
+      window.setTimeout(() => {
+        this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
+      }, 1);
+
+      if (!init) this.change(phone);
+    }, 1);
   };
 }

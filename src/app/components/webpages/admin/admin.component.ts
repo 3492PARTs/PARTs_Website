@@ -20,7 +20,14 @@ export class AdminComponent implements OnInit {
   init: AdminInit = new AdminInit();
   users: User[] = [];
 
-  userTableCols: any[] = [];
+  userTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+    { PropertyName: 'phone', ColLabel: 'Phone' },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+  ];
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
   userOption = 1;
@@ -117,13 +124,6 @@ export class AdminComponent implements OnInit {
       new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline')
     ]);
     this.ns.setSubPage('users');
-
-    this.buildUserColumns();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.buildUserColumns();
   }
 
   adminInit(): void {
@@ -135,8 +135,8 @@ export class AdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as AdminInit;
+            this.userTableCols = this.userTableCols;
             //console.log(this.init);
-            this.buildUserColumns();
           }
         },
         error: (err: any) => {
@@ -148,30 +148,6 @@ export class AdminComponent implements OnInit {
         }
       }
     );
-  }
-
-  buildUserColumns(): void {
-    this.userTableCols = [
-      { PropertyName: 'name', ColLabel: 'User' },
-      { PropertyName: 'username', ColLabel: 'Username' },
-      { PropertyName: 'email', ColLabel: 'Email' },
-    ];
-
-    if (this.gs.screenSize() === 'xs') {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
-        { PropertyName: 'phone', ColLabel: 'Phone' },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
-      ]);
-    }
-    else {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', SelectList: this.init.phoneTypes, BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'is_active', ColLabel: 'Active', Type: 'checkbox', FunctionCallBack: this.saveUser.bind(this) }
-      ]);
-    }
   }
 
   getUsers() {
@@ -221,9 +197,7 @@ export class AdminComponent implements OnInit {
     this.buildAvailableUserGroups();
   }
 
-  saveUser(u?: User): void {
-    if (u) this.activeUser = u;
-
+  saveUser(): void {
     this.us.saveUser(this.activeUser, this.userGroups, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();

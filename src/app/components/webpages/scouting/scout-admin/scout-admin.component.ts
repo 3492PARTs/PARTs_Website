@@ -33,7 +33,15 @@ export class ScoutAdminComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  userTableCols: any[] = [];
+  userTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+    { PropertyName: 'phone', ColLabel: 'Phone' },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+  ];
+
 
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
@@ -90,12 +98,6 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
     this.ns.setSubPage('users');
-    this.buildUserColumns();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.buildUserColumns();
   }
 
   adminInit(): void {
@@ -113,7 +115,7 @@ export class ScoutAdminComponent implements OnInit {
             });
             this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.buildEventList();
-            this.buildUserColumns();
+            this.userTableCols = this.userTableCols;
           }
         },
         error: (err: any) => {
@@ -350,29 +352,6 @@ export class ScoutAdminComponent implements OnInit {
         }
       }
     );
-  }
-
-  buildUserColumns(): void {
-    this.userTableCols = [
-      { PropertyName: 'name', ColLabel: 'User' },
-      { PropertyName: 'username', ColLabel: 'Username' },
-      { PropertyName: 'email', ColLabel: 'Email' },
-    ];
-
-    if (this.gs.screenSize() === 'xs') {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
-        { PropertyName: 'phone', ColLabel: 'Phone' },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
-      ]);
-    }
-    else {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', SelectList: this.init.phoneTypes, BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
-      ]);
-    }
   }
 
   showManageUserModal(u: User): void {
