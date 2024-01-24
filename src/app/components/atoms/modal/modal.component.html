@@ -5,7 +5,7 @@
 <div class="overlay" [ngClass]="{'visible': _visible}" [ngStyle]="{'z-index': zIndex}">
   <div class="popup" (appClickOutside)="clickOutsideClose()">
     <div class="popup-title">
-      <app-header [h]="2" [centered]="true">{{ Title }}</app-header>
+      <app-header [h]="2" [centered]="true" [Width]="'100%'">{{ Title }}</app-header>
       <div class="close">
         <app-button [ButtonType]="'close'" [SymbolSize]="'2.2rem'" (FunctionCallBack)="close()"></app-button>
       </div>
