@@ -64,7 +64,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (ul.length > 0) mi.menu_items.push(new MenuItem('Logout', ''));
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new MenuItem('Logout', ''));
           else mi.menu_items.push(new MenuItem('Login', 'login'))
         }
       });
