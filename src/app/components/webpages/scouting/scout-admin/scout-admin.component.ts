@@ -584,6 +584,20 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  buildEventTeamList(teamList: Team[], eventTeamList: Team[]): Team[] {
+    for (let i = 0; i < teamList.length; i++) {
+      for (let j = 0; j < eventTeamList.length; j++) {
+        if (teamList[i].team_no === eventTeamList[j].team_no) {
+          teamList.splice(i--, 1);
+          eventTeamList.splice(j--, 1);
+          break;
+        }
+      }
+    }
+
+    return teamList;
+  }
+
   clearEventToTeams() {
     this.eventToTeams = new EventToTeams();
     this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));

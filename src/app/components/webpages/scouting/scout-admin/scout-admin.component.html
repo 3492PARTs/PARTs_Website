@@ -265,8 +265,7 @@
           </app-form-element>
 
           <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
-            [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="eventToTeams.event_id"
-            [Required]="true">
+            [DisplayProperty]="'event_nm'" [(Model)]="eventToTeams" [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
