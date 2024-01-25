@@ -284,13 +284,18 @@
       <app-modal [ButtonType]="'main'" [ButtonText]="'Remove Team from Event'" [Title]="'Remove Team from Event'"
         [(visible)]="removeTeamFromEventModalVisible" [MaxWidth]="'400px'">
         <app-form (SubmitFunction)="removeEventToTeams()">
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
+            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
+            (ModelChange)="getEvents(linkTeamToEventSeason || -1, linkTeamToEventList)" [FormGroupInline]="true"
+            [Required]="true">
+          </app-form-element>
+
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="linkTeamToEventList"
             [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent" [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="selectedEvent.team_no"
-            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="selectedEvent.team_no"
-            [Required]="true">
+            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="selectedEvent.team_no">
           </app-form-element>
 
           <app-button-ribbon>

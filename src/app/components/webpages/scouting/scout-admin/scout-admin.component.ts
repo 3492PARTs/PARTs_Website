@@ -566,6 +566,7 @@ export class ScoutAdminComponent implements OnInit {
             this.eventToTeams = new EventToTeams();
             this.adminInit();
             this.linkTeamToEventModalVisible = false;
+            this.linkTeamToEventSeason = null;
             this.eventToTeams = new EventToTeams();
           }
         },
@@ -597,6 +598,7 @@ export class ScoutAdminComponent implements OnInit {
             this.selectedEvent = new Event();
             this.adminInit();
             this.removeTeamFromEventModalVisible = false;
+            this.linkTeamToEventSeason = null;
           }
         },
         error: (err: any) => {
