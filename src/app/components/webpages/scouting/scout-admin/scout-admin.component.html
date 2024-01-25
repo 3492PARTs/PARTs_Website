@@ -141,8 +141,8 @@
     </app-form-element>
 
     <app-button-ribbon>
-      <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'"
-        (FunctionCallBack)="setSeason()">Save</app-button>
+      <app-button *ngIf="this.init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Save
+      </app-button>
       <app-button [ButtonType]="'warning'" (FunctionCallBack)="resetSeasonForm()">Clear</app-button>
     </app-button-ribbon>
   </app-form-element-group>
@@ -198,10 +198,10 @@
           <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm" [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st"
-            [Required]="true"></app-form-element>
-          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end"
-            [Required]="true"></app-form-element>
+          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st" [Required]="true">
+          </app-form-element>
+          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end" [Required]="true">
+          </app-form-element>
 
           <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address" [Required]="true">
           </app-form-element>
@@ -256,7 +256,7 @@
       <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'"
         [(visible)]="linkTeamToEventModalVisible" [MaxWidth]="'400px'">
         <app-form (SubmitFunction)="addEventToTeams()">
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="init.events"
             [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'" [(Model)]="eventToTeams.event_id"
             [Required]="true">
           </app-form-element>

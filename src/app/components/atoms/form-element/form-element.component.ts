@@ -264,18 +264,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   isInvalid(): boolean {
     // validate if the element is a valid one or not
-    let ret = false;
+    let invalid = false;
     if (this.Touched) {
       if (this.ValidityFunction != null) {
-        ret = !this.ValidityFunction();
+        invalid = !this.ValidityFunction();
       }
       else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
-        ret = !(this.Model.length === 10);
+        invalid = !(this.Model.length === 10);
       }
       else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
         const emailRegex =
           new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
-        ret = !emailRegex.test(this.Model);
+        invalid = !emailRegex.test(this.Model);
       }
     }
 
@@ -294,10 +294,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else {
       this.hasValue = false;
-      ret = this.Required;
+      //invalid = this.Required;
     }
 
-    this.valid = !ret;
+    if (this.Required && !this.hasValue) invalid = true;
+
+    this.valid = !invalid;
 
     // move indicator for certain types
     if (['radio'].includes(this.Type))
@@ -314,7 +316,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       }, 1);
 
-    return ret;
+    return invalid;
   }
 
   touchIt() {
