@@ -53,8 +53,8 @@
   <br>
   <app-form (SubmitFunction)="save()">
     <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="matches"
-      [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch" [Required]="true"
-      (FunctionCallBack)="buildTeamList()">
+      [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
+      [Required]="matches.length > 0" (FunctionCallBack)="buildTeamList()">
     </app-form-element>
 
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamList"

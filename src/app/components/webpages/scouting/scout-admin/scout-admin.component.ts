@@ -27,6 +27,8 @@ export class ScoutAdminComponent implements OnInit {
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
+  linkTeamToEventSeason!: number | null;
+  linkTeamToEventList: Event[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
@@ -120,7 +122,7 @@ export class ScoutAdminComponent implements OnInit {
                 fs.end_time = new Date(fs.end_time)
             });
             this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
-            this.buildEventList();
+            this.getEvents(this.init.currentSeason.season_id, this.eventList);
             this.userTableCols = this.userTableCols;
           }
         },
@@ -288,12 +290,34 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  buildEventList(clearActiveCompetition = false): void {
-    this.eventList = this.init.events.filter(item => item.season_id === this.init.currentSeason.season_id);
-
-    if (clearActiveCompetition) {
-      this.init.currentEvent.competition_page_active = 'n';
+  getEvents(season_id: number, events: Event[]): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/season-events/', {
+      params: {
+        season_id: season_id
+      }
     }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            window.setTimeout(() => {
+              events.splice(0, events.length);
+              (result as Event[]).forEach(e => { events.push(e) });
+            }, 1);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   resetSeasonForm(): void {

@@ -233,6 +233,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.ModelChange.emit(newValue);
     }
 
+    this.touchIt();
     if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
 
@@ -240,7 +241,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.Model[index]['checked'] = newValue;
     this._SelectList[index]['checked'] = newValue;
     this.ModelChange.emit(this.Model);
-    this.FunctionCallBack.emit();
+    this.touchIt();
+    if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
 
   private positionMultiSelect(): void {

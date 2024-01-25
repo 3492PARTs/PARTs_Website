@@ -157,6 +157,9 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         this.team = this.teamMatch.red_three_id as number;
       }
     }
+    else {
+      this.teams.forEach(t => { this.teamList.push(t) });
+    }
   }
 
   save(): void | null {
