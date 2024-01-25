@@ -285,12 +285,12 @@
         [(visible)]="removeTeamFromEventModalVisible" [MaxWidth]="'400px'">
         <app-form (SubmitFunction)="removeEventToTeams()">
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
-            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
-            (ModelChange)="getEvents(linkTeamToEventSeason || -1, linkTeamToEventList)" [FormGroupInline]="true"
+            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="removeTeamFromEventSeason"
+            (ModelChange)="getEvents(removeTeamFromEventSeason || -1, removeTeamFromEventList)" [FormGroupInline]="true"
             [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="linkTeamToEventList"
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
             [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="selectedEvent" [Required]="true">
           </app-form-element>
 

@@ -29,6 +29,8 @@ export class ScoutAdminComponent implements OnInit {
   eventList: Event[] = [];
   linkTeamToEventSeason!: number | null;
   linkTeamToEventList: Event[] = [];
+  removeTeamFromEventSeason!: number | null;
+  removeTeamFromEventList: Event[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
@@ -598,7 +600,8 @@ export class ScoutAdminComponent implements OnInit {
             this.selectedEvent = new Event();
             this.adminInit();
             this.removeTeamFromEventModalVisible = false;
-            this.linkTeamToEventSeason = null;
+            this.removeTeamFromEventSeason = null;
+            this.removeTeamFromEventList = [];
           }
         },
         error: (err: any) => {
