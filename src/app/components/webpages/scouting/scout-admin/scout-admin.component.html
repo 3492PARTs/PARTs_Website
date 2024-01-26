@@ -265,10 +265,11 @@
           </app-form-element>
 
           <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
-            [DisplayProperty]="'event_nm'" [(Model)]="eventToTeams" [Required]="true">
+            [DisplayProperty]="'event_nm'" [(Model)]="linkTeamToEventEvent" [Required]="true"
+            (FunctionCallBack)="buildEventTeamList()">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="init.teams"
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="eventToTeams.teams"
             [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="eventToTeams.teams"
             [Required]="true">
           </app-form-element>

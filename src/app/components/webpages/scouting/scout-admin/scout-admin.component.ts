@@ -28,6 +28,7 @@ export class ScoutAdminComponent implements OnInit {
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
   linkTeamToEventSeason!: number | null;
+  linkTeamToEventEvent = new Event();
   linkTeamToEventList: Event[] = [];
   removeTeamFromEventSeason!: number | null;
   removeTeamFromEventList: Event[] = [];
@@ -123,7 +124,7 @@ export class ScoutAdminComponent implements OnInit {
               fs.st_time = new Date(fs.st_time),
                 fs.end_time = new Date(fs.end_time)
             });
-            this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+            //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.getEvents(this.init.currentSeason.season_id, this.eventList);
             this.userTableCols = this.userTableCols;
           }
@@ -569,6 +570,7 @@ export class ScoutAdminComponent implements OnInit {
             this.adminInit();
             this.linkTeamToEventModalVisible = false;
             this.linkTeamToEventSeason = null;
+            this.linkTeamToEventEvent = new Event();
             this.eventToTeams = new EventToTeams();
           }
         },
@@ -584,7 +586,10 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  buildEventTeamList(teamList: Team[], eventTeamList: Team[]): Team[] {
+  buildEventTeamList(): void {
+    let teamList = this.init.teams;
+    let eventTeamList = this.linkTeamToEventEvent.team_no;
+
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
         if (teamList[i].team_no === eventTeamList[j].team_no) {
@@ -595,7 +600,8 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
 
-    return teamList;
+    this.eventToTeams.event_id = this.linkTeamToEventEvent.event_id;
+    this.eventToTeams.teams = teamList;
   }
 
   clearEventToTeams() {
