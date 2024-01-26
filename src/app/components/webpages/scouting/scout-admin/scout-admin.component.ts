@@ -28,7 +28,7 @@ export class ScoutAdminComponent implements OnInit {
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
   linkTeamToEventSeason!: number | null;
-  linkTeamToEventEvent = new Event();
+  linkTeamToEventEvent: Event | null = null;
   linkTeamToEventList: Event[] = [];
   removeTeamFromEventSeason!: number | null;
   removeTeamFromEventList: Event[] = [];
@@ -291,6 +291,11 @@ export class ScoutAdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  getCurrentEvents(): void {
+    this.init.currentEvent = new Event();
+    this.getEvents(this.init.currentSeason.season_id, this.eventList);
   }
 
   getEvents(season_id: number, events: Event[]): void {
@@ -560,9 +565,7 @@ export class ScoutAdminComponent implements OnInit {
 
   showLinkTeamToEventModal(visible: boolean) {
     this.linkTeamToEventModalVisible = visible;
-    this.linkTeamToEventSeason = null;
-    this.linkTeamToEventEvent = new Event();
-    this.eventToTeams = new EventToTeams();
+    this.clearEventToTeams();
   }
 
   addEventToTeams(): void {
@@ -595,7 +598,7 @@ export class ScoutAdminComponent implements OnInit {
 
   buildEventTeamList(): void {
     let teamList = this.init.teams;
-    let eventTeamList = this.linkTeamToEventEvent.team_no;
+    let eventTeamList = this.linkTeamToEventEvent?.team_no || [];
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -607,13 +610,15 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
 
-    this.eventToTeams.event_id = this.linkTeamToEventEvent.event_id;
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
     this.eventToTeams.teams = teamList;
   }
 
   clearEventToTeams() {
-    this.eventToTeams = new EventToTeams();
-    this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+    this.linkTeamToEventSeason = null;
+    this.linkTeamToEventEvent = new Event();
+    this.linkTeamToEventList = [];
+    this.eventToTeams.teams = [];
   }
 
   removeEventToTeams(): void {
@@ -644,14 +649,14 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   clearRemoveEventToTeams() {
-    this.removeTeamFromEventEvent.team_no.forEach(t => t.checked = true);
+    this.removeTeamFromEventSeason = null;
+    this.removeTeamFromEventEvent = new Event();
+    this.removeTeamFromEventList = [];
   }
 
   showRemoveTeamFromEventModal(visible: boolean) {
     this.removeTeamFromEventModalVisible = visible;
-    this.removeTeamFromEventSeason = null;
-    this.removeTeamFromEventList = [];
-    this.removeTeamFromEventEvent = new Event();
+    this.clearRemoveEventToTeams();
   }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {

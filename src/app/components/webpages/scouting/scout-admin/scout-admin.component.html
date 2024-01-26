@@ -128,8 +128,8 @@
 <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
   <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
     <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons" [DisplayProperty]="'season'"
-      [BindingProperty]="'season_id'" [(Model)]="init.currentSeason.season_id"
-      (ModelChange)="getEvents(init.currentSeason.season_id, eventList)" [FormGroupInline]="true">
+      [BindingProperty]="'season_id'" [(Model)]="init.currentSeason.season_id" (ModelChange)="getCurrentEvents()"
+      [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList" [DisplayProperty]="'event_nm'"
