@@ -22,7 +22,8 @@ export class ScoutAdminComponent implements OnInit {
   newSeason!: number | null;
   delSeason!: number | null;
   newEvent: Event = new Event();
-  delEvent!: number;
+  delEvent!: number | null;
+  delEventList: Event[] = [];
   removeTeamFromEventEvent = new Event();
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
@@ -299,33 +300,35 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getEvents(season_id: number, events: Event[]): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/season-events/', {
-      params: {
-        season_id: season_id
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            window.setTimeout(() => {
-              events.splice(0, events.length);
-              (result as Event[]).forEach(e => { events.push(e) });
-            }, 1);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+    if (!this.gs.strNoE(season_id)) {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/season-events/', {
+        params: {
+          season_id: season_id
         }
       }
-    );
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              window.setTimeout(() => {
+                events.splice(0, events.length);
+                (result as Event[]).forEach(e => { events.push(e) });
+              }, 1);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }
   }
 
   resetSeasonForm(): void {
@@ -381,6 +384,8 @@ export class ScoutAdminComponent implements OnInit {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
             this.delSeason = null;
+            this.delEvent = null;
+            this.delEventList = [];
             this.manageSeasonModalVisible = false;
           }
         },
@@ -511,7 +516,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/delete-event/', {
       params: {
-        event_id: this.delEvent.toString()
+        event_id: this.delEvent?.toString() || ''
       }
     }
     ).subscribe(
@@ -519,6 +524,8 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.delEvent = null;
+            this.getEvents(this.delSeason || -1, this.delEventList);
             this.adminInit();
           }
         },

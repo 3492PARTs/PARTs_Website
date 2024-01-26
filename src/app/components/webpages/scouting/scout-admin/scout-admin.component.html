@@ -175,13 +175,14 @@
         <div class="inline-flex align-items-center padding-right-half-em">
           <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
             [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="delSeason" [FormGroupInline]="true">
+            [(Model)]="delSeason" [FormGroupInline]="true"
+            (FunctionCallBack)="getEvents(delSeason || -1, delEventList)">
           </app-form-element>
           <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
         </div>
 
         <div class="inline-flex align-items-center padding-right-half-em">
-          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="init.events"
+          <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="delEventList"
             [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
             [(Model)]="delEvent" [FormGroupInline]="true">
           </app-form-element>
@@ -260,7 +261,7 @@
         <app-form (SubmitFunction)="addEventToTeams()">
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
             [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
-            (ModelChange)="getEvents(linkTeamToEventSeason || -1, linkTeamToEventList)" [FormGroupInline]="true"
+            (FunctionCallBack)="getEvents(linkTeamToEventSeason || -1, linkTeamToEventList)" [FormGroupInline]="true"
             [Required]="true">
           </app-form-element>
 
@@ -287,8 +288,8 @@
         <app-form (SubmitFunction)="removeEventToTeams()">
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
             [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="removeTeamFromEventSeason"
-            (ModelChange)="getEvents(removeTeamFromEventSeason || -1, removeTeamFromEventList)" [FormGroupInline]="true"
-            [Required]="true">
+            (FunctionCallBack)="getEvents(removeTeamFromEventSeason || -1, removeTeamFromEventList)"
+            [FormGroupInline]="true" [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
