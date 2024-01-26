@@ -23,7 +23,7 @@ export class ScoutAdminComponent implements OnInit {
   delSeason!: number | null;
   newEvent: Event = new Event();
   delEvent!: number;
-  selectedEvent = new Event();
+  removeTeamFromEventEvent = new Event();
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
@@ -558,6 +558,13 @@ export class ScoutAdminComponent implements OnInit {
     this.newTeam = new Team();
   }
 
+  showLinkTeamToEventModal(visible: boolean) {
+    this.linkTeamToEventModalVisible = visible;
+    this.linkTeamToEventSeason = null;
+    this.linkTeamToEventEvent = new Event();
+    this.eventToTeams = new EventToTeams();
+  }
+
   addEventToTeams(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
@@ -612,12 +619,12 @@ export class ScoutAdminComponent implements OnInit {
   removeEventToTeams(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'scouting/admin/remove-team-to-event/', this.selectedEvent
+      'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.selectedEvent = new Event();
+            this.removeTeamFromEventEvent = new Event();
             this.adminInit();
             this.removeTeamFromEventModalVisible = false;
             this.removeTeamFromEventSeason = null;
@@ -637,7 +644,14 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   clearRemoveEventToTeams() {
-    this.selectedEvent.team_no.forEach(t => t.checked = true);
+    this.removeTeamFromEventEvent.team_no.forEach(t => t.checked = true);
+  }
+
+  showRemoveTeamFromEventModal(visible: boolean) {
+    this.removeTeamFromEventModalVisible = visible;
+    this.removeTeamFromEventSeason = null;
+    this.removeTeamFromEventList = [];
+    this.removeTeamFromEventEvent = new Event();
   }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
