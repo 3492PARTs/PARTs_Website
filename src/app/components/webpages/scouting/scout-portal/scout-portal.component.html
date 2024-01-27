@@ -27,7 +27,7 @@
 
               <app-form-element [LabelText]="'Type'" [FormGroup]="true" [Type]="'select'"
                 [SelectList]="init.scheduleTypes" [DisplayProperty]="'sch_nm'" [BindingProperty]="'sch_typ'"
-                [(Model)]="currentSchedule.sch_typ" [FormGroupInline]="true" [Disabled]="true" [Required]="true">
+                [(Model)]="currentSchedule.sch_typ" [FormGroupInline]="true" [Required]="true">
               </app-form-element>
 
               <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
