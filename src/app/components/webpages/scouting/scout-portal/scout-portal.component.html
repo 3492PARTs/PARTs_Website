@@ -1,68 +1,81 @@
 <app-box [Title]="'Portal'">
 
-  <app-table [TableTitle]="'Full Scouting Schedule'" *ngIf="init.allFieldSchedule && init.allFieldSchedule.length > 0"
-    [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="init.allFieldSchedule" [Scrollable]="true"
-    [EnableFilter]="true">
-  </app-table>
+  <app-form-element-group [LabelText]="'Full Scouting Schedule'">
+    <app-table *ngIf="init.allFieldSchedule && init.allFieldSchedule.length > 0"
+      [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="init.allFieldSchedule" [Scrollable]="true"
+      [EnableFilter]="true">
+    </app-table>
+  </app-form-element-group>
 
-  <app-table [TableTitle]="'All Subgroup Schedule'" *ngIf="init.users && init.users.length > 0"
-    [TableCols]="expandedScheduleTableCols" [TableData]="init.allSchedule" [Scrollable]="true" [ShowAddButton]="true"
-    (AddRecordCallBack)="showScoutScheduleModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showScoutScheduleModal($event)" [EnableFilter]="true">
-  </app-table>
+  <ng-container *ngIf="init.users && init.users.length > 0">
+    <app-form-element-group [LabelText]="'All Subgroup Schedules'">
+      <app-table *ngFor="let sch of init.allSchedule" [TableTitle]="sch.sch_typ.sch_nm"
+        [TableCols]="expandedScheduleTableCols" [TableData]="sch.sch" [Scrollable]="true" [ShowAddButton]="true"
+        (AddRecordCallBack)="showScoutScheduleModal(sch.sch_typ)" [ShowEditButton]="true"
+        (EditRecordCallBack)="showScoutScheduleModal(sch.sch_typ, $event)" [EnableFilter]="true">
+      </app-table>
 
-  <app-modal [(visible)]="scheduleModalVisible" [Title]="'Schedule'">
-    <app-form>
-      <app-form-element-group>
+      <app-modal [(visible)]="scheduleModalVisible" [Title]="'Schedule'">
+        <app-form>
+          <app-form-element-group>
+            <app-form (SubmitFunction)="saveScheduleEntry()">
+              <app-form-element [LabelText]="'User'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+                [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
+                [(Model)]="currentSchedule.user" [FormGroupInline]="true"
+                [SelectComparatorFunction]="compareUserObjects" [Required]="true">
+              </app-form-element>
 
-        <app-form-element [LabelText]="'User'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
-          [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
-          [(Model)]="currentSchedule.user" [FormGroupInline]="true" [SelectComparatorFunction]="compareUserObjects">
-        </app-form-element>
+              <app-form-element [LabelText]="'Type'" [FormGroup]="true" [Type]="'select'"
+                [SelectList]="init.scheduleTypes" [DisplayProperty]="'sch_nm'" [BindingProperty]="'sch_typ'"
+                [(Model)]="currentSchedule.sch_typ" [FormGroupInline]="true" [Disabled]="true" [Required]="true">
+              </app-form-element>
 
-        <app-form-element [LabelText]="'Type'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.scheduleTypes"
-          [DisplayProperty]="'sch_nm'" [BindingProperty]="'sch_typ'" [DisplayEmptyOption]="true"
-          [(Model)]="currentSchedule.sch_typ" [FormGroupInline]="true">
-        </app-form-element>
+              <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
+                [(Model)]="currentSchedule.st_time" (FunctionCallBack)="setEndTime()" [Required]="true">
+              </app-form-element>
+              <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
+                [(Model)]="currentSchedule.end_time" [Required]="true">
+              </app-form-element>
 
-        <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'Start Time'"
-          [(Model)]="currentSchedule.st_time" (FunctionCallBack)="setEndTime()">
-        </app-form-element>
-        <app-form-element [Type]="'datetime'" [FormGroup]="true" [LabelText]="'End Time'"
-          [(Model)]="currentSchedule.end_time">
-        </app-form-element>
+              <app-form-element *ngIf="currentSchedule.sch_id" [Type]="'checkbox'" [FormGroup]="true"
+                [LabelText]="'Delete?'" [(Model)]="currentSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
+              </app-form-element>
 
-        <app-form-element *ngIf="currentSchedule.sch_id" [Type]="'checkbox'" [FormGroup]="true" [LabelText]="'Delete?'"
-          [(Model)]="currentSchedule.void_ind" [TrueValue]="'y'" [FalseValue]="'n'">
-        </app-form-element>
+              <app-button-ribbon>
+                <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'warning'"
+                  (FunctionCallBack)="notifyUser(currentSchedule.sch_id)">
+                  Notify</app-button>
+                <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'main'"
+                  (FunctionCallBack)="copyScoutScheduleEntry()">Copy</app-button>
+                <app-button [ButtonType]="'main'" [Type]="'submit'">Save
+                </app-button>
+              </app-button-ribbon>
+            </app-form>
+          </app-form-element-group>
+        </app-form>
+      </app-modal>
+    </app-form-element-group>
+  </ng-container>
 
-        <app-button-ribbon>
-          <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'warning'"
-            (FunctionCallBack)="notifyUser(currentSchedule.sch_id)">
-            Notify</app-button>
-          <app-button *ngIf="currentSchedule.sch_id" [ButtonType]="'main'"
-            (FunctionCallBack)="copyScoutScheduleEntry()">Copy</app-button>
-          <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="saveScheduleEntry()">Save</app-button>
-        </app-button-ribbon>
-      </app-form-element-group>
-    </app-form>
-  </app-modal>
+  <app-form-element-group [LabelText]="'Your Field Scouting Schedule'">
+    <div *ngIf="scoutFieldScheduleData.length <= 0">
+      <p>You do not currently have any scheduled scouting.</p>
+    </div>
 
-  <div *ngIf="scoutFieldScheduleData.length <= 0">
-    <p>You do not currently have any scheduled scouting.</p>
-  </div>
+    <app-table *ngIf="scoutFieldScheduleData && scoutFieldScheduleData.length > 0"
+      [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData" [Scrollable]="true">
+    </app-table>
+  </app-form-element-group>
 
-  <app-table [TableTitle]="'Your Scouting Schedule'" *ngIf="scoutFieldScheduleData && scoutFieldScheduleData.length > 0"
-    [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData" [Scrollable]="true">
-  </app-table>
+  <app-form-element-group [LabelText]="'Your Pit Scouting Schedule'">
+    <div *ngIf="init.schedule && init.schedule.length <= 0">
+      <p>You do not currently have any scheduled pit times.</p>
+    </div>
 
-  <div *ngIf="init.schedule && init.schedule.length <= 0">
-    <p>You do not currently have any scheduled pit times.</p>
-  </div>
-
-  <app-table [TableTitle]="'Schedule'" *ngIf="init.schedule && init.schedule.length > 0" [TableCols]="scheduleTableCols"
-    [TableData]="init.schedule" [Scrollable]="true">
-  </app-table>
+    <app-table *ngIf="init.schedule && init.schedule.length > 0" [TableCols]="scheduleTableCols"
+      [TableData]="init.schedule" [Scrollable]="true">
+    </app-table>
+  </app-form-element-group>
 
   <!--<app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
     [Scrollable]="true">

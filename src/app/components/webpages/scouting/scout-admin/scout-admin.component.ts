@@ -89,7 +89,18 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutPitQuestions = false;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
-    this.ns.currentSubPage.subscribe(p => this.page = p);
+    this.ns.currentSubPage.subscribe(p => {
+      this.page = p;
+
+      switch (this.page) {
+        case 'users':
+          this.us.getUsers(1);
+          break;
+        case 'mngSch':
+          this.us.getUsers(1, 1);
+          break;
+      }
+    });
     this.us.currentUsers.subscribe(u => this.users = u);
   }
 
@@ -128,6 +139,7 @@ export class ScoutAdminComponent implements OnInit {
             //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.getEvents(this.init.currentSeason.season_id, this.eventList);
             this.userTableCols = this.userTableCols;
+            this.us.getUsers(1);
           }
         },
         error: (err: any) => {
