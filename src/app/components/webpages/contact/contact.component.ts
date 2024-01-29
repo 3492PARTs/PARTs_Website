@@ -64,6 +64,8 @@ export class ContactComponent implements OnInit {
   save(): void | null {
     this.gs.incrementOutstandingCalls();
 
+    this.questions.forEach(q => { q.answer = this.gs.formatQuestionAnswer(q.answer) });
+
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
