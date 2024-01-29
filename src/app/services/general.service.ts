@@ -343,7 +343,7 @@ export class GeneralService {
       let str = '';
       answer.forEach(opt => {
         if (!this.strNoE(opt.checked) && opt.checked !== 'false')
-          if (opt.checked === 'true')
+          if (opt.checked === 'true' || opt.checked === true)
             str += opt.option + ', ';
           else
             str += opt.checked + ', ';

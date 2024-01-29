@@ -45,7 +45,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     window.setTimeout(() => {
       this._SelectList = sl;
 
-      if (this.Type === 'multiCheckbox') {
+      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
