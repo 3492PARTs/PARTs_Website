@@ -47,6 +47,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
+        console.log(tmp);
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
           if (this.Model) {
@@ -226,6 +227,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (index !== -1) {
       this.Model[index]['checked'] = newValue;
+      //this._SelectList[index]['checked'] = newValue;
       this.ModelChange.emit(this.Model);
     }
     else {
@@ -236,14 +238,14 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.touchIt();
     if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
-
-  multiChange(newValue: any, index: number) {
-    this.Model[index]['checked'] = newValue;
-    this._SelectList[index]['checked'] = newValue;
-    this.ModelChange.emit(this.Model);
-    this.touchIt();
-    if (!this.isInvalid()) this.FunctionCallBack.emit();
-  }
+  /*
+    multiChange(newValue: any, index: number) {
+      this.Model[index]['checked'] = newValue;
+      this._SelectList[index]['checked'] = newValue;
+      this.ModelChange.emit(this.Model);
+      this.touchIt();
+      if (!this.isInvalid()) this.FunctionCallBack.emit();
+    }*/
 
   private positionMultiSelect(): void {
     if (this.Type === 'multiSelect' && this.multiSelect) {
@@ -436,13 +438,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   selectAll(): void {
     for (let i = 0; i < this._SelectList.length; i++) {
-      this.multiChange(true, i);
+      this.change(true, i);
     }
   }
 
   deselectAll(): void {
     for (let i = 0; i < this._SelectList.length; i++) {
-      this.multiChange(false, i);
+      this.change(false, i);
     }
   }
 

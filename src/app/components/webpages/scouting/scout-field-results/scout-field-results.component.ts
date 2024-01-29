@@ -20,6 +20,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   teamScoutResults: ScoutResults = new ScoutResults();
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
   showScoutFieldCols!: any[];
+  showScoutFieldColsList!: any[];
 
   filterText = '';
   rank!: number | null;
@@ -47,7 +48,8 @@ export class ScoutFieldResultsComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.scoutResults = result as ScoutResults;
-            this.showScoutFieldCols = this.scoutResults['scoutCols'];
+            this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults['scoutCols']);
+            this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResults['scoutCols']);
 
             for (let i = 0; i < this.showScoutFieldCols.length; i++) {
               this.showScoutFieldCols[i]['checked'] = true;
