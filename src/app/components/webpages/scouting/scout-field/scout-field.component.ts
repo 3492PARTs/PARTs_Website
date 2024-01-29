@@ -108,8 +108,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   buildTeamList(): void {
     this.teamList = [];
-    // only run if a match is selected
-    if (!this.gs.strNoE(this.teamMatch)) {
+    // only run if there are matchs
+    if (this.matches.length > 0) {
 
       // get the teams for the match from the teams list
       if (this.teamMatch.blue_one_id) {
@@ -133,27 +133,27 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       }
 
       // set the selected team based on which user is assigned to which team
-      if (this.user.id === this.scoutFieldSchedule.blue_one_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
         this.team = this.teamMatch.blue_one_id as number;
       }
 
-      if (this.user.id === this.scoutFieldSchedule.blue_two_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
         this.team = this.teamMatch.blue_two_id as number;
       }
 
-      if (this.user.id === this.scoutFieldSchedule.blue_three_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
         this.team = this.teamMatch.blue_three_id as number;
       }
 
-      if (this.user.id === this.scoutFieldSchedule.red_one_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
         this.team = this.teamMatch.red_one_id as number;
       }
 
-      if (this.user.id === this.scoutFieldSchedule.red_two_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
         this.team = this.teamMatch.red_two_id as number;
       }
 
-      if (this.user.id === this.scoutFieldSchedule.red_three_id.id) {
+      if (this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
         this.team = this.teamMatch.red_three_id as number;
       }
     }
@@ -180,6 +180,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.scoutOtherQuestions.forEach(sq => {
       response.push(sq);
     });
+
+    response.forEach(r => {
+      r.answer = this.gs.formatQuestionAnswer(r.answer);
+    })
 
     this.http.post(
       //'scouting/field/save-answers/',

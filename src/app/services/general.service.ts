@@ -337,6 +337,23 @@ export class GeneralService {
       'linear'
     );
   }
+
+  formatQuestionAnswer(answer: any): String {
+    if (Array.isArray(answer)) {
+      let str = '';
+      answer.forEach(opt => {
+        if (!this.strNoE(opt.checked) && opt.checked !== 'false')
+          if (opt.checked === 'true')
+            str += opt.option + ', ';
+          else
+            str += opt.checked + ', ';
+      });
+      str = str.substring(0, str.length - 2);
+      answer = str;
+    }
+
+    return answer;
+  }
 }
 
 export class RetMessage {
