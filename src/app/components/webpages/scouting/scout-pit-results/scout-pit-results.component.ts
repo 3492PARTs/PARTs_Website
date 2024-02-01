@@ -15,6 +15,7 @@ import { AppSize } from '../../../../services/general.service';
 })
 export class ScoutPitResultsComponent implements OnInit {
   teams: Team[] = [];
+  teamsList: Team[] = [];
   scoutPitResults: ScoutPitResults[] = [];
   resultWidth = '350px';
 
@@ -34,6 +35,7 @@ export class ScoutPitResultsComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.teams = result as Team[];
+            this.teamsList = result as Team[];
           }
         },
         error: (err: any) => {

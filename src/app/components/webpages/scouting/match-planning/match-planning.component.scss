@@ -1,3 +1,7 @@
+#back-button {
+  padding-bottom: 2rem;
+}
+
 .team-results {
   display: flex;
   flex-wrap: wrap;
@@ -26,6 +30,7 @@
 .box {
   width: 2rem;
   height: 2rem;
+  margin-right: 1rem;
 }
 
 .ten {
@@ -50,12 +55,13 @@
 
 #legend {
   width: 100%;
-  overflow: hidden;
-  th,
-  td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    white-space: pre-line;
+
+  .box,
+  .box + p {
+    display: inline-block;
+  }
+
+  .box + p {
+    margin-bottom: 0;
   }
 }
