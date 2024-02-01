@@ -113,9 +113,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     }
 
     this.gs.incrementOutstandingCalls();
-    const formData = new FormData();
-    formData.append('file', this.robotPic);
-    formData.append('team_no', this.team);
+
+    this.scoutQuestions.forEach(r => {
+      r.answer = this.gs.formatQuestionAnswer(r.answer);
+    });
+    //const formData = new FormData();
+    //formData.append('file', this.robotPic);
+    //formData.append('team_no', this.team);
     this.http.post(
       //'scouting/pit/save-answers/',
       'form/save-answers/',

@@ -183,7 +183,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     response.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
-    })
+    });
 
     this.http.post(
       //'scouting/field/save-answers/',
