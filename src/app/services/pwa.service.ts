@@ -30,7 +30,7 @@ export class PwaService {
           break;
       }
 
-      if (confirm('There is a new app version available. Would you like to refresh?')) {
+      if (confirm('There is a new version of the site available. Would you like to refresh?')) {
         // Reload the page to update to the latest version.
         document.location.reload();
       }
