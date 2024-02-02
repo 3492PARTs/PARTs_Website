@@ -317,6 +317,10 @@
   </app-form-element-group>
 </app-box>
 
+<app-box *ngIf="page === 'scoutAct'" [Title]="'Scouting Activity'">
+
+</app-box>
+
 <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
   <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
 </app-box>

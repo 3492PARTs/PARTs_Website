@@ -48,12 +48,13 @@ export class ScoutFieldResultsComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.scoutResults = result as ScoutResults;
-            this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults['scoutCols']);
-            this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResults['scoutCols']);
+            this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults.scoutCols);
 
             for (let i = 0; i < this.showScoutFieldCols.length; i++) {
               this.showScoutFieldCols[i]['checked'] = true;
             }
+
+            this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
           }
         },
         error: (err: any) => {
@@ -216,7 +217,7 @@ export class ScoutFieldResultsComponent implements OnInit {
       }
     }
 
-    this.scoutResults['scoutCols'] = tmp;
+    this.scoutResults.scoutCols = tmp;
   }
 
   resetTableColumns(): void {

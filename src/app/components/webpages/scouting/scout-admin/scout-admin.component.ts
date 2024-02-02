@@ -88,6 +88,8 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
+  userFieldResults: UserFieldResult[] = [];
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
@@ -98,6 +100,9 @@ export class ScoutAdminComponent implements OnInit {
           break;
         case 'mngSch':
           this.us.getUsers(1, 1);
+          break;
+        case 'scoutAct':
+          this.getScoutingActivity();
           break;
       }
     });
@@ -114,8 +119,9 @@ export class ScoutAdminComponent implements OnInit {
 
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
-      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
       new MenuItem('Season', 'mngSeason', 'card-bulleted-settings-outline'),
+      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
+      new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
@@ -819,6 +825,29 @@ export class ScoutAdminComponent implements OnInit {
     }
     return false;
   }
+
+  getScoutingActivity(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/scout-activity/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userFieldResults = result['userFieldResults'] as UserFieldResult[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
 }
 
 export class Season {
@@ -924,4 +953,18 @@ export class ScoutAdminInit {
 export class EventToTeams {
   event_id!: number;
   teams: Team[] = [];
+}
+
+export class ScoutField {
+  scout_field_id!: number;
+  event!: number;
+  team_no!: number;
+  user!: number;
+  time = new Date()
+  match!: number;
+}
+
+export class UserFieldResult {
+  user = new User();
+  results: ScoutField[] = [];
 }
