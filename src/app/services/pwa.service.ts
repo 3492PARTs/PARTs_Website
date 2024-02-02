@@ -29,17 +29,15 @@ export class PwaService {
         case 'VERSION_READY':
           console.log(`Current app version: ${evt.currentVersion.hash}`);
           console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
+          if (confirm('There is a new version of the site available. Would you like to refresh?')) {
+            // Reload the page to update to the latest version.
+            document.location.reload();
+          }
           break;
         case 'VERSION_INSTALLATION_FAILED':
           console.log(`Failed to install app version '${evt.version.hash}': ${evt.error}`);
           break;
       }
-
-      if (confirm('There is a new version of the site available. Would you like to refresh?')) {
-        // Reload the page to update to the latest version.
-        document.location.reload();
-      }
-
     });
   }
 
