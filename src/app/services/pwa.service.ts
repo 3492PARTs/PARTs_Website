@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { GeneralService } from './general.service';
 
 @Injectable({
@@ -13,10 +14,14 @@ export class PwaService {
   private installEligibleBS = new BehaviorSubject<boolean>(this.installEligiblePriv);
   installEligible = this.installEligibleBS.asObservable();
 
-  constructor(updates: SwUpdate) {
+  constructor(private updates: SwUpdate) {
     this.initPwaPrompt();
 
-    updates.versionUpdates.subscribe(evt => {
+    if (this.updates.isEnabled) {
+      console.log(`${environment.version} running...`);
+    }
+
+    this.updates.versionUpdates.subscribe(evt => {
       switch (evt.type) {
         case 'VERSION_DETECTED':
           console.log(`Downloading new app version: ${evt.version.hash}`);

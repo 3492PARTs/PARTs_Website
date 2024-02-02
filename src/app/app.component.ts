@@ -2,9 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { APIStatus, AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
-import { GeneralService, RetMessage } from './services/general.service';
+import { GeneralService } from './services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { SwUpdate } from '@angular/service-worker';
 import { PwaService } from './services/pwa.service';
 import { DOCUMENT } from '@angular/common';
 
@@ -20,9 +19,8 @@ export class AppComponent implements OnInit {
 
   private apiStatus = APIStatus.prcs;
   private firstRun = true;
-  private VERSION = environment.version;
 
-  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, private http: HttpClient, private swUpdate: SwUpdate, private pwa: PwaService, @Inject(DOCUMENT) private document: Document) {
+  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, @Inject(DOCUMENT) private document: Document) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
       if (environment.production && event instanceof NavigationEnd) {
@@ -45,10 +43,6 @@ export class AppComponent implements OnInit {
     })
 
     console.log('prod: ' + environment.production);
-
-    if (this.swUpdate.isEnabled) {
-      console.log(this.VERSION + ' running...');
-    }
   }
 
   ngOnInit() {
