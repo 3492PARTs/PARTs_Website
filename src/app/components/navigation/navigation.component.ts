@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { AuthService, User } from 'src/app/services/auth.service';
 import { Router, NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -30,7 +30,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   subNav = '';
   pageIDs: any = {};
-  pagesWithNavs = ['admin', 'scouting admin'];
+  pagesWithNavs = ['admin', 'scouting admin', 'match planning'];
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;
@@ -64,7 +64,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (ul.length > 0) mi.menu_items.push(new MenuItem('Logout', ''));
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new MenuItem('Logout', ''));
           else mi.menu_items.push(new MenuItem('Login', 'login'))
         }
       });
@@ -122,13 +122,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.navExpanded = this.gs.screenSize() === 'lg';
+    this.navExpanded = this.gs.screenSize() >= AppSize.LG;
 
-    this.hideNavExpander = this.gs.screenSize() !== 'lg';
+    this.hideNavExpander = this.gs.screenSize() < AppSize.LG;
 
     if (this.hideNavExpander) this.showNav = false;
 
-    this.screenXs = this.gs.screenSize() === 'xs';
+    this.screenXs = this.gs.screenSize() === AppSize.XS;
 
     this.appMenu = [
       new MenuItem('Join PARTs', 'join', 'account-supervisor', [
@@ -288,10 +288,10 @@ let max = document.documentElement.scrollHeight;
     }
 
     this.resizeTimer = window.setTimeout(() => {
-      if (!this.manualNavExpander || this.gs.screenSize() !== 'lg') {
-        this.navExpanded = this.gs.screenSize() === 'lg';
+      if (!this.manualNavExpander || this.gs.screenSize() < AppSize.LG) {
+        this.navExpanded = this.gs.screenSize() >= AppSize.LG;
         this.manualNavExpander = false;
-        this.hideNavExpander = this.gs.screenSize() !== 'lg';
+        this.hideNavExpander = this.gs.screenSize() < AppSize.LG;
 
         if (!this.hideNavExpander) {
           this.showNav = true;
@@ -299,7 +299,7 @@ let max = document.documentElement.scrollHeight;
         }
       }
 
-      this.screenXs = this.gs.screenSize() === 'xs';
+      this.screenXs = this.gs.screenSize() === AppSize.XS;
     }, 200);
   }
 

@@ -1,4 +1,4 @@
-<app-box [Title]="'Scout Pit Form'">
+<app-box [Title]="'Pit Scouting Form'">
   <form>
     <div>
       <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
@@ -9,7 +9,7 @@
       <app-form-element [LabelText]="'Edit Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true">
+        [DisplayEmptyOption]="true" [MinWidth]="'150px'">
       </app-form-element>
     </div>
 

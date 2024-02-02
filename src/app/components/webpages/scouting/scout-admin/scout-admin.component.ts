@@ -19,21 +19,35 @@ export class ScoutAdminComponent implements OnInit {
   init: ScoutAdminInit = new ScoutAdminInit();
   users: User[] = [];
   //season!: number;
-  newSeason!: number;
-  delSeason!: number;
+  newSeason!: number | null;
+  delSeason!: number | null;
   newEvent: Event = new Event();
-  delEvent!: number;
-  selectedEvent = new Event();
+  delEvent!: number | null;
+  delEventList: Event[] = [];
+  removeTeamFromEventEvent = new Event();
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
+  linkTeamToEventSeason!: number | null;
+  linkTeamToEventEvent: Event | null = null;
+  linkTeamToEventList: Event[] = [];
+  removeTeamFromEventSeason!: number | null;
+  removeTeamFromEventList: Event[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
 
   syncSeasonResponse = new RetMessage();
 
-  userTableCols: any[] = [];
+  userTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+    { PropertyName: 'phone', ColLabel: 'Phone' },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+  ];
+
 
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
@@ -65,11 +79,28 @@ export class ScoutAdminComponent implements OnInit {
   scoutScheduleModalTitle = '';
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
 
+  manageSeasonModalVisible = false;
+  manageEventsModalVisible = false;
+  manageTeamModalVisible = false;
+  linkTeamToEventModalVisible = false;
+  removeTeamFromEventModalVisible = false;
+
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
-    this.ns.currentSubPage.subscribe(p => this.page = p);
+    this.ns.currentSubPage.subscribe(p => {
+      this.page = p;
+
+      switch (this.page) {
+        case 'users':
+          this.us.getUsers(1);
+          break;
+        case 'mngSch':
+          this.us.getUsers(1, 1);
+          break;
+      }
+    });
     this.us.currentUsers.subscribe(u => this.users = u);
   }
 
@@ -90,12 +121,6 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
     this.ns.setSubPage('users');
-    this.buildUserColumns();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.buildUserColumns();
   }
 
   adminInit(): void {
@@ -111,9 +136,10 @@ export class ScoutAdminComponent implements OnInit {
               fs.st_time = new Date(fs.st_time),
                 fs.end_time = new Date(fs.end_time)
             });
-            this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
-            this.buildEventList();
-            this.buildUserColumns();
+            //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+            this.getEvents(this.init.currentSeason.season_id, this.eventList);
+            this.userTableCols = this.userTableCols;
+            this.us.getUsers(1);
           }
         },
         error: (err: any) => {
@@ -280,11 +306,40 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  buildEventList(clearActiveCompetition = false): void {
-    this.eventList = this.init.events.filter(item => item.season_id === this.init.currentSeason.season_id);
+  getCurrentEvents(): void {
+    this.init.currentEvent = new Event();
+    this.getEvents(this.init.currentSeason.season_id, this.eventList);
+  }
 
-    if (clearActiveCompetition) {
-      this.init.currentEvent.competition_page_active = 'n';
+  getEvents(season_id: number, events: Event[]): void {
+    if (!this.gs.strNoE(season_id)) {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/season-events/', {
+        params: {
+          season_id: season_id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              window.setTimeout(() => {
+                events.splice(0, events.length);
+                (result as Event[]).forEach(e => { events.push(e) });
+              }, 1);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
     }
   }
 
@@ -297,7 +352,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/add-season/', {
       params: {
-        season: this.newSeason.toString()
+        season: this.newSeason?.toString() || ''
       }
     }
     ).subscribe(
@@ -306,6 +361,8 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
+            this.newSeason = null;
+            this.manageSeasonModalVisible = false;
           }
         },
         error: (err: any) => {
@@ -329,7 +386,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/delete-season/', {
       params: {
-        season_id: this.delSeason.toString()
+        season_id: this.delSeason?.toString() || ''
       }
     }
     ).subscribe(
@@ -338,6 +395,10 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
+            this.delSeason = null;
+            this.delEvent = null;
+            this.delEventList = [];
+            this.manageSeasonModalVisible = false;
           }
         },
         error: (err: any) => {
@@ -350,29 +411,6 @@ export class ScoutAdminComponent implements OnInit {
         }
       }
     );
-  }
-
-  buildUserColumns(): void {
-    this.userTableCols = [
-      { PropertyName: 'name', ColLabel: 'User' },
-      { PropertyName: 'username', ColLabel: 'Username' },
-      { PropertyName: 'email', ColLabel: 'Email' },
-    ];
-
-    if (this.gs.screenSize() === 'xs') {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
-        { PropertyName: 'phone', ColLabel: 'Phone' },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
-      ]);
-    }
-    else {
-      this.userTableCols = this.userTableCols.concat([
-        { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'text', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone', ColLabel: 'Phone', Type: 'phone', FunctionCallBack: this.saveUser.bind(this) },
-        { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'select', SelectList: this.init.phoneTypes, BindingProperty: 'phone_type_id', DisplayProperty: 'carrier', FunctionCallBack: this.saveUser.bind(this) },
-      ]);
-    }
   }
 
   showManageUserModal(u: User): void {
@@ -459,6 +497,8 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.manageEventsModalVisible = false;
             this.adminInit();
             this.newEvent = new Event();
           }
@@ -488,7 +528,7 @@ export class ScoutAdminComponent implements OnInit {
     this.http.get(
       'scouting/admin/delete-event/', {
       params: {
-        event_id: this.delEvent.toString()
+        event_id: this.delEvent?.toString() || ''
       }
     }
     ).subscribe(
@@ -496,6 +536,8 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.delEvent = null;
+            this.getEvents(this.delSeason || -1, this.delEventList);
             this.adminInit();
           }
         },
@@ -520,6 +562,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.adminInit();
+            this.manageTeamModalVisible = false;
             this.newTeam = new Team();
           }
         },
@@ -539,6 +582,11 @@ export class ScoutAdminComponent implements OnInit {
     this.newTeam = new Team();
   }
 
+  showLinkTeamToEventModal(visible: boolean) {
+    this.linkTeamToEventModalVisible = visible;
+    this.clearEventToTeams();
+  }
+
   addEventToTeams(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
@@ -549,6 +597,10 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.eventToTeams = new EventToTeams();
             this.adminInit();
+            this.linkTeamToEventModalVisible = false;
+            this.linkTeamToEventSeason = null;
+            this.linkTeamToEventEvent = new Event();
+            this.eventToTeams = new EventToTeams();
           }
         },
         error: (err: any) => {
@@ -563,21 +615,44 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  buildEventTeamList(): void {
+    let teamList = this.init.teams;
+    let eventTeamList = this.linkTeamToEventEvent?.team_no || [];
+
+    for (let i = 0; i < teamList.length; i++) {
+      for (let j = 0; j < eventTeamList.length; j++) {
+        if (teamList[i].team_no === eventTeamList[j].team_no) {
+          teamList.splice(i--, 1);
+          eventTeamList.splice(j--, 1);
+          break;
+        }
+      }
+    }
+
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
+    this.eventToTeams.teams = teamList;
+  }
+
   clearEventToTeams() {
-    this.eventToTeams = new EventToTeams();
-    this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+    this.linkTeamToEventSeason = null;
+    this.linkTeamToEventEvent = new Event();
+    this.linkTeamToEventList = [];
+    this.eventToTeams.teams = [];
   }
 
   removeEventToTeams(): void {
     this.gs.incrementOutstandingCalls();
     this.http.post(
-      'scouting/admin/remove-team-to-event/', this.selectedEvent
+      'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.selectedEvent = new Event();
+            this.removeTeamFromEventEvent = new Event();
             this.adminInit();
+            this.removeTeamFromEventModalVisible = false;
+            this.removeTeamFromEventSeason = null;
+            this.removeTeamFromEventList = [];
           }
         },
         error: (err: any) => {
@@ -593,7 +668,14 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   clearRemoveEventToTeams() {
-    this.selectedEvent.team_no.forEach(t => t.checked = true);
+    this.removeTeamFromEventSeason = null;
+    this.removeTeamFromEventEvent = new Event();
+    this.removeTeamFromEventList = [];
+  }
+
+  showRemoveTeamFromEventModal(visible: boolean) {
+    this.removeTeamFromEventModalVisible = visible;
+    this.clearRemoveEventToTeams();
   }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
@@ -840,6 +922,6 @@ export class ScoutAdminInit {
 }
 
 export class EventToTeams {
-  event_id = 0;
+  event_id!: number;
   teams: Team[] = [];
 }

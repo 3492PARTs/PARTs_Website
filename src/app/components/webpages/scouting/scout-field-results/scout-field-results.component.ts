@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 import * as LoadImg from 'blueimp-load-image';
@@ -20,6 +20,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   teamScoutResults: ScoutResults = new ScoutResults();
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
   showScoutFieldCols!: any[];
+  showScoutFieldColsList!: any[];
 
   filterText = '';
   rank!: number | null;
@@ -35,7 +36,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
 
-    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
+    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   scoutFieldResultsInit(): void {
@@ -47,7 +48,8 @@ export class ScoutFieldResultsComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.scoutResults = result as ScoutResults;
-            this.showScoutFieldCols = this.scoutResults['scoutCols'];
+            this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults['scoutCols']);
+            this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResults['scoutCols']);
 
             for (let i = 0; i < this.showScoutFieldCols.length; i++) {
               this.showScoutFieldCols[i]['checked'] = true;

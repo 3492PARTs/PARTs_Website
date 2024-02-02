@@ -294,7 +294,7 @@ export class TableComponent implements OnInit, OnChanges {
     }
 
     if (colWidth > 0) {
-      this.buttonCellWidth = colWidth + 'rem';
+      this.buttonCellWidth = colWidth + 0.6 + 'rem';
     }
 
     if (

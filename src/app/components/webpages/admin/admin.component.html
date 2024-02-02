@@ -1,5 +1,5 @@
 <app-box *ngIf="page === 'users'" [Title]="'Manage Users'">
-  <app-form-element-group [LabelText]="'Filter'" [InlineElements]="true">
+  <app-form-element-group [InlineElements]="true">
     <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
 
     <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
@@ -11,45 +11,48 @@
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
-    <div class="flex">
-      <div>
-        <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
-          [FormGroupInline]="true">
-        </app-form-element>
-        <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
-          [FormGroupInline]="true">
-        </app-form-element>
-        <app-form-element [Type]="'text'" [LabelText]="'Email:'" [(Model)]="activeUser.email" [FormGroupInline]="true">
-        </app-form-element>
-        <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
-          [FormGroupInline]="true">
-        </app-form-element>
-        <app-form-element [Type]="'text'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
-          [FormGroupInline]="true">
-        </app-form-element>
-        <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
-          [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
-          [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
-        </app-form-element>
-        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
-          [FormGroupInline]="true">
-        </app-form-element>
+    <app-form (SubmitFunction)="saveUser()">
+      <div class="flex">
+        <div>
+          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+            [FormGroupInline]="true" [Required]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+            [FormGroupInline]="true" [Required]="true">
+          </app-form-element>
+          <app-form-element [Type]="'email'" [LabelText]="'Email:'" [(Model)]="activeUser.email"
+            [FormGroupInline]="true" [Required]="true">
+          </app-form-element>
+          <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'phone'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+            [FormGroupInline]="true">
+          </app-form-element>
+          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+          </app-form-element>
+          <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
+            [FormGroupInline]="true">
+          </app-form-element>
+        </div>
+        <div class="vertical-center">
+          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormGroupInline]="true"
+            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
+            [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+          </app-form-element>
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
+        </div>
       </div>
-      <div class="vertical-center">
-        <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormGroupInline]="true" [(Model)]="newAuthGroup.id"
-          [SelectList]="availableAuthGroups" [BindingProperty]="'id'" [DisplayProperty]="'name'"
-          [DisplayEmptyOption]="true">
-        </app-form-element>
-        <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
-      </div>
-    </div>
 
-    <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
-      [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+        [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveUser()">Save</app-button>
-    </app-button-ribbon>
+      <app-button-ribbon>
+        <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+      </app-button-ribbon>
+    </app-form>
   </app-modal>
 </app-box>
 
@@ -111,20 +114,20 @@
   </app-modal>
 </app-box>
 
-<app-box *ngIf="page ==='team-app-form'" [Title]="'Manage Team Application Form'">
-  <app-question-admin-form [questionType]="'team-app'"></app-question-admin-form>
-
+<app-box *ngIf="page ==='team-app-form'" [Title]="'Team Application Form'">
   <app-form-element-group [LabelText]="'Responses'">
     <app-table [TableCols]="teamApplicationResponsesCols" [TableData]="teamApplicationResponses"
-      (RecordClickCallBack)="openResponse($event)"></app-table>
+      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'"></app-table>
   </app-form-element-group>
+
+  <app-question-admin-form [questionType]="'team-app'"></app-question-admin-form>
 </app-box>
 
-<app-box *ngIf="page ==='team-cntct-form'" [Title]="'Manage Team Contact Form'">
-  <app-question-admin-form [questionType]="'team-cntct'"></app-question-admin-form>
-
+<app-box *ngIf="page ==='team-cntct-form'" [Title]="'Team Contact Form'">
   <app-form-element-group [LabelText]="'Responses'">
     <app-table [TableCols]="teamContactResponsesCols" [TableData]="teamContactResponses"
-      (RecordClickCallBack)="openResponse($event)"></app-table>
+      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'"></app-table>
   </app-form-element-group>
+
+  <app-question-admin-form [questionType]="'team-cntct'"></app-question-admin-form>
 </app-box>

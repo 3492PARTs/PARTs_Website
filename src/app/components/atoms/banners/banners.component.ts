@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Banner, GeneralService } from 'src/app/services/general.service';
+import { AppSize, Banner, GeneralService } from 'src/app/services/general.service';
 import * as $ from 'jquery';
 import { ModalService } from 'src/app/services/modal.service';
 
@@ -53,7 +53,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     //this.positionBannerWrapper();
-    this.mobile = this.gs.screenSize() === 'xs';
+    this.mobile = this.gs.screenSize() === AppSize.XS;
     if (this.mobile) this.scrollEvents(window.scrollY);
   }
 
@@ -63,7 +63,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   positionBannerWrapper(): void {
-    this.mobile = this.gs.screenSize() === 'xs';
+    this.mobile = this.gs.screenSize() === AppSize.XS;
 
     const windowTop = $(window).scrollTop() || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();

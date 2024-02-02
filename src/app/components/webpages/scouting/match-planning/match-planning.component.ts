@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
+import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import * as LoadImg from 'blueimp-load-image';
+import { NavigationService } from 'src/app/services/navigation.service';
+import { MenuItem } from 'src/app/components/navigation/navigation.component';
 
 @Component({
   selector: 'app-match-planning',
@@ -13,6 +15,8 @@ import * as LoadImg from 'blueimp-load-image';
   styleUrls: ['./match-planning.component.scss']
 })
 export class MatchPlanningComponent implements OnInit {
+  page = 'matches';
+
   initData = new Init();
 
   currentTeamNote = new TeamNote();
@@ -36,11 +40,31 @@ export class MatchPlanningComponent implements OnInit {
 
   tableWidth = '200%';
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
+    this.ns.currentSubPage.subscribe(p => {
+      this.page = p;
+      let r = 9;
+      /*
+      switch (this.page) {
+        
+      }*/
+    });
+  }
 
   ngOnInit(): void {
-    this.init();
-    if (this.gs.screenSize() != 'lg') this.tableWidth = '800%';
+    this.authService.authInFlight.subscribe(r => {
+      if (r === AuthCallStates.comp) {
+        this.init();
+      }
+    });
+
+    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
+
+    this.ns.setSubPages([
+      new MenuItem('Matches', 'matches', 'soccer-field'),
+      new MenuItem('Team Notes', 'notes', 'note-multiple'),
+    ]);
+    this.ns.setSubPage('matches');
   }
 
   init(): void {

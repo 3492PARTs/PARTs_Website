@@ -45,8 +45,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     window.setTimeout(() => {
       this._SelectList = sl;
 
-      if (this.Type === 'multiCheckbox') {
+      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
+        this.gs.devConsoleLog(tmp);
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
           if (this.Model) {
@@ -153,19 +154,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    /*
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'Model': {
-            if (this.Type === 'multiCheckbox') {
-              console.log(this.Model);
+            if (this.Type === 'phone') {
+              //console.log(changes);
+              if (this.gs.strNoE(changes['Model'].previousValue) && !this.gs.strNoE(changes['Model'].currentValue)) this.phoneMaskFn(changes['Model'].currentValue);
             }
           }
         }
       }
     }
-    */
   }
 
 
@@ -227,6 +227,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (index !== -1) {
       this.Model[index]['checked'] = newValue;
+      //this._SelectList[index]['checked'] = newValue;
       this.ModelChange.emit(this.Model);
     }
     else {
@@ -234,15 +235,17 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.ModelChange.emit(newValue);
     }
 
+    this.touchIt();
     if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
-
-  multiChange(newValue: any, index: number) {
-    this.Model[index]['checked'] = newValue;
-    this._SelectList[index]['checked'] = newValue;
-    this.ModelChange.emit(this.Model);
-    this.FunctionCallBack.emit();
-  }
+  /*
+    multiChange(newValue: any, index: number) {
+      this.Model[index]['checked'] = newValue;
+      this._SelectList[index]['checked'] = newValue;
+      this.ModelChange.emit(this.Model);
+      this.touchIt();
+      if (!this.isInvalid()) this.FunctionCallBack.emit();
+    }*/
 
   private positionMultiSelect(): void {
     if (this.Type === 'multiSelect' && this.multiSelect) {
@@ -265,27 +268,27 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   isInvalid(): boolean {
     // validate if the element is a valid one or not
-    let ret = false;
+    let invalid = false;
     if (this.Touched) {
       if (this.ValidityFunction != null) {
-        ret = !this.ValidityFunction();
+        invalid = !this.ValidityFunction();
       }
       else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
-        ret = !(this.Model.length === 10);
+        invalid = !(this.Model.length === 10);
       }
       else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
         const emailRegex =
           new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
-        ret = !emailRegex.test(this.Model);
+        invalid = !emailRegex.test(this.Model);
       }
     }
 
     // if the element is populated or not
     if (!this.strNoE(this.Model)) {
       this.hasValue = false;
-      if (this.Type === 'multiCheckbox') {
+      if (['multiCheckbox', 'multiSelect'].includes(this.Type)) {
         this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked).replace('"', '').replace('"', '').replace('false', '');
+          let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
           if (!this.strNoE(s))
             this.hasValue = true;
         });
@@ -295,10 +298,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else {
       this.hasValue = false;
-      ret = this.Required;
+      //invalid = this.Required;
     }
 
-    this.valid = !ret;
+    if (this.Required && !this.hasValue) invalid = true;
+
+    this.valid = !invalid;
 
     // move indicator for certain types
     if (['radio'].includes(this.Type))
@@ -315,7 +320,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       }, 1);
 
-    return ret;
+    return invalid;
   }
 
   touchIt() {
@@ -433,13 +438,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   selectAll(): void {
     for (let i = 0; i < this._SelectList.length; i++) {
-      this.multiChange(true, i);
+      this.change(true, i);
     }
   }
 
   deselectAll(): void {
     for (let i = 0; i < this._SelectList.length; i++) {
-      this.multiChange(false, i);
+      this.change(false, i);
     }
   }
 
@@ -503,18 +508,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   phoneMaskFn(value: string, init = false) {
     window.setTimeout(() => {
       this.phoneMaskModel = '';
-    }, 1);
-    // This code manipulates the input to look like a phone number.
-    let phone = (value || '').replace(/\D/g, '');
-    phone = phone.slice(0, 10);
-    const areaCode = phone.slice(0, 3);
-    const prefix = phone.slice(3, 6);
-    const suffix = phone.slice(6, 10);
 
-    window.setTimeout(() => {
-      this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
-    }, 1);
+      // This code manipulates the input to look like a phone number.
+      let phone = (value || '').replace(/\D/g, '');
+      phone = phone.slice(0, 10);
+      const areaCode = phone.slice(0, 3);
+      const prefix = phone.slice(3, 6);
+      const suffix = phone.slice(6, 10);
 
-    if (!init) this.change(phone);
+      window.setTimeout(() => {
+        this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
+      }, 1);
+
+      if (!init) this.change(phone);
+    }, 1);
   };
 }

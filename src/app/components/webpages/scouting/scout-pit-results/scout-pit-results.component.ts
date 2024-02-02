@@ -6,6 +6,7 @@ import { Question } from '../../../elements/question-admin-form/question-admin-f
 
 import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { AppSize } from '../../../../services/general.service';
 
 @Component({
   selector: 'app-scout-pit-results',
@@ -14,6 +15,7 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 })
 export class ScoutPitResultsComponent implements OnInit {
   teams: Team[] = [];
+  teamsList: Team[] = [];
   scoutPitResults: ScoutPitResults[] = [];
   resultWidth = '350px';
 
@@ -21,7 +23,7 @@ export class ScoutPitResultsComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
-    this.resultWidth = this.gs.screenSize() === 'xs' ? '100%' : '350px';
+    this.resultWidth = this.gs.screenSize() === AppSize.XS ? '100%' : '350px';
   }
 
   scoutPitResultsInit(): void {
@@ -33,6 +35,7 @@ export class ScoutPitResultsComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.teams = result as Team[];
+            this.teamsList = result as Team[];
           }
         },
         error: (err: any) => {

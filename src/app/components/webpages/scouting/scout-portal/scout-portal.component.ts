@@ -114,16 +114,21 @@ export class ScoutPortalComponent implements OnInit {
     );
   }
 
-  showScoutScheduleModal(s?: Schedule): void {
+  showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
     if (s) {
       //"2020-01-01T01:00"
       let s1 = JSON.parse(JSON.stringify(s));
       //ss1.st_time = new Date(ss1.st_time);
       //ss1.end_time = new Date(ss1.end_time);
       this.currentSchedule = s1;
-    } else {
+    }
+    else {
       this.currentSchedule = new Schedule();
     }
+
+    this.currentSchedule.sch_typ = sch_typ.sch_typ;
+    this.currentSchedule.sch_nm = sch_typ.sch_nm;
+
     this.scheduleModalVisible = true;
   }
 
@@ -207,7 +212,7 @@ export class ScoutPortalInit {
   fieldSchedule: ScoutFieldSchedule[] = [];
   schedule: Schedule[] = [];
   allFieldSchedule: ScoutFieldSchedule[] = [];
-  allSchedule: Schedule[] = [];
+  allSchedule: ScheduleByType[] = [];
   users: User[] = [];
   scheduleTypes: ScheduleType[] = [];
 }
@@ -229,4 +234,9 @@ export class Schedule {
 export class ScheduleType {
   sch_typ = '';
   sch_nm = '';
+}
+
+export class ScheduleByType {
+  sch_typ = new ScheduleType();
+  sch: Schedule[] = [];
 }

@@ -3,8 +3,8 @@
     <div id="table-buttons">
       <div>
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
-          [BindingProperty]="'checked'" [SelectList]="showScoutFieldCols" [(Model)]="showScoutFieldCols"
-          (ModelChange)="showHideTableCols()" [Width]="'200px'">
+          [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
+          (FunctionCallBack)="showHideTableCols()">
         </app-form-element>
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
       </div>

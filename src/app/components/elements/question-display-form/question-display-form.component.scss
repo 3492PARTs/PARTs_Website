@@ -1,5 +1,5 @@
 .question {
-  align-items: flex-end;
+  position: relative;
 }
 
 .number-stepper,
@@ -9,6 +9,8 @@
 }
 
 .number-stepper {
+  position: absolute;
+  bottom: 0;
   padding-bottom: calc(1em + 14px);
 }
 
