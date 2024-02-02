@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { GeneralService } from './general.service';
 
 @Injectable({
@@ -13,10 +14,14 @@ export class PwaService {
   private installEligibleBS = new BehaviorSubject<boolean>(this.installEligiblePriv);
   installEligible = this.installEligibleBS.asObservable();
 
-  constructor(updates: SwUpdate) {
+  constructor(private updates: SwUpdate) {
     this.initPwaPrompt();
 
-    updates.versionUpdates.subscribe(evt => {
+    if (this.updates.isEnabled) {
+      console.log(`${environment.version} running...`);
+    }
+
+    this.updates.versionUpdates.subscribe(evt => {
       switch (evt.type) {
         case 'VERSION_DETECTED':
           console.log(`Downloading new app version: ${evt.version.hash}`);
@@ -24,17 +29,15 @@ export class PwaService {
         case 'VERSION_READY':
           console.log(`Current app version: ${evt.currentVersion.hash}`);
           console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
+          if (confirm('There is a new version of the site available. Would you like to refresh?')) {
+            // Reload the page to update to the latest version.
+            document.location.reload();
+          }
           break;
         case 'VERSION_INSTALLATION_FAILED':
           console.log(`Failed to install app version '${evt.version.hash}': ${evt.error}`);
           break;
       }
-
-      if (confirm('There is a new version of the site available. Would you like to refresh?')) {
-        // Reload the page to update to the latest version.
-        document.location.reload();
-      }
-
     });
   }
 
