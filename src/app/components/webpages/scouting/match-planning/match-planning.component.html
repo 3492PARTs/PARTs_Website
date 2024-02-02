@@ -77,7 +77,7 @@
 </app-box>
 
 <app-box *ngIf="page === 'notes'" [Title]="'Team Notes'">
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Take team note'" [Title]="'Team Note'"
+    <app-modal [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
         [(visible)]="teamNoteModalVisible">
         <app-form>
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="initData.teams"
@@ -94,7 +94,7 @@
         </app-button-ribbon>
     </app-modal>
 
-    <app-modal [ButtonType]="'main'" [ButtonText]="'View team notes'" [Title]="'View Team Notes'">
+    <app-modal [ButtonType]="'main'" [ButtonText]="'View notes'" [Title]="'View Team Notes'">
         <app-form>
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="initData.teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
