@@ -30,7 +30,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   subNav = '';
   pageIDs: any = {};
-  pagesWithNavs = ['admin', 'scouting admin'];
+  pagesWithNavs = ['admin', 'scouting admin', 'match planning'];
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;

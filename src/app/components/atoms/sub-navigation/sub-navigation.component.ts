@@ -17,12 +17,11 @@ export class SubNavigationComponent {
 
   @Input() hideNavExpander = false;
 
-  page = 'users'
+  page = '';
   @Input() navItems: MenuItem[] = [];
 
 
   constructor(private ns: NavigationService) {
-    this.ns.setSubPage(this.page);
     this.ns.currentSubPages.subscribe(sp => this.navItems = sp);
     this.ns.currentSubPage.subscribe(p => this.page = p);
   }
