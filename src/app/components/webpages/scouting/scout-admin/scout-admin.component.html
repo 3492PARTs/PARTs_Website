@@ -319,8 +319,22 @@
 
 <app-box *ngIf="page === 'scoutAct'" [Title]="'Scouting Activity'">
   <app-table [TableCols]="userActivityTableCols" [TableData]="userActivity" [EnableFilter]="true" [Scrollable]="true"
-    [ShowViewButton]="true" (ViewRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
+    [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)" [ScrollHeight]="'50rem'">
   </app-table>
+
+  <app-modal [Title]="'User Scouting Activity'" [(visible)]="userActivityModalVisible">
+    <app-form-element-group [LabelText]="'Schedule'">
+      <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserActivity.schedule">
+      </app-table>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Results'">
+      <app-table [TableCols]="activeUserActivity.results.scoutCols"
+        [TableData]="activeUserActivity.results.scoutAnswers" [Scrollable]="true"
+        [Width]="userScoutActivityResultsTableWidth" [Responsive]="true">
+      </app-table>
+    </app-form-element-group>
+  </app-modal>
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">

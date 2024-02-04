@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
@@ -89,10 +89,28 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutPitQuestions = false;
 
   userActivity: UserActivity[] = [];
+  activeUserActivity: UserActivity = new UserActivity();
   userActivityTableCols = [
     { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
   ];
+  userActivityModalVisible = false;
 
+  userScoutActivityScheduleTableCols: object[] = [
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'scouts', ColLabel: 'Scouts' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification' },
+    { PropertyName: 'notification2', ColLabel: '5 min notification' },
+    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+  ];
+
+  userScoutActivityResultsTableCols: object[] = [
+    { PropertyName: 'match', ColLabel: 'Match' },
+    { PropertyName: 'team_no', ColLabel: 'Team' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+  ];
+
+  userScoutActivityResultsTableWidth = '200%';
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -130,6 +148,8 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
+
+    if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
   }
 
   adminInit(): void {
@@ -866,6 +886,11 @@ export class ScoutAdminComponent implements OnInit {
 
     return name;
   }
+
+  showUserActivityModal(ua: UserActivity): void {
+    this.userActivityModalVisible = true;
+    this.activeUserActivity = ua;
+  }
 }
 
 export class Season {
@@ -988,8 +1013,13 @@ export class ScoutField {
   match!: number;
 }
 
+export class ScoutFieldResultsSerializer {
+  scoutCols: any[] = [];
+  scoutAnswers: any[] = [];
+}
+
 export class UserActivity {
   user = new User();
-  results: ScoutField[] = [];
+  results = new ScoutFieldResultsSerializer();
   schedule: ScoutFieldSchedule[] = [];
 }
