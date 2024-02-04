@@ -96,7 +96,7 @@
               </app-form-element>
 
               <span *ngSwitchCase="'function'">
-                {{ col.ColValueFn(rec[col.PropertyName])}}
+                {{ col.ColValueFn(GetTableDisplayValue(rec, col.PropertyName))}}
               </span>
 
               <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate

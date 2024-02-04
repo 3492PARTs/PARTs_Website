@@ -270,7 +270,7 @@
             (FunctionCallBack)="buildEventTeamList()">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="eventToTeams.teams"
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="linkTeamToEventTeams"
             [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="eventToTeams.teams"
             [Required]="true">
           </app-form-element>
@@ -318,7 +318,9 @@
 </app-box>
 
 <app-box *ngIf="page === 'scoutAct'" [Title]="'Scouting Activity'">
-
+  <app-table [TableCols]="userActivityTableCols" [TableData]="userActivity" [EnableFilter]="true" [Scrollable]="true"
+    [ShowViewButton]="true" (ViewRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
+  </app-table>
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
