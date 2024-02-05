@@ -41,7 +41,8 @@ export class MatchPlanningComponent implements OnInit {
 
   tableWidth = '200%';
 
-  chart: any = []
+  redChart: any = []
+  blueChart: any = []
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -163,24 +164,26 @@ export class MatchPlanningComponent implements OnInit {
             let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
             this.matchPlanningResults.forEach(mp => {
-              let data: any[] = [];
-              let dataSet: { label: string; data: any[]; borderWidth: number; };
+              if (mp.alliance === 'red') {
+                let data: any[] = [];
+                let dataSet: { label: string; data: any[]; borderWidth: number; };
 
-              mp.fieldAnswers.forEach((element: any) => {
-                data.push(element['ans124'] || 0);
-              });
+                mp.fieldAnswers.forEach((element: any) => {
+                  data.push(element['ans124'] || 0);
+                });
 
-              dataSet = {
-                label: `${mp.team.team_no} ${mp.team.team_nm}`,
-                data: data,
-                borderWidth: 1
-              };
+                dataSet = {
+                  label: `${mp.team.team_no} ${mp.team.team_nm}`,
+                  data: data,
+                  borderWidth: 1
+                };
 
-              dataSets.push(dataSet);
+                dataSets.push(dataSet);
+              }
             });
 
             window.setTimeout(() => {
-              this.chart = this.createLineChart(labels, dataSets);
+              this.redChart = this.createLineChart(labels, dataSets);
             }, 1);
 
             //this.chart = this.createLineChart(labels, 'Match', data);
@@ -330,4 +333,5 @@ export class MatchPlanning {
   fieldCols!: any;
   fieldAnswers!: any;
   notes: TeamNote[] = [];
+  alliance = '';
 }
