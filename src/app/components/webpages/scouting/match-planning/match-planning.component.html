@@ -1,8 +1,4 @@
 <app-box *ngIf="page === 'matches'" [Title]="'Matches'">
-    <app-form-element-group [LabelText]="'Alliance'">
-        <canvas id="canvas">{{chart}}</canvas>
-    </app-form-element-group>
-
     <div *ngIf="matchPlanningResults.length <= 0">
         <app-form-element-group [LabelText]="'Legend'">
             <div id="legend" class="flex justify-content-space-between">

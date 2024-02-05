@@ -33,20 +33,33 @@ export class TabContainerComponent implements AfterContentInit {
   }
 
   getTabs() {
-    this.tabContainerTabs.forEach(el => {
-      this.tabs.push({ name: el.TabName, element: el, active: false });
-    });
+    for (let i = 0; i < this.tabContainerTabs.length; i++) {
+      let el = this.tabContainerTabs.get(i);
 
-    this.tabContainerTabs.toArray()[0].visible = true;
-    this.tabs[0].active = true;
-    this.activeTab = this.tabs[0];
+      if (el) {
+        el.visible = i === 0;
+        this.tabs.push({ name: el?.TabName, element: el, active: i === 0 });
+      }
+
+    }
+
+    //this.tabContainerTabs.forEach(el => {
+    //  this.tabs.push({ name: el.TabName, element: el, active: false });
+    //});
+
+
+    //window.setTimeout(() => {
+    //  this.showTab(this.tabs[0]);
+    //}, 1);
   }
 
   showTab(tab: TabElement) {
-    if (this.activeTab && this.activeTab.element && tab.element) {
+    if (this.activeTab && this.activeTab.element) {
       this.activeTab.element.visible = false;
       this.activeTab.active = false;
+    }
 
+    if (tab.element) {
       tab.active = true;
       tab.element.visible = true;
 

@@ -15,7 +15,7 @@ import Chart, { ChartItem } from 'chart.js/auto';
   templateUrl: './match-planning.component.html',
   styleUrls: ['./match-planning.component.scss']
 })
-export class MatchPlanningComponent implements OnInit, AfterViewInit {
+export class MatchPlanningComponent implements OnInit {
   page = 'matches';
 
   initData = new Init();
@@ -68,33 +68,6 @@ export class MatchPlanningComponent implements OnInit, AfterViewInit {
       new MenuItem('Team Notes', 'notes', 'note-multiple'),
     ]);
     this.ns.setSubPage('matches');
-  }
-
-  ngAfterViewInit(): void {
-    window.setTimeout(() => {
-      this.chart = new Chart('canvas', {
-        type: 'bar',
-        data: {
-          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-          datasets: [
-            {
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-    }, 1);
-
-    let x = 0;
   }
 
   init(): void {
@@ -173,6 +146,25 @@ export class MatchPlanningComponent implements OnInit, AfterViewInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.matchPlanningResults = result as MatchPlanning[];
+
+            let labels: any[] = [];
+            let data: any[] = [];
+            console.log(this.matchPlanningResults[0].fieldCols);
+
+            this.matchPlanningResults[0].fieldAnswers.forEach((element: any) => {
+              labels.push(element['time']);
+              data.push(element['ans124'] || 0);
+            });
+
+            console.log(labels);
+            console.log(data);
+
+            window.setTimeout(() => {
+              this.chart = this.createLineChart(labels, 'Match', data);
+            }, 0);
+
+            //this.chart = this.createLineChart(labels, 'Match', data);
+
           }
         },
         error: (err: any) => {
@@ -240,6 +232,29 @@ export class MatchPlanningComponent implements OnInit, AfterViewInit {
     else if (rank <= 20) return '#ffcc00';
     else if (rank <= 30) return '#ff6600';
     else return '#ff0000'
+  }
+
+  private createLineChart(labels: string[], label: string, data: number[]): Chart {
+    return new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: label,
+            data: data,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
   }
 }
 
