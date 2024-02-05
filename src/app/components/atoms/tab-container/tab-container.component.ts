@@ -33,24 +33,13 @@ export class TabContainerComponent implements AfterContentInit {
   }
 
   getTabs() {
-    for (let i = 0; i < this.tabContainerTabs.length; i++) {
-      let el = this.tabContainerTabs.get(i);
+    this.tabContainerTabs.forEach(el => {
+      this.tabs.push({ name: el.TabName, element: el, active: false });
+    });
 
-      if (el) {
-        el.visible = i === 0;
-        this.tabs.push({ name: el?.TabName, element: el, active: i === 0 });
-      }
-
-    }
-
-    //this.tabContainerTabs.forEach(el => {
-    //  this.tabs.push({ name: el.TabName, element: el, active: false });
-    //});
-
-
-    //window.setTimeout(() => {
-    //  this.showTab(this.tabs[0]);
-    //}, 1);
+    window.setTimeout(() => {
+      this.showTab(this.tabs[0]);
+    }, 0);
   }
 
   showTab(tab: TabElement) {
@@ -58,7 +47,6 @@ export class TabContainerComponent implements AfterContentInit {
       this.activeTab.element.visible = false;
       this.activeTab.active = false;
     }
-
     if (tab.element) {
       tab.active = true;
       tab.element.visible = true;

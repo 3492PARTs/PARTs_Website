@@ -8,7 +8,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 import * as LoadImg from 'blueimp-load-image';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
-import Chart, { ChartItem } from 'chart.js/auto';
+import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 
 @Component({
   selector: 'app-match-planning',
@@ -148,20 +148,40 @@ export class MatchPlanningComponent implements OnInit {
             this.matchPlanningResults = result as MatchPlanning[];
 
             let labels: any[] = [];
-            let data: any[] = [];
+
             console.log(this.matchPlanningResults[0].fieldCols);
+
+
 
             this.matchPlanningResults[0].fieldAnswers.forEach((element: any) => {
               labels.push(element['time']);
-              data.push(element['ans124'] || 0);
+              //data.push(element['ans124'] || 0);
             });
 
             console.log(labels);
-            console.log(data);
+
+            let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+            this.matchPlanningResults.forEach(mp => {
+              let data: any[] = [];
+              let dataSet: { label: string; data: any[]; borderWidth: number; };
+
+              mp.fieldAnswers.forEach((element: any) => {
+                data.push(element['ans124'] || 0);
+              });
+
+              dataSet = {
+                label: `${mp.team.team_no} ${mp.team.team_nm}`,
+                data: data,
+                borderWidth: 1
+              };
+
+              dataSets.push(dataSet);
+            });
 
             window.setTimeout(() => {
-              this.chart = this.createLineChart(labels, 'Match', data);
-            }, 0);
+              this.chart = this.createLineChart(labels, dataSets);
+            }, 1);
 
             //this.chart = this.createLineChart(labels, 'Match', data);
 
@@ -234,18 +254,23 @@ export class MatchPlanningComponent implements OnInit {
     else return '#ff0000'
   }
 
-  private createLineChart(labels: string[], label: string, data: number[]): Chart {
-    return new Chart('canvas', {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
+  /*
+  
+  [
           {
             label: label,
             data: data,
             borderWidth: 1,
           },
-        ],
+        ]
+        */
+
+  private createLineChart(labels: string[], datasets: ChartDataset<'line', (number | Point | [number, number] | BubbleDataPoint | null)[]>[]): Chart {
+    return new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets,
       },
       options: {
         scales: {
