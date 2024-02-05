@@ -1,4 +1,7 @@
 <app-box *ngIf="page === 'matches'" [Title]="'Matches'">
+    <app-form-element-group [LabelText]="'Alliance'">
+        <canvas id="canvas">{{chart}}</canvas>
+    </app-form-element-group>
 
     <div *ngIf="matchPlanningResults.length <= 0">
         <app-form-element-group [LabelText]="'Legend'">
@@ -36,6 +39,10 @@
         <div id="back-button">
             <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
         </div>
+
+        <app-form-element-group [LabelText]="'Alliance'">
+            <canvas id="canvas">{{chart}}</canvas>
+        </app-form-element-group>
 
         <app-tab-container>
             <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">

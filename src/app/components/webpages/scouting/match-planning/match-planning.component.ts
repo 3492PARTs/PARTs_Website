@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
@@ -8,13 +8,14 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 import * as LoadImg from 'blueimp-load-image';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
+import Chart, { ChartItem } from 'chart.js/auto';
 
 @Component({
   selector: 'app-match-planning',
   templateUrl: './match-planning.component.html',
   styleUrls: ['./match-planning.component.scss']
 })
-export class MatchPlanningComponent implements OnInit {
+export class MatchPlanningComponent implements OnInit, AfterViewInit {
   page = 'matches';
 
   initData = new Init();
@@ -39,6 +40,8 @@ export class MatchPlanningComponent implements OnInit {
   teamNotes: TeamNote[] = [];
 
   tableWidth = '200%';
+
+  chart: any = []
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -65,6 +68,33 @@ export class MatchPlanningComponent implements OnInit {
       new MenuItem('Team Notes', 'notes', 'note-multiple'),
     ]);
     this.ns.setSubPage('matches');
+  }
+
+  ngAfterViewInit(): void {
+    window.setTimeout(() => {
+      this.chart = new Chart('canvas', {
+        type: 'bar',
+        data: {
+          labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+          datasets: [
+            {
+              label: '# of Votes',
+              data: [12, 19, 3, 5, 2, 3],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }, 1);
+
+    let x = 0;
   }
 
   init(): void {

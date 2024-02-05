@@ -26,6 +26,7 @@
     "@angular/service-worker": "^16.2.12",
     "@mdi/angular-material": "^7.2.96",
     "blueimp-load-image": "^5.14.0",
+    "chart.js": "^4.4.1",
     "file-saver": "^2.0.5",
     "jquery": "^3.7.1",
     "moment": "^2.30.1",
