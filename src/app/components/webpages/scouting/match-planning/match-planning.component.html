@@ -35,6 +35,9 @@
         <div id="back-button">
             <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
         </div>
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'" [SelectList]="graphOptionsList"
+            [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'" (FunctionCallBack)="buildGraph()">
+        </app-form-element>
 
         <app-form-element-group [LabelText]="'Red Alliance'">
             <canvas id="canvas">{{redChart}}</canvas>

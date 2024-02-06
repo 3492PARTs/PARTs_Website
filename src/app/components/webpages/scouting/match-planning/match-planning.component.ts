@@ -41,8 +41,11 @@ export class MatchPlanningComponent implements OnInit {
 
   tableWidth = '200%';
 
-  redChart: any = []
-  blueChart: any = []
+  graphOptionsList: any[] = [];
+  graphOptionsSelected: any[] = [];
+  redChart: Chart | null = null;
+  blueChart: any;
+
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -148,45 +151,9 @@ export class MatchPlanningComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.matchPlanningResults = result as MatchPlanning[];
 
-            let labels: any[] = [];
-
-            console.log(this.matchPlanningResults[0].fieldCols);
+            this.buildGraphOptionsList();
 
 
-
-            this.matchPlanningResults[0].fieldAnswers.forEach((element: any) => {
-              labels.push(element['time']);
-              //data.push(element['ans124'] || 0);
-            });
-
-            console.log(labels);
-
-            let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
-
-            this.matchPlanningResults.forEach(mp => {
-              if (mp.alliance === 'red') {
-                let data: any[] = [];
-                let dataSet: { label: string; data: any[]; borderWidth: number; };
-
-                mp.fieldAnswers.forEach((element: any) => {
-                  data.push(element['ans124'] || 0);
-                });
-
-                dataSet = {
-                  label: `${mp.team.team_no} ${mp.team.team_nm}`,
-                  data: data,
-                  borderWidth: 1
-                };
-
-                dataSets.push(dataSet);
-              }
-            });
-
-            window.setTimeout(() => {
-              this.redChart = this.createLineChart(labels, dataSets);
-            }, 1);
-
-            //this.chart = this.createLineChart(labels, 'Match', data);
 
           }
         },
@@ -199,6 +166,89 @@ export class MatchPlanningComponent implements OnInit {
         }
       }
     );
+  }
+
+  buildGraphOptionsList(): void {
+    this.graphOptionsList = [];
+    this.matchPlanningResults[0].fieldCols.forEach((fc: any) => {
+      if (fc['scorable']) {
+        this.graphOptionsList.push(fc);
+      }
+    });
+  }
+
+  buildGraph(): void {
+    let labels: any[] = [];
+
+    console.log(this.matchPlanningResults[0].fieldCols);
+
+    this.matchPlanningResults[0].fieldAnswers.forEach((element: any) => {
+      labels.push(element['time']);
+      //data.push(element['ans124'] || 0);
+    });
+
+    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    this.matchPlanningResults.forEach(mp => {
+      if (mp.alliance === 'red') {
+        let data: any[] = [];
+        let dataSet: { label: string; data: any[]; borderWidth: number; };
+        console.log(mp.team);
+        console.log(mp.fieldAnswers);
+
+        mp.fieldAnswers.forEach((fa: any) => {
+          let sum = 0;
+          this.graphOptionsSelected.forEach((gos: any) => {
+            if (gos['checked']) {
+              sum += parseFloat(fa[gos['PropertyName']]) || 0;
+            }
+          });
+
+          data.push(sum);
+        });
+
+        dataSet = {
+          label: `${mp.team.team_no} ${mp.team.team_nm}`,
+          data: data,
+          borderWidth: 1
+        };
+
+        dataSets.push(dataSet);
+      }
+    });
+
+    window.setTimeout(() => {
+      if (this.redChart) this.redChart.destroy();
+      this.redChart = this.createLineChart(labels, dataSets);
+    }, 1);
+    /*
+                let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+    
+                this.matchPlanningResults.forEach(mp => {
+                  if (mp.alliance === 'red') {
+                    let data: any[] = [];
+                    let dataSet: { label: string; data: any[]; borderWidth: number; };
+                    console.log(mp.team);
+                    console.log(mp.fieldAnswers);
+                    mp.fieldAnswers.forEach((element: any) => {
+                      data.push(element['ans124'] || 0);
+                    });
+    
+                    dataSet = {
+                      label: `${mp.team.team_no} ${mp.team.team_nm}`,
+                      data: data,
+                      borderWidth: 1
+                    };
+    
+                    dataSets.push(dataSet);
+                  }
+                });
+    
+                window.setTimeout(() => {
+                  this.redChart = this.createLineChart(labels, dataSets);
+                }, 1);*/
+
+    //this.chart = this.createLineChart(labels, 'Match', data);
   }
 
   clearResults(): void {

@@ -87,7 +87,7 @@ export class QuestionAdminFormComponent implements OnInit {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.question = new Question();
             this.questionInit();
-            console.log(this.question);
+            //console.log(this.question);
           }
         },
         error: (err: any) => {
