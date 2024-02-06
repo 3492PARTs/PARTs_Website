@@ -59,7 +59,8 @@
       [DisplayEmptyOption]="true">
     </app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="editQuestion.scout_question.scorable">
+    <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [LabelText]="'Scorable'"
+      [(Model)]="editQuestion.scout_question.scorable">
     </app-form-element>
 
     <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"

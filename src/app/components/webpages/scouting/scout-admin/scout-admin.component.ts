@@ -150,6 +150,8 @@ export class ScoutAdminComponent implements OnInit {
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
+
+    this.ns.setSubPage('users');
   }
 
   adminInit(): void {
@@ -169,9 +171,6 @@ export class ScoutAdminComponent implements OnInit {
             this.getEvents(this.init.currentSeason.season_id, this.eventList);
             this.userTableCols = this.userTableCols;
             this.us.getUsers(1);
-
-            //TODO: Remove
-            this.ns.setSubPage('scoutAct');
           }
         },
         error: (err: any) => {
