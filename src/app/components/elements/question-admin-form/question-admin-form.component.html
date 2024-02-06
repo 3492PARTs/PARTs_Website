@@ -16,6 +16,9 @@
       [MinWidth]="'200px'">
     </app-form-element>
 
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="question.scout_question.scorable">
+    </app-form-element>
+
     <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
       [(Model)]="question.required"></app-form-element>
 
@@ -54,6 +57,9 @@
       [Type]="'select'" [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="editQuestion.form_sub_typ"
       [DisplayEmptyOption]="true">
+    </app-form-element>
+
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="editQuestion.scout_question.scorable">
     </app-form-element>
 
     <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
