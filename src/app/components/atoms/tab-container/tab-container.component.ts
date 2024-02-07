@@ -1,4 +1,5 @@
 import { Component, Input, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
+import { GeneralService } from 'src/app/services/general.service';
 import { TabComponent } from '../tab/tab.component';
 
 @Component({
@@ -21,11 +22,14 @@ export class TabContainerComponent implements AfterContentInit {
   private activeTabTitle = '';
 
 
-  constructor() { }
+  constructor(private gs: GeneralService) { }
 
   ngAfterContentInit() {
+    this.tabContainerTabs.changes.subscribe(() => {
+      this.getTabs();
+    });
+
     this.getTabs();
-    this.setActiveTab(this.activeTabTitle);
   }
 
   setActiveTab(at: string) {
@@ -38,7 +42,9 @@ export class TabContainerComponent implements AfterContentInit {
     });
 
     window.setTimeout(() => {
-      this.showTab(this.tabs[0]);
+      if (this.tabs.length > 0)
+        if (!this.gs.strNoE(this.activeTabTitle)) this.setActiveTab(this.activeTabTitle);
+        else this.showTab(this.tabs[0]);
     }, 0);
   }
 
