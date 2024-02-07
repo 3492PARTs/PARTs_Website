@@ -116,6 +116,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   buildTeamList(): void {
     this.teamList = [];
+    this.noMatch = false;
     // only run if there are matchs
     if (this.matches.length > 0) {
 
