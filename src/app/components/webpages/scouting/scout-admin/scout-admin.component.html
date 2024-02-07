@@ -267,10 +267,10 @@
 
           <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
             [DisplayProperty]="'event_nm'" [(Model)]="linkTeamToEventEvent" [Required]="true"
-            (FunctionCallBack)="buildEventTeamList()">
+            (FunctionCallBack)="buildLinkTeamToEventTeamList()">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="eventToTeams.teams"
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="linkTeamToEventTeams"
             [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="eventToTeams.teams"
             [Required]="true">
           </app-form-element>
@@ -294,10 +294,10 @@
 
           <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
             [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="removeTeamFromEventEvent"
-            [Required]="true">
+            (FunctionCallBack)="buildRemoveTeamFromEventTeamList()" [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventEvent.team_no"
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
             [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.team_no">
           </app-form-element>
 
@@ -315,6 +315,26 @@
       <p class="word-break">{{syncSeasonResponse.retMessage}}</p>
     </div>
   </app-form-element-group>
+</app-box>
+
+<app-box *ngIf="page === 'scoutAct'" [Title]="'Scouting Activity'">
+  <app-table [TableCols]="userActivityTableCols" [TableData]="userActivity" [EnableFilter]="true" [Scrollable]="true"
+    [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)" [ScrollHeight]="'50rem'">
+  </app-table>
+
+  <app-modal [Title]="'User Scouting Activity'" [(visible)]="userActivityModalVisible">
+    <app-form-element-group [LabelText]="'Schedule'">
+      <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserActivity.schedule">
+      </app-table>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Results'">
+      <app-table [TableCols]="activeUserActivity.results.scoutCols"
+        [TableData]="activeUserActivity.results.scoutAnswers" [Scrollable]="true"
+        [Width]="userScoutActivityResultsTableWidth" [Responsive]="true">
+      </app-table>
+    </app-form-element-group>
+  </app-modal>
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">

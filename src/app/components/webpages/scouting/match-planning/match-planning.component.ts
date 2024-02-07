@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
@@ -8,6 +8,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 import * as LoadImg from 'blueimp-load-image';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
+import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 
 @Component({
   selector: 'app-match-planning',
@@ -39,6 +40,12 @@ export class MatchPlanningComponent implements OnInit {
   teamNotes: TeamNote[] = [];
 
   tableWidth = '200%';
+
+  graphOptionsList: any[] = [];
+  graphOptionsSelected: any[] = [];
+  redChart: Chart | null = null;
+  blueChart: Chart | null = null;
+
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -143,6 +150,8 @@ export class MatchPlanningComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.matchPlanningResults = result as MatchPlanning[];
+
+            this.buildGraphOptionsList();
           }
         },
         error: (err: any) => {
@@ -154,6 +163,84 @@ export class MatchPlanningComponent implements OnInit {
         }
       }
     );
+  }
+
+  buildGraphOptionsList(): void {
+    this.graphOptionsList = [];
+    this.matchPlanningResults[0].fieldCols.forEach((fc: any) => {
+      if (fc['scorable']) {
+        this.graphOptionsList.push(fc);
+      }
+    });
+  }
+
+  buildGraph(): void {
+    let labels: any[] = [];
+
+    // red
+    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    let red = this.matchPlanningResults.filter(mp => mp.alliance === 'red');
+    dataSets = this.getAllianceDataSets(red);
+    let count = 0;
+    dataSets.forEach(ds => {
+      if (count < ds.data.length) count = ds.data.length;
+    });
+    for (let i = 1; i <= count; i++) labels.push(i);
+
+    // blue
+    let dataSets2: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    let blue = this.matchPlanningResults.filter(mp => mp.alliance === 'blue');
+    dataSets2 = this.getAllianceDataSets(blue);
+    labels = [];
+    count = 0;
+
+    dataSets2.forEach(ds => {
+      if (count < ds.data.length) count = ds.data.length;
+    });
+
+    for (let i = 1; i <= count; i++) labels.push(i);
+
+    window.setTimeout(() => {
+      if (this.redChart) this.redChart.destroy();
+      this.redChart = this.createLineChart('red-chart', labels, dataSets);
+
+      if (this.blueChart) this.blueChart.destroy();
+      this.blueChart = this.createLineChart('blue-chart', labels, dataSets2);
+    }, 0);
+  }
+
+  getAllianceDataSets(results: MatchPlanning[]): { label: string; data: any[]; borderWidth: number; }[] {
+    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    results.forEach(mp => {
+      let data: any[] = [];
+      let dataSet: { label: string; data: any[]; borderWidth: number; };
+      //console.log(mp.team);
+      //console.log(mp.fieldAnswers);
+
+      mp.fieldAnswers.forEach((fa: any) => {
+        let sum = 0;
+        this.graphOptionsSelected.forEach((gos: any) => {
+          if (gos['checked']) {
+            sum += parseFloat(fa[gos['PropertyName']]) || 0;
+          }
+        });
+
+        data.push(sum);
+      });
+
+      dataSet = {
+        label: `${mp.team.team_no} ${mp.team.team_nm}`,
+        data: data,
+        borderWidth: 1
+      };
+
+      dataSets.push(dataSet);
+    });
+
+    return dataSets;
   }
 
   clearResults(): void {
@@ -211,6 +298,34 @@ export class MatchPlanningComponent implements OnInit {
     else if (rank <= 30) return '#ff6600';
     else return '#ff0000'
   }
+
+  /*
+  
+  [
+          {
+            label: label,
+            data: data,
+            borderWidth: 1,
+          },
+        ]
+        */
+
+  private createLineChart(id: string, labels: string[], datasets: ChartDataset<'line', (number | Point | [number, number] | BubbleDataPoint | null)[]>[]): Chart {
+    return new Chart(id, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets,
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  }
 }
 
 export class Match {
@@ -260,4 +375,5 @@ export class MatchPlanning {
   fieldCols!: any;
   fieldAnswers!: any;
   notes: TeamNote[] = [];
+  alliance = '';
 }

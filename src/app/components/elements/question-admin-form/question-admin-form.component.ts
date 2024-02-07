@@ -87,7 +87,7 @@ export class QuestionAdminFormComponent implements OnInit {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.question = new Question();
             this.questionInit();
-            console.log(this.question);
+            //console.log(this.question);
           }
         },
         error: (err: any) => {
@@ -179,9 +179,17 @@ export class QuestionAdminFormComponent implements OnInit {
 
 }
 
+export class ScoutQuestion {
+  id!: number;
+  question_id!: number;
+  season_id!: number;
+  scorable = false;
+  void_ind = 'n';
+}
+
 export class Question {
   question_id: number | null = null;
-  season!: number;
+  //season!: number;
   form_typ!: string;
   form_sub_typ!: string;
   form_sub_nm!: string;
@@ -195,13 +203,15 @@ export class Question {
   display_value = '';
 
   questionoption_set: QuestionOption[] = [];
-  scoutpitanswer_set: QuestionAnswer[] = [];
+  //scoutpitanswer_set: QuestionAnswer[] = [];
+
+  scout_question = new ScoutQuestion();
 }
 
 export class QuestionOption {
   question_opt_id!: number;
-  sfq_id!: number;
-  spq_id!: number;
+  //sfq_id!: number;
+  //spq_id!: number;
   option!: string;
   active = 'y';
   void_ind = 'n';
@@ -209,8 +219,8 @@ export class QuestionOption {
 
 export class QuestionAnswer {
   question_answer_id!: number;
-  scout_field!: any;
-  scout_pit!: any;
+  //scout_field!: any;
+  //scout_pit!: any;
   response!: any;
   question!: Question;
   answer = '';

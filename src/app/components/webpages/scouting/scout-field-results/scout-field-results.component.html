@@ -22,7 +22,7 @@
     <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetRankFilter()">Reset Rank Filter</app-button>
   </app-form-element-group>
 
-  <app-table [TableCols]="scoutResults['scoutCols']" [TableData]="scoutResults['scoutAnswers']" [Scrollable]="true"
+  <app-table [TableCols]="scoutResults.scoutCols" [TableData]="scoutResults.scoutAnswers" [Scrollable]="true"
     [(FilterText)]="filterText" [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
     [ScrollHeight]="'50rem'">
   </app-table>

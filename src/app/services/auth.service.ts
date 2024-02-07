@@ -94,24 +94,26 @@ export class AuthService {
     this.http.post('user/token/', userData).subscribe(
       {
         next: (result: any) => {
-          // console.log(Response);
-          const tmp = result as Token;
-          // this.getTokenExp(tmp.access, 'Log In Access');
-          // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
-          this.token.next(tmp);
-          this.internalToken = tmp;
-          localStorage.setItem(this.localStorageString, tmp.refresh);
-          localStorage.setItem(environment.loggedInHereBefore, 'hi');
-          this.getAllUserInfo();
-          this.ps.subscribeToNotifications();
+          if (this.gs.checkResponse(result)) {
+            // console.log(Response);
+            const tmp = result as Token;
+            // this.getTokenExp(tmp.access, 'Log In Access');
+            // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
+            this.token.next(tmp);
+            this.internalToken = tmp;
+            localStorage.setItem(this.localStorageString, tmp.refresh);
+            localStorage.setItem(environment.loggedInHereBefore, 'hi');
+            this.getAllUserInfo();
+            this.ps.subscribeToNotifications();
 
-          if (this.gs.strNoE(returnUrl)) {
-            this.router.navigateByUrl('');
-          } else {
-            this.router.navigateByUrl(returnUrl || '');
+            if (this.gs.strNoE(returnUrl)) {
+              this.router.navigateByUrl('');
+            } else {
+              this.router.navigateByUrl(returnUrl || '');
+            }
+
+            this.authInFlightBS.next(AuthCallStates.comp);
           }
-
-          this.authInFlightBS.next(AuthCallStates.comp);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();

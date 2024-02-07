@@ -1,5 +1,4 @@
 <app-box *ngIf="page === 'matches'" [Title]="'Matches'">
-
     <div *ngIf="matchPlanningResults.length <= 0">
         <app-form-element-group [LabelText]="'Legend'">
             <div id="legend" class="flex justify-content-space-between">
@@ -34,7 +33,23 @@
 
     <div *ngIf="matchPlanningResults.length > 0">
         <div id="back-button">
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+            <app-button-ribbon [TextAlign]="'left'">
+                <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+                <app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
+                    <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'"
+                        [SelectList]="graphOptionsList" [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'"
+                        (FunctionCallBack)="buildGraph()">
+                    </app-form-element>
+
+                    <app-form-element-group [LabelText]="'Red Alliance'">
+                        <canvas id="red-chart">{{redChart}}</canvas>
+                    </app-form-element-group>
+
+                    <app-form-element-group [LabelText]="'Blue Alliance'">
+                        <canvas id="blue-chart">{{blueChart}}</canvas>
+                    </app-form-element-group>
+                </app-modal>
+            </app-button-ribbon>
         </div>
 
         <app-tab-container>
@@ -67,8 +82,8 @@
 
                 <div class="padding-bottom-1rem"></div>
 
-                <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [Scrollable]="true"
-                    [EnableFilter]="true" [Width]="tableWidth" [Responsive]="true">
+                <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [EnableFilter]="true"
+                    [Width]="tableWidth" [Responsive]="true">
                 </app-table>
             </app-tab>
         </app-tab-container>

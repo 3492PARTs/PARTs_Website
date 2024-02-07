@@ -37,16 +37,17 @@ export class TabContainerComponent implements AfterContentInit {
       this.tabs.push({ name: el.TabName, element: el, active: false });
     });
 
-    this.tabContainerTabs.toArray()[0].visible = true;
-    this.tabs[0].active = true;
-    this.activeTab = this.tabs[0];
+    window.setTimeout(() => {
+      this.showTab(this.tabs[0]);
+    }, 0);
   }
 
   showTab(tab: TabElement) {
-    if (this.activeTab && this.activeTab.element && tab.element) {
+    if (this.activeTab && this.activeTab.element) {
       this.activeTab.element.visible = false;
       this.activeTab.active = false;
-
+    }
+    if (tab.element) {
       tab.active = true;
       tab.element.visible = true;
 

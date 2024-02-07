@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
@@ -30,9 +30,11 @@ export class ScoutAdminComponent implements OnInit {
   eventList: Event[] = [];
   linkTeamToEventSeason!: number | null;
   linkTeamToEventEvent: Event | null = null;
+  linkTeamToEventTeams: Team[] = [];
   linkTeamToEventList: Event[] = [];
   removeTeamFromEventSeason!: number | null;
   removeTeamFromEventList: Event[] = [];
+  removeTeamFromEventTeams: Team[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
@@ -47,7 +49,6 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'phone', ColLabel: 'Phone' },
     { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
   ];
-
 
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
@@ -88,6 +89,30 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
+  userActivity: UserActivity[] = [];
+  activeUserActivity: UserActivity = new UserActivity();
+  userActivityTableCols = [
+    { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+  ];
+  userActivityModalVisible = false;
+
+  userScoutActivityScheduleTableCols: object[] = [
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'scouts', ColLabel: 'Scouts' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification' },
+    { PropertyName: 'notification2', ColLabel: '5 min notification' },
+    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+  ];
+
+  userScoutActivityResultsTableCols: object[] = [
+    { PropertyName: 'match', ColLabel: 'Match' },
+    { PropertyName: 'team_no', ColLabel: 'Team' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+  ];
+
+  userScoutActivityResultsTableWidth = '200%';
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
@@ -98,6 +123,9 @@ export class ScoutAdminComponent implements OnInit {
           break;
         case 'mngSch':
           this.us.getUsers(1, 1);
+          break;
+        case 'scoutAct':
+          this.getScoutingActivity();
           break;
       }
     });
@@ -114,12 +142,16 @@ export class ScoutAdminComponent implements OnInit {
 
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
-      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
       new MenuItem('Season', 'mngSeason', 'card-bulleted-settings-outline'),
+      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
+      new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
+
+    if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
+
     this.ns.setSubPage('users');
   }
 
@@ -595,12 +627,12 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.eventToTeams = new EventToTeams();
             this.adminInit();
             this.linkTeamToEventModalVisible = false;
             this.linkTeamToEventSeason = null;
             this.linkTeamToEventEvent = new Event();
-            this.eventToTeams = new EventToTeams();
+            this.linkTeamToEventTeams = [];
+            this.eventToTeams = new EventToTeams();;
           }
         },
         error: (err: any) => {
@@ -615,9 +647,17 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  buildEventTeamList(): void {
-    let teamList = this.init.teams;
-    let eventTeamList = this.linkTeamToEventEvent?.team_no || [];
+  buildLinkTeamToEventTeamList(): void {
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
+    this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.team_no || []);
+  }
+
+  buildRemoveTeamFromEventTeamList(): void {
+    this.removeTeamFromEventTeams = this.gs.cloneObject(this.removeTeamFromEventEvent.team_no);
+  }
+
+  buildEventTeamList(eventTeamList: Team[]): Team[] {
+    let teamList = this.gs.cloneObject(this.init.teams);
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -629,8 +669,7 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
 
-    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
-    this.eventToTeams.teams = teamList;
+    return teamList;
   }
 
   clearEventToTeams() {
@@ -653,6 +692,7 @@ export class ScoutAdminComponent implements OnInit {
             this.removeTeamFromEventModalVisible = false;
             this.removeTeamFromEventSeason = null;
             this.removeTeamFromEventList = [];
+            this.removeTeamFromEventTeams = [];
           }
         },
         error: (err: any) => {
@@ -819,6 +859,46 @@ export class ScoutAdminComponent implements OnInit {
     }
     return false;
   }
+
+  getScoutingActivity(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/admin/scout-activity/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userActivity = result as UserActivity[];
+            console.log(this.userActivity);
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getUserName(id: number): string {
+    let name = '';
+
+    this.userActivity.forEach(ua => {
+      if (ua.user.id === id)
+        name = `${ua.user.first_name} ${ua.user.last_name}`;
+    });
+
+    return name;
+  }
+
+  showUserActivityModal(ua: UserActivity): void {
+    this.userActivityModalVisible = true;
+    this.activeUserActivity = ua;
+  }
 }
 
 export class Season {
@@ -882,6 +962,12 @@ export class ScoutFieldSchedule {
   blue_one_id: User | number | null | any = new User();
   blue_two_id: User | number | null | any = new User();
   blue_three_id: User | number | null | any = new User();
+  red_one_check_in = new Date();
+  red_two_check_in = new Date();
+  red_three_check_in = new Date();
+  blue_one_check_in = new Date();
+  blue_two_check_in = new Date();
+  blue_three_check_in = new Date();
   st_time!: Date;
   end_time!: Date;
   notification1 = false;
@@ -924,4 +1010,24 @@ export class ScoutAdminInit {
 export class EventToTeams {
   event_id!: number;
   teams: Team[] = [];
+}
+
+export class ScoutField {
+  scout_field_id!: number;
+  event!: number;
+  team_no!: number;
+  user!: number;
+  time = new Date()
+  match!: number;
+}
+
+export class ScoutFieldResultsSerializer {
+  scoutCols: any[] = [];
+  scoutAnswers: any[] = [];
+}
+
+export class UserActivity {
+  user = new User();
+  results = new ScoutFieldResultsSerializer();
+  schedule: ScoutFieldSchedule[] = [];
 }
