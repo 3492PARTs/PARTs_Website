@@ -135,6 +135,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
   @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef = new ElementRef(null);
   @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
@@ -452,7 +453,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
       if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
-        const width = this.label.nativeElement.clientWidth + 32;
+        const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 44) : this.label.nativeElement.clientWidth) + 32;
         if (this.MinWidth === 'auto') {
           this.MinWidth = width + 'px';
         }

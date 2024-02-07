@@ -250,7 +250,7 @@
       }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" #multiSelect
         (appClickOutside)="multiSelectClose()">
         <span (click)="multiSelectMenu()">
-          <p>{{ LabelText }}</p>
+          <p #multiSelectText>{{ LabelText }}</p>
           <div class="arrow-wrapper">
             <i class="arrow down"></i>
           </div>
