@@ -49,13 +49,14 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
         this.gs.devConsoleLog(tmp);
         tmp.forEach((e: any) => {
-          e['checked'] = this.gs.strNoE(e['checked']) ? '' : e['checked'];
+          e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
           if (this.Model) {
             if (typeof this.Model === 'string') {
               if (e[this.DisplayProperty] === 'Other') {
                 let other = '';
                 this.Model.split(',').forEach((option: any) => {
                   let match = false;
+                  // TODO: Revisit this logic i dont think this loop is needed
                   tmp.forEach((element: any) => {
                     if (option === element[this.BindingProperty]) match = true;
                   });

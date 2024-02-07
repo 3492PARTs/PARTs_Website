@@ -261,7 +261,7 @@
             &nbsp;
             <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
           </div>
-          <div *ngFor="let obj of _SelectList; let i = index">
+          <div *ngFor="let obj of Model; let i = index">
             <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="Model[i]['checked']"
               (ngModelChange)="change($event, i)" [disabled]="Disabled">
             <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>

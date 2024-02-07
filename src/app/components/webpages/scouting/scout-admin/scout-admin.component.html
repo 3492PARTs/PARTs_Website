@@ -267,7 +267,7 @@
 
           <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
             [DisplayProperty]="'event_nm'" [(Model)]="linkTeamToEventEvent" [Required]="true"
-            (FunctionCallBack)="buildEventTeamList()">
+            (FunctionCallBack)="buildLinkTeamToEventTeamList()">
           </app-form-element>
 
           <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="linkTeamToEventTeams"
@@ -294,10 +294,10 @@
 
           <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
             [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="removeTeamFromEventEvent"
-            [Required]="true">
+            (FunctionCallBack)="buildRemoveTeamFromEventTeamList()" [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventEvent.team_no"
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
             [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.team_no">
           </app-form-element>
 

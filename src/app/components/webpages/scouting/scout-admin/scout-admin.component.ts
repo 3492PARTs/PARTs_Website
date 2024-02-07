@@ -34,6 +34,7 @@ export class ScoutAdminComponent implements OnInit {
   linkTeamToEventList: Event[] = [];
   removeTeamFromEventSeason!: number | null;
   removeTeamFromEventList: Event[] = [];
+  removeTeamFromEventTeams: Team[] = [];
   competitionPageActive = 'n';
   newPhoneType = false;
   phoneType: PhoneType = new PhoneType();
@@ -626,12 +627,12 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.eventToTeams = new EventToTeams();
             this.adminInit();
             this.linkTeamToEventModalVisible = false;
             this.linkTeamToEventSeason = null;
             this.linkTeamToEventEvent = new Event();
-            this.eventToTeams = new EventToTeams();
+            this.linkTeamToEventTeams = [];
+            this.eventToTeams = new EventToTeams();;
           }
         },
         error: (err: any) => {
@@ -646,9 +647,17 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  buildEventTeamList(): void {
-    let teamList = this.init.teams;
-    let eventTeamList = this.linkTeamToEventEvent?.team_no || [];
+  buildLinkTeamToEventTeamList(): void {
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
+    this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.team_no || []);
+  }
+
+  buildRemoveTeamFromEventTeamList(): void {
+    this.removeTeamFromEventTeams = this.gs.cloneObject(this.removeTeamFromEventEvent.team_no);
+  }
+
+  buildEventTeamList(eventTeamList: Team[]): Team[] {
+    let teamList = this.gs.cloneObject(this.init.teams);
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -660,8 +669,7 @@ export class ScoutAdminComponent implements OnInit {
       }
     }
 
-    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
-    this.linkTeamToEventTeams = teamList;
+    return teamList;
   }
 
   clearEventToTeams() {
@@ -684,6 +692,7 @@ export class ScoutAdminComponent implements OnInit {
             this.removeTeamFromEventModalVisible = false;
             this.removeTeamFromEventSeason = null;
             this.removeTeamFromEventList = [];
+            this.removeTeamFromEventTeams = [];
           }
         },
         error: (err: any) => {
