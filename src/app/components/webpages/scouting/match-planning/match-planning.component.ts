@@ -44,7 +44,7 @@ export class MatchPlanningComponent implements OnInit {
   graphOptionsList: any[] = [];
   graphOptionsSelected: any[] = [];
   redChart: Chart | null = null;
-  blueChart: any;
+  blueChart: Chart | null = null;
 
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
@@ -152,9 +152,6 @@ export class MatchPlanningComponent implements OnInit {
             this.matchPlanningResults = result as MatchPlanning[];
 
             this.buildGraphOptionsList();
-
-
-
           }
         },
         error: (err: any) => {
@@ -180,75 +177,70 @@ export class MatchPlanningComponent implements OnInit {
   buildGraph(): void {
     let labels: any[] = [];
 
-    console.log(this.matchPlanningResults[0].fieldCols);
-
-    this.matchPlanningResults[0].fieldAnswers.forEach((element: any) => {
-      labels.push(element['time']);
-      //data.push(element['ans124'] || 0);
-    });
-
+    // red
     let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    this.matchPlanningResults.forEach(mp => {
-      if (mp.alliance === 'red') {
-        let data: any[] = [];
-        let dataSet: { label: string; data: any[]; borderWidth: number; };
-        console.log(mp.team);
-        console.log(mp.fieldAnswers);
-
-        mp.fieldAnswers.forEach((fa: any) => {
-          let sum = 0;
-          this.graphOptionsSelected.forEach((gos: any) => {
-            if (gos['checked']) {
-              sum += parseFloat(fa[gos['PropertyName']]) || 0;
-            }
-          });
-
-          data.push(sum);
-        });
-
-        dataSet = {
-          label: `${mp.team.team_no} ${mp.team.team_nm}`,
-          data: data,
-          borderWidth: 1
-        };
-
-        dataSets.push(dataSet);
-      }
+    let red = this.matchPlanningResults.filter(mp => mp.alliance === 'red');
+    dataSets = this.getAllianceDataSets(red);
+    let count = 0;
+    dataSets.forEach(ds => {
+      if (count < ds.data.length) count = ds.data.length;
     });
+    for (let i = 1; i <= count; i++) labels.push(i);
+
+    // blue
+    let dataSets2: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    let blue = this.matchPlanningResults.filter(mp => mp.alliance === 'blue');
+    dataSets2 = this.getAllianceDataSets(blue);
+    labels = [];
+    count = 0;
+
+    dataSets2.forEach(ds => {
+      if (count < ds.data.length) count = ds.data.length;
+    });
+
+    for (let i = 1; i <= count; i++) labels.push(i);
 
     window.setTimeout(() => {
       if (this.redChart) this.redChart.destroy();
-      this.redChart = this.createLineChart(labels, dataSets);
-    }, 1);
-    /*
-                let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
-    
-                this.matchPlanningResults.forEach(mp => {
-                  if (mp.alliance === 'red') {
-                    let data: any[] = [];
-                    let dataSet: { label: string; data: any[]; borderWidth: number; };
-                    console.log(mp.team);
-                    console.log(mp.fieldAnswers);
-                    mp.fieldAnswers.forEach((element: any) => {
-                      data.push(element['ans124'] || 0);
-                    });
-    
-                    dataSet = {
-                      label: `${mp.team.team_no} ${mp.team.team_nm}`,
-                      data: data,
-                      borderWidth: 1
-                    };
-    
-                    dataSets.push(dataSet);
-                  }
-                });
-    
-                window.setTimeout(() => {
-                  this.redChart = this.createLineChart(labels, dataSets);
-                }, 1);*/
+      this.redChart = this.createLineChart('red-chart', labels, dataSets);
 
-    //this.chart = this.createLineChart(labels, 'Match', data);
+      if (this.blueChart) this.blueChart.destroy();
+      this.blueChart = this.createLineChart('blue-chart', labels, dataSets2);
+    }, 0);
+  }
+
+  getAllianceDataSets(results: MatchPlanning[]): { label: string; data: any[]; borderWidth: number; }[] {
+    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+
+    results.forEach(mp => {
+      let data: any[] = [];
+      let dataSet: { label: string; data: any[]; borderWidth: number; };
+      //console.log(mp.team);
+      //console.log(mp.fieldAnswers);
+
+      mp.fieldAnswers.forEach((fa: any) => {
+        let sum = 0;
+        this.graphOptionsSelected.forEach((gos: any) => {
+          if (gos['checked']) {
+            sum += parseFloat(fa[gos['PropertyName']]) || 0;
+          }
+        });
+
+        data.push(sum);
+      });
+
+      dataSet = {
+        label: `${mp.team.team_no} ${mp.team.team_nm}`,
+        data: data,
+        borderWidth: 1
+      };
+
+      dataSets.push(dataSet);
+    });
+
+    return dataSets;
   }
 
   clearResults(): void {
@@ -318,8 +310,8 @@ export class MatchPlanningComponent implements OnInit {
         ]
         */
 
-  private createLineChart(labels: string[], datasets: ChartDataset<'line', (number | Point | [number, number] | BubbleDataPoint | null)[]>[]): Chart {
-    return new Chart('canvas', {
+  private createLineChart(id: string, labels: string[], datasets: ChartDataset<'line', (number | Point | [number, number] | BubbleDataPoint | null)[]>[]): Chart {
+    return new Chart(id, {
       type: 'line',
       data: {
         labels: labels,

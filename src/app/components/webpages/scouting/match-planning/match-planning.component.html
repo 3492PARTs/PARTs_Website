@@ -33,15 +33,24 @@
 
     <div *ngIf="matchPlanningResults.length > 0">
         <div id="back-button">
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
-        </div>
-        <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'" [SelectList]="graphOptionsList"
-            [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'" (FunctionCallBack)="buildGraph()">
-        </app-form-element>
+            <app-button-ribbon [TextAlign]="'left'">
+                <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+                <app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
+                    <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'"
+                        [SelectList]="graphOptionsList" [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'"
+                        (FunctionCallBack)="buildGraph()">
+                    </app-form-element>
 
-        <app-form-element-group [LabelText]="'Red Alliance'">
-            <canvas id="canvas">{{redChart}}</canvas>
-        </app-form-element-group>
+                    <app-form-element-group [LabelText]="'Red Alliance'">
+                        <canvas id="red-chart">{{redChart}}</canvas>
+                    </app-form-element-group>
+
+                    <app-form-element-group [LabelText]="'Blue Alliance'">
+                        <canvas id="blue-chart">{{blueChart}}</canvas>
+                    </app-form-element-group>
+                </app-modal>
+            </app-button-ribbon>
+        </div>
 
         <app-tab-container>
             <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">
