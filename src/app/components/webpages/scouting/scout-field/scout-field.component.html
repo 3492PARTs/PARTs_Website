@@ -52,11 +52,14 @@
   </div>
   <br>
   <app-form (SubmitFunction)="save()">
-    <app-form-element [LabelText]="'Match'" [Type]="'select'" [FormGroup]="true" [SelectList]="matches"
-      [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
-      [Required]="matches.length > 0" (FunctionCallBack)="buildTeamList()">
-    </app-form-element>
+    <div class="flex align-items-baseline">
+      <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
+        [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
+        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()">
+      </app-form-element>
 
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()">No Match</app-button>
+    </div>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamList"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
       [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true">

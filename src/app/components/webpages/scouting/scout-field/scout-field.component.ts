@@ -16,6 +16,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   teamList: Team[] = [];
   team!: number;
   matches: Match[] = [];
+  noMatch = false;
   teamMatch!: Match;
   scoutQuestions: Question[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
@@ -106,8 +107,16 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
   }
 
+  setNoMatch() {
+    this.noMatch = true;
+    this.teamMatch = new Match();
+    this.teamList = [];
+    this.teams.forEach(t => { this.teamList.push(t) });
+  }
+
   buildTeamList(): void {
     this.teamList = [];
+    this.noMatch = false;
     // only run if there are matchs
     if (this.matches.length > 0) {
 
@@ -195,6 +204,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.teamMatch = new Match();
+            this.noMatch = false;
             this.scoutFieldInit();
             this.gs.scrollTo(0);
           }

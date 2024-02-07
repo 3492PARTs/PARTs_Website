@@ -159,7 +159,7 @@ export class MatchPlanningComponent implements OnInit {
           this.gs.decrementOutstandingCalls();
         },
         complete: () => {
-          this.gs.decrementOutstandingCalls();
+          window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1);
         }
       }
     );
