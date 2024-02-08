@@ -33,7 +33,8 @@ export class UserService {
     ).subscribe(
       {
         next: (result: any) => {
-          this.users.next(result as User[]);
+          if (this.gs.checkResponse(result))
+            this.users.next(result as User[]);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
@@ -94,6 +95,30 @@ export class UserService {
     );
   }
 
+  saveGroup(grp: AuthGroup) {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'user/groups/', grp
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.getGroups();
+          }
+
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
   getPermissions() {
     this.gs.incrementOutstandingCalls();
     this.http.get(
@@ -101,7 +126,8 @@ export class UserService {
     ).subscribe(
       {
         next: (result: any) => {
-          this.permissions.next(result as AuthPermission[]);
+          if (this.gs.checkResponse(result))
+            this.permissions.next(result as AuthPermission[]);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();

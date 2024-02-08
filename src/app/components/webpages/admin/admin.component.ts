@@ -284,6 +284,10 @@ export class AdminComponent implements OnInit {
     this.buildAvailablePermissions();
   }
 
+  saveGroup(): void {
+    this.us.saveGroup(this.activeGroup);
+  }
+
   showPermissionModal(permisson?: AuthPermission): void {
     this.activePermission = permisson ? permisson : new AuthPermission();
     this.permissionsModalVisible = true;

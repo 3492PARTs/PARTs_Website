@@ -65,6 +65,8 @@
     <app-form>
       <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeGroup.name"></app-form-element>
 
+      <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="saveGroup()">Save</app-button>
+
       <div class="vertical-center">
         <app-form-element [FormGroupInline]="true" [Type]="'select'" [LabelText]="'Permission'"
           [SelectList]="availablePermissions" [DisplayProperty]="'name'" [(Model)]="activePermission"
