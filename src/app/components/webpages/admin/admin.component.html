@@ -58,7 +58,8 @@
 
 <app-box *ngIf="page === 'security'" [Title]="'Manage Security'">
   <app-table [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
-    (EditRecordCallBack)="showGroupModal($event)">
+    (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
+    [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)">
   </app-table>
 
   <app-modal [Title]="'Manage Group'" [(visible)]="groupModalVisible">
@@ -82,8 +83,21 @@
   </app-modal>
 
   <app-table [TableCols]="permissionsTableCols" [TableData]="permissions" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)">
+    (EditRecordCallBack)="showPermissionModal($event)" [ShowAddButton]="true"
+    (AddRecordCallBack)="showPermissionModal()" [ShowRemoveButton]="true"
+    (RemoveRecordCallBack)="deletePermission($event)">
   </app-table>
+
+  <app-modal [Title]="'Manage Permission'" [(visible)]="permissionsModalVisible">
+    <app-form>
+      <app-form-element [Type]="'text'" [LabelText]="'Codename'" [(Model)]="activePermission.codename">
+      </app-form-element>
+
+      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activePermission.name"></app-form-element>
+
+      <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="savePermission()">Save</app-button>
+    </app-form>
+  </app-modal>
 </app-box>
 
 <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">

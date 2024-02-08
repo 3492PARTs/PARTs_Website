@@ -95,7 +95,7 @@ export class UserService {
     );
   }
 
-  saveGroup(grp: AuthGroup) {
+  saveGroup(grp: AuthGroup, fn?: Function) {
     this.gs.incrementOutstandingCalls();
     this.http.post(
       'user/groups/', grp
@@ -104,6 +104,37 @@ export class UserService {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            if (fn) fn();
+            this.getGroups();
+          }
+
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  deleteGroup(group_id: number, fn?: Function) {
+    this.gs.incrementOutstandingCalls();
+    this.http.delete(
+      'user/groups/',
+      {
+        params: {
+          group_id: group_id,
+        }
+      }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            if (fn) fn();
             this.getGroups();
           }
 
@@ -126,8 +157,65 @@ export class UserService {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(result))
+          if (this.gs.checkResponse(result)) {
             this.permissions.next(result as AuthPermission[]);
+            this.getGroups();
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  savePermission(prmsn: AuthPermission, fn?: Function) {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'user/permissions/', prmsn
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            if (fn) fn();
+            this.getPermissions();
+          }
+
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  deletePermission(prmsn_id: number, fn?: Function) {
+    this.gs.incrementOutstandingCalls();
+    this.http.delete(
+      'user/permissions/',
+      {
+        params: {
+          prmsn_id: prmsn_id,
+        }
+      }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            if (fn) fn();
+            this.getPermissions();
+          }
+
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();

@@ -127,7 +127,7 @@ export class GeneralService {
   input: any;
 
   /* Custom Confirm */
-  triggerConfirm(message: string, tmpFx: (x: any) => void, tmpInput: any) {
+  triggerConfirm(message: string, tmpFx: (x: any) => void, tmpInput?: any) {
     this.confirmMessage = '';
     this.fx = null;
     this.input = null;

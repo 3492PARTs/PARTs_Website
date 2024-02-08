@@ -285,7 +285,23 @@ export class AdminComponent implements OnInit {
   }
 
   saveGroup(): void {
-    this.us.saveGroup(this.activeGroup);
+    this.us.saveGroup(this.activeGroup, () => {
+      this.activeGroup = new AuthGroup();
+      this.activePermission = new AuthPermission();
+      this.availablePermissions = [];
+      this.groupModalVisible = false;
+    });
+  }
+
+  deleteGroup(group: AuthGroup): void {
+    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+      this.us.deleteGroup(group.id, () => {
+        this.activeGroup = new AuthGroup();
+        this.activePermission = new AuthPermission();
+        this.availablePermissions = [];
+        this.groupModalVisible = false;
+      });
+    });
   }
 
   showPermissionModal(permisson?: AuthPermission): void {
@@ -293,8 +309,21 @@ export class AdminComponent implements OnInit {
     this.permissionsModalVisible = true;
   }
 
+  savePermission(): void {
+    this.us.savePermission(this.activePermission, () => {
+      this.activePermission = new AuthPermission();
+      this.permissionsModalVisible = false;
+    });
+  }
 
-
+  deletePermission(prmsn: AuthPermission): void {
+    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+      this.us.deletePermission(prmsn.id, () => {
+        this.activePermission = new AuthPermission();
+        this.permissionsModalVisible = false;
+      });
+    });
+  }
 
   getPhoneType(type: number): string {
     if (this.init)
