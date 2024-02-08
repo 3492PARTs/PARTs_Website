@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthGroup, AuthPermission, User } from './auth.service';
 import { GeneralService, RetMessage } from './general.service';
 
@@ -226,5 +226,11 @@ export class UserService {
         }
       }
     );
+  }
+
+  runSecurityAudit(): Observable<object> | null {
+    return this.http.get(
+      'user/security-audit/'
+    )
   }
 }

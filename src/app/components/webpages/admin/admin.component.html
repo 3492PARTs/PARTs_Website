@@ -57,6 +57,9 @@
 </app-box>
 
 <app-box *ngIf="page === 'security'" [Title]="'Manage Security'">
+  <app-table [TableCols]="userAuditTableCols" [TableData]="userAudit">
+  </app-table>
+
   <app-table [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
     (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
     [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)">

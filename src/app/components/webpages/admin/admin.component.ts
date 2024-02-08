@@ -61,6 +61,14 @@ export class AdminComponent implements OnInit {
   permissionsModalVisible = false;
   activePermission = new AuthPermission();
 
+  userAudit: User[] = [];
+  userAuditTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'groups', ColLabel: 'Groups', Type: 'function', ColValueFn: this.getGroupDisplayValue },
+  ];
+
   errorTableCols: object[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'path', ColLabel: 'Path' },
@@ -126,6 +134,7 @@ export class AdminComponent implements OnInit {
           this.us.getUsers(1, 1);
           this.us.getGroups();
           this.us.getPermissions();
+          this.runSecurityAudit();
           break;
       }
     });
@@ -323,6 +332,35 @@ export class AdminComponent implements OnInit {
         this.permissionsModalVisible = false;
       });
     });
+  }
+
+  runSecurityAudit() {
+    this.gs.incrementOutstandingCalls();
+    this.us.runSecurityAudit()?.subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userAudit = result as User[];
+            //console.log(result);
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getGroupDisplayValue(groups: AuthGroup[]): string {
+    let name = groups.reduce((pV: AuthGroup, cV: AuthGroup, i: number) => {
+      return { id: -1, name: `${pV.name}, ${cV.name}`, permissions: [] };
+    }, { id: -1, name: '', permissions: [] }).name;
+
+    return name.substring(2, name.length);
   }
 
   getPhoneType(type: number): string {
