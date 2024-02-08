@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
+import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates, AuthPermission } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
@@ -19,6 +19,8 @@ export class AdminComponent implements OnInit {
 
   init: AdminInit = new AdminInit();
   users: User[] = [];
+  groups: AuthGroup[] = [];
+  permissions: AuthPermission[] = [];
 
   userTableCols = [
     { PropertyName: 'name', ColLabel: 'User' },
@@ -42,6 +44,16 @@ export class AdminComponent implements OnInit {
 
   userGroupsTableCols: object[] = [
     { PropertyName: 'name', ColLabel: 'Name' }
+  ];
+
+  groupsTableCols: object[] = [
+    { PropertyName: 'name', ColLabel: 'Group' },
+    { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
+  ];
+
+  permissionsTableCols: object[] = [
+    { PropertyName: 'codename', ColLabel: 'Code' },
+    { PropertyName: 'name', ColLabel: 'Permission' },
   ];
 
   errorTableCols: object[] = [
@@ -90,6 +102,9 @@ export class AdminComponent implements OnInit {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
       switch (this.page) {
+        case 'users':
+          this.getUsers();
+          break;
         case 'errors':
           this.getErrors(this.errorPage);
           break;
@@ -102,28 +117,37 @@ export class AdminComponent implements OnInit {
         case 'team-cntct-form':
           this.getResponses('team-cntct');
           break;
+        case 'security':
+          this.us.getUsers(1, 1);
+          this.us.getGroups();
+          this.us.getPermissions();
+          break;
       }
     });
 
     this.us.currentUsers.subscribe(u => this.users = u);
+    this.us.currentGroups.subscribe(g => this.groups = g);
+    this.us.currentPermissions.subscribe(p => this.permissions = p);
   }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers(this.userOption, this.adminOption);
+        //this.us.getUsers(this.userOption, this.adminOption);
       }
     });
 
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
+      new MenuItem('Security', 'security', 'chat-question-outline'),
       new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
       new MenuItem('Requested Items', 'req-items', 'view-grid-plus'),
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
-      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline')
+      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
     ]);
-    this.ns.setSubPage('users');
+    //this.ns.setSubPage('users');
+    this.ns.setSubPage('security');
   }
 
   adminInit(): void {
@@ -205,6 +229,18 @@ export class AdminComponent implements OnInit {
       this.us.getUsers(this.userOption, this.adminOption);
     });
   }
+
+  getPermissionDisplayValue(prmsns: AuthPermission[]) {
+    let codename = prmsns.reduce((pV: AuthPermission, cV: AuthPermission, i: number) => {
+      return { id: -1, codename: `${pV.codename}, ${cV.codename}`, content_type: -1, name: '' };
+    }, { id: -1, codename: '', content_type: -1, name: '' }).codename;
+
+    return codename.substring(2, codename.length);
+  }
+
+
+
+
 
   getPhoneType(type: number): string {
     if (this.init)

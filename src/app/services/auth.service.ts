@@ -354,7 +354,7 @@ export class AuthService {
   getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
       return this.http.get(
-        'user/user-groups/', {
+        'user/groups/', {
         params: {
           user_id: userId
         }

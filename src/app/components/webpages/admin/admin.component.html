@@ -56,6 +56,16 @@
   </app-modal>
 </app-box>
 
+<app-box *ngIf="page === 'security'" [Title]="'Manage Security'">
+  <app-table [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
+    (EditRecordCallBack)="showManageUserModal($event)">
+  </app-table>
+
+  <app-table [TableCols]="permissionsTableCols" [TableData]="permissions" [ShowEditButton]="true"
+    (EditRecordCallBack)="showManageUserModal($event)">
+  </app-table>
+</app-box>
+
 <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
   <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
     (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'">

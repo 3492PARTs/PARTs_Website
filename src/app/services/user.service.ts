@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AuthGroup, User } from './auth.service';
+import { AuthGroup, AuthPermission, User } from './auth.service';
 import { GeneralService, RetMessage } from './general.service';
 
 @Injectable({
@@ -11,6 +11,12 @@ export class UserService {
 
   private users = new BehaviorSubject<User[]>([]);
   currentUsers = this.users.asObservable();
+
+  private groups = new BehaviorSubject<AuthGroup[]>([]);
+  currentGroups = this.groups.asObservable();
+
+  private permissions = new BehaviorSubject<AuthPermission[]>([]);
+  currentPermissions = this.permissions.asObservable();
 
   constructor(private http: HttpClient, private gs: GeneralService) { }
 
@@ -60,6 +66,46 @@ export class UserService {
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getGroups() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/groups/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.groups.next(result as AuthGroup[]);
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getPermissions() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/permissions/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.permissions.next(result as AuthPermission[]);
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
