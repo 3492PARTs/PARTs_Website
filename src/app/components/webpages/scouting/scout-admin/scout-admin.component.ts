@@ -869,7 +869,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.userActivity = result as UserActivity[];
-            console.log(this.userActivity);
+            //console.log(this.userActivity);
           }
         },
         error: (err: any) => {
