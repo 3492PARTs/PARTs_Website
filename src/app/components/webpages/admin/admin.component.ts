@@ -50,11 +50,16 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Group' },
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
+  groupModalVisible = false;
+  activeGroup = new AuthGroup();
+  availablePermissions: AuthPermission[] = [];
 
   permissionsTableCols: object[] = [
     { PropertyName: 'codename', ColLabel: 'Code' },
     { PropertyName: 'name', ColLabel: 'Permission' },
   ];
+  permissionsModalVisible = false;
+  activePermission = new AuthPermission();
 
   errorTableCols: object[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
@@ -140,7 +145,7 @@ export class AdminComponent implements OnInit {
 
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
-      new MenuItem('Security', 'security', 'chat-question-outline'),
+      new MenuItem('Security', 'security', 'security'),
       new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
       new MenuItem('Requested Items', 'req-items', 'view-grid-plus'),
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
@@ -230,7 +235,7 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  getPermissionDisplayValue(prmsns: AuthPermission[]) {
+  getPermissionDisplayValue(prmsns: AuthPermission[]): string {
     let codename = prmsns.reduce((pV: AuthPermission, cV: AuthPermission, i: number) => {
       return { id: -1, codename: `${pV.codename}, ${cV.codename}`, content_type: -1, name: '' };
     }, { id: -1, codename: '', content_type: -1, name: '' }).codename;
@@ -238,6 +243,51 @@ export class AdminComponent implements OnInit {
     return codename.substring(2, codename.length);
   }
 
+  showGroupModal(group?: AuthGroup): void {
+    this.activeGroup = group ? group : new AuthGroup();
+    this.activePermission = new AuthPermission();
+    this.buildAvailablePermissions();
+    this.groupModalVisible = true;
+  }
+
+  buildAvailablePermissions(): void {
+    let prmsns: AuthPermission[] = this.gs.cloneObject(this.permissions);
+    let grpPrmsns: AuthPermission[] = this.gs.cloneObject(this.activeGroup.permissions);
+
+    for (let i = 0; i < prmsns.length; i++) {
+      for (let j = 0; j < grpPrmsns.length; j++) {
+        if (prmsns[i].id === grpPrmsns[j].id) {
+          prmsns.splice(i--, 1);
+          grpPrmsns.splice(j--, 1);
+          break;
+        }
+      }
+    }
+
+    this.availablePermissions = prmsns;
+  }
+
+  addPermissionToGroup(): void {
+    this.activeGroup.permissions.push(this.activePermission);
+    this.activePermission = new AuthPermission();
+    this.buildAvailablePermissions();
+  }
+
+  removePermissionFromGroup(prmsn: AuthPermission): void {
+    for (let i = 0; i < this.activeGroup.permissions.length; i++) {
+      if (this.activeGroup.permissions[i].id === prmsn.id) {
+        this.activeGroup.permissions.splice(i, 1);
+        break;
+      }
+    }
+
+    this.buildAvailablePermissions();
+  }
+
+  showPermissionModal(permisson?: AuthPermission): void {
+    this.activePermission = permisson ? permisson : new AuthPermission();
+    this.permissionsModalVisible = true;
+  }
 
 
 

@@ -58,8 +58,26 @@
 
 <app-box *ngIf="page === 'security'" [Title]="'Manage Security'">
   <app-table [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
-    (EditRecordCallBack)="showManageUserModal($event)">
+    (EditRecordCallBack)="showGroupModal($event)">
   </app-table>
+
+  <app-modal [Title]="'Manage Group'" [(visible)]="groupModalVisible">
+    <app-form>
+      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeGroup.name"></app-form-element>
+
+      <div class="vertical-center">
+        <app-form-element [FormGroupInline]="true" [Type]="'select'" [LabelText]="'Permission'"
+          [SelectList]="availablePermissions" [DisplayProperty]="'name'" [(Model)]="activePermission"
+          [DisplayEmptyOption]="true"></app-form-element>
+
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="addPermissionToGroup()"></app-button>
+      </div>
+
+      <app-table [TableCols]="permissionsTableCols" [TableData]="activeGroup.permissions" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removePermissionFromGroup($event)">
+      </app-table>
+    </app-form>
+  </app-modal>
 
   <app-table [TableCols]="permissionsTableCols" [TableData]="permissions" [ShowEditButton]="true"
     (EditRecordCallBack)="showManageUserModal($event)">
