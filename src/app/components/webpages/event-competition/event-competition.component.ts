@@ -29,6 +29,8 @@ export class EventCompetitionComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.competitionInfo = (result as CompetitionInit);
             this.buildMatchSchedule();
+
+            console.log(this.competitionInfo);
           }
         },
         error: (err: any) => {

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
+import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates, AuthPermission } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
@@ -19,6 +19,8 @@ export class AdminComponent implements OnInit {
 
   init: AdminInit = new AdminInit();
   users: User[] = [];
+  groups: AuthGroup[] = [];
+  permissions: AuthPermission[] = [];
 
   userTableCols = [
     { PropertyName: 'name', ColLabel: 'User' },
@@ -42,6 +44,29 @@ export class AdminComponent implements OnInit {
 
   userGroupsTableCols: object[] = [
     { PropertyName: 'name', ColLabel: 'Name' }
+  ];
+
+  groupsTableCols: object[] = [
+    { PropertyName: 'name', ColLabel: 'Group' },
+    { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
+  ];
+  groupModalVisible = false;
+  activeGroup = new AuthGroup();
+  availablePermissions: AuthPermission[] = [];
+
+  permissionsTableCols: object[] = [
+    { PropertyName: 'codename', ColLabel: 'Code' },
+    { PropertyName: 'name', ColLabel: 'Permission' },
+  ];
+  permissionsModalVisible = false;
+  activePermission = new AuthPermission();
+
+  userAudit: User[] = [];
+  userAuditTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'groups', ColLabel: 'Groups', Type: 'function', ColValueFn: this.getGroupDisplayValue },
   ];
 
   errorTableCols: object[] = [
@@ -90,6 +115,9 @@ export class AdminComponent implements OnInit {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
       switch (this.page) {
+        case 'users':
+          this.getUsers();
+          break;
         case 'errors':
           this.getErrors(this.errorPage);
           break;
@@ -102,28 +130,38 @@ export class AdminComponent implements OnInit {
         case 'team-cntct-form':
           this.getResponses('team-cntct');
           break;
+        case 'security':
+          this.us.getUsers(1, 1);
+          this.us.getGroups();
+          this.us.getPermissions();
+          this.runSecurityAudit();
+          break;
       }
     });
 
     this.us.currentUsers.subscribe(u => this.users = u);
+    this.us.currentGroups.subscribe(g => this.groups = g);
+    this.us.currentPermissions.subscribe(p => this.permissions = p);
   }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers(this.userOption, this.adminOption);
+        //this.us.getUsers(this.userOption, this.adminOption);
       }
     });
 
     this.ns.setSubPages([
       new MenuItem('Users', 'users', 'account-group'),
+      new MenuItem('Security', 'security', 'security'),
       new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
       new MenuItem('Requested Items', 'req-items', 'view-grid-plus'),
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
-      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline')
+      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
     ]);
-    this.ns.setSubPage('users');
+    //this.ns.setSubPage('users');
+    this.ns.setSubPage('security');
   }
 
   adminInit(): void {
@@ -204,6 +242,125 @@ export class AdminComponent implements OnInit {
       this.adminInit();
       this.us.getUsers(this.userOption, this.adminOption);
     });
+  }
+
+  getPermissionDisplayValue(prmsns: AuthPermission[]): string {
+    let codename = prmsns.reduce((pV: AuthPermission, cV: AuthPermission, i: number) => {
+      return { id: -1, codename: `${pV.codename}, ${cV.codename}`, content_type: -1, name: '' };
+    }, { id: -1, codename: '', content_type: -1, name: '' }).codename;
+
+    return codename.substring(2, codename.length);
+  }
+
+  showGroupModal(group?: AuthGroup): void {
+    this.activeGroup = group ? group : new AuthGroup();
+    this.activePermission = new AuthPermission();
+    this.buildAvailablePermissions();
+    this.groupModalVisible = true;
+  }
+
+  buildAvailablePermissions(): void {
+    let prmsns: AuthPermission[] = this.gs.cloneObject(this.permissions);
+    let grpPrmsns: AuthPermission[] = this.gs.cloneObject(this.activeGroup.permissions);
+
+    for (let i = 0; i < prmsns.length; i++) {
+      for (let j = 0; j < grpPrmsns.length; j++) {
+        if (prmsns[i].id === grpPrmsns[j].id) {
+          prmsns.splice(i--, 1);
+          grpPrmsns.splice(j--, 1);
+          break;
+        }
+      }
+    }
+
+    this.availablePermissions = prmsns;
+  }
+
+  addPermissionToGroup(): void {
+    this.activeGroup.permissions.push(this.activePermission);
+    this.activePermission = new AuthPermission();
+    this.buildAvailablePermissions();
+  }
+
+  removePermissionFromGroup(prmsn: AuthPermission): void {
+    for (let i = 0; i < this.activeGroup.permissions.length; i++) {
+      if (this.activeGroup.permissions[i].id === prmsn.id) {
+        this.activeGroup.permissions.splice(i, 1);
+        break;
+      }
+    }
+
+    this.buildAvailablePermissions();
+  }
+
+  saveGroup(): void {
+    this.us.saveGroup(this.activeGroup, () => {
+      this.activeGroup = new AuthGroup();
+      this.activePermission = new AuthPermission();
+      this.availablePermissions = [];
+      this.groupModalVisible = false;
+    });
+  }
+
+  deleteGroup(group: AuthGroup): void {
+    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+      this.us.deleteGroup(group.id, () => {
+        this.activeGroup = new AuthGroup();
+        this.activePermission = new AuthPermission();
+        this.availablePermissions = [];
+        this.groupModalVisible = false;
+      });
+    });
+  }
+
+  showPermissionModal(permisson?: AuthPermission): void {
+    this.activePermission = permisson ? permisson : new AuthPermission();
+    this.permissionsModalVisible = true;
+  }
+
+  savePermission(): void {
+    this.us.savePermission(this.activePermission, () => {
+      this.activePermission = new AuthPermission();
+      this.permissionsModalVisible = false;
+    });
+  }
+
+  deletePermission(prmsn: AuthPermission): void {
+    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+      this.us.deletePermission(prmsn.id, () => {
+        this.activePermission = new AuthPermission();
+        this.permissionsModalVisible = false;
+      });
+    });
+  }
+
+  runSecurityAudit() {
+    this.gs.incrementOutstandingCalls();
+    this.us.runSecurityAudit()?.subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.userAudit = result as User[];
+            //console.log(result);
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getGroupDisplayValue(groups: AuthGroup[]): string {
+    let name = groups.reduce((pV: AuthGroup, cV: AuthGroup, i: number) => {
+      return { id: -1, name: `${pV.name}, ${cV.name}`, permissions: [] };
+    }, { id: -1, name: '', permissions: [] }).name;
+
+    return name.substring(2, name.length);
   }
 
   getPhoneType(type: number): string {

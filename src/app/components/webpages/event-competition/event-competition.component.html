@@ -1,5 +1,5 @@
 <div>
-    <app-box>
+    <app-box [Title]="'Where will we be?'">
         <h2>{{competitionInfo.event?.event_nm}}</h2>
 
         <h4>We'll be playing at the <a target="_blank"
@@ -43,6 +43,12 @@
             </table>
         </div>
     </app-box>
+
+    <!--<app-box [Title]="'Live Stream'">
+        <iframe [src]="'https://player.twitch.tv/' + competitionInfo.event?.webcast_url" height="300" width="400"
+            allowfullscreen>
+        </iframe>
+    </app-box>-->
 </div>
 
 <!--
