@@ -82,7 +82,8 @@ export class UserService {
     ).subscribe(
       {
         next: (result: any) => {
-          this.groups.next(result as AuthGroup[]);
+          if (this.gs.checkResponse(result))
+            this.groups.next(result as AuthGroup[]);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();

@@ -19,8 +19,6 @@ export class AdminComponent implements OnInit {
 
   init: AdminInit = new AdminInit();
   users: User[] = [];
-  groups: AuthGroup[] = [];
-  permissions: AuthPermission[] = [];
 
   userTableCols = [
     { PropertyName: 'name', ColLabel: 'User' },
@@ -51,6 +49,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
+  groups: AuthGroup[] = [];
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
@@ -59,7 +58,10 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Permission' },
   ];
   permissionsModalVisible = false;
+  permissions: AuthPermission[] = [];
   activePermission = new AuthPermission();
+
+  scoutAuthGroups: AuthGroup[] = [];
 
   userAudit: User[] = [];
   userAuditTableCols = [
@@ -134,6 +136,7 @@ export class AdminComponent implements OnInit {
           this.us.getUsers(1, 1);
           this.us.getGroups();
           this.us.getPermissions();
+          this.getScoutAuthGroups();
           this.runSecurityAudit();
           break;
       }
@@ -361,6 +364,50 @@ export class AdminComponent implements OnInit {
     }, { id: -1, name: '', permissions: [] }).name;
 
     return name.substring(2, name.length);
+  }
+
+  getScoutAuthGroups() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'admin/scout-auth-groups/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result))
+            this.scoutAuthGroups = result as AuthGroup[];
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  saveScoutAuthGroups() {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'admin/scout-auth-groups/', this.scoutAuthGroups
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+          }
+
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   getPhoneType(type: number): string {

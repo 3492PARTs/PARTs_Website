@@ -105,6 +105,11 @@
       <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="savePermission()">Save</app-button>
     </app-form>
   </app-modal>
+
+  <app-table [TableTitle]="'Scout Admin Assignable Groups'" [TableCols]="groupsTableCols" [TableData]="scoutAuthGroups"
+    [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()" [ShowRemoveButton]="true"
+    (RemoveRecordCallBack)="deleteGroup($event)" [Width]="'100%'">
+  </app-table>
 </app-box>
 
 <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
