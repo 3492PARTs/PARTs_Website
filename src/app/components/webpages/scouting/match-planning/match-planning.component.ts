@@ -45,6 +45,7 @@ export class MatchPlanningComponent implements OnInit {
   graphOptionsSelected: any[] = [];
   redChart: Chart | null = null;
   blueChart: Chart | null = null;
+  chosenGraphDataPoints = '';
 
 
   constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
@@ -209,6 +210,15 @@ export class MatchPlanningComponent implements OnInit {
       if (this.blueChart) this.blueChart.destroy();
       this.blueChart = this.createLineChart('blue-chart', labels, dataSets2);
     }, 0);
+
+    this.chosenGraphDataPoints = '';
+
+    this.graphOptionsSelected.forEach((gos: any) => {
+      if (gos['checked'])
+        this.chosenGraphDataPoints += `${gos['ColLabel']}, `;
+    });
+
+    this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
   }
 
   getAllianceDataSets(results: MatchPlanning[]): { label: string; data: any[]; borderWidth: number; }[] {

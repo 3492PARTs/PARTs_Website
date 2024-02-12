@@ -35,6 +35,7 @@
         <div id="back-button">
             <app-button-ribbon [TextAlign]="'left'">
                 <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+
                 <app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
                     <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'"
                         [SelectList]="graphOptionsList" [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'"
@@ -42,10 +43,14 @@
                     </app-form-element>
 
                     <app-form-element-group [LabelText]="'Red Alliance'">
+                        <p>{{chosenGraphDataPoints}}</p>
+
                         <canvas id="red-chart">{{redChart}}</canvas>
                     </app-form-element-group>
 
                     <app-form-element-group [LabelText]="'Blue Alliance'">
+                        <p>{{chosenGraphDataPoints}}</p>
+
                         <canvas id="blue-chart">{{blueChart}}</canvas>
                     </app-form-element-group>
                 </app-modal>
