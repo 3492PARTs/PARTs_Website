@@ -19,8 +19,6 @@ export class AdminComponent implements OnInit {
 
   init: AdminInit = new AdminInit();
   users: User[] = [];
-  groups: AuthGroup[] = [];
-  permissions: AuthPermission[] = [];
 
   userTableCols = [
     { PropertyName: 'name', ColLabel: 'User' },
@@ -51,6 +49,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
+  groups: AuthGroup[] = []; //TODO: I have this in the init object too. remove it from there 
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
@@ -59,7 +58,13 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Permission' },
   ];
   permissionsModalVisible = false;
+  permissions: AuthPermission[] = [];
   activePermission = new AuthPermission();
+
+  scoutAuthGroups: AuthGroup[] = [];
+  availableScoutAuthGroups: AuthGroup[] = [];
+  scoutAuthGroup = new AuthGroup();
+  scoutAuthGroupsModalVisible = false;
 
   userAudit: User[] = [];
   userAuditTableCols = [
@@ -160,8 +165,8 @@ export class AdminComponent implements OnInit {
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
     ]);
-    //this.ns.setSubPage('users');
-    this.ns.setSubPage('security');
+    this.ns.setSubPage('users');
+    //this.ns.setSubPage('security');
   }
 
   adminInit(): void {
@@ -361,6 +366,75 @@ export class AdminComponent implements OnInit {
     }, { id: -1, name: '', permissions: [] }).name;
 
     return name.substring(2, name.length);
+  }
+
+  getScoutAuthGroups(visible: boolean) {
+    this.gs.incrementOutstandingCalls();
+    this.scoutAuthGroupsModalVisible = visible;
+    this.http.get(
+      'admin/scout-auth-groups/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result))
+            this.scoutAuthGroups = result as AuthGroup[];
+          this.buildAvailableScoutAuthGroups();
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  private buildAvailableScoutAuthGroups(): void {
+    this.availableScoutAuthGroups = this.groups.filter(g => {
+      return this.scoutAuthGroups.map(el => el.id).indexOf(g.id) < 0;
+    });
+  }
+
+  addScoutAuthGroup() {
+    this.scoutAuthGroups.push(this.scoutAuthGroup);
+    this.scoutAuthGroup = new AuthGroup();
+    this.buildAvailableScoutAuthGroups()
+  }
+
+  removeScoutAuthGroup(ag: AuthGroup) {
+    for (let i = 0; i < this.scoutAuthGroups.length; i++) {
+      if (this.scoutAuthGroups[i].id === ag.id) {
+        this.scoutAuthGroups.splice(i, 1);
+        break;
+      }
+    }
+    this.buildAvailableScoutAuthGroups();
+  }
+
+  saveScoutAuthGroups() {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'admin/scout-auth-groups/', this.scoutAuthGroups
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.scoutAuthGroup = new AuthGroup();
+            this.scoutAuthGroupsModalVisible = false;
+          }
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   getPhoneType(type: number): string {
