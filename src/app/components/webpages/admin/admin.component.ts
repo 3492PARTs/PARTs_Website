@@ -165,8 +165,8 @@ export class AdminComponent implements OnInit {
       new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
     ]);
-    //this.ns.setSubPage('users');
-    this.ns.setSubPage('security');
+    this.ns.setSubPage('users');
+    //this.ns.setSubPage('security');
   }
 
   adminInit(): void {
