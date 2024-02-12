@@ -189,7 +189,7 @@
 <app-box *ngIf="page ==='team-app-form'" [Title]="'Team Application Form'">
   <app-form-element-group [LabelText]="'Responses'">
     <app-table [TableCols]="teamApplicationResponsesCols" [TableData]="teamApplicationResponses"
-      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'"></app-table>
+      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'" [CursorPointer]="true"></app-table>
   </app-form-element-group>
 
   <app-question-admin-form [questionType]="'team-app'"></app-question-admin-form>
@@ -198,7 +198,7 @@
 <app-box *ngIf="page ==='team-cntct-form'" [Title]="'Team Contact Form'">
   <app-form-element-group [LabelText]="'Responses'">
     <app-table [TableCols]="teamContactResponsesCols" [TableData]="teamContactResponses"
-      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'"></app-table>
+      (RecordClickCallBack)="openResponse($event)" [Width]="'100%'" [CursorPointer]="true"></app-table>
   </app-form-element-group>
 
   <app-question-admin-form [questionType]="'team-cntct'"></app-question-admin-form>
