@@ -49,7 +49,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
-  groups: AuthGroup[] = [];
+  groups: AuthGroup[] = []; //TODO: I have this in the init object too. remove it from there 
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
@@ -62,6 +62,9 @@ export class AdminComponent implements OnInit {
   activePermission = new AuthPermission();
 
   scoutAuthGroups: AuthGroup[] = [];
+  availableScoutAuthGroups: AuthGroup[] = [];
+  scoutAuthGroup = new AuthGroup();
+  scoutAuthGroupsModalVisible = false;
 
   userAudit: User[] = [];
   userAuditTableCols = [
@@ -136,7 +139,6 @@ export class AdminComponent implements OnInit {
           this.us.getUsers(1, 1);
           this.us.getGroups();
           this.us.getPermissions();
-          this.getScoutAuthGroups();
           this.runSecurityAudit();
           break;
       }
@@ -366,8 +368,9 @@ export class AdminComponent implements OnInit {
     return name.substring(2, name.length);
   }
 
-  getScoutAuthGroups() {
+  getScoutAuthGroups(visible: boolean) {
     this.gs.incrementOutstandingCalls();
+    this.scoutAuthGroupsModalVisible = visible;
     this.http.get(
       'admin/scout-auth-groups/'
     ).subscribe(
@@ -375,6 +378,7 @@ export class AdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result))
             this.scoutAuthGroups = result as AuthGroup[];
+          this.buildAvailableScoutAuthGroups();
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
@@ -387,6 +391,28 @@ export class AdminComponent implements OnInit {
     );
   }
 
+  private buildAvailableScoutAuthGroups(): void {
+    this.availableScoutAuthGroups = this.groups.filter(g => {
+      return this.scoutAuthGroups.map(el => el.id).indexOf(g.id) < 0;
+    });
+  }
+
+  addScoutAuthGroup() {
+    this.scoutAuthGroups.push(this.scoutAuthGroup);
+    this.scoutAuthGroup = new AuthGroup();
+    this.buildAvailableScoutAuthGroups()
+  }
+
+  removeScoutAuthGroup(ag: AuthGroup) {
+    for (let i = 0; i < this.scoutAuthGroups.length; i++) {
+      if (this.scoutAuthGroups[i].id === ag.id) {
+        this.scoutAuthGroups.splice(i, 1);
+        break;
+      }
+    }
+    this.buildAvailableScoutAuthGroups();
+  }
+
   saveScoutAuthGroups() {
     this.gs.incrementOutstandingCalls();
     this.http.post(
@@ -396,8 +422,9 @@ export class AdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.scoutAuthGroup = new AuthGroup();
+            this.scoutAuthGroupsModalVisible = false;
           }
-
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
