@@ -130,7 +130,7 @@
 
 <app-box *ngIf="page ==='errors'" [Title]="'Error Log'">
   <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
-    (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'">
+    (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'" [CursorPointer]="true">
   </app-table>
 
   <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
