@@ -98,7 +98,10 @@ export class ScoutPitResultsComponent implements OnInit {
     if (sp.pics.length > 0) {
       let link = '';
 
-      if (index) link = sp.pics[index].pic;
+      if (index !== undefined) {
+        link = sp.pics[index].pic;
+        sp.pic = index;
+      }
       else {
         for (let i = 0; i < sp.pics.length; i++) {
           if (sp.pics[i].default) {
