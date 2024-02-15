@@ -253,6 +253,13 @@ textarea.form-control {
 
     z-index: 9999;
   }
+
+  .multi-select-option {
+    input,
+    label {
+      cursor: pointer;
+    }
+  }
 }
 
 .arrow-wrapper {
