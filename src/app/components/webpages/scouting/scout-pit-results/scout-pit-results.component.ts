@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Team } from '../scout-field/scout-field.component';
 import { Question } from '../../../elements/question-admin-form/question-admin-form.component';
 
@@ -137,6 +137,35 @@ export class ScoutPitResultsComponent implements OnInit {
     }
   }
 
+  setDefaultPic(spi: ScoutPitImage): void {
+    this.gs.incrementOutstandingCalls();
+
+    this.http.get(
+      'scouting/pit/set-default-pit-image/', {
+      params: {
+        scout_pit_img_id: spi.scout_pit_img_id
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.search();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
   download(): void | null {
     let export_file = this.scoutPitResults;
 
@@ -186,6 +215,7 @@ export class ScoutPitResultAnswer {
 }
 
 export class ScoutPitImage {
+  scout_pit_img_id!: number;
   pic!: string;
   default = false;
 }
