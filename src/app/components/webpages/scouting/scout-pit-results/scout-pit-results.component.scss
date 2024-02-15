@@ -19,39 +19,3 @@
   font-weight: bold;
   text-align: center;
 }
-
-.team-pic-wrapper {
-  position: relative;
-  display: inline-block;
-
-  .team-pic {
-    padding-top: 1em;
-
-    text-align: center;
-
-    canvas {
-      width: 80%;
-    }
-  }
-
-  .default-pic-btn {
-    position: absolute;
-    top: 0;
-    right: -15px;
-  }
-
-  .prev-pic,
-  .next-pic {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .prev-pic {
-    left: -15px;
-  }
-
-  .next-pic {
-    right: -15px;
-  }
-}

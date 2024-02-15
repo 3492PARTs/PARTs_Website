@@ -13,25 +13,8 @@
 
 <div id="results">
 
-  <app-box *ngFor="let res of scoutPitResults" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth"
-    appOnCreate (onCreate)="preview(res)">
-    <div class="team-pic-wrapper">
-      <div class="default-pic-btn" *ngIf="res.pics.length > 1">
-        <app-button [ButtonType]="'check'" [BackgroundColor]="res.pics[res.pic].default ? 'green' : ''"
-          (FunctionCallBack)="setDefaultPic(res.pics[res.pic])"></app-button>
-      </div>
-
-      <div class="team-pic" [id]="res.teamNo">
-      </div>
-
-      <div class="prev-pic" *ngIf="res.pics.length > 1">
-        <app-button [ButtonType]="'collapse'" [Rotate]="'90deg'" (FunctionCallBack)="prevImage(res)"></app-button>
-      </div>
-
-      <div class="next-pic" *ngIf="res.pics.length > 1">
-        <app-button [ButtonType]="'collapse'" [Rotate]="'-90deg'" (FunctionCallBack)="nextImage(res)"></app-button>
-      </div>
-    </div>
+  <app-box *ngFor="let res of scoutPitResults" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth">
+    <app-scout-pic-display [ScoutPitResult]="res"></app-scout-pic-display>
 
     <div *ngFor="let r of res.results">
       <p>{{ r.question }}: {{ r.answer }}</p>
