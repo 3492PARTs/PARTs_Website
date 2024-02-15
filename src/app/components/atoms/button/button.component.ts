@@ -17,6 +17,7 @@ export class ButtonComponent implements OnInit {
   @Input() SymbolSize = '3rem';
   @Input() ElementID = '';
   @Input() SmallButton = false;
+  @Input() Rotate = '0deg';
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 

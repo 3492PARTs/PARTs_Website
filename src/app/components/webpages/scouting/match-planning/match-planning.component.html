@@ -63,9 +63,9 @@
                     <div>
                         <app-header [h]="1">{{ mpr.team.team_no }} - {{ mpr.team.team_nm }}</app-header>
 
-                        <div *ngIf="mpr.pitData" class="team-pic" [id]="mpr.team.team_no" appOnCreate
-                            (onCreate)="preview(mpr.pitData.pic, mpr.team.team_no)">
-
+                        <div *ngIf="mpr.pitData" class="team-pic" [id]="mpr.team.team_no">
+                            <!--appOnCreate
+                            (onCreate)="preview(mpr.pitData.pic, mpr.team.team_no)"-->
                         </div>
                     </div>
                     <div class="team-info">

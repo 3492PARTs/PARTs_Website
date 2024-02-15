@@ -80,23 +80,54 @@ export class ScoutPitResultsComponent implements OnInit {
     );
   }
 
-  preview(link: string, id: string) {
-    LoadImg(
-      link,
-      (img: any) => {
-        img.style.width = '100%';
-        img.style.height = 'auto';
-        document.getElementById(id)!.appendChild(img);
-      },
-      {
-        //maxWidth: 600,
-        //maxHeight: 300,
-        //minWidth: 100,
-        //minHeight: 50,
-        //canvas: true,
-        orientation: true
+  nextImage(sp: ScoutPitResults): void {
+    if (sp.pic + 1 > sp.pics.length - 1) sp.pic = 0;
+    else sp.pic++;
+
+    this.preview(sp, sp.pic)
+  }
+
+  preview(sp: ScoutPitResults, index?: number): void {
+    if (sp.pics.length > 0) {
+      let link = '';
+
+      if (index) link = sp.pics[index].pic;
+      else {
+        for (let i = 0; i < sp.pics.length; i++) {
+          if (sp.pics[i].default) {
+            sp.pic = i;
+            link = sp.pics[i].pic;
+            break;
+          }
+        }
+
+        if (this.gs.strNoE(link)) {
+          link = sp.pics[0].pic;
+          sp.pic = 0;
+        }
       }
-    );
+
+      let el = document.getElementById(sp.teamNo);
+
+      if (el) el.replaceChildren();
+
+      LoadImg(
+        link,
+        (img: any) => {
+          img.style.width = '100%';
+          img.style.height = 'auto';
+          document.getElementById(sp.teamNo)!.appendChild(img);
+        },
+        {
+          //maxWidth: 600,
+          //maxHeight: 300,
+          //minWidth: 100,
+          //minHeight: 50,
+          //canvas: true,
+          orientation: true
+        }
+      );
+    }
   }
 
   download(): void | null {
@@ -122,7 +153,11 @@ export class ScoutPitResultsComponent implements OnInit {
       element.results.forEach(r => {
         csv += '"' + r.answer + '"' + ',';
       });
-      csv += element.pic + ',';
+
+      element.pics.forEach(p => {
+        csv += p.pic + ',';
+      });
+
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
     });
@@ -133,11 +168,17 @@ export class ScoutPitResultsComponent implements OnInit {
 export class ScoutPitResults {
   teamNo!: string;
   teamNm!: string;
-  pic!: string;
+  pics: ScoutPitImage[] = [];
+  pic = 0;
   results: ScoutPitResultAnswer[] = [];
 }
 
 export class ScoutPitResultAnswer {
   question!: string;
   answer!: string;
+}
+
+export class ScoutPitImage {
+  pic!: string;
+  default = false;
 }

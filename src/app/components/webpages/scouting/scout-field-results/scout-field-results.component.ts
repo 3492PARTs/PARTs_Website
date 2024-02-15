@@ -142,14 +142,14 @@ export class ScoutFieldResultsComponent implements OnInit {
             if ((result as ScoutPitResults[])[0]) {
               this.scoutPitResult = (result as ScoutPitResults[])[0];
 
-              this.preview(this.scoutPitResult.pic, 'team-pic');
+              //this.preview(this.scoutPitResult.pic, 'team-pic');
             } else {
               this.scoutPitResult = new ScoutPitResults();
             }
           }
           else {
             this.scoutPitResult = new ScoutPitResults();
-            this.preview(this.scoutPitResult.pic, 'team-pic');
+            //this.preview(this.scoutPitResult.pic, 'team-pic');
           }
 
           this.teamScoutResultsModalVisible = true;
