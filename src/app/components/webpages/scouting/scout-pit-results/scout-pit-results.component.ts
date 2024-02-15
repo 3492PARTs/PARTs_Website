@@ -80,6 +80,13 @@ export class ScoutPitResultsComponent implements OnInit {
     );
   }
 
+  prevImage(sp: ScoutPitResults): void {
+    if (sp.pic - 1 < 0) sp.pic = sp.pics.length - 1;
+    else sp.pic--;
+
+    this.preview(sp, sp.pic)
+  }
+
   nextImage(sp: ScoutPitResults): void {
     if (sp.pic + 1 > sp.pics.length - 1) sp.pic = 0;
     else sp.pic++;
