@@ -1,20 +1,20 @@
-<div class="team-pic-wrapper">
-    <div class="default-pic-btn" *ngIf="ScoutPitResult.pics.length > 1">
+<div class="team-pic-wrapper" *ngIf="_ScoutPitResult && _ScoutPitResult.pics">
+    <div class="default-pic-btn" *ngIf="_ScoutPitResult.pics.length > 1">
         <app-button [ButtonType]="'check'"
-            [BackgroundColor]="ScoutPitResult.pics[ScoutPitResult.pic].default ? 'green' : ''"
-            (FunctionCallBack)="setDefaultPic(ScoutPitResult.pics[ScoutPitResult.pic])"></app-button>
+            [BackgroundColor]="_ScoutPitResult.pics[_ScoutPitResult.pic].default ? 'green' : ''"
+            (FunctionCallBack)="setDefaultPic(_ScoutPitResult.pics[_ScoutPitResult.pic])"></app-button>
     </div>
 
-    <div class="team-pic" [id]="ScoutPitResult.teamNo">
+    <div class="team-pic" [id]="_ScoutPitResult.teamNo">
     </div>
 
-    <div class="prev-pic" *ngIf="ScoutPitResult.pics.length > 1">
-        <app-button [ButtonType]="'collapse'" [Rotate]="'90deg'" (FunctionCallBack)="prevImage(ScoutPitResult)">
+    <div class="prev-pic" *ngIf="_ScoutPitResult.pics.length > 1">
+        <app-button [ButtonType]="'collapse'" [Rotate]="'90deg'" (FunctionCallBack)="prevImage(_ScoutPitResult)">
         </app-button>
     </div>
 
-    <div class="next-pic" *ngIf="ScoutPitResult.pics.length > 1">
-        <app-button [ButtonType]="'collapse'" [Rotate]="'-90deg'" (FunctionCallBack)="nextImage(ScoutPitResult)">
+    <div class="next-pic" *ngIf="_ScoutPitResult.pics.length > 1">
+        <app-button [ButtonType]="'collapse'" [Rotate]="'-90deg'" (FunctionCallBack)="nextImage(_ScoutPitResult)">
         </app-button>
     </div>
 </div>

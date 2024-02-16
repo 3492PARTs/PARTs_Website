@@ -9,14 +9,15 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })
-export class ScoutPicDisplayComponent implements OnInit {
-  @Input() ScoutPitResult = new ScoutPitResults();
+export class ScoutPicDisplayComponent {
+  @Input()
+  set ScoutPitResult(spr: ScoutPitResults) {
+    this._ScoutPitResult = spr;
+    this.preview(this._ScoutPitResult);
+  }
+  _ScoutPitResult = new ScoutPitResults();
 
   constructor(private gs: GeneralService, private http: HttpClient) { }
-
-  ngOnInit(): void {
-    this.preview(this.ScoutPitResult);
-  }
 
   prevImage(sp: ScoutPitResults): void {
     if (sp.pic - 1 < 0) sp.pic = sp.pics.length - 1;
@@ -33,7 +34,7 @@ export class ScoutPicDisplayComponent implements OnInit {
   }
 
   preview(sp: ScoutPitResults, index?: number): void {
-    if (sp.pics.length > 0) {
+    if (sp && sp.pics.length > 0) {
       let link = '';
 
       if (index !== undefined) {
@@ -93,6 +94,8 @@ export class ScoutPicDisplayComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             // TODO: need to emit this this.search();
+            this._ScoutPitResult.pics.forEach(p => p.default = false);
+            spi.default = true;
           }
         },
         error: (err: any) => {

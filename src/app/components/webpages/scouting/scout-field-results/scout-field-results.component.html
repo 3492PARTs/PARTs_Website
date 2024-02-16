@@ -24,13 +24,13 @@
 
   <app-table [TableCols]="scoutResults.scoutCols" [TableData]="scoutResults.scoutAnswers" [Scrollable]="true"
     [(FilterText)]="filterText" [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
-    [ScrollHeight]="'50rem'">
+    [ScrollHeight]="'50rem'" [CursorPointer]="true">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
     <div class="team-results">
-      <div class="team-pic" id="team-pic">
-
+      <div class="team-pic">
+        <app-scout-pic-display [ScoutPitResult]="scoutPitResult"></app-scout-pic-display>
       </div>
       <div class="team-info">
         <div class="team-nm">

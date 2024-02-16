@@ -5,7 +5,6 @@ import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
-import * as LoadImg from 'blueimp-load-image';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
@@ -255,26 +254,6 @@ export class MatchPlanningComponent implements OnInit {
 
   clearResults(): void {
     this.matchPlanningResults = [];
-  }
-
-  preview(link: string, id: string) {
-    document.getElementById(id)!.innerHTML = '';
-    LoadImg(
-      link,
-      (img: any) => {
-        img.style.width = '100%';
-        img.style.height = 'auto';
-        document.getElementById(id)!.appendChild(img);
-      },
-      {
-        //maxWidth: 800,
-        //maxHeight: 500,
-        //minWidth: 300,
-        //minHeight: 250,
-        //canvas: true,
-        orientation: true
-      }
-    );
   }
 
   rankToColor(team: number): string {
