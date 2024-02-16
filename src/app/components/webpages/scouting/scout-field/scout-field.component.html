@@ -51,7 +51,7 @@
     </div>
   </div>
   <br>
-  <app-form (SubmitFunction)="save()">
+  <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div class="flex align-items-baseline">
       <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
         [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
@@ -65,14 +65,17 @@
       [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true">
     </app-form-element>
 
-    <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions">
+    <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
+      (FormElementsChange)="setAutoFormElements($event)">
     </app-question-display-form>
 
-    <app-question-display-form [LabelText]="'Teleoperated'" [(Questions)]="scoutTeleopQuestions">
+    <app-question-display-form [LabelText]="'Teleoperated'" [(Questions)]="scoutTeleopQuestions"
+      (FormElementsChange)="setTeleopFormElements($event)">
     </app-question-display-form>
 
     <app-question-display-form *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'"
-      [(Questions)]="scoutOtherQuestions"></app-question-display-form>
+      [(Questions)]="scoutOtherQuestions" (FormElementsChange)="setOtherFormElements($event)">
+    </app-question-display-form>
 
     <app-button-ribbon>
       <app-button [Type]="'submit'" [ButtonType]="'main'">Save</app-button>
