@@ -419,7 +419,7 @@ export class User {
   discord_user_id = '';
   phone = '';
   phone_type = '';
-  phone_type_id = -1;
+  phone_type_id!: number | null;
   groups: AuthGroup[] = [];
   image = '';
 }

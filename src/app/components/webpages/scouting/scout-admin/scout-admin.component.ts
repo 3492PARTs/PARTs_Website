@@ -503,6 +503,8 @@ export class ScoutAdminComponent implements OnInit {
   saveUser(u?: User): void {
     if (u) this.activeUser = u;
 
+    if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
+
     this.us.saveUser(this.activeUser, this.userGroups, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
