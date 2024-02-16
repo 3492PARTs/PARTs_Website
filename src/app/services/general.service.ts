@@ -345,7 +345,7 @@ export class GeneralService {
         if (!this.strNoE(opt.checked) && opt.checked !== 'false')
           if (opt.checked === 'true' || opt.checked === true)
             str += opt.option + ', ';
-          else
+          else if (opt.checked !== false)
             str += opt.checked + ', ';
       });
       str = str.substring(0, str.length - 2);

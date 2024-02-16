@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Team } from '../scout-field/scout-field.component';
 import { Question } from '../../../elements/question-admin-form/question-admin-form.component';
 
-import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize } from '../../../../services/general.service';
 
@@ -80,25 +79,6 @@ export class ScoutPitResultsComponent implements OnInit {
     );
   }
 
-  preview(link: string, id: string) {
-    LoadImg(
-      link,
-      (img: any) => {
-        img.style.width = '100%';
-        img.style.height = 'auto';
-        document.getElementById(id)!.appendChild(img);
-      },
-      {
-        //maxWidth: 600,
-        //maxHeight: 300,
-        //minWidth: 100,
-        //minHeight: 50,
-        //canvas: true,
-        orientation: true
-      }
-    );
-  }
-
   download(): void | null {
     let export_file = this.scoutPitResults;
 
@@ -122,7 +102,11 @@ export class ScoutPitResultsComponent implements OnInit {
       element.results.forEach(r => {
         csv += '"' + r.answer + '"' + ',';
       });
-      csv += element.pic + ',';
+
+      element.pics.forEach(p => {
+        csv += p.pic + ',';
+      });
+
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
     });
@@ -133,11 +117,18 @@ export class ScoutPitResultsComponent implements OnInit {
 export class ScoutPitResults {
   teamNo!: string;
   teamNm!: string;
-  pic!: string;
+  pics: ScoutPitImage[] = [];
+  pic = 0;
   results: ScoutPitResultAnswer[] = [];
 }
 
 export class ScoutPitResultAnswer {
   question!: string;
   answer!: string;
+}
+
+export class ScoutPitImage {
+  scout_pit_img_id!: number;
+  pic!: string;
+  default = false;
 }

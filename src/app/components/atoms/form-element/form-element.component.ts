@@ -132,6 +132,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @ViewChild('fileUpload') fileUpload: { nativeElement: { value: string; }; } = { nativeElement: { value: '' } };
 
+  private stopwatchRun = false;
+  private stopwatchHour = 0;
+  private stopwatchMinute = 0;
+  private stopwatchSecond = 0;
+  private stopwatchLoopCount = 0;
+
   @Input() IconOnly = false;
 
   @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
@@ -160,9 +166,14 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'Model': {
-            if (this.Type === 'phone') {
-              //console.log(changes);
-              if (this.gs.strNoE(changes['Model'].previousValue) && !this.gs.strNoE(changes['Model'].currentValue)) this.phoneMaskFn(changes['Model'].currentValue);
+            let modelChanges = changes['Model'];
+            if (this.Type === 'phone' && !modelChanges.firstChange) {
+              if (this.formatPhone(modelChanges.currentValue) !== this.phoneMaskModel) {
+                //console.log(this.Model);
+                //console.log(this.phoneMaskModel);
+                //console.log(changes);
+                this.phoneMaskFn(modelChanges.currentValue);
+              }
             }
           }
         }
@@ -322,6 +333,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       }, 1);
 
+    if (['checkbox'].includes(this.Type))
+      window.setTimeout(() => {
+        if (this.label && this.validationIndicator) {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+        }
+      }, 1);
+
     return invalid;
   }
 
@@ -450,6 +468,53 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
   }
 
+  stopwatchStart(): void {
+    this.stopwatchRun = true;
+    this.stopwatchRunFunction();
+  }
+
+  stopwatchStop(): void {
+    this.stopwatchRun = false;
+  }
+
+  stopwatchReset(): void {
+    this.stopwatchHour = 0;
+    this.stopwatchMinute = 0;
+    this.stopwatchSecond = 0;
+    this.stopwatchLoopCount = 0;
+    this.stopwatchSetValue();
+  }
+
+  stopwatchRunFunction(): void {
+    if (this.stopwatchRun) {
+      this.stopwatchLoopCount++;
+
+      if (this.stopwatchLoopCount === 100) {
+        this.stopwatchSecond++;
+        this.stopwatchLoopCount = 0;
+      }
+
+      if (this.stopwatchSecond === 60) {
+        this.stopwatchMinute++;
+        this.stopwatchSecond = 0;
+      }
+
+      if (this.stopwatchMinute === 60) {
+        this.stopwatchHour++;
+        this.stopwatchMinute = 0;
+        this.stopwatchSecond = 0;
+      }
+
+      this.stopwatchSetValue();
+      window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+    }
+  }
+
+  stopwatchSetValue(): void {
+    this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    this.change(this.Model);
+  }
+
   resizeFormElement(): void {
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
@@ -507,22 +572,45 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     return this.gs.strNoE(a);
   }
 
+  formatPhone(value: string): string {
+    // This code manipulates the input to look like a phone number.
+    let phone = (value || '').replace(/\D/g, '');
+    phone = phone.slice(0, 10);
+    const areaCode = phone.slice(0, 3);
+    const prefix = phone.slice(3, 6);
+    const suffix = phone.slice(6, 10);
+
+    let ret = areaCode.length >= 1 ? '(' : '';
+    ret += areaCode;
+    ret += prefix.length > 0 ? ') ' : '';
+    ret += prefix;
+    ret += suffix.length >= 1 ? '-' : '';
+    ret += suffix;
+
+    return ret;
+  }
+
   phoneMaskFn(value: string, init = false) {
+
+    this.phoneMaskModel = '';
+
+    // This code manipulates the input to look like a phone number.
+    let phone = (value || '').replace(/\D/g, '');
+    /*phone = phone.slice(0, 10);
+    const areaCode = phone.slice(0, 3);
+    const prefix = phone.slice(3, 6);
+    const suffix = phone.slice(6, 10);*/
+
     window.setTimeout(() => {
-      this.phoneMaskModel = '';
-
-      // This code manipulates the input to look like a phone number.
-      let phone = (value || '').replace(/\D/g, '');
-      phone = phone.slice(0, 10);
-      const areaCode = phone.slice(0, 3);
-      const prefix = phone.slice(3, 6);
-      const suffix = phone.slice(6, 10);
-
-      window.setTimeout(() => {
-        this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
-      }, 1);
+      /*this.phoneMaskModel = areaCode.length >= 1 ? '(' : '';
+      this.phoneMaskModel += areaCode;
+      this.phoneMaskModel += prefix.length > 0 ? ') ' : '';
+      this.phoneMaskModel += prefix;
+      this.phoneMaskModel += suffix.length >= 1 ? '-' : '';
+      this.phoneMaskModel += suffix;*/
+      this.phoneMaskModel = this.formatPhone(value);
 
       if (!init) this.change(phone);
-    }, 1);
+    }, 0);
   };
 }

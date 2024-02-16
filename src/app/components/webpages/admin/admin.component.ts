@@ -199,7 +199,7 @@ export class AdminComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = u;
+    this.activeUser = this.gs.cloneObject(u);
     this.gs.incrementOutstandingCalls();
     this.authService.getUserGroups(u.id.toString())!.subscribe(
       {
