@@ -6,6 +6,7 @@ import { Team } from '../scout-field/scout-field.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
+import { ScoutResults } from '../scout-field-results/scout-field-results.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -113,6 +114,14 @@ export class ScoutAdminComponent implements OnInit {
 
   userScoutActivityResultsTableWidth = '200%';
 
+  scoutResults: ScoutResults = new ScoutResults();
+  scoutResultsCols: object[] = [
+    { PropertyName: 'team', ColLabel: 'Team' },
+    { PropertyName: 'match', ColLabel: 'Match' },
+    { PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'user', ColLabel: 'Scout' },
+  ];
+
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
@@ -126,6 +135,9 @@ export class ScoutAdminComponent implements OnInit {
           break;
         case 'scoutAct':
           this.getScoutingActivity();
+          break;
+        case 'mngFldRes':
+          this.getFieldResults();
           break;
       }
     });
@@ -148,6 +160,8 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
+      new MenuItem('Field Results', 'mngFldRes', 'phone'),
+      new MenuItem('Pit Results', 'mngPitRes', 'phone'),
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
@@ -898,6 +912,29 @@ export class ScoutAdminComponent implements OnInit {
   showUserActivityModal(ua: UserActivity): void {
     this.userActivityModalVisible = true;
     this.activeUserActivity = ua;
+  }
+
+  getFieldResults(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/field/results/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.scoutResults = result as ScoutResults;
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 }
 
