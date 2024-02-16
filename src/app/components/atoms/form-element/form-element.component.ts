@@ -568,21 +568,25 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   phoneMaskFn(value: string, init = false) {
+
+    this.phoneMaskModel = '';
+
+    // This code manipulates the input to look like a phone number.
+    let phone = (value || '').replace(/\D/g, '');
+    phone = phone.slice(0, 10);
+    const areaCode = phone.slice(0, 3);
+    const prefix = phone.slice(3, 6);
+    const suffix = phone.slice(6, 10);
+
     window.setTimeout(() => {
-      this.phoneMaskModel = '';
-
-      // This code manipulates the input to look like a phone number.
-      let phone = (value || '').replace(/\D/g, '');
-      phone = phone.slice(0, 10);
-      const areaCode = phone.slice(0, 3);
-      const prefix = phone.slice(3, 6);
-      const suffix = phone.slice(6, 10);
-
-      window.setTimeout(() => {
-        this.phoneMaskModel = `(${areaCode}) ${prefix}-${suffix}`;
-      }, 1);
+      this.phoneMaskModel = areaCode.length >= 1 ? '(' : '';
+      this.phoneMaskModel += areaCode;
+      this.phoneMaskModel += prefix.length > 0 ? ') ' : '';
+      this.phoneMaskModel += prefix;
+      this.phoneMaskModel += suffix.length >= 1 ? '-' : '';
+      this.phoneMaskModel += suffix;
 
       if (!init) this.change(phone);
-    }, 1);
+    }, 0);
   };
 }

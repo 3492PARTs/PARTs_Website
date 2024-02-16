@@ -36,6 +36,7 @@ export class FormComponent implements OnInit {
     // Returns true if all fields ARE valid
     //let valid = true;
     this.formElements.forEach(eachObj => {
+      eachObj.touchIt();
       const v = eachObj.isInvalid();
       /*if (valid && v) {
         valid = false;
