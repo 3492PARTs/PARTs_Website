@@ -270,6 +270,23 @@
           </div>
         </div>
       </div>
+
+      <div *ngSwitchCase="'stopwatch'" class="stopwatch">
+        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+          'disabled': Disabled, 
+          'valid': valid && Required && Touched, 
+          'invalid': !valid && Touched,
+          'required': Required && Touched && hasValue
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
+          (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
+          (focusout)="focusOut()">
+        <div class="flex justify-content-space-between">
+          <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()">Start</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="stopwatchStop()">Stop</app-button>
+          <app-button [ButtonType]="'danger'" (FunctionCallBack)="stopwatchReset()">Reset</app-button>
+        </div>
+      </div>
+
     </ng-container>
   </div>
   <p *ngIf="Required && !hasValue && Touched; else invalidMessage" class="invalid-message">{{ ValidationMessage ||

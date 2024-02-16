@@ -132,6 +132,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @ViewChild('fileUpload') fileUpload: { nativeElement: { value: string; }; } = { nativeElement: { value: '' } };
 
+  private stopwatchRun = false;
+  private stopwatchHour = 0;
+  private stopwatchMinute = 0;
+  private stopwatchSecond = 0;
+  private stopwatchLoopCount = 0;
+
   @Input() IconOnly = false;
 
   @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
@@ -448,6 +454,53 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     for (let i = 0; i < this._SelectList.length; i++) {
       this.change(false, i);
     }
+  }
+
+  stopwatchStart(): void {
+    this.stopwatchRun = true;
+    this.stopwatchRunFunction();
+  }
+
+  stopwatchStop(): void {
+    this.stopwatchRun = false;
+  }
+
+  stopwatchReset(): void {
+    this.stopwatchHour = 0;
+    this.stopwatchMinute = 0;
+    this.stopwatchSecond = 0;
+    this.stopwatchLoopCount = 0;
+    this.stopwatchSetValue();
+  }
+
+  stopwatchRunFunction(): void {
+    if (this.stopwatchRun) {
+      this.stopwatchLoopCount++;
+
+      if (this.stopwatchLoopCount === 100) {
+        this.stopwatchSecond++;
+        this.stopwatchLoopCount = 0;
+      }
+
+      if (this.stopwatchSecond === 60) {
+        this.stopwatchMinute++;
+        this.stopwatchSecond = 0;
+      }
+
+      if (this.stopwatchMinute === 60) {
+        this.stopwatchHour++;
+        this.stopwatchMinute = 0;
+        this.stopwatchSecond = 0;
+      }
+
+      this.stopwatchSetValue();
+      window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+    }
+  }
+
+  stopwatchSetValue(): void {
+    this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    this.change(this.Model);
   }
 
   resizeFormElement(): void {
