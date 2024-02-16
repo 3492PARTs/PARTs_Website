@@ -192,8 +192,8 @@
         </div>
       </ng-container>
 
-      <div *ngSwitchCase="'datetime'" class="datetime form-control">
-        <div (focus)="focusIn()" (focusout)="focusOut()" [ngClass]="{
+      <ng-container *ngSwitchCase="'datetime'">
+        <div (focus)="focusIn()" (focusout)="focusOut()" class="datetime form-control" [ngClass]="{
           'disabled': Disabled, 
           'valid': valid && Required && Touched, 
           'invalid': !valid && Touched,
@@ -208,7 +208,7 @@
             </ngx-mat-datetime-picker>
           </mat-form-field>
         </div>
-      </div>
+      </ng-container>
 
       <div *ngSwitchCase="'date'" class="date-form-control form-control" [ngClass]="{
         'disabled': Disabled, 
