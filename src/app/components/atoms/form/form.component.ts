@@ -45,6 +45,7 @@ export class FormComponent implements OnInit {
     });
 
     this.FormElements.forEach(eachObj => {
+      eachObj.touchIt();
       const v = eachObj.isInvalid();
       /*if (valid && v) {
         valid = false;

@@ -22,10 +22,6 @@
     & > div {
       order: 1;
       display: flex;
-
-      & > .validation {
-        display: none;
-      }
     }
 
     & > label {
@@ -34,7 +30,7 @@
 
     & > p {
       order: 3;
-      padding-left: 1.6rem;
+      padding-left: 2.5rem;
     }
   }
 
@@ -59,6 +55,10 @@
     left: 16px;
     top: -7px;
     z-index: 1;
+
+    &.checkboxLabel {
+      margin-right: 0;
+    }
 
     &.checkboxLabel,
     &.radioLabel {
@@ -167,6 +167,11 @@ textarea.form-control {
 
   &.multiSelect {
     right: 2.2rem;
+  }
+
+  &.stopwatch {
+    transform: none;
+    top: 11px;
   }
 
   .icon-valid {

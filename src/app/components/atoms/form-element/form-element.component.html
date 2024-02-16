@@ -7,7 +7,7 @@
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
     <div *ngIf="(Required && Touched) || !valid" class="validation" #validationIndicator
-      [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect'}">
+      [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect', 'stopwatch': Type === 'stopwatch'}">
       <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid && hasValue; else invalid"></mat-icon>
       <ng-template #invalid>
         <mat-icon class="icon-invalid" svgIcon="alert-circle-outline">

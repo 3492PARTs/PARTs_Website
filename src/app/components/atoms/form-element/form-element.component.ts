@@ -328,6 +328,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       }, 1);
 
+    if (['checkbox'].includes(this.Type))
+      window.setTimeout(() => {
+        if (this.label && this.validationIndicator) {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+        }
+      }, 1);
+
     return invalid;
   }
 
