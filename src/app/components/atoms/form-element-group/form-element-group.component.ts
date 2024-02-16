@@ -1,4 +1,4 @@
-import { Component, Input, ContentChildren, QueryList, AfterViewInit, OnInit } from '@angular/core';
+import { Component, Input, ContentChildren, QueryList, AfterViewInit, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { FormComponent } from '../form/form.component';
 
@@ -12,7 +12,10 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() MaxWidth = false;
   @Input() LabelText = '';
   @Input() InlineElements = false;
-  @ContentChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
+  @ContentChildren(FormElementComponent, { descendants: true }) formElements = new QueryList<FormElementComponent>();
+
+  @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
+  @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
 
   constructor() {
   }
@@ -21,6 +24,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
     if (this.InlineElements) {
       this.formElements.forEach(fe => fe.FormGroupInline = true);
     }
+
   }
 
   ngAfterViewInit() {
@@ -28,7 +32,10 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
 
     this.formElements.changes.subscribe(() => {
       this.setFormGroup();
+      this.setFormElements();
     });
+
+    this.setFormElements();
   }
 
   setFormGroup() {
@@ -44,5 +51,10 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
         }
       }
     }, 1);
+  }
+
+  setFormElements(): void {
+    this.FormElements = this.formElements;
+    this.FormElementsChange.emit(this.FormElements);
   }
 }

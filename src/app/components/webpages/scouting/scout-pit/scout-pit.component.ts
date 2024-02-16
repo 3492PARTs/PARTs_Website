@@ -5,6 +5,7 @@ import { Question } from 'src/app/components/elements/question-admin-form/questi
 
 import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -17,10 +18,12 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   team!: string;
   private previousTeam!: string;
   robotPic!: File;
+  robotPics: File[] = [];
   previewUrl: any = null;
   scoutQuestions: Question[] = [];
   private scoutQuestionsCopy: Question[] = [];
   private checkTeamInterval: number | undefined;
+  previewImages: ScoutPitImage[] = [];
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -106,6 +109,12 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     }
   }
 
+  addRobotPicture() {
+    if (this.robotPic)
+      this.robotPics.push(this.robotPic);
+    this.robotPic = new File([], '');
+  }
+
   save(): void | null {
     if (this.gs.strNoE(this.team)) {
       this.gs.addBanner(new Banner("Must select a team.", 500));
@@ -130,7 +139,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
             this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
-            this.savePicture();
+            this.savePictures();
             this.spInit();
             this.team = '';
             this.gs.scrollTo(0);
@@ -148,37 +157,37 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     );
   }
 
-  private savePicture(): void | null {
-    if (!this.robotPic || this.robotPic.size <= 0) {
-      this.previewUrl = null;
-      return null; // only process if there is a pic
-    }
+  private savePictures(): void | null {
+    this.robotPics.forEach(pic => {
+      if (pic && pic.size >= 0) {
+        this.gs.incrementOutstandingCalls();
 
-    this.gs.incrementOutstandingCalls();
+        const formData = new FormData();
+        formData.append('file', pic);
+        formData.append('team_no', this.team);
 
-    const formData = new FormData();
-    formData.append('file', this.robotPic);
-    formData.append('team_no', this.team);
-
-    this.http.post(
-      'scouting/pit/save-picture/', formData
-    ).subscribe(
-      {
-        next: (result: any) => {
-          this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-          this.robotPic = new File([], '');
-          this.previewUrl = null;
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+        this.http.post(
+          'scouting/pit/save-picture/', formData
+        ).subscribe(
+          {
+            next: (result: any) => {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.robotPic = new File([], '');
+              this.previewUrl = null;
+            },
+            error: (err: any) => {
+              console.log('error', err);
+              this.gs.triggerError(err);
+              this.gs.decrementOutstandingCalls();
+            },
+            complete: () => {
+              this.gs.decrementOutstandingCalls();
+            }
+          }
+        );
       }
-    );
+    });
+    this.robotPics = [];
   }
 
   preview() {
@@ -237,7 +246,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.scoutQuestions = (result['questions'] as Question[]);
-            this.previewUrl = result['pic'];
+            this.previewImages = result['pics'] as ScoutPitImage[];
           }
         },
         error: (err: any) => {

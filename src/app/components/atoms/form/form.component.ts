@@ -10,6 +10,8 @@ import { Banner, GeneralService } from 'src/app/services/general.service';
 })
 
 export class FormComponent implements OnInit {
+  @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
+
   @Output() SubmitFunction = new EventEmitter();
 
   @ContentChildren(FormElementComponent, { descendants: true }) formElements = new QueryList<FormElementComponent>();
@@ -24,11 +26,9 @@ export class FormComponent implements OnInit {
       eachObj.reset();
     });
 
-    /*this.formElementGroups.forEach(eachObj => {
-      eachObj.formElements.forEach(eachObj2 => {
-        eachObj2.reset();
-      });
-    });*/
+    this.FormElements.forEach(eachObj => {
+      eachObj.reset();
+    });
   }
 
   validateAllFelids(): string {
@@ -36,6 +36,7 @@ export class FormComponent implements OnInit {
     // Returns true if all fields ARE valid
     //let valid = true;
     this.formElements.forEach(eachObj => {
+      eachObj.touchIt();
       const v = eachObj.isInvalid();
       /*if (valid && v) {
         valid = false;
@@ -44,14 +45,15 @@ export class FormComponent implements OnInit {
         ret += '&bull;  ' + eachObj.LabelText + ' is invalid\n'
     });
 
-    /*this.formElementGroups.forEach(eachObj => {
-      eachObj.formElements.forEach(eachObj2 => {
-        const v = eachObj2.isInvalid();
-        if (valid && v) {
-          valid = false;
-        }
-      });
-    });*/
+    this.FormElements.forEach(eachObj => {
+      eachObj.touchIt();
+      const v = eachObj.isInvalid();
+      /*if (valid && v) {
+        valid = false;
+      }*/
+      if (v)
+        ret += '&bull;  ' + eachObj.LabelText + ' is invalid\n'
+    });
     return ret;
   }
 

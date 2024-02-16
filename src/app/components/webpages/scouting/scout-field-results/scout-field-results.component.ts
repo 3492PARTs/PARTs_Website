@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
-import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 
@@ -142,14 +141,12 @@ export class ScoutFieldResultsComponent implements OnInit {
             if ((result as ScoutPitResults[])[0]) {
               this.scoutPitResult = (result as ScoutPitResults[])[0];
 
-              this.preview(this.scoutPitResult.pic, 'team-pic');
             } else {
               this.scoutPitResult = new ScoutPitResults();
             }
           }
           else {
             this.scoutPitResult = new ScoutPitResults();
-            this.preview(this.scoutPitResult.pic, 'team-pic');
           }
 
           this.teamScoutResultsModalVisible = true;
@@ -182,29 +179,6 @@ export class ScoutFieldResultsComponent implements OnInit {
         complete: () => {
           this.gs.decrementOutstandingCalls();
         }
-      }
-    );
-  }
-
-  preview(link: string, id: string) {
-    let elem = document.getElementById(id);
-    if (elem)
-      elem.innerHTML = '';
-    LoadImg(
-      link,
-      (img: any) => {
-        img.style.width = '100%';
-        img.style.height = 'auto';
-        if (elem)
-          elem.appendChild(img);
-      },
-      {
-        //maxWidth: 800,
-        //maxHeight: 500,
-        //minWidth: 300,
-        //minHeight: 250,
-        //canvas: true,
-        orientation: true
       }
     );
   }

@@ -368,3 +368,9 @@
     </app-button-ribbon>
   </app-form>
 </app-box>
+
+<app-box *ngIf="page === 'mngFldRes'" [Title]="'Manage Field Responses'">
+  <app-form (SubmitFunction)="savePhoneType()">
+    <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"></app-table>
+  </app-form>
+</app-box>

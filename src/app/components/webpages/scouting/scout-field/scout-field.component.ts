@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
+import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -26,6 +27,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   private checkScoutInterval: number | undefined;
   user!: User;
 
+  autoFormElements = new QueryList<FormElementComponent>();
+  teleopFormElements = new QueryList<FormElementComponent>();
+  otherFormElements = new QueryList<FormElementComponent>();
+  formElements = new QueryList<FormElementComponent>();
+
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) {
     this.authService.currentUser.subscribe(u => this.user = u);
   }
@@ -46,10 +52,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           error: (err: any) => {
             console.log('error', err);
             this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
+            //this.gs.decrementOutstandingCalls();
           },
           complete: () => {
-            this.gs.decrementOutstandingCalls();
+            //this.gs.decrementOutstandingCalls();
           }
         }
       );
@@ -219,6 +225,25 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  setAutoFormElements(fes: QueryList<FormElementComponent>): void {
+    this.autoFormElements = fes;
+    this.setFormElements();
+  }
+
+  setTeleopFormElements(fes: QueryList<FormElementComponent>): void {
+    this.teleopFormElements = fes;
+    this.setFormElements();
+  }
+
+  setOtherFormElements(fes: QueryList<FormElementComponent>): void {
+    this.otherFormElements = fes;
+    this.setFormElements();
+  }
+
+  setFormElements(): void {
+    this.formElements.reset([...this.autoFormElements, ...this.teleopFormElements, ...this.otherFormElements]);
   }
 }
 
