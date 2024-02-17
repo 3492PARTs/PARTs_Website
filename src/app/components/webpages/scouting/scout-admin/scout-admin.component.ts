@@ -159,9 +159,9 @@ export class ScoutAdminComponent implements OnInit {
           this.getFieldResults();
           break;
         case 'mngFldQAgg':
-          this.questionInit();
-          this.getScoutQuestionAggregateTypes();
-          this.getScoutQuestionAggregates();
+          this.getScoutFieldQuestions();
+          this.getQuestionAggregateTypes();
+          this.getFieldQuestionAggregates();
           break;
       }
     });
@@ -942,10 +942,10 @@ export class ScoutAdminComponent implements OnInit {
     this.activeUserActivity = ua;
   }
 
-  getScoutQuestionAggregates(): void {
+  getFieldQuestionAggregates(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'form/question-aggregates/', {
+      'form/question-aggregate/', {
       params: {
         form_typ: 'field'
       }
@@ -970,7 +970,7 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
-  getScoutQuestionAggregateTypes(): void {
+  getQuestionAggregateTypes(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'form/question-aggregate-types/'
@@ -1004,7 +1004,7 @@ export class ScoutAdminComponent implements OnInit {
     return qat1.question_aggregate_typ === qat2.question_aggregate_typ;
   }
 
-  questionInit(): void {
+  getScoutFieldQuestions(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
       'form/form-init/', {
@@ -1041,7 +1041,7 @@ export class ScoutAdminComponent implements OnInit {
         if (q.question_id === aq.question_id) match = true;
       });
 
-      if (!match) this.fieldQuestionAggQuestionList.push(q);
+      if (!match && q.scout_question.scorable) this.fieldQuestionAggQuestionList.push(q);
     });
   }
 
@@ -1051,6 +1051,32 @@ export class ScoutAdminComponent implements OnInit {
       this.fieldQuestionToAddToAgg = new Question();
       this.buildFieldQuestionAggQuestionList();
     }
+  }
+
+  saveQuestionAggregate(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'form/question-aggregate/', this.activeFieldQuestionAggregate
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.activeFieldQuestionAggregate = new QuestionAggregate();
+            this.fieldQuestionAggregateModalVisible = false;
+            this.getFieldQuestionAggregates();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   getFieldResults(): void {
@@ -1219,5 +1245,5 @@ export class QuestionAggregate {
   field_name = '';
   question_aggregate_typ = new QuestionAggregateType()
   questions: Question[] = [];
-  active = ''
+  active = 'y'
 }
