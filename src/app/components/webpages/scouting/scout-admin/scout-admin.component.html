@@ -341,6 +341,28 @@
   <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
 </app-box>
 
+<app-box *ngIf="page === 'mngFldQAgg'" [Title]="'Manage Field Question Aggregates'">
+  <app-table [TableCols]="fieldQuestionAggregatesTableCols" [TableData]="fieldQuestionAggregates" [Width]="'100%'"
+    [ShowAddButton]="true" (AddRecordCallBack)="showFieldQuestionAggregateModal()" [ShowEditButton]="true"
+    (EditRecordCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
+
+  <app-modal [Title]="'Field Question Aggregate'" [(visible)]="fieldQuestionAggregateModalVisible">
+    <app-form>
+      <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeFieldQuestionAggregate.field_name"
+        [Required]="true"></app-form-element>
+      <app-form-element [Type]="'select'" [LabelText]="'Aggregate Function'"
+        [(Model)]="activeFieldQuestionAggregate.question_aggregate_typ" [Required]="true"
+        [SelectList]="questionAggregateTypes" [DisplayProperty]="'question_aggregate_nm'"
+        [SelectComparatorFunction]="compareQuestionAggregateTypes"></app-form-element>
+
+      <app-table [TableCols]="fieldQuestionAggregateQuestionsTableCols"
+        [TableData]="activeFieldQuestionAggregate.questions" [Width]="'100%'" [ShowAddButton]="true"
+        (AddRecordCallBack)="showFieldQuestionAggregateModal()" [ShowRemoveButton]="true"
+        (RecordClickCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
+    </app-form>
+  </app-modal>
+</app-box>
+
 <app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
   <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
 </app-box>
@@ -372,5 +394,6 @@
 <app-box *ngIf="page === 'mngFldRes'" [Title]="'Manage Field Responses'">
   <app-form (SubmitFunction)="savePhoneType()">
     <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"></app-table>
+
   </app-form>
 </app-box>

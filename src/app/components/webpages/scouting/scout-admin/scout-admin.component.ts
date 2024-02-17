@@ -7,6 +7,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
+import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -114,6 +115,21 @@ export class ScoutAdminComponent implements OnInit {
 
   userScoutActivityResultsTableWidth = '200%';
 
+  questionAggregateTypes: QuestionAggregateType[] = [];
+  fieldQuestionAggregates: QuestionAggregate[] = [];
+  fieldQuestionAggregateModalVisible = false;
+  activeFieldQuestionAggregate = new QuestionAggregate();
+  fieldQuestionAggregatesTableCols: object[] = [
+    { PropertyName: 'field_name', ColLabel: 'Name' },
+    { PropertyName: 'question_aggregate_typ.question_aggregate_nm', ColLabel: 'Aggregate Function' },
+    { PropertyName: 'active', ColLabel: 'Active' },
+  ];
+
+  fieldQuestionAggregateQuestionsTableCols: object[] = [
+    { PropertyName: 'display_value', ColLabel: 'Question' },
+    { PropertyName: 'active', ColLabel: 'Active' },
+  ];
+
   scoutResults: ScoutResults = new ScoutResults();
   scoutResultsCols: object[] = [
     { PropertyName: 'team', ColLabel: 'Team' },
@@ -139,6 +155,10 @@ export class ScoutAdminComponent implements OnInit {
         case 'mngFldRes':
           this.getFieldResults();
           break;
+        case 'mngFldQAgg':
+          this.getScoutQuestionAggregateTypes();
+          this.getScoutQuestionAggregates();
+          break;
       }
     });
     this.us.currentUsers.subscribe(u => this.users = u);
@@ -158,15 +178,17 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
       new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
+      new MenuItem('Field Question Aggregates', 'mngFldQAgg', 'chat-question-outline'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
-      new MenuItem('Field Results', 'mngFldRes', 'phone'),
-      new MenuItem('Pit Results', 'mngPitRes', 'phone'),
+      //new MenuItem('Field Results', 'mngFldRes', 'phone'),
+      //new MenuItem('Pit Results', 'mngPitRes', 'phone'),
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
-    this.ns.setSubPage('users');
+    //this.ns.setSubPage('users');
+    this.ns.setSubPage('mngFldQAgg');
   }
 
   adminInit(): void {
@@ -916,6 +938,67 @@ export class ScoutAdminComponent implements OnInit {
     this.activeUserActivity = ua;
   }
 
+  getScoutQuestionAggregates(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/question-aggregates/', {
+      params: {
+        form_typ: 'field'
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            console.log(result);
+            this.fieldQuestionAggregates = result as QuestionAggregate[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getScoutQuestionAggregateTypes(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/question-aggregate-types/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            console.log(result);
+            this.questionAggregateTypes = result as QuestionAggregateType[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  showFieldQuestionAggregateModal(qa?: QuestionAggregate) {
+    this.fieldQuestionAggregateModalVisible = true;
+    this.activeFieldQuestionAggregate = this.gs.cloneObject(qa ? qa : new QuestionAggregate());
+  }
+
+  compareQuestionAggregateTypes(qat1: QuestionAggregateType, qat2: QuestionAggregateType): boolean {
+    return qat1.question_aggregate_typ === qat2.question_aggregate_typ;
+  }
+
   getFieldResults(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
@@ -1069,4 +1152,18 @@ export class UserActivity {
   user = new User();
   results = new ScoutFieldResultsSerializer();
   schedule: ScoutFieldSchedule[] = [];
+}
+
+export class QuestionAggregateType {
+  question_aggregate_typ = ''
+  question_aggregate_nm = ''
+}
+
+
+export class QuestionAggregate {
+  question_aggregate_id!: number;
+  field_name = '';
+  question_aggregate_typ = new QuestionAggregateType()
+  questions: Question[] = [];
+  active = ''
 }
