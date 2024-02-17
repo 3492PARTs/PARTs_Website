@@ -7,7 +7,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
-import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
+import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -125,6 +125,9 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
+  fieldForm = new Init();
+  fieldQuestionAggQuestionList: Question[] = [];
+  fieldQuestionToAddToAgg: Question | null = null;;
   fieldQuestionAggregateQuestionsTableCols: object[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
     { PropertyName: 'active', ColLabel: 'Active' },
@@ -156,6 +159,7 @@ export class ScoutAdminComponent implements OnInit {
           this.getFieldResults();
           break;
         case 'mngFldQAgg':
+          this.questionInit();
           this.getScoutQuestionAggregateTypes();
           this.getScoutQuestionAggregates();
           break;
@@ -993,10 +997,60 @@ export class ScoutAdminComponent implements OnInit {
   showFieldQuestionAggregateModal(qa?: QuestionAggregate) {
     this.fieldQuestionAggregateModalVisible = true;
     this.activeFieldQuestionAggregate = this.gs.cloneObject(qa ? qa : new QuestionAggregate());
+    this.buildFieldQuestionAggQuestionList();
   }
 
   compareQuestionAggregateTypes(qat1: QuestionAggregateType, qat2: QuestionAggregateType): boolean {
     return qat1.question_aggregate_typ === qat2.question_aggregate_typ;
+  }
+
+  questionInit(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/form-init/', {
+      params: {
+        form_typ: 'field'
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.fieldForm = result as Init;
+            this.buildFieldQuestionAggQuestionList();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  buildFieldQuestionAggQuestionList(): void {
+    this.fieldQuestionAggQuestionList = [];
+
+    this.fieldForm.questions.forEach(q => {
+      let match = false;
+      this.activeFieldQuestionAggregate.questions.forEach(aq => {
+        if (q.question_id === aq.question_id) match = true;
+      });
+
+      if (!match) this.fieldQuestionAggQuestionList.push(q);
+    });
+  }
+
+  addQuestionToFieldAggregate(): void {
+    if (this.fieldQuestionToAddToAgg && !this.gs.strNoE(this.fieldQuestionToAddToAgg.question_id)) {
+      this.activeFieldQuestionAggregate.questions.push(this.fieldQuestionToAddToAgg);
+      this.fieldQuestionToAddToAgg = new Question();
+      this.buildFieldQuestionAggQuestionList();
+    }
   }
 
   getFieldResults(): void {

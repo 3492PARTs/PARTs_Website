@@ -338,7 +338,8 @@
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQ'" [Title]="'Manage Field Questions'">
-  <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions"></app-question-admin-form>
+  <app-question-admin-form [questionType]="'field'" [runInit]="manageScoutFieldQuestions">
+  </app-question-admin-form>
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQAgg'" [Title]="'Manage Field Question Aggregates'">
@@ -355,9 +356,12 @@
         [SelectList]="questionAggregateTypes" [DisplayProperty]="'question_aggregate_nm'"
         [SelectComparatorFunction]="compareQuestionAggregateTypes"></app-form-element>
 
+      <app-form-element [Type]="'select'" [LabelText]="'Question'" [(Model)]="fieldQuestionToAddToAgg" [Required]="true"
+        [SelectList]="fieldQuestionAggQuestionList" [DisplayProperty]="'display_value'"></app-form-element>
+      <app-button [ButtonType]="'add'" (FunctionCallBack)="addQuestionToFieldAggregate()"></app-button>
+
       <app-table [TableCols]="fieldQuestionAggregateQuestionsTableCols"
-        [TableData]="activeFieldQuestionAggregate.questions" [Width]="'100%'" [ShowAddButton]="true"
-        (AddRecordCallBack)="showFieldQuestionAggregateModal()" [ShowRemoveButton]="true"
+        [TableData]="activeFieldQuestionAggregate.questions" [Width]="'100%'" [ShowRemoveButton]="true"
         (RecordClickCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
     </app-form>
   </app-modal>
