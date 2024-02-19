@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { QuestionCondition } from '../../webpages/scouting/scout-admin/scout-admin.component';
 
 @Component({
   selector: 'app-question-admin-form',

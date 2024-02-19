@@ -133,6 +133,17 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
+  fieldQuestionConditions: QuestionCondition[] = [];
+  fieldQuestionConditionModalVisible = false;
+  activeFieldQuestionCondition = new QuestionCondition();
+  fieldQuestionConditionsTableCols: object[] = [
+    { PropertyName: 'condition', ColLabel: 'Condition' },
+    { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
+    { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
+  ];
+  fieldQuestionConditionQuestionFromList: Question[] = [];
+  fieldQuestionConditionQuestionToList: Question[] = [];
+
   scoutResults: ScoutResults = new ScoutResults();
   scoutResultsCols: object[] = [
     { PropertyName: 'team', ColLabel: 'Team' },
@@ -163,6 +174,10 @@ export class ScoutAdminComponent implements OnInit {
           this.getQuestionAggregateTypes();
           this.getFieldQuestionAggregates();
           break;
+        case 'mngFldQCond':
+          this.getScoutFieldQuestions();
+          this.getFieldQuestionConditions();
+          break;
       }
     });
     this.us.currentUsers.subscribe(u => this.users = u);
@@ -182,7 +197,8 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
       new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
-      new MenuItem('Field Question Aggregates', 'mngFldQAgg', 'chat-question-outline'),
+      new MenuItem('Field Question Aggregates', 'mngFldQAgg', 'sigma'),
+      new MenuItem('Field Question Conditions', 'mngFldQCond', 'sigma'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
       //new MenuItem('Field Results', 'mngFldRes', 'phone'),
@@ -192,7 +208,7 @@ export class ScoutAdminComponent implements OnInit {
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
     //this.ns.setSubPage('users');
-    this.ns.setSubPage('mngFldQAgg');
+    this.ns.setSubPage('mngFldQCond');
   }
 
   adminInit(): void {
@@ -978,7 +994,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            console.log(result);
+            //console.log(result);
             this.questionAggregateTypes = result as QuestionAggregateType[];
           }
         },
@@ -1018,6 +1034,8 @@ export class ScoutAdminComponent implements OnInit {
           if (this.gs.checkResponse(result)) {
             this.fieldForm = result as Init;
             this.buildFieldQuestionAggQuestionList();
+            this.buildFieldQuestionConditionFromLists();
+            this.buildFieldQuestionConditionToLists();
           }
         },
         error: (err: any) => {
@@ -1065,6 +1083,117 @@ export class ScoutAdminComponent implements OnInit {
             this.activeFieldQuestionAggregate = new QuestionAggregate();
             this.fieldQuestionAggregateModalVisible = false;
             this.getFieldQuestionAggregates();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getFieldQuestionConditions(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'form/question-condition/', {
+      params: {
+        form_typ: 'field'
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            console.log(result);
+            this.fieldQuestionConditions = result as QuestionCondition[];
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  showFieldQuestionConditionModal(qc?: QuestionCondition) {
+    this.fieldQuestionConditionModalVisible = true;
+    this.activeFieldQuestionCondition = this.gs.cloneObject(qc ? qc : new QuestionCondition());
+    this.buildFieldQuestionConditionFromLists();
+    this.buildFieldQuestionConditionToLists();
+  }
+
+  buildFieldQuestionConditionFromLists(): void {
+    this.fieldQuestionConditionQuestionFromList = [];
+
+
+    this.fieldForm.questions.forEach(q => {
+      let match = false;
+      this.fieldQuestionConditions.forEach(qc => {
+        if ([qc.question_to.question_id].includes(q.question_id))
+          match = true
+      });
+
+      if (this.activeFieldQuestionCondition.question_to &&
+        !this.gs.strNoE(this.activeFieldQuestionCondition.question_to.question_id) &&
+        this.activeFieldQuestionCondition.question_to.question_id === q.question_id)
+        match = true;
+
+      if (!match)
+        this.fieldQuestionConditionQuestionFromList.push(q);
+    });
+  }
+
+  buildFieldQuestionConditionToLists(): void {
+    this.fieldQuestionConditionQuestionToList = [];
+
+    this.fieldForm.questions.forEach(q => {
+      let match = false;
+      this.fieldQuestionConditions.forEach(qc => {
+        if ([qc.question_from.question_id, qc.question_to.question_id].includes(q.question_id)) match = true
+      });
+
+      if (this.activeFieldQuestionCondition.question_from &&
+        !this.gs.strNoE(this.activeFieldQuestionCondition.question_from.question_id) &&
+        this.activeFieldQuestionCondition.question_from.question_id === q.question_id) match = true;
+
+      if (this.activeFieldQuestionCondition.question_to &&
+        !this.gs.strNoE(this.activeFieldQuestionCondition.question_to.question_id) &&
+        this.activeFieldQuestionCondition.question_to.question_id === q.question_id) match = false;
+
+      if (!match)
+        this.fieldQuestionConditionQuestionToList.push(q);
+    });
+  }
+
+  compareQuestions(q1: Question, q2: Question): boolean {
+    if (q1 && q2)
+      return q1.question_id === q2.question_id;
+    else
+      return false;
+  }
+
+  saveQuestionCondition(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.post(
+      'form/question-condition/', this.activeFieldQuestionCondition
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.activeFieldQuestionCondition = new QuestionCondition();
+            this.fieldQuestionConditionModalVisible = false;
+            this.getFieldQuestionConditions();
           }
         },
         error: (err: any) => {
@@ -1246,4 +1375,12 @@ export class QuestionAggregate {
   question_aggregate_typ = new QuestionAggregateType()
   questions: Question[] = [];
   active = 'y'
+}
+
+export class QuestionCondition {
+  question_condition_id!: number;
+  condition = '';
+  question_from!: Question;
+  question_to!: Question;
+  active = 'y';
 }
