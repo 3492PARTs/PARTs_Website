@@ -19,23 +19,26 @@
       [Required]="sq.required === 'y'">
     </app-form-element>
 
+    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save</p>
+
     <div class="flex align-items-baseline">
       <app-form-element [LabelText]="'Robot Picture'" [Type]="'file'" [FormGroup]="true" [(Model)]="robotPic"
         (change)="preview()">
       </app-form-element>
       <app-button [ButtonType]="'add'" (FunctionCallBack)="addRobotPicture()"></app-button>
+      <app-button [ButtonType]="'minus'" (FunctionCallBack)="removeRobotPicture()"></app-button>
     </div>
 
-
-    <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
-
-    <div>
+    <div *ngIf="robotPics.length > 0">
       <div *ngFor="let pic of robotPics">
         {{pic.name}}
       </div>
     </div>
 
-    <div>
+    <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
+
+    <div *ngIf="previewImages.length > 0">
+      <p>Existing images</p>
       <div *ngFor="let pic of previewImages">
         <img [src]="pic.pic" height="300">
       </div>

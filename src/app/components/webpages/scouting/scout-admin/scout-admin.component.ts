@@ -208,8 +208,8 @@ export class ScoutAdminComponent implements OnInit {
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
-    //this.ns.setSubPage('users');
-    this.ns.setSubPage('mngFldQ');
+    this.ns.setSubPage('users');
+    //this.ns.setSubPage('mngFldQ');
   }
 
   adminInit(): void {

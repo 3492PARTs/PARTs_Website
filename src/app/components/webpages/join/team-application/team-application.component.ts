@@ -43,7 +43,8 @@ export class TeamApplicationComponent implements OnInit {
     this.http.get(
       'form/get-questions/', {
       params: {
-        form_typ: 'team-app'
+        form_typ: 'team-app',
+        active: 'y'
       }
     }
     ).subscribe(
@@ -87,11 +88,13 @@ export class TeamApplicationComponent implements OnInit {
   save(): void | null {
     this.gs.incrementOutstandingCalls();
 
+    let questions = this.gs.cloneObject(this.questions) as FormSubTypeWrapper[];
+
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
       {
-        question_answers: this.questions.map(subForm => {
+        question_answers: questions.map(subForm => {
           subForm.questions.forEach(q => {
             q.answer = this.gs.formatQuestionAnswer(q.answer);
           })
