@@ -21,8 +21,17 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   init: Init = new Init();
-  question: Question = new Question();
-  editQuestion: Question = new Question();
+  questionModalVisible = false
+  activeQuestion: Question = new Question();
+  //editQuestion: Question = new Question();
+
+  questionTableCols: object[] = [
+    { PropertyName: 'form_sub_nm', ColLabel: 'Form Sub Type' },
+    { PropertyName: 'order', ColLabel: 'Order' },
+    { PropertyName: 'question', ColLabel: 'Question' },
+    { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'active', ColLabel: 'Active' },
+  ];
 
   optionsTableCols: object[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
@@ -48,8 +57,6 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as Init;
-            this.question = new Question();
-            this.editQuestion = new Question();
             this.gs.devConsoleLog(this.init);
           }
         },
@@ -65,12 +72,17 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
+  showQuestionModal(q?: Question): void {
+    this.activeQuestion = q ? this.gs.cloneObject(q) : new Question();
+    this.questionModalVisible = true;
+  }
+
   saveQuestion(): void {
     this.gs.incrementOutstandingCalls();
-    this.question.form_typ = this.questionType;
+    this.activeQuestion.form_typ = this.questionType;
 
 
-    let save = this.editQuestion && this.editQuestion.question_id ? this.editQuestion : this.question;
+    let save = this.activeQuestion;
 
     for (let i = 0; i < save.questionoption_set.length; i++) {
       if (this.gs.strNoE(save.questionoption_set[i].question_opt_id) && this.gs.strNoE(save.questionoption_set[i].option)) {
@@ -86,7 +98,8 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.question = new Question();
+            this.activeQuestion = new Question();
+            this.questionModalVisible = false;
             this.questionInit();
             //console.log(this.question);
           }
