@@ -384,15 +384,15 @@
     (EditRecordCallBack)="showFieldQuestionConditionModal($event)"></app-table>
 
   <app-modal [Title]="'Field Question Condition'" [(visible)]="fieldQuestionConditionModalVisible">
+    <app-form-element [Type]="'select'" [LabelText]="'Question From'"
+      [(Model)]="activeFieldQuestionCondition.question_from" [Required]="true"
+      [SelectList]="fieldQuestionConditionQuestionFromList" [DisplayProperty]="'display_value'"
+      [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionToLists()">
+    </app-form-element>
+
     <app-form (SubmitFunction)="saveQuestionCondition()">
       <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeFieldQuestionCondition.condition"
         [Required]="true"></app-form-element>
-
-      <app-form-element [Type]="'select'" [LabelText]="'Question From'"
-        [(Model)]="activeFieldQuestionCondition.question_from" [Required]="true"
-        [SelectList]="fieldQuestionConditionQuestionFromList" [DisplayProperty]="'display_value'"
-        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionToLists()">
-      </app-form-element>
 
       <app-form-element [Type]="'select'" [LabelText]="'Question To'"
         [(Model)]="activeFieldQuestionCondition.question_to" [Required]="true"

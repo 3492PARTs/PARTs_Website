@@ -137,9 +137,10 @@ export class ScoutAdminComponent implements OnInit {
   fieldQuestionConditionModalVisible = false;
   activeFieldQuestionCondition = new QuestionCondition();
   fieldQuestionConditionsTableCols: object[] = [
-    { PropertyName: 'condition', ColLabel: 'Condition' },
     { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
+    { PropertyName: 'condition', ColLabel: 'Condition' },
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
+    { PropertyName: 'active', ColLabel: 'Active' },
   ];
   fieldQuestionConditionQuestionFromList: Question[] = [];
   fieldQuestionConditionQuestionToList: Question[] = [];
@@ -198,7 +199,7 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
       new MenuItem('Field Questions', 'mngFldQ', 'chat-question-outline'),
       new MenuItem('Field Question Aggregates', 'mngFldQAgg', 'sigma'),
-      new MenuItem('Field Question Conditions', 'mngFldQCond', 'sigma'),
+      new MenuItem('Field Question Conditions', 'mngFldQCond', 'code-equal'),
       new MenuItem('Pit Questions', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
       //new MenuItem('Field Results', 'mngFldRes', 'phone'),
@@ -207,8 +208,8 @@ export class ScoutAdminComponent implements OnInit {
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
-    //this.ns.setSubPage('users');
-    this.ns.setSubPage('mngFldQCond');
+    this.ns.setSubPage('users');
+    //this.ns.setSubPage('mngFldQCond');
   }
 
   adminInit(): void {
@@ -1127,7 +1128,7 @@ export class ScoutAdminComponent implements OnInit {
 
   showFieldQuestionConditionModal(qc?: QuestionCondition) {
     this.fieldQuestionConditionModalVisible = true;
-    this.activeFieldQuestionCondition = this.gs.cloneObject(qc ? qc : new QuestionCondition());
+    this.activeFieldQuestionCondition = qc ? this.gs.cloneObject(qc) : new QuestionCondition();
     this.buildFieldQuestionConditionFromLists();
     this.buildFieldQuestionConditionToLists();
   }
