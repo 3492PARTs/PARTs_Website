@@ -207,6 +207,8 @@ export class Question {
   //scoutpitanswer_set: QuestionAnswer[] = [];
 
   scout_question = new ScoutQuestion();
+
+  conditions: QuestionCondition[] = []
 }
 
 export class QuestionOption {
