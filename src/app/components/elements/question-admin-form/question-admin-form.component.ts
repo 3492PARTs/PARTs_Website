@@ -30,6 +30,7 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'is_condition', ColLabel: 'Is Condition' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
@@ -221,7 +222,9 @@ export class Question {
 
   scout_question = new ScoutQuestion();
 
-  conditions: QuestionCondition[] = []
+  conditions: QuestionCondition[] = [];
+
+  is_condition = 'n';
 }
 
 export class QuestionOption {
