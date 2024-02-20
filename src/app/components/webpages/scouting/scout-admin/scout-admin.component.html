@@ -387,6 +387,10 @@
   <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
 </app-box>
 
+<app-box *ngIf="page === 'mngPitQCond'" [Title]="'Manage Pit Question Conditions'">
+  <app-question-condition-admin-form [FormType]="'pit'"></app-question-condition-admin-form>
+</app-box>
+
 <app-box *ngIf="page === 'mngPhnTyp'" [Title]="'Manage Phone Types'">
   <app-form (SubmitFunction)="savePhoneType()">
     <div class="flex align-items-center">

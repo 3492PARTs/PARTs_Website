@@ -8,6 +8,7 @@ import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
 import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
+import { QuestionAggregateType, QuestionAggregate } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -1237,26 +1238,4 @@ export class UserActivity {
   user = new User();
   results = new ScoutFieldResultsSerializer();
   schedule: ScoutFieldSchedule[] = [];
-}
-
-export class QuestionAggregateType {
-  question_aggregate_typ = ''
-  question_aggregate_nm = ''
-}
-
-
-export class QuestionAggregate {
-  question_aggregate_id!: number;
-  field_name = '';
-  question_aggregate_typ = new QuestionAggregateType()
-  questions: Question[] = [];
-  active = 'y'
-}
-
-export class QuestionCondition {
-  question_condition_id!: number;
-  condition = '';
-  question_from!: Question;
-  question_to!: Question;
-  active = 'y';
 }

@@ -1,4 +1,5 @@
-<app-form-element-group [LabelText]="LabelText" (FormElementsChange)="setFormElements($event)">
+<app-form-element-group [LabelText]="LabelText" [RemoveBorder]="LabelText.length <= 0"
+    (FormElementsChange)="setFormElements($event)">
     <ng-container *ngFor="let sq of Questions">
         <div class="question">
             <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ.question_typ" [FormGroup]="true"

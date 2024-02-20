@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
@@ -6,6 +6,7 @@ import { Question } from 'src/app/components/elements/question-admin-form/questi
 import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
+import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -24,6 +25,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   private scoutQuestionsCopy: Question[] = [];
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
+
+  formElements = new QueryList<FormElementComponent>();
 
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
 
@@ -268,6 +271,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  setFormElements(fes: QueryList<FormElementComponent>): void {
+    this.formElements.reset(fes.toArray());
   }
 }
 

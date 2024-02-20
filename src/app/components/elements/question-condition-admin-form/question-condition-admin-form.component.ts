@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { QuestionCondition } from '../../webpages/scouting/scout-admin/scout-admin.component';
 import { Question } from '../question-admin-form/question-admin-form.component';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
@@ -93,6 +92,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   showQuestionConditionModal(qc?: QuestionCondition) {
     this.questionConditionModalVisible = true;
     this.activeQuestionCondition = qc ? this.gs.cloneObject(qc) : new QuestionCondition();
+
     this.buildQuestionConditionFromLists();
     this.buildQuestionConditionToLists();
   }
@@ -171,4 +171,26 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       }
     );
   }
+}
+
+export class QuestionAggregateType {
+  question_aggregate_typ = ''
+  question_aggregate_nm = ''
+}
+
+
+export class QuestionAggregate {
+  question_aggregate_id!: number;
+  field_name = '';
+  question_aggregate_typ = new QuestionAggregateType()
+  questions: Question[] = [];
+  active = 'y'
+}
+
+export class QuestionCondition {
+  question_condition_id!: number;
+  condition = '';
+  question_from!: Question;
+  question_to!: Question;
+  active = 'y';
 }
