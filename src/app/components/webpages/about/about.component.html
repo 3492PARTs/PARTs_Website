@@ -114,12 +114,20 @@
           <img class="robot-image" alt="2019 Robot" src="../../../../assets/webImages/Robots/GLough.jpg1">
         </app-box>
 
-        <app-box [Title]="'2020 - Plaster Blaster'" [InlineBlock]="true" (click)="bot2020ModalVisible = true">
-          <img class="robot-image" alt="2020 Robot" src="../../../../assets/webImages/Robots/GLough.jpg1">
+        <app-box [Title]="'2020/21 - Plaster Blaster'" [InlineBlock]="true" (click)="bot2020ModalVisible = true">
+          <img class="robot-image" alt="2020/21 Robot" src="../../../../assets/webImages/Robots/PlasterBlaster.jpg">
         </app-box>
 
         <app-box [Title]="'2022 - Jake and Bake'" [InlineBlock]="true" (click)="bot2022ModalVisible = true">
-          <img class="robot-image" alt="2022 Robot" src="../../../../assets/webImages/Robots/GLough.jpg1">
+          <img class="robot-image" alt="2022 Robot" src="../../../../assets/webImages/Robots/JakeAndBake.jpg">
+        </app-box>
+
+        <app-box [Title]="'2023 - T.I.N.A.'" [InlineBlock]="true" (click)="bot2023ModalVisible = true">
+          <img class="robot-image" alt="2023 Robot" src="../../../../assets/webImages/Robots/TINA.jpg">
+        </app-box>
+
+        <app-box [Title]="'2024 - TBD'" [InlineBlock]="true" (click)="bot2024ModalVisible = true">
+          <img class="robot-image" alt="2024 Robot" src="../../../../assets/webImages/Robots/TBD.jpg">
         </app-box>
       </div>
 
@@ -361,7 +369,7 @@
         </p>
       </app-modal>
 
-      <app-modal [Title]="'2020 - Plaster Blaster'" [(visible)]="bot2020ModalVisible">
+      <app-modal [Title]="'2020/21 - Plaster Blaster'" [(visible)]="bot2020ModalVisible">
         <p>"Plaster Blaster" was named after our current mechanical mentor Jacob Plasters. Plaster Blaster is our
           tenth robot designed
           to play in the 2020 INFINITE RECHARGE game. The robot had a rear intake and could hold three balls (power
@@ -416,6 +424,17 @@
         <p>In our off season event at WVRoX, we ranked 19th out of 24 teams, and we made it to the quarterfinals,
           where we were picked by
           Dark Side Robotics (7515) and Horsepower (4991)</p>
+      </app-modal>
+
+      <app-modal [Title]="'2023 - T.I.N.A.'" [(visible)]="bot2023ModalVisible">
+        <p>"T.I.N.A." (Tank Inspired Nightmare Automaton) was made our 2023 year and was named after our mentor Tina Kirk. (robot stuff here).</p>
+        <p>In CHARGED, two competing alliances are invited to process game pieces to bring energy to their community
+          by retrieving their game pieces from substations and scoring it into the grid.</p>
+      </app-modal>
+
+      <app-modal [Title]="'2024 - TBD'" [(visible)]="bot2024ModalVisible">
+        <p>Our 2024 robot is still in the design phase, and we are still working on the name.</p>
+        <p>For the 2024 theme CRESCENDO.</p>
       </app-modal>
     </div>
   </main>
