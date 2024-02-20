@@ -18,9 +18,7 @@
             </div>
         </div>
         <div *ngIf="sq.conditions.length > 0" class="sub-question">
-            {{(sq.answer || '').toString() | json}}
             <ng-container *ngFor="let c of sq.conditions">
-                {{c.condition | json}}
                 <div class="question" *ngIf="c.condition === (sq.answer || '').toString()">
                     <app-form-element [LabelText]="c.question_to.question"
                         [Type]="c.question_to.question_typ.question_typ" [FormGroup]="true"
