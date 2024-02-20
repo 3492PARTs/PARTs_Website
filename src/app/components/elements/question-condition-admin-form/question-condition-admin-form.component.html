@@ -1,25 +1,23 @@
-<app-table [TableCols]="fieldQuestionConditionsTableCols" [TableData]="fieldQuestionConditions" [Width]="'100%'"
-    [ShowAddButton]="true" (AddRecordCallBack)="showFieldQuestionConditionModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showFieldQuestionConditionModal($event)"></app-table>
+<app-table [TableCols]="questionConditionsTableCols" [TableData]="questionConditions" [Width]="'100%'"
+    [ShowAddButton]="true" (AddRecordCallBack)="showQuestionConditionModal()" [ShowEditButton]="true"
+    (EditRecordCallBack)="showQuestionConditionModal($event)"></app-table>
 
-<app-modal [Title]="'Field Question Condition'" [(visible)]="fieldQuestionConditionModalVisible">
-    <app-form-element [Type]="'select'" [LabelText]="'Question From'"
-        [(Model)]="activeFieldQuestionCondition.question_from" [Required]="true"
-        [SelectList]="fieldQuestionConditionQuestionFromList" [DisplayProperty]="'display_value'"
-        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionToLists()">
+<app-modal [Title]="'Question Condition'" [(visible)]="questionConditionModalVisible">
+    <app-form-element [Type]="'select'" [LabelText]="'Question From'" [(Model)]="activeQuestionCondition.question_from"
+        [Required]="true" [SelectList]="questionConditionQuestionFromList" [DisplayProperty]="'display_value'"
+        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionToLists()">
     </app-form-element>
 
     <app-form (SubmitFunction)="saveQuestionCondition()">
-        <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeFieldQuestionCondition.condition"
+        <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeQuestionCondition.condition"
             [Required]="true"></app-form-element>
 
-        <app-form-element [Type]="'select'" [LabelText]="'Question To'"
-            [(Model)]="activeFieldQuestionCondition.question_to" [Required]="true"
-            [SelectList]="fieldQuestionConditionQuestionToList" [DisplayProperty]="'display_value'"
-            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionFromLists()">
+        <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"
+            [Required]="true" [SelectList]="questionConditionQuestionToList" [DisplayProperty]="'display_value'"
+            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionFromLists()">
         </app-form-element>
 
-        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeFieldQuestionCondition.active"
+        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionCondition.active"
             [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
 
 

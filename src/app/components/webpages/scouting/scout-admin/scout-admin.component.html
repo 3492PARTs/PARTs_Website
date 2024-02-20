@@ -380,7 +380,7 @@
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQCond'" [Title]="'Manage Field Question Conditions'">
-  <app-question-condition-admin-form></app-question-condition-admin-form>
+  <app-question-condition-admin-form [FormType]="'field'"></app-question-condition-admin-form>
 </app-box>
 
 <app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
