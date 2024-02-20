@@ -125,7 +125,7 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
-  fieldForm = new Init();
+  fieldQuestions: Question[] = [];
   fieldQuestionAggQuestionList: Question[] = [];
   fieldQuestionToAddToAgg: Question | null = null;;
   fieldQuestionAggregateQuestionsTableCols: object[] = [
@@ -1024,16 +1024,17 @@ export class ScoutAdminComponent implements OnInit {
   getScoutFieldQuestions(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'form/form-init/', {
+      'form/get-questions/', {
       params: {
-        form_typ: 'field'
+        form_typ: 'field',
+        active: 'y'
       }
     }
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.fieldForm = result as Init;
+            this.fieldQuestions = result as Question[];
             this.buildFieldQuestionAggQuestionList();
             this.buildFieldQuestionConditionFromLists();
             this.buildFieldQuestionConditionToLists();
@@ -1054,7 +1055,7 @@ export class ScoutAdminComponent implements OnInit {
   buildFieldQuestionAggQuestionList(): void {
     this.fieldQuestionAggQuestionList = [];
 
-    this.fieldForm.questions.forEach(q => {
+    this.fieldQuestions.forEach(q => {
       let match = false;
       this.activeFieldQuestionAggregate.questions.forEach(aq => {
         if (q.question_id === aq.question_id) match = true;
@@ -1137,7 +1138,7 @@ export class ScoutAdminComponent implements OnInit {
     this.fieldQuestionConditionQuestionFromList = [];
 
 
-    this.fieldForm.questions.forEach(q => {
+    this.fieldQuestions.forEach(q => {
       let match = false;
       this.fieldQuestionConditions.forEach(qc => {
         if ([qc.question_to.question_id].includes(q.question_id))
@@ -1157,7 +1158,7 @@ export class ScoutAdminComponent implements OnInit {
   buildFieldQuestionConditionToLists(): void {
     this.fieldQuestionConditionQuestionToList = [];
 
-    this.fieldForm.questions.forEach(q => {
+    this.fieldQuestions.forEach(q => {
       let match = false;
       this.fieldQuestionConditions.forEach(qc => {
         if ([qc.question_from.question_id, qc.question_to.question_id].includes(q.question_id)) match = true

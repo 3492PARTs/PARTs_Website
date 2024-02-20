@@ -351,6 +351,7 @@
     <app-form (SubmitFunction)="saveQuestionAggregate()">
       <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeFieldQuestionAggregate.field_name"
         [Required]="true"></app-form-element>
+
       <app-form-element [Type]="'select'" [LabelText]="'Aggregate Function'"
         [(Model)]="activeFieldQuestionAggregate.question_aggregate_typ" [Required]="true"
         [SelectList]="questionAggregateTypes" [DisplayProperty]="'question_aggregate_nm'"
