@@ -380,36 +380,7 @@
 </app-box>
 
 <app-box *ngIf="page === 'mngFldQCond'" [Title]="'Manage Field Question Conditions'">
-  <app-table [TableCols]="fieldQuestionConditionsTableCols" [TableData]="fieldQuestionConditions" [Width]="'100%'"
-    [ShowAddButton]="true" (AddRecordCallBack)="showFieldQuestionConditionModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showFieldQuestionConditionModal($event)"></app-table>
-
-  <app-modal [Title]="'Field Question Condition'" [(visible)]="fieldQuestionConditionModalVisible">
-    <app-form-element [Type]="'select'" [LabelText]="'Question From'"
-      [(Model)]="activeFieldQuestionCondition.question_from" [Required]="true"
-      [SelectList]="fieldQuestionConditionQuestionFromList" [DisplayProperty]="'display_value'"
-      [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionToLists()">
-    </app-form-element>
-
-    <app-form (SubmitFunction)="saveQuestionCondition()">
-      <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeFieldQuestionCondition.condition"
-        [Required]="true"></app-form-element>
-
-      <app-form-element [Type]="'select'" [LabelText]="'Question To'"
-        [(Model)]="activeFieldQuestionCondition.question_to" [Required]="true"
-        [SelectList]="fieldQuestionConditionQuestionToList" [DisplayProperty]="'display_value'"
-        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildFieldQuestionConditionFromLists()">
-      </app-form-element>
-
-      <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeFieldQuestionCondition.active"
-        [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
-
-
-      <app-button-ribbon>
-        <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
-      </app-button-ribbon>
-    </app-form>
-  </app-modal>
+  <app-question-condition-admin-form></app-question-condition-admin-form>
 </app-box>
 
 <app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
