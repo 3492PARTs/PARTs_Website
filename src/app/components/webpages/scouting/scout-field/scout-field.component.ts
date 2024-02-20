@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
-import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
+import { QuestionCondition, ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 
@@ -198,6 +198,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     response.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
+
+      r.conditions.forEach((c: QuestionCondition) => {
+        c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to.answer);
+      });
     });
 
     this.http.post(

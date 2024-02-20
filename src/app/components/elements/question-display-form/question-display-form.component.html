@@ -17,5 +17,30 @@
                 </div>
             </div>
         </div>
+        <div *ngIf="sq.conditions.length > 0" class="sub-question">
+            <ng-container *ngFor="let c of sq.conditions">
+                <div class="question" *ngIf="c.condition === (sq.answer || '').toString()">
+                    <app-form-element [LabelText]="c.question_to.question"
+                        [Type]="c.question_to.question_typ.question_typ" [FormGroup]="true"
+                        [SelectList]="c.question_to.questionoption_set" [BindingProperty]="'option'"
+                        [DisplayProperty]="'option'" [DisplayEmptyOption]="true" [(Model)]="c.question_to.answer"
+                        [TrueValue]="'true'" [FalseValue]="'false'"
+                        [FormGroupInline]="c.question_to.question_typ.question_typ === 'number'"
+                        [Required]="c.question_to.required === 'y'"
+                        [Width]="['area', 'multiCheckbox'].includes(c.question_to.question_typ.question_typ) ? '100%' : 'auto'"
+                        [FieldSize]="c.question_to.question_typ.question_typ === 'multiCheckbox' ? 1000 : c.question_to.question_typ.question_typ === 'text' ? 255 : 524288">
+                    </app-form-element>
+                    <div class="number-stepper" *ngIf="c.question_to.question_typ.question_typ === 'number'">
+                        <div class="increment">
+                            <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(c.question_to)"></app-button>
+                        </div>
+                        <div class="decrement">
+                            <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(c.question_to)">
+                            </app-button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
     </ng-container>
 </app-form-element-group>

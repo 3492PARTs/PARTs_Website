@@ -1,83 +1,48 @@
-<app-form>
-  <app-form-element-group [LabelText]="'Add Questions'" [InlineElements]="true">
-    <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="question.question" [Width]="'100%'">
+<app-table [TableCols]="questionTableCols" [TableData]="init.questions" [Width]="'100%'" [ShowAddButton]="true"
+  (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)">
+</app-table>
+
+<app-modal [(visible)]="questionModalVisible" [Title]="'Manage Question'">
+  <app-form (SubmitFunction)="saveQuestion()">
+    <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="activeQuestion.question" [Required]="true"
+      [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
-    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="question.order">
+    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="activeQuestion.order" [Required]="true"
+      [Width]="'5em'" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
-      [DisplayProperty]="'question_typ_nm'" [(Model)]="question.question_typ" [MinWidth]="'300px'">
+      [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
+      [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
+      [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Form Sub Type'" [SelectList]="init.form_sub_types" [DisplayProperty]="'form_sub_nm'"
-      [BindingProperty]="'form_sub_typ'" [(Model)]="question.form_sub_typ" [DisplayEmptyOption]="true"
-      [MinWidth]="'200px'">
+      [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
+      [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="activeQuestion.form_sub_typ"
+      [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="question.scout_question.scorable">
+    <app-form-element *ngIf="['field', 'pit'].includes(activeQuestion.form_typ)" [Type]="'checkbox'"
+      [LabelText]="'Scorable'" [(Model)]="activeQuestion.scout_question.scorable" [FormGroup]="true"
+      [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
-      [(Model)]="question.required"></app-form-element>
+      [(Model)]="activeQuestion.required" [FormGroup]="true" [FormGroupInline]="true"></app-form-element>
+
+    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"
+      [(Model)]="activeQuestion.active" [FormGroup]="true" [FormGroupInline]="true"></app-form-element>
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion()">Save</app-button>
+      <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
     </app-button-ribbon>
 
-    <div *ngIf="question.question_typ && question.question_typ.is_list === 'y'" class="optionsTableWrapper">
-      <app-table [TableCols]="optionsTableCols" [TableData]="question.questionoption_set" [ShowAddButton]="true"
-        (AddRecordCallBack)="addOption(question.questionoption_set)" [Scrollable]="true">
+    <div *ngIf="activeQuestion.question_typ && activeQuestion.question_typ.is_list === 'y'" class="optionsTableWrapper">
+      <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="activeQuestion.questionoption_set"
+        [ShowAddButton]="true" (AddRecordCallBack)="addOption(activeQuestion.questionoption_set)" [Scrollable]="true">
       </app-table>
     </div>
-  </app-form-element-group>
-</app-form>
-
-<app-form>
-  <app-form-element-group [LabelText]="'Modify Questions'" [InlineElements]="true">
-    <app-form-element [Type]="'select'" [LabelText]="'Question'" [SelectList]="init.questions"
-      [DisplayProperty]="'display_value'" [DisplayEmptyOption]="true" [(Model)]="editQuestion">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id" [Type]="'area'" [LabelText]="'Question'"
-      [(Model)]="editQuestion.question">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id" [Type]="'number'" [LabelText]="'Order'"
-      [(Model)]="editQuestion.order" [Width]="'5em'">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id" [Type]="'select'" [LabelText]="'Question Type'"
-      [SelectList]="init.question_types" [DisplayProperty]="'question_typ_nm'" [(Model)]="editQuestion.question_typ"
-      [SelectComparatorFunction]="compareQuestionTypeObjects" [Width]="'100%'" [MinWidth]="'200px'">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id && init.form_sub_types && init.form_sub_types.length > 0"
-      [Type]="'select'" [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="editQuestion.form_sub_typ"
-      [DisplayEmptyOption]="true">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id && ['field', 'pit'].includes(editQuestion.form_typ)"
-      [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="editQuestion.scout_question.scorable">
-    </app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
-      [LabelText]="'Required'" [(Model)]="editQuestion.required"></app-form-element>
-
-    <app-form-element *ngIf="editQuestion.question_id" [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
-      [LabelText]="'Active'" [(Model)]="editQuestion.active"></app-form-element>
-
-    <app-button-ribbon *ngIf="editQuestion.question_id">
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="saveQuestion()">Update</app-button>
-    </app-button-ribbon>
-
-    <div *ngIf="editQuestion.question_id && editQuestion.question_typ && editQuestion.question_typ.is_list === 'y'"
-      class="optionsTableWrapper">
-      <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="editQuestion.questionoption_set"
-        [ShowAddButton]="true" (AddRecordCallBack)="addOption(editQuestion.questionoption_set)" [Scrollable]="true">
-      </app-table>
-    </div>
-  </app-form-element-group>
-</app-form>
+  </app-form>
+</app-modal>

@@ -124,8 +124,8 @@
             [compareWith]="SelectComparatorFunction">
             <option value="" *ngIf="DisplayEmptyOption"></option>
             <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{
-                obj[DisplayProperty] }} {{ obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
+              <option *ngFor="let obj of _SelectList" [ngValue]="obj">
+                {{obj[DisplayProperty] }} {{ obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
               </option>
             </ng-container>
           </select>

@@ -43,10 +43,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           error: (err: any) => {
             console.log('error', err);
             this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
+            //this.gs.decrementOutstandingCalls();
           },
           complete: () => {
-            this.gs.decrementOutstandingCalls();
+            //this.gs.decrementOutstandingCalls();
           }
         }
       );
@@ -112,12 +112,22 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   addRobotPicture() {
     if (this.robotPic)
       this.robotPics.push(this.robotPic);
+    this.removeRobotPicture();
+  }
+
+  removeRobotPicture() {
     this.robotPic = new File([], '');
+    this.previewUrl = null;
   }
 
   save(): void | null {
     if (this.gs.strNoE(this.team)) {
       this.gs.addBanner(new Banner("Must select a team.", 500));
+      return null;
+    }
+
+    if (this.robotPic && this.robotPic.size > 0) {
+      this.gs.addBanner(new Banner("Must add or remove staged image.", 500));
       return null;
     }
 
@@ -172,8 +182,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           {
             next: (result: any) => {
               this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-              this.robotPic = new File([], '');
-              this.previewUrl = null;
+              this.removeRobotPicture();
             },
             error: (err: any) => {
               console.log('error', err);

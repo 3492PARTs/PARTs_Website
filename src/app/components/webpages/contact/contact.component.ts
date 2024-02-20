@@ -26,7 +26,8 @@ export class ContactComponent implements OnInit {
     this.http.get(
       'form/get-questions/', {
       params: {
-        form_typ: 'team-cntct'
+        form_typ: 'team-cntct',
+        active: 'y'
       }
     }
     ).subscribe(

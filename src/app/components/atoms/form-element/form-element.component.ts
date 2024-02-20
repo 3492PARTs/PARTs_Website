@@ -595,7 +595,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.phoneMaskModel = '';
 
     // This code manipulates the input to look like a phone number.
-    let phone = (value || '').replace(/\D/g, '');
+    let phone = (value || '').replace(/\D/g, '').slice(0, 10);
     /*phone = phone.slice(0, 10);
     const areaCode = phone.slice(0, 3);
     const prefix = phone.slice(3, 6);
