@@ -203,9 +203,9 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Field Form Conditions', 'mngFldQCond', 'code-equal'),
       new MenuItem('Pit Form', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
+      new MenuItem('Field Results', 'mngFldRes', 'table-edit'),
+      new MenuItem('Pit Results', 'mngPitRes', 'table-edit'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
-      new MenuItem('Field Results', 'mngFldRes', 'phone'),
-      new MenuItem('Pit Results', 'mngPitRes', 'phone'),
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
