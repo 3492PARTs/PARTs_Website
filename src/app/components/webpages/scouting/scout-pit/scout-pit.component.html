@@ -1,23 +1,21 @@
 <app-box [Title]="'Pit Scouting Form'">
-  <form>
+  <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div>
       <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [(Model)]="team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true">
+        [(Model)]="team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true"
+        [Required]="!team || team.length <= 0">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'150px'">
+        [DisplayEmptyOption]="true" [MinWidth]="'150px'" [Required]="!team || team.length <= 0">
       </app-form-element>
     </div>
 
-    <app-form-element *ngFor="let sq of scoutQuestions" [LabelText]="sq.question" [Type]="sq.question_typ.question_typ"
-      [FormGroup]="true" [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-      [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
-      [Required]="sq.required === 'y'">
-    </app-form-element>
+    <app-question-display-form [(Questions)]="scoutQuestions" (FormElementsChange)="setFormElements($event)">
+    </app-question-display-form>
 
     <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save</p>
 
@@ -45,7 +43,7 @@
     </div>
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="save()">Save</app-button>
+      <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
     </app-button-ribbon>
-  </form>
+  </app-form>
 </app-box>

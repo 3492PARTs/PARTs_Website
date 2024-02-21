@@ -87,6 +87,7 @@ import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-s
 import { MainViewComponent } from './components/atoms/main-view/main-view.component';
 import { QuestionDisplayFormComponent } from './components/elements/question-display-form/question-display-form.component';
 import { ScoutPicDisplayComponent } from './components/elements/scout-pic-display/scout-pic-display.component';
+import { QuestionConditionAdminFormComponent } from './components/elements/question-condition-admin-form/question-condition-admin-form.component';
 
 @NgModule({
   declarations: [
@@ -152,7 +153,8 @@ import { ScoutPicDisplayComponent } from './components/elements/scout-pic-displa
     SponsorShopComponent,
     MainViewComponent,
     QuestionDisplayFormComponent,
-    ScoutPicDisplayComponent
+    ScoutPicDisplayComponent,
+    QuestionConditionAdminFormComponent
   ],
   imports: [
     BrowserModule,

@@ -122,7 +122,8 @@
           }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
             [compareWith]="SelectComparatorFunction">
-            <option value="" *ngIf="DisplayEmptyOption"></option>
+            <option [ngValue]="strNoE(Model) ? Model : ''" [disabled]="!DisplayEmptyOption"></option>
+
             <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj">
                 {{obj[DisplayProperty] }} {{ obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}

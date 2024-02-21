@@ -1,0 +1,28 @@
+<app-table [TableCols]="questionConditionsTableCols" [TableData]="questionConditions" [Width]="'100%'"
+    [ShowAddButton]="true" (AddRecordCallBack)="showQuestionConditionModal()" [ShowEditButton]="true"
+    (EditRecordCallBack)="showQuestionConditionModal($event)"></app-table>
+
+<app-modal [Title]="'Question Condition'" [(visible)]="questionConditionModalVisible">
+    <app-form-element [Type]="'select'" [LabelText]="'Question From'" [(Model)]="activeQuestionCondition.question_from"
+        [Required]="true" [SelectList]="questionConditionQuestionFromList" [DisplayProperty]="'display_value'"
+        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionToLists()">
+    </app-form-element>
+
+    <app-form (SubmitFunction)="saveQuestionCondition()">
+        <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeQuestionCondition.condition"
+            [Required]="true"></app-form-element>
+
+        <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"
+            [Required]="true" [SelectList]="questionConditionQuestionToList" [DisplayProperty]="'display_value'"
+            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionFromLists()">
+        </app-form-element>
+
+        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionCondition.active"
+            [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
+
+
+        <app-button-ribbon>
+            <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+        </app-button-ribbon>
+    </app-form>
+</app-modal>
