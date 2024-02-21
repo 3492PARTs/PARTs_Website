@@ -5,9 +5,15 @@ Website for PARTs.
 - [x] Replace Twitter
   - [x] Edit hover color in CSS
   - [x] Replace the logo.
+- [ ] Replace slide images.
+- [ ] Replace videos.
 
 ### Sponser Page ✓
 - [x] Add shop link.
+  
+### Media Page
+- [ ] Make albums for the missing comps.
+- [ ] Make albums for the missing seasons.
 
 ### About Page
 - [ ] Write decriptions.
