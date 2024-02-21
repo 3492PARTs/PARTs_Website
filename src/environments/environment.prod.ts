@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '2024.02.21',
+  version: '2024.02.21-1',
   baseUrl: 'https://api.parts3492.org/',
   backupBaseUrl: '',
   tokenString: '8fa1792e-ce4b-11ed-afa1-0242ac120002',
