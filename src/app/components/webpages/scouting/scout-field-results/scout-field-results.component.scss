@@ -31,11 +31,6 @@
   align-content: center;
 
   & > div {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: center;
-
     app-form-element {
       padding-right: 1.6rem;
     }
