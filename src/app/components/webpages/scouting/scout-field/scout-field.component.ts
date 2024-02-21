@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
-import { QuestionCondition, ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
+import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
+import { QuestionCondition } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 
 @Component({
   selector: 'app-scout-field',
@@ -200,7 +201,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
 
       r.conditions.forEach((c: QuestionCondition) => {
-        c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to.answer);
+        if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
       });
     });
 
