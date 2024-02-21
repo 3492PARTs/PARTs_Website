@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
 import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { QuestionAggregateType, QuestionAggregate } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
+import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 
 @Component({
   selector: 'app-scout-admin',
@@ -141,6 +142,16 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'user', ColLabel: 'Scout' },
   ];
+  scoutResultModalVisible = false;
+  activeScoutResult: any;
+
+  scoutPitResults: ScoutPitResults[] = [];
+  scoutPitResultsCols: object[] = [
+    { PropertyName: 'teamNo', ColLabel: 'Team' },
+    { PropertyName: 'teamNm', ColLabel: 'Name' },
+  ];
+  scoutPitResultModalVisible = false;
+  activePitScoutResult = new ScoutPitResults();
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -158,6 +169,9 @@ export class ScoutAdminComponent implements OnInit {
           break;
         case 'mngFldRes':
           this.getFieldResults();
+          break;
+        case 'mngPitRes':
+          this.getPitResults();
           break;
         case 'mngFldQAgg':
           this.getScoutFieldQuestions();
@@ -189,15 +203,15 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Field Form Conditions', 'mngFldQCond', 'code-equal'),
       new MenuItem('Pit Form', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
+      new MenuItem('Field Results', 'mngFldRes', 'table-edit'),
+      new MenuItem('Pit Results', 'mngPitRes', 'table-edit'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
-      //new MenuItem('Field Results', 'mngFldRes', 'phone'),
-      //new MenuItem('Pit Results', 'mngPitRes', 'phone'),
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
-    this.ns.setSubPage('users');
-    //this.ns.setSubPage('mngFldQ');
+    //this.ns.setSubPage('users');
+    this.ns.setSubPage('mngPitRes');
   }
 
   adminInit(): void {
@@ -1106,6 +1120,131 @@ export class ScoutAdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  showScoutFieldResultModal(rec: any): void {
+    this.activeScoutResult = rec;
+    this.scoutResultModalVisible = true;
+  }
+
+  deleteFieldResult(): void {
+    this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.delete(
+        'scouting/admin/delete-field-result/', {
+        params: {
+          scout_field_id: this.activeScoutResult.scout_field_id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+              this.getFieldResults();
+              this.activeScoutResult = null;
+              this.scoutResultModalVisible = false;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
+  }
+
+  getPitResults(): void {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'scouting/pit/results-init/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            let teams = result as Team[];
+
+            this.gs.incrementOutstandingCalls();
+
+            teams.forEach((t) => {
+              t.checked = true;
+            });
+
+            this.http.post(
+              'scouting/pit/results/', teams
+            ).subscribe(
+              {
+                next: (result: any) => {
+                  if (this.gs.checkResponse(result)) {
+                    this.scoutPitResults = result as ScoutPitResults[];
+                    //console.log(this.scoutPitResults);
+                  }
+                },
+                error: (err: any) => {
+                  console.log('error', err);
+                  this.gs.triggerError(err);
+                  this.gs.decrementOutstandingCalls();
+                },
+                complete: () => {
+                  this.gs.decrementOutstandingCalls();
+                }
+              }
+            );
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  showPitScoutResultModal(rec: ScoutPitResults): void {
+    this.activePitScoutResult = rec;
+    this.scoutPitResultModalVisible = true;
+    //console.log(rec);
+  }
+
+  deletePitResult(): void {
+    this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.delete(
+        'scouting/admin/delete-pit-result/', {
+        params: {
+          scout_pit_id: this.activePitScoutResult.scout_pit_id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+              this.getPitResults();
+              this.activePitScoutResult = new ScoutPitResults();
+              this.scoutPitResultModalVisible = false;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
   }
 }
 

@@ -244,6 +244,10 @@ export class GeneralService {
     return JSON.parse(JSON.stringify(o));
   }
 
+  triggerChange(tmpFx: () => void) {
+    window.setTimeout(() => { tmpFx() }, 0);
+  }
+
   // For one given propery and its value, get the value of another propery in the same object
   propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
     for (let i = 0; i < arr.length; i++) {
@@ -323,15 +327,11 @@ export class GeneralService {
   navigateByUrl(s: string) {
     this.router.navigateByUrl(s);
   }
-  /*scrollTo(id: string) {
-    this.scrollTo($('#' + id).offset().top - 200);
-  }
-*/
 
-  scrollTo(y: number) {
+  scrollTo(y: number | string) {
     $('html, body').animate(
       {
-        scrollTop: y,
+        scrollTop: typeof y === 'number' ? y : ($('#' + y).offset()?.top || 0) - 200,
       },
       500,
       'linear'
