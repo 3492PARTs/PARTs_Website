@@ -830,7 +830,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   notifyUsers(scout_field_sch_id: number): void {
-    let ss = JSON.parse(JSON.stringify(this.init.fieldSchedule));
+    let ss = this.gs.cloneObject(this.init.fieldSchedule);
     ss.forEach((sfs: ScoutFieldSchedule) => {
       sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
       sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
@@ -848,7 +848,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
             this.adminInit();
           }
         },

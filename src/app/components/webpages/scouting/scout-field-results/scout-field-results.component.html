@@ -1,11 +1,12 @@
 <app-box [Title]="'Scout Field Results'">
   <app-form-element-group [LabelText]="'Table Display'">
     <div id="table-buttons">
-      <div>
+      <div class="flex align-items-baseline">
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
           [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
           (FunctionCallBack)="showHideTableCols()">
         </app-form-element>
+
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
       </div>
 
@@ -13,13 +14,15 @@
     </div>
   </app-form-element-group>
 
-  <app-form-element-group [InlineElements]="true" [LabelText]="'Filter'">
-    <app-form-element [Type]="'text'" [LabelText]="'Wildcard Search'" [(Model)]="filterText"></app-form-element>
-    <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="rank"></app-form-element>
-    <app-form-element [Type]="'number'" [LabelText]="'Rank Range'" [(Model)]="range"></app-form-element>
-    <app-form-element [Type]="'checkbox'" [LabelText]="'Above'" [(Model)]="above"></app-form-element>
-    <app-button [ButtonType]="'main'" (FunctionCallBack)="filterByRank()">Filter by Rank</app-button>
-    <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetRankFilter()">Reset Rank Filter</app-button>
+  <app-form-element-group [LabelText]="'Filter'">
+    <div class="flex align-items-baseline justify-content-space-between flex-wrap">
+      <app-form-element [Type]="'text'" [LabelText]="'Wildcard Search'" [(Model)]="filterText"></app-form-element>
+      <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="rank"></app-form-element>
+      <app-form-element [Type]="'number'" [LabelText]="'Rank Range'" [(Model)]="range"></app-form-element>
+      <app-form-element [Type]="'checkbox'" [LabelText]="'Above'" [(Model)]="above"></app-form-element>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="filterByRank()">Filter by Rank</app-button>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetRankFilter()">Reset Rank Filter</app-button>
+    </div>
   </app-form-element-group>
 
   <app-table [TableCols]="scoutResults.scoutCols" [TableData]="scoutResults.scoutAnswers" [Scrollable]="true"
