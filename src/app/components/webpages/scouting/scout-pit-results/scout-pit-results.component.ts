@@ -115,6 +115,7 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 }
 export class ScoutPitResults {
+  scout_pit_id!: number;
   teamNo!: string;
   teamNm!: string;
   pics: ScoutPitImage[] = [];
