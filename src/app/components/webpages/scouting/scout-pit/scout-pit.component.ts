@@ -274,7 +274,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
-    this.formElements.reset(fes.toArray());
+    this.formElements = fes;
   }
 }
 
