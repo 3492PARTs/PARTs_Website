@@ -1,7 +1,7 @@
 # PARTs_Website
 Website for PARTs.
 
-### Home Page ✓
+### Home Page
 - [x] Replace Twitter
   - [x] Edit hover color in CSS
   - [x] Replace the logo.
@@ -14,6 +14,7 @@ Website for PARTs.
 ### Media Page
 - [ ] Make albums for the missing comps.
 - [ ] Make albums for the missing seasons.
+- [x] Fix wallpapers.
 
 ### About Page
 - [ ] Write decriptions.
