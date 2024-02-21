@@ -416,8 +416,16 @@
 </app-box>
 
 <app-box *ngIf="page === 'mngFldRes'" [Title]="'Manage Field Responses'">
-  <app-form (SubmitFunction)="savePhoneType()">
-    <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"></app-table>
+  <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"
+    [ScrollHeight]="'50rem'" [Scrollable]="true" [ShowViewButton]="true"
+    (ViewRecordCallBack)="showScoutFieldResultModal($event)"></app-table>
 
-  </app-form>
+  <app-modal [(visible)]="scoutResultModalVisible" [Title]="'Field Result'">
+    <app-table [TableCols]="scoutResults.scoutCols" [TableData]="[activeScoutResult || {}]"
+      [Width]="userScoutActivityResultsTableWidth"></app-table>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteFieldResult()">Delete</app-button>
+    </app-button-ribbon>
+  </app-modal>
 </app-box>

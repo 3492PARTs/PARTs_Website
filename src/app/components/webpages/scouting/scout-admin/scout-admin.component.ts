@@ -141,6 +141,8 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'user', ColLabel: 'Scout' },
   ];
+  scoutResultModalVisible = false;
+  activeScoutResult: any;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
@@ -190,14 +192,14 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Pit Form', 'mngPitQ', 'chat-question-outline'),
       new MenuItem('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
-      //new MenuItem('Field Results', 'mngFldRes', 'phone'),
+      new MenuItem('Field Results', 'mngFldRes', 'phone'),
       //new MenuItem('Pit Results', 'mngPitRes', 'phone'),
     ]);
 
     if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
     this.ns.setSubPage('users');
-    //this.ns.setSubPage('mngFldQ');
+    this.ns.setSubPage('mngFldRes');
   }
 
   adminInit(): void {
@@ -1106,6 +1108,44 @@ export class ScoutAdminComponent implements OnInit {
         }
       }
     );
+  }
+
+  showScoutFieldResultModal(rec: any): void {
+    this.activeScoutResult = rec;
+    this.scoutResultModalVisible = true;
+    console.log(rec);
+  }
+
+  deleteFieldResult(): void {
+    this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.delete(
+        'scouting/admin/delete-field-result/', {
+        params: {
+          scout_field_id: this.activeScoutResult.scout_field_id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+              this.getFieldResults();
+              this.activeScoutResult = null;
+              this.scoutResultModalVisible = false;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
   }
 }
 
