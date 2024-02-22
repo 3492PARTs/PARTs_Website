@@ -30,7 +30,7 @@ export class EventCompetitionComponent implements OnInit {
             this.competitionInfo = (result as CompetitionInit);
             this.buildMatchSchedule();
 
-            console.log(this.competitionInfo);
+            //console.log(this.competitionInfo);
           }
         },
         error: (err: any) => {
