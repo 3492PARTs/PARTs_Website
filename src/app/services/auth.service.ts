@@ -43,7 +43,8 @@ export class AuthService {
     this.user.next(new User());
     this.userLinks.next([]);
     localStorage.removeItem(this.localStorageString);
-    if (this.rememberMeTimeout) window.clearTimeout(this.rememberMeTimeout);
+    if (this.rememberMeTimeout)
+      window.clearTimeout(this.rememberMeTimeout);
     this.router.navigateByUrl('login');
   }
 
@@ -271,7 +272,7 @@ export class AuthService {
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
     this.getTokenExp(this.internalToken.refresh, 'Refresh');
-    this.gs.incrementOutstandingCalls();
+    //this.gs.incrementOutstandingCalls();
 
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
 
@@ -285,7 +286,7 @@ export class AuthService {
           // this.getTokenExp(this.internalToken.refresh, 'Refreshed Refresh');
           this.token.next(this.internalToken);
 
-          this.gs.decrementOutstandingCalls();
+          //this.gs.decrementOutstandingCalls();
 
           return res as Token;
         })
@@ -302,20 +303,20 @@ export class AuthService {
 
   stayLoggedIn(): void {
     let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
-    console.log('loggin ' + rememberMe);
-    if (rememberMe && !this.rememberMeTimeout) {
+    //console.log('loggin ' + rememberMe);
+    if (rememberMe) {
       let date = this.getTokenExp(this.internalToken.access, 'access');
       let curr = new Date().getTime();
       let interval = date.getTime() - curr;
-      console.log('intv ' + interval);
-      console.log('intv mins ' + (interval / 1000 / 60));
-      interval -= 1000 * 60; // remove half a second. we will refresh this often
-      console.log('new intv mins ' + (interval / 1000 / 60));
+      //console.log('intv ' + interval);
+      //console.log('intv mins ' + (interval / 1000 / 60));
+      interval -= 1000 * 30; // remove half a minute. we will refresh this often
+      //console.log('new intv mins ' + (interval / 1000 / 60));
 
       this.rememberMeTimeout = window.setTimeout(() => {
         this.refreshToken().subscribe(result => {
-          console.log('result is below');
-          console.log(result);
+          //console.log('result is below');
+          //console.log(result);
           this.stayLoggedIn();
         });
       }, interval);
