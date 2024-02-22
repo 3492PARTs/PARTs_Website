@@ -159,13 +159,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     else if (this.Type === 'phone') {
       this.phoneMaskFn(this.Model, true);
     }
+
+    this.markRequired();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
-          case 'Model': {
+          case 'Model':
             let modelChanges = changes['Model'];
             if (this.Type === 'phone' && !modelChanges.firstChange) {
               if (this.formatPhone(modelChanges.currentValue) !== this.phoneMaskModel) {
@@ -175,7 +177,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
-          }
+            this.markRequired();
+            break;
+          case 'Required':
+            this.markRequired();
+            break;
         }
       }
     }
@@ -281,6 +287,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
   }
 
+  markRequired(): void {
+    if (this.Required) {
+      this.touchIt();
+      this.isInvalid();
+    }
+  }
+
   isInvalid(): boolean {
     // validate if the element is a valid one or not
     let invalid = false;
@@ -317,6 +330,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
 
     if (this.Required && !this.hasValue) invalid = true;
+
+    if (this.LabelText === 'Edit Team') {
+      console.log('here');
+    }
 
     this.valid = !invalid;
 

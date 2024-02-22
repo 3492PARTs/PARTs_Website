@@ -6,7 +6,7 @@
     LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
-    <div *ngIf="Required || !valid" class="validation" #validationIndicator
+    <div *ngIf="(Required && Touched) || !valid" class="validation" #validationIndicator
       [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect', 'stopwatch': Type === 'stopwatch'}">
       <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid && hasValue; else invalid"></mat-icon>
       <ng-template #invalid>
@@ -290,7 +290,7 @@
 
     </ng-container>
   </div>
-  <p *ngIf="Required && !hasValue; else invalidMessage" class="invalid-message">{{ ValidationMessage ||
+  <p *ngIf="Required && !hasValue && Touched; else invalidMessage" class="invalid-message">{{ ValidationMessage ||
     'required' }}
   </p>
   <ng-template #invalidMessage>

@@ -136,7 +136,9 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
 
-    this.scoutQuestions.forEach(r => {
+    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as Question[];
+
+    scoutQuestions.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
     });
     //const formData = new FormData();
@@ -145,7 +147,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.http.post(
       //'scouting/pit/save-answers/',
       'form/save-answers/',
-      { question_answers: this.scoutQuestions, team: this.team, form_typ: 'pit' },
+      { question_answers: scoutQuestions, team: this.team, form_typ: 'pit' },
     ).subscribe(
       {
         next: (result: any) => {
