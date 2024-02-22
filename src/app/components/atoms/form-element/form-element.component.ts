@@ -259,14 +259,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.touchIt();
     if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
-  /*
-    multiChange(newValue: any, index: number) {
-      this.Model[index]['checked'] = newValue;
-      this._SelectList[index]['checked'] = newValue;
-      this.ModelChange.emit(this.Model);
-      this.touchIt();
-      if (!this.isInvalid()) this.FunctionCallBack.emit();
-    }*/
 
   private positionMultiSelect(): void {
     if (this.Type === 'multiSelect' && this.multiSelect) {
@@ -288,10 +280,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   markRequired(): void {
-    if (this.Required) {
-      this.touchIt();
-      this.isInvalid();
-    }
+    this.touchIt();
+    this.isInvalid();
   }
 
   isInvalid(): boolean {
@@ -330,10 +320,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
 
     if (this.Required && !this.hasValue) invalid = true;
-
-    if (this.LabelText === 'Edit Team') {
-      console.log('here');
-    }
 
     this.valid = !invalid;
 

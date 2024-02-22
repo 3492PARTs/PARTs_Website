@@ -88,23 +88,30 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
+    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as Question[];
 
-    this.scoutQuestions.forEach(el => {
-      if (!this.gs.strNoE(el.answer?.toString())) {
+    scoutQuestions.forEach(el => {
+      let answer = this.gs.formatQuestionAnswer(el.answer)
+      if (!this.gs.strNoE(answer)) {
         dirty = true;
       }
+
     });
 
-    if (dirty && confirm("Are you sure you want to clear and change teams?")) {
-      this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
-      this.previewUrl = '';
-      if (load && this.team) this.loadTeam();
-    }
-    else if (dirty) {
-      window.setTimeout(() => {
-        this.team = this.previousTeam;
-        this.previewUrl = '';
-      }, 1);
+    if (dirty) {
+      this.gs.triggerConfirm('Are you sure you want to clear and change teams?',
+        () => {
+          this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy) as Question[];
+          this.previewUrl = '';
+          this.previousTeam = this.team;
+          if (load && this.team) this.loadTeam();
+        },
+        () => {
+          this.gs.triggerChange(() => {
+            this.team = this.previousTeam;
+            this.previewUrl = '';
+          });
+        });
     }
     else {
       this.previousTeam = this.team;
@@ -141,11 +148,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     scoutQuestions.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
     });
-    //const formData = new FormData();
-    //formData.append('file', this.robotPic);
-    //formData.append('team_no', this.team);
+
     this.http.post(
-      //'scouting/pit/save-answers/',
       'form/save-answers/',
       { question_answers: scoutQuestions, team: this.team, form_typ: 'pit' },
     ).subscribe(
@@ -216,35 +220,6 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     reader.onload = (_event) => {
       this.previewUrl = reader.result;
     };
-
-    /*LoadImg(
-      this.robotPic,
-      (img) => {
-        document.body.appendChild(img);
-      },
-      {
-        maxWidth: 600,
-        maxHeight: 300,
-        minWidth: 100,
-        minHeight: 50,
-        canvas: true,
-        orientation: 8
-      }
-    );
-
-    window.setTimeout(() => {
-      let canv = document.querySelector('canvas');
-      console.log(canv);
-      canv.toBlob((blob) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(blob);
-        reader.onload = (_event) => {
-          this.previewUrl = reader.result;
-        };
-      });
-    }, 1000);*/
-
-
   }
 
   loadTeam(): void {
