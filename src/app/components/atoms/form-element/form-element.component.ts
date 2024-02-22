@@ -202,6 +202,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.Width = '100px';
       }
     }, 1);
+
+    this.setIndicatorPosition();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -319,13 +321,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.valid = !invalid;
 
     // move indicator for certain types
-    if (['radio'].includes(this.Type))
-      window.setTimeout(() => {
-        if (this.label && this.validationIndicator) {
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', 'calc(' + this.label.nativeElement.scrollWidth + 'px - 2.2rem)');
-        }
-      }, 1);
+    this.setIndicatorPosition();
 
+    return invalid;
+  }
+
+  setIndicatorPosition(): void {
     if (['radio', 'multiCheckbox'].includes(this.Type))
       window.setTimeout(() => {
         if (this.label && this.validationIndicator) {
@@ -339,8 +340,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         }
       }, 1);
-
-    return invalid;
   }
 
   touchIt() {
