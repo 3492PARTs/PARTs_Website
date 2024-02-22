@@ -236,12 +236,12 @@
               </div>
             </div>
             <div id="user-profile-divider"></div>
-            <div class="profile-option" id="logout">
+            <div class="profile-option" id="logout" (click)="auth.logOut(); hideUserModal()">
               <div>
                 <mat-icon class="icon" svgIcon="logout"></mat-icon>
               </div>
               <div>
-                <p (click)="auth.logOut(); hideUserModal()">Logout</p>
+                <p>Logout</p>
               </div>
             </div>
           </div>

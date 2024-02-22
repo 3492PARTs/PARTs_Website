@@ -32,6 +32,8 @@ export class AuthService {
 
   private firstLoad = true;
 
+  private rememberMeTimeout: number | null | undefined;
+
   constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService) {
     this.localStorageString = environment.tokenString;
   }
@@ -41,6 +43,7 @@ export class AuthService {
     this.user.next(new User());
     this.userLinks.next([]);
     localStorage.removeItem(this.localStorageString);
+    if (this.rememberMeTimeout) window.clearTimeout(this.rememberMeTimeout);
     this.router.navigateByUrl('login');
   }
 
@@ -65,6 +68,7 @@ export class AuthService {
                 this.getAllUserInfo();
                 this.firstLoad = false;
               }
+              this.stayLoggedIn();
               this.ps.subscribeToNotifications();
               this.authInFlightBS.next(AuthCallStates.comp);
             }
@@ -105,6 +109,7 @@ export class AuthService {
             localStorage.setItem(environment.loggedInHereBefore, 'hi');
             this.getAllUserInfo();
             this.ps.subscribeToNotifications();
+            this.stayLoggedIn();
 
             if (this.gs.strNoE(returnUrl)) {
               this.router.navigateByUrl('');
@@ -296,7 +301,25 @@ export class AuthService {
   }
 
   stayLoggedIn(): void {
+    let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
+    console.log('loggin ' + rememberMe);
+    if (rememberMe && !this.rememberMeTimeout) {
+      let date = this.getTokenExp(this.internalToken.access, 'access');
+      let curr = new Date().getTime();
+      let interval = date.getTime() - curr;
+      console.log('intv ' + interval);
+      console.log('intv mins ' + (interval / 1000 / 60));
+      interval -= 1000 * 60; // remove half a second. we will refresh this often
+      console.log('new intv mins ' + (interval / 1000 / 60));
 
+      this.rememberMeTimeout = window.setTimeout(() => {
+        this.refreshToken().subscribe(result => {
+          console.log('result is below');
+          console.log(result);
+          this.stayLoggedIn();
+        });
+      }, interval);
+    }
   }
 
   checkAPIStatus(): void {

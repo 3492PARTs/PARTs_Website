@@ -68,7 +68,7 @@ export class ScoutPortalComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as ScoutPortalInit;
-            console.log(this.init);
+            //console.log(this.init);
             this.scoutFieldScheduleData = [];
             this.init.fieldSchedule.forEach(elem => {
               let pos = '';

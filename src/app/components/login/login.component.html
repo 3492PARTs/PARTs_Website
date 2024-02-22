@@ -19,7 +19,8 @@
         <div class="padding-bottom-1rem"></div>
 
         <div class="flex justify-content-space-between">
-          <app-form-element [Type]="'checkbox'" [LabelText]="'Remember me'"></app-form-element>
+          <app-form-element [Type]="'checkbox'" [LabelText]="'Remember me'" [(Model)]="rememberMe"
+            (FunctionCallBack)="setRememberMe()"></app-form-element>
 
           <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="login()">Login</app-button>
         </div>
