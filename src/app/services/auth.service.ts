@@ -295,6 +295,10 @@ export class AuthService {
     return of(this.internalToken.access);
   }
 
+  stayLoggedIn(): void {
+
+  }
+
   checkAPIStatus(): void {
     this.http.get('public/api-status/').subscribe(
       {
