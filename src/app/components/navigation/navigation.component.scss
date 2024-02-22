@@ -449,7 +449,8 @@ header {
   }
 
   .icon-wrapper {
-    &:hover > .icon {
+    &:hover > .icon,
+    .icon.active {
       fill: #b7b9cc;
     }
   }

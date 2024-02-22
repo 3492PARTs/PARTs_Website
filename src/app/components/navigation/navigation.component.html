@@ -136,7 +136,8 @@
       <div id="user-center-wrapper" *ngIf="user && user.id;else login" appClickOutside
         (appClickOutside)="hideNotificationModal()">
         <div class="icon-wrapper">
-          <mat-icon class="icon" svgIcon="bell" (click)="showNotificationModal()"></mat-icon>
+          <mat-icon class="icon" [ngClass]="{'active': notifications.length > 0}"
+            [svgIcon]="notifications.length <= 0 ? 'bell' : 'bell-ring'" (click)="showNotificationModal()"></mat-icon>
         </div>
 
         <div id="notification-modal"
@@ -174,7 +175,8 @@
         </div>
 
         <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
-          <mat-icon class="icon" svgIcon="email" (click)="showMessageModal()"></mat-icon>
+          <mat-icon class="icon" [ngClass]="{'active': messages.length > 0}"
+            [svgIcon]="messages.length <= 0 ? 'email' : 'email-open'" (click)="showMessageModal()"></mat-icon>
 
           <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModalVisible }">
             <h6>Message Center</h6>
