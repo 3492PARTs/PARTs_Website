@@ -439,69 +439,73 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   addSeason(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/add-season/', {
-      params: {
-        season: this.newSeason?.toString() || ''
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.adminInit();
-            this.newSeason = null;
-            this.manageSeasonModalVisible = false;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+    if (this.newSeason) {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/add-season/', {
+        params: {
+          season: this.newSeason.toString()
         }
       }
-    );
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.adminInit();
+              this.newSeason = null;
+              this.manageSeasonModalVisible = false;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }
   }
 
   deleteSeason(): void | null {
-    if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/delete-season/', {
-      params: {
-        season_id: this.delSeason?.toString() || ''
+    if (this.delSeason) {
+      if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.')) {
+        return null;
       }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.adminInit();
-            this.delSeason = null;
-            this.delEvent = null;
-            this.delEventList = [];
-            this.manageSeasonModalVisible = false;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/delete-season/', {
+        params: {
+          season_id: this.delSeason.toString()
         }
       }
-    );
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.adminInit();
+              this.delSeason = null;
+              this.delEvent = null;
+              this.delEventList = [];
+              this.manageSeasonModalVisible = false;
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }
   }
 
   showManageUserModal(u: User): void {
@@ -613,37 +617,39 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   deleteEvent(): void | null {
-    if (!confirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.')) {
-      return null;
-    }
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/delete-event/', {
-      params: {
-        event_id: this.delEvent?.toString() || ''
+    if (this.delEvent) {
+      if (!confirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.')) {
+        return null;
       }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-            this.delEvent = null;
-            this.getEvents(this.delSeason || -1, this.delEventList);
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/delete-event/', {
+        params: {
+          event_id: this.delEvent.toString()
         }
       }
-    );
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.delEvent = null;
+              this.getEvents(this.delSeason || -1, this.delEventList);
+              this.adminInit();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    }
   }
 
   saveTeam(): void {

@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 
 import { GeneralService } from 'src/app/services/general.service';
+import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-form-element',
@@ -29,6 +30,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() LabelText = '';
   @Input() Width = 'auto';
   @Input() MinWidth = 'auto';
+  private originalMinWidth = '';
   @Input() Placeholder = '';
   @Input() Rows = 0;
   //@Input() SelectDisplayValue = '';
@@ -47,7 +49,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
-        this.gs.devConsoleLog(tmp);
+        //this.gs.devConsoleLog(tmp);
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
           if (this.Model) {
@@ -145,10 +147,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef = new ElementRef(null);
   @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
 
-  constructor(private gs: GeneralService, private renderer: Renderer2) { }
+  //private resizeTimeout: number | null | undefined;
+
+  constructor(private gs: GeneralService, private renderer: Renderer2, private navigationService: NavigationService) { }
 
   ngOnInit() {
     this.LabelID = this.gs.getNextGsId();
+    this.originalMinWidth = this.MinWidth;
 
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
@@ -159,13 +164,22 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     else if (this.Type === 'phone') {
       this.phoneMaskFn(this.Model, true);
     }
+
+    this.markRequired();
+
+    this.navigationService.currentNavigationState.subscribe(ns => {
+      if (ns === NavigationState.collapsed) this.MinWidth = 'auto';
+      window.setTimeout(() => {
+        this.setElementPositions();
+      }, 102);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
-          case 'Model': {
+          case 'Model':
             let modelChanges = changes['Model'];
             if (this.Type === 'phone' && !modelChanges.firstChange) {
               if (this.formatPhone(modelChanges.currentValue) !== this.phoneMaskModel) {
@@ -175,7 +189,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
-          }
+            this.markRequired();
+            break;
+          case 'Required':
+            this.markRequired();
+            break;
         }
       }
     }
@@ -191,29 +209,28 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-    this.positionMultiSelect();
-
-    this.resizeFormElement();
-
-    //this.positionLabel();
+    this.setElementPositions()
 
     window.setTimeout(() => {
       if (this.Width === 'auto' && this.Type === 'number') {
         this.Width = '100px';
       }
     }, 1);
-
-    this.setIndicatorPosition();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
+    this.setElementPositions()
+  }
+
+  setElementPositions(): void {
     this.positionMultiSelect();
 
     this.resizeFormElement();
 
     //this.positionLabel();
 
+    this.setIndicatorPosition();
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -253,14 +270,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.touchIt();
     if (!this.isInvalid()) this.FunctionCallBack.emit();
   }
-  /*
-    multiChange(newValue: any, index: number) {
-      this.Model[index]['checked'] = newValue;
-      this._SelectList[index]['checked'] = newValue;
-      this.ModelChange.emit(this.Model);
-      this.touchIt();
-      if (!this.isInvalid()) this.FunctionCallBack.emit();
-    }*/
 
   private positionMultiSelect(): void {
     if (this.Type === 'multiSelect' && this.multiSelect) {
@@ -279,6 +288,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       );
 
     }
+  }
+
+  markRequired(): void {
+    this.touchIt();
+    this.isInvalid();
   }
 
   isInvalid(): boolean {
@@ -517,14 +531,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   resizeFormElement(): void {
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
-      if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
+      if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
         const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 44) : this.label.nativeElement.clientWidth) + 32;
-        if (this.MinWidth === 'auto') {
+        if (this.originalMinWidth === 'auto') {
           this.MinWidth = width + 'px';
         }
-      }
-      if (this.LabelText.includes('Edit Team')) {
-        let x = 0;
       }
 
       this.positionLabel();
@@ -545,7 +556,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         // i need this to be . if i find a place where i need it to be
         // strictly this is my reminder that i need to find another solution
         if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          //if (this.LabelText.substring(0, 10) === 'How is you')
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
           this.renderer.setStyle(
             this.label.nativeElement,
@@ -555,8 +567,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             this.formElement.nativeElement,
             'margin-top', labelOffset + 'px'
           );
-        } else {
-          //this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+        }
+        else {
+          //if (this.LabelText.substring(0, 10) === 'Not Scouted Teams')
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-7px'

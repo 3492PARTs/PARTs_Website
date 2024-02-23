@@ -1,5 +1,7 @@
 <div #thisWrapper id="wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+  <!--navigation-->
   <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
+    <!--site logo-->
     <div class="height" id="logo">
       <a routerLink="">
         <img src="../../../assets/appIcons/BeanieBotWhite.svg">
@@ -8,12 +10,14 @@
 
     <hr>
 
+    <!--sidebar navigation links-->
     <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}"
       appClickOutside (appClickOutside)="closeSubNav()">
       <ul>
         <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of appMenu"
           (click)="mi.menu_items.length > 0 ? openSubNav(getNavPageID(mi.menu_name), getNavPageID(mi.menu_name) + '-1') : closeSubNav(true)">
 
+          <!--menu item link-->
           <a [routerLink]="mi.routerlink && !mi.routerlink.includes('https') ? mi.routerlink : null"
             routerLinkActive="active" [ngClass]="{'right-hand-nav': rightHandNav}"
             (click)="mi.routerlink && mi.routerlink.includes('https') ? openURL(mi.routerlink) : null">
@@ -68,15 +72,17 @@
               </g>
             </svg>
 
-            <span routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-            true}" class="menu-link">
+            <!--menu item name-->
+            <span routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="menu-link">
               {{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}
             </span>
 
+            <!--arrow icon for menu item with submenu items-->
             <mat-icon *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}" class="icon page-options"
               [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}" svgIcon="menu-right"></mat-icon>
           </a>
 
+          <!--submenu items-->
           <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar" *ngIf="mi.menu_items.length > 0"
             [ngClass]="{ show : subNav === getNavPageID(mi.menu_name) + '-1'}">
             <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
@@ -98,31 +104,28 @@
         <app-sub-navigation *ngIf="pagesWithNavs.includes(getActiveMenuItemName())" [setNavExpanded]="navExpanded"
           [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
-        <!--<app-support-nav *ngIf="page === 'Support'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
-        </app-support-nav>
-        <app-firmware-nav *ngIf="page === 'Firmware'" [setNavExpanded]="navExpanded"
-          [hideNavExpander]="hideNavExpander">
-        </app-firmware-nav>
-        <app-devices-nav *ngIf="page === 'Devices'" [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
-        </app-devices-nav>-->
       </div>
     </div>
 
+    <!--wide screen nav expander-->
     <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
       <div (click)="toggleForceNavExpand()">
         <mat-icon id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" svgIcon="menu-right"></mat-icon>
       </div>
     </div>
-
   </nav>
 
+  <!--site header-->
   <header #thisHeader id="site-header"
     [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}">
+    <!--narrow screen nav expander-->
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
       <mat-icon class="icon" svgIcon="menu"></mat-icon>
     </div>
 
+    <!--app menu bar-->
     <div id="menu-bar" [ngClass]="{ small_search : screenXs}">
+      <!--search, not in use, disabled-->
       <div id="search-icon-wrapper" *ngIf="screenXs">
         <mat-icon *ngIf="false" class="icon" id="search-icon" svgIcon="magnify" (click)="xsToggleSearch()"
           appClickOutside (appClickOutside)="xsShowSearch = false"></mat-icon>
@@ -133,8 +136,10 @@
         </app-form-element>
       </div>
 
+      <!--user information/notifications/messages-->
       <div id="user-center-wrapper" *ngIf="user && user.id;else login" appClickOutside
         (appClickOutside)="hideNotificationModal()">
+        <!--notifications-->
         <div class="icon-wrapper">
           <mat-icon class="icon" [ngClass]="{'active': notifications.length > 0}"
             [svgIcon]="notifications.length <= 0 ? 'bell' : 'bell-ring'" (click)="showNotificationModal()"></mat-icon>
@@ -174,6 +179,7 @@
           </div>
         </div>
 
+        <!--messages-->
         <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
           <mat-icon class="icon" [ngClass]="{'active': messages.length > 0}"
             [svgIcon]="messages.length <= 0 ? 'email' : 'email-open'" (click)="showMessageModal()"></mat-icon>
@@ -209,6 +215,7 @@
 
         <div class="vertical-divider"></div>
 
+        <!--user profile-->
         <div id="profile" appClickOutside (appClickOutside)="hideUserModal()">
           <div id="profile-info" (click)="showUserModal()">
             <p>{{ user.first_name }} {{ user.last_name }}</p>
@@ -236,17 +243,18 @@
               </div>
             </div>
             <div id="user-profile-divider"></div>
-            <div class="profile-option" id="logout">
+            <div class="profile-option" id="logout" (click)="auth.logOut(); hideUserModal()">
               <div>
                 <mat-icon class="icon" svgIcon="logout"></mat-icon>
               </div>
               <div>
-                <p (click)="auth.logOut(); hideUserModal()">Logout</p>
+                <p>Logout</p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!--this shows if the user center does not-->
       <ng-template #login>
         <div id="login-link">
           <a routerLink="login">Log In</a>
@@ -257,12 +265,14 @@
 
   <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}"
     (appClickInside)="closeNavOnMobile()">
+    <!--main page content-->
     <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}">
       <ng-content>
 
       </ng-content>
     </main>
 
+    <!--site footer-->
     <footer #thisFooter
       [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'full-height': hideNavExpander || removeHeader}">
       <div>

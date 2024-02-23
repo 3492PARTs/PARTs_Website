@@ -123,29 +123,33 @@ export class GeneralService {
     this.decrementOutstandingCalls();
   }
 
-  fx: ((x: any) => void) | undefined | null;
-  input: any;
+  confirmFx: (() => void) | undefined | null;
+  rejectConfirmFx: (() => void) | undefined | null;
+  //input: any;
 
   /* Custom Confirm */
-  triggerConfirm(message: string, tmpFx: (x: any) => void, tmpInput?: any) {
+  triggerConfirm(message: string, tmpConfirmFx: () => void, tmpRejectConfirmFx?: () => void) {
     this.confirmMessage = '';
-    this.fx = null;
-    this.input = null;
+    this.confirmFx = null;
+    this.rejectConfirmFx = null;
+    //this.input = null;
 
     this.showConfirmModal = true;
     this.confirmMessage = message;
 
-    this.fx = tmpFx;
-    this.input = tmpInput;
+    this.confirmFx = tmpConfirmFx;
+    this.rejectConfirmFx = tmpRejectConfirmFx;
+    //this.input = tmpInput;
   }
 
   acceptConfirm() {
     this.showConfirmModal = false;
-    if (this.fx) this.fx(this.input);
+    if (this.confirmFx) this.confirmFx();
   }
 
   rejectConfirm() {
     this.showConfirmModal = false;
+    if (this.rejectConfirmFx) this.rejectConfirmFx();
   }
 
   getNextGsId(): string {
@@ -234,8 +238,9 @@ export class GeneralService {
     reader.onload = onLoad;
   }
 
-  devConsoleLog(x: any): void {
+  devConsoleLog(location: string, x: any): void {
     if (!environment.production) {
+      console.log(location);
       console.log(x);
     }
   }

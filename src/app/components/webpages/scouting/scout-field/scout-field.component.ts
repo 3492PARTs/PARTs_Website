@@ -81,7 +81,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.matches = result['matches'];
             this.sortQuestions();
             this.buildTeamList();
-            this.gs.devConsoleLog(this.scoutQuestions);
+            this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
           }
         },
         error: (err: any) => {

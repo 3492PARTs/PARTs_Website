@@ -9,12 +9,23 @@
         <app-form-element [Type]="'text'" [(Model)]="input.username" [Placeholder]="'username'" [Name]="'username'"
           [Width]="'100%'">
         </app-form-element>
-        <br>
+
+        <div class="padding-bottom-1rem"></div>
+
         <app-form-element [Type]="'password'" [(Model)]="input.password" [Placeholder]="'password'" [Name]="'password'"
           [Width]="'100%'">
         </app-form-element>
 
-        <br>
+        <div class="padding-bottom-1rem"></div>
+
+        <div class="flex justify-content-space-between">
+          <app-form-element [Type]="'checkbox'" [LabelText]="'Remember me'" [(Model)]="rememberMe"
+            (FunctionCallBack)="setRememberMe()"></app-form-element>
+
+          <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="login()">Login</app-button>
+        </div>
+
+        <div class="padding-bottom-1rem"></div>
 
         <div id="options">
           <div>
@@ -24,7 +35,7 @@
             |
             <a (click)="page = 'register'">Register</a>
           </div>
-          <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="login()">Login</app-button>
+
         </div>
         <div id="options">
           <a (click)="changePage('resendConfirmation')">Resend Activation</a>

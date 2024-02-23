@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   apiStatus = APIStatus.prcs;
   page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
+  rememberMe = false;
 
   constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private http: HttpClient, private router: Router) {
     /*this.route.queryParamMap.subscribe(queryParams => {
@@ -46,6 +47,8 @@ export class LoginComponent implements OnInit {
       this.apiStatus = a;
       if (a === APIStatus.off) this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
     });
+
+    this.readRememberMe();
   }
 
   login() {
@@ -54,6 +57,16 @@ export class LoginComponent implements OnInit {
 
   register() {
     this.authService.registerUser(this.newUser, 'login?page=registerFinish');
+  }
+
+  setRememberMe(): void {
+    localStorage.setItem(environment.rememberMe, this.rememberMe.toString());
+    //localStorage.removeItem(environment.rememberMe)
+  }
+
+  readRememberMe(): void {
+    let rememberMe = localStorage.getItem(environment.rememberMe) || '';
+    this.rememberMe = rememberMe.toLowerCase() === 'true';
   }
 
   resetPassword(): void | null {

@@ -32,6 +32,8 @@ export class AuthService {
 
   private firstLoad = true;
 
+  private rememberMeTimeout: number | null | undefined;
+
   constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService) {
     this.localStorageString = environment.tokenString;
   }
@@ -41,6 +43,8 @@ export class AuthService {
     this.user.next(new User());
     this.userLinks.next([]);
     localStorage.removeItem(this.localStorageString);
+    if (this.rememberMeTimeout)
+      window.clearTimeout(this.rememberMeTimeout);
     this.router.navigateByUrl('login');
   }
 
@@ -65,6 +69,7 @@ export class AuthService {
                 this.getAllUserInfo();
                 this.firstLoad = false;
               }
+              this.stayLoggedIn();
               this.ps.subscribeToNotifications();
               this.authInFlightBS.next(AuthCallStates.comp);
             }
@@ -105,6 +110,7 @@ export class AuthService {
             localStorage.setItem(environment.loggedInHereBefore, 'hi');
             this.getAllUserInfo();
             this.ps.subscribeToNotifications();
+            this.stayLoggedIn();
 
             if (this.gs.strNoE(returnUrl)) {
               this.router.navigateByUrl('');
@@ -266,7 +272,7 @@ export class AuthService {
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
     this.getTokenExp(this.internalToken.refresh, 'Refresh');
-    this.gs.incrementOutstandingCalls();
+    //this.gs.incrementOutstandingCalls();
 
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
 
@@ -280,7 +286,7 @@ export class AuthService {
           // this.getTokenExp(this.internalToken.refresh, 'Refreshed Refresh');
           this.token.next(this.internalToken);
 
-          this.gs.decrementOutstandingCalls();
+          //this.gs.decrementOutstandingCalls();
 
           return res as Token;
         })
@@ -293,6 +299,28 @@ export class AuthService {
 
   getAccessToken(): Observable<string> {
     return of(this.internalToken.access);
+  }
+
+  stayLoggedIn(): void {
+    let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
+    //console.log('loggin ' + rememberMe);
+    if (rememberMe) {
+      let date = this.getTokenExp(this.internalToken.access, 'access');
+      let curr = new Date().getTime();
+      let interval = date.getTime() - curr;
+      //console.log('intv ' + interval);
+      //console.log('intv mins ' + (interval / 1000 / 60));
+      interval -= 1000 * 30; // remove half a minute. we will refresh this often
+      //console.log('new intv mins ' + (interval / 1000 / 60));
+
+      this.rememberMeTimeout = window.setTimeout(() => {
+        this.refreshToken().subscribe(result => {
+          //console.log('result is below');
+          //console.log(result);
+          this.stayLoggedIn();
+        });
+      }, interval);
+    }
   }
 
   checkAPIStatus(): void {
@@ -373,8 +401,8 @@ export class AuthService {
   getTokenExp(tkn: string, tknTyp = ''): Date {
     const d = new Date(0);
     d.setUTCSeconds(this.getTokenLoad(tkn).exp);
-    this.gs.devConsoleLog(tknTyp)
-    this.gs.devConsoleLog(d);
+    this.gs.devConsoleLog('auth - getTokenExp - token type', tknTyp)
+    this.gs.devConsoleLog('auth - getTokenExp - date', d);
     return d;
   }
 

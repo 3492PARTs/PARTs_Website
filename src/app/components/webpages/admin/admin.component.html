@@ -14,22 +14,22 @@
     <app-form (SubmitFunction)="saveUser()">
       <div class="flex">
         <div>
-          <app-form-element [Type]="'text'" [LabelText]="'First Name:'" [(Model)]="activeUser.first_name"
+          <app-form-element [Type]="'text'" [LabelText]="'First Name'" [(Model)]="activeUser.first_name"
             [FormGroupInline]="true" [Required]="true">
           </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Last Name:'" [(Model)]="activeUser.last_name"
+          <app-form-element [Type]="'text'" [LabelText]="'Last Name'" [(Model)]="activeUser.last_name"
             [FormGroupInline]="true" [Required]="true">
           </app-form-element>
-          <app-form-element [Type]="'email'" [LabelText]="'Email:'" [(Model)]="activeUser.email"
-            [FormGroupInline]="true" [Required]="true">
+          <app-form-element [Type]="'email'" [LabelText]="'Email'" [(Model)]="activeUser.email" [FormGroupInline]="true"
+            [Required]="true">
           </app-form-element>
-          <app-form-element [Type]="'text'" [LabelText]="'Discord User ID:'" [(Model)]="activeUser.discord_user_id"
+          <app-form-element [Type]="'text'" [LabelText]="'Discord User ID'" [(Model)]="activeUser.discord_user_id"
             [FormGroupInline]="true">
           </app-form-element>
-          <app-form-element [Type]="'phone'" [LabelText]="'Phone Number:'" [(Model)]="activeUser.phone"
+          <app-form-element [Type]="'phone'" [LabelText]="'Phone Number'" [(Model)]="activeUser.phone"
             [FormGroupInline]="true">
           </app-form-element>
-          <app-form-element [Type]="'select'" [LabelText]="'Carrier:'" [FormGroupInline]="true"
+          <app-form-element [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
             [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
@@ -38,9 +38,9 @@
           </app-form-element>
         </div>
         <div class="vertical-center">
-          <app-form-element [Type]="'select'" [LabelText]="'Group:'" [FormGroupInline]="true"
-            [(Model)]="newAuthGroup.id" [SelectList]="availableAuthGroups" [BindingProperty]="'id'"
-            [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+          <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true" [(Model)]="newAuthGroup.id"
+            [SelectList]="availableAuthGroups" [BindingProperty]="'id'" [DisplayProperty]="'name'"
+            [DisplayEmptyOption]="true">
           </app-form-element>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
         </div>

@@ -1,13 +1,13 @@
 <app-box [Title]="'Pit Scouting Form'">
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div>
-      <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
+      <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
         [(Model)]="team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true"
         [Required]="!team || team.length <= 0">
       </app-form-element>
 
-      <app-form-element [LabelText]="'Edit Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
+      <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
         [DisplayEmptyOption]="true" [MinWidth]="'150px'" [Required]="!team || team.length <= 0">
@@ -17,8 +17,6 @@
     <app-question-display-form [(Questions)]="scoutQuestions" (FormElementsChange)="setFormElements($event)">
     </app-question-display-form>
 
-    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save</p>
-
     <div class="flex align-items-baseline">
       <app-form-element [LabelText]="'Robot Picture'" [Type]="'file'" [FormGroup]="true" [(Model)]="robotPic"
         (change)="preview()">
@@ -26,6 +24,7 @@
       <app-button [ButtonType]="'add'" (FunctionCallBack)="addRobotPicture()"></app-button>
       <app-button [ButtonType]="'minus'" (FunctionCallBack)="removeRobotPicture()"></app-button>
     </div>
+    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
 
     <div *ngIf="robotPics.length > 0">
       <div *ngFor="let pic of robotPics">

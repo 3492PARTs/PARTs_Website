@@ -550,7 +550,7 @@ header {
     padding-top: 7rem;
     padding-bottom: calc(100vh + 1.6rem); //11.6rem;
     width: 100%;
-    min-height: 100%;
+    //min-height: 100%; TODO: confirm this does not mess up, this appears to be the culprit of the extra space at the bottom of pages
     position: relative;
 
     &.remove-header {
