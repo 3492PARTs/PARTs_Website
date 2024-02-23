@@ -240,8 +240,8 @@ export class GeneralService {
 
   devConsoleLog(location: string, x: any): void {
     if (!environment.production) {
-      console.log(location);
-      console.log(x);
+      //console.log(location);
+      console.log(location + '\n', x);
     }
   }
 
