@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { GeneralService } from './general.service';
+import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
@@ -61,8 +61,9 @@ export class AuthService {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
               this.internalToken.access = (result as Token).access;
-              this.getTokenExp(this.internalToken.access, 'New Access');
-              this.getTokenExp(this.internalToken.refresh, 'New Refresh');
+              this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+              this.getTokenExp(this.internalToken.access);
+              this.getTokenExp(this.internalToken.refresh);
               this.token.next(this.internalToken);
 
               if (this.firstLoad) {
@@ -249,11 +250,7 @@ export class AuthService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({
-              severity: 3, // 1 - high, 2 - med, 3 - low (Still needs implemented)
-              message: 'Password reset successfully.', //
-              time: 10000 // time in ms to show banner, -1 means until dismissed (Still needs implemented)
-            })
+            this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
             this.router.navigateByUrl('login?page=login');
           }
         },
@@ -271,7 +268,6 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
-    this.getTokenExp(this.internalToken.refresh, 'Refresh');
     //this.gs.incrementOutstandingCalls();
 
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
@@ -282,8 +278,10 @@ export class AuthService {
         map(res => {
           this.internalToken.access = res['access'];
           this.internalToken.refresh = res['refresh'];
-          // this.getTokenExp(this.internalToken.access, 'Refreshed Access');
-          // this.getTokenExp(this.internalToken.refresh, 'Refreshed Refresh');
+          this.gs.devConsoleLog('refreshToken', 'new tokens below');
+          this.getTokenExp(this.internalToken.access);
+          this.getTokenExp(this.internalToken.refresh);
+
           this.token.next(this.internalToken);
 
           //this.gs.decrementOutstandingCalls();
@@ -304,8 +302,8 @@ export class AuthService {
   stayLoggedIn(): void {
     let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
     //console.log('loggin ' + rememberMe);
-    if (rememberMe) {
-      let date = this.getTokenExp(this.internalToken.access, 'access');
+    if (false && rememberMe) { //TODO: Come back and implement this once i research more
+      let date = this.getTokenExp(this.internalToken.access);
       let curr = new Date().getTime();
       let interval = date.getTime() - curr;
       //console.log('intv ' + interval);
@@ -398,11 +396,11 @@ export class AuthService {
     return tokenDecoded as TokenLoad;
   }
 
-  getTokenExp(tkn: string, tknTyp = ''): Date {
+  getTokenExp(tkn: string): Date {
     const d = new Date(0);
-    d.setUTCSeconds(this.getTokenLoad(tkn).exp);
-    this.gs.devConsoleLog('auth - getTokenExp - token type', tknTyp)
-    this.gs.devConsoleLog('auth - getTokenExp - date', d);
+    let tokenLoad = this.getTokenLoad(tkn);
+    d.setUTCSeconds(tokenLoad.exp);
+    this.gs.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
     return d;
   }
 
@@ -411,6 +409,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
+    this.gs.devConsoleLog('isAuthenticated', 'current access token below');
     return !this.gs.strNoE(this.internalToken.access) && !this.isTokenExpired(this.internalToken.access);
   }
 }
@@ -425,6 +424,9 @@ export class TokenLoad {
   username!: string;
   email!: string;
   user_id!: number;
+  iat!: number;
+  jti!: number;
+  token_type = '';
 }
 
 export class UserData {

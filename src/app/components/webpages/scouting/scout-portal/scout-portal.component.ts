@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event, ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 
@@ -142,7 +142,7 @@ export class ScoutPortalComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.currentSchedule = new Schedule();
             this.scheduleModalVisible = false;
             this.portalInit();
@@ -168,7 +168,7 @@ export class ScoutPortalComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.scheduleModalVisible = false;
             this.portalInit();
           }

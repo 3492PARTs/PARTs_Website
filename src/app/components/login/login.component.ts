@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.apiStatus.subscribe(a => {
       this.apiStatus = a;
-      if (a === APIStatus.off) this.gs.addBanner({ message: 'Unable to reach API. You will be unable to login.', severity: 1, time: -1 });
+      if (a === APIStatus.off) this.gs.addBanner(new Banner('Unable to reach API. You will be unable to login.', 0, 1));
     });
 
     this.readRememberMe();

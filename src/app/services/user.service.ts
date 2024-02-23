@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthGroup, AuthPermission, User } from './auth.service';
-import { GeneralService, RetMessage } from './general.service';
+import { Banner, GeneralService, RetMessage } from './general.service';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +60,7 @@ export class UserService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
             if (fn) fn();
           }
         },
@@ -104,7 +104,7 @@ export class UserService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
             if (fn) fn();
             this.getGroups();
           }
@@ -134,7 +134,7 @@ export class UserService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             if (fn) fn();
             this.getGroups();
           }
@@ -182,7 +182,7 @@ export class UserService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
             if (fn) fn();
             this.getPermissions();
           }
@@ -212,7 +212,7 @@ export class UserService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
             if (fn) fn();
             this.getPermissions();
           }

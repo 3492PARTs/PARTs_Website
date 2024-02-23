@@ -421,7 +421,7 @@ export class AdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             this.scoutAuthGroup = new AuthGroup();
             this.scoutAuthGroupsModalVisible = false;
           }

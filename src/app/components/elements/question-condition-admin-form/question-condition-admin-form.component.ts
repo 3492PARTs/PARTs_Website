@@ -154,7 +154,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.activeQuestionCondition = new QuestionCondition();
             this.questionConditionModalVisible = false;
             this.getQuestionConditions();

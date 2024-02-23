@@ -97,7 +97,7 @@ export class QuestionAdminFormComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             this.activeQuestion = new Question();
             this.questionModalVisible = false;
             this.questionInit();
