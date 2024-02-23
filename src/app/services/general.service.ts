@@ -101,10 +101,14 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner({ message: response.retMessage, severity: 1, time: 5000 });
+      this.addBanner(new Banner(response.retMessage, 5000));
       return false;
     }
     return true;
+  }
+
+  successfulResponseBanner(response: any) {
+    this.addBanner(new Banner((response as RetMessage).retMessage, 3500));
   }
 
   handelHTTPError(error: HttpErrorResponse) {
@@ -375,11 +379,13 @@ export class Page {
 export class Banner {
   severity!: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
   message!: string; //
-  time = -1; // time in ms to show banner, -1 means until dismissed (Still needs implemented)
+  time = -1; // time in ms to show banner, 0 means until dismissed
+  timeout: number | null | undefined;
 
-  constructor(message = '', time = -1) {
+  constructor(message = '', time = -1, severity = 3) {
     this.message = message;
     this.time = time;
+    this.severity = severity;
   }
 }
 

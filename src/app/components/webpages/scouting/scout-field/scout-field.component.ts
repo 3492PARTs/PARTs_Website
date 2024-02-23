@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
@@ -213,7 +213,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.teamMatch = new Match();
             this.noMatch = false;
             this.scoutFieldInit();

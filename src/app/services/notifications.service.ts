@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
-import { GeneralService, RetMessage } from './general.service';
+import { Banner, GeneralService, RetMessage } from './general.service';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -82,7 +82,7 @@ export class NotificationsService {
             error: (err: any) => {
               this.gs.decrementOutstandingCalls();
               console.log('error', err);
-              this.gs.addBanner({ message: 'Couldn\'t subscribe to push notifications.', severity: 1, time: 0 });
+              this.gs.addBanner(new Banner('Couldn\'t subscribe to push notifications.', 0));
             },
             complete: () => {
               this.gs.decrementOutstandingCalls();

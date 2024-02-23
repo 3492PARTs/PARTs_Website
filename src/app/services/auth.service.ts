@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { GeneralService } from './general.service';
+import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
@@ -250,11 +250,7 @@ export class AuthService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({
-              severity: 3, // 1 - high, 2 - med, 3 - low (Still needs implemented)
-              message: 'Password reset successfully.', //
-              time: 10000 // time in ms to show banner, -1 means until dismissed (Still needs implemented)
-            })
+            this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
             this.router.navigateByUrl('login?page=login');
           }
         },

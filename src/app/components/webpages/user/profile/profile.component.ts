@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthService, User, UserData } from 'src/app/services/auth.service';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
 
             this.auth.getUser();
             this.userProfileImage = null;

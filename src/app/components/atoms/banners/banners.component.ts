@@ -30,11 +30,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
       this.banners = sb;
 
       this.banners.forEach(b => {
-        if (b.time > 0) {
-          window.setTimeout(() => {
-            this.dismissBanner(b);
-          }, b.time);
-        }
+        this.setTimeout(b);
       });
     });
   }
@@ -121,5 +117,21 @@ export class BannersComponent implements OnInit, AfterViewInit {
 
     //if (!environment.production) console.log('top + delta: ' + top);
     this.renderer.setStyle(this.bannerWrapper.nativeElement, 'top', top + 70 + 'px');
+  }
+
+  pauseTimeout(b: Banner) {
+    if (b.timeout != null) window.clearTimeout(b.timeout);
+  }
+
+  resumeTimeout(b: Banner) {
+    this.setTimeout(b);
+  }
+
+  setTimeout(b: Banner) {
+    if (b.time > 0) {
+      b.timeout = window.setTimeout(() => {
+        this.dismissBanner(b);
+      }, b.time);
+    }
   }
 }

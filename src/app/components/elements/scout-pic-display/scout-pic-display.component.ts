@@ -92,7 +92,7 @@ export class ScoutPicDisplayComponent {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             // TODO: need to emit this this.search();
             this._ScoutPitResult.pics.forEach(p => p.default = false);
             spi.default = true;

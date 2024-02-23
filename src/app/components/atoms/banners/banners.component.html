@@ -1,7 +1,7 @@
 <div id="banner-wrapper" #thisBannerWrapper [ngClass]="{'top-zero' : top0}" [ngStyle]="{'z-index': zIndex}">
   <div *ngFor="let b of banners" class="banner">
     <app-box>
-      <div class="banner-content">
+      <div class="banner-content" (focus)="pauseTimeout(b)" (focusout)="resumeTimeout(b)">
         <p [innerHTML]="b.message"></p>
         <app-button [ButtonType]="'dismiss'" (FunctionCallBack)="dismissBanner(b)"></app-button>
       </div>

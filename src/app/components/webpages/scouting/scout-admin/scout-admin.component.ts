@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { AppSize, Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Team } from '../scout-field/scout-field.component';
@@ -338,7 +338,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             this.adminInit();
           }
         },
@@ -381,7 +381,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.adminInit();
           }
         },
@@ -451,7 +451,7 @@ export class ScoutAdminComponent implements OnInit {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.gs.successfulResponseBanner(result);
               this.adminInit();
               this.newSeason = null;
               this.manageSeasonModalVisible = false;
@@ -487,7 +487,7 @@ export class ScoutAdminComponent implements OnInit {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.gs.successfulResponseBanner(result);
               this.adminInit();
               this.delSeason = null;
               this.delEvent = null;
@@ -594,7 +594,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.manageEventsModalVisible = false;
             this.adminInit();
             this.newEvent = new Event();
@@ -633,7 +633,7 @@ export class ScoutAdminComponent implements OnInit {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.gs.successfulResponseBanner(result);
               this.delEvent = null;
               this.getEvents(this.delSeason || -1, this.delEventList);
               this.adminInit();
@@ -831,7 +831,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.scoutFieldSchedule = new ScoutFieldSchedule();
             this.scoutScheduleModalVisible = false;
             this.adminInit();
@@ -868,7 +868,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             this.adminInit();
           }
         },
@@ -897,7 +897,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+            this.gs.successfulResponseBanner(result);
             this.adminInit();
             this.phoneType = new PhoneType();
           }
@@ -1087,7 +1087,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.activeFieldQuestionAggregate = new QuestionAggregate();
             this.fieldQuestionAggregateModalVisible = false;
             this.getFieldQuestionAggregates();
@@ -1146,7 +1146,7 @@ export class ScoutAdminComponent implements OnInit {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+              this.gs.successfulResponseBanner(result);
               this.getFieldResults();
               this.activeScoutResult = null;
               this.scoutResultModalVisible = false;
@@ -1234,7 +1234,7 @@ export class ScoutAdminComponent implements OnInit {
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+              this.gs.successfulResponseBanner(result);
               this.getPitResults();
               this.activePitScoutResult = new ScoutPitResults();
               this.scoutPitResultModalVisible = false;

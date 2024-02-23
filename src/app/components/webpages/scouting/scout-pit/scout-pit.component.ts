@@ -156,7 +156,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 3500 });
+            this.gs.successfulResponseBanner(result);
             this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
             this.savePictures();
             this.spInit();
@@ -190,7 +190,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         ).subscribe(
           {
             next: (result: any) => {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
+              this.gs.successfulResponseBanner(result);
               this.removeRobotPicture();
             },
             error: (err: any) => {
