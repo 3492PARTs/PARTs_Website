@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 import { PwaService } from 'src/app/services/pwa.service';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
+import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-navigation',
@@ -15,7 +16,7 @@ import { Alert, NotificationsService } from 'src/app/services/notifications.serv
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
 
-  private resizeTimer: any;
+  private resizeTimeout: any;
   private scrollResizeTimer: any;
   private scrollPosition = 0;
   private userScrolling = false;
@@ -56,7 +57,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   notifications: Alert[] = [];
   messages: Alert[] = [];
 
-  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService) {
+  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService, private navigationService: NavigationService) {
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
@@ -122,11 +123,11 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.navExpanded = this.gs.screenSize() >= AppSize.LG;
+    this.setNavExpanded(this.gs.screenSize() >= AppSize.LG);
 
     this.hideNavExpander = this.gs.screenSize() < AppSize.LG;
 
-    if (this.hideNavExpander) this.showNav = false;
+    if (this.hideNavExpander) this.setShowNav(false);
 
     this.screenXs = this.gs.screenSize() === AppSize.XS;
 
@@ -242,8 +243,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       }
 
       //if (!environment.production) console.log('top + delta: ' + top);
-      this.renderer.setStyle(this.header.nativeElement, 'top', top + 'px');
-      this.renderer.setStyle(this.main.nativeElement, 'paddingTop', (top + 70) + 'px');
+      this.setHeaderPosition(top);
       //if (!environment.production) console.log('--end--');
       /*
       //In chrome and some browser scroll is given to body tag
@@ -281,20 +281,25 @@ let max = document.documentElement.scrollHeight;
     }
   }
 
+  setHeaderPosition(top: number): void {
+    this.renderer.setStyle(this.header.nativeElement, 'top', top + 'px');
+    this.renderer.setStyle(this.main.nativeElement, 'paddingTop', (top + 70) + 'px');
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
+    if (this.resizeTimeout != null) {
+      window.clearTimeout(this.resizeTimeout);
     }
 
-    this.resizeTimer = window.setTimeout(() => {
+    this.resizeTimeout = window.setTimeout(() => {
       if (!this.manualNavExpander || this.gs.screenSize() < AppSize.LG) {
-        this.navExpanded = this.gs.screenSize() >= AppSize.LG;
+        this.setNavExpanded(this.gs.screenSize() >= AppSize.LG);
         this.manualNavExpander = false;
         this.hideNavExpander = this.gs.screenSize() < AppSize.LG;
 
         if (!this.hideNavExpander) {
-          this.showNav = true;
+          this.setShowNav(true);
           this.renderer.setStyle(this.header.nativeElement, 'top', '0');
         }
       }
@@ -344,16 +349,29 @@ let max = document.documentElement.scrollHeight;
 
   toggleForceNavExpand(): void {
     this.manualNavExpander = true;
-    this.navExpanded = !this.navExpanded;
+    this.setNavExpanded(!this.navExpanded);
+  }
+
+  setNavExpanded(b: boolean): void {
+    this.navExpanded = b;
+    if (this.navExpanded) this.navigationService.setNavigationState(NavigationState.expanded);
+    else this.navigationService.setNavigationState(NavigationState.collapsed);
   }
 
   toggleNav(): void {
-    this.showNav = !this.showNav;
+    this.setHeaderPosition(0);
+    this.setShowNav(!this.showNav);
+  }
+
+  setShowNav(b: boolean): void {
+    this.showNav = b;
+    if (this.showNav) this.navigationService.setNavigationState(NavigationState.collapsed);
+    else this.navigationService.setNavigationState(NavigationState.hidden);
   }
 
   closeNavOnMobile(): void {
     if (this.hideNavExpander) {
-      this.showNav = false;
+      this.setShowNav(false);
     }
   }
 

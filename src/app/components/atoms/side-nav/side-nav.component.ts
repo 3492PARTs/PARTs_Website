@@ -17,7 +17,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
   @Input() Title = '';
 
   private screenSizeWide = 1175;
-  private resizeTimer: number | null | undefined;
+  private resizeTimeout: number | null | undefined;
   private runStickyMethod = true;
 
   collapsed = false;
@@ -96,11 +96,11 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
   }
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
+    if (this.resizeTimeout != null) {
+      window.clearTimeout(this.resizeTimeout);
     }
 
-    this.resizeTimer = window.setTimeout(() => {
+    this.resizeTimeout = window.setTimeout(() => {
       if (window.innerWidth >= this.screenSizeWide) {
         this.runStickyMethod = true;
         this.hide = true;

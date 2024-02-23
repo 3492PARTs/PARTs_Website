@@ -16,6 +16,10 @@ export class NavigationService {
   private subPages = new BehaviorSubject<MenuItem[]>([]);
   currentSubPages = this.subPages.asObservable();
 
+  /* State of navigation expander */
+  private navigationState = new BehaviorSubject<NavigationState>(NavigationState.expanded);
+  currentNavigationState = this.navigationState.asObservable();
+
   constructor(private gs: GeneralService) { }
 
   setSubPage(s: string): void {
@@ -26,4 +30,14 @@ export class NavigationService {
   setSubPages(s: MenuItem[]): void {
     this.subPages.next(s);
   }
+
+  setNavigationState(n: NavigationState): void {
+    this.navigationState.next(n);
+  }
+}
+
+export enum NavigationState {
+  expanded,
+  collapsed,
+  hidden
 }

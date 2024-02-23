@@ -2,8 +2,7 @@
   [ngClass]="{'form-group': FormGroup, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox', 'otherOptionCheckboxElement': Type === 'checkbox' && LabelText.toLowerCase() === 'other' }">
   <label *ngIf="LabelText !== ''" #label
     [ngClass]="{'checkboxLabel': ['checkbox', 'multiCheckbox'].includes(Type), 'otherOptionCheckboxLabel': Type === 'checkbox' && LabelText.toLowerCase() === 'other', 'radioLabel': Type === 'radio'}"
-    for="{{ LabelID }}">{{
-    LabelText }}</label>
+    for="{{ LabelID }}">{{LabelText }}</label>
 
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
     <div *ngIf="(Required && Touched) || !valid" class="validation" #validationIndicator
