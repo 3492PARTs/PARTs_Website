@@ -39,8 +39,7 @@ export class NotificationsService {
       if (!this.swPush.subscription) this.requestSubscription();*/
 
       this.swPush.messages.subscribe(m => {
-        this.gs.devConsoleLog('message');
-        this.gs.devConsoleLog(m);
+        this.gs.devConsoleLog('subscribeToNotifications - message', m);
         this.getUserAlerts('notification');
       });
 
@@ -50,8 +49,7 @@ export class NotificationsService {
       });*/
 
       this.swPush.notificationClicks.subscribe(n => {
-        this.gs.devConsoleLog('notificationClicks');
-        this.gs.devConsoleLog(n);
+        this.gs.devConsoleLog('subscribeToNotifications - notificationClicks', n);
         if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
       });
     }

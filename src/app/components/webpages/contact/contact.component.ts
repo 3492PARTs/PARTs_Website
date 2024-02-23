@@ -35,7 +35,6 @@ export class ContactComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.questions = result as Question[];
-            this.gs.devConsoleLog(this.questions);
 
             this.authService.authInFlight.subscribe(r => {
               if (r === AuthCallStates.comp) {

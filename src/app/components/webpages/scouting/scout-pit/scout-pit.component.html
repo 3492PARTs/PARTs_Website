@@ -17,8 +17,6 @@
     <app-question-display-form [(Questions)]="scoutQuestions" (FormElementsChange)="setFormElements($event)">
     </app-question-display-form>
 
-    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save</p>
-
     <div class="flex align-items-baseline">
       <app-form-element [LabelText]="'Robot Picture'" [Type]="'file'" [FormGroup]="true" [(Model)]="robotPic"
         (change)="preview()">
@@ -26,6 +24,7 @@
       <app-button [ButtonType]="'add'" (FunctionCallBack)="addRobotPicture()"></app-button>
       <app-button [ButtonType]="'minus'" (FunctionCallBack)="removeRobotPicture()"></app-button>
     </div>
+    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
 
     <div *ngIf="robotPics.length > 0">
       <div *ngFor="let pic of robotPics">

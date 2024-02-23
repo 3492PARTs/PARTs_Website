@@ -58,7 +58,6 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.init = result as Init;
-            this.gs.devConsoleLog(this.init);
           }
         },
         error: (err: any) => {

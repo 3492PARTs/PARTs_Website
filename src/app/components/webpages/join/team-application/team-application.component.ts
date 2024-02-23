@@ -58,7 +58,7 @@ export class TeamApplicationComponent implements OnInit {
             form_sub_typs.forEach(fst => {
               this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
             });
-            this.gs.devConsoleLog(this.questions);
+            this.gs.devConsoleLog('team app - applicationInit', this.questions);
 
             this.authService.authInFlight.subscribe(r => {
               if (r === AuthCallStates.comp) {
@@ -142,7 +142,7 @@ export class TeamApplicationComponent implements OnInit {
               this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
             });
 
-            this.gs.devConsoleLog(this.questions);
+            this.gs.devConsoleLog('team app - getResponse', this.questions);
             this.disabled = true;
           }
         },

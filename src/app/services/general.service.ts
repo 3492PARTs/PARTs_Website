@@ -238,8 +238,9 @@ export class GeneralService {
     reader.onload = onLoad;
   }
 
-  devConsoleLog(x: any): void {
+  devConsoleLog(location: string, x: any): void {
     if (!environment.production) {
+      console.log(location);
       console.log(x);
     }
   }

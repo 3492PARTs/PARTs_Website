@@ -401,8 +401,8 @@ export class AuthService {
   getTokenExp(tkn: string, tknTyp = ''): Date {
     const d = new Date(0);
     d.setUTCSeconds(this.getTokenLoad(tkn).exp);
-    this.gs.devConsoleLog(tknTyp)
-    this.gs.devConsoleLog(d);
+    this.gs.devConsoleLog('auth - getTokenExp - token type', tknTyp)
+    this.gs.devConsoleLog('auth - getTokenExp - date', d);
     return d;
   }
 

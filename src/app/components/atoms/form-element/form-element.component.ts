@@ -49,7 +49,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
         let tmp = JSON.parse(JSON.stringify(this._SelectList));
-        this.gs.devConsoleLog(tmp);
+        //this.gs.devConsoleLog(tmp);
         tmp.forEach((e: any) => {
           e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
           if (this.Model) {
@@ -556,8 +556,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         // i need this to be . if i find a place where i need it to be
         // strictly this is my reminder that i need to find another solution
         if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-          if (this.LabelText.substring(0, 10) === 'How is you')
-            this.gs.devConsoleLog('your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          //if (this.LabelText.substring(0, 10) === 'How is you')
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
           this.renderer.setStyle(
             this.label.nativeElement,
@@ -569,8 +569,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           );
         }
         else {
-          if (this.LabelText.substring(0, 10) === 'Not Scouted Teams')
-            this.gs.devConsoleLog('your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          //if (this.LabelText.substring(0, 10) === 'Not Scouted Teams')
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-7px'
