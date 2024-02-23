@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 
 import { GeneralService } from 'src/app/services/general.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-form-element',
@@ -168,6 +168,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.markRequired();
 
     this.navigationService.currentNavigationState.subscribe(ns => {
+      if (ns === NavigationState.collapsed) this.MinWidth = 'auto';
       window.setTimeout(() => {
         this.setElementPositions();
       }, 102);
@@ -530,7 +531,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   resizeFormElement(): void {
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
-      if (!['radio', 'checkbox'].includes(this.Type) && this.label) {
+      if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
         const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 44) : this.label.nativeElement.clientWidth) + 32;
         if (this.originalMinWidth === 'auto') {
           this.MinWidth = width + 'px';

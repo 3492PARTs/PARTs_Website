@@ -1,21 +1,22 @@
 <app-form-element-group [LabelText]="LabelText" [RemoveBorder]="LabelText.length <= 0"
     (FormElementsChange)="setFormElements($event)">
     <ng-container *ngFor="let sq of Questions">
-        <div class="question">
-            <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ.question_typ" [FormGroup]="true"
-                [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-                [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
-                [FormGroupInline]="sq.question_typ.question_typ === 'number'" [Required]="sq.required === 'y'"
-                [Width]="['area', 'multiCheckbox'].includes(sq.question_typ.question_typ) ? '100%' : 'auto'"
-                [FieldSize]="sq.question_typ.question_typ === 'multiCheckbox' ? 1000 : sq.question_typ.question_typ === 'text' ? 255 : 524288">
-            </app-form-element>
-            <div class="number-stepper" *ngIf="sq.question_typ.question_typ === 'number'">
-                <div class="increment">
-                    <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
-                </div>
-                <div class="decrement">
-                    <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
-                </div>
+        <div class="question flex align-items-flex-end">
+            <div [ngClass]="{'flex-grow-2': sq.question_typ.question_typ !== 'number' }">
+                <app-form-element [LabelText]="sq.question" [Type]="sq.question_typ.question_typ" [FormGroup]="true"
+                    [SelectList]="sq.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+                    [DisplayEmptyOption]="true" [(Model)]="sq.answer" [TrueValue]="'true'" [FalseValue]="'false'"
+                    [FormGroupInline]="sq.question_typ.question_typ === 'number'" [Required]="sq.required === 'y'"
+                    [Width]="['area', 'multiCheckbox', 'number'].includes(sq.question_typ.question_typ) ? '100%' : 'auto'"
+                    [FieldSize]="sq.question_typ.question_typ === 'multiCheckbox' ? 1000 : sq.question_typ.question_typ === 'text' ? 255 : 2000">
+                </app-form-element>
+            </div>
+
+            <div class="number-stepper inline-flex flex-wrap gap-1rem"
+                *ngIf="sq.question_typ.question_typ === 'number'">
+                <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(sq)"></app-button>
+
+                <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(sq)"></app-button>
             </div>
         </div>
         <div *ngIf="sq.conditions.length > 0" class="sub-question">
