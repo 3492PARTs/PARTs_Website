@@ -16,7 +16,7 @@ import { QuestionCondition } from 'src/app/components/elements/question-conditio
 export class ScoutFieldComponent implements OnInit, OnDestroy {
   private teams: Team[] = [];
   teamList: Team[] = [];
-  team!: number;
+  team: number | null = null;
   matches: Match[] = [];
   noMatch = false;
   teamMatch!: Match;
@@ -188,13 +188,13 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     let response: any[] = [];
     this.scoutAutoQuestions.forEach(sq => {
-      response.push(sq);
+      response.push(this.gs.cloneObject(sq));
     });
     this.scoutTeleopQuestions.forEach(sq => {
-      response.push(sq);
+      response.push(this.gs.cloneObject(sq));
     });
     this.scoutOtherQuestions.forEach(sq => {
-      response.push(sq);
+      response.push(this.gs.cloneObject(sq));
     });
 
     response.forEach(r => {
@@ -208,13 +208,14 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.http.post(
       //'scouting/field/save-answers/',
       'form/save-answers/',
-      { question_answers: response, team: this.team, match: this.teamMatch.match_id, form_typ: 'field' }
+      { question_answers: response, team: this.team, match: this.teamMatch?.match_id || null, form_typ: 'field' }
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
             this.teamMatch = new Match();
+            this.team = null;
             this.noMatch = false;
             this.scoutFieldInit();
             this.gs.scrollTo(0);
