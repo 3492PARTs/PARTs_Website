@@ -6,7 +6,7 @@ import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
-import { Alert, NotificationsService } from './notifications.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,21 +28,21 @@ export class AuthService {
   private userLinks = new BehaviorSubject<MenuItem[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
-  localStorageString = '';
+  tokenStringLocalStorage = '';
 
   private firstLoad = true;
 
   private rememberMeTimeout: number | null | undefined;
 
   constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService) {
-    this.localStorageString = environment.tokenString;
+    this.tokenStringLocalStorage = environment.tokenString;
   }
 
   logOut(): void {
     this.token.next(new Token());
     this.user.next(new User());
     this.userLinks.next([]);
-    localStorage.removeItem(this.localStorageString);
+    localStorage.removeItem(this.tokenStringLocalStorage);
     if (this.rememberMeTimeout)
       window.clearTimeout(this.rememberMeTimeout);
     this.router.navigateByUrl('login');
@@ -51,7 +51,7 @@ export class AuthService {
   previouslyAuthorized(): void {
     this.authInFlightBS.next(AuthCallStates.prcs);
 
-    const tmpTkn = { access: '', refresh: localStorage.getItem(this.localStorageString) || '' };
+    const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
     this.token.next(tmpTkn);
     this.internalToken = tmpTkn;
     if (this.internalToken && this.internalToken.refresh) {
@@ -103,11 +103,13 @@ export class AuthService {
           if (this.gs.checkResponse(result)) {
             // console.log(Response);
             const tmp = result as Token;
-            // this.getTokenExp(tmp.access, 'Log In Access');
-            // this.getTokenExp(tmp.refresh, 'Log In ßRefresh');
-            this.token.next(tmp);
             this.internalToken = tmp;
-            localStorage.setItem(this.localStorageString, tmp.refresh);
+            this.token.next(this.internalToken);
+
+            this.gs.devConsoleLog('authorizeUser', 'login tokens below');
+            this.getTokenExp(this.internalToken.access);
+            this.getTokenExp(this.internalToken.refresh);
+            localStorage.setItem(this.tokenStringLocalStorage, this.internalToken.refresh);
             localStorage.setItem(environment.loggedInHereBefore, 'hi');
             this.getAllUserInfo();
             this.ps.subscribeToNotifications();
@@ -411,6 +413,11 @@ export class AuthService {
   isAuthenticated(): boolean {
     this.gs.devConsoleLog('isAuthenticated', 'current access token below');
     return !this.gs.strNoE(this.internalToken.access) && !this.isTokenExpired(this.internalToken.access);
+  }
+
+  isSessionExpired(): boolean {
+    this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
+    return this.gs.strNoE(this.internalToken.refresh) || this.isTokenExpired(this.internalToken.refresh);
   }
 }
 

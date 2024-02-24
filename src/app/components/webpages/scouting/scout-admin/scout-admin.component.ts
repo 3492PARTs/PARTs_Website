@@ -189,7 +189,6 @@ export class ScoutAdminComponent implements OnInit {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        this.us.getUsers(1);
       }
     });
 
@@ -230,7 +229,6 @@ export class ScoutAdminComponent implements OnInit {
             //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
             this.getEvents(this.init.currentSeason.season_id, this.eventList);
             this.userTableCols = this.userTableCols;
-            this.us.getUsers(1);
           }
         },
         error: (err: any) => {

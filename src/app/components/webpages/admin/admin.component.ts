@@ -153,7 +153,6 @@ export class AdminComponent implements OnInit {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
-        //this.us.getUsers(this.userOption, this.adminOption);
       }
     });
 

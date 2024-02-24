@@ -20,7 +20,7 @@ export class AuthGuard {
     return this.authService.authInFlight.pipe(skipWhile(val => val === AuthCallStates.prcs), map(val => {
       switch (val) {
         case AuthCallStates.comp:
-          if (this.authService.isAuthenticated())
+          if (!this.authService.isSessionExpired())
             return true;
           else {
             this.authService.logOut();

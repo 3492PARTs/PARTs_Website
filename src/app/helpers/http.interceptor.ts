@@ -39,7 +39,7 @@ export class HTTPInterceptor implements HttpInterceptor {
 
     if (request.url.includes('./assets')) { // this is for the icons used on the front end
       return next.handle(request);
-    } else if (this.user && this.token && this.token.access) {
+    } else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
       request = request.clone({
         url: baseURL + request.url,
         setHeaders: {
@@ -47,8 +47,11 @@ export class HTTPInterceptor implements HttpInterceptor {
         }
       });
     } else {
+      let withCredentials = request.url.includes('user/token/refresh/');
+      //console.log(request.url, withCredentials);
       request = request.clone({
-        url: baseURL + request.url
+        url: baseURL + request.url,
+        //withCredentials: withCredentials,
       });
     }
 
