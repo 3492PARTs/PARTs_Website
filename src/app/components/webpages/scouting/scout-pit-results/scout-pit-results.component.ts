@@ -83,7 +83,7 @@ export class ScoutPitResultsComponent implements OnInit {
     let export_file = this.scoutPitResults;
 
     if (export_file.length <= 0) {
-      this.gs.triggerError('Cannot export empty dataset.');
+      this.gs.triggerError('Cannot export empty dataset. Please select some teams first.');
       return null;
     }
 
