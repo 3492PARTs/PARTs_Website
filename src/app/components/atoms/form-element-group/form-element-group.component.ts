@@ -40,7 +40,10 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
       this.setFormGroup();
       this.setFormElements();
     });
-
+    this.questionFormElements.changes.subscribe(() => {
+      this.setFormGroup();
+      this.setFormElements();
+    })
     this.setFormElements();
   }
 
