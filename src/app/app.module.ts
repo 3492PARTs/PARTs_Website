@@ -88,6 +88,7 @@ import { MainViewComponent } from './components/atoms/main-view/main-view.compon
 import { QuestionDisplayFormComponent } from './components/elements/question-display-form/question-display-form.component';
 import { ScoutPicDisplayComponent } from './components/elements/scout-pic-display/scout-pic-display.component';
 import { QuestionConditionAdminFormComponent } from './components/elements/question-condition-admin-form/question-condition-admin-form.component';
+import { QuestionFormElementComponent } from './components/elements/question-form-element/question-form-element.component';
 
 @NgModule({
   declarations: [
@@ -154,7 +155,8 @@ import { QuestionConditionAdminFormComponent } from './components/elements/quest
     MainViewComponent,
     QuestionDisplayFormComponent,
     ScoutPicDisplayComponent,
-    QuestionConditionAdminFormComponent
+    QuestionConditionAdminFormComponent,
+    QuestionFormElementComponent
   ],
   imports: [
     BrowserModule,
