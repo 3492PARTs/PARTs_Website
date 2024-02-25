@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as saveAs from 'file-saver';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, asyncScheduler } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
 import { Router } from '@angular/router';
-//import { saveAs } from 'file-saver';
+import imageCompression from 'browser-image-compression';
 
 @Injectable({
   providedIn: 'root'
@@ -242,10 +242,11 @@ export class GeneralService {
     reader.onload = onLoad;
   }
 
-  devConsoleLog(location: string, x: any): void {
+  devConsoleLog(location: string, x?: any): void {
     if (!environment.production) {
       //console.log(location);
-      console.log(location + '\n', x);
+      if (x) console.log(location + '\n', x);
+      else console.log(location);
     }
   }
 
@@ -363,6 +364,83 @@ export class GeneralService {
 
     return answer;
   }
+
+  resizeImageToMaxSize(file: File): Promise<File> {
+    var options = {
+      maxSizeMB: 10485760,
+      useWebWorker: true
+    }
+
+    return imageCompression(file, options);
+  }
+
+  /*
+  resizeImageToMaxSize(file: File): Promise<File> {
+    return new Promise((resolve) => {
+      const max = 10485760
+      if (file.size > max) { // max by our webserver in bytes
+        const factor = max / file.size;
+        this.compressImage(file, factor, 1).then(f => resolve(f));
+      }
+      else {
+        resolve(file);
+      }
+    });
+  }
+
+  compressImage(file: File, resizingFactor: number, quality: number): Promise<File> {
+    return new Promise((resolve) => {
+      this.fileToDataUri(file).then((uri) => {
+        const imgToCompress = new Image();
+        imgToCompress.onload = () => {
+          // showing the compressed image
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+
+          const originalWidth = imgToCompress.width;
+          const originalHeight = imgToCompress.height;
+
+          const canvasWidth = originalWidth * resizingFactor;
+          const canvasHeight = originalHeight * resizingFactor;
+
+          canvas.width = canvasWidth;
+          canvas.height = canvasHeight;
+
+          context?.drawImage(
+            imgToCompress,
+            0,
+            0,
+            originalWidth * resizingFactor,
+            originalHeight * resizingFactor
+          );
+
+          // reducing the quality of the image
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                const compressedImageBlob = blob;
+                resolve(new File([compressedImageBlob], 'image.jpeg'));
+              }
+            },
+            "image/jpeg",
+            quality
+          );
+        }
+        imgToCompress.src = uri;
+      });
+    });
+  }
+
+  fileToDataUri(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        resolve(reader.result as string);
+      });
+      reader.readAsDataURL(file);
+    });
+  }
+  */
 }
 
 export class RetMessage {
