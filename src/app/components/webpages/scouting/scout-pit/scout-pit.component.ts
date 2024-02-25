@@ -179,12 +179,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.robotPics.forEach(pic => {
       if (pic && pic.size >= 0) {
         this.gs.incrementOutstandingCalls();
+        const team_no = this.team;
 
         this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
           if (resizedPic) {
             const formData = new FormData();
             formData.append('file', resizedPic);
-            formData.append('team_no', this.team);
+            formData.append('team_no', team_no);
 
             this.http.post(
               'scouting/pit/save-picture/', formData
@@ -209,6 +210,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       }
     });
     this.robotPics = [];
+    this.team = '';
   }
 
   preview() {
