@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as saveAs from 'file-saver';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, asyncScheduler } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import * as LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
@@ -242,10 +242,11 @@ export class GeneralService {
     reader.onload = onLoad;
   }
 
-  devConsoleLog(location: string, x: any): void {
+  devConsoleLog(location: string, x?: any): void {
     if (!environment.production) {
       //console.log(location);
-      console.log(location + '\n', x);
+      if (x) console.log(location + '\n', x);
+      else console.log(location);
     }
   }
 
@@ -362,6 +363,10 @@ export class GeneralService {
     }
 
     return answer;
+  }
+
+  resizeImageToMaxSize(file: File) {
+
   }
 }
 
