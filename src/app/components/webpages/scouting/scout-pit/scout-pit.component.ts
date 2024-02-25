@@ -160,7 +160,6 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
             this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
             this.savePictures();
             this.spInit();
-            this.team = '';
             this.gs.scrollTo(0);
           }
         },
@@ -181,34 +180,39 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       if (pic && pic.size >= 0) {
         this.gs.incrementOutstandingCalls();
 
-        const formData = new FormData();
-        formData.append('file', pic);
-        formData.append('team_no', this.team);
+        this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
+          if (resizedPic) {
+            const formData = new FormData();
+            formData.append('file', resizedPic);
+            formData.append('team_no', this.team);
 
-        this.http.post(
-          'scouting/pit/save-picture/', formData
-        ).subscribe(
-          {
-            next: (result: any) => {
-              this.gs.successfulResponseBanner(result);
-              this.removeRobotPicture();
-            },
-            error: (err: any) => {
-              console.log('error', err);
-              this.gs.triggerError(err);
-              this.gs.decrementOutstandingCalls();
-            },
-            complete: () => {
-              this.gs.decrementOutstandingCalls();
-            }
+            this.http.post(
+              'scouting/pit/save-picture/', formData
+            ).subscribe(
+              {
+                next: (result: any) => {
+                  this.gs.successfulResponseBanner(result);
+                  this.removeRobotPicture();
+                },
+                error: (err: any) => {
+                  console.log('error', err);
+                  this.gs.triggerError(err);
+                  this.gs.decrementOutstandingCalls();
+                },
+                complete: () => {
+                  this.gs.decrementOutstandingCalls();
+                }
+              }
+            );
           }
-        );
+        });
       }
     });
     this.robotPics = [];
   }
 
   preview() {
+    this.gs.incrementOutstandingCalls();
     // Show preview
     const mimeType = this.robotPic.type;
     if (mimeType.match(/image\/*/) == null) {
@@ -219,6 +223,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     reader.readAsDataURL(this.robotPic);
     reader.onload = (_event) => {
       this.previewUrl = reader.result;
+      this.gs.decrementOutstandingCalls();
     };
   }
 
