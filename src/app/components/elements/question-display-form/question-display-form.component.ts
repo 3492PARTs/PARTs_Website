@@ -41,16 +41,6 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
     }
   }
 
-  increment(sq: Question): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    sq.answer = parseInt(sq.answer.toString()) + 1;
-  }
-
-  decrement(sq: Question): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    if (parseInt(sq.answer.toString()) > 0) sq.answer = parseInt(sq.answer.toString()) - 1;
-  }
-
   setFormElements(fes: QueryList<FormElementComponent>): void {
     this.FormElements = fes;
     this.FormElementsChange.emit(this.FormElements);

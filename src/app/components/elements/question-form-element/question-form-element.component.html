@@ -1,0 +1,20 @@
+<div class="flex align-items-flex-end">
+
+    <div [ngClass]="{'flex-grow-2': Question.question_typ.question_typ !== 'number' }">
+        <app-form-element [LabelText]="Question.question" [Type]="Question.question_typ.question_typ" [FormGroup]="true"
+            [SelectList]="Question.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
+            [DisplayEmptyOption]="true" [Model]="Question.answer" (ModelChange)="change($event)" [TrueValue]="'true'"
+            [FalseValue]="'false'" [FormGroupInline]="Question.question_typ.question_typ === 'number'"
+            [Required]="Question.required === 'y'"
+            [Width]="['area', 'multiCheckbox', 'number'].includes(Question.question_typ.question_typ) ? '100%' : 'auto'"
+            [FieldSize]="Question.question_typ.question_typ === 'multiCheckbox' ? 1000 : Question.question_typ.question_typ === 'text' ? 255 : 2000"
+            [Rows]="8">
+        </app-form-element>
+    </div>
+
+    <div class="number-stepper inline-flex flex-wrap gap-1rem" *ngIf="Question.question_typ.question_typ === 'number'">
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="increment(Question)"></app-button>
+
+        <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement(Question)"></app-button>
+    </div>
+</div>
