@@ -60,7 +60,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           }
         }
       );
-    }, 30000);
+    }, 1000 * 60 * 3); //3 min
   }
 
   ngOnDestroy(): void {

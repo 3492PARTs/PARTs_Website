@@ -53,7 +53,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           }
         }
       );
-    }, 10000);
+    }, 1000 * 60 * 3); //3 min
   }
 
   ngOnDestroy(): void {
