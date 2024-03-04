@@ -57,10 +57,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
             this.matches = result['matches'];
-            this.setUpdateScoutFieldScheduleTimeout();
+            this.checkInScout();
             this.sortQuestions();
             this.buildTeamList();
-            this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
+            //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
+            this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
           }
         },
         error: (err: any) => {
@@ -73,6 +74,35 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  checkInScout(): void {
+    if (this.scoutFieldSchedule)
+      this.http.get(
+        'scouting/field/check-in/', {
+        params: {
+          scout_field_sch_id: this.scoutFieldSchedule.scout_field_sch_id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.successfulResponseBanner(result);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            //this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            //this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+
+    this.setUpdateScoutFieldScheduleTimeout();
   }
 
   setUpdateScoutFieldScheduleTimeout(): void {
@@ -93,7 +123,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
-            this.setUpdateScoutFieldScheduleTimeout();
+            this.checkInScout();
           }
         },
         error: (err: any) => {
