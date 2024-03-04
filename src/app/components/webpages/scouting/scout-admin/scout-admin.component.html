@@ -321,7 +321,7 @@
 
 
   <app-table [TableCols]="userActivityTableCols" [TableData]="userActivity" [EnableFilter]="true" [Scrollable]="true"
-    [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)" [ScrollHeight]="'50rem'">
+    [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)" [ScrollHeight]="'calc(100vh - 24rem)'">
   </app-table>
 
   <app-modal [Title]="'User Scouting Activity'" [(visible)]="userActivityModalVisible">
@@ -332,7 +332,7 @@
 
     <app-form-element-group [LabelText]="'Results'">
       <app-table [TableCols]="activeUserActivity.results.scoutCols"
-        [TableData]="activeUserActivity.results.scoutAnswers" [Scrollable]="true"
+        [TableData]="activeUserActivity.results.scoutAnswers" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'"
         [Width]="userScoutActivityResultsTableWidth" [Responsive]="true">
       </app-table>
     </app-form-element-group>

@@ -208,10 +208,19 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
 
-    if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
     this.ns.setSubPage('users');
     //this.ns.setSubPage('mngPitRes');
+    this.setTableSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setTableSize();
+  }
+
+  setTableSize(): void {
+    if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
   }
 
   adminInit(): void {
