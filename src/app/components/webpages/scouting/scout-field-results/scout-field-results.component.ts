@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
@@ -38,6 +38,15 @@ export class ScoutFieldResultsComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
 
+    this.setTableSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setTableSize();
+  }
+
+  setTableSize(): void {
     if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 

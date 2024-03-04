@@ -3,11 +3,16 @@
 }
 
 .team-results {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
   padding-top: 1rem;
+
+  .team-header {
+    width: 100%;
+  }
 
   .team-info {
     padding-left: 1em;
