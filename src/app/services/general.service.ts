@@ -277,7 +277,7 @@ export class GeneralService {
     return -1;
   }
 
-  dateStringToString(s: string): string {
+  formatDateString(s: string | Date): string {
     let d = new Date(s);
     let day = d.getDate();
     let month = d.getMonth();
@@ -293,7 +293,7 @@ export class GeneralService {
     //console.log('d: ' + day + ' m ' + month + ' y ' + year + ' h ' + hour + ' m ' + min + ' ' + amPm);
     //8/28/21, 11:03 PM
 
-    return month + '/' + day + '/' + year + ', ' + hour + ':' + (min < 10 ? '0' + min : min.toString() + ' ' + amPm);
+    return `${month}/${day}/${year} ${hour}:${min < 10 ? '0' + min : min.toString()} ${amPm}`;
 
   }
 

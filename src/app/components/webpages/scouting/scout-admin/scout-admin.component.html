@@ -318,6 +318,8 @@
 </app-box>
 
 <app-box *ngIf="page === 'scoutAct'" [Title]="'Scouting Activity'">
+
+
   <app-table [TableCols]="userActivityTableCols" [TableData]="userActivity" [EnableFilter]="true" [Scrollable]="true"
     [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)" [ScrollHeight]="'50rem'">
   </app-table>

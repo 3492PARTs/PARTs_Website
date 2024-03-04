@@ -97,6 +97,7 @@ export class ScoutAdminComponent implements OnInit {
   activeUserActivity: UserActivity = new UserActivity();
   userActivityTableCols = [
     { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
   userActivityModalVisible = false;
 
@@ -934,7 +935,7 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.userActivity = result as UserActivity[];
-            //console.log(this.userActivity);
+            console.log(this.userActivity);
           }
         },
         error: (err: any) => {
@@ -958,6 +959,34 @@ export class ScoutAdminComponent implements OnInit {
     });
 
     return name;
+  }
+
+  getScoutSchedule(id: number): string {
+    const missing = 'missing';
+    let schedule = '';
+
+    this.userActivity.forEach(ua => {
+      if (ua.user.id === id)
+        ua.schedule.forEach(s => {
+          schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
+          if (s.red_one_id?.id === id)
+            schedule += `R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}`;
+          else if (s.red_two_id?.id === id)
+            schedule += `R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}`;
+          else if (s.red_three_id?.id === id)
+            schedule += `R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}`;
+          else if (s.blue_one_id?.id === id)
+            schedule += `B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}`;
+          else if (s.blue_two_id?.id === id)
+            schedule += `B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}`;
+          else if (s.blue_three_id?.id === id)
+            schedule += `B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}`;
+
+          schedule += '\n';
+        });
+    });
+
+    return schedule;
   }
 
   showUserActivityModal(ua: UserActivity): void {
