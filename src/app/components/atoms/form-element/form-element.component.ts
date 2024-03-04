@@ -159,9 +159,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
     }
-    else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
-      window.setTimeout(() => { this.change(this.MinValue); }, 1);
-    }
+    //else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
+    //window.setTimeout(() => { this.change(this.MinValue); }, 1);
+    //}
     else if (this.Type === 'phone') {
       this.phoneMaskFn(this.Model, true);
     }
@@ -250,12 +250,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (this.Type == 'number') {
       this.Model = newValue;
-      if (this.MinValue !== null && this.MinValue !== undefined) {
-        this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
+      if (!this.gs.strNoE(this.Model)) {
+        if (this.MinValue !== null && this.MinValue !== undefined) {
+          this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
+        }
+        if (this.MaxValue !== null && this.MaxValue !== undefined) {
+          this.Model = newValue <= this.MaxValue ? newValue : this.MaxValue;
+        }
       }
-      if (this.MaxValue !== null && this.MaxValue !== undefined) {
-        this.Model = newValue <= this.MaxValue ? newValue : this.MaxValue;
-      }
+
       this.ModelChange.emit(this.Model);
     }
     else if (index !== -1) {

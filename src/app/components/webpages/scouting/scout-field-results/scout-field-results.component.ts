@@ -20,11 +20,14 @@ export class ScoutFieldResultsComponent implements OnInit {
   scoutPitResult: ScoutPitResults = new ScoutPitResults();
   showScoutFieldCols!: any[];
   showScoutFieldColsList!: any[];
+  scoutTableCols: any[] = [];
+  scoutTableRows: any[] = [];
 
   filterText = '';
-  rank!: number | null;
-  range!: number | null;
-  above = false;
+  filterTeam = '';
+  filterRank: number | null = null;
+  filterRange: number | null = null;
+  filterAboveRank = false;
 
   teamNotes: TeamNote[] = [];
 
@@ -52,6 +55,9 @@ export class ScoutFieldResultsComponent implements OnInit {
             for (let i = 0; i < this.showScoutFieldCols.length; i++) {
               this.showScoutFieldCols[i]['checked'] = true;
             }
+
+            this.showHideTableCols();
+            this.filter();
 
             this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
           }
@@ -191,7 +197,7 @@ export class ScoutFieldResultsComponent implements OnInit {
       }
     }
 
-    this.scoutResults.scoutCols = tmp;
+    this.scoutTableCols = tmp;
   }
 
   resetTableColumns(): void {
@@ -201,32 +207,35 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.showHideTableCols();
   }
 
-  filterByRank(): void {
-    if (!this.gs.strNoE(this.rank)) {
-      let temp = [];
-      if (!this.gs.strNoE(this.range)) {
+  filter(): void {
+    let temp = this.scoutResults.scoutAnswers;
+
+    if (!this.gs.strNoE(this.filterRank)) {
+
+      if (!this.gs.strNoE(this.filterRange)) { //get those in a range of ranks
+        temp = temp.filter(r => r.rank >= (this.filterRank || 0) && r.rank <= (this.filterRange || 0))
+      }
+      else { // get those above or below the desired rank
         for (let i = 0; i < this.scoutResults.scoutAnswers.length; i++) {
-          if (this.scoutResults.scoutAnswers[i].rank >= (this.rank || 0) && this.scoutResults.scoutAnswers[i].rank <= (this.range || 0)) {
-            temp.push(this.scoutResults.scoutAnswers[i]);
-          }
+          temp = temp.filter(r => (this.filterAboveRank && r.rank >= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank <= (this.filterRank || 0)))
         }
       }
-      else {
-        for (let i = 0; i < this.scoutResults.scoutAnswers.length; i++) {
-          if ((this.above && this.scoutResults.scoutAnswers[i].rank >= (this.rank || 0)) || (!this.above && this.scoutResults.scoutAnswers[i].rank <= (this.rank || 0))) {
-            temp.push(this.scoutResults.scoutAnswers[i]);
-          }
-        }
-      }
-      this.scoutResults.scoutAnswers = temp;
     }
+
+    if (!this.gs.strNoE(this.filterTeam)) {
+      temp = temp.filter(r => r.team.toString() === this.filterTeam);
+    }
+
+    this.scoutTableRows = temp;
   }
 
-  resetRankFilter(): void {
-    this.scoutFieldResultsInit();
-    this.range = null;
-    this.rank = null;
-    this.above = false;
+  resetFilter(): void {
+    this.filterRange = null;
+    this.filterRank = null;
+    this.filterAboveRank = false;
+    this.filterTeam = '';
+    this.filterText = '';
+    this.filter();
   }
 }
 export class ScoutResults {
