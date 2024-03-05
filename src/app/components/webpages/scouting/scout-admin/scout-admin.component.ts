@@ -107,7 +107,7 @@ export class ScoutAdminComponent implements OnInit {
   userScoutActivityScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScouts },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScouts.bind(this) },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
@@ -213,7 +213,7 @@ export class ScoutAdminComponent implements OnInit {
 
 
     if (environment.production) this.ns.setSubPage('users');
-    else this.ns.setSubPage('scoutAct');
+    else this.ns.setSubPage('users');
     this.setTableSize();
   }
 
