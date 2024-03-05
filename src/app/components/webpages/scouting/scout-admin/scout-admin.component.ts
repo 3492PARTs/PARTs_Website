@@ -96,8 +96,8 @@ export class ScoutAdminComponent implements OnInit {
   userActivity: UserActivity[] = [];
   activeUserActivity: UserActivity = new UserActivity();
   userActivityTableCols = [
-    { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
-    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
+    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
     { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
   userActivityModalVisible = false;
