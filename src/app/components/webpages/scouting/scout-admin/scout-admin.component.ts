@@ -10,6 +10,7 @@ import { ScoutResults } from '../scout-field-results/scout-field-results.compone
 import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { QuestionAggregateType, QuestionAggregate } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-scout-admin',
@@ -210,8 +211,8 @@ export class ScoutAdminComponent implements OnInit {
     ]);
 
 
-    //this.ns.setSubPage('users');
-    this.ns.setSubPage('scoutAct');
+    if (environment.production) this.ns.setSubPage('users');
+    else this.ns.setSubPage('scoutAct');
     this.setTableSize();
   }
 
