@@ -97,6 +97,7 @@ export class ScoutAdminComponent implements OnInit {
   activeUserActivity: UserActivity = new UserActivity();
   userActivityTableCols = [
     { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
     { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
   userActivityModalVisible = false;
@@ -209,8 +210,8 @@ export class ScoutAdminComponent implements OnInit {
     ]);
 
 
-    this.ns.setSubPage('users');
-    //this.ns.setSubPage('mngPitRes');
+    //this.ns.setSubPage('users');
+    this.ns.setSubPage('scoutAct');
     this.setTableSize();
   }
 
@@ -944,7 +945,14 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.userActivity = result as UserActivity[];
-            console.log(this.userActivity);
+
+            if (this.activeUserActivity) {
+              this.userActivity.forEach(ua => {
+                if (ua.user.id == this.activeUserActivity.user.id)
+                  this.activeUserActivity = this.gs.cloneObject(ua);
+              });
+            }
+            //console.log(this.userActivity);
           }
         },
         error: (err: any) => {
@@ -998,9 +1006,43 @@ export class ScoutAdminComponent implements OnInit {
     return schedule;
   }
 
+  getUserReviewStatus(status: boolean): string {
+    return status ? 'Yes' : 'No';
+  }
+
   showUserActivityModal(ua: UserActivity): void {
     this.userActivityModalVisible = true;
     this.activeUserActivity = ua;
+  }
+
+  toggleUserUnderReviewStatus(): void {
+    this.gs.triggerConfirm('Are you sure you want to put this scout under review?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/toggle-scout-under-review/', {
+        params: {
+          user_id: this.activeUserActivity.user.id.toString(),
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.getScoutingActivity();
+              this.gs.successfulResponseBanner(result);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
   }
 
   getFieldQuestionAggregates(): void {
@@ -1415,8 +1457,13 @@ export class ScoutFieldResultsSerializer {
   scoutAnswers: any[] = [];
 }
 
+export class ScoutingUserInfo {
+  id!: number;
+  under_review = false;
+}
 export class UserActivity {
   user = new User();
+  user_info = new ScoutingUserInfo();
   results = new ScoutFieldResultsSerializer();
   schedule: ScoutFieldSchedule[] = [];
 }

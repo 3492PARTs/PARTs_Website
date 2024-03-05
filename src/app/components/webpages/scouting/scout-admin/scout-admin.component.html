@@ -325,6 +325,16 @@
   </app-table>
 
   <app-modal [Title]="'User Scouting Activity'" [(visible)]="userActivityModalVisible">
+    <app-form-element-group [LabelText]="'User Status'">
+      <div class="flex justify-content-space-between align-items-center">
+        <p class="margin-bottom-0">Under Review: {{getUserReviewStatus(activeUserActivity.user_info.under_review)}}</p>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="toggleUserUnderReviewStatus()">Toggle Review
+          Status</app-button>
+      </div>
+
+
+    </app-form-element-group>
+
     <app-form-element-group [LabelText]="'Schedule'">
       <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserActivity.schedule">
       </app-table>

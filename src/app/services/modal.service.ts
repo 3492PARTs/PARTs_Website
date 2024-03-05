@@ -9,11 +9,22 @@ export class ModalService {
   /* Modal Visible */
   private modalVisible = new BehaviorSubject<boolean>(false);
   currentModalVisible = this.modalVisible.asObservable();
-  //private modalVisible = false;
+
+  private modalVisibleCount = 0;
 
   constructor() { }
 
-  setModalVisible(b: boolean): void {
-    this.modalVisible.next(b);
+  setModalVisible(): void {
+    this.modalVisible.next(this.modalVisibleCount > 0);
+  }
+
+  incrementModalVisibleCount(): void {
+    this.modalVisibleCount++;
+    this.setModalVisible();
+  }
+
+  decrementModalVisibleCount(): void {
+    if (this.modalVisibleCount > 0) this.modalVisibleCount--;
+    this.setModalVisible();
   }
 }
