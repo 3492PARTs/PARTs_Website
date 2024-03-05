@@ -77,7 +77,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   checkInScout(): void {
-    if (this.scoutFieldSchedule)
+    if (this.scoutFieldSchedule && this.scoutFieldSchedule.scout_field_sch_id)
       this.http.get(
         'scouting/field/check-in/', {
         params: {
