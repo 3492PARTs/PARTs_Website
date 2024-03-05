@@ -33,20 +33,21 @@ export class AppComponent implements OnInit {
       }
     });
 
-
+    /*
     this.authService.apiStatus.subscribe(a => {
       this.apiStatus = a;
       if (a !== APIStatus.prcs && a !== APIStatus.off && this.firstRun) {
         this.authService.previouslyAuthorized();
         this.firstRun = false;
       }
-    })
+    });*/
 
     console.log('prod: ' + environment.production);
   }
 
   ngOnInit() {
-    this.authService.checkAPIStatus();
+    //this.authService.checkAPIStatus();
+    this.authService.previouslyAuthorized();
   }
 
   getTitle(state: RouterState, parent: ActivatedRoute): string[] {

@@ -106,7 +106,7 @@ export class ScoutAdminComponent implements OnInit {
   userScoutActivityScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'scouts', ColLabel: 'Scouts' },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScouts },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
@@ -1009,6 +1009,18 @@ export class ScoutAdminComponent implements OnInit {
 
   getUserReviewStatus(status: boolean): string {
     return status ? 'Yes' : 'No';
+  }
+
+  getScoutingActivityScouts(sfs: ScoutFieldSchedule): string {
+    const missing = 'missing';
+    let str = '';
+    str += sfs.red_one_id ? `R1: ${sfs.red_one_id.first_name} ${sfs.red_one_id.last_name}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
+    str += sfs.red_two_id ? `R2: ${sfs.red_two_id.first_name} ${sfs.red_two_id.last_name}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
+    str += sfs.red_three_id ? `R3: ${sfs.red_three_id.first_name} ${sfs.red_three_id.last_name}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
+    str += sfs.blue_one_id ? `B1: ${sfs.blue_one_id.first_name} ${sfs.blue_one_id.last_name}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
+    str += sfs.blue_two_id ? `B2: ${sfs.blue_two_id.first_name} ${sfs.blue_two_id.last_name}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
+    str += sfs.blue_three_id ? `B3: ${sfs.blue_three_id.first_name} ${sfs.blue_three_id.last_name}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
+    return str;
   }
 
   showUserActivityModal(ua: UserActivity): void {
