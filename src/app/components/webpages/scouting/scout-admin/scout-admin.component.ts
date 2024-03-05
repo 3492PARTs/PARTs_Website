@@ -101,6 +101,7 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
     { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
+  userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
 
   userScoutActivityScheduleTableCols: object[] = [
@@ -1043,6 +1044,37 @@ export class ScoutAdminComponent implements OnInit {
             if (this.gs.checkResponse(result)) {
               this.getScoutingActivity();
               this.gs.successfulResponseBanner(result);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
+  }
+
+  markScoutPresent(sfs: ScoutFieldSchedule): void {
+    this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/mark-scout-present/', {
+        params: {
+          scout_field_sch_id: sfs.scout_field_sch_id,
+          user_id: this.activeUserActivity.user.id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.successfulResponseBanner(result);
+              this.getScoutingActivity();
             }
           },
           error: (err: any) => {

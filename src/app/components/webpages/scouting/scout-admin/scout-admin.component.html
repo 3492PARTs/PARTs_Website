@@ -336,7 +336,8 @@
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Schedule'">
-      <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserActivity.schedule">
+      <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserActivity.schedule"
+        [TableDataButtons]="userActivityTableButtons">
       </app-table>
     </app-form-element-group>
 
