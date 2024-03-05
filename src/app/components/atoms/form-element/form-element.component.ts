@@ -57,7 +57,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             if (typeof this.Model === 'string') {
               if (e[this.DisplayProperty] === 'Other') {
                 let other = '';
-                this.Model.split(',').forEach((option: any) => {
+                this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
                   let match = false;
                   // TODO: Revisit this logic i dont think this loop is needed
                   tmp.forEach((element: any) => {
@@ -70,7 +70,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
               }
               else
-                e['checked'] = this.Model.split(',').includes(e[this.BindingProperty]).toString();
+                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty]).toString();
             }
             else
               this.Model.forEach((m: any) => {
@@ -319,7 +319,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     // if the element is populated or not
     if (!this.strNoE(this.Model)) {
       this.hasValue = false;
-      if (['multiCheckbox', 'multiSelect'].includes(this.Type)) {
+      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && Array.isArray(this.Model)) {
         this.Model.forEach((e: any) => {
           let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
           if (!this.strNoE(s))
