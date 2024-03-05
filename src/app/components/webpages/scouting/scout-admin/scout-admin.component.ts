@@ -987,17 +987,17 @@ export class ScoutAdminComponent implements OnInit {
         ua.schedule.forEach(s => {
           schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
           if (s.red_one_id?.id === id)
-            schedule += `R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}`;
+            schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
           else if (s.red_two_id?.id === id)
-            schedule += `R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}`;
+            schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
           else if (s.red_three_id?.id === id)
-            schedule += `R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}`;
+            schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
           else if (s.blue_one_id?.id === id)
-            schedule += `B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}`;
+            schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
           else if (s.blue_two_id?.id === id)
-            schedule += `B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}`;
+            schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
           else if (s.blue_three_id?.id === id)
-            schedule += `B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}`;
+            schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
 
           schedule += '\n';
         });
