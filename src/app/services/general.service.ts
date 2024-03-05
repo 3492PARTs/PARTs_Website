@@ -109,7 +109,7 @@ export class GeneralService {
 
   successfulResponseBanner(response: any) {
     const message = (response as RetMessage).retMessage;
-    if (!this.strNoE(message)) this.addBanner(new Banner(message));
+    if (!this.strNoE(message)) this.addBanner(new Banner(message, 3500));
   }
 
   handelHTTPError(error: HttpErrorResponse) {

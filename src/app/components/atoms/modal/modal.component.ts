@@ -23,7 +23,7 @@ export class ModalComponent implements OnInit {
   @Input()
   set visible(v: boolean) {
     this._visible = v;
-    this.visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
+    this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
     this.clickOutsideCapture = true;
 
     if (this._visible) {

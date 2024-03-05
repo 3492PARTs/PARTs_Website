@@ -1016,7 +1016,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   toggleUserUnderReviewStatus(): void {
-    this.gs.triggerConfirm('Are you sure you want to put this scout under review?', () => {
+    this.gs.triggerConfirm('Are you sure you want to change this scout\'s under review status?', () => {
       this.gs.incrementOutstandingCalls();
       this.http.get(
         'scouting/admin/toggle-scout-under-review/', {
