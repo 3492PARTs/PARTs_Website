@@ -111,7 +111,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
-  phoneMaskModel = '';
+  phoneMaskModel: string | null = null;
   //@Input() ModelProperty = '';
 
   //@Input() MultiModel: any = [];
@@ -628,9 +628,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel += prefix;
       this.phoneMaskModel += suffix.length >= 1 ? '-' : '';
       this.phoneMaskModel += suffix;*/
-      this.phoneMaskModel = this.formatPhone(value);
+      const val = this.formatPhone(value);
+      this.phoneMaskModel = !this.gs.strNoE(val) ? val : null;
 
       if (!init) this.change(phone);
-    }, 0);
+    }, 1);
   };
 }
