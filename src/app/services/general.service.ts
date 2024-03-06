@@ -65,6 +65,7 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
+    /*
     let add = true;
     this.internalSiteBanners.forEach(el => {
       if (el.message === b.message) {
@@ -76,6 +77,9 @@ export class GeneralService {
       this.internalSiteBanners.push(b);
       this.siteBanners.next(this.internalSiteBanners);
     }
+  */
+    this.internalSiteBanners.push(b);
+    this.siteBanners.next(this.internalSiteBanners);
   }
 
   removeBanner(b: Banner): void {
