@@ -7,6 +7,7 @@ import * as LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class GeneralService {
 
   private gsId = 0;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private deviceService: DeviceDetectorService) { }
 
 
   /* Loading Screen */
@@ -177,29 +178,30 @@ export class GeneralService {
 
   screenSize(): AppSize {
     const width = window.innerWidth;
+    const mobile = this.deviceService.isMobile();
 
-    if (width >= AppSize._7XLG) {
+    if (!mobile && width >= AppSize._7XLG) {
       return AppSize._7XLG;
     }
-    else if (width >= AppSize._6XLG) {
+    else if (!mobile && width >= AppSize._6XLG) {
       return AppSize._6XLG;
     }
-    else if (width >= AppSize._5XLG) {
+    else if (!mobile && width >= AppSize._5XLG) {
       return AppSize._5XLG;
     }
-    else if (width >= AppSize._4XLG) {
+    else if (!mobile && width >= AppSize._4XLG) {
       return AppSize._4XLG;
     }
-    else if (width >= AppSize._3XLG) {
+    else if (!mobile && width >= AppSize._3XLG) {
       return AppSize._3XLG;
     }
-    else if (width >= AppSize._2XLG) {
+    else if (!mobile && width >= AppSize._2XLG) {
       return AppSize._2XLG;
     }
-    else if (width >= AppSize.XLG) {
+    else if (!mobile && width >= AppSize.XLG) {
       return AppSize.XLG;
     }
-    else if (width >= AppSize.LG) {
+    else if (!mobile && width >= AppSize.LG) {
       return AppSize.LG;
     }
     else if (width >= AppSize.SM) {
