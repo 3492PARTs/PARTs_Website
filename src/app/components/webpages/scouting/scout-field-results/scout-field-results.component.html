@@ -36,17 +36,19 @@
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
     <div class="team-results">
-      <div class="team-pic">
+      <div class="team-header">
+        <app-header [h]="1">{{ scoutPitResult.teamNo }} - {{ scoutPitResult.teamNm }}</app-header>
+
         <app-scout-pic-display [ScoutPitResult]="scoutPitResult"></app-scout-pic-display>
+
       </div>
       <div class="team-info">
-        <div class="team-nm">
-          <p>{{ scoutPitResult.teamNo }} - {{ scoutPitResult.teamNm }}</p>
-        </div>
 
-        <div *ngFor="let r of scoutPitResult.results">
-          <p>{{ r.question }}: {{ r.answer }}</p>
-        </div>
+        <ng-container *ngIf="scoutPitResult">
+          <div *ngFor="let r of scoutPitResult.results">
+            <p>{{ r.question }}: {{ r.answer }}</p>
+          </div>
+        </ng-container>
       </div>
 
     </div>
