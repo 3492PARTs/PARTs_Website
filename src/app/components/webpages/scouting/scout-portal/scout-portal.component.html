@@ -1,6 +1,6 @@
 <app-box [Title]="'Portal'">
 
-  <app-form-element-group [LabelText]="'Full Scouting Schedule'">
+  <app-form-element-group [LabelText]="'Full Scouting Schedule'" *ngIf="init.users && init.users.length > 0">
     <app-table *ngIf="init.allFieldSchedule && init.allFieldSchedule.length > 0"
       [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="init.allFieldSchedule" [Scrollable]="true"
       [EnableFilter]="true">
