@@ -176,7 +176,7 @@ export class GeneralService {
     saveAs(blob, filename);
   }
 
-  screenSize(): AppSize {
+  getScreenSize(): AppSize {
     const width = window.innerWidth;
     const mobile = this.deviceService.isMobile();
 

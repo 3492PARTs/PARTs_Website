@@ -37,7 +37,6 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
-
     this.setTableSize();
   }
 
@@ -47,7 +46,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   setTableSize(): void {
-    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
+    if (this.gs.getScreenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   scoutFieldResultsInit(): void {

@@ -1,33 +1,3 @@
-.team-results {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-top: 1rem;
-
-  .team-header {
-    width: 100%;
-  }
-
-  .team-info {
-    padding-left: 1em;
-  }
-
-  .team-pic {
-    width: 250px;
-
-    @media only screen and (max-width: 400px) {
-      width: 100%;
-    }
-
-    img {
-      width: 100%;
-      height: auto;
-    }
-  }
-}
-
 #table-buttons {
   display: flex;
   flex-wrap: wrap;

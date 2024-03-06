@@ -35,23 +35,7 @@
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
-    <div class="team-results">
-      <div class="team-header">
-        <app-header [h]="1">{{ scoutPitResult.teamNo }} - {{ scoutPitResult.teamNm }}</app-header>
-
-        <app-scout-pic-display [ScoutPitResult]="scoutPitResult"></app-scout-pic-display>
-
-      </div>
-      <div class="team-info">
-
-        <ng-container *ngIf="scoutPitResult">
-          <div *ngFor="let r of scoutPitResult.results">
-            <p>{{ r.question }}: {{ r.answer }}</p>
-          </div>
-        </ng-container>
-      </div>
-
-    </div>
+    <app-pit-result-display [ScoutPitResult]="scoutPitResult"></app-pit-result-display>
 
     <app-form-element-group [LabelText]="'Notes'">
       <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr">

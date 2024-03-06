@@ -49,7 +49,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     //this.positionBannerWrapper();
-    this.mobile = this.gs.screenSize() === AppSize.XS;
+    this.mobile = this.gs.getScreenSize() === AppSize.XS;
     if (this.mobile) this.scrollEvents(window.scrollY);
   }
 
@@ -59,7 +59,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   positionBannerWrapper(): void {
-    this.mobile = this.gs.screenSize() === AppSize.XS;
+    this.mobile = this.gs.getScreenSize() === AppSize.XS;
 
     const windowTop = $(window).scrollTop() || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();

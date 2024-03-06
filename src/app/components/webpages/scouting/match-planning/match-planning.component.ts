@@ -79,7 +79,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setTableSize(): void {
-    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
+    if (this.gs.getScreenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(): void {

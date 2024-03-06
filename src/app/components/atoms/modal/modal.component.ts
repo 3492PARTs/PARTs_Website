@@ -54,7 +54,7 @@ export class ModalComponent implements OnInit {
     }
 
     this.resizeTimer = window.setTimeout(() => {
-      if (this.gs.screenSize() >= AppSize._3XLG) {
+      if (this.gs.getScreenSize() >= AppSize._3XLG) {
         this.Width = '90%';
       }
       else {
