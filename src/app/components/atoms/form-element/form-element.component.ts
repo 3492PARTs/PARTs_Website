@@ -516,11 +516,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.stopwatchSecond = 0;
       }
 
+      /*
       if (this.stopwatchMinute === 60) {
         this.stopwatchHour++;
         this.stopwatchMinute = 0;
         this.stopwatchSecond = 0;
       }
+      */
 
       this.stopwatchSetValue();
       window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
@@ -528,7 +530,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   stopwatchSetValue(): void {
-    this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    //this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    this.Model = `${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec ${this.stopwatchLoopCount}ms`;
     this.change(this.Model);
   }
 
