@@ -19,7 +19,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   team: number | null = null;
   matches: Match[] = [];
   noMatch = false;
-  teamMatch!: Match;
+  teamMatch: Match | null = null;
   scoutQuestions: Question[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: Question[] = [];
@@ -157,10 +157,12 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   setNoMatch() {
-    this.noMatch = true;
-    this.teamMatch = new Match();
-    this.teamList = [];
-    this.teams.forEach(t => { this.teamList.push(t) });
+    this.gs.triggerConfirm('Are you sure there is no match number?', () => {
+      this.noMatch = true;
+      this.teamMatch = new Match();
+      this.teamList = [];
+      this.teams.forEach(t => { this.teamList.push(t) });
+    });
   }
 
   buildTeamList(): void {
@@ -171,23 +173,23 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
       // get the teams for the match from the teams list
       if (this.teamMatch?.blue_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_one_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one_id.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.blue_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_two_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two_id.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.blue_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.blue_three_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three_id.toString()) this.teamList.push(t) });
       }
 
       if (this.teamMatch?.red_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_one_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one_id.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.red_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_two_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two_id.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.red_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch.red_three_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three_id.toString()) this.teamList.push(t) });
       }
 
       // set the selected team based on which user is assigned to which team
@@ -256,7 +258,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
-            this.teamMatch = new Match();
+            this.teamMatch = null;
             this.team = null;
             this.noMatch = false;
             this.scoutFieldInit();
