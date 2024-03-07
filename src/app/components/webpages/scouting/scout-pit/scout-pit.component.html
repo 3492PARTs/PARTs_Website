@@ -10,7 +10,7 @@
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'150px'" [Required]="!team || team.length <= 0">
+        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!team || team.length <= 0">
       </app-form-element>
     </div>
 

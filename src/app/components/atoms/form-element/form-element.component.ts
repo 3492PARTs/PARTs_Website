@@ -169,7 +169,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.markRequired();
 
     this.navigationService.currentNavigationState.subscribe(ns => {
-      if (ns === NavigationState.collapsed) this.MinWidth = 'auto';
+      if (ns === NavigationState.collapsed && this.Type != 'select') this.MinWidth = 'auto';
       window.setTimeout(() => {
         this.setElementPositions();
       }, 102);
