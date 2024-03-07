@@ -42,7 +42,7 @@
       /*size of the images*/
       img,
       a > img {
-        width: $width;
+        width: calc($width / 6);
         height: 100%;
         float: left;
       }
@@ -77,12 +77,12 @@
 
   @media screen and (max-width: 1000px) {
     /*narrow*/
-    @include off(100vw);
+    @include off(100%);
     @include animationMode(-narrow);
   }
 } @else {
   /*normal display*/
-  @include off(100vw);
+  @include off(100%);
   @include animationMode("");
 }
 
