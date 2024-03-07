@@ -123,13 +123,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.setNavExpanded(this.gs.getScreenSize() >= AppSize.LG);
+    this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
 
-    this.hideNavExpander = this.gs.getScreenSize() < AppSize.LG;
+    this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
 
     if (this.hideNavExpander) this.setShowNav(false);
 
-    this.screenXs = this.gs.getScreenSize() === AppSize.XS;
+    this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
     this.appMenu = [
       new MenuItem('Join PARTs', 'join', 'account-supervisor', [
@@ -293,10 +293,10 @@ let max = document.documentElement.scrollHeight;
     }
 
     this.resizeTimeout = window.setTimeout(() => {
-      if (!this.manualNavExpander || this.gs.getScreenSize() < AppSize.LG) {
-        this.setNavExpanded(this.gs.getScreenSize() >= AppSize.LG);
+      if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
+        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
         this.manualNavExpander = false;
-        this.hideNavExpander = this.gs.getScreenSize() < AppSize.LG;
+        this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
 
         if (!this.hideNavExpander) {
           this.setShowNav(true);
@@ -304,7 +304,7 @@ let max = document.documentElement.scrollHeight;
         }
       }
 
-      this.screenXs = this.gs.getScreenSize() === AppSize.XS;
+      this.screenXs = this.gs.getAppSize() === AppSize.XS;
     }, 200);
   }
 

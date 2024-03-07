@@ -180,37 +180,31 @@ export class GeneralService {
     saveAs(blob, filename);
   }
 
-  isMobile(): boolean {
-    return this.deviceService.isMobile();
-  }
-
   getScreenSize(): AppSize {
-    return AppSize.SM;
     const width = window.innerWidth;
-    const mobile = this.isMobile();
 
-    if (!mobile && width >= AppSize._7XLG) {
+    if (width >= AppSize._7XLG) {
       return AppSize._7XLG;
     }
-    else if (!mobile && width >= AppSize._6XLG) {
+    else if (width >= AppSize._6XLG) {
       return AppSize._6XLG;
     }
-    else if (!mobile && width >= AppSize._5XLG) {
+    else if (width >= AppSize._5XLG) {
       return AppSize._5XLG;
     }
-    else if (!mobile && width >= AppSize._4XLG) {
+    else if (width >= AppSize._4XLG) {
       return AppSize._4XLG;
     }
-    else if (!mobile && width >= AppSize._3XLG) {
+    else if (width >= AppSize._3XLG) {
       return AppSize._3XLG;
     }
-    else if (!mobile && width >= AppSize._2XLG) {
+    else if (width >= AppSize._2XLG) {
       return AppSize._2XLG;
     }
-    else if (!mobile && width >= AppSize.XLG) {
+    else if (width >= AppSize.XLG) {
       return AppSize.XLG;
     }
-    else if (!mobile && width >= AppSize.LG) {
+    else if (width >= AppSize.LG) {
       return AppSize.LG;
     }
     else if (width >= AppSize.SM) {
@@ -219,6 +213,26 @@ export class GeneralService {
     else {
       return AppSize.XS;
     }
+  }
+
+  isMobile(): boolean {
+    return this.deviceService.isMobile();
+  }
+
+  getAppSize(): AppSize {
+    //return AppSize.SM;
+    const size = this.getScreenSize();
+    const mobile = this.isMobile();
+
+    if (!mobile)
+      return size;
+    else
+      if (size > AppSize.SM) {
+        return AppSize.SM;
+      }
+      else {
+        return size;
+      }
   }
 
   previewImage(link: string, id: string) {

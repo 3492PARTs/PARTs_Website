@@ -19,7 +19,7 @@
       <app-form-element [Type]="'text'" [LabelText]="'Team Search'" [(Model)]="filterTeam"
         (FunctionCallBack)="filter()"></app-form-element>
       <app-form-element [Type]="'text'" [LabelText]="'Wildcard Search'" [(Model)]="filterText"></app-form-element>
-      <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="filterRank"></app-form-element>
+      <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="filterRank" [MinValue]="1"></app-form-element>
       <app-form-element [Type]="'number'" [LabelText]="'Rank Range'" [(Model)]="filterRange"
         [MinValue]="(filterRank || 0) + 1" [Disabled]="filterAboveRank"></app-form-element>
       <app-form-element [Type]="'checkbox'" [LabelText]="'Above'" [(Model)]="filterAboveRank"
@@ -31,7 +31,7 @@
 
   <app-table [TableCols]="scoutTableCols" [TableData]="scoutTableRows" [Scrollable]="true" [(FilterText)]="filterText"
     [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
-    [ScrollHeight]="'calc(100vh - 21rem)'" [CursorPointer]="true">
+    [ScrollHeight]="'calc(100vh - 20rem)'" [CursorPointer]="true">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
@@ -48,7 +48,7 @@
     </app-button-ribbon>
 
     <app-table [TableCols]="teamScoutResults['scoutCols']" [TableData]="teamScoutResults['scoutAnswers']"
-      [Scrollable]="true" [ScrollHeight]="'calc(100vh - 23rem)'" [EnableFilter]="true" [Width]="tableWidth"
+      [Scrollable]="true" [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Width]="tableWidth"
       [Responsive]="true">
     </app-table>
   </app-modal>

@@ -35,7 +35,7 @@ export class ModalComponent implements OnInit {
   @Output() visibleChange = new EventEmitter();
   _visible = false;
 
-  @Input() zIndex = 16;
+  @Input() zIndex = 17;
 
   private clickOutsideCapture = true;
 
@@ -60,10 +60,10 @@ export class ModalComponent implements OnInit {
   }
 
   setModalSize(): void {
-    if (this.gs.getScreenSize() >= AppSize._3XLG) {
+    if (this.gs.getAppSize() >= AppSize._3XLG) {
       this.Width = '90%';
     }
-    else if (this.gs.getScreenSize() >= AppSize.LG) {
+    else if (this.gs.getAppSize() >= AppSize.LG) {
       this.Width = '80%';
     }
     else {
