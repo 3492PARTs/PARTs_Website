@@ -5,7 +5,7 @@ Website for PARTs.
 - [x] Replace Twitter
   - [x] Edit hover color in CSS
   - [x] Replace the logo.
-- [ ] Replace slide images.
+- [x] Replace slide images.
 - [x] Replace videos.
 
 ### Sponsor Page ✓
