@@ -192,6 +192,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             }
             this.markRequired();
             break;
+          case 'Disabled':
           case 'Required':
             this.markRequired();
             break;
@@ -302,39 +303,41 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   isInvalid(): boolean {
     // validate if the element is a valid one or not
     let invalid = false;
-    if (this.Touched) {
-      if (this.ValidityFunction != null) {
-        invalid = !this.ValidityFunction();
+    if (!this.Disabled) {
+      if (this.Touched) {
+        if (this.ValidityFunction != null) {
+          invalid = !this.ValidityFunction();
+        }
+        else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
+          invalid = !(this.Model.length === 10);
+        }
+        else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
+          const emailRegex =
+            new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
+          invalid = !emailRegex.test(this.Model);
+        }
       }
-      else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
-        invalid = !(this.Model.length === 10);
-      }
-      else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
-        const emailRegex =
-          new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
-        invalid = !emailRegex.test(this.Model);
-      }
-    }
 
-    // if the element is populated or not
-    if (!this.strNoE(this.Model)) {
-      this.hasValue = false;
-      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && Array.isArray(this.Model)) {
-        this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
-          if (!this.strNoE(s))
-            this.hasValue = true;
-        });
+      // if the element is populated or not
+      if (!this.strNoE(this.Model)) {
+        this.hasValue = false;
+        if (['multiCheckbox', 'multiSelect'].includes(this.Type) && Array.isArray(this.Model)) {
+          this.Model.forEach((e: any) => {
+            let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
+            if (!this.strNoE(s))
+              this.hasValue = true;
+          });
+        }
+        else
+          this.hasValue = true;
       }
-      else
-        this.hasValue = true;
-    }
-    else {
-      this.hasValue = false;
-      //invalid = this.Required;
-    }
+      else {
+        this.hasValue = false;
+        //invalid = this.Required;
+      }
 
-    if (this.Required && !this.hasValue) invalid = true;
+      if (this.Required && !this.hasValue) invalid = true;
+    }
 
     this.valid = !invalid;
 
@@ -342,6 +345,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.setIndicatorPosition();
 
     return invalid;
+  }
+
+  isFormElementValid(): boolean {
+    return !this.Disabled && this.valid && this.Required && this.Touched;
+  }
+
+  isFormElementInvalid(): boolean {
+    return !this.Disabled && !this.valid && this.Touched;
+  }
+
+  isFormElementRequired(): boolean {
+    return !this.Disabled && this.Required && this.Touched && this.hasValue;
   }
 
   setIndicatorPosition(): void {

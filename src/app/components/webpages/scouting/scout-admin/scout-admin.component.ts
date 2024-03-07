@@ -284,6 +284,35 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  syncEvent(event_cd: string): void {
+    this.init.currentEvent.event_cd
+    this.http.get(
+      'scouting/admin/sync-event/', {
+      params: {
+        event_cd: event_cd
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.syncSeasonResponse = result as RetMessage;
+            this.manageEventsModalVisible = false;
+            this.adminInit();
+            this.newEvent = new Event();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      });
+  }
+
   syncMatches(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
@@ -311,7 +340,11 @@ export class ScoutAdminComponent implements OnInit {
   syncEventTeamInfo(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'scouting/admin/sync-event-team-info/'
+      'scouting/admin/sync-event-team-info/', {
+      params: {
+        force: 1
+      }
+    }
     ).subscribe(
       {
         next: (result: any) => {
@@ -598,29 +631,34 @@ export class ScoutAdminComponent implements OnInit {
 
   saveEvent(): void {
     this.gs.incrementOutstandingCalls();
-    this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
-    this.http.post(
-      'scouting/admin/add-event/', this.newEvent
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.manageEventsModalVisible = false;
-            this.adminInit();
-            this.newEvent = new Event();
+    if (this.gs.strNoE(this.newEvent.event_cd)) {
+      this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+      this.http.post(
+        'scouting/admin/add-event/', this.newEvent
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.successfulResponseBanner(result);
+              this.manageEventsModalVisible = false;
+              this.adminInit();
+              this.newEvent = new Event();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
           }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
         }
-      }
-    );
+      );
+    }
+    else {
+      this.syncEvent(this.newEvent.event_cd);
+    }
   }
 
   clearEvent() {
@@ -1388,7 +1426,7 @@ export class Event {
   season_id!: number;
   event_nm!: string;
   date_st!: Date;
-  event_cd!: string;
+  event_cd = '';
   date_end!: Date;
   event_url!: string;
   address!: string;

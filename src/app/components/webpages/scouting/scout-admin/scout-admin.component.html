@@ -53,18 +53,6 @@
     [ScrollHeight]="'50rem'">
   </app-table>
 
-  <!--
-    <app-table [TableTitle]="'Scout Pit'" [TableCols]="scoutScheduleTableCols" [TableData]="init.pitSchedule"
-      [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
-      [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)">
-    </app-table>-->
-
-  <!--
-    <app-table [TableTitle]="'Scout Past'" [TableCols]="pastScoutScheduleTableCols" [TableData]="init.pastSchedule"
-      [Scrollable]="true">
-    </app-table>
-  -->
-
   <app-modal [Title]="scoutScheduleModalTitle" [(visible)]="scoutScheduleModalVisible">
     <app-form>
       <app-form-element-group [LabelText]="'New Entry'">
@@ -154,6 +142,9 @@
     <div class="flex flex-wrap space-between">
       <app-button *ngIf="init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
         Sync Season</app-button>
+      <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'"
+        (FunctionCallBack)="syncEvent(init.currentEvent.event_cd)">
+        Sync Event</app-button>
       <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
         Sync Matches</app-button>
       <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
@@ -200,11 +191,11 @@
 
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
             [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="newEvent.season_id" [Required]="true">
+            [(Model)]="newEvent.season_id" [Required]="true" [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
           <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm" [Required]="true"
-            [Disabled]="newEvent && newEvent.event_cd && newEvent.event_cd.length > 0">
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
           <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st" [Required]="true"
