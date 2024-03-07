@@ -1,7 +1,7 @@
 # PARTs_Website
 Website for PARTs.
 
-### Home Page
+### Home Page ✓
 - [x] Replace Twitter
   - [x] Edit hover color in CSS
   - [x] Replace the logo.
