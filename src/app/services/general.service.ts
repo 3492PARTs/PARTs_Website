@@ -185,6 +185,7 @@ export class GeneralService {
   }
 
   getScreenSize(): AppSize {
+    return AppSize.SM;
     const width = window.innerWidth;
     const mobile = this.isMobile();
 
