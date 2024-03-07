@@ -193,45 +193,61 @@
       <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'"
         [(visible)]="manageEventsModalVisible" [MaxWidth]="'500px'">
         <app-form (SubmitFunction)="saveEvent()">
+          <app-form-element [Type]="'text'" [LabelText]="'TBA Event Code'" [(Model)]="newEvent.event_cd">
+          </app-form-element>
+
+          <p>OR</p>
+
           <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
             [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
             [(Model)]="newEvent.season_id" [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm" [Required]="true">
+          <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm" [Required]="true"
+            [Disabled]="newEvent && newEvent.event_cd && newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st" [Required]="true">
+          <app-form-element [Type]="'date'" [LabelText]="'Date Start'" [(Model)]="newEvent.date_st" [Required]="true"
+            [Disabled]="newEvent && newEvent.event_cd.length > 0">
           </app-form-element>
-          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end" [Required]="true">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address" [Required]="true">
-          </app-form-element>
-
-          <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city" [Required]="true">
+          <app-form-element [Type]="'date'" [LabelText]="'Date End'" [(Model)]="newEvent.date_end" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov" [Required]="true">
+          <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="newEvent.address" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code" [Required]="true">
+          <app-form-element [Type]="'text'" [LabelText]="'City'" [(Model)]="newEvent.city" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
+          </app-form-element>
+
+          <app-form-element [Type]="'text'" [LabelText]="'State'" [(Model)]="newEvent.state_prov" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
+          </app-form-element>
+
+          <app-form-element [Type]="'text'" [LabelText]="'Zip Code'" [(Model)]="newEvent.postal_code" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
           <app-form-element [Type]="'text'" [LabelText]="'Location Name'" [(Model)]="newEvent.location_name"
-            [Required]="true">
+            [Required]="true" [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url">
+          <app-form-element [Type]="'text'" [LabelText]="'Event URL'" [(Model)]="newEvent.event_url"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url">
+          <app-form-element [Type]="'text'" [LabelText]="'Google Maps URL'" [(Model)]="newEvent.gmaps_url"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url">
+          <app-form-element [Type]="'text'" [LabelText]="'Webcast URL'" [(Model)]="newEvent.webcast_url"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
-          <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone" [Required]="true">
+          <app-form-element [Type]="'text'" [LabelText]="'Time Zone'" [(Model)]="newEvent.timezone" [Required]="true"
+            [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
           <app-button-ribbon>
