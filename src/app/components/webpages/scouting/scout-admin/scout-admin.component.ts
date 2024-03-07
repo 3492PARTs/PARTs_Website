@@ -223,7 +223,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setTableSize(): void {
-    if (this.gs.getScreenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
+    if (this.gs.getAppSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
   }
 
   adminInit(): void {

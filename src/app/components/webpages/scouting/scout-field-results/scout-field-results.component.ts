@@ -46,7 +46,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   setTableSize(): void {
-    if (this.gs.getScreenSize() < AppSize.LG) this.tableWidth = '800%';
+    if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   scoutFieldResultsInit(): void {

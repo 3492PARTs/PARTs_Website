@@ -22,7 +22,7 @@ export class ScoutPitResultsComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
-    this.resultWidth = this.gs.getScreenSize() === AppSize.XS ? '100%' : '350px';
+    this.resultWidth = this.gs.getAppSize() === AppSize.XS ? '100%' : '350px';
   }
 
   scoutPitResultsInit(): void {

@@ -20,8 +20,8 @@ export class BannersComponent implements OnInit, AfterViewInit {
 
   constructor(private gs: GeneralService, private router: Router, private renderer: Renderer2, private ms: ModalService) {
     this.ms.currentModalVisible.subscribe(m => {
-      if (m) this.zIndex = 17;
-      else this.zIndex = 15;
+      if (m) this.zIndex = 19;
+      else this.zIndex = 17;
     })
   }
 
@@ -49,7 +49,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
     //this.positionBannerWrapper();
-    this.mobile = this.gs.getScreenSize() === AppSize.XS;
+    this.mobile = this.gs.getAppSize() === AppSize.XS;
     if (this.mobile) this.scrollEvents(window.scrollY);
   }
 
@@ -59,7 +59,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   positionBannerWrapper(): void {
-    this.mobile = this.gs.getScreenSize() === AppSize.XS;
+    this.mobile = this.gs.getAppSize() === AppSize.XS;
 
     const windowTop = $(window).scrollTop() || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();

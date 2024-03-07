@@ -1,4 +1,5 @@
-<div class="team-results" [ngClass]="{ 'flex-wrap-nowrap': screenSize >= appSizeXLG}">
+<div class="team-results"
+    [ngClass]="{ 'flex-wrap-nowrap': appSize >= appSizeXLG || (isMobile() && screenSize > appSizeSM)}">
     <div class="team-header">
         <app-header [h]="1">{{ ScoutPitResult.teamNo }} - {{ ScoutPitResult.teamNm }}</app-header>
 

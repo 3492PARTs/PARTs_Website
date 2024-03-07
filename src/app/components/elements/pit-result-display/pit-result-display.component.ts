@@ -8,18 +8,26 @@ import { ScoutPitResults } from '../../webpages/scouting/scout-pit-results/scout
   styleUrls: ['./pit-result-display.component.scss']
 })
 export class PitResultDisplayComponent implements OnInit {
+  appSize!: AppSize;
   screenSize!: AppSize;
   appSizeXLG = AppSize.XLG;
+  appSizeSM = AppSize.SM;
   @Input() ScoutPitResult = new ScoutPitResults()
 
   constructor(private gs: GeneralService) { }
 
   ngOnInit() {
     this.screenSize = this.gs.getScreenSize();
+    this.appSize = this.gs.getAppSize();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.screenSize = this.gs.getScreenSize();
+    this.appSize = this.gs.getAppSize();
+  }
+
+  isMobile(): boolean {
+    return this.gs.isMobile();
   }
 }
