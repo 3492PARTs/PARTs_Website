@@ -8,7 +8,8 @@
       [DisplayEmptyOption]="true" [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'"
       [Required]="q.required === 'y'"
       [Width]="q.question_typ.question_typ === 'area' ? '100%' : q.question_typ.question_typ === 'checkbox' ? 'auto' : '300px'"
-      [Rows]="5" [Disabled]="disabled">
+      [Rows]="5" [Disabled]="disabled"
+      [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 2000">
     </app-form-element>
 
     <app-button-ribbon *ngIf="!disabled">

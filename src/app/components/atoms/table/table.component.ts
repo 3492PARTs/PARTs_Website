@@ -29,6 +29,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() TableData: any[] = [];
   @Input() TableCols: any[] = [];
+  @Input() TableDataButtons: any[] = [];
 
   @Input() TableTitle!: string;
 
@@ -293,6 +294,10 @@ export class TableComponent implements OnInit, OnChanges {
       colWidth += 3.4;
     }
 
+    this.TableDataButtons.forEach(t => {
+      colWidth += 3.4;
+    });
+
     if (colWidth > 0) {
       this.buttonCellWidth = colWidth + 0.6 + 'rem';
     }
@@ -301,7 +306,8 @@ export class TableComponent implements OnInit, OnChanges {
       this.ShowAddButton ||
       this.ShowRemoveButton ||
       this.ShowEditButton ||
-      this.ShowViewButton
+      this.ShowViewButton ||
+      this.TableDataButtons.length > 0
     ) {
       return true;
     }

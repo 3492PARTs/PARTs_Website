@@ -10,6 +10,7 @@ import { ScoutResults } from '../scout-field-results/scout-field-results.compone
 import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 import { QuestionAggregateType, QuestionAggregate } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-scout-admin',
@@ -96,14 +97,17 @@ export class ScoutAdminComponent implements OnInit {
   userActivity: UserActivity[] = [];
   activeUserActivity: UserActivity = new UserActivity();
   userActivityTableCols = [
-    { PropertyName: 'user.id', ColLabel: 'User', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
+    { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
+  userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
 
   userScoutActivityScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'scouts', ColLabel: 'Scouts' },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScouts.bind(this) },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
@@ -207,10 +211,19 @@ export class ScoutAdminComponent implements OnInit {
       new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
 
-    if (this.gs.screenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
 
-    this.ns.setSubPage('users');
-    //this.ns.setSubPage('mngPitRes');
+    if (environment.production) this.ns.setSubPage('users');
+    else this.ns.setSubPage('users');
+    this.setTableSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setTableSize();
+  }
+
+  setTableSize(): void {
+    if (this.gs.getScreenSize() < AppSize.LG) this.userScoutActivityResultsTableWidth = '800%';
   }
 
   adminInit(): void {
@@ -271,6 +284,35 @@ export class ScoutAdminComponent implements OnInit {
     );
   }
 
+  syncEvent(event_cd: string): void {
+    this.init.currentEvent.event_cd
+    this.http.get(
+      'scouting/admin/sync-event/', {
+      params: {
+        event_cd: event_cd
+      }
+    }
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.syncSeasonResponse = result as RetMessage;
+            this.manageEventsModalVisible = false;
+            this.adminInit();
+            this.newEvent = new Event();
+          }
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      });
+  }
+
   syncMatches(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
@@ -298,7 +340,11 @@ export class ScoutAdminComponent implements OnInit {
   syncEventTeamInfo(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'scouting/admin/sync-event-team-info/'
+      'scouting/admin/sync-event-team-info/', {
+      params: {
+        force: 1
+      }
+    }
     ).subscribe(
       {
         next: (result: any) => {
@@ -585,29 +631,34 @@ export class ScoutAdminComponent implements OnInit {
 
   saveEvent(): void {
     this.gs.incrementOutstandingCalls();
-    this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
-    this.http.post(
-      'scouting/admin/add-event/', this.newEvent
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.manageEventsModalVisible = false;
-            this.adminInit();
-            this.newEvent = new Event();
+    if (this.gs.strNoE(this.newEvent.event_cd)) {
+      this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+      this.http.post(
+        'scouting/admin/add-event/', this.newEvent
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.successfulResponseBanner(result);
+              this.manageEventsModalVisible = false;
+              this.adminInit();
+              this.newEvent = new Event();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
           }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
         }
-      }
-    );
+      );
+    }
+    else {
+      this.syncEvent(this.newEvent.event_cd);
+    }
   }
 
   clearEvent() {
@@ -934,6 +985,13 @@ export class ScoutAdminComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.userActivity = result as UserActivity[];
+
+            if (this.activeUserActivity) {
+              this.userActivity.forEach(ua => {
+                if (ua.user.id == this.activeUserActivity.user.id)
+                  this.activeUserActivity = this.gs.cloneObject(ua);
+              });
+            }
             //console.log(this.userActivity);
           }
         },
@@ -960,9 +1018,114 @@ export class ScoutAdminComponent implements OnInit {
     return name;
   }
 
+  getScoutSchedule(id: number): string {
+    const missing = 'missing';
+    let schedule = '';
+
+    this.userActivity.forEach(ua => {
+      if (ua.user.id === id)
+        ua.schedule.forEach(s => {
+          schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
+          if (s.red_one_id?.id === id)
+            schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
+          else if (s.red_two_id?.id === id)
+            schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
+          else if (s.red_three_id?.id === id)
+            schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
+          else if (s.blue_one_id?.id === id)
+            schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
+          else if (s.blue_two_id?.id === id)
+            schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
+          else if (s.blue_three_id?.id === id)
+            schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
+
+          schedule += '\n';
+        });
+    });
+
+    return schedule;
+  }
+
+  getUserReviewStatus(status: boolean): string {
+    return status ? 'Yes' : 'No';
+  }
+
+  getScoutingActivityScouts(sfs: ScoutFieldSchedule): string {
+    const missing = 'missing';
+    let str = '';
+    str += sfs.red_one_id ? `R1: ${sfs.red_one_id.first_name} ${sfs.red_one_id.last_name}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
+    str += sfs.red_two_id ? `R2: ${sfs.red_two_id.first_name} ${sfs.red_two_id.last_name}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
+    str += sfs.red_three_id ? `R3: ${sfs.red_three_id.first_name} ${sfs.red_three_id.last_name}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
+    str += sfs.blue_one_id ? `B1: ${sfs.blue_one_id.first_name} ${sfs.blue_one_id.last_name}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
+    str += sfs.blue_two_id ? `B2: ${sfs.blue_two_id.first_name} ${sfs.blue_two_id.last_name}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
+    str += sfs.blue_three_id ? `B3: ${sfs.blue_three_id.first_name} ${sfs.blue_three_id.last_name}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
+    return str;
+  }
+
   showUserActivityModal(ua: UserActivity): void {
     this.userActivityModalVisible = true;
     this.activeUserActivity = ua;
+  }
+
+  toggleUserUnderReviewStatus(): void {
+    this.gs.triggerConfirm('Are you sure you want to change this scout\'s under review status?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/toggle-scout-under-review/', {
+        params: {
+          user_id: this.activeUserActivity.user.id.toString(),
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.getScoutingActivity();
+              this.gs.successfulResponseBanner(result);
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
+  }
+
+  markScoutPresent(sfs: ScoutFieldSchedule): void {
+    this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
+      this.gs.incrementOutstandingCalls();
+      this.http.get(
+        'scouting/admin/mark-scout-present/', {
+        params: {
+          scout_field_sch_id: sfs.scout_field_sch_id,
+          user_id: this.activeUserActivity.user.id
+        }
+      }
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              this.gs.successfulResponseBanner(result);
+              this.getScoutingActivity();
+            }
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            this.gs.triggerError(err);
+            this.gs.decrementOutstandingCalls();
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
+    });
   }
 
   getFieldQuestionAggregates(): void {
@@ -1263,7 +1426,7 @@ export class Event {
   season_id!: number;
   event_nm!: string;
   date_st!: Date;
-  event_cd!: string;
+  event_cd = '';
   date_end!: Date;
   event_url!: string;
   address!: string;
@@ -1377,8 +1540,13 @@ export class ScoutFieldResultsSerializer {
   scoutAnswers: any[] = [];
 }
 
+export class ScoutingUserInfo {
+  id!: number;
+  under_review = false;
+}
 export class UserActivity {
   user = new User();
+  user_info = new ScoutingUserInfo();
   results = new ScoutFieldResultsSerializer();
   schedule: ScoutFieldSchedule[] = [];
 }
