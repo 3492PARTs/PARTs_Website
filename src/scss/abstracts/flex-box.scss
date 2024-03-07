@@ -6,6 +6,10 @@
   flex-wrap: wrap;
 }
 
+.flex-wrap-nowrap {
+  flex-wrap: nowrap !important;
+}
+
 .inline-flex {
   display: inline-flex;
 }

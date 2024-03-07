@@ -57,7 +57,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             if (typeof this.Model === 'string') {
               if (e[this.DisplayProperty] === 'Other') {
                 let other = '';
-                this.Model.split(',').forEach((option: any) => {
+                this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
                   let match = false;
                   // TODO: Revisit this logic i dont think this loop is needed
                   tmp.forEach((element: any) => {
@@ -70,7 +70,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
               }
               else
-                e['checked'] = this.Model.split(',').includes(e[this.BindingProperty]).toString();
+                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty]).toString();
             }
             else
               this.Model.forEach((m: any) => {
@@ -111,7 +111,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
 
-  phoneMaskModel = '';
+  phoneMaskModel: string | null = null;
   //@Input() ModelProperty = '';
 
   //@Input() MultiModel: any = [];
@@ -159,9 +159,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
     }
-    else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
-      window.setTimeout(() => { this.change(this.MinValue); }, 1);
-    }
+    //else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
+    //window.setTimeout(() => { this.change(this.MinValue); }, 1);
+    //}
     else if (this.Type === 'phone') {
       this.phoneMaskFn(this.Model, true);
     }
@@ -169,7 +169,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.markRequired();
 
     this.navigationService.currentNavigationState.subscribe(ns => {
-      if (ns === NavigationState.collapsed) this.MinWidth = 'auto';
+      if (ns === NavigationState.collapsed && this.Type != 'select') this.MinWidth = 'auto';
       window.setTimeout(() => {
         this.setElementPositions();
       }, 102);
@@ -192,6 +192,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             }
             this.markRequired();
             break;
+          case 'Disabled':
           case 'Required':
             this.markRequired();
             break;
@@ -250,12 +251,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (this.Type == 'number') {
       this.Model = newValue;
-      if (this.MinValue !== null && this.MinValue !== undefined) {
-        this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
+      if (!this.gs.strNoE(this.Model)) {
+        if (this.MinValue !== null && this.MinValue !== undefined) {
+          this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
+        }
+        if (this.MaxValue !== null && this.MaxValue !== undefined) {
+          this.Model = newValue <= this.MaxValue ? newValue : this.MaxValue;
+        }
       }
-      if (this.MaxValue !== null && this.MaxValue !== undefined) {
-        this.Model = newValue <= this.MaxValue ? newValue : this.MaxValue;
-      }
+
       this.ModelChange.emit(this.Model);
     }
     else if (index !== -1) {
@@ -299,39 +303,41 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   isInvalid(): boolean {
     // validate if the element is a valid one or not
     let invalid = false;
-    if (this.Touched) {
-      if (this.ValidityFunction != null) {
-        invalid = !this.ValidityFunction();
+    if (!this.Disabled) {
+      if (this.Touched) {
+        if (this.ValidityFunction != null) {
+          invalid = !this.ValidityFunction();
+        }
+        else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
+          invalid = !(this.Model.length === 10);
+        }
+        else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
+          const emailRegex =
+            new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
+          invalid = !emailRegex.test(this.Model);
+        }
       }
-      else if (this.Type === 'phone' && !this.strNoE(this.Model)) {
-        invalid = !(this.Model.length === 10);
-      }
-      else if (this.Type === 'email' && this.Model && !this.strNoE(this.Model)) {
-        const emailRegex =
-          new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/, "gm");
-        invalid = !emailRegex.test(this.Model);
-      }
-    }
 
-    // if the element is populated or not
-    if (!this.strNoE(this.Model)) {
-      this.hasValue = false;
-      if (['multiCheckbox', 'multiSelect'].includes(this.Type)) {
-        this.Model.forEach((e: any) => {
-          let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
-          if (!this.strNoE(s))
-            this.hasValue = true;
-        });
+      // if the element is populated or not
+      if (!this.strNoE(this.Model)) {
+        this.hasValue = false;
+        if (['multiCheckbox', 'multiSelect'].includes(this.Type) && Array.isArray(this.Model)) {
+          this.Model.forEach((e: any) => {
+            let s = JSON.stringify(e.checked || '').replace('"', '').replace('"', '').replace('false', '');
+            if (!this.strNoE(s))
+              this.hasValue = true;
+          });
+        }
+        else
+          this.hasValue = true;
       }
-      else
-        this.hasValue = true;
-    }
-    else {
-      this.hasValue = false;
-      //invalid = this.Required;
-    }
+      else {
+        this.hasValue = false;
+        //invalid = this.Required;
+      }
 
-    if (this.Required && !this.hasValue) invalid = true;
+      if (this.Required && !this.hasValue) invalid = true;
+    }
 
     this.valid = !invalid;
 
@@ -339,6 +345,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.setIndicatorPosition();
 
     return invalid;
+  }
+
+  isFormElementValid(): boolean {
+    return !this.Disabled && this.valid && this.Required && this.Touched;
+  }
+
+  isFormElementInvalid(): boolean {
+    return !this.Disabled && !this.valid && this.Touched;
+  }
+
+  isFormElementRequired(): boolean {
+    return !this.Disabled && this.Required && this.Touched && this.hasValue;
   }
 
   setIndicatorPosition(): void {
@@ -513,11 +531,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.stopwatchSecond = 0;
       }
 
+      /*
       if (this.stopwatchMinute === 60) {
         this.stopwatchHour++;
         this.stopwatchMinute = 0;
         this.stopwatchSecond = 0;
       }
+      */
 
       this.stopwatchSetValue();
       window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
@@ -525,7 +545,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   stopwatchSetValue(): void {
-    this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    //this.Model = `${(this.stopwatchHour < 10 ? '0' : '')}${this.stopwatchHour}hr ${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec`;
+    this.Model = `${(this.stopwatchMinute < 10 ? '0' : '')}${this.stopwatchMinute}min ${(this.stopwatchSecond < 10 ? '0' : '')}${this.stopwatchSecond}sec ${this.stopwatchLoopCount}ms`;
     this.change(this.Model);
   }
 
@@ -622,9 +643,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel += prefix;
       this.phoneMaskModel += suffix.length >= 1 ? '-' : '';
       this.phoneMaskModel += suffix;*/
-      this.phoneMaskModel = this.formatPhone(value);
+      const val = this.formatPhone(value);
+      this.phoneMaskModel = !this.gs.strNoE(val) ? val : null;
 
       if (!init) this.change(phone);
-    }, 0);
+    }, 1);
   };
 }

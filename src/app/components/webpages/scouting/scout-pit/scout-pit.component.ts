@@ -25,6 +25,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   private scoutQuestionsCopy: Question[] = [];
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
+  responseId: string | null = null;
 
   formElements = new QueryList<FormElementComponent>();
 
@@ -103,6 +104,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         () => {
           this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy) as Question[];
           this.previewUrl = '';
+          this.responseId = null;
           this.previousTeam = this.team;
           if (load && this.team) this.loadTeam();
         },
@@ -151,7 +153,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     this.http.post(
       'form/save-answers/',
-      { question_answers: scoutQuestions, team: this.team, form_typ: 'pit' },
+      { question_answers: scoutQuestions, team: this.team, form_typ: 'pit', response_id: this.responseId },
     ).subscribe(
       {
         next: (result: any) => {
@@ -243,6 +245,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           if (this.gs.checkResponse(result)) {
             this.scoutQuestions = (result['questions'] as Question[]);
             this.previewImages = result['pics'] as ScoutPitImage[];
+            this.responseId = result['response_id'] as string;
           }
         },
         error: (err: any) => {

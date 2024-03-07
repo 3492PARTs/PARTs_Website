@@ -1,0 +1,17 @@
+<div class="team-results" [ngClass]="{ 'flex-wrap-nowrap': screenSize >= appSizeXLG}">
+    <div class="team-header">
+        <app-header [h]="1">{{ ScoutPitResult.teamNo }} - {{ ScoutPitResult.teamNm }}</app-header>
+
+        <app-scout-pic-display [ScoutPitResult]="ScoutPitResult"></app-scout-pic-display>
+
+    </div>
+    <div class="team-info">
+
+        <ng-container *ngIf="ScoutPitResult">
+            <div *ngFor="let r of ScoutPitResult.results">
+                <p>{{ r.question }}: {{ r.answer }}</p>
+            </div>
+        </ng-container>
+    </div>
+
+</div>

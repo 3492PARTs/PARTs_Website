@@ -59,23 +59,7 @@
 
         <app-tab-container>
             <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">
-                <div class="team-results">
-                    <div>
-                        <app-header [h]="1">{{ mpr.team.team_no }} - {{ mpr.team.team_nm }}</app-header>
-
-                        <app-scout-pic-display [ScoutPitResult]="mpr.pitData"></app-scout-pic-display>
-
-                    </div>
-                    <div class="team-info">
-
-                        <ng-container *ngIf="mpr.pitData">
-                            <div *ngFor="let r of mpr.pitData.results">
-                                <p>{{ r.question }}: {{ r.answer }}</p>
-                            </div>
-                        </ng-container>
-                    </div>
-
-                </div>
+                <app-pit-result-display [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
 
                 <app-form-element-group [LabelText]="'Notes'">
                     <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="note.time | dateToStr">
@@ -86,7 +70,7 @@
                 <div class="padding-bottom-1rem"></div>
 
                 <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [EnableFilter]="true"
-                    [Width]="tableWidth" [Responsive]="true">
+                    [Width]="tableWidth" [Responsive]="true" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
                 </app-table>
             </app-tab>
         </app-tab-container>

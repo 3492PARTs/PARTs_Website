@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
@@ -24,8 +24,8 @@ export class MatchPlanningComponent implements OnInit {
 
   matchesTableCols: object[] = [
     { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
-    { PropertyName: 'match_number', ColLabel: 'Match' },
     { PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'match_number', ColLabel: 'Match' },
     { PropertyName: 'red_one_id', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
     { PropertyName: 'red_two_id', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
     { PropertyName: 'red_three_id', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
@@ -65,13 +65,21 @@ export class MatchPlanningComponent implements OnInit {
       }
     });
 
-    if (this.gs.screenSize() < AppSize.LG) this.tableWidth = '800%';
-
     this.ns.setSubPages([
       new MenuItem('Matches', 'matches', 'soccer-field'),
       new MenuItem('Team Notes', 'notes', 'note-multiple'),
     ]);
     this.ns.setSubPage('matches');
+    this.setTableSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setTableSize();
+  }
+
+  setTableSize(): void {
+    if (this.gs.getScreenSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(): void {

@@ -104,9 +104,14 @@ export class NotificationsService {
     this.notificationsBS.next(this.notifications_);
   }
 
-  pusMessage(m: Alert): void {
+  pushMessage(m: Alert): void {
     this.messages_.push(m);
     this.gs.addBanner(new Banner(`New Message:\n${m.alert_subject}`, 3500));
+    this.messagesBS.next(this.messages_);
+  }
+
+  removeMessage(i: number): void {
+    this.messages_.splice(i, 1);
     this.messagesBS.next(this.messages_);
   }
 
@@ -122,18 +127,24 @@ export class NotificationsService {
       {
         next: (result: any) => {
           if (alert_comm_typ_id === 'notification') {
-            this.notifications_ = [];
-            this.notificationsBS.next(this.notifications_);
-            for (let n of result as Alert[]) {
-              this.pushNotification(n);
+            for (let r of result as Alert[]) {
+              let found = false;
+              this.notifications_.forEach(n => {
+                if (n.alert_channel_send_id === r.alert_channel_send_id)
+                  found = true;
+              });
+              if (!found) this.pushNotification(r);
             }
           }
 
           if (alert_comm_typ_id === 'message') {
-            this.messages_ = [];
-            this.messagesBS.next(this.messages_);
-            for (let m of result as Alert[]) {
-              this.pusMessage(m);
+            for (let r of result as Alert[]) {
+              let found = false;
+              this.messages_.forEach(m => {
+                if (m.alert_channel_send_id === r.alert_channel_send_id)
+                  found = true;
+              });
+              if (!found) this.pushMessage(r);
             }
           }
         },
@@ -160,6 +171,10 @@ export class NotificationsService {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
+            let index = this.gs.arrayObjectIndexOf(this.notifications_, a.alert_channel_send_id, 'alert_channel_send_id');
+            if (index >= 0) this.removeNotification(index);
+            index = this.gs.arrayObjectIndexOf(this.messages_, a.alert_channel_send_id, 'alert_channel_send_id')
+            if (index >= 0) this.removeMessage(index);
             this.getUserAlerts('notification');
             this.getUserAlerts('message');
           }

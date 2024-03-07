@@ -1,28 +1,3 @@
-.team-results {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-
-  .team-info {
-    padding-left: 1em;
-  }
-
-  .team-nm {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  .team-pic {
-    width: 250px;
-
-    @media only screen and (max-width: 400px) {
-      width: 100%;
-    }
-  }
-}
-
 #table-buttons {
   display: flex;
   flex-wrap: wrap;

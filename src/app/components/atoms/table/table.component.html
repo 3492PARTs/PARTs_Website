@@ -71,6 +71,12 @@
             </app-button>
             <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
               (FunctionCallBack)="Remove(rec)"></app-button>
+            <ng-container *ngFor="let btn of TableDataButtons">
+              <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
+                [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
+                [Type]="btn.Type">{{ btn.Text }}
+              </app-button>
+            </ng-container>
           </div>
         </td>
         <td *ngFor="let col of TableCols" [ngStyle]="{ 
@@ -96,7 +102,7 @@
               </app-form-element>
 
               <span *ngSwitchCase="'function'">
-                {{ col.ColValueFn(GetTableDisplayValue(rec, col.PropertyName))}}
+                {{ col.ColValueFn(col.PropertyName ? GetTableDisplayValue(rec, col.PropertyName) : rec)}}
               </span>
 
               <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate
@@ -124,6 +130,12 @@
             </app-button>
             <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
               (FunctionCallBack)="Remove(rec)"></app-button>
+            <ng-container *ngFor="let btn of TableDataButtons">
+              <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
+                [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
+                [Type]="btn.Type">{{ btn.Text }}
+              </app-button>
+            </ng-container>
           </div>
         </td>
       </tr>

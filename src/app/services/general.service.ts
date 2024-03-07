@@ -7,6 +7,7 @@ import * as LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class GeneralService {
 
   private gsId = 0;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private deviceService: DeviceDetectorService) { }
 
 
   /* Loading Screen */
@@ -64,6 +65,7 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
+    /*
     let add = true;
     this.internalSiteBanners.forEach(el => {
       if (el.message === b.message) {
@@ -75,6 +77,9 @@ export class GeneralService {
       this.internalSiteBanners.push(b);
       this.siteBanners.next(this.internalSiteBanners);
     }
+  */
+    this.internalSiteBanners.push(b);
+    this.siteBanners.next(this.internalSiteBanners);
   }
 
   removeBanner(b: Banner): void {
@@ -108,7 +113,8 @@ export class GeneralService {
   }
 
   successfulResponseBanner(response: any) {
-    this.addBanner(new Banner((response as RetMessage).retMessage, 3500));
+    const message = (response as RetMessage).retMessage;
+    if (!this.strNoE(message)) this.addBanner(new Banner(message, 3500));
   }
 
   handelHTTPError(error: HttpErrorResponse) {
@@ -174,31 +180,32 @@ export class GeneralService {
     saveAs(blob, filename);
   }
 
-  screenSize(): AppSize {
+  getScreenSize(): AppSize {
     const width = window.innerWidth;
+    const mobile = this.deviceService.isMobile();
 
-    if (width >= AppSize._7XLG) {
+    if (!mobile && width >= AppSize._7XLG) {
       return AppSize._7XLG;
     }
-    else if (width >= AppSize._6XLG) {
+    else if (!mobile && width >= AppSize._6XLG) {
       return AppSize._6XLG;
     }
-    else if (width >= AppSize._5XLG) {
+    else if (!mobile && width >= AppSize._5XLG) {
       return AppSize._5XLG;
     }
-    else if (width >= AppSize._4XLG) {
+    else if (!mobile && width >= AppSize._4XLG) {
       return AppSize._4XLG;
     }
-    else if (width >= AppSize._3XLG) {
+    else if (!mobile && width >= AppSize._3XLG) {
       return AppSize._3XLG;
     }
-    else if (width >= AppSize._2XLG) {
+    else if (!mobile && width >= AppSize._2XLG) {
       return AppSize._2XLG;
     }
-    else if (width >= AppSize.XLG) {
+    else if (!mobile && width >= AppSize.XLG) {
       return AppSize.XLG;
     }
-    else if (width >= AppSize.LG) {
+    else if (!mobile && width >= AppSize.LG) {
       return AppSize.LG;
     }
     else if (width >= AppSize.SM) {
@@ -276,7 +283,7 @@ export class GeneralService {
     return -1;
   }
 
-  dateStringToString(s: string): string {
+  formatDateString(s: string | Date): string {
     let d = new Date(s);
     let day = d.getDate();
     let month = d.getMonth();
@@ -292,7 +299,7 @@ export class GeneralService {
     //console.log('d: ' + day + ' m ' + month + ' y ' + year + ' h ' + hour + ' m ' + min + ' ' + amPm);
     //8/28/21, 11:03 PM
 
-    return month + '/' + day + '/' + year + ', ' + hour + ':' + (min < 10 ? '0' + min : min.toString() + ' ' + amPm);
+    return `${month}/${day}/${year} ${hour}:${min < 10 ? '0' + min : min.toString()} ${amPm}`;
 
   }
 

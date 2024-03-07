@@ -59,7 +59,8 @@
 <app-box *ngIf="page === 'security'" [Title]="'Manage Security'">
   <app-button-ribbon>
     <app-modal [ButtonType]="'main'" [ButtonText]="'Security Audit'" [Title]="'User Security'">
-      <app-table [TableCols]="userAuditTableCols" [TableData]="userAudit" [Width]="'100%'">
+      <app-table [TableCols]="userAuditTableCols" [TableData]="userAudit" [Width]="'100%'" [Scrollable]="true"
+        [ScrollHeight]="'calc(100vh - 21rem)'">
       </app-table>
     </app-modal>
 

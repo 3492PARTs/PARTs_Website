@@ -23,7 +23,7 @@ export class ModalComponent implements OnInit {
   @Input()
   set visible(v: boolean) {
     this._visible = v;
-    this.ms.setModalVisible(this._visible);
+    this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
     this.clickOutsideCapture = true;
 
     if (this._visible) {
@@ -54,7 +54,7 @@ export class ModalComponent implements OnInit {
     }
 
     this.resizeTimer = window.setTimeout(() => {
-      if (this.gs.screenSize() >= AppSize._3XLG) {
+      if (this.gs.getScreenSize() >= AppSize._3XLG) {
         this.Width = '90%';
       }
       else {
@@ -66,7 +66,7 @@ export class ModalComponent implements OnInit {
 
   open() {
     this._visible = true;
-    this.ms.setModalVisible(this._visible);
+    this.ms.incrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
     this.clickOutsideCapture = true;
 
@@ -77,7 +77,7 @@ export class ModalComponent implements OnInit {
 
   close() {
     this._visible = false;
-    this.ms.setModalVisible(this._visible);
+    this.ms.decrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
     this.form.forEach(elem => {
       elem.reset();
