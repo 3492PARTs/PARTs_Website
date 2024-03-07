@@ -45,6 +45,7 @@ export class ModalComponent implements OnInit {
   constructor(private ms: ModalService, private gs: GeneralService) { }
 
   ngOnInit() {
+    this.setModalSize();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -54,14 +55,20 @@ export class ModalComponent implements OnInit {
     }
 
     this.resizeTimer = window.setTimeout(() => {
-      if (this.gs.getScreenSize() >= AppSize._3XLG) {
-        this.Width = '90%';
-      }
-      else {
-        this.Width = '80%';
-      }
-
+      this.setModalSize();
     }, 200);
+  }
+
+  setModalSize(): void {
+    if (this.gs.getScreenSize() >= AppSize._3XLG) {
+      this.Width = '90%';
+    }
+    else if (this.gs.getScreenSize() >= AppSize.LG) {
+      this.Width = '80%';
+    }
+    else {
+      this.Width = '100%';
+    }
   }
 
   open() {

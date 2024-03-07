@@ -295,7 +295,10 @@ export class TableComponent implements OnInit, OnChanges {
     }
 
     this.TableDataButtons.forEach(t => {
-      colWidth += 3.4;
+      if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
+        colWidth += 6;
+      else
+        colWidth += 3.4;
     });
 
     if (colWidth > 0) {

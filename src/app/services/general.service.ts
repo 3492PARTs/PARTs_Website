@@ -180,9 +180,13 @@ export class GeneralService {
     saveAs(blob, filename);
   }
 
+  isMobile(): boolean {
+    return this.deviceService.isMobile();
+  }
+
   getScreenSize(): AppSize {
     const width = window.innerWidth;
-    const mobile = this.deviceService.isMobile();
+    const mobile = this.isMobile();
 
     if (!mobile && width >= AppSize._7XLG) {
       return AppSize._7XLG;

@@ -18,6 +18,8 @@ export class AboutComponent implements OnInit {
   bot2019ModalVisible = false;
   bot2020ModalVisible = false;
   bot2022ModalVisible = false;
+  bot2023ModalVisible = false;
+  bot2024ModalVisible = false;
 
   constructor() { }
 
