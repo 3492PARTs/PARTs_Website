@@ -133,14 +133,18 @@
       </ng-container>
       <!--TODO Fix display property 2 using ternary operator-->
 
-      <textarea *ngSwitchCase="'area'" class="form-control" [ngClass]="{
+      <div *ngSwitchCase="'area'" class="area"
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}">
+        <textarea class="form-control" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
       }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
-        placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
-        [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
+          placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
+          [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
+        <p class="margin-bottom-0">{{Model ? Model.length : 0}}/{{FieldSize}}</p>
+      </div>
 
       <ng-container *ngSwitchCase="'checkbox'">
         <ng-container *ngIf="LabelText.toLowerCase() !== 'other'; else other">
