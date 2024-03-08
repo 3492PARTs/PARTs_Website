@@ -110,23 +110,23 @@
     }
     16.6666666667%,
     26.6666666667% {
-      transform: translateX(-$width / 6);
+      transform: translateX(-$width);
     }
     33.3333333333%,
     43.3333333333% {
-      transform: translateX(-$width / 6 * 2);
+      transform: translateX(-$width * 2);
     }
     50%,
     60% {
-      transform: translateX(-$width / 6 * 3);
+      transform: translateX(-$width * 3);
     }
     66.6666666667%,
     76.6666666667% {
-      transform: translateX(-$width / 6 * 4);
+      transform: translateX(-$width * 4);
     }
     83.3333333333%,
     93.3333333333% {
-      transform: translateX(-$width / 6 * 5);
+      transform: translateX(-$width * 5);
     }
     100% {
       transform: translateX(0);
@@ -139,23 +139,23 @@
     }
     16.6666666667%,
     26.6666666667% {
-      transform: translateX(-$width / 6);
+      transform: translateX(-$width);
     }
     33.3333333333%,
     43.3333333333% {
-      transform: translateX(-$width / 6 * 2);
+      transform: translateX(-$width * 2);
     }
     50%,
     60% {
-      transform: translateX(-$width / 6 * 3);
+      transform: translateX(-$width * 3);
     }
     66.6666666667%,
     76.6666666667% {
-      transform: translateX(-$width / 6 * 4);
+      transform: translateX(-$width * 4);
     }
     83.3333333333%,
     93.3333333333% {
-      transform: translateX(-$width / 6 * 5);
+      transform: translateX(-$width * 5);
     }
     100% {
       transform: translateX(0);
@@ -173,23 +173,23 @@
       }
       16.6666666667%,
       26.6666666667% {
-        margin-left: -$width / 6;
+        margin-left: -$width;
       }
       33.3333333333%,
       43.3333333333% {
-        margin-left: -$width / 6 * 2;
+        margin-left: -$width * 2;
       }
       50%,
       60% {
-        margin-left: -$width / 6 * 3;
+        margin-left: -$width * 3;
       }
       66.6666666667%,
       76.6666666667% {
-        margin-left: -$width / 6 * 4;
+        margin-left: -$width * 4;
       }
       83.3333333333%,
       93.3333333333% {
-        margin-left: -$width / 6 * 5;
+        margin-left: -$width * 5;
       }
       100% {
         margin-left: -0.1vw;
@@ -204,23 +204,23 @@
       }
       16.6666666667%,
       26.6666666667% {
-        margin-left: -$width / 6;
+        margin-left: -$width;
       }
       33.3333333333%,
       43.3333333333% {
-        margin-left: -$width / 6 * 2;
+        margin-left: -$width * 2;
       }
       50%,
       60% {
-        margin-left: -$width / 6 * 3;
+        margin-left: -$width * 3;
       }
       66.6666666667%,
       76.6666666667% {
-        margin-left: -$width / 6 * 4;
+        margin-left: -$width * 4;
       }
       83.3333333333%,
       93.3333333333% {
-        margin-left: -$width / 6 * 5;
+        margin-left: -$width * 5;
       }
       100% {
         margin-left: -0.1vw;
@@ -280,14 +280,14 @@
   @media screen and (max-width: 1000px) {
     /*narrow*/
     @include manualAdvancement(100%);
-    @include automaticAdvancement(100%);
+    @include automaticAdvancement(100% / 6);
   }
-  @include automaticAdvancementIE($IMMERSIVE_WIDTH, 100%);
+  @include automaticAdvancementIE($IMMERSIVE_WIDTH, 100% / 6);
 } @else {
   /*normal display*/
   @include manualAdvancement(100%);
-  @include automaticAdvancement(100%);
-  @include automaticAdvancementIE(100%, 0);
+  @include automaticAdvancement(100% / 6);
+  @include automaticAdvancementIE(100% / 6, 0);
 }
 
 /********** ANIMATIONS **********/
