@@ -30,8 +30,21 @@ body {
 /*FOR MOBILE*/
 
 @media screen and (max-width: 1000px) {
-  #cssSlider > #slideDesc > .slideText,
-  #cssSlider > #pageIndicators {
+  #cssSlider > #slideDesc > .slideText {
+    //#cssSlider > #pageIndicators {
     display: none;
+  }
+
+  #cssSlider > #pageIndicators > .indicator {
+    width: 1em;
+    height: 1em;
+
+    .hoverPoint {
+      margin: 0;
+
+      .point {
+        margin-bottom: 0.25em;
+      }
+    }
   }
 }
