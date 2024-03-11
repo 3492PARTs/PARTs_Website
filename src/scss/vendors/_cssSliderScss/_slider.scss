@@ -3,11 +3,6 @@
 /*don't show the other images*/
 
 #cssSlider {
-  position: relative;
-  overflow: hidden;
-}
-
-#cssSlider {
   @if ($ASPECT_RATIO != 0) {
     padding-bottom: ($ASPECT_RATIO) * 100%;
     /*to find % aspect ratio, (height/width)*100% 900/2048*/
@@ -17,7 +12,11 @@
   }
 
   width: $SLIDER_WIDTH;
-  //position: relative;
+
+  position: relative;
+  overflow: hidden;
+  background-color: $SLIDER_BACKGROUND;
+
   #sliderImages {
     left: 0;
     width: calc(100% * #{$SLIDE_COUNT});
@@ -81,7 +80,8 @@
   padding: 0;
   /*this is the time to transition between images
     when using the arrows*/
-  transition: #{$SLIDE_TIME * (($SLIDE_TIME / $SLIDE_COUNT) / 100) + "s"};
+  transition: #{$SLIDE_TIME * math.div(math.div($SLIDE_TIME, $SLIDE_COUNT), 100) +
+    "s"};
 }
 
 /********** END IMAGE/SLIDER STYLING **********/

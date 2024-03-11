@@ -65,7 +65,7 @@ $t: 0;
   }
 
   $i: $i + 1;
-  $t: $t + (($SLIDE_TIME * 1000) / $SLIDE_COUNT);
+  $t: $t + math.div(($SLIDE_TIME * 1000), $SLIDE_COUNT);
 }
 
 /*WHICH INDICATOR SHOULD BE LIT*/
@@ -77,7 +77,7 @@ $i: 1;
     ~ #pageIndicators
     > .indicator
     > #point#{$i} {
-    background: $indicatorColor;
+    background: $INDICATOR_COLOR;
     /*color of page indicator dot*/
   }
 
@@ -87,7 +87,7 @@ $i: 1;
 /*used to override the animation for lit indicator*/
 
 #cssSlider > #pageIndicators > .indicator:hover > .point {
-  background: $indicatorColor;
+  background: $INDICATOR_COLOR;
   /*color of page indicator dot*/
 }
 

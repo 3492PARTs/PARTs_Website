@@ -49,13 +49,13 @@ $c: 0;
 
 /********** AUTOMATIC PAGE ADVANCEMENT **********/
 @keyframes slider {
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
   $i: 0;
   $c: 0;
   @while $i < 100 {
     #{$i}%,
     #{$i + $SLIDE_PAUSE_PERCENT}% {
-      transform: translateX($c * -100% / $SLIDE_COUNT);
+      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
     }
 
     $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
@@ -68,13 +68,13 @@ $c: 0;
 }
 
 @-webkit-keyframes slider {
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $gap: math.div((100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
   $i: 0;
   $c: 0;
   @while $i < 100 {
     #{$i}%,
     #{$i + $SLIDE_PAUSE_PERCENT}% {
-      transform: translateX($c * -100% / $SLIDE_COUNT);
+      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
     }
 
     $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
@@ -114,7 +114,7 @@ $c: 0;
 /********** ANIMATIONS **********/
 
 /*arrows*/
-$gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+$gap: math.div((100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 @-webkit-keyframes arrows {
   0%,
@@ -147,7 +147,7 @@ $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
 @keyframes point {
   1%,
   #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
-    background: $indicatorColor;
+    background: $INDICATOR_COLOR;
     /*color of page indicator dot*/
   }
   #{ceil($SLIDE_PAUSE_PERCENT + $gap)}%,
@@ -159,7 +159,7 @@ $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
 @-webkit-keyframes point {
   0%,
   #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
-    background: $indicatorColor;
+    background: $INDICATOR_COLOR;
     /*color of page indicator dot*/
   }
   #{ceil($SLIDE_PAUSE_PERCENT + $gap)}%,
@@ -170,7 +170,7 @@ $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
 
 /*text box*/
 @keyframes textBoxBounce {
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
   0.7%,
   #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
@@ -201,7 +201,7 @@ $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
 }
 
 @-webkit-keyframes textBoxBounce {
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
   0.7%,
   #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
@@ -232,7 +232,7 @@ $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
 }
 
 @keyframes textBoxBounce {
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
   0.7%,
   #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;

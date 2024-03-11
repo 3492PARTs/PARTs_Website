@@ -1,24 +1,15 @@
-/*CSS RESET*/
+@use "sass:math";
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
+@import "_variables";
 
 /*FONT IMPORT*/
 
 @font-face {
   font-family: timeburner;
-  src: url(/assets/typography/timeburner.ttf);
+  src: url($FONT_PATH);
 }
 
-@import "_variables";
-@import "_mixins";
+//@import "_mixins";
 
 /*slider imports*/
 
