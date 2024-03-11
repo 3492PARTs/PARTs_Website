@@ -7,83 +7,47 @@
   overflow: hidden;
 }
 
-/*the size of the responsive slider*/
-
-@mixin immersive($width) {
-  #cssSlider {
-    height: 100vh;
-    background: $sliderBackground;
-
-    #sliderImages {
-      left: calc((#{$width} - 100%) / -2);
-      width: $width * 6;
-
-      /*size of the images*/
-      img,
-      a > img {
-        width: $width;
-        height: 100%;
-        float: left;
-      }
-    }
-  }
-}
-
-@mixin off($width) {
-  #cssSlider {
-    padding-bottom: calc(1365 / 2048) * 100%;
-    /*to find % aspect ratio, (height/width)100*/
+#cssSlider {
+  @if ($ASPECT_RATIO != 0) {
+    padding-bottom: ($ASPECT_RATIO) * 100%;
+    /*to find % aspect ratio, (height/width)*100% 900/2048*/
     height: 0;
+  } @else {
+    height: $SLIDER_HEIGHT;
+  }
 
-    #sliderImages {
-      left: 0;
-      width: $width * 6;
+  width: $SLIDER_WIDTH;
+  //position: relative;
+  #sliderImages {
+    left: 0;
+    width: calc(100% * #{$SLIDE_COUNT});
+    height: 100%;
+    /*size of the images*/
+    div {
+      width: calc(100% / #{$SLIDE_COUNT});
+      height: 100%;
+      float: left;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      /*size of the images*/
-      img,
-      a > img {
-        width: calc($width / 6);
+      img {
         height: 100%;
-        float: left;
+        width: auto;
+        /*
+				@media all and (orientation:portrait) {
+					width: 100%;
+					height: auto;
+				}
+				@media all and (orientation:landscape) {
+					height: 100%;
+					width: auto;
+				}
+				*/
       }
     }
   }
-}
-
-@mixin animationMode($type) {
-  #cssSlider > #sliderImages {
-    /* IE 10+ hack - cant animate translate */
-    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-      animation-name: slider-ie#{$type} !important;
-      animation-duration: 40s;
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
-    }
-  }
-}
-
-/*which mode to use*/
-
-@if ($MODE== "immersive") {
-  /*immersive mode*/
-  @include immersive($IMMERSIVE_WIDTH);
-  @include animationMode("");
-} @else if($MODE== "mixed") {
-  @media screen and (min-width: 1001px) {
-    /*wide*/
-    @include immersive($IMMERSIVE_WIDTH);
-    @include animationMode(-wide);
-  }
-
-  @media screen and (max-width: 1000px) {
-    /*narrow*/
-    @include off(100%);
-    @include animationMode(-narrow);
-  }
-} @else {
-  /*normal display*/
-  @include off(100%);
-  @include animationMode("");
 }
 
 /*animation to use*/
@@ -94,13 +58,21 @@
 
 #cssSlider > #sliderImages {
   -webkit-animation-name: slider;
-  -webkit-animation-duration: 40s;
+  -webkit-animation-duration: #{$SLIDE_TIME + "s"};
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite;
   animation-name: slider;
-  animation-duration: 40s;
+  animation-duration: #{$SLIDE_TIME + "s"};
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
+
+  /* IE 10+ hack - cant animate translate */
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    animation-name: slider-ie !important;
+    animation-duration: #{$SLIDE_TIME + "s"};
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
 }
 
 #cssSlider > #sliderImages {
@@ -109,7 +81,7 @@
   padding: 0;
   /*this is the time to transition between images
     when using the arrows*/
-  transition: 2.66666666667s;
+  transition: #{$SLIDE_TIME * (($SLIDE_TIME / $SLIDE_COUNT) / 100) + "s"};
 }
 
 /********** END IMAGE/SLIDER STYLING **********/

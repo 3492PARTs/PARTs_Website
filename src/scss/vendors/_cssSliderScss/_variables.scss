@@ -8,5 +8,10 @@ $blurbBox: #abb7b7;
 /*for full screen calculate (desired height of slider in vh * width of img) / height of img with vh as units
 for normal slider just uncomment the second width*/
 
-$IMMERSIVE_WIDTH: calc((100vh * 2048) / 1365);
-$MODE: mixed;
+$ASPECT_RATIO: 0; // either set this or height
+$SLIDER_WIDTH: 100%;
+$SLIDER_HEIGHT: 100%; // aspect ration takes precedence to height
+$SLIDE_COUNT: 6;
+$SLIDE_TIME: 40; // in seconds
+$SLIDE_PAUSE_PERCENT: 10; // percent of time paused on each image
+$BTN_OPACITY: 0.7;

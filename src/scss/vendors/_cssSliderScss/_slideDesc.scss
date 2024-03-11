@@ -1,83 +1,72 @@
 /********** SLIDER TEXT **********/
-
-#cssSlider>#slideDesc>.slideText {
-    position: absolute;
-    bottom: 0;
-    padding: .6em;
-    margin: 2em;
-    max-width: calc(100vw - 4em);
-    background-color: $blurbBox;
-    /*color of blurb box*/
-    border-radius: .5em;
-    z-index: -1;
-    opacity: 0;
-    -webkit-transform: translateY(-100px);
-    transform: translateY(-100px);
-    -webkit-transition: 950ms opacity 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550), 950ms -webkit-transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550), 950ms visibility 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
-    transition: 950ms opacity 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550), 950ms -webkit-transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550), 950ms transform 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550), 950ms visibility 850ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+#slideDesc {
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 
-#cssSlider>#slideDesc>.slideText>p {
-    padding: .1em;
-    margin: 0;
-    color: $descTextColor;
-    /*color of blurb box text*/
-    font-size: 2em;
-    font-family: timeburner;
+#cssSlider > #slideDesc > .slideText {
+  position: absolute;
+  bottom: 0;
+  padding: 0.6em;
+  margin: 2em;
+  max-width: calc(100vw - 4em);
+  background-color: $blurbBox;
+  /*color of blurb box*/
+  border-radius: 0.5em;
+  z-index: -1;
+  opacity: 0;
+  -webkit-transform: translateY(-100px);
+  transform: translateY(-100px);
+  -webkit-transition: 950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: 950ms opacity 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    950ms -webkit-transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    950ms transform 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+    950ms visibility 850ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+#cssSlider > #slideDesc > .slideText > p {
+  padding: 0.1em;
+  margin: 0;
+  color: $descTextColor;
+  /*color of blurb box text*/
+  font-size: 2em;
+  font-family: timeburner;
+}
 
 /*BRING THE TEXT FORWARD ON ITS PAGE*/
 
-#cssSlider>#slide1:checked~#slideDesc>#slideText1,
-#cssSlider>#slide2:checked~#slideDesc>#slideText2,
-#cssSlider>#slide3:checked~#slideDesc>#slideText3,
-#cssSlider>#slide4:checked~#slideDesc>#slideText4,
-#cssSlider>#slide5:checked~#slideDesc>#slideText5,
-#cssSlider>#slide6:checked~#slideDesc>#slideText6 {
+$i: 1;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #slide#{$i}:checked ~ #slideDesc > #slideText#{$i} {
     z-index: 2;
     opacity: 1;
     -webkit-transform: translateY(0);
-    transform: translateY(0)
-}
+    transform: translateY(0);
+  }
 
+  $i: $i + 1;
+}
 
 /*TEXT BOX ANIMATION*/
 
 @mixin pointTime($time) {
-    -webkit-animation: textBoxBounce 40000ms infinite $time;
-    animation: textBoxBounce 40000ms infinite $time;
+  -webkit-animation: textBoxBounce #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
+  animation: textBoxBounce #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
 }
 
-#cssSlider>#play:checked~#slideDesc>#slideText1,
-#cssSlider>#pause:checked~#slideDesc>#slideText1 {
-    @include pointTime(0ms);
-}
+$i: 1;
+$t: 0;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #play:checked ~ #slideDesc > #slideText#{$i},
+  #cssSlider > #pause:checked ~ #slideDesc > #slideText#{$i} {
+    @include pointTime(#{$t}ms);
+  }
 
-#cssSlider>#play:checked~#slideDesc>#slideText2,
-#cssSlider>#pause:checked~#slideDesc>#slideText2 {
-    @include pointTime(6666.6666666667ms);
+  $i: $i + 1;
+  $t: $t + (($SLIDE_TIME * 1000) / $SLIDE_COUNT);
 }
-
-#cssSlider>#play:checked~#slideDesc>#slideText3,
-#cssSlider>#pause:checked~#slideDesc>#slideText3 {
-    @include pointTime(13333.333333333ms);
-}
-
-#cssSlider>#play:checked~#slideDesc>#slideText4,
-#cssSlider>#pause:checked~#slideDesc>#slideText4 {
-    @include pointTime(20000ms);
-}
-
-#cssSlider>#play:checked~#slideDesc>#slideText5,
-#cssSlider>#pause:checked~#slideDesc>#slideText5 {
-    @include pointTime(26666.666666666ms);
-}
-
-#cssSlider>#play:checked~#slideDesc>#slideText6,
-#cssSlider>#pause:checked~#slideDesc>#slideText6 {
-    @include pointTime(33333.333333333ms);
-}
-
 
 /********** END SLIDER TEXT **********/

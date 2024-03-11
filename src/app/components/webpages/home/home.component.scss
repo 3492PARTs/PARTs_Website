@@ -12,6 +12,15 @@
   width: 100%;
 }
 
+#cssSliderWrapper {
+  position: relative;
+  width: 100%;
+
+  #cssSlider {
+    position: absolute;
+  }
+}
+
 #partsIntro,
 #homeMedia,
 #videos table {
