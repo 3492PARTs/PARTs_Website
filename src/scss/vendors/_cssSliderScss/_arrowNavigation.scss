@@ -27,30 +27,30 @@
   transition: opacity 0.5s ease-in-out;
 }
 
-@mixin arrowStyle($bckImg) {
+@mixin arrowStyle($img) {
   width: 10vw;
   height: 10vw;
-  background: url(#{$bckImg + png});
-  background-image: url(#{$bckImg + svg}), none;
+  //background: url(#{$bckImg + png});
+  background-image: url(#{$img}), none;
   background-repeat: no-repeat;
   background-size: 100%;
   z-index: -1;
 }
 
 #cssSlider > #pageNav > #previousArrow > .slideL {
-  @include arrowStyle("/assets/icons/previous.");
+  @include arrowStyle($ARROW_PREVIOUS_PATH);
 }
 
 #cssSlider > #pageNav > #nextArrow > .slideR {
-  @include arrowStyle("/assets/icons/next.");
+  @include arrowStyle($ARROW_NEXT_PATH);
 }
 
 #cssSlider > #pageNav > #playPause > #playBtn {
-  @include arrowStyle("/assets/icons/play.");
+  @include arrowStyle($ARROW_PLAY_PATH);
 }
 
 #cssSlider > #pageNav > #playPause > #pauseBtn {
-  @include arrowStyle("/assets/icons/pause.");
+  @include arrowStyle($ARROW_PAUSE_PATH);
 }
 
 /*POSITION*/
@@ -70,15 +70,13 @@
 
 /*ONLY DISPLAY IF ON SLIDER*/
 
-$opacity: 0.75;
-
 #cssSlider > #pageNav:hover > #playPause > .playPauseBtn {
-  opacity: $opacity;
+  opacity: $BTN_OPACITY;
 }
 
 #cssSlider > #pageNav:hover > #previousArrow > .slideL,
 #cssSlider > #pageNav:hover > #nextArrow > .slideR {
-  opacity: calc($opacity/6);
+  opacity: math.div($BTN_OPACITY, $SLIDE_COUNT);
 }
 
 /*DON'T SHOW PLAY AND PAUSE*/
@@ -93,56 +91,60 @@ $opacity: 0.75;
 
 /*WHICH ARROW SHOULD BE ON TOP*/
 
-#cssSlider > #slide1:checked ~ #pageNav > #previousArrow > #slideL6,
-#cssSlider > #slide1:checked ~ #pageNav > #nextArrow > #slideR2,
-#cssSlider > #slide2:checked ~ #pageNav > #previousArrow > #slideL1,
-#cssSlider > #slide2:checked ~ #pageNav > #nextArrow > #slideR3,
-#cssSlider > #slide3:checked ~ #pageNav > #previousArrow > #slideL2,
-#cssSlider > #slide3:checked ~ #pageNav > #nextArrow > #slideR4,
-#cssSlider > #slide4:checked ~ #pageNav > #previousArrow > #slideL3,
-#cssSlider > #slide4:checked ~ #pageNav > #nextArrow > #slideR5,
-#cssSlider > #slide5:checked ~ #pageNav > #previousArrow > #slideL4,
-#cssSlider > #slide5:checked ~ #pageNav > #nextArrow > #slideR6,
-#cssSlider > #slide6:checked ~ #pageNav > #previousArrow > #slideL5,
-#cssSlider > #slide6:checked ~ #pageNav > #nextArrow > #slideR1 {
-  z-index: 15;
+$i: 1;
+$l: $SLIDE_COUNT;
+$r: 2;
+//$t: 0;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #slide#{$i}:checked ~ #pageNav > #previousArrow > #slideL#{$l},
+  #cssSlider > #slide#{$i}:checked ~ #pageNav > #nextArrow > #slideR#{$r} {
+    z-index: 15;
+  }
+
+  $i: $i + 1;
+
+  @if $l == $SLIDE_COUNT {
+    $l: 0;
+  }
+
+  @if $r == $SLIDE_COUNT {
+    $r: 0;
+  }
+
+  $l: $l + 1;
+  $r: $r + 1;
 }
 
 /*STARTING ARROW ANIMATION, FOR WHICH TO BE ON TOP*/
 
 @mixin arrowTime($time) {
-  -webkit-animation: arrows 40000ms infinite $time;
-  animation: arrows 40000ms infinite $time;
+  -webkit-animation: arrows #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
+  animation: arrows #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
 }
 
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL6,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR2 {
-  @include arrowTime(0ms);
-}
+$i: 1;
+$l: $SLIDE_COUNT;
+$r: 2;
+$t: 0;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL#{$l},
+  #cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR#{$r} {
+    @include arrowTime(#{$t}ms);
+  }
 
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL1,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR3 {
-  @include arrowTime(6666.6666666667ms);
-}
+  $i: $i + 1;
 
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL2,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR4 {
-  @include arrowTime(13333.333333333ms);
-}
+  @if $l == $SLIDE_COUNT {
+    $l: 0;
+  }
 
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL3,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR5 {
-  @include arrowTime(20000ms);
-}
+  @if $r == $SLIDE_COUNT {
+    $r: 0;
+  }
 
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL4,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR6 {
-  @include arrowTime(26666.666666666ms);
-}
-
-#cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL5,
-#cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR1 {
-  @include arrowTime(33333.333333333ms);
+  $l: $l + 1;
+  $r: $r + 1;
+  $t: $t + math.div(($SLIDE_TIME * 1000), $SLIDE_COUNT);
 }
 
 /********** END NEXT SLIDE ARROW NAVIGATION **********/

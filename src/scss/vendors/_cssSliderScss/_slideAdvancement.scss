@@ -1,306 +1,128 @@
 /********** PLAY PAUSE OF ALL ANIMATIONS **********/
 
 /*restart the show*/
+$i: 1;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #slide#{$i}:checked ~ #sliderImages {
+    -webkit-animation: none;
+    animation: none;
+  }
 
-#cssSlider > #slide1:checked ~ #sliderImages,
-#cssSlider > #slide2:checked ~ #sliderImages,
-#cssSlider > #slide3:checked ~ #sliderImages,
-#cssSlider > #slide4:checked ~ #sliderImages,
-#cssSlider > #slide5:checked ~ #sliderImages,
-#cssSlider > #slide6:checked ~ #sliderImages {
-  -webkit-animation: none;
-  animation: none;
+  $i: $i + 1;
 }
 
 /*pause all animations*/
-
-#cssSlider > #pause:checked ~ #sliderImages,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText1,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText2,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText3,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText4,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText5,
-#cssSlider > #pause:checked ~ #slideDesc > #slideText6,
-#cssSlider > #pause:checked ~ #pageNav #previousArrow > #slideL6,
-#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR2,
-#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL1,
-#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR3,
-#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL2,
-#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR4,
-#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL3,
-#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR5,
-#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL4,
-#cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR6,
-#cssSlider > #pause:checked ~ #pageNav > #previousArrow > #slideL5,
-#cssSlider > #pause:checked ~ #pageNav #nextArrow > #slideR1,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point1,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point2,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point3,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point4,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point5,
-#cssSlider
-  > #pause:checked
-  ~ #pageIndicators
-  > .indicator
-  > .hoverPoint
-  > #point6 {
+#cssSlider > #pause:checked ~ #sliderImages {
   -webkit-animation-play-state: paused;
   animation-play-state: paused;
+}
+
+$i: 1;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #pause:checked ~ #slideDesc > #slideText#{$i},
+  #cssSlider > #pause:checked ~ #pageNav #previousArrow > #slideL#{$i},
+  #cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR#{$i},
+  #cssSlider > #pause:checked ~ #pageIndicators > .indicator > #point#{$i} {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+  }
+
+  $i: $i + 1;
 }
 
 /********** END PLAY PAUSE OF ALL ANIMATIONS **********/
 
 /********** MANUAL PAGE ADVANCEMENT **********/
 
-@mixin manualAdvancement($width) {
-  #cssSlider > #slide1:checked ~ #sliderImages {
-    margin-left: 0;
+$i: 1;
+$c: 0;
+@while $i <= $SLIDE_COUNT {
+  #cssSlider > #slide#{$i}:checked ~ #sliderImages {
+    margin-left: -100% * $c;
   }
-  #cssSlider > #slide2:checked ~ #sliderImages {
-    margin-left: -$width;
-  }
-  #cssSlider > #slide3:checked ~ #sliderImages {
-    margin-left: -$width * 2;
-  }
-  #cssSlider > #slide4:checked ~ #sliderImages {
-    margin-left: -$width * 3;
-  }
-  #cssSlider > #slide5:checked ~ #sliderImages {
-    margin-left: -$width * 4;
-  }
-  #cssSlider > #slide6:checked ~ #sliderImages {
-    margin-left: -$width * 5;
-  }
+
+  $i: $i + 1;
+  $c: $c + 1;
 }
 
 /********** END MANUAL PAGE ADVANCEMENT **********/
 
 /********** AUTOMATIC PAGE ADVANCEMENT **********/
+@keyframes slider {
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $i: 0;
+  $c: 0;
+  @while $i < 100 {
+    #{$i}%,
+    #{$i + $SLIDE_PAUSE_PERCENT}% {
+      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
+    }
 
-@mixin automaticAdvancement($width) {
-  @keyframes slider {
-    0%,
-    10% {
-      transform: translateX(0);
-    }
-    16.6666666667%,
-    26.6666666667% {
-      transform: translateX(-$width);
-    }
-    33.3333333333%,
-    43.3333333333% {
-      transform: translateX(-$width * 2);
-    }
-    50%,
-    60% {
-      transform: translateX(-$width * 3);
-    }
-    66.6666666667%,
-    76.6666666667% {
-      transform: translateX(-$width * 4);
-    }
-    83.3333333333%,
-    93.3333333333% {
-      transform: translateX(-$width * 5);
-    }
-    100% {
-      transform: translateX(0);
-    }
+    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $c: $c + 1;
   }
-  @-webkit-keyframes slider {
-    0%,
-    10% {
-      transform: translateX(0);
-    }
-    16.6666666667%,
-    26.6666666667% {
-      transform: translateX(-$width);
-    }
-    33.3333333333%,
-    43.3333333333% {
-      transform: translateX(-$width * 2);
-    }
-    50%,
-    60% {
-      transform: translateX(-$width * 3);
-    }
-    66.6666666667%,
-    76.6666666667% {
-      transform: translateX(-$width * 4);
-    }
-    83.3333333333%,
-    93.3333333333% {
-      transform: translateX(-$width * 5);
-    }
-    100% {
-      transform: translateX(0);
-    }
+
+  100% {
+    transform: translateX(0);
   }
 }
 
-@mixin automaticAdvancementIE($width, $widthNarrow) {
-  /*IE FIX*/
-  @if ($MODE != "mixed") {
-    @keyframes slider-ie {
-      0%,
-      10% {
-        margin-left: 0;
-      }
-      16.6666666667%,
-      26.6666666667% {
-        margin-left: -$width;
-      }
-      33.3333333333%,
-      43.3333333333% {
-        margin-left: -$width * 2;
-      }
-      50%,
-      60% {
-        margin-left: -$width * 3;
-      }
-      66.6666666667%,
-      76.6666666667% {
-        margin-left: -$width * 4;
-      }
-      83.3333333333%,
-      93.3333333333% {
-        margin-left: -$width * 5;
-      }
-      100% {
-        margin-left: -0.1vw;
-        /*can't be 0, gives blank page*/
-      }
+@-webkit-keyframes slider {
+  $gap: math.div((100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $i: 0;
+  $c: 0;
+  @while $i < 100 {
+    #{$i}%,
+    #{$i + $SLIDE_PAUSE_PERCENT}% {
+      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
     }
-  } @else {
-    @keyframes slider-ie-wide {
-      0%,
-      10% {
-        margin-left: 0;
-      }
-      16.6666666667%,
-      26.6666666667% {
-        margin-left: -$width;
-      }
-      33.3333333333%,
-      43.3333333333% {
-        margin-left: -$width * 2;
-      }
-      50%,
-      60% {
-        margin-left: -$width * 3;
-      }
-      66.6666666667%,
-      76.6666666667% {
-        margin-left: -$width * 4;
-      }
-      83.3333333333%,
-      93.3333333333% {
-        margin-left: -$width * 5;
-      }
-      100% {
-        margin-left: -0.1vw;
-        /*can't be 0, gives blank page*/
-      }
+
+    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $c: $c + 1;
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* AGAIN, PLEASE DIE IE */
+/* IE IS FINALLY DEAD*/
+/*IE FIX
+@keyframes slider-ie {
+  $total: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT));
+  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $i: 0;
+  $c: 0;
+  @while $i < 100 {
+    #{$i}%,
+    #{$i + $SLIDE_PAUSE_PERCENT}% {
+      margin-left: ($c * -$SLIDER_WIDTH/$SLIDE_COUNT);
     }
-    @keyframes slider-ie-narrow {
-      0%,
-      10% {
-        margin-left: 0;
-      }
-      16.6666666667%,
-      26.6666666667% {
-        margin-left: -$widthNarrow;
-      }
-      33.3333333333%,
-      43.3333333333% {
-        margin-left: -$widthNarrow * 2;
-      }
-      50%,
-      60% {
-        margin-left: -$widthNarrow * 3;
-      }
-      66.6666666667%,
-      76.6666666667% {
-        margin-left: -$widthNarrow * 4;
-      }
-      83.3333333333%,
-      93.3333333333% {
-        margin-left: -$widthNarrow * 5;
-      }
-      100% {
-        margin-left: -0.1vw;
-        /*can't be 0, gives blank page*/
-      }
-    }
+
+    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $c: $c + 1;
+  }
+
+  100% {
+    margin-left: -0.1vw;
   }
 }
 
 /********** END AUTOMATIC PAGE ADVANCEMENT **********/
 
-/*advancement mode based on chosen size*/
-
-/*which mode to use*/
-
-@if ($MODE== "immersive") {
-  /*immersive mode*/
-  @include manualAdvancement($IMMERSIVE_WIDTH);
-  @include automaticAdvancement($IMMERSIVE_WIDTH);
-  @include automaticAdvancementIE($IMMERSIVE_WIDTH, 0);
-} @else if($MODE== "mixed") {
-  @media screen and (min-width: 1001px) {
-    /*wide*/
-    @include manualAdvancement($IMMERSIVE_WIDTH);
-    @include automaticAdvancement($IMMERSIVE_WIDTH);
-  }
-  @media screen and (max-width: 1000px) {
-    /*narrow*/
-    @include manualAdvancement(100%);
-    @include automaticAdvancement(100% / 6);
-  }
-  @include automaticAdvancementIE($IMMERSIVE_WIDTH, 100% / 6);
-} @else {
-  /*normal display*/
-  @include manualAdvancement(100%);
-  @include automaticAdvancement(100% / 6);
-  @include automaticAdvancementIE(100% / 6, 0);
-}
-
 /********** ANIMATIONS **********/
 
 /*arrows*/
+$gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 @-webkit-keyframes arrows {
   0%,
-  16.656666666666666% {
-    opacity: 1;
+  #{$SLIDE_PAUSE_PERCENT + $gap}% {
+    opacity: 0;
     z-index: 15;
   }
-  16.666666666666668%,
+  #{$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
   100% {
     opacity: 0;
     z-index: -1;
@@ -309,11 +131,13 @@
 
 @keyframes arrows {
   0%,
-  16.656666666666666% {
+  #{$SLIDE_PAUSE_PERCENT + $gap}% {
+    opacity: 0;
     z-index: 15;
   }
-  16.666666666666668%,
+  #{$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
   100% {
+    opacity: 0;
     z-index: -1;
   }
 }
@@ -322,11 +146,11 @@
 
 @keyframes point {
   1%,
-  16% {
-    background: $indicatorColor;
+  #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
+    background: $INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
-  17%,
+  #{floor($SLIDE_PAUSE_PERCENT + $gap) + 1}%,
   100% {
     background: transparent;
   }
@@ -334,73 +158,105 @@
 
 @-webkit-keyframes point {
   0%,
-  16% {
-    background: $indicatorColor;
+  #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
+    background: $INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
-  17%,
+  #{floor($SLIDE_PAUSE_PERCENT + $gap) + 1}%,
   100% {
     background: transparent;
   }
 }
 
 /*text box*/
-
-@-webkit-keyframes textBoxBounce {
-  0.6927083333333334%,
-  15.963958333333334% {
+@keyframes textBoxBounce {
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  0.7%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(10px);
     transform: translateY(10px);
   }
-  0.9895833333333334%,
-  15.667083333333334% {
+  1%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
-  17.65625% {
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
     opacity: 0;
     z-index: 2;
     visibility: hidden;
     -webkit-transform: translateY(-100px);
     transform: translateY(-100px);
   }
-  17.66625%,
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
+  100% {
+    z-index: 0;
+  }
+}
+
+@-webkit-keyframes textBoxBounce {
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  0.7%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(10px);
+    transform: translateY(10px);
+  }
+  1%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
+    opacity: 1;
+    z-index: 2;
+    visibility: visible;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
+    opacity: 0;
+    z-index: 2;
+    visibility: hidden;
+    -webkit-transform: translateY(-100px);
+    transform: translateY(-100px);
+  }
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
   100% {
     z-index: 0;
   }
 }
 
 @keyframes textBoxBounce {
-  0.6927083333333334%,
-  15.963958333333334% {
+  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  0.7%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(10px);
     transform: translateY(10px);
   }
-  0.9895833333333334%,
-  15.667083333333334% {
+  1%,
+  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
-  17.65625% {
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
     opacity: 0;
     z-index: 2;
     visibility: hidden;
     -webkit-transform: translateY(-100px);
     transform: translateY(-100px);
   }
-  17.66625%,
+  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
   100% {
     z-index: 0;
   }

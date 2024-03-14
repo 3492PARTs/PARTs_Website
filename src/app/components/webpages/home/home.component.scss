@@ -12,6 +12,15 @@
   width: 100%;
 }
 
+#cssSliderWrapper {
+  position: relative;
+  width: 100%;
+
+  #cssSlider {
+    position: absolute;
+  }
+}
+
 #partsIntro,
 #homeMedia,
 #videos table {
@@ -44,14 +53,7 @@
 
 #homeJoin {
   width: 100%;
-  /*SCREEN SIZE:WIDE SCREEN*/
-  @media only screen and (min-width: 1001px) {
-    height: 50vh;
-  }
-  /*SCREEN SIZE:NARROW SCREEN*/
-  @media only screen and (max-width: 1000px) {
-    height: 30vh;
-  }
+  height: 50vh;
   position: relative;
 }
 
