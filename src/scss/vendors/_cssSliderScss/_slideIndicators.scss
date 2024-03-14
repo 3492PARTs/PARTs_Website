@@ -15,25 +15,11 @@
   height: 1.5em;
   width: 1.5em;
   border-radius: 100%;
-  background-color: #abb7b7;
+  background-color: $INDICATOR_BACKGROUND_COLOR;
   /*color of page indicator*/
   cursor: pointer;
   position: relative;
 }
-
-/*why can't i mix in or anything here?*/
-/*
-#cssSlider > #pageIndicators > .indicator > .hoverPoint {
-  margin: 0.5em;
-  display: inline-block;
-  height: 0.5em;
-  width: 0.5em;
-  border-radius: 100%;
-  background: transparent;
-  transition: 0.3s ease-in-out;
-  -webkit-transition: 0.3s ease-in-out;
-  z-index: 16;
-}*/
 
 #cssSlider > #pageIndicators > .indicator > .point {
   display: inline-block;
@@ -52,8 +38,8 @@
 /*STARTING PAGE INDICATOR WHICH TO BE LIT ANIMATION*/
 
 @mixin pointTime($time) {
-  -webkit-animation: point 40000ms infinite $time;
-  animation: point 40000ms infinite $time;
+  -webkit-animation: point #{$SLIDE_TIME * 1000 + "ms"} infinite $time;
+  animation: point #{$SLIDE_TIME * 1000 + "ms"} infinite $time;
 }
 
 $i: 1;
@@ -77,7 +63,7 @@ $i: 1;
     ~ #pageIndicators
     > .indicator
     > #point#{$i} {
-    background: $INDICATOR_COLOR;
+    background: $INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
 
@@ -87,7 +73,7 @@ $i: 1;
 /*used to override the animation for lit indicator*/
 
 #cssSlider > #pageIndicators > .indicator:hover > .point {
-  background: $INDICATOR_COLOR;
+  background: $INDICATOR_POINT_COLOR;
   /*color of page indicator dot*/
 }
 

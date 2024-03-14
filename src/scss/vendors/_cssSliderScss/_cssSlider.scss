@@ -19,6 +19,12 @@
 @import "_slideDesc";
 @import "_slideAdvancement";
 
+/* Checks before we compile*/
+
+@if ($SLIDE_COUNT * $SLIDE_PAUSE_PERCENT > 100) {
+  @error "Slider can't take up more than 100% of the time.";
+}
+
 /*FOR MOBILE*/
 
 @media screen and (max-width: 1000px) {
