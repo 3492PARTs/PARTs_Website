@@ -1,31 +1,29 @@
-/*CSS RESET*/
+@use "sass:math";
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
+@import "_variables";
 
 /*FONT IMPORT*/
 
 @font-face {
   font-family: timeburner;
-  src: url(/assets/typography/timeburner.ttf);
+  src: url($FONT_PATH);
 }
 
-@import "./_variables";
+//@import "_mixins";
 
 /*slider imports*/
 
-@import "./_arrowNavigation";
-@import "./_slideIndicators";
-@import "./_slider";
-@import "./_slideDesc";
-@import "./_slideAdvancement";
+@import "_arrowNavigation";
+@import "_slideIndicators";
+@import "_slider";
+@import "_slideDesc";
+@import "_slideAdvancement";
+
+/* Checks before we compile*/
+
+@if ($SLIDE_COUNT * $SLIDE_PAUSE_PERCENT > 100) {
+  @error "Slider can't take up more than 100% of the time.";
+}
 
 /*FOR MOBILE*/
 
@@ -38,13 +36,9 @@ body {
   #cssSlider > #pageIndicators > .indicator {
     width: 1em;
     height: 1em;
-
-    .hoverPoint {
-      margin: 0;
-
-      .point {
-        margin-bottom: 0.25em;
-      }
-    }
   }
+}
+
+#cssSliderTestWrapper {
+  height: 100vh;
 }

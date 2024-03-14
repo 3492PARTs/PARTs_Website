@@ -1,0 +1,28 @@
+/// Mixin to prefix a property
+/// @author Brandon Duke
+/// @param {String} $property - Property name
+/// @param {*} $parameters - Property value
+@mixin prefix($property, $parameters) {
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
+    #{$prefix}#{$property}: $parameters;
+  }
+}
+
+/// Mixin to prefix a property
+/// @author Brandon Duke
+/// @param {String} $property - Property name
+/// @param {*} $parameters - Property value
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content; 
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  } 
+}
