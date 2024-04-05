@@ -57,7 +57,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
             this.matches = result['matches'];
-            this.checkInScout();
+            //this.checkInScout();
             this.sortQuestions();
             this.buildTeamList();
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
@@ -102,7 +102,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         }
       );
 
-    this.setUpdateScoutFieldScheduleTimeout();
+    //this.setUpdateScoutFieldScheduleTimeout();
   }
 
   setUpdateScoutFieldScheduleTimeout(): void {
