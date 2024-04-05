@@ -12,13 +12,11 @@
 </app-box>
 
 <div id="results">
-  <ng-container *ngFor="let res of scoutPitResults">
-    <app-box *ngIf="res" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth">
-      <app-scout-pic-display [ScoutPitResult]="res"></app-scout-pic-display>
+  <app-box *ngFor="let res of scoutPitResults" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth">
+    <app-scout-pic-display [ScoutPitResult]="res"></app-scout-pic-display>
 
-      <div *ngFor="let r of res.results">
-        <p>{{ r.question }}: {{ r.answer }}</p>
-      </div>
-    </app-box>
-  </ng-container>
+    <div *ngFor="let r of res.results">
+      <p>{{ r.question }}: {{ r.answer }}</p>
+    </div>
+  </app-box>
 </div>
