@@ -59,7 +59,7 @@
 
         <app-tab-container>
             <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no">
-                <app-pit-result-display [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
+                <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
 
                 <app-form-element-group [LabelText]="'Notes'">
                     <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="note.time | dateToStr">
