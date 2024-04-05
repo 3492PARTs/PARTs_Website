@@ -323,19 +323,20 @@ export class AuthService {
     }
   }
 
-  checkAPIStatus(): void {
-    this.http.get('public/api-status/').subscribe(
-      {
-        next: (result: any) => {
-          this.apiStatusBS.next(APIStatus.on);
-        },
-        error: (err: any) => {
-          this.apiStatusBS.next(APIStatus.off);
-          this.authInFlightBS.next(AuthCallStates.err);
+  /*
+    checkAPIStatus(): void {
+      this.http.get('public/api-status/').subscribe(
+        {
+          next: (result: any) => {
+            this.apiStatusBS.next(APIStatus.on);
+          },
+          error: (err: any) => {
+            this.apiStatusBS.next(APIStatus.off);
+            this.authInFlightBS.next(AuthCallStates.err);
+          }
         }
-      }
-    );
-  }
+      );
+    }*/
 
   getUser() {
     this.gs.incrementOutstandingCalls();

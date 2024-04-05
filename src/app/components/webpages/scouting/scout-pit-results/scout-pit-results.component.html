@@ -12,7 +12,6 @@
 </app-box>
 
 <div id="results">
-
   <app-box *ngFor="let res of scoutPitResults" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth">
     <app-scout-pic-display [ScoutPitResult]="res"></app-scout-pic-display>
 
