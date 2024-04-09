@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   version: 'v5',
-  baseUrl: 'https://parts.bduke.dev/',
+  baseUrl: 'https://parts-webapi-b87789d4ecea.herokuapp.com/',
   backupBaseUrl: 'https://parts-webapi.herokuapp.com/',
   tokenString: '8fa1792e-ce4b-11ed-afa1-0242ac120002',
   loggedInHereBefore: '2cf049f8-ce4c-11ed-afa1-0242ac120002',
