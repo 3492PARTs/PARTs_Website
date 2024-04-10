@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { QuestionWithConditions } from 'src/app/models/form.models';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
-import { Question } from '../../elements/question-admin-form/question-admin-form.component';
 
 @Component({
   selector: 'app-contact',
@@ -12,7 +12,7 @@ import { Question } from '../../elements/question-admin-form/question-admin-form
 })
 export class ContactComponent implements OnInit {
 
-  questions: Question[] = [];
+  questions: QuestionWithConditions[] = [];
   disabled = false;
 
   constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
@@ -34,7 +34,7 @@ export class ContactComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.questions = result as Question[];
+            this.questions = result as QuestionWithConditions[];
 
             this.authService.authInFlight.subscribe(r => {
               if (r === AuthCallStates.comp) {
@@ -103,7 +103,7 @@ export class ContactComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.questions = result as Question[];
+            this.questions = result as QuestionWithConditions[];
             this.disabled = true;
           }
         },

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question } from '../question-admin-form/question-admin-form.component';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
+import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 
 @Component({
   selector: 'app-question-condition-admin-form',
@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
 
-  questions: Question[] = [];
+  questions: QuestionWithConditions[] = [];
   questionConditions: QuestionCondition[] = [];
   questionConditionModalVisible = false;
   activeQuestionCondition = new QuestionCondition();
@@ -21,8 +21,8 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
-  questionConditionQuestionFromList: Question[] = [];
-  questionConditionQuestionToList: Question[] = [];
+  questionConditionQuestionFromList: QuestionWithConditions[] = [];
+  questionConditionQuestionToList: QuestionWithConditions[] = [];
 
   constructor(private gs: GeneralService, private http: HttpClient) { }
 
@@ -44,7 +44,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.questions = result as Question[];
+            this.questions = result as QuestionWithConditions[];
             this.buildQuestionConditionFromLists();
             this.buildQuestionConditionToLists();
           }
@@ -139,7 +139,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     });
   }
 
-  compareQuestions(q1: Question, q2: Question): boolean {
+  compareQuestions(q1: QuestionWithConditions, q2: QuestionWithConditions): boolean {
     if (q1 && q2)
       return q1.question_id === q2.question_id;
     else
@@ -171,26 +171,4 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       }
     );
   }
-}
-
-export class QuestionAggregateType {
-  question_aggregate_typ = ''
-  question_aggregate_nm = ''
-}
-
-
-export class QuestionAggregate {
-  question_aggregate_id!: number;
-  field_name = '';
-  question_aggregate_typ = new QuestionAggregateType()
-  questions: Question[] = [];
-  active = 'y'
-}
-
-export class QuestionCondition {
-  question_condition_id!: number;
-  condition = '';
-  question_from!: Question;
-  question_to!: Question;
-  active = 'y';
 }

@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
-import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
+import { GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { QuestionCondition } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
+import { Team } from 'src/app/models/scouting.models';
+import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
+import { AppDatabaseService } from 'src/app/services/app-database.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -20,11 +21,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   matches: Match[] = [];
   noMatch = false;
   teamMatch: Match | null = null;
-  scoutQuestions: Question[] = [];
+  scoutQuestions: QuestionWithConditions[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
-  scoutAutoQuestions: Question[] = [];
-  scoutTeleopQuestions: Question[] = [];
-  scoutOtherQuestions: Question[] = [];
+  scoutAutoQuestions: QuestionWithConditions[] = [];
+  scoutTeleopQuestions: QuestionWithConditions[] = [];
+  scoutOtherQuestions: QuestionWithConditions[] = [];
   private checkScoutTimeout: number | undefined;
   user!: User;
 
@@ -33,12 +34,18 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   otherFormElements = new QueryList<FormElementComponent>();
   formElements = new QueryList<FormElementComponent>();
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) {
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService, private appDB: AppDatabaseService) {
     this.authService.currentUser.subscribe(u => this.user = u);
   }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
+
+    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+      sfrc.forEach(s => {
+        console.log(s);
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -143,7 +150,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.scoutTeleopQuestions = [];
     this.scoutOtherQuestions = [];
     this.scoutQuestions.forEach(sq => {
-      let sqCopy = JSON.parse(JSON.stringify(sq)) as Question;
+      let sqCopy = JSON.parse(JSON.stringify(sq)) as QuestionWithConditions;
       if (sqCopy.form_sub_typ === 'auto') {
         this.scoutAutoQuestions.push(sqCopy);
       }
@@ -228,7 +235,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    this.gs.incrementOutstandingCalls();
+    //this.gs.incrementOutstandingCalls();
 
     let response: any[] = [];
     this.scoutAutoQuestions.forEach(sq => {
@@ -249,32 +256,36 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.http.post(
-      //'scouting/field/save-answers/',
-      'form/save-answers/',
-      { question_answers: response, team: this.team, match: this.teamMatch?.match_id || null, form_typ: 'field' }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.teamMatch = null;
-            this.team = null;
-            this.noMatch = false;
-            this.scoutFieldInit();
-            this.gs.scrollTo(0);
+    if (this.team)
+      this.appDB.ScoutFieldResponseCrud.AddAsync({ question_answers: response, team: this.team, match: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' });
+    /*
+        this.http.post(
+          //'scouting/field/save-answers/',
+          'form/save-answers/',
+          { question_answers: response, team: this.team, match: this.teamMatch?.match_id || null, form_typ: 'field' }
+        ).subscribe(
+          {
+            next: (result: any) => {
+              if (this.gs.checkResponse(result)) {
+                this.gs.successfulResponseBanner(result);
+                this.teamMatch = null;
+                this.team = null;
+                this.noMatch = false;
+                this.scoutFieldInit();
+                this.gs.scrollTo(0);
+              }
+            },
+            error: (err: any) => {
+              console.log('error', err);
+              this.gs.triggerError(err);
+              this.gs.decrementOutstandingCalls();
+            },
+            complete: () => {
+              this.gs.decrementOutstandingCalls();
+            }
           }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+        );
+        */
   }
 
   setAutoFormElements(fes: QueryList<FormElementComponent>): void {
@@ -295,17 +306,4 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   setFormElements(): void {
     this.formElements.reset([...this.autoFormElements, ...this.teleopFormElements, ...this.otherFormElements]);
   }
-}
-
-/*export class ScoutAnswer {
-  scoutQuestions: ScoutQuestion[] = [];
-  teams: Team[] = [];
-  team!: string;
-}*/
-
-export class Team {
-  team_no!: string;
-  team_nm!: string;
-  void_ind = 'n'
-  checked = false;
 }

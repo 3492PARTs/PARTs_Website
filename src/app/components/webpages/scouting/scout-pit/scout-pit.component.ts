@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
-import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
 
-import * as LoadImg from 'blueimp-load-image';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
+import { QuestionWithConditions } from 'src/app/models/form.models';
+import { Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-field',
@@ -21,8 +21,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   robotPic!: File;
   robotPics: File[] = [];
   previewUrl: any = null;
-  scoutQuestions: Question[] = [];
-  private scoutQuestionsCopy: Question[] = [];
+  scoutQuestions: QuestionWithConditions[] = [];
+  private scoutQuestionsCopy: QuestionWithConditions[] = [];
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
   responseId: string | null = null;
@@ -72,7 +72,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
             this.teams = (result as ScoutPitInit).teams;
             this.compTeams = (result as ScoutPitInit).comp_teams;
             this.scoutQuestions = (result as ScoutPitInit).scoutQuestions;
-            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as Question[];
+            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as QuestionWithConditions[];
           }
         },
         error: (err: any) => {
@@ -89,7 +89,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as Question[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as QuestionWithConditions[];
 
     scoutQuestions.forEach(el => {
       let answer = this.gs.formatQuestionAnswer(el.answer)
@@ -102,7 +102,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     if (dirty) {
       this.gs.triggerConfirm('Are you sure you want to clear and change teams?',
         () => {
-          this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy) as Question[];
+          this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy) as QuestionWithConditions[];
           this.previewUrl = '';
           this.responseId = null;
           this.previousTeam = this.team;
@@ -145,7 +145,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
 
-    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as Question[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as QuestionWithConditions[];
 
     scoutQuestions.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
@@ -159,7 +159,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
-            this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as Question[];
+            this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as QuestionWithConditions[];
             this.savePictures();
             this.spInit();
             this.gs.scrollTo(0);
@@ -243,7 +243,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.scoutQuestions = (result['questions'] as Question[]);
+            this.scoutQuestions = (result['questions'] as QuestionWithConditions[]);
             this.previewImages = result['pics'] as ScoutPitImage[];
             this.responseId = result['response_id'] as string;
           }
@@ -266,19 +266,13 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 }
 
 export class ScoutPitInit {
-  scoutQuestions: Question[] = [];
+  scoutQuestions: QuestionWithConditions[] = [];
   teams: Team[] = [];
   comp_teams: Team[] = [];
 }
 
 export class ScoutAnswer {
-  scoutQuestions: Question[] = [];
+  scoutQuestions: QuestionWithConditions[] = [];
   teams: Team[] = [];
   team!: string;
-}
-
-export class Team {
-  team_no!: string;
-  team_nm!: string;
-  checked = false;
 }
