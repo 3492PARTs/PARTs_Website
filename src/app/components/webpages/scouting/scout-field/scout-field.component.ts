@@ -30,6 +30,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   private checkScoutTimeout: number | undefined;
   user!: User;
 
+  private outstandingResultsTimeout: number | undefined;
   outstandingResults = '';
 
   autoFormElements = new QueryList<FormElementComponent>();
@@ -44,18 +45,31 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
     this.populateOutstandingResults();
-
-    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
-      sfrc.forEach(s => {
-        console.log(s);
-
-        //this.save(s, s.id);
-      });
-    });
   }
 
   ngOnDestroy(): void {
     window.clearTimeout(this.checkScoutTimeout);
+  }
+
+  setUploadOutstandingResultsTimeout(): void {
+    if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
+
+    this.outstandingResultsTimeout = window.setTimeout(() => {
+      this.uploadOutstandingResults();
+    }, 1000 * 60 * 5); // try to send again after 5 mins
+
+  }
+
+  uploadOutstandingResults() {
+    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+      let count = 1;
+      sfrc.forEach(s => {
+        window.setTimeout(() => {
+          console.log(s);
+          //this.save(s, s.id);
+        }, 1000 * count++);
+      });
+    });
   }
 
   populateOutstandingResults(): void {
@@ -85,6 +99,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.sortQuestions();
             this.buildTeamList();
             this.buildMatchList();
+
+            this.setUploadOutstandingResultsTimeout();
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
           }
@@ -346,6 +362,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
+          this.setUploadOutstandingResultsTimeout();
         }
       }
     );

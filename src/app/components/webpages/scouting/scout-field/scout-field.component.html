@@ -1,6 +1,7 @@
 <app-box [Title]="'Field Scouting Form'">
 
   <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResults.length > 0">
+    <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResults()"></app-button>
     {{outstandingResults}}
   </app-form-element-group>
   <br *ngIf="outstandingResults.length > 0">
