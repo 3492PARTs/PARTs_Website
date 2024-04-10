@@ -43,22 +43,29 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
+    this.populateOutstandingResults();
 
     this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
       sfrc.forEach(s => {
         console.log(s);
 
-        this.outstandingResults += `${(s as ScoutFieldResponse).team}, `;
-
         //this.save(s, s.id);
       });
-
-      if (this.outstandingResults.length >= 2) this.outstandingResults = this.outstandingResults.substring(0, this.outstandingResults.length - 2);
     });
   }
 
   ngOnDestroy(): void {
     window.clearTimeout(this.checkScoutTimeout);
+  }
+
+  populateOutstandingResults(): void {
+    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+      sfrc.forEach(s => {
+        this.outstandingResults += `${(s as ScoutFieldResponse).team}, `;
+      });
+
+      if (this.outstandingResults.length >= 2) this.outstandingResults = this.outstandingResults.substring(0, this.outstandingResults.length - 2);
+    });
   }
 
   scoutFieldInit(): void {
