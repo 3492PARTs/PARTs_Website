@@ -258,7 +258,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         });
       });
 
-      sfr = { question_answers: response, team: this.team || 0, match: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' };
+      sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' };
     }
     this.http.post(
       'form/save-answers/',
@@ -275,7 +275,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.gs.scrollTo(0);
 
             if (id) {
-              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
+              //this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
             }
           }
         },
