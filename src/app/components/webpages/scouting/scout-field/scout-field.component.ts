@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService } from 'src/app/services/general.service';
+import { Banner, GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { Team } from 'src/app/models/scouting.models';
+import { ScoutFieldResponse, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { AppDatabaseService } from 'src/app/services/app-database.service';
 
@@ -44,6 +44,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
       sfrc.forEach(s => {
         console.log(s);
+        this.save(s, s.id);
       });
     });
   }
@@ -229,63 +230,74 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     }
   }
 
-  save(): void | null {
-    if (this.gs.strNoE(this.team)) {
-      this.gs.triggerError('Must select a team to scout!');
-      return null;
-    }
+  save(sfr?: ScoutFieldResponse, id?: number): void | null {
+    if (!sfr) {
+      if (this.gs.strNoE(this.team)) {
+        this.gs.triggerError('Must select a team to scout!');
+        return null;
+      }
 
-    //this.gs.incrementOutstandingCalls();
+      this.gs.incrementOutstandingCalls();
 
-    let response: any[] = [];
-    this.scoutAutoQuestions.forEach(sq => {
-      response.push(this.gs.cloneObject(sq));
-    });
-    this.scoutTeleopQuestions.forEach(sq => {
-      response.push(this.gs.cloneObject(sq));
-    });
-    this.scoutOtherQuestions.forEach(sq => {
-      response.push(this.gs.cloneObject(sq));
-    });
-
-    response.forEach(r => {
-      r.answer = this.gs.formatQuestionAnswer(r.answer);
-
-      r.conditions.forEach((c: QuestionCondition) => {
-        if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
+      let response: any[] = [];
+      this.scoutAutoQuestions.forEach(sq => {
+        response.push(this.gs.cloneObject(sq));
       });
-    });
+      this.scoutTeleopQuestions.forEach(sq => {
+        response.push(this.gs.cloneObject(sq));
+      });
+      this.scoutOtherQuestions.forEach(sq => {
+        response.push(this.gs.cloneObject(sq));
+      });
 
-    if (this.team)
-      this.appDB.ScoutFieldResponseCrud.AddAsync({ question_answers: response, team: this.team, match: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' });
-    /*
-        this.http.post(
-          //'scouting/field/save-answers/',
-          'form/save-answers/',
-          { question_answers: response, team: this.team, match: this.teamMatch?.match_id || null, form_typ: 'field' }
-        ).subscribe(
-          {
-            next: (result: any) => {
-              if (this.gs.checkResponse(result)) {
-                this.gs.successfulResponseBanner(result);
-                this.teamMatch = null;
-                this.team = null;
-                this.noMatch = false;
-                this.scoutFieldInit();
-                this.gs.scrollTo(0);
-              }
-            },
-            error: (err: any) => {
-              console.log('error', err);
-              this.gs.triggerError(err);
-              this.gs.decrementOutstandingCalls();
-            },
-            complete: () => {
-              this.gs.decrementOutstandingCalls();
+      response.forEach(r => {
+        r.answer = this.gs.formatQuestionAnswer(r.answer);
+
+        r.conditions.forEach((c: QuestionCondition) => {
+          if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
+        });
+      });
+
+      sfr = { question_answers: response, team: this.team || 0, match: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' };
+    }
+    this.http.post(
+      'form/save-answers/',
+      sfr
+    ).subscribe(
+      {
+        next: (result: any) => {
+          if (this.gs.checkResponse(result)) {
+            this.gs.successfulResponseBanner(result);
+            this.teamMatch = null;
+            this.team = null;
+            this.noMatch = false;
+            this.scoutFieldInit();
+            this.gs.scrollTo(0);
+
+            if (id) {
+              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
             }
           }
-        );
-        */
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.gs.triggerError(err);
+          if (sfr) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
+            this.gs.successfulResponseBanner(new Banner('Failed to upload, will try again later.', 3500));
+            this.teamMatch = null;
+            this.team = null;
+            this.noMatch = false;
+            this.scoutFieldInit();
+            this.gs.scrollTo(0);
+          });
+
+          this.gs.decrementOutstandingCalls();
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 
   setAutoFormElements(fes: QueryList<FormElementComponent>): void {
