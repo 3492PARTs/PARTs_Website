@@ -30,6 +30,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   private checkScoutTimeout: number | undefined;
   user!: User;
 
+  outstandingResults = '';
+
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
   otherFormElements = new QueryList<FormElementComponent>();
@@ -45,8 +47,13 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
       sfrc.forEach(s => {
         console.log(s);
-        this.save(s, s.id);
+
+        this.outstandingResults += `${(s as ScoutFieldResponse).team}, `;
+
+        //this.save(s, s.id);
       });
+
+      if (this.outstandingResults.length >= 2) this.outstandingResults = this.outstandingResults.substring(0, this.outstandingResults.length - 2);
     });
   }
 

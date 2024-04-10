@@ -56,7 +56,6 @@ import { ResourcesComponent } from './components/webpages/resources/resources.co
 import { FirstComponent } from './components/webpages/first/first.component';
 import { SideNavComponent } from './components/atoms/side-nav/side-nav.component';
 import { BoxSideNavWrapperComponent } from './components/atoms/box-side-nav-wrapper/box-side-nav-wrapper.component';
-import { CardComponent } from './components/atoms/card/card.component';
 //import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
@@ -96,7 +95,6 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     AppComponent,
     HomeComponent,
     NavigationComponent,
-    //FooterComponent,
     LoginComponent,
     LoadingComponent,
     BoxComponent,
@@ -118,8 +116,6 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     FormComponent,
     SideNavComponent,
     BoxSideNavWrapperComponent,
-    CardComponent,
-    //ErrorMessageComponent,
     TabComponent,
     TabContainerComponent,
     ScoutPitComponent,

@@ -1,4 +1,10 @@
 <app-box [Title]="'Field Scouting Form'">
+
+  <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResults.length > 0">
+    {{outstandingResults}}
+  </app-form-element-group>
+  <br *ngIf="outstandingResults.length > 0">
+
   <div id="scout-header">
     <div id="scouts">
       <div class="red">
@@ -51,6 +57,7 @@
     </div>
   </div>
   <br>
+
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div *ngIf="matches.length > 0" class="flex align-items-baseline">
       <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
