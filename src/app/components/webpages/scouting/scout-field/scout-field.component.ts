@@ -51,12 +51,12 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     window.clearTimeout(this.checkScoutTimeout);
   }
 
-  setUploadOutstandingResultsTimeout(): void {
+  startUploadOutstandingResultsTimeout(): void {
     if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
 
     this.outstandingResultsTimeout = window.setTimeout(() => {
       this.uploadOutstandingResults();
-    }, 1000 * 60 * 5); // try to send again after 5 mins
+    }, 1000 * 60 * 3); // try to send again after 5 mins
 
   }
 
@@ -102,7 +102,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.buildTeamList();
             this.buildMatchList();
 
-            this.setUploadOutstandingResultsTimeout();
+            this.startUploadOutstandingResultsTimeout();
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
           }
@@ -214,26 +214,36 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         s.match_id;
         s.team;
 
-        let match = this.matches[this.gs.arrayObjectIndexOf(this.matches, s.match_id, 'match_id')];
+        const index = this.gs.arrayObjectIndexOf(this.matches, s.match_id, 'match_id');
 
-        if (match.red_one_id === s.team) {
-          match.red_one_id = null;
+        if (index !== -1) {
+          let match = this.matches[index];
+
+          if (match.red_one_id === s.team) {
+            match.red_one_id = null;
+          }
+          else if (match.red_two_id === s.team) {
+            match.red_two_id = null;
+          }
+          else if (match.red_three_id === s.team) {
+            match.red_three_id = null;
+          }
+          else if (match.blue_one_id === s.team) {
+            match.blue_one_id = null;
+          }
+          else if (match.blue_two_id === s.team) {
+            match.blue_two_id = null;
+          }
+          else if (match.blue_three_id === s.team) {
+            match.blue_three_id = null;
+          }
+
+          if (!match.red_one_id && !match.red_two_id && !match.red_three_id &&
+            !match.blue_one_id && !match.blue_two_id && !match.blue_three_id) {
+            this.matches.splice(index, 1);
+          }
         }
-        else if (match.red_two_id === s.team) {
-          match.red_two_id = null;
-        }
-        else if (match.red_three_id === s.team) {
-          match.red_three_id = null;
-        }
-        else if (match.blue_one_id === s.team) {
-          match.blue_one_id = null;
-        }
-        else if (match.blue_two_id === s.team) {
-          match.blue_two_id = null;
-        }
-        else if (match.blue_three_id === s.team) {
-          match.blue_three_id = null;
-        }
+
       });
     });
   }
@@ -345,6 +355,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
             this.reset();
+            this.scoutFieldInit();
 
             if (id) {
               this.appDB.ScoutFieldResponseCrud.RemoveAsync(id).then(() => {
@@ -367,7 +378,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           this.gs.decrementOutstandingCalls();
-          this.setUploadOutstandingResultsTimeout();
+          this.startUploadOutstandingResultsTimeout();
         }
       }
     );
