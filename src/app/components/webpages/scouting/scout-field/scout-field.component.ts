@@ -357,7 +357,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           console.log('error', err);
           this.gs.triggerError(err);
 
-          if (sfr) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
+          if (sfr && !id) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
             this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
             this.populateOutstandingResults();
             this.reset();
