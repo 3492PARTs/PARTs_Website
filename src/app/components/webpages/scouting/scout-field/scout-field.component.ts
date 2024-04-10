@@ -22,6 +22,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   noMatch = false;
   teamMatch: Match | null = null;
   scoutQuestions: QuestionWithConditions[] = [];
+  private scoutQuestionsCopy: QuestionWithConditions[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: QuestionWithConditions[] = [];
   scoutTeleopQuestions: QuestionWithConditions[] = [];
@@ -56,7 +57,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   scoutFieldInit(): void {
     this.gs.incrementOutstandingCalls();
     this.http.get(
-      'scouting/field/questions/'
+      'scouting/field/init/'
     ).subscribe(
       {
         next: (result: any) => {
@@ -64,12 +65,14 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.teams = result['teams'];
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
+            this.scoutQuestionsCopy = result['scoutQuestions'];
             this.matches = result['matches'];
             //this.checkInScout();
             this.sortQuestions();
             this.buildTeamList();
+            this.buildMatchList();
             //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
-            this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
+            //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
           }
         },
         error: (err: any) => {
@@ -173,6 +176,36 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
   }
 
+  buildMatchList(): void {
+    this.appDB.ScoutFieldResponseCrud.getAll().then((sfrc: ScoutFieldResponse[]) => {
+      sfrc.forEach((s: ScoutFieldResponse) => {
+        s.match_id;
+        s.team;
+
+        let match = this.matches[this.gs.arrayObjectIndexOf(this.matches, s.match_id, 'match_id')];
+
+        if (match.red_one_id === s.team) {
+          match.red_one_id = null;
+        }
+        else if (match.red_two_id === s.team) {
+          match.red_two_id = null;
+        }
+        else if (match.red_three_id === s.team) {
+          match.red_three_id = null;
+        }
+        else if (match.blue_one_id === s.team) {
+          match.blue_one_id = null;
+        }
+        else if (match.blue_two_id === s.team) {
+          match.blue_two_id = null;
+        }
+        else if (match.blue_three_id === s.team) {
+          match.blue_three_id = null;
+        }
+      });
+    });
+  }
+
   buildTeamList(): void {
     this.teamList = [];
     this.noMatch = false;
@@ -181,23 +214,23 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
       // get the teams for the match from the teams list
       if (this.teamMatch?.blue_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one_id?.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.blue_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two_id?.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.blue_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three_id?.toString()) this.teamList.push(t) });
       }
 
       if (this.teamMatch?.red_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one_id?.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.red_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two_id?.toString()) this.teamList.push(t) });
       }
       if (this.teamMatch?.red_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three_id.toString()) this.teamList.push(t) });
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three_id?.toString()) this.teamList.push(t) });
       }
 
       // set the selected team based on which user is assigned to which team
@@ -230,6 +263,17 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     }
   }
 
+  reset() {
+    this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy);
+    this.teamMatch = null;
+    this.team = null;
+    this.noMatch = false;
+    this.sortQuestions();
+    this.buildTeamList();
+    this.buildMatchList();
+    this.gs.scrollTo(0);
+  }
+
   save(sfr?: ScoutFieldResponse, id?: number): void | null {
     if (!sfr) {
       if (this.gs.strNoE(this.team)) {
@@ -258,7 +302,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         });
       });
 
-      sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id ? parseInt(this.teamMatch.match_id) : null, form_typ: 'field' };
+      sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id || null, form_typ: 'field' };
     }
     this.http.post(
       'form/save-answers/',
@@ -268,27 +312,20 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
-            this.teamMatch = null;
-            this.team = null;
-            this.noMatch = false;
-            this.scoutFieldInit();
-            this.gs.scrollTo(0);
+            this.reset();
 
             if (id) {
-              //this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
+              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
             }
           }
         },
         error: (err: any) => {
           console.log('error', err);
           this.gs.triggerError(err);
+
           if (sfr) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
-            this.gs.successfulResponseBanner(new Banner('Failed to upload, will try again later.', 3500));
-            this.teamMatch = null;
-            this.team = null;
-            this.noMatch = false;
-            this.scoutFieldInit();
-            this.gs.scrollTo(0);
+            this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
+            this.reset();
           });
 
           this.gs.decrementOutstandingCalls();

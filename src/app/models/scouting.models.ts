@@ -26,13 +26,13 @@ export class ScoutQuestion implements IScoutQuestion {
 export interface IScoutFieldResponse {
     question_answers: IQuestion[];
     team: number;
-    match_id: number | null;
+    match_id: string | null;
     form_typ: string;
 }
 
 export class ScoutFieldResponse implements IScoutFieldResponse {
     question_answers: QuestionWithConditions[] = [];
     team!: number;
-    match_id!: number | null;
+    match_id!: string | null;
     form_typ = 'field';
 }
