@@ -65,8 +65,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       let count = 1;
       sfrc.forEach(s => {
         window.setTimeout(() => {
-          console.log(s);
-          //this.save(s, s.id);
+          //console.log(s);
+          this.save(s, s.id);
         }, 1000 * count++);
       });
     });
@@ -345,7 +345,9 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.reset();
 
             if (id) {
-              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id);
+              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id).then(() => {
+                this.populateOutstandingResults();
+              });
             }
           }
         },
@@ -355,6 +357,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
           if (sfr) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
             this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
+            this.populateOutstandingResults();
             this.reset();
           });
 
