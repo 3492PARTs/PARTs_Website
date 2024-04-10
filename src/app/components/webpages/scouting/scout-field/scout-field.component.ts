@@ -74,6 +74,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   populateOutstandingResults(): void {
     this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+      this.outstandingResults = '';
+
       sfrc.forEach(s => {
         this.outstandingResults += `${(s as ScoutFieldResponse).team}, `;
       });
