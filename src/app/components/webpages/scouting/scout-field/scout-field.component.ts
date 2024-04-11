@@ -366,6 +366,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
       sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id || null, form_typ: 'field' };
     }
+
     this.http.post(
       'form/save-answers/',
       sfr
