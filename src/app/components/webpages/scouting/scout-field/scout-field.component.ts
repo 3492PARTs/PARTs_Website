@@ -8,6 +8,7 @@ import { FormElementComponent } from 'src/app/components/atoms/form-element/form
 import { ScoutFieldResponse, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { AppDatabaseService } from 'src/app/services/app-database.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -41,7 +42,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService, private appDB: AppDatabaseService) {
+  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService, private cs: CacheService) {
     this.authService.currentUser.subscribe(u => this.user = u);
   }
 
@@ -64,7 +65,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   uploadOutstandingResults() {
-    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+    this.cs.ScoutFieldResponse.getAll().then(sfrc => {
       let count = 1;
       sfrc.forEach(s => {
         window.setTimeout(() => {
@@ -76,7 +77,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   populateOutstandingResults(): void {
-    this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
+    this.cs.ScoutFieldResponse.getAll().then(sfrc => {
       this.outstandingResults = [];
 
       sfrc.forEach(s => {
@@ -88,7 +89,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.appDB.ScoutFieldResponseCrud.getById(id).then(sfrc => {
+    this.cs.ScoutFieldResponse.getById(id).then(sfrc => {
       this.matches = this.gs.cloneObject(this.matchesCopy);
       if (sfrc?.match_id) {
         this.teamMatch = this.matches[this.gs.arrayObjectIndexOf(this.matches, sfrc.match_id, 'match_id')];
@@ -227,7 +228,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   buildMatchList(): void {
-    this.appDB.ScoutFieldResponseCrud.getAll().then((sfrc: ScoutFieldResponse[]) => {
+    this.cs.ScoutFieldResponse.getAll().then((sfrc: ScoutFieldResponse[]) => {
       sfrc.forEach((s: ScoutFieldResponse) => {
         s.match_id;
         s.team;
@@ -379,7 +380,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.scoutFieldInit();
 
             if (id) {
-              this.appDB.ScoutFieldResponseCrud.RemoveAsync(id).then(() => {
+              this.cs.ScoutFieldResponse.RemoveAsync(id).then(() => {
                 this.populateOutstandingResults();
               });
             }
@@ -389,7 +390,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
           console.log('error', err);
           this.gs.triggerError(err);
 
-          if (sfr && !id) this.appDB.ScoutFieldResponseCrud.AddAsync(sfr).then(() => {
+          if (sfr && !id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
             this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
             this.populateOutstandingResults();
             this.reset();

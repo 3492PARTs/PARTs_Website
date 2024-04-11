@@ -11,8 +11,8 @@ import { DexieCrud } from '../classes/dexie-crud';
 })
 export class AppDatabaseService extends Dexie {
 
-  private ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
-  ScoutFieldResponseCrud!: DexieCrud<IScoutFieldResponse, number>;
+  ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
+
 
   versionNumber: number = 1;
 
@@ -38,7 +38,6 @@ export class AppDatabaseService extends Dexie {
     this.version(this.versionNumber).stores(this.setTablesSchema());
     this.gs.devConsoleLog('app-database.service', 'database initialized');
     this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
-    this.ScoutFieldResponseCrud = new DexieCrud<IScoutFieldResponse, number>(this.ScoutFieldResponseTable);
   }
 
   private setTablesSchema() {
