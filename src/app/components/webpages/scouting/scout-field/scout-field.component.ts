@@ -9,6 +9,7 @@ import { ScoutFieldResponse, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { AppDatabaseService } from 'src/app/services/app-database.service';
 import { CacheService } from 'src/app/services/cache.service';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -42,7 +43,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService, private cs: CacheService) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService) {
     this.authService.currentUser.subscribe(u => this.user = u);
   }
 
@@ -103,66 +104,31 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   scoutFieldInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/field/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.teams = result['teams'];
-            this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
-            this.scoutQuestions = result['scoutQuestions'];
-            this.scoutQuestionsCopy = this.gs.cloneObject(this.scoutQuestions);
-            this.matches = result['matches'];
-            this.matchesCopy = this.gs.cloneObject(this.matches);
-            //this.checkInScout();
-            this.sortQuestions();
-            this.buildTeamList();
-            this.buildMatchList();
+    this.api.get(true, 'scouting/field/init/', undefined, (result: any) => {
+      this.teams = result['teams'];
+      this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
+      this.scoutQuestions = result['scoutQuestions'];
+      this.scoutQuestionsCopy = this.gs.cloneObject(this.scoutQuestions);
+      this.matches = result['matches'];
+      this.matchesCopy = this.gs.cloneObject(this.matches);
+      //this.checkInScout();
+      this.sortQuestions();
+      this.buildTeamList();
+      this.buildMatchList();
 
-            this.startUploadOutstandingResultsTimeout();
-            //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
-            //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+      this.startUploadOutstandingResultsTimeout();
+      //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
+      //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
+    });
   }
 
   checkInScout(): void {
     if (this.scoutFieldSchedule && this.scoutFieldSchedule.scout_field_sch_id)
-      this.http.get(
-        'scouting/field/check-in/', {
-        params: {
-          scout_field_sch_id: this.scoutFieldSchedule.scout_field_sch_id
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            //this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            //this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(false, 'scouting/field/check-in/', {
+        scout_field_sch_id: this.scoutFieldSchedule.scout_field_sch_id
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+      });
 
     //this.setUpdateScoutFieldScheduleTimeout();
   }
@@ -178,26 +144,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   updateScoutFieldSchedule(): void {
-    this.http.get(
-      'scouting/field/questions/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
-            this.checkInScout();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          //this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          //this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(false, 'scouting/field/questions/', undefined, (result: any) => {
+      this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
+      this.checkInScout();
+    });
   }
 
   sortQuestions(): void {
@@ -368,42 +318,25 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id || null, form_typ: 'field' };
     }
 
-    this.http.post(
-      'form/save-answers/',
-      sfr
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.reset();
-            this.scoutFieldInit();
+    this.api.post(true, 'form/save-answers/', sfr, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.reset();
+      this.scoutFieldInit();
 
-            if (id) {
-              this.cs.ScoutFieldResponse.RemoveAsync(id).then(() => {
-                this.populateOutstandingResults();
-              });
-            }
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-
-          if (sfr && !id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
-            this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-            this.populateOutstandingResults();
-            this.reset();
-          });
-
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-          this.startUploadOutstandingResultsTimeout();
-        }
+      if (id) {
+        this.cs.ScoutFieldResponse.RemoveAsync(id).then(() => {
+          this.populateOutstandingResults();
+        });
       }
-    );
+    }, (err: any) => {
+      if (sfr && !id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
+        this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
+        this.populateOutstandingResults();
+        this.reset();
+      });
+
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   setAutoFormElements(fes: QueryList<FormElementComponent>): void {
