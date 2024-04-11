@@ -9,6 +9,7 @@ import { GeneralService } from 'src/app/services/general.service';
 })
 export class QuestionFormElementComponent {
   @Input() Question: any;
+  @Input() Disabled = false;
   @Output() QuestionChange = new EventEmitter<any>();
   @ViewChild(FormElementComponent) formElement!: FormElementComponent;
 

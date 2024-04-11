@@ -38,6 +38,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   otherFormElements = new QueryList<FormElementComponent>();
   formElements = new QueryList<FormElementComponent>();
 
+  formDisabled = false;
+
   constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService, private appDB: AppDatabaseService) {
     this.authService.currentUser.subscribe(u => this.user = u);
   }
@@ -84,6 +86,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   viewResult(id: number): void {
+    this.formDisabled = true;
     this.appDB.ScoutFieldResponseCrud.getById(id).then(sfrc => {
       this.scoutQuestions = sfrc?.question_answers || this.scoutQuestions;
       this.sortQuestions();
@@ -320,6 +323,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.buildTeamList();
     this.buildMatchList();
     this.gs.scrollTo(0);
+    this.formDisabled = false;
   }
 
   save(sfr?: ScoutFieldResponse, id?: number): void | null {

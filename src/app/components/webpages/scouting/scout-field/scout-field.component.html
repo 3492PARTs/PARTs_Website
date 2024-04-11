@@ -66,30 +66,34 @@
   <br>
 
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
+    <div *ngIf="formDisabled">
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
+    </div>
+
     <div *ngIf="matches.length > 0" class="flex align-items-baseline">
       <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
         [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
-        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()">
+        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled">
       </app-form-element>
 
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()">No Match
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
       </app-button>
     </div>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamList"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true">
+      [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true" [Disabled]="formDisabled">
     </app-form-element>
 
     <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
-      (FormElementsChange)="setAutoFormElements($event)">
+      (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
     </app-question-display-form>
 
     <app-question-display-form [LabelText]="'Teleoperated'" [(Questions)]="scoutTeleopQuestions"
-      (FormElementsChange)="setTeleopFormElements($event)">
+      (FormElementsChange)="setTeleopFormElements($event)" [Disabled]="formDisabled">
     </app-question-display-form>
 
     <app-question-display-form *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'"
-      [(Questions)]="scoutOtherQuestions" (FormElementsChange)="setOtherFormElements($event)">
+      [(Questions)]="scoutOtherQuestions" (FormElementsChange)="setOtherFormElements($event)" [Disabled]="formDisabled">
     </app-question-display-form>
 
     <app-button-ribbon>

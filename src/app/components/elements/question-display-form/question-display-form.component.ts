@@ -11,6 +11,7 @@ import { QuestionWithConditions } from 'src/app/models/form.models';
 export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
   @Input() LabelText = '';
+  @Input() Disabled = false;
   @Input() Questions: QuestionWithConditions[] = [];
   @Output() QuestionsChange: EventEmitter<QuestionWithConditions[]> = new EventEmitter();
 
