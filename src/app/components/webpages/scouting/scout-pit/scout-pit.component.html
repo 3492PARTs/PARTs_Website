@@ -1,5 +1,4 @@
 <app-box [Title]="'Pit Scouting Form'">
-  <p>{{scoutPitResponse.response_id}}</p>
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div>
       <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
