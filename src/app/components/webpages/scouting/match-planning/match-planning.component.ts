@@ -3,11 +3,11 @@ import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
-import { Team } from '../scout-field/scout-field.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
+import { Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-match-planning',
@@ -329,17 +329,17 @@ export class Match {
   match_id!: string;
   match_number!: number;
   event!: Event;
-  red_one_id!: Team | number;
+  red_one_id!: Team | number | null;
   red_one_rank!: number;
-  red_two_id!: Team | number;
+  red_two_id!: Team | number | null;
   red_two_rank!: number;
-  red_three_id!: Team | number;
+  red_three_id!: Team | number | null;
   red_three_rank!: number;
-  blue_one_id!: Team | number;
+  blue_one_id!: Team | number | null;
   blue_one_rank!: number;
-  blue_two_id!: Team | number;
+  blue_two_id!: Team | number | null;
   blue_two_rank!: number;
-  blue_three_id!: Team | number;
+  blue_three_id!: Team | number | null;
   blue_three_rank!: number;
   red_score!: number;
   blue_score!: number;

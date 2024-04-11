@@ -285,9 +285,11 @@
           (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
           (focusout)="focusOut()">
         <div class="flex justify-content-space-between">
-          <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()">Start</app-button>
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="stopwatchStop()">Stop</app-button>
-          <app-button [ButtonType]="'danger'" (FunctionCallBack)="stopwatchReset()">Reset</app-button>
+          <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()"
+            [Disabled]="Disabled">Start</app-button>
+          <app-button [ButtonType]="'main'" (FunctionCallBack)="stopwatchStop()" [Disabled]="Disabled">Stop</app-button>
+          <app-button [ButtonType]="'danger'" (FunctionCallBack)="stopwatchReset()"
+            [Disabled]="Disabled">Reset</app-button>
         </div>
       </div>
 

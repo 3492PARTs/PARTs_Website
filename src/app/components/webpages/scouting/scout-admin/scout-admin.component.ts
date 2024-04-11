@@ -2,15 +2,14 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AppSize, Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Team } from '../scout-field/scout-field.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
-import { Init, Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
-import { QuestionAggregateType, QuestionAggregate } from 'src/app/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
+import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
+import { Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-admin',
@@ -131,9 +130,9 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
-  fieldQuestions: Question[] = [];
-  fieldQuestionAggQuestionList: Question[] = [];
-  fieldQuestionToAddToAgg: Question | null = null;;
+  fieldQuestions: QuestionWithConditions[] = [];
+  fieldQuestionAggQuestionList: QuestionWithConditions[] = [];
+  fieldQuestionToAddToAgg: QuestionWithConditions | null = null;;
   fieldQuestionAggregateQuestionsTableCols: object[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
     { PropertyName: 'active', ColLabel: 'Active' },
@@ -1203,7 +1202,7 @@ export class ScoutAdminComponent implements OnInit {
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.fieldQuestions = result as Question[];
+            this.fieldQuestions = result as QuestionWithConditions[];
             this.buildFieldQuestionAggQuestionList();
           }
         },
@@ -1235,7 +1234,7 @@ export class ScoutAdminComponent implements OnInit {
   addQuestionToFieldAggregate(): void {
     if (this.fieldQuestionToAddToAgg && !this.gs.strNoE(this.fieldQuestionToAddToAgg.question_id)) {
       this.activeFieldQuestionAggregate.questions.push(this.fieldQuestionToAddToAgg);
-      this.fieldQuestionToAddToAgg = new Question();
+      this.fieldQuestionToAddToAgg = new QuestionWithConditions();
       this.buildFieldQuestionAggQuestionList();
     }
   }

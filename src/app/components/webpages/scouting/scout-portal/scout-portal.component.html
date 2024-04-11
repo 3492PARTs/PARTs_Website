@@ -57,7 +57,7 @@
     </app-form-element-group>
   </ng-container>
 
-  <app-form-element-group [LabelText]="'Your Field Scouting Schedule'">
+  <app-form-element-group [LabelText]="'Your Scouting Schedule'">
     <div *ngIf="scoutFieldScheduleData.length <= 0">
       <p>You do not currently have any scheduled scouting.</p>
     </div>
@@ -67,7 +67,7 @@
     </app-table>
   </app-form-element-group>
 
-  <app-form-element-group [LabelText]="'Your Pit Scouting Schedule'">
+  <app-form-element-group [LabelText]="'Your Pit Schedule'">
     <div *ngIf="init.schedule && init.schedule.length <= 0">
       <p>You do not currently have any scheduled pit times.</p>
     </div>

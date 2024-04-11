@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel, Event } from '../scouting/scout-admin/scout-admin.component';
-import { Team } from '../scouting/scout-field/scout-field.component';
+import { Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-event-competition',

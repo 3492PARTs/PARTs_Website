@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { QuestionCondition } from '../question-condition-admin-form/question-condition-admin-form.component';
+import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType } from 'src/app/models/form.models';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -22,7 +22,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   init: Init = new Init();
   questionModalVisible = false
-  activeQuestion: Question = new Question();
+  activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   //editQuestion: Question = new Question();
 
   questionTableCols: object[] = [
@@ -72,8 +72,8 @@ export class QuestionAdminFormComponent implements OnInit {
     );
   }
 
-  showQuestionModal(q?: Question): void {
-    this.activeQuestion = q ? this.gs.cloneObject(q) : new Question();
+  showQuestionModal(q?: QuestionWithConditions): void {
+    this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
     this.questionModalVisible = true;
   }
 
@@ -98,7 +98,7 @@ export class QuestionAdminFormComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
-            this.activeQuestion = new Question();
+            this.activeQuestion = new QuestionWithConditions();
             this.questionModalVisible = false;
             this.questionInit();
             //console.log(this.question);
@@ -115,38 +115,6 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     );
   }
-  /*
-    toggleQuestion(q: Question): void | null {
-      if (!confirm('Are you sure you want to toggle this question?')) {
-        return null;
-      }
-  
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/toggle-scout-question/', {
-        params: {
-          sq_id: q.question_id?.toString() || '-1'
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-              this.questionInit();
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
-    }*/
 
   addOption(list: any): void {
     list.push(new QuestionOption());
@@ -158,107 +126,10 @@ export class QuestionAdminFormComponent implements OnInit {
     }
     return false;
   }
-  /*
-    toggleOption(op: QuestionOption): void | null {
-      if (!confirm('Are you sure you want to toggle this option?')) {
-        return null;
-      }
-  
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/toggle-option/', {
-        params: {
-          q_opt_id: op.question_opt_id.toString()
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-              this.questionInit();
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
-    }*/
-
 }
 
-export class ScoutQuestion {
-  id!: number;
-  question_id!: number;
-  season_id!: number;
-  scorable = false;
-  void_ind = 'n';
-}
-
-export class Question {
-  question_id: number | null = null;
-  //season!: number;
-  form_typ!: string;
-  form_sub_typ!: string;
-  form_sub_nm!: string;
-  question_typ!: QuestionType;
-  question!: string;
-  order!: number;
-  required = 'n';
-  active = 'y';
-  void_ind = 'n';
-  answer: any = '';
-  display_value = '';
-
-  questionoption_set: QuestionOption[] = [];
-  //scoutpitanswer_set: QuestionAnswer[] = [];
-
-  scout_question = new ScoutQuestion();
-
-  conditions: QuestionCondition[] = [];
-
-  is_condition = 'n';
-}
-
-export class QuestionOption {
-  question_opt_id!: number;
-  //sfq_id!: number;
-  //spq_id!: number;
-  option!: string;
-  active = 'y';
-  void_ind = 'n';
-}
-
-export class QuestionAnswer {
-  question_answer_id!: number;
-  //scout_field!: any;
-  //scout_pit!: any;
-  response!: any;
-  question!: Question;
-  answer = '';
-  void_ind = 'n'
-}
-export class QuestionType {
-  question_typ!: string;
-  question_typ_nm!: string;
-  is_list = 'n';
-  void_ind = 'n';
-}
-
-export class FormSubType {
-  form_sub_typ = ''
-  form_sub_nm = ''
-  form_typ_id = ''
-}
-
-export class Init {
+class Init {
   question_types: QuestionType[] = [];
-  questions: Question[] = [];
+  questions: QuestionWithConditions[] = [];
   form_sub_types: FormSubType[] = [];
 }

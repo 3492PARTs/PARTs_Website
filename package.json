@@ -28,6 +28,7 @@
     "blueimp-load-image": "^5.14.0",
     "browser-image-compression": "^2.0.2",
     "chart.js": "^4.4.1",
+    "dexie": "^4.0.2",
     "file-saver": "^2.0.5",
     "jquery": "^3.7.1",
     "moment": "^2.30.1",
