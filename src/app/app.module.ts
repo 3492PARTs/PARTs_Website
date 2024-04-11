@@ -11,7 +11,7 @@ import { ErrorInterceptor } from './helpers/error.interceptor';
 import { HomeComponent } from './components/webpages/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 //import { FooterComponent } from './components/footer/footer.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/webpages/login/login.component';
 import { LoadingComponent } from './components/atoms/loading/loading.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
 import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
