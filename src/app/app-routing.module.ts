@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './helpers/auth.gaurd';
 
 import { HomeComponent } from './components/webpages/home/home.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/webpages/login/login.component';
 import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
 import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
 import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
