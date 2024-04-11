@@ -336,13 +336,14 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   save(sfr?: ScoutFieldResponse, id?: number): void | null {
+    this.gs.incrementOutstandingCalls();
     if (!sfr) {
       if (this.gs.strNoE(this.team)) {
         this.gs.triggerError('Must select a team to scout!');
         return null;
       }
 
-      this.gs.incrementOutstandingCalls();
+
 
       let response: any[] = [];
       this.scoutAutoQuestions.forEach(sq => {
