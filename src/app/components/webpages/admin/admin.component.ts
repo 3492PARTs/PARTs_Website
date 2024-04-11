@@ -1,12 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { GeneralService, RetMessage, Page } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { User, AuthGroup, AuthService, PhoneType, ErrorLog, AuthCallStates, AuthPermission } from 'src/app/services/auth.service';
+import { AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
 import { QuestionWithConditions } from 'src/app/models/form.models';
+import { User, AuthGroup, AuthPermission } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-admin',

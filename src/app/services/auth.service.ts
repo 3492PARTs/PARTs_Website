@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
+import { User } from '../models/user.models';
 
 @Injectable({
   providedIn: 'root'
@@ -444,36 +445,6 @@ export class UserData {
   uuid!: string | null;
   token!: string | null;
   email!: string | null;
-}
-
-export class User {
-  id!: number;
-  username = '';
-  email = '';
-  name = '';
-  first_name = '';
-  last_name = '';
-  is_active = false;
-  discord_user_id = '';
-  phone = '';
-  phone_type = '';
-  phone_type_id!: number | null;
-  groups: AuthGroup[] = [];
-  image = '';
-}
-
-
-export class AuthGroup {
-  id!: number;
-  name!: string;
-  permissions: AuthPermission[] = [];
-}
-
-export class AuthPermission {
-  id!: number;
-  codename!: string;
-  content_type!: number;
-  name!: string;
 }
 
 export class PhoneType {

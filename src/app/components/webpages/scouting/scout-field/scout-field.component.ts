@@ -1,15 +1,14 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Banner, GeneralService } from 'src/app/services/general.service';
-import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
 import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 import { ScoutFieldResponse, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
-import { AppDatabaseService } from 'src/app/services/app-database.service';
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-scout-field',

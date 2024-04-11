@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AppSize, Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
-import { User, AuthGroup, AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
+import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
@@ -10,6 +10,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
 import { Team } from 'src/app/models/scouting.models';
+import { User, AuthGroup } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-scout-admin',

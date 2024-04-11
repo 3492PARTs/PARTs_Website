@@ -1,13 +1,14 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { AuthService, User } from 'src/app/services/auth.service';
-import { Router, NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 import { PwaService } from 'src/app/services/pwa.service';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-navigation',

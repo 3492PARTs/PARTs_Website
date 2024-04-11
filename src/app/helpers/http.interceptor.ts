@@ -10,12 +10,12 @@ import {
   HttpResponse,
   HttpUserEvent,
 } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
-import { APIStatus, AuthService, Token, User } from '../services/auth.service';
+import { Observable } from 'rxjs';
+import { APIStatus, AuthService, Token } from '../services/auth.service';
 import { environment } from '../../environments/environment';
 import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
+import { User } from '../models/user.models';
 
 @Injectable()
 export class HTTPInterceptor implements HttpInterceptor {

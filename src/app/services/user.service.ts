@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthGroup, AuthPermission, User } from './auth.service';
 import { Banner, GeneralService, RetMessage } from './general.service';
+import { User, AuthGroup, AuthPermission } from '../models/user.models';
 
 @Injectable({
   providedIn: 'root'

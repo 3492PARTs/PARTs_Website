@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
-import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
@@ -8,6 +8,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 import { Team } from 'src/app/models/scouting.models';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-match-planning',

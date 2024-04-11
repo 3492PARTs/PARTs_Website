@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Event, ScoutFieldSchedule, ScoutPitSchedule } from '../scout-admin/scout-admin.component';
-import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Event, ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
+import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
-import { AuthCallStates, AuthService, User } from 'src/app/services/auth.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/user.models';
 
 @Component({
   selector: 'app-scout-portal',
