@@ -1,7 +1,7 @@
 import { IQuestion, QuestionWithConditions } from "./form.models";
 
 export class Team {
-    team_no!: string;
+    team_no!: number;
     team_nm!: string;
     void_ind = 'n'
     checked = false;
@@ -34,5 +34,19 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     match_id!: string | null;
+    form_typ = 'field';
+}
+
+export interface IScoutPitResponse {
+    question_answers: IQuestion[];
+    team: number;
+    response_id: number | null;
+    form_typ: string;
+}
+
+export class ScoutPitResponse implements IScoutPitResponse {
+    question_answers: QuestionWithConditions[] = [];
+    team!: number;
+    response_id!: number | null;
     form_typ = 'field';
 }

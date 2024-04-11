@@ -6,7 +6,7 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 import { QuestionWithConditions } from 'src/app/models/form.models';
-import { Team } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-field',
@@ -16,16 +16,15 @@ import { Team } from 'src/app/models/scouting.models';
 export class ScoutPitComponent implements OnInit, OnDestroy {
   teams: Team[] = [];
   compTeams: Team[] = [];
-  team!: string;
-  private previousTeam!: string;
+  private previousTeam!: number;
   robotPic!: File;
   robotPics: File[] = [];
   previewUrl: any = null;
-  scoutQuestions: QuestionWithConditions[] = [];
+  scoutPitResponse = new ScoutPitResponse();
+
   private scoutQuestionsCopy: QuestionWithConditions[] = [];
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
-  responseId: string | null = null;
 
   formElements = new QueryList<FormElementComponent>();
 
@@ -71,8 +70,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
           if (this.gs.checkResponse(result)) {
             this.teams = (result as ScoutPitInit).teams;
             this.compTeams = (result as ScoutPitInit).comp_teams;
-            this.scoutQuestions = (result as ScoutPitInit).scoutQuestions;
-            this.scoutQuestionsCopy = JSON.parse(JSON.stringify((result as ScoutPitInit).scoutQuestions)) as QuestionWithConditions[];
+            this.scoutPitResponse.question_answers = (result as ScoutPitInit).scoutQuestions;
+            this.scoutQuestionsCopy = this.gs.cloneObject((result as ScoutPitInit).scoutQuestions) as QuestionWithConditions[];
           }
         },
         error: (err: any) => {
@@ -89,7 +88,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as QuestionWithConditions[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as QuestionWithConditions[];
 
     scoutQuestions.forEach(el => {
       let answer = this.gs.formatQuestionAnswer(el.answer)
@@ -102,23 +101,30 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     if (dirty) {
       this.gs.triggerConfirm('Are you sure you want to clear and change teams?',
         () => {
-          this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy) as QuestionWithConditions[];
-          this.previewUrl = '';
-          this.responseId = null;
-          this.previousTeam = this.team;
-          if (load && this.team) this.loadTeam();
+          this.setNewTeam(load);
         },
         () => {
           this.gs.triggerChange(() => {
-            this.team = this.previousTeam;
-            this.previewUrl = '';
+            this.scoutPitResponse.team = this.previousTeam;
           });
         });
     }
     else {
-      this.previousTeam = this.team;
-      if (load) this.loadTeam();
+      this.setNewTeam(load);
     }
+  }
+
+  private setNewTeam(load: boolean): void {
+    this.previousTeam = this.scoutPitResponse.team;
+    this.scoutPitResponse = new ScoutPitResponse();
+    this.scoutPitResponse.team = this.previousTeam;
+    this.scoutPitResponse.question_answers = this.gs.cloneObject(this.scoutQuestionsCopy);
+
+    this.robotPic = new File([], '');
+    this.previewUrl = null;
+    this.previewImages = [];
+
+    if (load) this.loadTeam();
   }
 
   addRobotPicture() {
@@ -133,7 +139,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   save(): void | null {
-    if (this.gs.strNoE(this.team)) {
+    if (this.gs.strNoE(this.scoutPitResponse.team)) {
       this.gs.addBanner(new Banner("Must select a team.", 500));
       return null;
     }
@@ -145,21 +151,24 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
 
-    let scoutQuestions = this.gs.cloneObject(this.scoutQuestions) as QuestionWithConditions[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as QuestionWithConditions[];
 
     scoutQuestions.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
     });
 
+    this.scoutPitResponse.question_answers = scoutQuestions;
+    this.scoutPitResponse.form_typ = 'pit';
+
     this.http.post(
       'form/save-answers/',
-      { question_answers: scoutQuestions, team: this.team, form_typ: 'pit', response_id: this.responseId },
+      this.scoutPitResponse,
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.gs.successfulResponseBanner(result);
-            this.scoutQuestions = JSON.parse(JSON.stringify(this.scoutQuestionsCopy)) as QuestionWithConditions[];
+            this.gs.incrementOutstandingCalls();
             this.savePictures();
             this.spInit();
             this.gs.scrollTo(0);
@@ -178,41 +187,49 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   private savePictures(): void | null {
+    let count = 0;
+
     this.robotPics.forEach(pic => {
       if (pic && pic.size >= 0) {
-        this.gs.incrementOutstandingCalls();
-        const team_no = this.team;
+        const team_no = this.scoutPitResponse.team;
 
-        this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
-          if (resizedPic) {
-            const formData = new FormData();
-            formData.append('file', resizedPic);
-            formData.append('team_no', team_no);
+        window.setTimeout(() => {
+          this.gs.incrementOutstandingCalls();
 
-            this.http.post(
-              'scouting/pit/save-picture/', formData
-            ).subscribe(
-              {
-                next: (result: any) => {
-                  this.gs.successfulResponseBanner(result);
-                  this.removeRobotPicture();
-                },
-                error: (err: any) => {
-                  console.log('error', err);
-                  this.gs.triggerError(err);
-                  this.gs.decrementOutstandingCalls();
-                },
-                complete: () => {
-                  this.gs.decrementOutstandingCalls();
+          this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
+            if (resizedPic) {
+              const formData = new FormData();
+              formData.append('file', resizedPic);
+              formData.append('team_no', team_no.toString());
+
+              this.http.post(
+                'scouting/pit/save-picture/', formData
+              ).subscribe(
+                {
+                  next: (result: any) => {
+                    this.gs.successfulResponseBanner(result);
+                    this.removeRobotPicture();
+                  },
+                  error: (err: any) => {
+                    console.log('error', err);
+                    this.gs.triggerError(err);
+                    this.gs.decrementOutstandingCalls();
+                  },
+                  complete: () => {
+                    this.gs.decrementOutstandingCalls();
+                  }
                 }
-              }
-            );
-          }
-        });
+              );
+            }
+          });
+        }, 1500 * ++count);
       }
     });
+
+    window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
+
     this.robotPics = [];
-    this.team = '';
+    this.scoutPitResponse = new ScoutPitResponse();
   }
 
   preview() {
@@ -236,16 +253,16 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.http.get(
       'scouting/pit/team-data/', {
       params: {
-        team_num: this.team
+        team_num: this.scoutPitResponse.team
       }
     }
     ).subscribe(
       {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
-            this.scoutQuestions = (result['questions'] as QuestionWithConditions[]);
+            this.scoutPitResponse.question_answers = (result['questions'] as QuestionWithConditions[]);
+            this.scoutPitResponse.response_id = result['response_id'] as number;
             this.previewImages = result['pics'] as ScoutPitImage[];
-            this.responseId = result['response_id'] as string;
           }
         },
         error: (err: any) => {
@@ -271,8 +288,3 @@ export class ScoutPitInit {
   comp_teams: Team[] = [];
 }
 
-export class ScoutAnswer {
-  scoutQuestions: QuestionWithConditions[] = [];
-  teams: Team[] = [];
-  team!: string;
-}

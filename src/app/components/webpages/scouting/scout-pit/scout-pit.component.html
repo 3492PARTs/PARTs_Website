@@ -1,20 +1,22 @@
 <app-box [Title]="'Pit Scouting Form'">
+  <p>{{scoutPitResponse.response_id}}</p>
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div>
       <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [(Model)]="team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true"
-        [Required]="!team || team.length <= 0" [MinWidth]="'180px'">
+        [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true"
+        [Required]="!scoutPitResponse.team" [MinWidth]="'180px'">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!team || team.length <= 0">
+        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam(true)"
+        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team">
       </app-form-element>
     </div>
 
-    <app-question-display-form [(Questions)]="scoutQuestions" (FormElementsChange)="setFormElements($event)">
+    <app-question-display-form [(Questions)]="scoutPitResponse.question_answers"
+      (FormElementsChange)="setFormElements($event)">
     </app-question-display-form>
 
     <div class="flex align-items-baseline">
