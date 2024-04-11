@@ -56,11 +56,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   startUploadOutstandingResultsTimeout(): void {
     if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
-    /*
-        this.outstandingResultsTimeout = window.setTimeout(() => {
-          this.uploadOutstandingResults();
-        }, 1000 * 60 * 3); // try to send again after 3 mins
-    */
+
+    this.outstandingResultsTimeout = window.setTimeout(() => {
+      this.uploadOutstandingResults();
+    }, 1000 * 60 * 3); // try to send again after 3 mins
+
   }
 
   uploadOutstandingResults() {

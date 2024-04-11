@@ -64,8 +64,8 @@
   <br>
 
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
-    <div *ngIf="formDisabled">
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
+    <div *ngIf="formDisabled" class="padding-bottom-1rem">
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="reset()">Reset</app-button>
     </div>
 
     <div *ngIf="matches.length > 0" class="flex align-items-baseline">
