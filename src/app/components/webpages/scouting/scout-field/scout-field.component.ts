@@ -19,6 +19,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   teamList: Team[] = [];
   team: number | null = null;
   matches: Match[] = [];
+  private matchesCopy: Match[] = [];
   noMatch = false;
   teamMatch: Match | null = null;
   scoutQuestions: QuestionWithConditions[] = [];
@@ -55,11 +56,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   startUploadOutstandingResultsTimeout(): void {
     if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
-
-    this.outstandingResultsTimeout = window.setTimeout(() => {
-      this.uploadOutstandingResults();
-    }, 1000 * 60 * 3); // try to send again after 5 mins
-
+    /*
+        this.outstandingResultsTimeout = window.setTimeout(() => {
+          this.uploadOutstandingResults();
+        }, 1000 * 60 * 3); // try to send again after 3 mins
+    */
   }
 
   uploadOutstandingResults() {
@@ -88,6 +89,13 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   viewResult(id: number): void {
     this.formDisabled = true;
     this.appDB.ScoutFieldResponseCrud.getById(id).then(sfrc => {
+      this.matches = this.gs.cloneObject(this.matchesCopy);
+      if (sfrc?.match_id) {
+        this.teamMatch = this.matches[this.gs.arrayObjectIndexOf(this.matches, sfrc.match_id, 'match_id')];
+      }
+      this.team = sfrc?.team || 0;
+      this.buildTeamList();
+
       this.scoutQuestions = sfrc?.question_answers || this.scoutQuestions;
       this.sortQuestions();
     });
@@ -104,8 +112,9 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.teams = result['teams'];
             this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
             this.scoutQuestions = result['scoutQuestions'];
-            this.scoutQuestionsCopy = result['scoutQuestions'];
+            this.scoutQuestionsCopy = this.gs.cloneObject(this.scoutQuestions);
             this.matches = result['matches'];
+            this.matchesCopy = this.gs.cloneObject(this.matches);
             //this.checkInScout();
             this.sortQuestions();
             this.buildTeamList();
@@ -367,11 +376,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.reset();
             this.scoutFieldInit();
 
-            /*if (id) {
+            if (id) {
               this.appDB.ScoutFieldResponseCrud.RemoveAsync(id).then(() => {
                 this.populateOutstandingResults();
               });
-            }*/
+            }
           }
         },
         error: (err: any) => {
