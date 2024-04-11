@@ -31,7 +31,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   user!: User;
 
   private outstandingResultsTimeout: number | undefined;
-  outstandingResults = '';
+  outstandingResults: { id: number, team: number }[] = [];
 
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
@@ -74,13 +74,19 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   populateOutstandingResults(): void {
     this.appDB.ScoutFieldResponseCrud.getAll().then(sfrc => {
-      this.outstandingResults = '';
+      this.outstandingResults = [];
 
       sfrc.forEach(s => {
-        this.outstandingResults += `${(s as ScoutFieldResponse).team}, `;
+        this.outstandingResults.push({ id: s.id, team: s.team });
       });
 
-      if (this.outstandingResults.length >= 2) this.outstandingResults = this.outstandingResults.substring(0, this.outstandingResults.length - 2);
+    });
+  }
+
+  viewResult(id: number): void {
+    this.appDB.ScoutFieldResponseCrud.getById(id).then(sfrc => {
+      this.scoutQuestions = sfrc?.question_answers || this.scoutQuestions;
+      this.sortQuestions();
     });
   }
 
@@ -357,11 +363,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
             this.reset();
             this.scoutFieldInit();
 
-            if (id) {
+            /*if (id) {
               this.appDB.ScoutFieldResponseCrud.RemoveAsync(id).then(() => {
                 this.populateOutstandingResults();
               });
-            }
+            }*/
           }
         },
         error: (err: any) => {

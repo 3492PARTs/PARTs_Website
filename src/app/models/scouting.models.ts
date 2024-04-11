@@ -1,4 +1,4 @@
-import { IQuestion, QuestionWithConditions } from "./form.models";
+import { IQuestion, IQuestionWithConditions, QuestionWithConditions } from "./form.models";
 
 export class Team {
     team_no!: number;
@@ -24,7 +24,7 @@ export class ScoutQuestion implements IScoutQuestion {
 }
 
 export interface IScoutFieldResponse {
-    question_answers: IQuestion[];
+    question_answers: IQuestionWithConditions[];
     team: number;
     match_id: string | null;
     form_typ: string;
@@ -38,7 +38,7 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
 }
 
 export interface IScoutPitResponse {
-    question_answers: IQuestion[];
+    question_answers: IQuestionWithConditions[];
     team: number;
     response_id: number | null;
     form_typ: string;

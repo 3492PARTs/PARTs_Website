@@ -3,7 +3,10 @@
   <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResults.length > 0">
     <div id="outstanding-results" class="flex align-items-center gap-1rem">
       <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResults()"></app-button>
-      <p>{{outstandingResults}}</p>
+      <div *ngFor="let or of outstandingResults; let last = last; let i = index">
+        <a (click)="viewResult(or.id)">{{or.team}}</a><ng-container *ngIf="!last">,</ng-container>
+      </div>
+
     </div>
 
   </app-form-element-group>

@@ -1,7 +1,25 @@
 import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
 
-export interface IWithConditions {
+export interface IQuestionWithConditions {
+    question_id: number | null;
+    form_typ: string;
+    form_sub_typ: string;
+    form_sub_nm: string;
+    question_typ: IQuestionType;
+    question: string;
+    order: number;
+    required: string;
+    active: string;
+    void_ind: string;
+    answer: any;
+    display_value: string;
+
+    questionoption_set: IQuestionOption[];
+
+    scout_question: IScoutQuestion;
     conditions: IQuestionCondition[];
+    is_condition: string;
+
 }
 
 export interface IQuestion {
@@ -25,7 +43,7 @@ export interface IQuestion {
     is_condition: string;
 }
 
-export class QuestionWithConditions implements IQuestion, IWithConditions {
+export class QuestionWithConditions implements IQuestionWithConditions {
     question_id: number | null = null;
     form_typ!: string;
     form_sub_typ!: string;
