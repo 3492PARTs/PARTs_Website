@@ -6,7 +6,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
-import { Question } from '../../elements/question-admin-form/question-admin-form.component';
+import { QuestionWithConditions } from 'src/app/models/form.models';
 
 @Component({
   selector: 'app-admin',
@@ -616,7 +616,7 @@ export class Response {
   response_id!: number;
   form_typ = '';
   time = new Date();
-  questionanswer_set: Question[] = [];
+  questionanswer_set: QuestionWithConditions[] = [];
 }
 export class Item {
   item_id!: number;

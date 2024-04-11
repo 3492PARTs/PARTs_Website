@@ -7,6 +7,14 @@ button:not(:disabled) {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: 0.7 !important;
+
+  &:hover {
+    box-shadow: none !important;
+  }
+}
+
 .btn {
   display: inline-block;
   font-weight: 400;
@@ -127,6 +135,7 @@ button:not(:disabled) {
 
   &:hover {
     box-shadow: 0px 0px 0px 0.2rem rgba(95, 238, 246, 0.5);
+    background-color: rgba(95, 238, 246, 0.3);
   }
 }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Question } from 'src/app/components/elements/question-admin-form/question-admin-form.component';
+import { QuestionWithConditions } from 'src/app/models/form.models';
 import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
 import { GeneralService, Banner, RetMessage } from 'src/app/services/general.service';
 
@@ -52,7 +52,7 @@ export class TeamApplicationComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.questions = [];
-            let qs = result as Question[];
+            let qs = result as QuestionWithConditions[];
             let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
             form_sub_typs.forEach(fst => {
@@ -135,7 +135,7 @@ export class TeamApplicationComponent implements OnInit {
         next: (result: any) => {
           if (this.gs.checkResponse(result)) {
             this.questions = [];
-            let qs = result as Question[];
+            let qs = result as QuestionWithConditions[];
             let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
             form_sub_typs.forEach(fst => {
@@ -161,9 +161,9 @@ export class TeamApplicationComponent implements OnInit {
 
 class FormSubTypeWrapper {
   form_sub_typ = '';
-  questions: Question[] = [];
+  questions: QuestionWithConditions[] = [];
 
-  constructor(form_sub_typ: string, questions: Question[] = []) {
+  constructor(form_sub_typ: string, questions: QuestionWithConditions[] = []) {
     this.form_sub_typ = form_sub_typ;
     this.questions = questions;
   }

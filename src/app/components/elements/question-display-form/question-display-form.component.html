@@ -1,13 +1,14 @@
 <app-form-element-group [LabelText]="LabelText" [RemoveBorder]="LabelText.length <= 0"
     (FormElementsChange)="setFormElements($event)">
     <ng-container *ngFor="let sq of Questions; let i = index">
-        <app-question-form-element [(Question)]="Questions[i]"></app-question-form-element>
+        <app-question-form-element [(Question)]="Questions[i]" [Disabled]="Disabled"></app-question-form-element>
 
         <div *ngIf="sq.conditions.length > 0" class="sub-question">
             <ng-container *ngFor="let c of sq.conditions; let j = index">
                 <app-question-form-element
                     *ngIf="c.condition.toLowerCase() === (sq.answer || '').toString().toLowerCase()"
-                    [(Question)]="Questions[i].conditions[j].question_to"></app-question-form-element>
+                    [(Question)]="Questions[i].conditions[j].question_to"
+                    [Disabled]="Disabled"></app-question-form-element>
             </ng-container>
         </div>
     </ng-container>

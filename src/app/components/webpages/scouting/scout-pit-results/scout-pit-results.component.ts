@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { Team } from '../scout-field/scout-field.component';
-import { Question } from '../../../elements/question-admin-form/question-admin-form.component';
+import { GeneralService } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize } from '../../../../services/general.service';
+import { Team } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-pit-results',

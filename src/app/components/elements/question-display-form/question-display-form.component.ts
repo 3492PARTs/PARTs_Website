@@ -1,7 +1,7 @@
 import { Component, ContentChildren, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
-import { Question } from '../question-admin-form/question-admin-form.component';
+import { QuestionWithConditions } from 'src/app/models/form.models';
 
 @Component({
   selector: 'app-question-display-form',
@@ -11,8 +11,9 @@ import { Question } from '../question-admin-form/question-admin-form.component';
 export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
   @Input() LabelText = '';
-  @Input() Questions: Question[] = [];
-  @Output() QuestionsChange: EventEmitter<Question[]> = new EventEmitter();
+  @Input() Disabled = false;
+  @Input() Questions: QuestionWithConditions[] = [];
+  @Output() QuestionsChange: EventEmitter<QuestionWithConditions[]> = new EventEmitter();
 
   //formElements = new QueryList<FormElementComponent>();
 
