@@ -71,7 +71,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       sfrc.forEach(s => {
         window.setTimeout(() => {
           //console.log(s);
-          this.save(s, s.id);
+          this.save(s, s.id, false);
         }, 1000 * count++);
       });
     });
@@ -286,7 +286,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.formDisabled = false;
   }
 
-  save(sfr?: ScoutFieldResponse, id?: number): void | null {
+  save(sfr?: ScoutFieldResponse, id?: number, resetForm = true): void | null {
     if (!sfr) {
       if (this.gs.strNoE(this.team)) {
         this.gs.triggerError('Must select a team to scout!');
@@ -319,8 +319,12 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     this.api.post(true, 'form/save-answers/', sfr, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.reset();
-      this.scoutFieldInit();
+
+      if (resetForm) {
+        this.reset();
+        this.scoutFieldInit();
+      }
+
 
       if (id) {
         this.cs.ScoutFieldResponse.RemoveAsync(id).then(() => {
