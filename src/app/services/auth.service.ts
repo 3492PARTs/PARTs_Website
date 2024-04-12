@@ -8,8 +8,9 @@ import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
 import { IUser, User } from '../models/user.models';
 import { CacheService } from './cache.service';
-import { AppDatabaseService } from './app-database.service';
 import { IUserLinks, UserLinks } from '../models/navigation.models';
+import { DataService } from './data.service';
+import Dexie from 'dexie';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,13 @@ export class AuthService {
 
   private rememberMeTimeout: number | null | undefined;
 
-  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService, private cs: CacheService, private appDB: AppDatabaseService) {
+  constructor(private http: HttpClient,
+    private router: Router,
+    private gs: GeneralService,
+    private ps: NotificationsService,
+    private ns: NotificationsService,
+    private cs: CacheService,
+    private ds: DataService) {
     this.tokenStringLocalStorage = environment.tokenString;
   }
 
@@ -123,9 +130,14 @@ export class AuthService {
             else {
               let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
 
+              if (this.firstLoad) {
+                this.getAllUserInfo();
+                this.firstLoad = false;
+              }
+
               this.cs.User.getById(user_id).then((u: IUser | undefined) => {
                 if (u) {
-                  this.user.next(u);
+                  //this.user.next(u);
 
                   this.cs.UserLinks.getAll().then(uls => {
                     this.userLinks.next(uls.sort((a: IUserLinks, b: IUserLinks) => {
@@ -396,59 +408,33 @@ export class AuthService {
   }
 
   getAllUserInfo(): void {
-    if (this.token.value.access) {
-      this.getUser();
-      this.getUserLinks();
-      this.ns.getUserAlerts('notification');
-      this.ns.getUserAlerts('message');
-    }
+    this.getUser();
+    this.getUserLinks();
+    this.ns.getUserAlerts('notification');
+    this.ns.getUserAlerts('message');
   }
 
   getUser() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/user-data/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          // console.log(Response);
-          this.user.next(result as User);
-          this.cs.User.AddOrEditAsync(result as User);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
+      return u.where({ 'id': this.getTokenLoad(this.token.value.refresh).user_id })
+    }, (result: any) => {
+      // console.log(Response);
+      if (Array.isArray(result))
+        result = result[0];
+      this.user.next(result as User);
+      this.cs.User.AddOrEditAsync(result as User);
+    });
   }
 
   getUserLinks() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/user-links/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          this.userLinks.next(this.gs.cloneObject(result as UserLinks[]));
-          this.cs.UserLinks.RemoveAllAsync().then(() => {
-            (this.gs.cloneObject(result) as UserLinks[]).forEach(ul => {
-              this.cs.UserLinks.AddAsync(ul);
-            });
-          });
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
+      this.userLinks.next(this.gs.cloneObject(result as UserLinks[]));
+      this.cs.UserLinks.RemoveAllAsync().then(() => {
+        (this.gs.cloneObject(result) as UserLinks[]).forEach(ul => {
+          this.cs.UserLinks.AddAsync(ul);
+        });
+      });
+    });
   }
 }
 

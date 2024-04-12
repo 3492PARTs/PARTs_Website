@@ -9,12 +9,12 @@ export class APIService {
 
   constructor(private http: HttpClient, private gs: GeneralService) { }
 
-  get(loadingScreen: boolean, url: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
+  get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
   ) {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
     this.http.get(
-      url,
+      endpoint,
       {
         params: params
       }
@@ -37,12 +37,12 @@ export class APIService {
     );
   }
 
-  post(loadingScreen: boolean, url: string, obj: any,
+  post(loadingScreen: boolean, endpoint: string, obj: any,
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
   ) {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
     this.http.post(
-      url, obj
+      endpoint, obj
     ).subscribe(
       {
         next: (result: any) => {

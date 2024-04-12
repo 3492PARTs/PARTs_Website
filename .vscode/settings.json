@@ -4,5 +4,8 @@
             "style": "scss",
             "externalTemplate": true
         }
-    }
+    },
+    "cSpell.words": [
+        "Dexie"
+    ]
 }
