@@ -130,31 +130,13 @@ export class AuthService {
             else {
               let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
 
+              this.authInFlightBS.next(AuthCallStates.err);
+
               if (this.firstLoad) {
                 this.getAllUserInfo();
                 this.firstLoad = false;
+                this.authInFlightBS.next(AuthCallStates.comp);
               }
-
-              this.cs.User.getById(user_id).then((u: IUser | undefined) => {
-                if (u) {
-                  //this.user.next(u);
-
-                  this.cs.UserLinks.getAll().then(uls => {
-                    this.userLinks.next(uls.sort((a: IUserLinks, b: IUserLinks) => {
-                      if (a.order < b.order) return -1;
-                      else if (a.order > b.order) return 1;
-                      else return 0;
-                    }));
-                  });
-
-                  this.authInFlightBS.next(AuthCallStates.comp);
-                }
-                else {
-                  this.logOut();
-                  this.authInFlightBS.next(AuthCallStates.err);
-                }
-              });
-
             }
           },
           complete: () => {
@@ -429,6 +411,7 @@ export class AuthService {
   getUserLinks() {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
       this.userLinks.next(this.gs.cloneObject(result as UserLinks[]));
+
       this.cs.UserLinks.RemoveAllAsync().then(() => {
         (this.gs.cloneObject(result) as UserLinks[]).forEach(ul => {
           this.cs.UserLinks.AddAsync(ul);
