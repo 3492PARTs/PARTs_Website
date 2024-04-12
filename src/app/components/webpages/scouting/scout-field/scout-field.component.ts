@@ -7,6 +7,7 @@ import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.m
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
 import { User } from 'src/app/models/user.models';
+import { FieldScoutingService } from 'src/app/services/field-scouting.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -14,15 +15,12 @@ import { User } from 'src/app/models/user.models';
   styleUrls: ['./scout-field.component.scss']
 })
 export class ScoutFieldComponent implements OnInit, OnDestroy {
-  private teams: Team[] = [];
-  teamList: Team[] = [];
-  team: number | null = null;
+  teams: Team[] = [];
+  team: number = NaN;
   matches: Match[] = [];
-  private matchesCopy: Match[] = [];
   noMatch = false;
   teamMatch: Match | null = null;
   scoutQuestions: QuestionWithConditions[] = [];
-  private scoutQuestionsCopy: QuestionWithConditions[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: QuestionWithConditions[] = [];
   scoutTeleopQuestions: QuestionWithConditions[] = [];
@@ -40,8 +38,28 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private fss: FieldScoutingService) {
     this.authService.currentUser.subscribe(u => this.user = u);
+
+    this.fss.teams.subscribe(ts => {
+      this.team = NaN;
+      this.buildTeamList();
+    });
+
+    this.fss.matches.subscribe(ms => {
+      this.matches = ms;
+      this.teamMatch = new Match();
+      this.team = NaN;
+      this.amendMatchList();
+      this.buildTeamList();
+    });
+
+    this.fss.scoutFieldQuestions.subscribe(sfq => {
+      this.scoutQuestions = sfq;
+      this.sortQuestions();
+    });
+
+    this.fss.scoutFieldSchedule.subscribe(sfs => this.scoutFieldSchedule = sfs);
   }
 
   ngOnInit() {
@@ -87,36 +105,24 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.cs.ScoutFieldResponse.getById(id).then(sfrc => {
-      this.matches = this.gs.cloneObject(this.matchesCopy);
-      if (sfrc?.match_id) {
-        this.teamMatch = this.matches[this.gs.arrayObjectIndexOf(this.matches, sfrc.match_id, 'match_id')];
-      }
-      this.team = sfrc?.team || 0;
-      this.buildTeamList();
+    this.cs.ScoutFieldResponse.getById(id).then(sfr => {
+      this.cs.Match.getAll().then((ms: Match[]) => {
+        this.matches = ms;
+        if (sfr?.match_id) {
+          this.teamMatch = this.matches[this.gs.arrayObjectIndexOf(this.matches, sfr.match_id, 'match_id')];
+        }
+        this.team = sfr?.team || 0;
+        this.buildTeamList();
 
-      this.scoutQuestions = sfrc?.question_answers || this.scoutQuestions;
-      this.sortQuestions();
+        this.scoutQuestions = sfr?.question_answers || this.scoutQuestions;
+        this.sortQuestions();
+      });
     });
   }
 
   scoutFieldInit(): void {
-    this.api.get(true, 'scouting/field/init/', undefined, (result: any) => {
-      this.teams = result['teams'];
-      this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
-      this.scoutQuestions = result['scoutQuestions'];
-      this.scoutQuestionsCopy = this.gs.cloneObject(this.scoutQuestions);
-      this.matches = result['matches'];
-      this.matchesCopy = this.gs.cloneObject(this.matches);
-      //this.checkInScout();
-      this.sortQuestions();
-      this.buildTeamList();
-      this.buildMatchList();
-
-      this.startUploadOutstandingResultsTimeout();
-      //this.gs.devConsoleLog('scoutFieldInit', this.scoutQuestions);
-      //this.gs.devConsoleLog('scoutFieldInit', this.scoutFieldSchedule);
-    });
+    this.fss.init();
+    this.startUploadOutstandingResultsTimeout();
   }
 
   checkInScout(): void {
@@ -169,12 +175,14 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.gs.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
       this.teamMatch = new Match();
-      this.teamList = [];
-      this.teams.forEach(t => { this.teamList.push(t) });
+      this.teams = [];
+      this.cs.Team.getAll().then((ts: Team[]) => {
+        this.teams = this.teams.concat(ts);
+      });
     });
   }
 
-  buildMatchList(): void {
+  amendMatchList(): void {
     this.cs.ScoutFieldResponse.getAll().then((sfrc: ScoutFieldResponse[]) => {
       sfrc.forEach((s: ScoutFieldResponse) => {
         s.match_id;
@@ -215,31 +223,35 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   buildTeamList(): void {
-    this.teamList = [];
+    this.teams = [];
     this.noMatch = false;
     // only run if there are matchs
     if (this.matches.length > 0) {
 
       // get the teams for the match from the teams list
-      if (this.teamMatch?.blue_one) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one?.toString()) this.teamList.push(t) });
-      }
-      if (this.teamMatch?.blue_two) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two?.toString()) this.teamList.push(t) });
-      }
-      if (this.teamMatch?.blue_three) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three?.toString()) this.teamList.push(t) });
-      }
+      this.cs.Team.getAll().then((ts: Team[]) => {
+        if (this.teamMatch?.blue_one) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one?.toString()) this.teams.push(t) });
+        }
+        if (this.teamMatch?.blue_two) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two?.toString()) this.teams.push(t) });
+        }
+        if (this.teamMatch?.blue_three) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three?.toString()) this.teams.push(t) });
+        }
 
-      if (this.teamMatch?.red_one) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one?.toString()) this.teamList.push(t) });
-      }
-      if (this.teamMatch?.red_two) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two?.toString()) this.teamList.push(t) });
-      }
-      if (this.teamMatch?.red_three) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three?.toString()) this.teamList.push(t) });
-      }
+        if (this.teamMatch?.red_one) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one?.toString()) this.teams.push(t) });
+        }
+        if (this.teamMatch?.red_two) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two?.toString()) this.teams.push(t) });
+        }
+        if (this.teamMatch?.red_three) {
+          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three?.toString()) this.teams.push(t) });
+        }
+      });
+
+
 
       // set the selected team based on which user is assigned to which team
       if (this.teamMatch?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
@@ -267,20 +279,24 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       }
     }
     else {
-      this.teams.forEach(t => { this.teamList.push(t) });
+      this.cs.Team.getAll().then((ts: Team[]) => {
+        this.teams = this.teams.concat(ts);
+      });
     }
   }
 
   reset() {
-    this.scoutQuestions = this.gs.cloneObject(this.scoutQuestionsCopy);
-    this.teamMatch = null;
-    this.team = null;
-    this.noMatch = false;
-    this.sortQuestions();
-    this.buildTeamList();
-    this.buildMatchList();
-    this.gs.scrollTo(0);
-    this.formDisabled = false;
+    this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
+      this.scoutQuestions = sfqs;
+      this.teamMatch = null;
+      this.team = NaN;
+      this.noMatch = false;
+      this.sortQuestions();
+      this.buildTeamList();
+      this.amendMatchList();
+      this.gs.scrollTo(0);
+      this.formDisabled = false;
+    });
   }
 
   save(sfr?: ScoutFieldResponse, id?: number, resetForm = true): void | null {
@@ -319,7 +335,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
       if (resetForm) {
         this.reset();
-        this.scoutFieldInit();
+        //this.scoutFieldInit();
       }
 
 

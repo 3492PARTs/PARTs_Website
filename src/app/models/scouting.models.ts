@@ -132,7 +132,7 @@ export interface IScoutFieldSchedule {
 }
 
 export class ScoutFieldSchedule implements IScoutFieldSchedule {
-    scout_field_sch_id!: number;
+    scout_field_sch_id = NaN;
     event_id: Event | number = new Event();
     red_one_id: User | number | null | any = new User();
     red_two_id: User | number | null | any = new User();

@@ -77,7 +77,7 @@
       <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
       </app-button>
     </div>
-    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teamList"
+    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
       [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true" [Disabled]="formDisabled">
     </app-form-element>
