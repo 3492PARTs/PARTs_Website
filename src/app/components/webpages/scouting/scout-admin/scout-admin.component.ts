@@ -8,7 +8,7 @@ import { ScoutResults } from '../scout-field-results/scout-field-results.compone
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 
@@ -1419,76 +1419,6 @@ export class Season {
   season_id!: number;
   season!: string;
   current!: string;
-}
-
-export class Event {
-  event_id!: number;
-  season_id!: number;
-  event_nm!: string;
-  date_st!: Date;
-  event_cd = '';
-  date_end!: Date;
-  event_url!: string;
-  address!: string;
-  city!: string;
-  state_prov!: string;
-  postal_code!: string;
-  location_name!: string;
-  gmaps_url!: string;
-  webcast_url!: string;
-  current = 'n';
-  timezone = 'America/New_York';
-  void_ind = 'n';
-  competition_page_active = 'n';
-  team_no: Team[] = [];
-}
-
-export class Match {
-  match_id!: string;
-  match_number!: number;
-  event!: Event;
-  red_one!: Team | number;
-  red_two!: Team | number;
-  red_three!: Team | number;
-  blue_one!: Team | number;
-  blue_two!: Team | number;
-  blue_three!: Team | number;
-  red_score!: number;
-  blue_score!: number;
-  comp_level!: string | CompetitionLevel;
-  time!: Date;
-  void_ind!: string;
-
-}
-
-export class CompetitionLevel {
-  comp_lvl_typ = '';
-  comp_lvl_typ_nm = '';
-  comp_lvl_order = 0;
-  void_ind = '';
-}
-export class ScoutFieldSchedule {
-  scout_field_sch_id!: number;
-  event_id: Event | number = new Event();
-  red_one_id: User | number | null | any = new User();
-  red_two_id: User | number | null | any = new User();
-  red_three_id: User | number | null | any = new User();
-  blue_one_id: User | number | null | any = new User();
-  blue_two_id: User | number | null | any = new User();
-  blue_three_id: User | number | null | any = new User();
-  red_one_check_in = new Date();
-  red_two_check_in = new Date();
-  red_three_check_in = new Date();
-  blue_one_check_in = new Date();
-  blue_two_check_in = new Date();
-  blue_three_check_in = new Date();
-  st_time!: Date;
-  end_time!: Date;
-  notification1 = false;
-  notification2 = false;
-  notification3 = false;
-  void_ind = 'n';
-  scouts = '';
 }
 
 export class ScoutPitSchedule {

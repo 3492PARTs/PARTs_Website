@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Event, ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
+import { Event, ScoutFieldSchedule } from '../../../../models/scouting.models';
 import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';

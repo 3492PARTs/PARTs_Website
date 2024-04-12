@@ -2,11 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
-import { Team } from 'src/app/models/scouting.models';
+import { Match, Team } from 'src/app/models/scouting.models';
 import { User } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 
@@ -266,23 +265,26 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   rankToColor(team: number): string {
+    /*
+    TODO Fix this
     if (this.initData) {
       for (let m of this.initData.matches) {
-        if (m.blue_one_id === team)
+        if (m.blue_one === team)
           return this.rankToColorConverter(m.blue_one_rank);
-        if (m.blue_two_id === team)
+        if (m.blue_two === team)
           return this.rankToColorConverter(m.blue_two_rank);
-        if (m.blue_three_id === team)
-          return this.rankToColorConverter(m.blue_three_rank);
+        if (m.blue_three === team)
+          return this.rankToColorConverter(m.blue_three);
 
-        if (m.red_one_id === team)
+        if (m.red_one === team)
           return this.rankToColorConverter(m.red_one_rank);
-        if (m.red_two_id === team)
+        if (m.red_two === team)
           return this.rankToColorConverter(m.red_two_rank);
-        if (m.red_three_id === team)
+        if (m.red_three === team)
           return this.rankToColorConverter(m.red_three_rank);
       }
     }
+    */
 
     return 'initial'
 
@@ -324,30 +326,6 @@ export class MatchPlanningComponent implements OnInit {
       },
     });
   }
-}
-
-export class Match {
-  match_id!: string;
-  match_number!: number;
-  event!: Event;
-  red_one_id!: Team | number | null;
-  red_one_rank!: number;
-  red_two_id!: Team | number | null;
-  red_two_rank!: number;
-  red_three_id!: Team | number | null;
-  red_three_rank!: number;
-  blue_one_id!: Team | number | null;
-  blue_one_rank!: number;
-  blue_two_id!: Team | number | null;
-  blue_two_rank!: number;
-  blue_three_id!: Team | number | null;
-  blue_three_rank!: number;
-  red_score!: number;
-  blue_score!: number;
-  comp_level!: string | CompetitionLevel;
-  time!: Date;
-  void_ind!: string;
-
 }
 
 export class Init {

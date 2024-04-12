@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Banner, GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { ScoutFieldSchedule } from '../scout-admin/scout-admin.component';
-import { Match } from '../match-planning/match-planning.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { ScoutFieldResponse, Team } from 'src/app/models/scouting.models';
+import { Match, ScoutFieldResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
@@ -187,27 +185,27 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         if (index !== -1) {
           let match = this.matches[index];
 
-          if (match.red_one_id === s.team) {
-            match.red_one_id = null;
+          if (match.red_one === s.team) {
+            match.red_one = NaN;
           }
-          else if (match.red_two_id === s.team) {
-            match.red_two_id = null;
+          else if (match.red_two === s.team) {
+            match.red_two = NaN;
           }
-          else if (match.red_three_id === s.team) {
-            match.red_three_id = null;
+          else if (match.red_three === s.team) {
+            match.red_three = NaN;
           }
-          else if (match.blue_one_id === s.team) {
-            match.blue_one_id = null;
+          else if (match.blue_one === s.team) {
+            match.blue_one = NaN;
           }
-          else if (match.blue_two_id === s.team) {
-            match.blue_two_id = null;
+          else if (match.blue_two === s.team) {
+            match.blue_two = NaN;
           }
-          else if (match.blue_three_id === s.team) {
-            match.blue_three_id = null;
+          else if (match.blue_three === s.team) {
+            match.blue_three = NaN;
           }
 
-          if (!match.red_one_id && !match.red_two_id && !match.red_three_id &&
-            !match.blue_one_id && !match.blue_two_id && !match.blue_three_id) {
+          if (!match.red_one && !match.red_two && !match.red_three &&
+            !match.blue_one && !match.blue_two && !match.blue_three) {
             this.matches.splice(index, 1);
           }
         }
@@ -223,49 +221,49 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     if (this.matches.length > 0) {
 
       // get the teams for the match from the teams list
-      if (this.teamMatch?.blue_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.blue_one) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one?.toString()) this.teamList.push(t) });
       }
-      if (this.teamMatch?.blue_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.blue_two) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two?.toString()) this.teamList.push(t) });
       }
-      if (this.teamMatch?.blue_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.blue_three) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three?.toString()) this.teamList.push(t) });
       }
 
-      if (this.teamMatch?.red_one_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.red_one) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one?.toString()) this.teamList.push(t) });
       }
-      if (this.teamMatch?.red_two_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.red_two) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two?.toString()) this.teamList.push(t) });
       }
-      if (this.teamMatch?.red_three_id) {
-        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three_id?.toString()) this.teamList.push(t) });
+      if (this.teamMatch?.red_three) {
+        this.teams.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three?.toString()) this.teamList.push(t) });
       }
 
       // set the selected team based on which user is assigned to which team
-      if (this.teamMatch?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
-        this.team = this.teamMatch.blue_one_id as number;
+      if (this.teamMatch?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+        this.team = this.teamMatch.blue_one as number;
       }
 
-      if (this.teamMatch?.blue_two_id && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
-        this.team = this.teamMatch.blue_two_id as number;
+      if (this.teamMatch?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+        this.team = this.teamMatch.blue_two as number;
       }
 
-      if (this.teamMatch?.blue_three_id && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
-        this.team = this.teamMatch.blue_three_id as number;
+      if (this.teamMatch?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+        this.team = this.teamMatch.blue_three as number;
       }
 
-      if (this.teamMatch?.red_one_id && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
-        this.team = this.teamMatch.red_one_id as number;
+      if (this.teamMatch?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+        this.team = this.teamMatch.red_one as number;
       }
 
-      if (this.teamMatch?.red_two_id && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
-        this.team = this.teamMatch.red_two_id as number;
+      if (this.teamMatch?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+        this.team = this.teamMatch.red_two as number;
       }
 
-      if (this.teamMatch?.red_three_id && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
-        this.team = this.teamMatch.red_three_id as number;
+      if (this.teamMatch?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+        this.team = this.teamMatch.red_three as number;
       }
     }
     else {
