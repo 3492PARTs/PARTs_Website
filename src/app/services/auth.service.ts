@@ -34,8 +34,6 @@ export class AuthService {
 
   tokenStringLocalStorage = '';
 
-  private firstLoad = true;
-
   private rememberMeTimeout: number | null | undefined;
 
   constructor(private http: HttpClient,
@@ -96,8 +94,7 @@ export class AuthService {
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
     this.token.next(tmpTkn);
     if (this.token.value && this.token.value.refresh) {
-      this.gs.incrementOutstandingCalls();
-      this.http.post('user/token/refresh/', { refresh: this.token.value.refresh }).subscribe(
+      this.refreshToken().subscribe(
         {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
@@ -107,12 +104,10 @@ export class AuthService {
               this.getTokenExp(token.refresh);
               this.token.next(token);
 
-              if (this.firstLoad) {
-                this.getAllUserInfo();
-                this.firstLoad = false;
-              }
-              this.ps.subscribeToNotifications();
               this.authInFlightBS.next(AuthCallStates.comp);
+
+              this.getAllUserInfo();
+              this.ps.subscribeToNotifications();
             }
             else {
               this.authInFlightBS.next(AuthCallStates.err);
@@ -128,15 +123,7 @@ export class AuthService {
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              //TODO: need to fix the comp/error states
-              if (this.firstLoad) {
-                this.getAllUserInfo();
-                this.firstLoad = false;
-                this.authInFlightBS.next(AuthCallStates.comp);
-              }
-              else {
-                this.authInFlightBS.next(AuthCallStates.err);
-              }
+              this.getAllUserInfo();
             }
           },
           complete: () => {
@@ -403,8 +390,19 @@ export class AuthService {
       // console.log(Response);
       if (Array.isArray(result))
         result = result[0];
-      this.user.next(result as User);
-      this.cs.User.AddOrEditAsync(result as User);
+      result = (result as User);
+
+      if (result.id > 0) {
+        this.user.next(result as User);
+        this.cs.User.AddOrEditAsync(result as User);
+        this.authInFlightBS.next(AuthCallStates.comp);
+      }
+      else {
+        this.authInFlightBS.next(AuthCallStates.err);
+      }
+
+    }, (error: any) => {
+      this.authInFlightBS.next(AuthCallStates.err);
     });
   }
 

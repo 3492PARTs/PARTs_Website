@@ -18,13 +18,14 @@ export class DataService {
     this.api.get(loadingScreen, endpoint, params, (result: any) => {
       if (onNext) onNext(result);
     }, async (error: any) => {
-      if (onError) onError(error);
+
       let cacheData = await (this.cacheService as any)[repo].getAll(
         filterDelegate
       );
       if (onNext && cacheData && cacheData.length > 0) {
         onNext(cacheData);
       }
+      else if (onError) onError(error);
     }, () => {
       if (onComplete) onComplete();
     });
