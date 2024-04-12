@@ -7,7 +7,10 @@ import { map } from 'rxjs/operators';
 import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
-import { User } from '../models/user.models';
+import { IUser, User } from '../models/user.models';
+import { CacheService } from './cache.service';
+import { AppDatabaseService } from './app-database.service';
+import { Dexie } from 'dexie';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +24,7 @@ export class AuthService {
 
   private token = new BehaviorSubject<Token>(new Token());
   currentToken = this.token.asObservable();
-  private internalToken: Token = new Token();
+  //private internalToken: Token = new Token();
 
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
@@ -35,63 +38,8 @@ export class AuthService {
 
   private rememberMeTimeout: number | null | undefined;
 
-  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService) {
+  constructor(private http: HttpClient, private router: Router, private gs: GeneralService, private ps: NotificationsService, private ns: NotificationsService, private cs: CacheService, private appDB: AppDatabaseService) {
     this.tokenStringLocalStorage = environment.tokenString;
-  }
-
-  logOut(): void {
-    this.token.next(new Token());
-    this.user.next(new User());
-    this.userLinks.next([]);
-    localStorage.removeItem(this.tokenStringLocalStorage);
-    if (this.rememberMeTimeout)
-      window.clearTimeout(this.rememberMeTimeout);
-    this.router.navigateByUrl('login');
-  }
-
-  previouslyAuthorized(): void {
-    this.authInFlightBS.next(AuthCallStates.prcs);
-
-    const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
-    this.token.next(tmpTkn);
-    this.internalToken = tmpTkn;
-    if (this.internalToken && this.internalToken.refresh) {
-      this.gs.incrementOutstandingCalls();
-      this.http.post('user/token/refresh/', { refresh: this.internalToken.refresh }).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.internalToken.access = (result as Token).access;
-              this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
-              this.getTokenExp(this.internalToken.access);
-              this.getTokenExp(this.internalToken.refresh);
-              this.token.next(this.internalToken);
-
-              if (this.firstLoad) {
-                this.getAllUserInfo();
-                this.firstLoad = false;
-              }
-              this.stayLoggedIn();
-              this.ps.subscribeToNotifications();
-              this.authInFlightBS.next(AuthCallStates.comp);
-            }
-            else {
-              this.authInFlightBS.next(AuthCallStates.err);
-              this.logOut();
-            }
-          },
-          error: (err: any) => {
-            this.gs.decrementOutstandingCalls();
-            console.log('error', err);
-            this.authInFlightBS.next(AuthCallStates.err);
-            this.logOut();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
-    }
   }
 
   authorizeUser(userData: UserData, returnUrl?: string | null): void {
@@ -104,17 +52,15 @@ export class AuthService {
           if (this.gs.checkResponse(result)) {
             // console.log(Response);
             const tmp = result as Token;
-            this.internalToken = tmp;
-            this.token.next(this.internalToken);
+            this.token.next(tmp);
 
             this.gs.devConsoleLog('authorizeUser', 'login tokens below');
-            this.getTokenExp(this.internalToken.access);
-            this.getTokenExp(this.internalToken.refresh);
-            localStorage.setItem(this.tokenStringLocalStorage, this.internalToken.refresh);
+            this.getTokenExp(tmp.access);
+            this.getTokenExp(tmp.refresh);
+            localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
             localStorage.setItem(environment.loggedInHereBefore, 'hi');
             this.getAllUserInfo();
             this.ps.subscribeToNotifications();
-            this.stayLoggedIn();
 
             if (this.gs.strNoE(returnUrl)) {
               this.router.navigateByUrl('');
@@ -138,13 +84,70 @@ export class AuthService {
     );
   }
 
-  getAllUserInfo(): void {
-    if (this.internalToken.access) {
-      this.getUser();
-      this.getUserLinks();
-      this.ns.getUserAlerts('notification');
-      this.ns.getUserAlerts('message');
+  previouslyAuthorized(): void {
+    this.authInFlightBS.next(AuthCallStates.prcs);
+
+    const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
+    this.token.next(tmpTkn);
+    if (this.token.value && this.token.value.refresh) {
+      this.gs.incrementOutstandingCalls();
+      this.http.post('user/token/refresh/', { refresh: this.token.value.refresh }).subscribe(
+        {
+          next: (result: any) => {
+            if (this.gs.checkResponse(result)) {
+              const token = result as Token;
+              this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+              this.getTokenExp(token.access);
+              this.getTokenExp(token.refresh);
+              this.token.next(token);
+
+              if (this.firstLoad) {
+                this.getAllUserInfo();
+                this.firstLoad = false;
+              }
+              this.ps.subscribeToNotifications();
+              this.authInFlightBS.next(AuthCallStates.comp);
+            }
+            else {
+              this.authInFlightBS.next(AuthCallStates.err);
+              this.logOut();
+            }
+          },
+          error: (err: any) => {
+            this.gs.decrementOutstandingCalls();
+            console.log('error', err);
+            this.authInFlightBS.next(AuthCallStates.err);
+
+            if (this.isSessionExpired())
+              this.logOut();
+            else {
+              let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
+
+              this.cs.User.getById(user_id).then((u: IUser | undefined) => {
+                if (u)
+                  this.user.next(u);
+                else
+                  this.logOut();
+              });
+
+            }
+          },
+          complete: () => {
+            this.gs.decrementOutstandingCalls();
+          }
+        }
+      );
     }
+  }
+
+  logOut(): void {
+    this.token.next(new Token());
+    this.user.next(new User());
+    this.userLinks.next([]);
+    localStorage.removeItem(this.tokenStringLocalStorage);
+    if (this.rememberMeTimeout)
+      window.clearTimeout(this.rememberMeTimeout);
+    this.router.navigateByUrl('login');
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
@@ -276,20 +279,19 @@ export class AuthService {
     //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
 
     return this.http
-      .post<Token>('user/token/refresh/', { refresh: this.internalToken.refresh })
+      .post<Token>('user/token/refresh/', { refresh: this.token.value.refresh })
       .pipe(
         map(res => {
-          this.internalToken.access = res['access'];
-          this.internalToken.refresh = res['refresh'];
+          const token = res as Token;
           this.gs.devConsoleLog('refreshToken', 'new tokens below');
-          this.getTokenExp(this.internalToken.access);
-          this.getTokenExp(this.internalToken.refresh);
+          this.getTokenExp(token.access);
+          this.getTokenExp(token.refresh);
 
-          this.token.next(this.internalToken);
+          this.token.next(token);
 
           //this.gs.decrementOutstandingCalls();
 
-          return res as Token;
+          return token;
         })
       );
   }
@@ -299,9 +301,9 @@ export class AuthService {
   }
 
   getAccessToken(): Observable<string> {
-    return of(this.internalToken.access);
+    return of(this.token.value.access);
   }
-
+  /*
   stayLoggedIn(): void {
     let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
     //console.log('loggin ' + rememberMe);
@@ -324,7 +326,7 @@ export class AuthService {
     }
   }
 
-  /*
+
     checkAPIStatus(): void {
       this.http.get('public/api-status/').subscribe(
         {
@@ -338,48 +340,6 @@ export class AuthService {
         }
       );
     }*/
-
-  getUser() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/user-data/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          // console.log(Response);
-          this.user.next(result as User);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.internalToken = new Token();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
-  }
-
-  getUserLinks() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/user-links/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          this.userLinks.next(result as MenuItem[]);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
-  }
 
   getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
@@ -414,12 +374,68 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     this.gs.devConsoleLog('isAuthenticated', 'current access token below');
-    return !this.gs.strNoE(this.internalToken.access) && !this.isTokenExpired(this.internalToken.access);
+    return !this.gs.strNoE(this.token.value.access) && !this.isTokenExpired(this.token.value.access);
   }
 
   isSessionExpired(): boolean {
     this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
-    return this.gs.strNoE(this.internalToken.refresh) || this.isTokenExpired(this.internalToken.refresh);
+    return this.gs.strNoE(this.token.value.refresh) || this.isTokenExpired(this.token.value.refresh);
+  }
+
+  getAllUserInfo(): void {
+    if (this.token.value.access) {
+      this.getUser();
+      this.getUserLinks();
+      this.ns.getUserAlerts('notification');
+      this.ns.getUserAlerts('message');
+    }
+  }
+
+  getUser() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/user-data/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          // console.log(Response);
+          this.user.next(result as User);
+          this.cs.User.AddOrEditAsync(result as User).catch((reason: any) => {
+            console.log(reason);
+            this.cs.User.getAll().then(u => {
+              console.log(u);
+            });
+          });
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
+  }
+
+  getUserLinks() {
+    this.gs.incrementOutstandingCalls();
+    this.http.get(
+      'user/user-links/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.userLinks.next(result as MenuItem[]);
+        },
+        error: (err: any) => {
+          this.gs.decrementOutstandingCalls();
+          console.log('error', err);
+        },
+        complete: () => {
+          this.gs.decrementOutstandingCalls();
+        }
+      }
+    );
   }
 }
 

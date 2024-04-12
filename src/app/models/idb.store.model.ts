@@ -13,6 +13,7 @@ export class LoadedStores {
 
 // Define a generic function to generate columns with a constraint
 function generateColumns<T extends Record<string, any>>(instance: T): string {
+    console.log((Object.keys(instance) as (keyof T)[]).join(','));
     return (Object.keys(instance) as (keyof T)[]).join(',');
 }
 

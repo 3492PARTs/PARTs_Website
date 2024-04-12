@@ -29,6 +29,7 @@ export class DexieCrud<T, Tkey> {
     getById(id: Tkey) {
         return this.dbSet.get(id);
     }
+
     async AddAsync(item: T): Promise<void> {
         await this.dbSet.add(item);
     }
