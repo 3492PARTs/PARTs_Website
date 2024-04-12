@@ -128,12 +128,14 @@ export class AuthService {
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              this.authInFlightBS.next(AuthCallStates.err);
-
+              //TODO: need to fix the comp/error states
               if (this.firstLoad) {
                 this.getAllUserInfo();
                 this.firstLoad = false;
                 this.authInFlightBS.next(AuthCallStates.comp);
+              }
+              else {
+                this.authInFlightBS.next(AuthCallStates.err);
               }
             }
           },
