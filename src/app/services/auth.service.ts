@@ -115,10 +115,11 @@ export class AuthService {
           error: (err: any) => {
             this.gs.decrementOutstandingCalls();
             console.log('error', err);
-            this.authInFlightBS.next(AuthCallStates.err);
 
-            if (this.isSessionExpired())
+            if (this.isSessionExpired()) {
               this.logOut();
+              this.authInFlightBS.next(AuthCallStates.err);
+            }
             else {
               let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
 
@@ -133,9 +134,13 @@ export class AuthService {
                       else return 0;
                     }));
                   });
+
+                  this.authInFlightBS.next(AuthCallStates.comp);
                 }
-                else
+                else {
                   this.logOut();
+                  this.authInFlightBS.next(AuthCallStates.err);
+                }
               });
 
             }
