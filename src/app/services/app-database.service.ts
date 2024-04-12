@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
 import { IScoutFieldResponse, ScoutFieldResponse } from '../models/scouting.models';
-import { DBStores } from '../models/idb.store.model';
+import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { DexieCrud } from '../classes/dexie-crud';
+import { IUser } from '../models/user.models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,8 @@ import { DexieCrud } from '../classes/dexie-crud';
 export class AppDatabaseService extends Dexie {
 
   ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
+  UserTable!: Dexie.Table<IUser, number>;
+  LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
 
   versionNumber: number = 1;
@@ -38,6 +41,8 @@ export class AppDatabaseService extends Dexie {
     this.version(this.versionNumber).stores(this.setTablesSchema());
     this.gs.devConsoleLog('app-database.service', 'database initialized');
     this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
+    this.UserTable = this.table(DBStores.User.TableName);
+    this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
   }
 
   private setTablesSchema() {
