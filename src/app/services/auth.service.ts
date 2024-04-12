@@ -128,8 +128,6 @@ export class AuthService {
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
-
               this.authInFlightBS.next(AuthCallStates.err);
 
               if (this.firstLoad) {
