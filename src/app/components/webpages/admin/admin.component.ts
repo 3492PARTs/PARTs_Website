@@ -3,11 +3,11 @@ import { GeneralService, RetMessage, Page } from 'src/app/services/general.servi
 import { HttpClient } from '@angular/common/http';
 import { AuthService, PhoneType, ErrorLog, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { MenuItem } from '../../navigation/navigation.component';
 import * as moment from 'moment';
 import { UserService } from 'src/app/services/user.service';
 import { QuestionWithConditions } from 'src/app/models/form.models';
 import { User, AuthGroup, AuthPermission } from 'src/app/models/user.models';
+import { UserLinks } from 'src/app/models/navigation.models';
 
 @Component({
   selector: 'app-admin',
@@ -158,12 +158,12 @@ export class AdminComponent implements OnInit {
     });
 
     this.ns.setSubPages([
-      new MenuItem('Users', 'users', 'account-group'),
-      new MenuItem('Security', 'security', 'security'),
-      new MenuItem('Error Log', 'errors', 'alert-circle-outline'),
-      new MenuItem('Requested Items', 'req-items', 'view-grid-plus'),
-      new MenuItem('Team Application Form', 'team-app-form', 'chat-question-outline'),
-      new MenuItem('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
+      new UserLinks('Users', 'users', 'account-group'),
+      new UserLinks('Security', 'security', 'security'),
+      new UserLinks('Error Log', 'errors', 'alert-circle-outline'),
+      new UserLinks('Requested Items', 'req-items', 'view-grid-plus'),
+      new UserLinks('Team Application Form', 'team-app-form', 'chat-question-outline'),
+      new UserLinks('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
     ]);
     this.ns.setSubPage('users');
     //this.ns.setSubPage('security');

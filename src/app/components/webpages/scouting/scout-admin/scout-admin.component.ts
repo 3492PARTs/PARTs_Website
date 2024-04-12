@@ -3,7 +3,6 @@ import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.se
 import { AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import { UserService } from 'src/app/services/user.service';
 import { ScoutResults } from '../scout-field-results/scout-field-results.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
@@ -11,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
 import { Team } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
+import { UserLinks } from 'src/app/models/navigation.models';
 
 @Component({
   selector: 'app-scout-admin',
@@ -197,18 +197,18 @@ export class ScoutAdminComponent implements OnInit {
     });
 
     this.ns.setSubPages([
-      new MenuItem('Users', 'users', 'account-group'),
-      new MenuItem('Season', 'mngSeason', 'card-bulleted-settings-outline'),
-      new MenuItem('Schedule', 'mngSch', 'clipboard-text-clock'),
-      new MenuItem('Scouting Activity', 'scoutAct', 'account-reactivate'),
-      new MenuItem('Field Form', 'mngFldQ', 'chat-question-outline'),
-      new MenuItem('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
-      new MenuItem('Field Form Conditions', 'mngFldQCond', 'code-equal'),
-      new MenuItem('Pit Form', 'mngPitQ', 'chat-question-outline'),
-      new MenuItem('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
-      new MenuItem('Field Results', 'mngFldRes', 'table-edit'),
-      new MenuItem('Pit Results', 'mngPitRes', 'table-edit'),
-      new MenuItem('Phone Types', 'mngPhnTyp', 'phone'),
+      new UserLinks('Users', 'users', 'account-group'),
+      new UserLinks('Season', 'mngSeason', 'card-bulleted-settings-outline'),
+      new UserLinks('Schedule', 'mngSch', 'clipboard-text-clock'),
+      new UserLinks('Scouting Activity', 'scoutAct', 'account-reactivate'),
+      new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
+      new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
+      new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
+      new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
+      new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
+      new UserLinks('Field Results', 'mngFldRes', 'table-edit'),
+      new UserLinks('Pit Results', 'mngPitRes', 'table-edit'),
+      new UserLinks('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
 
 

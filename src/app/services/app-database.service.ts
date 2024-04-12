@@ -6,14 +6,18 @@ import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { DexieCrud } from '../classes/dexie-crud';
 import { IUser } from '../models/user.models';
+import { IUserLinks } from '../models/navigation.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppDatabaseService extends Dexie {
+  UserTable!: Dexie.Table<IUser, number>;
+  UserLinksTable!: Dexie.Table<IUserLinks, number>;
+
 
   ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
-  UserTable!: Dexie.Table<IUser, number>;
+
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
 
@@ -40,8 +44,12 @@ export class AppDatabaseService extends Dexie {
   private setIndexDbTable() {
     this.version(this.versionNumber).stores(this.setTablesSchema());
     this.gs.devConsoleLog('app-database.service', 'database initialized');
-    this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
+
     this.UserTable = this.table(DBStores.User.TableName);
+    this.UserLinksTable = this.table(DBStores.UserLinks.TableName);
+
+    this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
+
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
   }
 

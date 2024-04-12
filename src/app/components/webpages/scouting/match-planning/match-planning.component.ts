@@ -5,10 +5,10 @@ import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { CompetitionLevel } from '../scout-admin/scout-admin.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { NavigationService } from 'src/app/services/navigation.service';
-import { MenuItem } from 'src/app/components/navigation/navigation.component';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 import { Team } from 'src/app/models/scouting.models';
 import { User } from 'src/app/models/user.models';
+import { UserLinks } from 'src/app/models/navigation.models';
 
 @Component({
   selector: 'app-match-planning',
@@ -67,8 +67,8 @@ export class MatchPlanningComponent implements OnInit {
     });
 
     this.ns.setSubPages([
-      new MenuItem('Matches', 'matches', 'soccer-field'),
-      new MenuItem('Team Notes', 'notes', 'note-multiple'),
+      new UserLinks('Matches', 'matches', 'soccer-field'),
+      new UserLinks('Team Notes', 'notes', 'note-multiple'),
     ]);
     this.ns.setSubPage('matches');
     this.setTableSize();

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MenuItem } from '../components/navigation/navigation.component';
 import { GeneralService } from './general.service';
+import { UserLinks } from '../models/navigation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class NavigationService {
   currentSubPage = this.subPage.asObservable();
 
   /* Sub Pages */
-  private subPages = new BehaviorSubject<MenuItem[]>([]);
+  private subPages = new BehaviorSubject<UserLinks[]>([]);
   currentSubPages = this.subPages.asObservable();
 
   /* State of navigation expander */
@@ -27,7 +27,7 @@ export class NavigationService {
     this.subPage.next(s);
   }
 
-  setSubPages(s: MenuItem[]): void {
+  setSubPages(s: UserLinks[]): void {
     this.subPages.next(s);
   }
 

@@ -9,6 +9,7 @@ import { PwaService } from 'src/app/services/pwa.service';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 import { User } from 'src/app/models/user.models';
+import { UserLinks, SubUserLinks } from 'src/app/models/navigation.models';
 
 @Component({
   selector: 'app-navigation',
@@ -48,8 +49,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: MenuItem[] = [];
-  userLinks: MenuItem[] = [];
+  appMenu: UserLinks[] = [];
+  userLinks: UserLinks[] = [];
 
   removeHeader = false;
 
@@ -66,8 +67,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new MenuItem('Logout', ''));
-          else mi.menu_items.push(new MenuItem('Login', 'login'))
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new UserLinks('Logout', ''));
+          else mi.menu_items.push(new UserLinks('Login', 'login'))
         }
       });
 
@@ -90,7 +91,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
-              mi.menu_items.push(new MenuItem('Install', ''));
+              mi.menu_items.push(new UserLinks('Install', ''));
             }
             else if (!e && index !== -1) {
               mi.menu_items.splice(index, 1);
@@ -133,21 +134,21 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
     this.appMenu = [
-      new MenuItem('Join PARTs', 'join', 'account-supervisor', [
-        new MenuItem('Mechanical', 'join/mechanical'),
-        new MenuItem('Electrical', 'join/electrical'),
-        new MenuItem('Programming', 'join/programming'),
-        new MenuItem('Community Outreach', 'join/community-outreach'),
-        new MenuItem('Application Form', 'join/team-application'),
+      new UserLinks('Join PARTs', 'join', 'account-supervisor', [
+        new UserLinks('Mechanical', 'join/mechanical'),
+        new UserLinks('Electrical', 'join/electrical'),
+        new UserLinks('Programming', 'join/programming'),
+        new UserLinks('Community Outreach', 'join/community-outreach'),
+        new UserLinks('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
-      new MenuItem('Contact Us', 'contact', 'card-account-details'),
-      new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
-      new MenuItem('About', 'about', 'information'),
-      new MenuItem('Media', 'media', 'image-multiple'),
-      new MenuItem('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
-      new MenuItem('FIRST', 'first', 'first'),
-      new MenuItem('Members', '', 'folder', [
-        new MenuItem('Login', 'login'),
+      new UserLinks('Contact Us', 'contact', 'card-account-details'),
+      new UserLinks('Sponsoring', 'sponsor', 'account-child-circle'),
+      new UserLinks('About', 'about', 'information'),
+      new UserLinks('Media', 'media', 'image-multiple'),
+      new UserLinks('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
+      new UserLinks('FIRST', 'first', 'first'),
+      new UserLinks('Members', '', 'folder', [
+        new UserLinks('Login', 'login'),
       ], 'Members Area'),
     ];
     this.competitionInit();
@@ -174,7 +175,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         next: (result: any) => {
           if ((result as CompetitionInit).event) {
             window.setTimeout(() => {
-              this.appMenu.unshift(new MenuItem('Competition', 'competition', 'robot-excited-outline'));
+              this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
             }, 1);
           }
         },
@@ -452,7 +453,7 @@ let max = document.documentElement.scrollHeight;
     return this.pageIDs[key];
   }
 
-  setActiveMenuItem(parent: MenuItem, child: MenuItem): void {
+  setActiveMenuItem(parent: UserLinks, child: SubUserLinks): void {
     this.resetMenuItemNames();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
@@ -487,24 +488,4 @@ let max = document.documentElement.scrollHeight;
 export class PageSpecificNavOption {
   optionName!: string;
   optionFunction!: () => void;
-}
-
-export class MenuItem {
-  menu_name = '';
-  menu_name_active_item = '';
-  menu_header = '';
-  order = -1;
-  permission = -1;
-  routerlink = '';
-  user_links_id = -1;
-  icon = 'clipboard-text-multiple-outline';
-  menu_items: MenuItem[] = [];
-
-  constructor(menu_name: string, routerlink: string, icon?: string, menu_items?: MenuItem[], menu_header?: string) {
-    this.menu_name = menu_name;
-    this.routerlink = routerlink;
-    this.icon = icon || 'clipboard-text-multiple-outline';
-    this.menu_items = menu_items || [];
-    this.menu_header = menu_header || '';
-  }
 }

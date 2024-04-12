@@ -4,13 +4,12 @@ import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
-import { MenuItem } from '../components/navigation/navigation.component';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
 import { IUser, User } from '../models/user.models';
 import { CacheService } from './cache.service';
 import { AppDatabaseService } from './app-database.service';
-import { Dexie } from 'dexie';
+import { UserLinks } from '../models/navigation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +28,7 @@ export class AuthService {
   private user = new BehaviorSubject<User>(new User());
   currentUser = this.user.asObservable();
 
-  private userLinks = new BehaviorSubject<MenuItem[]>([]);
+  private userLinks = new BehaviorSubject<UserLinks[]>([]);
   currentUserLinks = this.userLinks.asObservable();
 
   tokenStringLocalStorage = '';
@@ -124,8 +123,13 @@ export class AuthService {
               let user_id = this.getTokenLoad(this.token.value.refresh).user_id;
 
               this.cs.User.getById(user_id).then((u: IUser | undefined) => {
-                if (u)
+                if (u) {
                   this.user.next(u);
+
+                  this.cs.UserLinks.getAll().then(uls => {
+                    this.userLinks.next(uls);
+                  });
+                }
                 else
                   this.logOut();
               });
@@ -400,12 +404,7 @@ export class AuthService {
         next: (result: any) => {
           // console.log(Response);
           this.user.next(result as User);
-          this.cs.User.AddOrEditAsync(result as User).catch((reason: any) => {
-            console.log(reason);
-            this.cs.User.getAll().then(u => {
-              console.log(u);
-            });
-          });
+          this.cs.User.AddOrEditAsync(result as User);
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
@@ -425,7 +424,10 @@ export class AuthService {
     ).subscribe(
       {
         next: (result: any) => {
-          this.userLinks.next(result as MenuItem[]);
+          this.userLinks.next(result as UserLinks[]);
+          this.userLinks.value.forEach(ul => {
+            this.cs.UserLinks.AddOrEditAsync(ul);
+          });
         },
         error: (err: any) => {
           this.gs.decrementOutstandingCalls();
