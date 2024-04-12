@@ -49,4 +49,8 @@ export class DexieCrud<T, Tkey> {
     async RemoveRangeAsync(ids: Tkey[]): Promise<void> {
         await this.dbSet.bulkDelete(ids);
     }
+
+    async RemoveAllAsync(): Promise<void> {
+        await this.dbSet.clear();
+    }
 }

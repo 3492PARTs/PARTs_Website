@@ -9,7 +9,7 @@ import { NotificationsService } from './notifications.service';
 import { IUser, User } from '../models/user.models';
 import { CacheService } from './cache.service';
 import { AppDatabaseService } from './app-database.service';
-import { UserLinks } from '../models/navigation.models';
+import { IUserLinks, UserLinks } from '../models/navigation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -127,7 +127,11 @@ export class AuthService {
                   this.user.next(u);
 
                   this.cs.UserLinks.getAll().then(uls => {
-                    this.userLinks.next(uls);
+                    this.userLinks.next(uls.sort((a: IUserLinks, b: IUserLinks) => {
+                      if (a.order < b.order) return -1;
+                      else if (a.order > b.order) return 1;
+                      else return 0;
+                    }));
                   });
                 }
                 else
@@ -424,9 +428,11 @@ export class AuthService {
     ).subscribe(
       {
         next: (result: any) => {
-          this.userLinks.next(result as UserLinks[]);
-          this.userLinks.value.forEach(ul => {
-            this.cs.UserLinks.AddOrEditAsync(ul);
+          this.userLinks.next(this.gs.cloneObject(result as UserLinks[]));
+          this.cs.UserLinks.RemoveAllAsync().then(() => {
+            (this.gs.cloneObject(result) as UserLinks[]).forEach(ul => {
+              this.cs.UserLinks.AddAsync(ul);
+            });
           });
         },
         error: (err: any) => {
