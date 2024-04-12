@@ -48,6 +48,41 @@ export class FieldScoutingService {
       });
 
       if (callbackFn) callbackFn();
+    }, (error: any) => {
+      let allLoaded = true;
+
+      this.cs.Team.getAll().then((ts: Team[]) => {
+        this.teamsBS.next(ts);
+      }).catch((reason: any) => {
+        console.log(reason);
+        allLoaded = false;
+      });
+
+      this.cs.Match.getAll().then((ms: Match[]) => {
+        this.matchesBS.next(ms);
+      }).catch((reason: any) => {
+        console.log(reason);
+        allLoaded = false;
+      });
+
+      this.cs.ScoutFieldSchedule.getAll().then((sfss: ScoutFieldSchedule[]) => {
+        sfss.forEach(sfs => this.scoutFieldScheduleBS.next(sfs));
+      }).catch((reason: any) => {
+        console.log(reason);
+        allLoaded = false;
+      });
+
+      this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
+        this.scoutFieldQuestionsBS.next(sfqs);
+      }).catch((reason: any) => {
+        console.log(reason);
+        allLoaded = false;
+      });
+
+      if (!allLoaded) {
+        alert('ugggg');
+      }
+
     });
   }
 }
