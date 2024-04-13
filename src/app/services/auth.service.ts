@@ -94,6 +94,7 @@ export class AuthService {
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
     this.token.next(tmpTkn);
     if (this.token.value && this.token.value.refresh) {
+      this.gs.incrementOutstandingCalls();
       this.refreshToken().subscribe(
         {
           next: (result: any) => {
@@ -103,8 +104,6 @@ export class AuthService {
               this.getTokenExp(token.access);
               this.getTokenExp(token.refresh);
               this.token.next(token);
-
-              this.authInFlightBS.next(AuthCallStates.comp);
 
               this.getAllUserInfo();
               this.ps.subscribeToNotifications();
@@ -124,6 +123,7 @@ export class AuthService {
             }
             else {
               this.getAllUserInfo();
+              //auth process calls get set to complete in get user info
             }
           },
           complete: () => {
@@ -268,10 +268,6 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
-    //this.gs.incrementOutstandingCalls();
-
-    //const header = new HttpHeaders({ authExempt: 'true', }); // may be wrong plavce lol
-
     return this.http
       .post<Token>('user/token/refresh/', { refresh: this.token.value.refresh })
       .pipe(
@@ -318,22 +314,22 @@ export class AuthService {
         });
       }, interval);
     }
-  }
+  }*/
 
 
-    checkAPIStatus(): void {
-      this.http.get('public/api-status/').subscribe(
-        {
-          next: (result: any) => {
-            this.apiStatusBS.next(APIStatus.on);
-          },
-          error: (err: any) => {
-            this.apiStatusBS.next(APIStatus.off);
-            this.authInFlightBS.next(AuthCallStates.err);
-          }
+  checkAPIStatus(): void {
+    this.http.get('public/api-status/').subscribe(
+      {
+        next: (result: any) => {
+          this.apiStatusBS.next(APIStatus.on);
+        },
+        error: (err: any) => {
+          this.apiStatusBS.next(APIStatus.off);
+          this.authInFlightBS.next(AuthCallStates.err);
         }
-      );
-    }*/
+      }
+    );
+  }
 
   getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
