@@ -55,7 +55,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   userLinks: UserLinks[] = [];
 
   siteHeaderHeight = 7;
-  siteBannerHeight = 4;
+  siteBannerHeight = 0;
   removeHeader = false;
 
   tokenString = '';
@@ -75,7 +75,16 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     private navigationService: NavigationService,
     private api: APIService) {
 
-    this.api.apiStatus.subscribe(apis => this.apiStatus = apis);
+    this.api.apiStatus.subscribe(apis => {
+      this.apiStatus = apis;
+
+      if (this.apiStatus === APIStatus.off) {
+        this.siteBannerHeight = 4;
+      }
+      else {
+        this.siteBannerHeight = 0;
+      }
+    });
 
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {

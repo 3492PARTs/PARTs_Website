@@ -42,6 +42,7 @@ export class APIService {
     ).subscribe(
       {
         next: (result: any) => {
+          if (this.apiStatusBS.value === APIStatus.off) this.apiStatusBS.next(APIStatus.on);
           if (this.gs.checkResponse(result))
             if (onNext) onNext(result);
         },
