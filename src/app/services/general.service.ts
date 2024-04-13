@@ -168,10 +168,14 @@ export class GeneralService {
 
   /* helper functions */
   strNoE(s: any) {
+
+    if (Number.isNaN(s)) return true;
+
     let type = typeof s;
     if (s !== null && !['undefined', 'string'].includes(type)) {
       s = s.toString();
     }
+
     return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';
   }
 
