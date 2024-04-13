@@ -15,12 +15,13 @@ import { FieldScoutingService } from 'src/app/services/field-scouting.service';
   styleUrls: ['./scout-field.component.scss']
 })
 export class ScoutFieldComponent implements OnInit, OnDestroy {
+  scoutFieldResponse = new ScoutFieldResponse();
   teams: Team[] = [];
-  team: number = NaN;
+  //team: number = NaN;
   matches: Match[] = [];
   noMatch = false;
-  teamMatch: Match | null = null;
-  scoutQuestions: QuestionWithConditions[] = [];
+  //teamMatch: Match | null = null;
+  //scoutQuestions: QuestionWithConditions[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: QuestionWithConditions[] = [];
   scoutTeleopQuestions: QuestionWithConditions[] = [];
@@ -42,20 +43,20 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.authService.currentUser.subscribe(u => this.user = u);
 
     this.fss.teams.subscribe(ts => {
-      this.team = NaN;
+      this.scoutFieldResponse.team = NaN;
       this.buildTeamList();
     });
 
     this.fss.matches.subscribe(ms => {
       this.matches = ms;
-      this.teamMatch = new Match();
-      this.team = NaN;
+      this.scoutFieldResponse.match = null;
+      this.scoutFieldResponse.team = NaN;
       this.amendMatchList();
       this.buildTeamList();
     });
 
     this.fss.scoutFieldQuestions.subscribe(sfq => {
-      this.scoutQuestions = sfq;
+      this.scoutFieldResponse.question_answers = sfq;
       this.sortQuestions();
     });
 
@@ -106,18 +107,32 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   viewResult(id: number): void {
     this.formDisabled = true;
     this.cs.ScoutFieldResponse.getById(id).then(sfr => {
+      this.scoutFieldResponse.id = sfr?.id;
+
       this.cs.Match.getAll().then((ms: Match[]) => {
         this.matches = ms;
-        if (sfr?.match_id) {
-          this.teamMatch = this.matches[this.gs.arrayObjectIndexOf(this.matches, sfr.match_id, 'match_id')];
+        if (sfr?.match) {
+          this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
         }
-        this.team = sfr?.team || 0;
-        this.buildTeamList();
 
-        this.scoutQuestions = sfr?.question_answers || this.scoutQuestions;
-        this.sortQuestions();
+      });
+
+      this.scoutFieldResponse.team = sfr?.team || 0;
+      this.buildTeamList();
+
+      this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
+      this.sortQuestions();
+    });
+  }
+
+  removeResult(): void {
+    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+      this.cs.ScoutFieldResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
+        this.reset();
+        this.populateOutstandingResults();
       });
     });
+
   }
 
   scoutFieldInit(): void {
@@ -157,7 +172,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.scoutAutoQuestions = [];
     this.scoutTeleopQuestions = [];
     this.scoutOtherQuestions = [];
-    this.scoutQuestions.forEach(sq => {
+    this.scoutFieldResponse.question_answers.forEach(sq => {
       let sqCopy = JSON.parse(JSON.stringify(sq)) as QuestionWithConditions;
       if (sqCopy.form_sub_typ === 'auto') {
         this.scoutAutoQuestions.push(sqCopy);
@@ -174,7 +189,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   setNoMatch() {
     this.gs.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
-      this.teamMatch = new Match();
+      this.scoutFieldResponse.match = null;
       this.teams = [];
       this.cs.Team.getAll().then((ts: Team[]) => {
         this.teams = this.teams.concat(ts);
@@ -183,41 +198,42 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   amendMatchList(): void {
-    this.cs.ScoutFieldResponse.getAll().then((sfrc: ScoutFieldResponse[]) => {
-      sfrc.forEach((s: ScoutFieldResponse) => {
-        s.match_id;
-        s.team;
+    this.cs.Match.getAll().then((ms: Match[]) => {
+      this.matches = ms;
 
-        const index = this.gs.arrayObjectIndexOf(this.matches, s.match_id, 'match_id');
+      this.cs.ScoutFieldResponse.getAll().then((sfrc: ScoutFieldResponse[]) => {
+        sfrc.forEach((s: ScoutFieldResponse) => {
+          const index = this.gs.arrayObjectIndexOf(this.matches, s.match?.match_id, 'match_id');
 
-        if (index !== -1) {
-          let match = this.matches[index];
+          if (index !== -1) {
+            let match = this.matches[index];
 
-          if (match.red_one === s.team) {
-            match.red_one = NaN;
-          }
-          else if (match.red_two === s.team) {
-            match.red_two = NaN;
-          }
-          else if (match.red_three === s.team) {
-            match.red_three = NaN;
-          }
-          else if (match.blue_one === s.team) {
-            match.blue_one = NaN;
-          }
-          else if (match.blue_two === s.team) {
-            match.blue_two = NaN;
-          }
-          else if (match.blue_three === s.team) {
-            match.blue_three = NaN;
+            if (match.red_one === s.team) {
+              match.red_one = NaN;
+            }
+            else if (match.red_two === s.team) {
+              match.red_two = NaN;
+            }
+            else if (match.red_three === s.team) {
+              match.red_three = NaN;
+            }
+            else if (match.blue_one === s.team) {
+              match.blue_one = NaN;
+            }
+            else if (match.blue_two === s.team) {
+              match.blue_two = NaN;
+            }
+            else if (match.blue_three === s.team) {
+              match.blue_three = NaN;
+            }
+
+            if (!match.red_one && !match.red_two && !match.red_three &&
+              !match.blue_one && !match.blue_two && !match.blue_three) {
+              this.matches.splice(index, 1);
+            }
           }
 
-          if (!match.red_one && !match.red_two && !match.red_three &&
-            !match.blue_one && !match.blue_two && !match.blue_three) {
-            this.matches.splice(index, 1);
-          }
-        }
-
+        });
       });
     });
   }
@@ -232,23 +248,23 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.cs.Team.getAll().then((ts: Team[]) => {
         this.teams = [];
         ts.forEach(t => {
-          if (t.team_no === this.teamMatch?.blue_one) {
+          if (t.team_no === this.scoutFieldResponse.match?.blue_one) {
             this.teams.push(t);
           }
-          if (t.team_no === this.teamMatch?.blue_two) {
+          if (t.team_no === this.scoutFieldResponse.match?.blue_two) {
             this.teams.push(t);
           }
-          if (t.team_no == this.teamMatch?.blue_three) {
+          if (t.team_no == this.scoutFieldResponse.match?.blue_three) {
             this.teams.push(t);
           }
 
-          if (t.team_no === this.teamMatch?.red_one) {
+          if (t.team_no === this.scoutFieldResponse.match?.red_one) {
             this.teams.push(t);
           }
-          if (t.team_no === this.teamMatch?.red_two) {
+          if (t.team_no === this.scoutFieldResponse.match?.red_two) {
             this.teams.push(t);
           }
-          if (t.team_no === this.teamMatch?.red_three) {
+          if (t.team_no === this.scoutFieldResponse.match?.red_three) {
             this.teams.push(t);
           }
         });
@@ -257,28 +273,28 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
 
       // set the selected team based on which user is assigned to which team
-      if (this.teamMatch?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
-        this.team = this.teamMatch.blue_one as number;
+      if (this.scoutFieldResponse.match?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_one as number;
       }
 
-      if (this.teamMatch?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
-        this.team = this.teamMatch.blue_two as number;
+      if (this.scoutFieldResponse.match?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_two as number;
       }
 
-      if (this.teamMatch?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
-        this.team = this.teamMatch.blue_three as number;
+      if (this.scoutFieldResponse.match?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_three as number;
       }
 
-      if (this.teamMatch?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
-        this.team = this.teamMatch.red_one as number;
+      if (this.scoutFieldResponse.match?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_one as number;
       }
 
-      if (this.teamMatch?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
-        this.team = this.teamMatch.red_two as number;
+      if (this.scoutFieldResponse.match?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_two as number;
       }
 
-      if (this.teamMatch?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
-        this.team = this.teamMatch.red_three as number;
+      if (this.scoutFieldResponse.match?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_three as number;
       }
     }
     else {
@@ -290,9 +306,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   reset() {
     this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
-      this.scoutQuestions = sfqs;
-      this.teamMatch = null;
-      this.team = NaN;
+      this.scoutFieldResponse = new ScoutFieldResponse();
+      this.scoutFieldResponse.question_answers = sfqs;
       this.noMatch = false;
       this.sortQuestions();
       this.buildTeamList();
@@ -304,12 +319,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   save(sfr?: ScoutFieldResponse, id?: number, resetForm = true): void | null {
     if (!sfr) {
-      if (this.gs.strNoE(this.team)) {
+      if (this.gs.strNoE(this.scoutFieldResponse.team)) {
         this.gs.triggerError('Must select a team to scout!');
         return null;
       }
-
-
 
       let response: any[] = [];
       this.scoutAutoQuestions.forEach(sq => {
@@ -330,10 +343,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         });
       });
 
-      sfr = { question_answers: response, team: this.team || 0, match_id: this.teamMatch?.match_id || null, form_typ: 'field' };
+      sfr = { question_answers: response, team: this.scoutFieldResponse.team || 0, match: this.scoutFieldResponse.match, form_typ: 'field' };
     }
 
-    this.api.post(true, 'form/save-answers/', sfr, (result: any) => {
+    this.api.post(true, 'form/save-answers/', { question_answers: sfr.question_answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, (result: any) => {
       this.gs.successfulResponseBanner(result);
 
       if (resetForm) {

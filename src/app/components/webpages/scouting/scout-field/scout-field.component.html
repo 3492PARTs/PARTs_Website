@@ -14,49 +14,49 @@
     <div id="scouts">
       <div class="red">
         <p>{{ scoutFieldSchedule.red_one_id?.first_name }} {{ scoutFieldSchedule.red_one_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.red_one">
+        <div *ngIf="scoutFieldResponse.match?.red_one">
           <hr>
-          <p>{{teamMatch?.red_one}}</p>
+          <p>{{scoutFieldResponse.match?.red_one}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_one_id?.first_name }} {{ scoutFieldSchedule.blue_one_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.blue_one">
+        <div *ngIf="scoutFieldResponse.match?.blue_one">
           <hr>
-          <p>{{teamMatch?.blue_one}}</p>
+          <p>{{scoutFieldResponse.match?.blue_one}}</p>
         </div>
       </div>
 
       <div class="red">
         <p>{{ scoutFieldSchedule.red_two_id?.first_name }} {{ scoutFieldSchedule.red_two_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.red_two">
+        <div *ngIf="scoutFieldResponse.match?.red_two">
           <hr>
-          <p>{{teamMatch?.red_two}}</p>
+          <p>{{scoutFieldResponse.match?.red_two}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_two_id?.first_name }} {{ scoutFieldSchedule.blue_two_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.blue_two">
+        <div *ngIf="scoutFieldResponse.match?.blue_two">
           <hr>
-          <p>{{teamMatch?.blue_two}}</p>
+          <p>{{scoutFieldResponse.match?.blue_two}}</p>
         </div>
       </div>
 
       <div class="red">
         <p>{{ scoutFieldSchedule.red_three_id?.first_name }} {{ scoutFieldSchedule.red_three_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.red_three">
+        <div *ngIf="scoutFieldResponse.match?.red_three">
           <hr>
-          <p>{{teamMatch?.red_three}}</p>
+          <p>{{scoutFieldResponse.match?.red_three}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_three_id?.first_name }} {{ scoutFieldSchedule.blue_three_id?.last_name }}</p>
-        <div *ngIf="teamMatch?.blue_three">
+        <div *ngIf="scoutFieldResponse.match?.blue_three">
           <hr>
-          <p>{{teamMatch?.blue_three}}</p>
+          <p>{{scoutFieldResponse.match?.blue_three}}</p>
         </div>
       </div>
     </div>
@@ -65,12 +65,13 @@
 
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div *ngIf="formDisabled" class="padding-bottom-1rem">
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="reset()">Reset</app-button>
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
     </div>
 
     <div *ngIf="matches.length > 0" class="flex align-items-baseline">
       <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
-        [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="teamMatch"
+        [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.match"
         [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled">
       </app-form-element>
 
@@ -79,7 +80,7 @@
     </div>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="team" [Required]="true" [Disabled]="formDisabled">
+      [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team" [Required]="true" [Disabled]="formDisabled">
     </app-form-element>
 
     <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"

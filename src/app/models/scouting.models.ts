@@ -172,16 +172,18 @@ export class ScoutQuestion implements IScoutQuestion {
 }
 
 export interface IScoutFieldResponse {
+    id?: number;
     question_answers: IQuestionWithConditions[];
     team: number;
-    match_id: string | null;
+    match: IMatch | null;
     form_typ: string;
 }
 
 export class ScoutFieldResponse implements IScoutFieldResponse {
+    id?: number;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
-    match_id!: string | null;
+    match!: Match | null;
     form_typ = 'field';
 }
 
