@@ -15,11 +15,19 @@ export class APIService {
   constructor(private http: HttpClient, private gs: GeneralService) { }
 
   getAPIStatus(): void {
-    this.get(false, 'public/api-status/', undefined, (result: any) => {
-      this.apiStatusBS.next(APIStatus.on);
-    }, (err: any) => {
-      this.apiStatusBS.next(APIStatus.off);
-    });
+    this.http.get(
+      'public/api-status/'
+    ).subscribe(
+      {
+        next: (result: any) => {
+          this.apiStatusBS.next(APIStatus.on);
+        },
+        error: (err: any) => {
+          console.log('error', err);
+          this.apiStatusBS.next(APIStatus.off);
+        }
+      }
+    );
   }
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
@@ -39,7 +47,10 @@ export class APIService {
         },
         error: (err: any) => {
           if (loadingScreen) this.gs.decrementOutstandingCalls();
-          console.log('error', err);
+          console.log('error', (err as Response).status);
+          if (err.status === 0) {
+            this.getAPIStatus();
+          }
           if (onError) onError(err);
         },
         complete: () => {
