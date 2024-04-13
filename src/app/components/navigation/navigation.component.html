@@ -1,3 +1,7 @@
+<div id="site-banner" *ngIf="apiStatus === 'prcs'" [ngStyle]="{ height: siteBannerHeight + 'rem'}">
+
+</div>
+
 <div #thisWrapper id="wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
   <!--navigation-->
   <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
@@ -117,7 +121,8 @@
 
   <!--site header-->
   <header #thisHeader id="site-header"
-    [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}">
+    [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}"
+    [ngStyle]="{ height: siteHeaderHeight + 'rem', 'margin-top': siteBannerHeight + 'rem'}">
     <!--narrow screen nav expander-->
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
       <mat-icon class="icon" svgIcon="menu"></mat-icon>
@@ -266,7 +271,8 @@
   <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}"
     (appClickInside)="closeNavOnMobile()">
     <!--main page content-->
-    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}">
+    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}"
+      [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem'}">
       <ng-content>
 
       </ng-content>

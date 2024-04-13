@@ -1,6 +1,15 @@
 @import "../../../scss/abstracts/variables.scss";
 @import "../../../scss/abstracts/mixins.scss";
 
+#site-banner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  background-color: $accent_color;
+  z-index: 100;
+}
+
 #wrapper {
   width: 100%;
   display: flex;
