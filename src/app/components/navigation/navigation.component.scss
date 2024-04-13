@@ -326,6 +326,18 @@ nav {
   width: 100%;
   background-color: $accent_color;
   z-index: 100;
+  padding-left: 1rem;
+
+  .banner-message {
+    .icon {
+      fill: #fff !important;
+    }
+
+    p {
+      color: white;
+      margin: 0;
+    }
+  }
 }
 
 #site-banner,

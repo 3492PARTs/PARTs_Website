@@ -1,5 +1,11 @@
-<div id="site-banner" *ngIf="apiStatus === 'prcs'" [ngStyle]="{ height: siteBannerHeight + 'rem'}"
+<div *ngIf="apiStatus === 'prcs'" id="site-banner" class="flex align-items-center"
+  [ngStyle]="{ height: siteBannerHeight + 'rem'}"
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
+
+  <div class="banner-message flex align-items-center gap-1rem">
+    <mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon>
+    <p>Application is running in offline mode</p>
+  </div>
 
 </div>
 
