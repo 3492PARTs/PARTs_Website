@@ -48,7 +48,6 @@ export class APIService {
         },
         error: (err: any) => {
           if (loadingScreen) this.gs.decrementOutstandingCalls();
-          console.log('error', (err as Response).status);
           if (err.status === 0) {
             this.getAPIStatus();
           }
