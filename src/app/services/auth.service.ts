@@ -19,9 +19,6 @@ export class AuthService {
   private authInFlightBS = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
   authInFlight = this.authInFlightBS.asObservable();
 
-  private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.prcs);
-  apiStatus = this.apiStatusBS.asObservable();
-
   private token = new BehaviorSubject<Token>(new Token());
   currentToken = this.token.asObservable();
   //private internalToken: Token = new Token();
@@ -316,21 +313,6 @@ export class AuthService {
     }
   }*/
 
-
-  checkAPIStatus(): void {
-    this.http.get('public/api-status/').subscribe(
-      {
-        next: (result: any) => {
-          this.apiStatusBS.next(APIStatus.on);
-        },
-        error: (err: any) => {
-          this.apiStatusBS.next(APIStatus.off);
-          this.authInFlightBS.next(AuthCallStates.err);
-        }
-      }
-    );
-  }
-
   getUserGroups(userId: string): Observable<object> | null {
     if (userId) {
       return this.http.get(
@@ -470,10 +452,4 @@ export enum AuthCallStates {
   prcs,
   comp,
   err
-}
-
-export enum APIStatus {
-  prcs,
-  on,
-  off
 }

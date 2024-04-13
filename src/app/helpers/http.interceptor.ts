@@ -2,7 +2,6 @@ import { Injectable, Injector } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
-  HttpEvent,
   HttpInterceptor,
   HttpSentEvent,
   HttpHeaderResponse,
@@ -11,22 +10,19 @@ import {
   HttpUserEvent,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { APIStatus, AuthService, Token } from '../services/auth.service';
 import { environment } from '../../environments/environment';
 import { GeneralService } from '../services/general.service';
-import { Router } from '@angular/router';
 import { User } from '../models/user.models';
+import { AuthService, Token } from '../services/auth.service';
 
 @Injectable()
 export class HTTPInterceptor implements HttpInterceptor {
   private token: Token = new Token();
   private user: User = new User();
-  private apiStatus = APIStatus.prcs;
 
-  constructor(private auth: AuthService, private gs: GeneralService, private injector: Injector, private router: Router) {
+  constructor(private auth: AuthService, private gs: GeneralService) {
     this.auth.currentToken.subscribe((t) => (this.token = t));
     this.auth.currentUser.subscribe(u => this.user = u);
-    this.auth.apiStatus.subscribe(a => this.apiStatus = a);
   }
 
   // function which will be called for all http calls

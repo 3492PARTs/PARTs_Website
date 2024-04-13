@@ -1,13 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
+import { APIStatus } from '../models/api.models';
+import { BehaviorSubject } from 'rxjs';
+import { AuthCallStates } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class APIService {
+  private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.prcs);
+  apiStatus = this.apiStatusBS.asObservable();
 
   constructor(private http: HttpClient, private gs: GeneralService) { }
+
+  getAPIStatus(): void {
+    this.get(false, 'public/api-status/', undefined, (result: any) => {
+      this.apiStatusBS.next(APIStatus.on);
+    }, (err: any) => {
+      this.apiStatusBS.next(APIStatus.off);
+    });
+  }
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,

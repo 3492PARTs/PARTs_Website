@@ -10,6 +10,8 @@ import { Alert, NotificationsService } from 'src/app/services/notifications.serv
 import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 import { User } from 'src/app/models/user.models';
 import { UserLinks, SubUserLinks } from 'src/app/models/navigation.models';
+import { APIService } from 'src/app/services/api.service';
+import { APIStatus } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-navigation',
@@ -52,6 +54,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   appMenu: UserLinks[] = [];
   userLinks: UserLinks[] = [];
 
+  siteHeaderHeight = 7;
+  siteBannerHeight = 4;
   removeHeader = false;
 
   tokenString = '';
@@ -59,7 +63,20 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   notifications: Alert[] = [];
   messages: Alert[] = [];
 
-  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService, private navigationService: NavigationService) {
+  apiStatus = APIStatus.prcs;
+
+  constructor(private gs: GeneralService,
+    private renderer: Renderer2,
+    public auth: AuthService,
+    private router: Router,
+    private http: HttpClient,
+    private pwa: PwaService,
+    private ns: NotificationsService,
+    private navigationService: NavigationService,
+    private api: APIService) {
+
+    this.api.apiStatus.subscribe(apis => this.apiStatus = apis);
+
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
       this.userLinks = ul;
