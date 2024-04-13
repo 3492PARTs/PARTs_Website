@@ -53,6 +53,7 @@ export class FieldScoutingService {
 
       this.cs.Team.getAll().then((ts: Team[]) => {
         this.teamsBS.next(ts);
+        if (ts.length <= 0) allLoaded = false;
       }).catch((reason: any) => {
         console.log(reason);
         allLoaded = false;
@@ -74,6 +75,7 @@ export class FieldScoutingService {
 
       this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
         this.scoutFieldQuestionsBS.next(sfqs);
+        if (sfqs.length <= 0) allLoaded = false;
       }).catch((reason: any) => {
         console.log(reason);
         allLoaded = false;

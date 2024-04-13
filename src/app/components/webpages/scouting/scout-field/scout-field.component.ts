@@ -223,32 +223,35 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   buildTeamList(): void {
-    this.teams = [];
+
     this.noMatch = false;
     // only run if there are matchs
     if (this.matches.length > 0) {
 
       // get the teams for the match from the teams list
       this.cs.Team.getAll().then((ts: Team[]) => {
-        if (this.teamMatch?.blue_one) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_one?.toString()) this.teams.push(t) });
-        }
-        if (this.teamMatch?.blue_two) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_two?.toString()) this.teams.push(t) });
-        }
-        if (this.teamMatch?.blue_three) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.blue_three?.toString()) this.teams.push(t) });
-        }
+        this.teams = [];
+        ts.forEach(t => {
+          if (t.team_no === this.teamMatch?.blue_one) {
+            this.teams.push(t);
+          }
+          if (t.team_no === this.teamMatch?.blue_two) {
+            this.teams.push(t);
+          }
+          if (t.team_no == this.teamMatch?.blue_three) {
+            this.teams.push(t);
+          }
 
-        if (this.teamMatch?.red_one) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_one?.toString()) this.teams.push(t) });
-        }
-        if (this.teamMatch?.red_two) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_two?.toString()) this.teams.push(t) });
-        }
-        if (this.teamMatch?.red_three) {
-          ts.forEach(t => { if (t.team_no.toString() === this.teamMatch?.red_three?.toString()) this.teams.push(t) });
-        }
+          if (t.team_no === this.teamMatch?.red_one) {
+            this.teams.push(t);
+          }
+          if (t.team_no === this.teamMatch?.red_two) {
+            this.teams.push(t);
+          }
+          if (t.team_no === this.teamMatch?.red_three) {
+            this.teams.push(t);
+          }
+        });
       });
 
 
