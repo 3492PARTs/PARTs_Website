@@ -1,4 +1,5 @@
-<div id="site-banner" *ngIf="apiStatus === 'prcs'" [ngStyle]="{ height: siteBannerHeight + 'rem'}">
+<div id="site-banner" *ngIf="apiStatus === 'prcs'" [ngStyle]="{ height: siteBannerHeight + 'rem'}"
+  [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
 </div>
 
