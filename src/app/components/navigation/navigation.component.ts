@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
+import { AppSize, Banner, GeneralService } from 'src/app/services/general.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -56,14 +56,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   siteHeaderHeight = 7;
   siteBannerHeight = 0;
+  persistentSiteBanners: Banner[] = [];
+
   removeHeader = false;
 
   tokenString = '';
 
   notifications: Alert[] = [];
   messages: Alert[] = [];
-
-  apiStatus = APIStatus.prcs;
 
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
@@ -72,19 +72,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     private pwa: PwaService,
     private ns: NotificationsService,
-    private navigationService: NavigationService,
-    private api: APIService) {
-
-    this.api.apiStatus.subscribe(apis => {
-      this.apiStatus = apis;
-
-      if (this.apiStatus === APIStatus.off) {
-        this.siteBannerHeight = 4;
-      }
-      else {
-        this.siteBannerHeight = 0;
-      }
-    });
+    private navigationService: NavigationService) {
 
     this.auth.currentUser.subscribe(u => this.user = u);
     this.auth.currentUserLinks.subscribe((ul) => {
@@ -144,6 +132,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.ns.notifications.subscribe(n => this.notifications = n);
     this.ns.messages.subscribe(m => this.messages = m);
 
+    this.gs.persistentSiteBanners.subscribe(psb => {
+      this.persistentSiteBanners = psb;
+      this.siteBannerHeight = 4 * this.persistentSiteBanners.length;
+    });
 
     this.gs.scrollPosition$.subscribe(scrollY => {
       this.scrollEvents(scrollY, true);

@@ -1,10 +1,10 @@
-<div *ngIf="apiStatus === 'off'" id="site-banner" class="flex align-items-center"
+<div *ngIf="persistentSiteBanners.length > 0" id="site-banner" class="flex align-items-center"
   [ngStyle]="{ height: siteBannerHeight + 'rem'}"
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
-  <div class="banner-message flex align-items-center gap-1rem">
+  <div class="banner-message flex align-items-center gap-1rem" *ngFor="let psb of persistentSiteBanners">
     <mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon>
-    <p>Application is running in offline mode</p>
+    <p>{{ psb.message }}</p>
   </div>
 
 </div>

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GeneralService } from './general.service';
+import { Banner, GeneralService } from './general.service';
 import { APIStatus } from '../models/api.models';
 import { BehaviorSubject } from 'rxjs';
 import { AuthCallStates } from './auth.service';
@@ -12,7 +12,35 @@ export class APIService {
   private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.prcs);
   apiStatus = this.apiStatusBS.asObservable();
 
-  constructor(private http: HttpClient, private gs: GeneralService) { }
+  private persistentSiteBanners: Banner[] = [];
+
+  constructor(private http: HttpClient, private gs: GeneralService) {
+    this.gs.persistentSiteBanners.subscribe(psb => this.persistentSiteBanners = psb);
+
+    this.apiStatus.subscribe(s => {
+      let message = "Application is running in offline mode.";
+
+      switch (s) {
+        case APIStatus.on:
+          console.log('on event');
+          this.gs.removePersistentBanner(new Banner(message));
+          break;
+        case APIStatus.off:
+          console.log('off event');
+          let found = false;
+          this.persistentSiteBanners.forEach((b: Banner) => {
+            if (b.message === message) found = true;
+
+
+          });
+
+          if (!found) {
+            this.gs.addPersistentBanner(new Banner(message));
+          }
+          break;
+      }
+    });
+  }
 
   getAPIStatus(): void {
     this.http.get(
@@ -20,9 +48,11 @@ export class APIService {
     ).subscribe(
       {
         next: (result: any) => {
+          console.log('on');
           this.apiStatusBS.next(APIStatus.on);
         },
         error: (err: any) => {
+          console.log('off');
           console.log('error', err);
           this.apiStatusBS.next(APIStatus.off);
         }
@@ -34,6 +64,7 @@ export class APIService {
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
   ) {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
+    console.log(endpoint);
     this.http.get(
       endpoint,
       {
@@ -42,7 +73,10 @@ export class APIService {
     ).subscribe(
       {
         next: (result: any) => {
-          if (this.apiStatusBS.value === APIStatus.off) this.apiStatusBS.next(APIStatus.on);
+          if (this.apiStatusBS.value === APIStatus.off) {
+            console.log('on');
+            this.apiStatusBS.next(APIStatus.on);
+          }
           if (this.gs.checkResponse(result))
             if (onNext) onNext(result);
         },

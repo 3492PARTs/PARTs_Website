@@ -37,7 +37,9 @@ export class GeneralService {
   /* Site Banners */
   private siteBanners = new BehaviorSubject<Banner[]>([]);
   currentSiteBanners = this.siteBanners.asObservable();
-  private internalSiteBanners: Banner[] = [];
+
+  private persistentSiteBannersBS = new BehaviorSubject<Banner[]>([]);
+  persistentSiteBanners = this.persistentSiteBannersBS.asObservable();
 
   private gsId = 0;
 
@@ -65,31 +67,47 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
-    /*
-    let add = true;
-    this.internalSiteBanners.forEach(el => {
-      if (el.message === b.message) {
-        add = false;
-      }
-    });
-
-    if (add) {
-      this.internalSiteBanners.push(b);
-      this.siteBanners.next(this.internalSiteBanners);
-    }
-  */
-    this.internalSiteBanners.push(b);
-    this.siteBanners.next(this.internalSiteBanners);
+    this.siteBanners.next(this.siteBanners.value.concat([b]));
   }
 
   removeBanner(b: Banner): void {
-    let i = this.arrayObjectIndexOf(this.internalSiteBanners, b.message, 'message');
+    let banners = this.siteBanners.value;
+    let index = -1;
 
-    if (i !== -1) {
-      this.internalSiteBanners.splice(i, 1);
-      this.siteBanners.next(this.internalSiteBanners);
+    for (let i = 0; i < banners.length; i++) {
+      if (banners[i].message === b.message && banners[i].time === b.time) {
+        index = i;
+        break;
+      }
     }
 
+    if (index !== -1) {
+      banners.splice(index, 1);
+      this.siteBanners.next(banners);
+    }
+  }
+
+  addPersistentBanner(b: Banner) {
+    console.log('add');
+    this.persistentSiteBannersBS.next(this.siteBanners.value.concat([b]));
+  }
+
+  removePersistentBanner(b: Banner): void {
+    console.log('remove');
+    let banners = this.persistentSiteBannersBS.value;
+    let index = -1;
+
+    for (let i = 0; i < banners.length; i++) {
+      if (banners[i].message === b.message && banners[i].time === b.time) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index !== -1) {
+      banners.splice(index, 1);
+      this.persistentSiteBannersBS.next(banners);
+    }
   }
 
   /* Error Service */
