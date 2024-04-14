@@ -22,11 +22,9 @@ export class APIService {
 
       switch (s) {
         case APIStatus.on:
-          console.log('on event');
           this.gs.removePersistentBanner(new Banner(message));
           break;
         case APIStatus.off:
-          console.log('off event');
           let found = false;
           this.persistentSiteBanners.forEach((b: Banner) => {
             if (b.message === message) found = true;
@@ -48,11 +46,9 @@ export class APIService {
     ).subscribe(
       {
         next: (result: any) => {
-          console.log('on');
           this.apiStatusBS.next(APIStatus.on);
         },
         error: (err: any) => {
-          console.log('off');
           console.log('error', err);
           this.apiStatusBS.next(APIStatus.off);
         }

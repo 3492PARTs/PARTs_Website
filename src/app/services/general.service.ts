@@ -88,12 +88,10 @@ export class GeneralService {
   }
 
   addPersistentBanner(b: Banner) {
-    console.log('add');
     this.persistentSiteBannersBS.next(this.siteBanners.value.concat([b]));
   }
 
   removePersistentBanner(b: Banner): void {
-    console.log('remove');
     let banners = this.persistentSiteBannersBS.value;
     let index = -1;
 
