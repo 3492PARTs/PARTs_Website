@@ -6,7 +6,7 @@ export interface ITeam {
     team_nm: string;
     void_ind: string;
     checked: boolean;
-    pitResult: boolean;
+    pitResult: number;
 }
 
 export class Team implements ITeam {
@@ -14,7 +14,7 @@ export class Team implements ITeam {
     team_nm = '';
     void_ind = 'n'
     checked = false;
-    pitResult = false;
+    pitResult = 0;
 }
 
 export interface IEvent {

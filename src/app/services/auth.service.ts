@@ -45,7 +45,7 @@ export class AuthService {
     private ns: NotificationsService,
     private cs: CacheService,
     private ds: DataService,
-    private fss: ScoutingService) {
+    private ss: ScoutingService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -323,7 +323,7 @@ export class AuthService {
 
   getUserLinks() {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
-      const offlineMenuNames = ['Field Scouting'];
+      const offlineMenuNames = ['Field Scouting', 'Pit Scouting'];
 
       switch (this.apiStatus) {
         case APIStatus.on:
@@ -334,7 +334,11 @@ export class AuthService {
           this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name)).forEach(ul => {
             switch (ul.menu_name) {
               case 'Field Scouting':
-                this.fss.initFieldScouting(false);
+                this.ss.initFieldScouting(false, (result: any) => {
+                  if (this.userLinksBS.value.filter(ul => ul.menu_name === 'Pit Scouting').length > 0) {
+                    this.ss.initPitScouting(false);
+                  }
+                });
                 break;
             }
           });

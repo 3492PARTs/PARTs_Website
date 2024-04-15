@@ -34,8 +34,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private ss: ScoutingService) {
 
-    this.ss.pitScoutingQuestions.subscribe(psq => {
-      //TODO Build outstanding list
+    this.ss.pitScoutingQuestions.subscribe(psqs => {
+      if (this.gs.strNoE(this.scoutPitResponse.team)) {
+        this.scoutPitResponse.question_answers = psqs;
+      }
     });
 
     this.ss.completedPitScoutingTeams.subscribe(cpsts => {
@@ -63,9 +65,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   spInit(): void {
-    this.ss.initializePitScouting(true, (result: any) => {
-      this.scoutPitResponse.question_answers = (result as ScoutPitInit).scoutQuestions;
-    });
+    this.ss.initPitScouting();
   }
 
   buildOutstandingTeamsList(): void {

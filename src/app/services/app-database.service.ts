@@ -53,6 +53,7 @@ export class AppDatabaseService extends Dexie {
     this.UserLinksTable = this.table(DBStores.UserLinks.TableName);
 
     this.TeamTable = this.table(DBStores.Team.TableName);
+
     this.MatchTable = this.table(DBStores.Match.TableName);
     this.ScoutFieldScheduleTable = this.table(DBStores.ScoutFieldSchedule.TableName);
     this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);

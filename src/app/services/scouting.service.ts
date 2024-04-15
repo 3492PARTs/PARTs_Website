@@ -29,37 +29,36 @@ export class ScoutingService {
   completedPitScoutingTeams = this.completedPitScoutingTeamsBS.asObservable();
 
   private pitScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
-  pitScoutingQuestions = this.fieldScoutingQuestionsBS.asObservable();
+  pitScoutingQuestions = this.pitScoutingQuestionsBS.asObservable();
 
   constructor(private api: APIService,
     private cs: CacheService,
     private gs: GeneralService) { }
 
-  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void): void {
-    this.api.get(loadingScreen, 'scouting/field/init/', undefined, (result: any) => {
+  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void) {
+    this.api.get(loadingScreen, 'scouting/field/init/', undefined, async (result: any) => {
       /** 
        * On success load results and store in db 
        **/
-      this.teamsBS.next(result['teams'] as Team[]);
-      this.cs.Team.RemoveAllAsync().then(() => {
-        this.cs.Team.AddBulkAsync(this.teamsBS.value);
-      });
+      const res = (result['teams'] as Team[]);
+      this.teamsBS.next(res);
+      await this.cs.Team.RemoveAllAsync();
+      await this.cs.Team.AddBulkAsync(this.teamsBS.value);
 
       this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
-      this.cs.ScoutFieldSchedule.RemoveAllAsync().then(() => {
-        if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
-      });
+      await this.cs.ScoutFieldSchedule.RemoveAllAsync();
+      if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) await this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
+
 
       this.fieldScoutingQuestionsBS.next(result['scoutQuestions'] as QuestionWithConditions[]);
       let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-      this.cs.QuestionWithConditions.RemoveRangeAsync(ids).then(() => {
-        this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
-      });
+
+      await this.cs.QuestionWithConditions.RemoveRangeAsync(ids);
+      await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
 
       this.matchesBS.next(result['matches'] as Match[]);
-      this.cs.Match.RemoveAllAsync().then(() => {
-        this.cs.Match.AddBulkAsync(this.matchesBS.value);
-      });
+      await this.cs.Match.RemoveAllAsync();
+      await this.cs.Match.AddBulkAsync(this.matchesBS.value);
 
       if (callbackFn) callbackFn(result);
     }, (error: any) => {
@@ -105,7 +104,7 @@ export class ScoutingService {
     });
   }
 
-  initializePitScouting(loadingScreen = true, callbackFn?: (result: any) => void): void {
+  initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): void {
     this.api.get(loadingScreen, 'scouting/pit/init/', undefined, (result: any) => {
       /** 
        * On success load results and store in db 
@@ -116,7 +115,7 @@ export class ScoutingService {
       init.comp_teams.forEach(t => {
         this.cs.Team.getById(t.team_no).then(t => {
           if (t) {
-            t.pitResult = true;
+            t.pitResult = 1;
             this.cs.Team.AddOrEditAsync(t);
           }
         });
@@ -135,7 +134,7 @@ export class ScoutingService {
        **/
       let allLoaded = true;
 
-      this.cs.Team.getAll((t) => t.where({ pitResult: true })).then(ts => {
+      this.cs.Team.getAll((t) => t.where({ pitResult: 1 })).then(ts => {
         this.completedPitScoutingTeamsBS.next(ts);
       }).catch((reason: any) => {
         console.log(reason);

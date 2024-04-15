@@ -88,7 +88,7 @@ export class GeneralService {
   }
 
   addPersistentBanner(b: Banner) {
-    this.persistentSiteBannersBS.next(this.siteBanners.value.concat([b]));
+    this.persistentSiteBannersBS.next(this.persistentSiteBannersBS.value.concat([b]));
   }
 
   removePersistentBanner(b: Banner): void {
