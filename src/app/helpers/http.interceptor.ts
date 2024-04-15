@@ -21,8 +21,8 @@ export class HTTPInterceptor implements HttpInterceptor {
   private user: User = new User();
 
   constructor(private auth: AuthService, private gs: GeneralService) {
-    this.auth.currentToken.subscribe((t) => (this.token = t));
-    this.auth.currentUser.subscribe(u => this.user = u);
+    this.auth.token.subscribe((t) => (this.token = t));
+    this.auth.user.subscribe(u => this.user = u);
   }
 
   // function which will be called for all http calls

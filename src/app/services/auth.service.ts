@@ -12,6 +12,7 @@ import { IUserLinks, UserLinks } from '../models/navigation.models';
 import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
+import { APIStatus } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -20,19 +21,20 @@ export class AuthService {
   private authInFlightBS = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
   authInFlight = this.authInFlightBS.asObservable();
 
-  private token = new BehaviorSubject<Token>(new Token());
-  currentToken = this.token.asObservable();
-  //private internalToken: Token = new Token();
+  private tokenBS = new BehaviorSubject<Token>(new Token());
+  token = this.tokenBS.asObservable();
 
-  private user = new BehaviorSubject<User>(new User());
-  currentUser = this.user.asObservable();
+  private userBS = new BehaviorSubject<User>(new User());
+  user = this.userBS.asObservable();
 
-  private userLinks = new BehaviorSubject<UserLinks[]>([]);
-  currentUserLinks = this.userLinks.asObservable();
+  private userLinksBS = new BehaviorSubject<UserLinks[]>([]);
+  userLinks = this.userLinksBS.asObservable();
 
   tokenStringLocalStorage = '';
 
   private rememberMeTimeout: number | null | undefined;
+
+  private apiStatus = APIStatus.on;
 
   constructor(private http: HttpClient,
     private api: APIService,
@@ -43,6 +45,19 @@ export class AuthService {
     private cs: CacheService,
     private ds: DataService) {
     this.tokenStringLocalStorage = environment.tokenString;
+
+    this.api.apiStatus.subscribe(apis => {
+      if (this.apiStatus != apis)
+        switch (apis) {
+          case APIStatus.on:
+            this.getUser();
+            this.getUserLinks();
+            break;
+          case APIStatus.off:
+            this.getUserLinks();
+        }
+      this.apiStatus = apis;
+    });
   }
 
   authorizeUser(userData: UserData, returnUrl?: string | null): void {
@@ -51,7 +66,7 @@ export class AuthService {
 
     this.api.post(true, 'user/token/', userData, (result: any) => {
       const tmp = result as Token;
-      this.token.next(tmp);
+      this.tokenBS.next(tmp);
 
       this.gs.devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
@@ -78,8 +93,8 @@ export class AuthService {
     this.authInFlightBS.next(AuthCallStates.prcs);
 
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
-    this.token.next(tmpTkn);
-    if (this.token.value && this.token.value.refresh) {
+    this.tokenBS.next(tmpTkn);
+    if (this.tokenBS.value && this.tokenBS.value.refresh) {
       this.refreshToken().subscribe(
         {
           next: (result: any) => {
@@ -116,9 +131,9 @@ export class AuthService {
   }
 
   logOut(): void {
-    this.token.next(new Token());
-    this.user.next(new User());
-    this.userLinks.next([]);
+    this.tokenBS.next(new Token());
+    this.userBS.next(new User());
+    this.userLinksBS.next([]);
     localStorage.removeItem(this.tokenStringLocalStorage);
     if (this.rememberMeTimeout)
       window.clearTimeout(this.rememberMeTimeout);
@@ -174,21 +189,21 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
-    return this.api.post(true, 'user/token/refresh/', { refresh: this.token.value.refresh }).pipe(
+    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh }).pipe(
       map(res => {
         const token = res as Token;
         this.gs.devConsoleLog('refreshToken', 'new tokens below');
         this.getTokenExp(token.access);
         this.getTokenExp(token.refresh);
 
-        this.token.next(token);
+        this.tokenBS.next(token);
 
         return token;
       })
     );
 
     return this.http
-      .post<Token>('user/token/refresh/', { refresh: this.token.value.refresh })
+      .post<Token>('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
       .pipe(
         map(res => {
           const token = res as Token;
@@ -196,7 +211,7 @@ export class AuthService {
           this.getTokenExp(token.access);
           this.getTokenExp(token.refresh);
 
-          this.token.next(token);
+          this.tokenBS.next(token);
 
           //this.gs.decrementOutstandingCalls();
 
@@ -206,11 +221,11 @@ export class AuthService {
   }
 
   setToken(tkn: Token): void {
-    this.token.next(tkn);
+    this.tokenBS.next(tkn);
   }
 
   getAccessToken(): Observable<string> {
-    return of(this.token.value.access);
+    return of(this.tokenBS.value.access);
   }
   /*
   stayLoggedIn(): void {
@@ -263,12 +278,12 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     this.gs.devConsoleLog('isAuthenticated', 'current access token below');
-    return !this.gs.strNoE(this.token.value.access) && !this.isTokenExpired(this.token.value.access);
+    return !this.gs.strNoE(this.tokenBS.value.access) && !this.isTokenExpired(this.tokenBS.value.access);
   }
 
   isSessionExpired(): boolean {
     this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
-    return this.gs.strNoE(this.token.value.refresh) || this.isTokenExpired(this.token.value.refresh);
+    return this.gs.strNoE(this.tokenBS.value.refresh) || this.isTokenExpired(this.tokenBS.value.refresh);
   }
 
   getAllUserInfo(): void {
@@ -280,7 +295,7 @@ export class AuthService {
 
   getUser() {
     this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
-      return u.where({ 'id': this.getTokenLoad(this.token.value.refresh).user_id })
+      return u.where({ 'id': this.getTokenLoad(this.tokenBS.value.refresh).user_id })
     }, (result: any) => {
       // console.log(Response);
       if (Array.isArray(result))
@@ -288,7 +303,7 @@ export class AuthService {
       result = (result as User);
 
       if (result.id > 0) {
-        this.user.next(result as User);
+        this.userBS.next(result as User);
         this.cs.User.AddOrEditAsync(result as User);
         this.authInFlightBS.next(AuthCallStates.comp);
       }
@@ -303,13 +318,35 @@ export class AuthService {
 
   getUserLinks() {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
-      this.userLinks.next(this.gs.cloneObject(result as UserLinks[]));
+      switch (this.apiStatus) {
+        case APIStatus.on:
+          this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
+          this.refreshUserLinksInCache(this.userLinksBS.value);
+          break;
+        case APIStatus.off:
+          let newUserLinks: UserLinks[] = [];
+          const offlineMenuNames = ['Field Scouting'];
 
-      this.cs.UserLinks.RemoveAllAsync().then(() => {
-        (this.gs.cloneObject(result) as UserLinks[]).forEach(ul => {
-          this.cs.UserLinks.AddAsync(ul);
-        });
-      });
+          this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
+            uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
+              if (ul1.order < ul2.order) return -1;
+              else if (ul1.order > ul2.order) return 1;
+              else return 0;
+            }).forEach(ul => {
+              newUserLinks.unshift(ul);
+            })
+          });
+
+          this.userLinksBS.next(newUserLinks);
+          break;
+      }
+
+    });
+  }
+
+  refreshUserLinksInCache(uls: UserLinks[]): void {
+    this.cs.UserLinks.RemoveAllAsync().then(() => {
+      this.cs.UserLinks.AddBulkAsync(uls);
     });
   }
 }

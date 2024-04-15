@@ -58,7 +58,7 @@ export class ScoutPortalComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
-    this.authService.currentUser.subscribe(u => this.user = u);
+    this.authService.user.subscribe(u => this.user = u);
   }
 
   portalInit(): void {

@@ -40,7 +40,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   formDisabled = false;
 
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private fss: FieldScoutingService) {
-    this.authService.currentUser.subscribe(u => this.user = u);
+    this.authService.user.subscribe(u => this.user = u);
 
     this.fss.teams.subscribe(ts => {
       this.scoutFieldResponse.team = NaN;

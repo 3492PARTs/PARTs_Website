@@ -12,6 +12,7 @@ import { User } from 'src/app/models/user.models';
 import { UserLinks, SubUserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
 import { APIStatus } from 'src/app/models/api.models';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-navigation',
@@ -67,26 +68,27 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
-    public auth: AuthService,
+    private auth: AuthService,
+    private cs: CacheService,
     private router: Router,
     private api: APIService,
     private pwa: PwaService,
     private ns: NotificationsService,
     private navigationService: NavigationService) {
 
-    this.auth.currentUser.subscribe(u => this.user = u);
-    this.auth.currentUserLinks.subscribe((ul) => {
+    this.auth.user.subscribe(u => this.user = u);
+
+    this.auth.userLinks.subscribe((ul) => {
       this.userLinks = ul;
 
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new UserLinks('Logout', ''));
-          else mi.menu_items.push(new UserLinks('Login', 'login'))
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubUserLinks('Logout', ''));
+          else mi.menu_items.push(new SubUserLinks('Login', 'login'))
         }
       });
 
-      //this.pages = [];
       this.userLinks.forEach(ul => {
         this.removeHeader = false;
 
@@ -169,7 +171,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new UserLinks('Login', 'login'),
       ], 'Members Area'),
     ];
-    this.competitionInit();
+
+    // Check if comp page is available
+    this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
+      if ((result as CompetitionInit).event) {
+        this.gs.triggerChange(() => {
+          this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
+        });
+      }
+    });
 
     this.tokenString = environment.tokenString;
 
@@ -185,22 +195,33 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.scrollPosition = window.scrollY;
   }
 
-  competitionInit(): void {
-    this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
-      if ((result as CompetitionInit).event) {
-        window.setTimeout(() => {
-          this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
-        }, 1);
-      }
-    });
-  }
-
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event: any) {
     this.scrollEvents(window.scrollY);
 
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimeout != null) {
+      window.clearTimeout(this.resizeTimeout);
+    }
+
+    this.resizeTimeout = window.setTimeout(() => {
+      if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
+        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
+        this.manualNavExpander = false;
+        this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
+
+        if (!this.hideNavExpander) {
+          this.setShowNav(true);
+          this.renderer.setStyle(this.header.nativeElement, 'top', '0');
+        }
+      }
+
+      this.screenXs = this.gs.getAppSize() === AppSize.XS;
+    }, 200);
+  }
   scrollEvents(scrollY: number, innerScrollElement = false): void {
     this.subNav = '';
 
@@ -293,28 +314,6 @@ let max = document.documentElement.scrollHeight;
   setHeaderPosition(top: number): void {
     this.renderer.setStyle(this.header.nativeElement, 'top', top + 'px');
     this.renderer.setStyle(this.main.nativeElement, 'paddingTop', (top + 70) + 'px');
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.resizeTimeout != null) {
-      window.clearTimeout(this.resizeTimeout);
-    }
-
-    this.resizeTimeout = window.setTimeout(() => {
-      if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
-        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
-        this.manualNavExpander = false;
-        this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
-
-        if (!this.hideNavExpander) {
-          this.setShowNav(true);
-          this.renderer.setStyle(this.header.nativeElement, 'top', '0');
-        }
-      }
-
-      this.screenXs = this.gs.getAppSize() === AppSize.XS;
-    }, 200);
   }
 
   openSubNav(pgID: string, elemID: string): void {
@@ -452,7 +451,7 @@ let max = document.documentElement.scrollHeight;
   logOut(): void {
     this.auth.logOut();
     //this.page = 'Members';
-    this.resetMenuItemNames();
+    //this.resetMenuItemNames();
   }
 
   getNavPageID(key: string): string {
@@ -488,7 +487,7 @@ let max = document.documentElement.scrollHeight;
   }
 
   openURL(url: string): void {
-    window.open(url, 'noopener');
+    this.gs.openURL(url);
   }
 }
 

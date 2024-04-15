@@ -15,8 +15,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   private token: Token = new Token();
 
   constructor(private auth: AuthService) {
-    this.auth.currentUser.subscribe(u => this.user = u);
-    this.auth.currentToken.subscribe(t => this.token = t);
+    this.auth.user.subscribe(u => this.user = u);
+    this.auth.token.subscribe(t => this.token = t);
   }
 
   intercept(

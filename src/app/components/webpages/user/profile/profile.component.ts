@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
       this.activeTab = queryParams.get('tab') || '';
     });
 
-    this.auth.currentUser.subscribe(u => {
+    this.auth.user.subscribe(u => {
       this.user = u;
       this.editUser = JSON.parse(JSON.stringify(u));
     });

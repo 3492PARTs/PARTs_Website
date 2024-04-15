@@ -9,7 +9,7 @@ import { AuthCallStates } from './auth.service';
   providedIn: 'root'
 })
 export class APIService {
-  private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.prcs);
+  private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.on);
   apiStatus = this.apiStatusBS.asObservable();
 
   private persistentSiteBanners: Banner[] = [];
