@@ -19,7 +19,7 @@ export class APIService {
   constructor(private http: HttpClient, private gs: GeneralService) {
     this.gs.persistentSiteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
-    // Bindings for apt status to set banner
+    // Bindings for app status to set banner
     this.apiStatus.subscribe(s => {
       let message = "Application is running in offline mode.";
 
@@ -41,7 +41,7 @@ export class APIService {
     });
   }
 
-  getAPIStatus(): void {
+  private getAPIStatus(): void {
     if (!this.outstandingApiStatusCheck) {
       this.outstandingApiStatusCheck = true;
       this.http.get(
@@ -186,6 +186,8 @@ export class APIService {
 
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
     if (loadingScreen) this.gs.decrementOutstandingCalls();
+
+    // This means connection is down error, check
     if (err.status === 0) {
       this.getAPIStatus();
     }

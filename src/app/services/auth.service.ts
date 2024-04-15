@@ -48,6 +48,7 @@ export class AuthService {
     private fss: FieldScoutingService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
+    // When the api goes online/offline change the list of links the user can access
     this.api.apiStatus.subscribe(apis => {
       if (this.apiStatus != apis)
         switch (apis) {
@@ -329,6 +330,7 @@ export class AuthService {
           this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
           this.refreshUserLinksInCache(this.userLinksBS.value);
 
+          // Cache data for endpoints we want to use offline.
           this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name)).forEach(ul => {
             switch (ul.menu_name) {
               case 'Field Scouting':
@@ -341,6 +343,7 @@ export class AuthService {
         case APIStatus.off:
           let newUserLinks: UserLinks[] = [];
 
+          // get the pages that we are able to use offline from the list of links for the user
           this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
             uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
               if (ul1.order < ul2.order) return -1;
