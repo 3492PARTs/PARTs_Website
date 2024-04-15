@@ -13,6 +13,7 @@ import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
 import { APIStatus } from '../models/api.models';
+import { FieldScoutingService } from './field-scouting.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,15 +44,15 @@ export class AuthService {
     private ps: NotificationsService,
     private ns: NotificationsService,
     private cs: CacheService,
-    private ds: DataService) {
+    private ds: DataService,
+    private fss: FieldScoutingService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     this.api.apiStatus.subscribe(apis => {
       if (this.apiStatus != apis)
         switch (apis) {
           case APIStatus.on:
-            this.getUser();
-            this.getUserLinks();
+            this.getLoggedInUserData();
             break;
           case APIStatus.off:
             this.getUserLinks();
@@ -71,14 +72,17 @@ export class AuthService {
       this.gs.devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
       this.getTokenExp(tmp.refresh);
+
       localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
       localStorage.setItem(environment.loggedInHereBefore, 'hi');
-      this.getAllUserInfo();
+
+      this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
       if (this.gs.strNoE(returnUrl)) {
         this.router.navigateByUrl('');
-      } else {
+      }
+      else {
         this.router.navigateByUrl(returnUrl || '');
       }
 
@@ -105,7 +109,7 @@ export class AuthService {
               this.getTokenExp(token.refresh);
               //this.token.next(token); handled in pipe call below
 
-              this.getAllUserInfo();
+              this.getLoggedInUserData();
               this.ps.subscribeToNotifications();
             }
             else {
@@ -121,7 +125,7 @@ export class AuthService {
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              this.getAllUserInfo();
+              this.getLoggedInUserData();
               //auth process calls get set to complete in get user info
             }
           }
@@ -286,7 +290,7 @@ export class AuthService {
     return this.gs.strNoE(this.tokenBS.value.refresh) || this.isTokenExpired(this.tokenBS.value.refresh);
   }
 
-  getAllUserInfo(): void {
+  getLoggedInUserData(): void {
     this.getUser();
     this.getUserLinks();
     this.ns.getUserAlerts('notification');
@@ -318,14 +322,24 @@ export class AuthService {
 
   getUserLinks() {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
+      const offlineMenuNames = ['Field Scouting'];
+
       switch (this.apiStatus) {
         case APIStatus.on:
           this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
           this.refreshUserLinksInCache(this.userLinksBS.value);
+
+          this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name)).forEach(ul => {
+            switch (ul.menu_name) {
+              case 'Field Scouting':
+                this.fss.init();
+                break;
+            }
+          });
+
           break;
         case APIStatus.off:
           let newUserLinks: UserLinks[] = [];
-          const offlineMenuNames = ['Field Scouting'];
 
           this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
             uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
@@ -334,7 +348,7 @@ export class AuthService {
               else return 0;
             }).forEach(ul => {
               newUserLinks.unshift(ul);
-            })
+            });
           });
 
           this.userLinksBS.next(newUserLinks);

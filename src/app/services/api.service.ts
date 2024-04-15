@@ -14,6 +14,8 @@ export class APIService {
 
   private persistentSiteBanners: Banner[] = [];
 
+  private outstandingApiStatusCheck = false;
+
   constructor(private http: HttpClient, private gs: GeneralService) {
     this.gs.persistentSiteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
@@ -40,19 +42,25 @@ export class APIService {
   }
 
   getAPIStatus(): void {
-    this.http.get(
-      'public/api-status/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          this.apiStatusBS.next(APIStatus.on);
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.apiStatusBS.next(APIStatus.off);
+    if (!this.outstandingApiStatusCheck) {
+      this.outstandingApiStatusCheck = true;
+      this.http.get(
+        'public/api-status/'
+      ).subscribe(
+        {
+          next: (result: any) => {
+            if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
+          },
+          error: (err: any) => {
+            console.log('error', err);
+            if (this.apiStatusBS.value !== APIStatus.off) this.apiStatusBS.next(APIStatus.off);
+            this.outstandingApiStatusCheck = false;
+          }, complete: () => {
+            this.outstandingApiStatusCheck = false;
+          },
         }
-      }
-    );
+      );
+    }
   }
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
