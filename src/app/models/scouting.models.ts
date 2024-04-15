@@ -190,14 +190,16 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
 }
 
 export interface IScoutPitResponse {
+    id?: number;
     question_answers: IQuestionWithConditions[];
     team: number;
     response_id: number;
     form_typ: string;
-    robotPics: File[];
+    //robotPics: File[];
 }
 
 export class ScoutPitResponse implements IScoutPitResponse {
+    id?: number;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     response_id = NaN;

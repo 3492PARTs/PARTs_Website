@@ -232,14 +232,14 @@
         </div>
       </div>
 
-      <div class="file-upload form-control" *ngSwitchCase="'file'">
+      <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }">
 
         <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none;"
           [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
         <div>
           <p>{{ Model ? (fileName || "No file uploaded yet.") : "No file uploaded yet."}}</p>
         </div>
-        <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()"></app-button>
+        <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()" [Disabled]="Disabled"></app-button>
       </div>
 
       <input *ngSwitchCase="'image'" class="form-control" type="file" id="{{ LabelID }}"

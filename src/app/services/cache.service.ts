@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IMatch, IScoutFieldResponse, IScoutFieldSchedule, ITeam } from '../models/scouting.models';
+import { IMatch, IScoutFieldResponse, IScoutFieldSchedule, IScoutPitResponse, ITeam } from '../models/scouting.models';
 import { AppDatabaseService } from './app-database.service';
 import { IUser } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
@@ -19,6 +19,8 @@ export class CacheService {
   ScoutFieldSchedule!: DexieCrud<IScoutFieldSchedule, number>;
   ScoutFieldResponse!: DexieCrud<IScoutFieldResponse, number>;
 
+  ScoutPitResponse!: DexieCrud<IScoutPitResponse, number>;
+
   QuestionWithConditions!: DexieCrud<IQuestionWithConditions, number>;
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
@@ -31,6 +33,8 @@ export class CacheService {
     this.Match = new DexieCrud<IMatch, string>(this.appDB.MatchTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.appDB.ScoutFieldScheduleTable);
     this.ScoutFieldResponse = new DexieCrud<IScoutFieldResponse, number>(this.appDB.ScoutFieldResponseTable);
+
+    this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.appDB.ScoutPitResponseTable);
 
     this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.appDB.QuestionWithConditionsTable);
 

@@ -9,6 +9,7 @@ import { QuestionWithConditions } from 'src/app/models/form.models';
 import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -29,10 +30,16 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   formElements = new QueryList<FormElementComponent>();
 
+  formDisabled = false;
+
+  private outstandingResultsTimeout: number | undefined;
+  outstandingResults: { id: number, team: number }[] = [];
+
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService) {
+    private ss: ScoutingService,
+    private cs: CacheService) {
 
     this.ss.pitScoutingQuestions.subscribe(psqs => {
       if (this.gs.strNoE(this.scoutPitResponse.team)) {
@@ -50,6 +57,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.spInit() : null);
 
+    //TODO: FIx this
     this.checkTeamInterval = window.setInterval(() => {
       this.api.get(false, 'scouting/pit/init/', undefined, (result: any) => {
         this.outstandingTeams = (result as ScoutPitInit).teams;
@@ -66,6 +74,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   spInit(): void {
     this.ss.initPitScouting();
+    this.populateOutstandingResults();
   }
 
   buildOutstandingTeamsList(): void {
@@ -76,6 +85,55 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
       this.outstandingTeams = this.outstandingTeams.filter(ot => !compTeams.includes(ot.team_no));
     });
+  }
+
+  startUploadOutstandingResultsTimeout(): void {
+    if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
+
+    this.outstandingResultsTimeout = window.setTimeout(() => {
+      this.uploadOutstandingResults();
+    }, 1000 * 60 * 3); // try to send again after 3 mins
+
+  }
+
+  uploadOutstandingResults() {
+    this.cs.ScoutPitResponse.getAll().then(sprs => {
+      let count = 1;
+      sprs.forEach(s => {
+        window.setTimeout(() => {
+          //console.log(s);
+          this.save(s, s.id);
+        }, 1000 * count++);
+      });
+    });
+  }
+
+  populateOutstandingResults(): void {
+    this.cs.ScoutPitResponse.getAll().then(sprs => {
+      this.outstandingResults = [];
+
+      sprs.forEach(s => {
+        this.outstandingResults.push({ id: s.id, team: s.team });
+      });
+
+    });
+  }
+
+  viewResult(id: number): void {
+    this.formDisabled = true;
+    this.cs.ScoutPitResponse.getById(id).then(spr => {
+      this.scoutPitResponse = spr as ScoutPitResponse;
+    });
+  }
+
+  removeResult(): void {
+    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+      this.cs.ScoutPitResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
+        this.reset();
+        this.populateOutstandingResults();
+      });
+    });
+
   }
 
   changeTeam(load = false): void {
@@ -131,8 +189,20 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.previewUrl = null;
   }
 
-  save(): void | null {
-    if (this.gs.strNoE(this.scoutPitResponse.team)) {
+  reset(): void {
+    this.ss.getScoutingQuestions('pit').then(psqs => {
+      this.previousTeam = NaN;
+      this.scoutPitResponse = new ScoutPitResponse();
+      this.scoutPitResponse.question_answers = psqs;
+      this.formDisabled = false;
+      this.gs.scrollTo(0);
+    });
+  }
+
+  save(spr?: ScoutPitResponse, id?: number): void | null {
+    if (!spr) spr = this.gs.cloneObject(this.scoutPitResponse) as ScoutPitResponse;
+
+    if (this.gs.strNoE(spr.team)) {
       this.gs.addBanner(new Banner("Must select a team.", 500));
       return null;
     }
@@ -142,28 +212,28 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as QuestionWithConditions[];
+    let scoutQuestions = this.gs.cloneObject(spr.question_answers) as QuestionWithConditions[];
 
     scoutQuestions.forEach(r => {
       r.answer = this.gs.formatQuestionAnswer(r.answer);
     });
 
-    this.scoutPitResponse.question_answers = scoutQuestions;
-    this.scoutPitResponse.form_typ = 'pit';
+    spr.question_answers = scoutQuestions;
+    spr.form_typ = 'pit';
 
-    let sp = this.gs.cloneObject(this.scoutPitResponse);
-    sp.robotPics = []; // we don't want to upload the images here
+    const sprPost = this.gs.cloneObject(spr);
+    sprPost.robotPics = []; // we don't want to upload the images here
 
-    this.api.post(true, 'form/save-answers/', sp, (result: any) => {
+    this.api.post(true, 'form/save-answers/', sprPost, (result: any) => {
       this.gs.successfulResponseBanner(result);
 
       this.gs.incrementOutstandingCalls();
 
       let count = 0;
 
-      this.scoutPitResponse.robotPics.forEach(pic => {
+      spr?.robotPics.forEach(pic => {
         if (pic && pic.size >= 0) {
-          const team_no = this.scoutPitResponse.team;
+          const team_no = spr?.team;
 
           window.setTimeout(() => {
             this.gs.incrementOutstandingCalls();
@@ -172,7 +242,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
               if (resizedPic) {
                 const formData = new FormData();
                 formData.append('file', resizedPic);
-                formData.append('team_no', team_no.toString());
+                formData.append('team_no', team_no?.toString() || '');
 
                 this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
                   this.gs.successfulResponseBanner(result);
@@ -190,12 +260,21 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
       window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
 
-      this.scoutPitResponse = new ScoutPitResponse();
+      if (id) {
+        this.cs.ScoutPitResponse.RemoveAsync(id).then(() => {
+          this.populateOutstandingResults();
+        });
+      }
 
+      this.reset();
       this.spInit();
       this.gs.scrollTo(0);
     }, (err: any) => {
-      this.gs.triggerError(err);
+      if (!id) this.cs.ScoutPitResponse.AddAsync(this.scoutPitResponse).then(() => {
+        this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
+        this.populateOutstandingResults();
+        this.reset();
+      });
     });
   }
 
