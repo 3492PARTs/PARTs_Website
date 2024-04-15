@@ -69,7 +69,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     private renderer: Renderer2,
     public auth: AuthService,
     private router: Router,
-    private http: HttpClient,
+    private api: APIService,
     private pwa: PwaService,
     private ns: NotificationsService,
     private navigationService: NavigationService) {
@@ -186,24 +186,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   competitionInit(): void {
-    this.http.get(
-      'public/competition/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if ((result as CompetitionInit).event) {
-            window.setTimeout(() => {
-              this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
-            }, 1);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-        }
+    this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
+      if ((result as CompetitionInit).event) {
+        window.setTimeout(() => {
+          this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
+        }, 1);
       }
-    );
+    });
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GeneralService } from 'src/app/services/general.service';
 import { Match, Event, CompetitionLevel } from 'src/app/models/scouting.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-event-competition',
@@ -12,34 +13,17 @@ export class EventCompetitionComponent implements OnInit {
   competitionInfo: CompetitionInit = new CompetitionInit();
   matchSchedule: any[] = [];
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  constructor(private gs: GeneralService, private api: APIService) { }
 
   ngOnInit(): void {
     this.competitionInit();
   }
 
   competitionInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'public/competition/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.competitionInfo = (result as CompetitionInit);
-            this.buildMatchSchedule();
-
-            //console.log(this.competitionInfo);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'public/competition/init/', undefined, (result: any) => {
+      this.competitionInfo = (result as CompetitionInit);
+      this.buildMatchSchedule();
+    });
   }
 
   buildMatchSchedule(): void {

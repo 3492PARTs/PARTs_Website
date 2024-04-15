@@ -3,6 +3,7 @@ import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { ScoutPitImage, ScoutPitResults } from '../../webpages/scouting/scout-pit-results/scout-pit-results.component';
 import * as LoadImg from 'blueimp-load-image';
 import { HttpClient } from '@angular/common/http';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-pic-display',
@@ -17,7 +18,7 @@ export class ScoutPicDisplayComponent {
   }
   _ScoutPitResult = new ScoutPitResults();
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  constructor(private gs: GeneralService, private api: APIService) { }
 
   prevImage(sp: ScoutPitResults): void {
     if (sp.pic - 1 < 0) sp.pic = sp.pics.length - 1;
@@ -80,33 +81,15 @@ export class ScoutPicDisplayComponent {
   }
 
   setDefaultPic(spi: ScoutPitImage): void {
-    this.gs.incrementOutstandingCalls();
-
-    this.http.get(
-      'scouting/pit/set-default-pit-image/', {
-      params: {
-        scout_pit_img_id: spi.scout_pit_img_id
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            // TODO: need to emit this this.search();
-            this._ScoutPitResult.pics.forEach(p => p.default = false);
-            spi.default = true;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/pit/set-default-pit-image/', {
+      scout_pit_img_id: spi.scout_pit_img_id
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      // TODO: need to emit this this.search();
+      this._ScoutPitResult.pics.forEach(p => p.default = false);
+      spi.default = true;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 }

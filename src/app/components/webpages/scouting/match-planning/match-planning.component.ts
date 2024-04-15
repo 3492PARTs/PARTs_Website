@@ -8,6 +8,7 @@ import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js
 import { Match, Team } from 'src/app/models/scouting.models';
 import { User } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-match-planning',
@@ -47,7 +48,10 @@ export class MatchPlanningComponent implements OnInit {
   chosenGraphDataPoints = '';
 
 
-  constructor(private gs: GeneralService, private http: HttpClient, private ns: NavigationService, private authService: AuthService) {
+  constructor(private gs: GeneralService,
+    private api: APIService,
+    private ns: NavigationService,
+    private authService: AuthService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
       let r = 9;
@@ -83,94 +87,37 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   init(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/match-planning/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.initData = (result as Init);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
+      this.initData = (result as Init);
+    });
   }
 
   saveNote(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/match-planning/save-note/', this.currentTeamNote
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.currentTeamNote = new TeamNote();
-            this.teamNoteModalVisible = false;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/match-planning/save-note/', this.currentTeamNote, (result: any) => {
+      this.currentTeamNote = new TeamNote();
+      this.teamNoteModalVisible = false;
+    });
   }
 
   loadTeamNotes(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/match-planning/load-team-notes/?team_no=' + this.currentTeamNote.team_no
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.teamNotes = result as TeamNote[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/match-planning/load-team-notes/', {
+      team_no: this.currentTeamNote.team_no as number
+    }, (result: any) => {
+      this.teamNotes = result as TeamNote[];
+    });
   }
 
   planMatch(match: Match): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/match-planning/plan-match/?match_id=' + match.match_id
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.matchPlanningResults = result as MatchPlanning[];
+    this.api.get(true, 'scouting/match-planning/plan-match/', {
+      match_id: match.match_id
+    }, (result: any) => {
+      this.matchPlanningResults = result as MatchPlanning[];
 
-            this.buildGraphOptionsList();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1);
-        }
-      }
-    );
+      this.buildGraphOptionsList();
+    }, undefined, () => {
+      // TODO: Check still needed
+      window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1);
+    });
   }
 
   buildGraphOptionsList(): void {

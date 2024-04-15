@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { QuestionWithConditions } from 'src/app/models/form.models';
 import { User, AuthGroup, AuthPermission } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-admin',
@@ -117,7 +118,11 @@ export class AdminComponent implements OnInit {
   activeItem = new Item();
   itemModalVisible = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
+  constructor(private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private ns: NavigationService,
+    private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
       switch (this.page) {
@@ -170,27 +175,10 @@ export class AdminComponent implements OnInit {
   }
 
   adminInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'admin/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.init = result as AdminInit;
-            this.userTableCols = this.userTableCols;
-            //console.log(this.init);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'admin/init/', undefined, (result: any) => {
+      this.init = result as AdminInit;
+      this.userTableCols = this.userTableCols;
+    });
   }
 
   getUsers() {
@@ -200,24 +188,12 @@ export class AdminComponent implements OnInit {
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.gs.incrementOutstandingCalls();
-    this.authService.getUserGroups(u.id.toString())!.subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.userGroups = result as AuthGroup[];
-            this.buildAvailableUserGroups();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.authService.getUserGroups(u.id.toString(), (result: any) => {
+      this.userGroups = result as AuthGroup[];
+      this.buildAvailableUserGroups();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   private buildAvailableUserGroups(): void {
@@ -340,24 +316,9 @@ export class AdminComponent implements OnInit {
   }
 
   runSecurityAudit() {
-    this.gs.incrementOutstandingCalls();
-    this.us.runSecurityAudit()?.subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.userAudit = result as User[];
-            //console.log(result);
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.us.runSecurityAudit((result: any) => {
+      this.userAudit = result as User[];
+    });
   }
 
   getGroupDisplayValue(groups: AuthGroup[]): string {
@@ -369,26 +330,10 @@ export class AdminComponent implements OnInit {
   }
 
   getScoutAuthGroups(visible: boolean) {
-    this.gs.incrementOutstandingCalls();
-    this.scoutAuthGroupsModalVisible = visible;
-    this.http.get(
-      'admin/scout-auth-groups/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result))
-            this.scoutAuthGroups = result as AuthGroup[];
-          this.buildAvailableScoutAuthGroups();
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'admin/scout-auth-groups/', undefined, (result: any) => {
+      this.scoutAuthGroups = result as AuthGroup[];
+      this.buildAvailableScoutAuthGroups();
+    });
   }
 
   private buildAvailableScoutAuthGroups(): void {
@@ -414,27 +359,11 @@ export class AdminComponent implements OnInit {
   }
 
   saveScoutAuthGroups() {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'admin/scout-auth-groups/', this.scoutAuthGroups
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.scoutAuthGroup = new AuthGroup();
-            this.scoutAuthGroupsModalVisible = false;
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.scoutAuthGroup = new AuthGroup();
+      this.scoutAuthGroupsModalVisible = false;
+    });
   }
 
   getPhoneType(type: number): string {
@@ -447,39 +376,22 @@ export class AdminComponent implements OnInit {
   }
 
   getErrors(pg: number): void {
-    this.gs.incrementOutstandingCalls();
     this.errorPage = pg;
-    this.http.get(
-      'admin/error-log/', {
-      params: {
-        pg_num: pg.toString()
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.errors = result['errors'] as ErrorLog[];
-            delete result['errors'];
-            this.pageInfo = result as Page;
-            this.errors.forEach(el => {
-              el.user_name = el.user.first_name + ' ' + el.user.last_name;
-              el.time = new Date(el.time);
-              el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
-                el.time.getFullYear() + ' ' +
-                (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
-                (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
-            });
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'admin/error-log/', {
+      pg_num: pg.toString()
+    }, (result: any) => {
+      this.errors = result['errors'] as ErrorLog[];
+      delete result['errors'];
+      this.pageInfo = result as Page;
+      this.errors.forEach(el => {
+        el.user_name = el.user.first_name + ' ' + el.user.last_name;
+        el.time = new Date(el.time);
+        el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
+          el.time.getFullYear() + ' ' +
+          (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
+          (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
+      });
+    });
   }
 
   showErrorModal(error: ErrorLog) {
@@ -488,33 +400,16 @@ export class AdminComponent implements OnInit {
   }
 
   getResponses(form_typ: string): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/get-responses/', {
-      params: {
-        form_typ: form_typ
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            if (form_typ === 'team-app')
-              this.teamApplicationResponses = result as Response[];
-            else
-              this.teamContactResponses = result as Response[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'form/get-responses/', {
+      form_typ: form_typ
+    }, (result: any) => {
+      if (form_typ === 'team-app')
+        this.teamApplicationResponses = result as Response[];
+      else
+        this.teamContactResponses = result as Response[];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   openResponse(res: Response): void {
@@ -524,36 +419,12 @@ export class AdminComponent implements OnInit {
       this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
   }
 
-
-
-
-
-
-
-
-
-
   //----------------------------------------------------------------------------------------------------
 
   getItems(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'sponsoring/get-items/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.items = result as Item[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'sponsoring/get-items/', undefined, (result: any) => {
+      this.items = result as Item[];
+    });
   }
 
   editItem(i = new Item()): void {
@@ -563,7 +434,6 @@ export class AdminComponent implements OnInit {
   }
 
   saveItem(): void {
-    this.gs.incrementOutstandingCalls();
     let formData = new FormData();
     //formData.append('file', this.form.get('profile').value);
     for (const [k, v] of Object.entries(this.activeItem)) {
@@ -573,26 +443,11 @@ export class AdminComponent implements OnInit {
       else
         formData.append(k, v);
     }
-
-    this.http.post(
-      'sponsoring/save-item/', formData
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.activeItem = new Item();
-            this.itemModalVisible = false;
-            this.getItems();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'sponsoring/save-item/', formData, (result: any) => {
+      this.activeItem = new Item();
+      this.itemModalVisible = false;
+      this.getItems();
+    });
   }
 
   previewImage(link: string, id: string): void {

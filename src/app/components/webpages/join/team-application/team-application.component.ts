@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionWithConditions } from 'src/app/models/form.models';
+import { APIService } from 'src/app/services/api.service';
 import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
 import { GeneralService, Banner, RetMessage } from 'src/app/services/general.service';
 
@@ -32,67 +33,49 @@ export class TeamApplicationComponent implements OnInit {
 
   disabled = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.applicationInit();
   }
 
   applicationInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/get-questions/', {
-      params: {
-        form_typ: 'team-app',
-        active: 'y'
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.questions = [];
-            let qs = result as QuestionWithConditions[];
-            let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+    this.api.get(true, 'form/get-questions/', {
+      form_typ: 'team-app',
+      active: 'y'
+    }, (result: any) => {
+      this.questions = [];
+      let qs = result as QuestionWithConditions[];
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
-            form_sub_typs.forEach(fst => {
-              this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
-            });
-            this.gs.devConsoleLog('team app - applicationInit', this.questions);
+      form_sub_typs.forEach(fst => {
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+      });
+      this.gs.devConsoleLog('team app - applicationInit', this.questions);
 
-            this.authService.authInFlight.subscribe(r => {
-              if (r === AuthCallStates.comp) {
-                let response = false;
-                this.route.queryParamMap.subscribe(queryParams => {
-                  if (!this.gs.strNoE(queryParams.get('response_id'))) {
-                    this.getResponse(queryParams.get('response_id') || '');
-                    response = true;
-                  }
-                });
-              }
-            });
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+      this.authService.authInFlight.subscribe(r => {
+        if (r === AuthCallStates.comp) {
+          let response = false;
+          this.route.queryParamMap.subscribe(queryParams => {
+            if (!this.gs.strNoE(queryParams.get('response_id'))) {
+              this.getResponse(queryParams.get('response_id') || '');
+              response = true;
+            }
+          });
         }
-      }
-    );
+      });
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   save(): void | null {
-    this.gs.incrementOutstandingCalls();
-
     let questions = this.gs.cloneObject(this.questions) as FormSubTypeWrapper[];
 
-    this.http.post(
-      //'scouting/field/save-answers/',
-      'form/save-answers/',
+    this.api.post(true, 'form/save-answers/',
       {
         question_answers: questions.map(subForm => {
           subForm.questions.forEach(q => {
@@ -100,62 +83,32 @@ export class TeamApplicationComponent implements OnInit {
           })
           return subForm.questions
         }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
-      }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
+      }, (result: any) => {
+        this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
 
-            this.applicationInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+        this.applicationInit();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
   }
 
   getResponse(response_id: string): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/get-response/', {
-      params: {
-        response_id: response_id
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.questions = [];
-            let qs = result as QuestionWithConditions[];
-            let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+    this.api.get(true, 'form/get-response/', {
+      response_id: response_id
+    }, (result: any) => {
+      this.questions = [];
+      let qs = result as QuestionWithConditions[];
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
 
-            form_sub_typs.forEach(fst => {
-              this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
-            });
+      form_sub_typs.forEach(fst => {
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+      });
 
-            this.gs.devConsoleLog('team app - getResponse', this.questions);
-            this.disabled = true;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+      this.gs.devConsoleLog('team app - getResponse', this.questions);
+      this.disabled = true;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 }
 

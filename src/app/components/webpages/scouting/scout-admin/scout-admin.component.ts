@@ -11,6 +11,7 @@ import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from
 import { Team, Event, ScoutFieldSchedule } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-admin',
@@ -157,7 +158,11 @@ export class ScoutAdminComponent implements OnInit {
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResults();
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService, private ns: NavigationService, private us: UserService) {
+  constructor(private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private ns: NavigationService,
+    private us: UserService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
 
@@ -227,142 +232,61 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   adminInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.init = result as ScoutAdminInit;
-            this.init.fieldSchedule.forEach(fs => {
-              fs.st_time = new Date(fs.st_time),
-                fs.end_time = new Date(fs.end_time)
-            });
-            //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
-            this.getEvents(this.init.currentSeason.season_id, this.eventList);
-            this.userTableCols = this.userTableCols;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/init/', undefined, (result: any) => {
+      this.init = result as ScoutAdminInit;
+      this.init.fieldSchedule.forEach(fs => {
+        fs.st_time = new Date(fs.st_time),
+          fs.end_time = new Date(fs.end_time)
+      });
+      //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
+      this.getEvents(this.init.currentSeason.season_id, this.eventList);
+      this.userTableCols = this.userTableCols;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   syncSeason(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/sync-season/', {
-      params: {
-        season_id: this.init.currentSeason.season_id.toString()
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.syncSeasonResponse = result as RetMessage;
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/sync-season/', {
+      season_id: this.init.currentSeason.season_id.toString()
+    }, (result: any) => {
+      this.syncSeasonResponse = result as RetMessage;
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   syncEvent(event_cd: string): void {
     this.init.currentEvent.event_cd
-    this.http.get(
-      'scouting/admin/sync-event/', {
-      params: {
-        event_cd: event_cd
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.syncSeasonResponse = result as RetMessage;
-            this.manageEventsModalVisible = false;
-            this.adminInit();
-            this.newEvent = new Event();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      });
+    this.api.get(true, 'scouting/admin/sync-event/', {
+      event_cd: event_cd
+    }, (result: any) => {
+      this.syncSeasonResponse = result as RetMessage;
+      this.manageEventsModalVisible = false;
+      this.adminInit();
+      this.newEvent = new Event();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   syncMatches(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/sync-matches/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.syncSeasonResponse = result as RetMessage;
-
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/sync-matches/', undefined, (result: any) => {
+      this.syncSeasonResponse = result as RetMessage;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   syncEventTeamInfo(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/sync-event-team-info/', {
-      params: {
-        force: 1
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.syncSeasonResponse = result as RetMessage;
-
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/sync-event-team-info/', {
+      force: 1
+    }, (result: any) => {
+      this.syncSeasonResponse = result as RetMessage;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   setSeason(): void | null {
@@ -370,32 +294,15 @@ export class ScoutAdminComponent implements OnInit {
       this.gs.triggerError('No season or event selected.');
       return null;
     }
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/set-season/', {
-      params: {
-        season_id: this.init.currentSeason.season_id.toString(),
-        event_id: this.init.currentEvent.event_id.toString()
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/set-season/', {
+      season_id: this.init.currentSeason.season_id.toString(),
+      event_id: this.init.currentEvent.event_id.toString()
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   toggleCompetitionPage(): void | null {
@@ -418,27 +325,12 @@ export class ScoutAdminComponent implements OnInit {
       return null;
     }
 
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/toggle-competition-page/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/toggle-competition-page/', undefined, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   getCurrentEvents(): void {
@@ -448,33 +340,16 @@ export class ScoutAdminComponent implements OnInit {
 
   getEvents(season_id: number, events: Event[]): void {
     if (!this.gs.strNoE(season_id)) {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/season-events/', {
-        params: {
-          season_id: season_id
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              window.setTimeout(() => {
-                events.splice(0, events.length);
-                (result as Event[]).forEach(e => { events.push(e) });
-              }, 1);
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(true, 'scouting/admin/season-events/', {
+        season_id: season_id
+      }, (result: any) => {
+        window.setTimeout(() => {
+          events.splice(0, events.length);
+          (result as Event[]).forEach(e => { events.push(e) });
+        }, 1);
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     }
   }
 
@@ -484,33 +359,16 @@ export class ScoutAdminComponent implements OnInit {
 
   addSeason(): void {
     if (this.newSeason) {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/add-season/', {
-        params: {
-          season: this.newSeason.toString()
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.adminInit();
-              this.newSeason = null;
-              this.manageSeasonModalVisible = false;
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(true, 'scouting/admin/add-season/', {
+        season: this.newSeason.toString()
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.adminInit();
+        this.newSeason = null;
+        this.manageSeasonModalVisible = false;
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     }
   }
 
@@ -520,60 +378,32 @@ export class ScoutAdminComponent implements OnInit {
         return null;
       }
 
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/delete-season/', {
-        params: {
-          season_id: this.delSeason.toString()
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.adminInit();
-              this.delSeason = null;
-              this.delEvent = null;
-              this.delEventList = [];
-              this.manageSeasonModalVisible = false;
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(true, 'scouting/admin/delete-season/', {
+        season_id: this.delSeason.toString()
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.adminInit();
+        this.delSeason = null;
+        this.delEvent = null;
+        this.delEventList = [];
+        this.manageSeasonModalVisible = false;
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     }
   }
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.gs.incrementOutstandingCalls();
-    this.authService.getUserGroups(u.id.toString())!.subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.userGroups = result as AuthGroup[];
-            this.buildAvailableUserGroups();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+    this.authService.getUserGroups(u.id.toString(), (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        this.userGroups = result as AuthGroup[];
+        this.buildAvailableUserGroups();
       }
-    );
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   private buildAvailableUserGroups(): void {
@@ -630,31 +460,17 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   saveEvent(): void {
-    this.gs.incrementOutstandingCalls();
     if (this.gs.strNoE(this.newEvent.event_cd)) {
       this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
-      this.http.post(
-        'scouting/admin/add-event/', this.newEvent
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.manageEventsModalVisible = false;
-              this.adminInit();
-              this.newEvent = new Event();
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+
+      this.api.post(true, 'scouting/admin/add-event/', this.newEvent, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.manageEventsModalVisible = false;
+        this.adminInit();
+        this.newEvent = new Event();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     }
     else {
       this.syncEvent(this.newEvent.event_cd);
@@ -671,59 +487,29 @@ export class ScoutAdminComponent implements OnInit {
         return null;
       }
 
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/delete-event/', {
-        params: {
-          event_id: this.delEvent.toString()
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.delEvent = null;
-              this.getEvents(this.delSeason || -1, this.delEventList);
-              this.adminInit();
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(true, 'scouting/admin/delete-event/', {
+        event_id: this.delEvent.toString()
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.delEvent = null;
+        this.getEvents(this.delSeason || -1, this.delEventList);
+        this.adminInit();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     }
   }
 
   saveTeam(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/add-team/', this.newTeam
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.adminInit();
-            this.manageTeamModalVisible = false;
-            this.newTeam = new Team();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/admin/add-team/', this.newTeam, (result: any) => {
+      this.adminInit();
+      this.manageTeamModalVisible = false;
+      this.newTeam = new Team();
+    }, (err: any) => {
+      console.log('error', err);
+      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   clearTeam() {
@@ -736,31 +522,16 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   addEventToTeams(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/add-team-to-event/', this.eventToTeams
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.adminInit();
-            this.linkTeamToEventModalVisible = false;
-            this.linkTeamToEventSeason = null;
-            this.linkTeamToEventEvent = new Event();
-            this.linkTeamToEventTeams = [];
-            this.eventToTeams = new EventToTeams();;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/admin/add-team-to-event/', this.eventToTeams, (result: any) => {
+      this.adminInit();
+      this.linkTeamToEventModalVisible = false;
+      this.linkTeamToEventSeason = null;
+      this.linkTeamToEventEvent = new Event();
+      this.linkTeamToEventTeams = [];
+      this.eventToTeams = new EventToTeams();;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   buildLinkTeamToEventTeamList(): void {
@@ -796,31 +567,16 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   removeEventToTeams(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.removeTeamFromEventEvent = new Event();
-            this.adminInit();
-            this.removeTeamFromEventModalVisible = false;
-            this.removeTeamFromEventSeason = null;
-            this.removeTeamFromEventList = [];
-            this.removeTeamFromEventTeams = [];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent, (result: any) => {
+      this.removeTeamFromEventEvent = new Event();
+      this.adminInit();
+      this.removeTeamFromEventModalVisible = false;
+      this.removeTeamFromEventSeason = null;
+      this.removeTeamFromEventList = [];
+      this.removeTeamFromEventTeams = [];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   clearRemoveEventToTeams() {
@@ -873,29 +629,15 @@ export class ScoutAdminComponent implements OnInit {
     sfs.blue_one_id = sfs.blue_one_id && (sfs!.blue_one_id as User).id ? (sfs!.blue_one_id as User).id : null;
     sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/save-scout-field-schedule-entry/', sfs
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.scoutFieldSchedule = new ScoutFieldSchedule();
-            this.scoutScheduleModalVisible = false;
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+
+    this.api.post(true, 'scouting/admin/save-scout-field-schedule-entry/', sfs, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.scoutFieldSchedule = new ScoutFieldSchedule();
+      this.scoutScheduleModalVisible = false;
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   notifyUsers(scout_field_sch_id: number): void {
@@ -909,28 +651,14 @@ export class ScoutAdminComponent implements OnInit {
       sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
     });
 
-
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/notify-users/?id=' + scout_field_sch_id
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.adminInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/admin/notify-users/', {
+      id: scout_field_sch_id
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   toggleNewPhoneType(): void {
@@ -939,28 +667,13 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   savePhoneType(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/admin/save-phone-type/', this.phoneType
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.adminInit();
-            this.phoneType = new PhoneType();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/admin/save-phone-type/', this.phoneType, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.adminInit();
+      this.phoneType = new PhoneType();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   setEndTime() {
@@ -977,34 +690,18 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getScoutingActivity(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/admin/scout-activity/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.userActivity = result as UserActivity[];
+    this.api.get(true, 'scouting/admin/scout-activity/', undefined, (result: any) => {
+      this.userActivity = result as UserActivity[];
 
-            if (this.activeUserActivity) {
-              this.userActivity.forEach(ua => {
-                if (ua.user.id == this.activeUserActivity.user.id)
-                  this.activeUserActivity = this.gs.cloneObject(ua);
-              });
-            }
-            //console.log(this.userActivity);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+      if (this.activeUserActivity) {
+        this.userActivity.forEach(ua => {
+          if (ua.user.id == this.activeUserActivity.user.id)
+            this.activeUserActivity = this.gs.cloneObject(ua);
+        });
       }
-    );
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   getUserName(id: number): string {
@@ -1069,115 +766,57 @@ export class ScoutAdminComponent implements OnInit {
 
   toggleUserUnderReviewStatus(): void {
     this.gs.triggerConfirm('Are you sure you want to change this scout\'s under review status?', () => {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/toggle-scout-under-review/', {
-        params: {
-          user_id: this.activeUserActivity.user.id.toString(),
+      this.api.get(true, 'scouting/admin/toggle-scout-under-review/', {
+        user_id: this.activeUserActivity.user.id.toString(),
+      }, (result: any) => {
+        if (this.gs.checkResponse(result)) {
+          this.getScoutingActivity();
+          this.gs.successfulResponseBanner(result);
         }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.getScoutingActivity();
-              this.gs.successfulResponseBanner(result);
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     });
   }
 
   markScoutPresent(sfs: ScoutFieldSchedule): void {
     this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
-      this.gs.incrementOutstandingCalls();
-      this.http.get(
-        'scouting/admin/mark-scout-present/', {
-        params: {
-          scout_field_sch_id: sfs.scout_field_sch_id,
-          user_id: this.activeUserActivity.user.id
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.getScoutingActivity();
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.get(true, 'scouting/admin/mark-scout-present/', {
+        scout_field_sch_id: sfs.scout_field_sch_id,
+        user_id: this.activeUserActivity.user.id
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.getScoutingActivity();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     });
   }
 
   getFieldQuestionAggregates(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/question-aggregate/', {
-      params: {
-        form_typ: 'field'
+    this.api.get(true, 'form/question-aggregate/', {
+      form_typ: 'field'
+    }, (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        console.log(result);
+        this.fieldQuestionAggregates = result as QuestionAggregate[];
       }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            console.log(result);
-            this.fieldQuestionAggregates = result as QuestionAggregate[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    }, (err: any) => {
+      console.log('error', err);
+      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   getQuestionAggregateTypes(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/question-aggregate-types/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            //console.log(result);
-            this.questionAggregateTypes = result as QuestionAggregateType[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+    this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        //console.log(result);
+        this.questionAggregateTypes = result as QuestionAggregateType[];
       }
-    );
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showFieldQuestionAggregateModal(qa?: QuestionAggregate) {
@@ -1191,32 +830,15 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getScoutFieldQuestions(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/get-questions/', {
-      params: {
-        form_typ: 'field',
-        active: 'y'
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.fieldQuestions = result as QuestionWithConditions[];
-            this.buildFieldQuestionAggQuestionList();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'form/get-questions/', {
+      form_typ: 'field',
+      active: 'y'
+    }, (result: any) => {
+      this.fieldQuestions = result as QuestionWithConditions[];
+      this.buildFieldQuestionAggQuestionList();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   buildFieldQuestionAggQuestionList(): void {
@@ -1241,52 +863,22 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   saveQuestionAggregate(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'form/question-aggregate/', this.activeFieldQuestionAggregate
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.activeFieldQuestionAggregate = new QuestionAggregate();
-            this.fieldQuestionAggregateModalVisible = false;
-            this.getFieldQuestionAggregates();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'form/question-aggregate/', this.activeFieldQuestionAggregate, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.activeFieldQuestionAggregate = new QuestionAggregate();
+      this.fieldQuestionAggregateModalVisible = false;
+      this.getFieldQuestionAggregates();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   getFieldResults(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/field/results/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.scoutResults = result as ScoutResults;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
+      this.scoutResults = result as ScoutResults;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showScoutFieldResultModal(rec: any): void {
@@ -1296,84 +888,37 @@ export class ScoutAdminComponent implements OnInit {
 
   deleteFieldResult(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
-      this.gs.incrementOutstandingCalls();
-      this.http.delete(
-        'scouting/admin/delete-field-result/', {
-        params: {
-          scout_field_id: this.activeScoutResult.scout_field_id
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.getFieldResults();
-              this.activeScoutResult = null;
-              this.scoutResultModalVisible = false;
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.delete(true, 'scouting/admin/delete-field-result/', {
+        scout_field_id: this.activeScoutResult.scout_field_id
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.getFieldResults();
+        this.activeScoutResult = null;
+        this.scoutResultModalVisible = false;
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     });
   }
 
   getPitResults(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/pit/results-init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            let teams = result as Team[];
+    this.api.get(true, 'scouting/pit/results-init/', undefined, (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        let teams = result as Team[];
 
-            this.gs.incrementOutstandingCalls();
+        teams.forEach((t) => {
+          t.checked = true;
+        });
 
-            teams.forEach((t) => {
-              t.checked = true;
-            });
-
-            this.http.post(
-              'scouting/pit/results/', teams
-            ).subscribe(
-              {
-                next: (result: any) => {
-                  if (this.gs.checkResponse(result)) {
-                    this.scoutPitResults = result as ScoutPitResults[];
-                    //console.log(this.scoutPitResults);
-                  }
-                },
-                error: (err: any) => {
-                  console.log('error', err);
-                  this.gs.triggerError(err);
-                  this.gs.decrementOutstandingCalls();
-                },
-                complete: () => {
-                  this.gs.decrementOutstandingCalls();
-                }
-              }
-            );
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
+        this.api.post(true, 'scouting/pit/results/', teams, (result: any) => {
+          this.scoutPitResults = result as ScoutPitResults[];
+        }, (err: any) => {
           this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+        });
       }
-    );
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showPitScoutResultModal(rec: ScoutPitResults): void {
@@ -1384,33 +929,16 @@ export class ScoutAdminComponent implements OnInit {
 
   deletePitResult(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
-      this.gs.incrementOutstandingCalls();
-      this.http.delete(
-        'scouting/admin/delete-pit-result/', {
-        params: {
-          scout_pit_id: this.activePitScoutResult.scout_pit_id
-        }
-      }
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              this.gs.successfulResponseBanner(result);
-              this.getPitResults();
-              this.activePitScoutResult = new ScoutPitResults();
-              this.scoutPitResultModalVisible = false;
-            }
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            this.gs.triggerError(err);
-            this.gs.decrementOutstandingCalls();
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
-          }
-        }
-      );
+      this.api.delete(true, 'scouting/admin/delete-pit-result/', {
+        scout_pit_id: this.activePitScoutResult.scout_pit_id
+      }, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.getPitResults();
+        this.activePitScoutResult = new ScoutPitResults();
+        this.scoutPitResultModalVisible = false;
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     });
   }
 }

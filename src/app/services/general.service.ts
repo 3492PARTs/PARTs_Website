@@ -114,9 +114,14 @@ export class GeneralService {
     this.errorMessage = '';
   }
 
-  triggerError(message: string) {
+  triggerError(message: string | HttpErrorResponse) {
     this.showErrorModal = true;
-    this.errorMessage = message;
+
+    if (message instanceof HttpErrorResponse) {
+      this.errorMessage = message.message;
+    }
+    else
+      this.errorMessage = message;
   }
 
   checkResponse(response: any): boolean {

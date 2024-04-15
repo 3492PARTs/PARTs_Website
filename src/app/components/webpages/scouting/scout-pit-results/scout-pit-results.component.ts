@@ -5,6 +5,7 @@ import { GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize } from '../../../../services/general.service';
 import { Team } from 'src/app/models/scouting.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-pit-results',
@@ -17,7 +18,7 @@ export class ScoutPitResultsComponent implements OnInit {
   scoutPitResults: ScoutPitResults[] = [];
   resultWidth = '350px';
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
@@ -25,31 +26,15 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 
   scoutPitResultsInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/pit/results-init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.teams = result as Team[];
-            this.teamsList = result as Team[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/pit/results-init/', undefined, (result: any) => {
+      this.teams = result as Team[];
+      this.teamsList = result as Team[];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   search(): void {
-    this.gs.incrementOutstandingCalls();
 
     this.teams.forEach((t) => {
       if (!t.checked) {
@@ -57,25 +42,11 @@ export class ScoutPitResultsComponent implements OnInit {
       }
     });
 
-    this.http.post(
-      'scouting/pit/results/', this.teams
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.scoutPitResults = result as ScoutPitResults[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/pit/results/', this.teams, (result: any) => {
+      this.scoutPitResults = result as ScoutPitResults[];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   download(): void | null {

@@ -4,6 +4,7 @@ import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -53,7 +54,7 @@ export class ScoutPortalComponent implements OnInit {
   ];
 
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
@@ -61,58 +62,43 @@ export class ScoutPortalComponent implements OnInit {
   }
 
   portalInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/portal/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.init = result as ScoutPortalInit;
-            //console.log(this.init);
-            this.scoutFieldScheduleData = [];
-            this.init.fieldSchedule.forEach(elem => {
-              let pos = '';
-              if ((elem?.red_one_id as User)?.id === this.user.id) {
-                pos = 'red one'
-              }
-              else if ((elem?.red_two_id as User)?.id === this.user.id) {
-                pos = 'red two'
-              }
-              else if ((elem?.red_three_id as User)?.id === this.user.id) {
-                pos = 'red three'
-              }
-              else if ((elem?.blue_one_id as User)?.id === this.user.id) {
-                pos = 'blue one'
-              }
-              else if ((elem?.blue_two_id as User)?.id === this.user.id) {
-                pos = 'blue two'
-              }
-              else if ((elem?.blue_three_id as User)?.id === this.user.id) {
-                pos = 'blue three'
-              }
-
-              this.scoutFieldScheduleData.push({
-                position: pos,
-                st_time: new Date(elem.st_time),
-                end_time: new Date(elem.end_time),
-                notification1: elem.notification1,
-                notification2: elem.notification2,
-                notification3: elem.notification3,
-              });
-            })
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+    this.api.get(true, 'scouting/portal/init/', undefined, (result: any) => {
+      this.init = result as ScoutPortalInit;
+      //console.log(this.init);
+      this.scoutFieldScheduleData = [];
+      this.init.fieldSchedule.forEach(elem => {
+        let pos = '';
+        if ((elem?.red_one_id as User)?.id === this.user.id) {
+          pos = 'red one'
         }
-      }
-    );
+        else if ((elem?.red_two_id as User)?.id === this.user.id) {
+          pos = 'red two'
+        }
+        else if ((elem?.red_three_id as User)?.id === this.user.id) {
+          pos = 'red three'
+        }
+        else if ((elem?.blue_one_id as User)?.id === this.user.id) {
+          pos = 'blue one'
+        }
+        else if ((elem?.blue_two_id as User)?.id === this.user.id) {
+          pos = 'blue two'
+        }
+        else if ((elem?.blue_three_id as User)?.id === this.user.id) {
+          pos = 'blue three'
+        }
+
+        this.scoutFieldScheduleData.push({
+          position: pos,
+          st_time: new Date(elem.st_time),
+          end_time: new Date(elem.end_time),
+          notification1: elem.notification1,
+          notification2: elem.notification2,
+          notification3: elem.notification3,
+        });
+      });
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
@@ -136,54 +122,26 @@ export class ScoutPortalComponent implements OnInit {
   saveScheduleEntry(): void {
     let s = JSON.parse(JSON.stringify(this.currentSchedule));
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/portal/save-schedule-entry/', s
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.currentSchedule = new Schedule();
-            this.scheduleModalVisible = false;
-            this.portalInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'scouting/portal/save-schedule-entry/', s, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.currentSchedule = new Schedule();
+      this.scheduleModalVisible = false;
+      this.portalInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   notifyUser(sch_id: number): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/portal/notify-user/?id=' + sch_id
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.scheduleModalVisible = false;
-            this.portalInit();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/portal/notify-user/?', {
+      id: sch_id
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.scheduleModalVisible = false;
+      this.portalInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   copyScoutScheduleEntry(): void {

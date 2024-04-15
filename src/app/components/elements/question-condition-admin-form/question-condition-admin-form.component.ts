@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-question-condition-admin-form',
@@ -24,7 +25,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   questionConditionQuestionFromList: QuestionWithConditions[] = [];
   questionConditionQuestionToList: QuestionWithConditions[] = [];
 
-  constructor(private gs: GeneralService, private http: HttpClient) { }
+  constructor(private gs: GeneralService, private api: APIService) { }
 
   ngOnInit(): void {
     this.getQuestions();
@@ -32,61 +33,26 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/get-questions/', {
-      params: {
-        form_typ: this.FormType,
-        active: 'y'
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.questions = result as QuestionWithConditions[];
-            this.buildQuestionConditionFromLists();
-            this.buildQuestionConditionToLists();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'form/get-questions/', {
+      form_typ: this.FormType,
+      active: 'y'
+    }, (result: any) => {
+      this.questions = result as QuestionWithConditions[];
+      this.buildQuestionConditionFromLists();
+      this.buildQuestionConditionToLists();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   getQuestionConditions(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/question-condition/', {
-      params: {
-        form_typ: this.FormType
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            //console.log(result);
-            this.questionConditions = result as QuestionCondition[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'form/question-condition/', {
+      form_typ: this.FormType
+    }, (result: any) => {
+      this.questionConditions = result as QuestionCondition[];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showQuestionConditionModal(qc?: QuestionCondition) {
@@ -147,28 +113,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   saveQuestionCondition(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'form/question-condition/', this.activeQuestionCondition
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.activeQuestionCondition = new QuestionCondition();
-            this.questionConditionModalVisible = false;
-            this.getQuestionConditions();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.activeQuestionCondition = new QuestionCondition();
+      this.questionConditionModalVisible = false;
+      this.getQuestionConditions();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 }

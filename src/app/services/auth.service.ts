@@ -11,6 +11,7 @@ import { CacheService } from './cache.service';
 import { IUserLinks, UserLinks } from '../models/navigation.models';
 import { DataService } from './data.service';
 import Dexie from 'dexie';
+import { APIService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,7 @@ export class AuthService {
   private rememberMeTimeout: number | null | undefined;
 
   constructor(private http: HttpClient,
+    private api: APIService,
     private router: Router,
     private gs: GeneralService,
     private ps: NotificationsService,
@@ -45,44 +47,31 @@ export class AuthService {
 
   authorizeUser(userData: UserData, returnUrl?: string | null): void {
     this.authInFlightBS.next(AuthCallStates.prcs);
-    this.gs.incrementOutstandingCalls();
     userData.username = userData.username.toLocaleLowerCase();
-    this.http.post('user/token/', userData).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            // console.log(Response);
-            const tmp = result as Token;
-            this.token.next(tmp);
 
-            this.gs.devConsoleLog('authorizeUser', 'login tokens below');
-            this.getTokenExp(tmp.access);
-            this.getTokenExp(tmp.refresh);
-            localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
-            localStorage.setItem(environment.loggedInHereBefore, 'hi');
-            this.getAllUserInfo();
-            this.ps.subscribeToNotifications();
+    this.api.post(true, 'user/token/', userData, (result: any) => {
+      const tmp = result as Token;
+      this.token.next(tmp);
 
-            if (this.gs.strNoE(returnUrl)) {
-              this.router.navigateByUrl('');
-            } else {
-              this.router.navigateByUrl(returnUrl || '');
-            }
+      this.gs.devConsoleLog('authorizeUser', 'login tokens below');
+      this.getTokenExp(tmp.access);
+      this.getTokenExp(tmp.refresh);
+      localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
+      localStorage.setItem(environment.loggedInHereBefore, 'hi');
+      this.getAllUserInfo();
+      this.ps.subscribeToNotifications();
 
-            this.authInFlightBS.next(AuthCallStates.comp);
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.authInFlightBS.next(AuthCallStates.err);
-          this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+      if (this.gs.strNoE(returnUrl)) {
+        this.router.navigateByUrl('');
+      } else {
+        this.router.navigateByUrl(returnUrl || '');
       }
-    );
+
+      this.authInFlightBS.next(AuthCallStates.comp);
+    }, (err: any) => {
+      this.authInFlightBS.next(AuthCallStates.err);
+      this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
+    });
   }
 
   previouslyAuthorized(): void {
@@ -91,7 +80,6 @@ export class AuthService {
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
     this.token.next(tmpTkn);
     if (this.token.value && this.token.value.refresh) {
-      this.gs.incrementOutstandingCalls();
       this.refreshToken().subscribe(
         {
           next: (result: any) => {
@@ -100,7 +88,7 @@ export class AuthService {
               this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
               this.getTokenExp(token.access);
               this.getTokenExp(token.refresh);
-              this.token.next(token);
+              //this.token.next(token); handled in pipe call below
 
               this.getAllUserInfo();
               this.ps.subscribeToNotifications();
@@ -111,7 +99,6 @@ export class AuthService {
             }
           },
           error: (err: any) => {
-            this.gs.decrementOutstandingCalls();
             console.log('error', err);
 
             if (this.isSessionExpired()) {
@@ -122,9 +109,6 @@ export class AuthService {
               this.getAllUserInfo();
               //auth process calls get set to complete in get user info
             }
-          },
-          complete: () => {
-            this.gs.decrementOutstandingCalls();
           }
         }
       );
@@ -142,129 +126,67 @@ export class AuthService {
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post('user/profile/', userData).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            if (this.gs.strNoE(returnUrl)) {
-              this.router.navigateByUrl('');
-            } else {
-              this.router.navigateByUrl(returnUrl || '');
-            }
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.gs.triggerError('Couldn\'t create user.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+    this.api.post(true, 'user/profile/', userData, (result: any) => {
+      if (this.gs.strNoE(returnUrl)) {
+        this.router.navigateByUrl('');
+      } else {
+        this.router.navigateByUrl(returnUrl || '');
       }
-    );
+    }, (err: any) => {
+      this.gs.triggerError('Couldn\'t create user.');
+    });
   }
 
   resendConfirmation(input: UserData): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/confirm/resend/',
-      { email: input.email }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.router.navigateByUrl('login?page=confirmationFinish');
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.gs.triggerError('Couldn\'t request activation email.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'user/confirm/resend/', { email: input.email }, (result: any) => {
+      this.router.navigateByUrl('login?page=confirmationFinish');
+    }, (err: any) => {
+      this.gs.triggerError('Couldn\'t request activation email.');
+    });
   }
 
   requestResetPassword(input: UserData): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/request-reset-password/',
-      { email: input.email }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
-            this.router.navigateByUrl('login?page=resetFinish');
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.gs.triggerError('Couldn\'t request password reset.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'user/request-reset-password/', { email: input.email }, (result: any) => {
+      this.router.navigateByUrl('login?page=resetFinish');
+    }, (err: any) => {
+      this.gs.triggerError('Couldn\'t request password reset.');
+    });
   }
 
   forgotUsername(input: UserData): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/request-username/',
-      { email: input.email }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(Response)) {
-            this.router.navigateByUrl('login?page=forgotUsernameFinish');
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.gs.triggerError('Couldn\'t request username reminder email.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'user/request-username/', { email: input.email }, (result: any) => {
+      this.router.navigateByUrl('login?page=forgotUsernameFinish');
+    }, (err: any) => {
+      this.gs.triggerError('Couldn\'t request username reminder email.');
+    });
   }
 
   resetPassword(input: UserData): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/reset-password/',
-      { uuid: input.uuid, token: input.token, password: input.password }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
-            this.router.navigateByUrl('login?page=login');
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          this.gs.triggerError('Couldn\'t reset password.');
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+    this.api.post(true, 'user/reset-password/', { uuid: input.uuid, token: input.token, password: input.password },
+      (result: any) => {
+        this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
+        this.router.navigateByUrl('login?page=login');
+      }, (err: any) => {
+        this.gs.triggerError('Couldn\'t reset password.');
       }
     );
   }
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<Token> {
+    return this.api.post(true, 'user/token/refresh/', { refresh: this.token.value.refresh }).pipe(
+      map(res => {
+        const token = res as Token;
+        this.gs.devConsoleLog('refreshToken', 'new tokens below');
+        this.getTokenExp(token.access);
+        this.getTokenExp(token.refresh);
+
+        this.token.next(token);
+
+        return token;
+      })
+    );
+
     return this.http
       .post<Token>('user/token/refresh/', { refresh: this.token.value.refresh })
       .pipe(
@@ -293,15 +215,15 @@ export class AuthService {
   /*
   stayLoggedIn(): void {
     let rememberMe = (localStorage.getItem(environment.rememberMe) || 'false') === 'true';
-    //console.log('loggin ' + rememberMe);
+    //console.log('logging ' + rememberMe);
     if (false && rememberMe) { //TODO: Come back and implement this once i research more
       let date = this.getTokenExp(this.internalToken.access);
       let curr = new Date().getTime();
       let interval = date.getTime() - curr;
-      //console.log('intv ' + interval);
-      //console.log('intv mins ' + (interval / 1000 / 60));
+      //console.log('interval ' + interval);
+      //console.log('interval mins ' + (interval / 1000 / 60));
       interval -= 1000 * 30; // remove half a minute. we will refresh this often
-      //console.log('new intv mins ' + (interval / 1000 / 60));
+      //console.log('new interval mins ' + (interval / 1000 / 60));
 
       this.rememberMeTimeout = window.setTimeout(() => {
         this.refreshToken().subscribe(result => {
@@ -313,17 +235,12 @@ export class AuthService {
     }
   }*/
 
-  getUserGroups(userId: string): Observable<object> | null {
+  getUserGroups(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
     if (userId) {
-      return this.http.get(
-        'user/groups/', {
-        params: {
-          user_id: userId
-        }
-      }
-      );
+      this.api.get(true, 'user/groups/', {
+        user_id: userId
+      }, onNext, onError);
     }
-    return null;
   }
 
   getTokenLoad(tkn: string): TokenLoad {

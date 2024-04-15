@@ -5,6 +5,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -33,7 +34,9 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   tableWidth = '200%';
 
-  constructor(private http: HttpClient, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private api: APIService,
+    private gs: GeneralService,
+    private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
@@ -50,36 +53,21 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   scoutFieldResultsInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/field/results/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.scoutResults = result as ScoutResults;
-            this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults.scoutCols);
+    this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
+      this.scoutResults = result as ScoutResults;
+      this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults.scoutCols);
 
-            for (let i = 0; i < this.showScoutFieldCols.length; i++) {
-              this.showScoutFieldCols[i]['checked'] = true;
-            }
-
-            this.showHideTableCols();
-            this.filter();
-
-            this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+      for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+        this.showScoutFieldCols[i]['checked'] = true;
       }
-    );
+
+      this.showHideTableCols();
+      this.filter();
+
+      this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   download(individual: boolean): void | null {
@@ -116,85 +104,38 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   getTeamInfo(row: any) {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/field/results/', {
-      params: {
-        team: String(row['team'])
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.teamScoutResults = result as ScoutResults;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'scouting/field/results/', {
+      team: String(row['team'])
+    }, (result: any) => {
+      this.teamScoutResults = result as ScoutResults;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
 
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'scouting/pit/results/', [{
-        team_no: String(row['team']),
-        team_nm: 'no team lol',
-        checked: true
-      }]
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            if ((result as ScoutPitResults[])[0]) {
-              this.scoutPitResult = (result as ScoutPitResults[])[0];
+    this.api.post(true, 'scouting/pit/results/', [{
+      team_no: String(row['team']),
+      team_nm: 'no team lol',
+      checked: true
+    }], (result: any) => {
+      if ((result as ScoutPitResults[])[0]) {
+        this.scoutPitResult = (result as ScoutPitResults[])[0];
 
-            } else {
-              this.scoutPitResult = new ScoutPitResults();
-            }
-          }
-          else {
-            this.scoutPitResult = new ScoutPitResults();
-          }
-
-          this.teamScoutResultsModalVisible = true;
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
+      } else {
+        this.scoutPitResult = new ScoutPitResults();
       }
-    );
 
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'scouting/match-planning/load-team-notes/?team_no=' + String(row['team'])
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.teamNotes = result as TeamNote[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+      this.teamScoutResultsModalVisible = true;
+    }, (err: any) => {
+      console.log('error', err);
+      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.api.get(true, 'scouting/match-planning/load-team-notes/', {
+      team_no: String(row['team'])
+    }, (result: any) => {
+      this.teamNotes = result as TeamNote[];
+    });
   }
 
   showHideTableCols(): void {

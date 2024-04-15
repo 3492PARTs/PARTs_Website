@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Banner, GeneralService } from './general.service';
 import { APIStatus } from '../models/api.models';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthCallStates } from './auth.service';
 
 @Injectable({
@@ -17,6 +17,7 @@ export class APIService {
   constructor(private http: HttpClient, private gs: GeneralService) {
     this.gs.persistentSiteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
+    // Bindings for apt status to set banner
     this.apiStatus.subscribe(s => {
       let message = "Application is running in offline mode.";
 
@@ -28,8 +29,6 @@ export class APIService {
           let found = false;
           this.persistentSiteBanners.forEach((b: Banner) => {
             if (b.message === message) found = true;
-
-
           });
 
           if (!found) {
@@ -58,63 +57,136 @@ export class APIService {
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ) {
+  ): Observable<object> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
-    console.log(endpoint);
-    this.http.get(
-      endpoint,
-      {
-        params: params
-      }
-    ).subscribe(
+
+    const obs =
+      this.http.get(
+        endpoint,
+        {
+          params: params
+        }
+      );
+
+    obs.subscribe(
       {
         next: (result: any) => {
-          if (this.apiStatusBS.value === APIStatus.off) {
-            console.log('on');
-            this.apiStatusBS.next(APIStatus.on);
-          }
-          if (this.gs.checkResponse(result))
-            if (onNext) onNext(result);
+          this.onNext(result, onNext);
         },
         error: (err: any) => {
-          if (loadingScreen) this.gs.decrementOutstandingCalls();
-          if (err.status === 0) {
-            this.getAPIStatus();
-          }
-          if (onError) onError(err);
+          this.onError(loadingScreen, err, onError);
         },
         complete: () => {
-          if (loadingScreen) this.gs.decrementOutstandingCalls();
-          if (onComplete) onComplete();
+          this.onComplete(loadingScreen, onComplete);
         }
       }
     );
+
+    return obs;
   }
 
   post(loadingScreen: boolean, endpoint: string, obj: any,
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ) {
+  ): Observable<object> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
-    this.http.post(
+
+    const obs = this.http.post(
       endpoint, obj
-    ).subscribe(
+    );
+
+    obs.subscribe(
       {
         next: (result: any) => {
-          if (this.gs.checkResponse(result))
-            if (onNext) onNext(result);
+          this.onNext(result, onNext);
         },
         error: (err: any) => {
-          if (loadingScreen) this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-          if (onError) onError(err);
+          this.onError(loadingScreen, err, onError);
         },
         complete: () => {
-          if (loadingScreen) this.gs.decrementOutstandingCalls();
-          if (onComplete) onComplete();
+          this.onComplete(loadingScreen, onComplete);
         }
       }
     );
+
+    return obs;
   }
 
+  delete(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+  ): Observable<object> {
+    if (loadingScreen) this.gs.incrementOutstandingCalls();
+
+    const obs = this.http.delete(
+      endpoint,
+      {
+        params: params
+      }
+    );
+
+    obs.subscribe(
+      {
+        next: (result: any) => {
+          this.onNext(result, onNext);
+        },
+        error: (err: any) => {
+          this.onError(loadingScreen, err, onError);
+        },
+        complete: () => {
+          this.onComplete(loadingScreen, onComplete);
+        }
+      }
+    );
+
+    return obs;
+  }
+
+  put(loadingScreen: boolean, endpoint: string, obj: any,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+  ): Observable<object> {
+    if (loadingScreen) this.gs.incrementOutstandingCalls();
+
+    const obs = this.http.put(
+      endpoint, obj
+    )
+
+    obs.subscribe(
+      {
+        next: (result: any) => {
+          this.onNext(result, onNext);
+        },
+        error: (err: any) => {
+          this.onError(loadingScreen, err, onError);
+        },
+        complete: () => {
+          this.onComplete(loadingScreen, onComplete);
+        }
+      }
+    );
+
+    return obs;
+  }
+
+  private onNext(result: any, onNext?: (result: any) => void): void {
+    // On successful calls set api status to on if it was off
+    if (this.apiStatusBS.value === APIStatus.off) {
+      this.apiStatusBS.next(APIStatus.on);
+    }
+
+    if (this.gs.checkResponse(result))
+      if (onNext) onNext(result);
+  }
+
+  private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
+    if (loadingScreen) this.gs.decrementOutstandingCalls();
+    if (err.status === 0) {
+      this.getAPIStatus();
+    }
+    if (onError) onError(err);
+  }
+
+  private onComplete(loadingScreen: boolean, onComplete?: () => void): void {
+    if (loadingScreen) this.gs.decrementOutstandingCalls();
+    if (onComplete) onComplete();
+  }
 
 }
