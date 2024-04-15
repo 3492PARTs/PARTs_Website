@@ -2,13 +2,13 @@
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div>
       <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
-        [SelectList]="teams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam()" [DisplayEmptyOption]="true"
-        [Required]="!scoutPitResponse.team" [MinWidth]="'180px'">
+        [SelectList]="outstandingTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
+        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam()"
+        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team" [MinWidth]="'180px'">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
-        [SelectList]="compTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
+        [SelectList]="completedTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam(true)"
         [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team">
       </app-form-element>
@@ -27,8 +27,8 @@
     </div>
     <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
 
-    <div *ngIf="robotPics.length > 0">
-      <div *ngFor="let pic of robotPics">
+    <div *ngIf="scoutPitResponse.robotPics.length > 0">
+      <div *ngFor="let pic of scoutPitResponse.robotPics">
         {{pic.name}}
       </div>
     </div>

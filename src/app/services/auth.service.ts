@@ -13,7 +13,7 @@ import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
 import { APIStatus } from '../models/api.models';
-import { FieldScoutingService } from './field-scouting.service';
+import { ScoutingService } from './scouting.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +45,7 @@ export class AuthService {
     private ns: NotificationsService,
     private cs: CacheService,
     private ds: DataService,
-    private fss: FieldScoutingService) {
+    private fss: ScoutingService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -334,7 +334,7 @@ export class AuthService {
           this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name)).forEach(ul => {
             switch (ul.menu_name) {
               case 'Field Scouting':
-                this.fss.init();
+                this.fss.initFieldScouting(false);
                 break;
             }
           });

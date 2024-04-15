@@ -7,7 +7,7 @@ import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.m
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
 import { User } from 'src/app/models/user.models';
-import { FieldScoutingService } from 'src/app/services/field-scouting.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -39,7 +39,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private fss: FieldScoutingService) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private fss: ScoutingService) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.fss.teams.subscribe(ts => {
@@ -55,7 +55,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.buildTeamList();
     });
 
-    this.fss.scoutFieldQuestions.subscribe(sfq => {
+    this.fss.fieldScoutingQuestions.subscribe(sfq => {
       this.scoutFieldResponse.question_answers = sfq;
       this.sortQuestions();
     });
@@ -136,7 +136,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   scoutFieldInit(): void {
-    this.fss.init();
+    this.fss.initFieldScouting();
     this.startUploadOutstandingResultsTimeout();
   }
 

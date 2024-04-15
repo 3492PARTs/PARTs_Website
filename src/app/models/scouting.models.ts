@@ -6,6 +6,7 @@ export interface ITeam {
     team_nm: string;
     void_ind: string;
     checked: boolean;
+    pitResult: boolean;
 }
 
 export class Team implements ITeam {
@@ -13,6 +14,7 @@ export class Team implements ITeam {
     team_nm = '';
     void_ind = 'n'
     checked = false;
+    pitResult = false;
 }
 
 export interface IEvent {
@@ -190,13 +192,15 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
 export interface IScoutPitResponse {
     question_answers: IQuestionWithConditions[];
     team: number;
-    response_id: number | null;
+    response_id: number;
     form_typ: string;
+    robotPics: File[];
 }
 
 export class ScoutPitResponse implements IScoutPitResponse {
     question_answers: QuestionWithConditions[] = [];
     team!: number;
-    response_id!: number | null;
+    response_id = NaN;
     form_typ = 'field';
+    robotPics: File[] = [];
 }

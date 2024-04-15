@@ -8,6 +8,7 @@ import { FormElementComponent } from 'src/app/components/atoms/form-element/form
 import { QuestionWithConditions } from 'src/app/models/form.models';
 import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-field',
@@ -15,28 +16,42 @@ import { APIService } from 'src/app/services/api.service';
   styleUrls: ['./scout-pit.component.scss']
 })
 export class ScoutPitComponent implements OnInit, OnDestroy {
-  teams: Team[] = [];
-  compTeams: Team[] = [];
+  outstandingTeams: Team[] = [];
+  completedTeams: Team[] = [];
+
   private previousTeam!: number;
   robotPic!: File;
-  robotPics: File[] = [];
   previewUrl: any = null;
   scoutPitResponse = new ScoutPitResponse();
 
-  private scoutQuestionsCopy: QuestionWithConditions[] = [];
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
 
   formElements = new QueryList<FormElementComponent>();
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private api: APIService,
+    private gs: GeneralService,
+    private authService: AuthService,
+    private ss: ScoutingService) {
+
+    this.ss.pitScoutingQuestions.subscribe(psq => {
+      //TODO Build outstanding list
+    });
+
+    this.ss.completedPitScoutingTeams.subscribe(cpsts => {
+      this.completedTeams = cpsts;
+      this.buildOutstandingTeamsList();
+    })
+
+  }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.spInit() : null);
+
     this.checkTeamInterval = window.setInterval(() => {
-      this.api.get(false, 'scouting/pit/questions/', undefined, (result: any) => {
-        this.teams = (result as ScoutPitInit).teams;
-        this.compTeams = (result as ScoutPitInit).comp_teams;
+      this.api.get(false, 'scouting/pit/init/', undefined, (result: any) => {
+        this.outstandingTeams = (result as ScoutPitInit).teams;
+        this.completedTeams = (result as ScoutPitInit).comp_teams;
       }, (err: any) => {
         this.gs.triggerError(err);
       });
@@ -48,13 +63,18 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   spInit(): void {
-    this.api.get(true, 'scouting/pit/questions/', undefined, (result: any) => {
-      this.teams = (result as ScoutPitInit).teams;
-      this.compTeams = (result as ScoutPitInit).comp_teams;
+    this.ss.initializePitScouting(true, (result: any) => {
       this.scoutPitResponse.question_answers = (result as ScoutPitInit).scoutQuestions;
-      this.scoutQuestionsCopy = this.gs.cloneObject((result as ScoutPitInit).scoutQuestions) as QuestionWithConditions[];
-    }, (err: any) => {
-      this.gs.triggerError(err);
+    });
+  }
+
+  buildOutstandingTeamsList(): void {
+    this.ss.getTeams().then(ts => {
+      this.outstandingTeams = ts;
+
+      const compTeams = this.completedTeams.map(t => t.team_no);
+
+      this.outstandingTeams = this.outstandingTeams.filter(ot => !compTeams.includes(ot.team_no));
     });
   }
 
@@ -87,21 +107,22 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   private setNewTeam(load: boolean): void {
-    this.previousTeam = this.scoutPitResponse.team;
-    this.scoutPitResponse = new ScoutPitResponse();
-    this.scoutPitResponse.team = this.previousTeam;
-    this.scoutPitResponse.question_answers = this.gs.cloneObject(this.scoutQuestionsCopy);
+    this.ss.getScoutingQuestions('pit').then(psqs => {
+      this.previousTeam = this.scoutPitResponse.team;
+      this.scoutPitResponse = new ScoutPitResponse();
+      this.scoutPitResponse.team = this.previousTeam;
+      this.scoutPitResponse.question_answers = psqs;
+      this.robotPic = new File([], '');
+      this.previewUrl = null;
+      this.previewImages = [];
 
-    this.robotPic = new File([], '');
-    this.previewUrl = null;
-    this.previewImages = [];
-
-    if (load) this.loadTeam();
+      if (load) this.loadTeam();
+    });
   }
 
   addRobotPicture() {
     if (this.robotPic)
-      this.robotPics.push(this.robotPic);
+      this.scoutPitResponse.robotPics.push(this.robotPic);
     this.removeRobotPicture();
   }
 
@@ -130,50 +151,52 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.scoutPitResponse.question_answers = scoutQuestions;
     this.scoutPitResponse.form_typ = 'pit';
 
-    this.api.post(true, 'form/save-answers/', this.scoutPitResponse, (result: any) => {
+    let sp = this.gs.cloneObject(this.scoutPitResponse);
+    sp.robotPics = []; // we don't want to upload the images here
+
+    this.api.post(true, 'form/save-answers/', sp, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.savePictures();
+
+      this.gs.incrementOutstandingCalls();
+
+      let count = 0;
+
+      this.scoutPitResponse.robotPics.forEach(pic => {
+        if (pic && pic.size >= 0) {
+          const team_no = this.scoutPitResponse.team;
+
+          window.setTimeout(() => {
+            this.gs.incrementOutstandingCalls();
+
+            this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
+              if (resizedPic) {
+                const formData = new FormData();
+                formData.append('file', resizedPic);
+                formData.append('team_no', team_no.toString());
+
+                this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
+                  this.gs.successfulResponseBanner(result);
+                  this.removeRobotPicture();
+                }, (err: any) => {
+                  this.gs.triggerError(err);
+                });
+              }
+            }).finally(() => {
+              this.gs.decrementOutstandingCalls();
+            });
+          }, 1500 * ++count);
+        }
+      });
+
+      window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
+
+      this.scoutPitResponse = new ScoutPitResponse();
+
       this.spInit();
       this.gs.scrollTo(0);
     }, (err: any) => {
       this.gs.triggerError(err);
     });
-  }
-
-  private savePictures(): void | null {
-    let count = 0;
-
-    this.robotPics.forEach(pic => {
-      if (pic && pic.size >= 0) {
-        const team_no = this.scoutPitResponse.team;
-
-        window.setTimeout(() => {
-          this.gs.incrementOutstandingCalls();
-
-          this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
-            if (resizedPic) {
-              const formData = new FormData();
-              formData.append('file', resizedPic);
-              formData.append('team_no', team_no.toString());
-
-              this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                this.gs.successfulResponseBanner(result);
-                this.removeRobotPicture();
-              }, (err: any) => {
-                this.gs.triggerError(err);
-              });
-            }
-          }).finally(() => {
-            this.gs.decrementOutstandingCalls();
-          });
-        }, 1500 * ++count);
-      }
-    });
-
-    window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
-
-    this.robotPics = [];
-    this.scoutPitResponse = new ScoutPitResponse();
   }
 
   preview() {

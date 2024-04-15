@@ -62,7 +62,7 @@ import { TabContainerComponent } from './components/atoms/tab-container/tab-cont
 import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
-import { BannersComponent } from './components/atoms/banners/banners.component';
+import { BannersComponent } from './components/elements/banners/banners.component';
 import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
 import { TableComponent } from './components/atoms/table/table.component';
 
