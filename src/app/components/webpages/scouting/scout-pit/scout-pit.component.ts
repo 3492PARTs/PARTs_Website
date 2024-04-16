@@ -81,6 +81,18 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       const compTeams = this.completedTeams.map(t => t.team_no);
 
       this.outstandingTeams = this.outstandingTeams.filter(ot => !compTeams.includes(ot.team_no));
+
+      this.amendMatchList();
+    });
+  }
+
+  amendMatchList(): void {
+    this.cs.ScoutPitResponse.getAll().then((sprs: ScoutPitResponse[]) => {
+      sprs.forEach(spr => {
+        for (let i = 0; i < this.outstandingTeams.length; i++) {
+          if (this.outstandingTeams[i].team_no === spr.team) this.outstandingTeams.splice(i, 1);
+        }
+      });
     });
   }
 
@@ -93,6 +105,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       });
 
     });
+
+    this.amendMatchList();
   }
 
   viewResult(id: number): void {
