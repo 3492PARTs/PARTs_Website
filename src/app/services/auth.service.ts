@@ -346,14 +346,15 @@ export class AuthService {
           this.ss.startUploadOutstandingResponsesTimeout();
 
           break;
+
         case APIStatus.off:
           let newUserLinks: UserLinks[] = [];
 
           // get the pages that we are able to use offline from the list of links for the user
           this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
             uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
-              if (ul1.order < ul2.order) return -1;
-              else if (ul1.order > ul2.order) return 1;
+              if (ul1.order < ul2.order) return 1;
+              else if (ul1.order > ul2.order) return -1;
               else return 0;
             }).forEach(ul => {
               newUserLinks.unshift(ul);
