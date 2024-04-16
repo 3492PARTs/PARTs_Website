@@ -200,7 +200,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   save(spr?: ScoutPitResponse, id?: number): void | null {
-    if (!spr) spr = this.gs.cloneObject(this.scoutPitResponse) as ScoutPitResponse;
+    if (!spr) spr = this.scoutPitResponse;
 
     if (this.gs.strNoE(spr.team)) {
       this.gs.addBanner(new Banner("Must select a team.", 500));
