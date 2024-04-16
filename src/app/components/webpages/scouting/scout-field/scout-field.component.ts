@@ -83,10 +83,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.cs.ScoutFieldResponse.getById(id).then(sfr => {
+    this.scoutFieldResponse = new ScoutFieldResponse();
+    this.cs.ScoutFieldResponse.getById(id).then(async sfr => {
       this.scoutFieldResponse.id = sfr?.id;
 
-      this.cs.Match.getAll().then((ms: Match[]) => {
+      await this.cs.Match.getAll().then((ms: Match[]) => {
         this.matches = ms;
         if (sfr?.match) {
           this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
@@ -220,7 +221,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     this.noMatch = false;
     // only run if there are matchs
-    if (this.matches.length > 0) {
+    if (this.scoutFieldResponse.match && this.matches.length > 0) {
 
       // get the teams for the match from the teams list
       this.cs.Team.getAll().then((ts: Team[]) => {
