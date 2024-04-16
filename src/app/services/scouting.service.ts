@@ -7,6 +7,7 @@ import { QuestionCondition, QuestionWithConditions } from '../models/form.models
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
 import { Banner, GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
+import { IFilterDelegate } from '../models/dexie.models';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +25,6 @@ export class ScoutingService {
 
   private fieldScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
   fieldScoutingQuestions = this.fieldScoutingQuestionsBS.asObservable();
-
-  private completedPitScoutingTeamsBS = new BehaviorSubject<Team[]>([]);
-  completedPitScoutingTeams = this.completedPitScoutingTeamsBS.asObservable();
 
   private pitScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
   pitScoutingQuestions = this.pitScoutingQuestionsBS.asObservable();
@@ -237,23 +235,14 @@ export class ScoutingService {
       this.outstandingInitPitScoutingCall = true;
 
       return new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/pit/init/', undefined, (result: any) => {
+        this.api.get(loadingScreen, 'form/get-questions/', {
+          form_typ: 'pit',
+          active: 'y'
+        }, (result: any) => {
           /** 
            * On success load results and store in db 
            **/
-          const init = (result as ScoutPitInit);
-          this.completedPitScoutingTeamsBS.next(init.comp_teams);
-
-          init.comp_teams.forEach(t => {
-            this.cs.Team.getById(t.team_no).then(t => {
-              if (t) {
-                t.pitResult = 1;
-                this.cs.Team.AddOrEditAsync(t);
-              }
-            });
-          });
-
-          this.pitScoutingQuestionsBS.next(init.scoutQuestions);
+          this.pitScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
           let ids = this.pitScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
           this.cs.QuestionWithConditions.RemoveRangeAsync(ids).then(() => {
@@ -267,13 +256,6 @@ export class ScoutingService {
            * On fail load results from db
            **/
           let allLoaded = true;
-
-          this.cs.Team.getAll((t) => t.where({ pitResult: 1 })).then(ts => {
-            this.completedPitScoutingTeamsBS.next(ts);
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
 
           this.getScoutingQuestions('pit').then((spqs: QuestionWithConditions[]) => {
             this.pitScoutingQuestionsBS.next(spqs);
@@ -372,7 +354,7 @@ export class ScoutingService {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
   }
 
-  getTeams(): PromiseExtended<any[]> {
-    return this.cs.Team.getAll();
+  getTeams(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
+    return this.cs.Team.getAll(filterDelegate);
   }
 }

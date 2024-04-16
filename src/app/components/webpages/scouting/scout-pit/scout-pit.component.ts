@@ -17,6 +17,7 @@ import { CacheService } from 'src/app/services/cache.service';
   styleUrls: ['./scout-pit.component.scss']
 })
 export class ScoutPitComponent implements OnInit, OnDestroy {
+  private buildOutstandingTeamsTimeout: number | undefined;
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];
 
@@ -46,11 +47,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.ss.teams.subscribe(t => this.buildOutstandingTeamsList());
-
-    this.ss.completedPitScoutingTeams.subscribe(cpsts => {
-      this.completedTeams = cpsts;
-      this.buildOutstandingTeamsList();
+    this.ss.teams.subscribe(t => {
+      this.buildTeamLists(t);
     });
   }
 
@@ -74,19 +72,25 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.populateOutstandingResponses();
   }
 
-  buildOutstandingTeamsList(): void {
-    this.ss.getTeams().then(ts => {
-      this.outstandingTeams = ts;
+  buildTeamLists(teams?: Team[]): void {
+    window.clearTimeout(this.buildOutstandingTeamsTimeout);
 
-      const compTeams = this.completedTeams.map(t => t.team_no);
+    this.buildOutstandingTeamsTimeout = window.setTimeout(async () => {
+      if (!teams) {
+        await this.ss.getTeams().then((ts) => {
+          teams = ts;
+        });
+      }
 
-      this.outstandingTeams = this.outstandingTeams.filter(ot => !compTeams.includes(ot.team_no));
+      this.outstandingTeams = teams?.filter(t => t.pit_result === 0) || [];
+      this.amendOutstandTeamsList();
 
-      this.amendMatchList();
-    });
+      this.completedTeams = teams?.filter(t => t.pit_result === 1) || [];
+    }, 200);
+
   }
 
-  amendMatchList(): void {
+  amendOutstandTeamsList(): void {
     this.cs.ScoutPitResponse.getAll().then((sprs: ScoutPitResponse[]) => {
       sprs.forEach(spr => {
         for (let i = 0; i < this.outstandingTeams.length; i++) {
@@ -106,7 +110,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     });
 
-    this.amendMatchList();
+    this.amendOutstandTeamsList();
   }
 
   viewResult(id: number): void {
