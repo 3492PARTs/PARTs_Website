@@ -71,77 +71,84 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void) {
+  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
     if (!this.outstandingInitFieldScoutingCall) {
       this.outstandingInitFieldScoutingCall = true;
-      this.api.get(loadingScreen, 'scouting/field/init/', undefined, async (result: any) => {
-        /** 
-         * On success load results and store in db 
-         **/
-        const res = (result['teams'] as Team[]);
-        this.teamsBS.next(res);
-        await this.cs.Team.RemoveAllAsync();
-        await this.cs.Team.AddBulkAsync(this.teamsBS.value);
 
-        this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
-        await this.cs.ScoutFieldSchedule.RemoveAllAsync();
-        if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) await this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
+      return new Promise<boolean>(resolve => {
+        this.api.get(loadingScreen, 'scouting/field/init/', undefined, async (result: any) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          const res = (result['teams'] as Team[]);
+          this.teamsBS.next(res);
+          await this.cs.Team.RemoveAllAsync();
+          await this.cs.Team.AddBulkAsync(this.teamsBS.value);
+
+          this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
+          await this.cs.ScoutFieldSchedule.RemoveAllAsync();
+          if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) await this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
 
 
-        this.fieldScoutingQuestionsBS.next(result['scoutQuestions'] as QuestionWithConditions[]);
-        let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
+          this.fieldScoutingQuestionsBS.next(result['scoutQuestions'] as QuestionWithConditions[]);
+          let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
 
-        await this.cs.QuestionWithConditions.RemoveRangeAsync(ids);
-        await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
+          await this.cs.QuestionWithConditions.RemoveRangeAsync(ids);
+          await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
 
-        this.matchesBS.next(result['matches'] as Match[]);
-        await this.cs.Match.RemoveAllAsync();
-        await this.cs.Match.AddBulkAsync(this.matchesBS.value);
+          this.matchesBS.next(result['matches'] as Match[]);
+          await this.cs.Match.RemoveAllAsync();
+          await this.cs.Match.AddBulkAsync(this.matchesBS.value);
 
-        if (callbackFn) callbackFn(result);
-      }, (error: any) => {
-        /** 
-         * On fail load results from db
-         **/
-        let allLoaded = true;
+          if (callbackFn) callbackFn(result);
+          resolve(true);
+        }, (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
 
-        this.getTeams().then((ts: Team[]) => {
-          this.teamsBS.next(ts);
-          if (ts.length <= 0) allLoaded = false;
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
+          this.getTeams().then((ts: Team[]) => {
+            this.teamsBS.next(ts);
+            if (ts.length <= 0) allLoaded = false;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          this.cs.Match.getAll().then((ms: Match[]) => {
+            this.matchesBS.next(ms);
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          this.cs.ScoutFieldSchedule.getAll().then((sfss: ScoutFieldSchedule[]) => {
+            sfss.forEach(sfs => this.scoutFieldScheduleBS.next(sfs));
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          this.getScoutingQuestions('field').then((sfqs: QuestionWithConditions[]) => {
+            this.fieldScoutingQuestionsBS.next(sfqs);
+            if (sfqs.length <= 0) allLoaded = false;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
+            resolve(false);
+          }
+          else
+            resolve(true);
+
+          this.outstandingInitFieldScoutingCall = false;
+        }, () => {
+          this.outstandingInitFieldScoutingCall = false;
         });
-
-        this.cs.Match.getAll().then((ms: Match[]) => {
-          this.matchesBS.next(ms);
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
-        });
-
-        this.cs.ScoutFieldSchedule.getAll().then((sfss: ScoutFieldSchedule[]) => {
-          sfss.forEach(sfs => this.scoutFieldScheduleBS.next(sfs));
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
-        });
-
-        this.getScoutingQuestions('field').then((sfqs: QuestionWithConditions[]) => {
-          this.fieldScoutingQuestionsBS.next(sfqs);
-          if (sfqs.length <= 0) allLoaded = false;
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
-        });
-
-        if (!allLoaded) {
-          this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-        }
-
-        this.outstandingInitFieldScoutingCall = false;
-      }, () => {
-        this.outstandingInitFieldScoutingCall = false;
       });
     }
   }
@@ -187,61 +194,68 @@ export class ScoutingService {
 
 
   // Pit Scouting --------------------------------------------------------------
-  initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): void {
+  initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
     if (!this.outstandingInitPitScoutingCall) {
       this.outstandingInitPitScoutingCall = true;
-      this.api.get(loadingScreen, 'scouting/pit/init/', undefined, (result: any) => {
-        /** 
-         * On success load results and store in db 
-         **/
-        const init = (result as ScoutPitInit);
-        this.completedPitScoutingTeamsBS.next(init.comp_teams);
 
-        init.comp_teams.forEach(t => {
-          this.cs.Team.getById(t.team_no).then(t => {
-            if (t) {
-              t.pitResult = 1;
-              this.cs.Team.AddOrEditAsync(t);
-            }
+      return new Promise<boolean>(resolve => {
+        this.api.get(loadingScreen, 'scouting/pit/init/', undefined, (result: any) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          const init = (result as ScoutPitInit);
+          this.completedPitScoutingTeamsBS.next(init.comp_teams);
+
+          init.comp_teams.forEach(t => {
+            this.cs.Team.getById(t.team_no).then(t => {
+              if (t) {
+                t.pitResult = 1;
+                this.cs.Team.AddOrEditAsync(t);
+              }
+            });
           });
+
+          this.pitScoutingQuestionsBS.next(init.scoutQuestions);
+
+          let ids = this.pitScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
+          this.cs.QuestionWithConditions.RemoveRangeAsync(ids).then(() => {
+            this.cs.QuestionWithConditions.AddBulkAsync(this.pitScoutingQuestionsBS.value);
+          });
+
+          if (callbackFn) callbackFn(result);
+          resolve(true);
+        }, (err: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          this.cs.Team.getAll((t) => t.where({ pitResult: 1 })).then(ts => {
+            this.completedPitScoutingTeamsBS.next(ts);
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          this.getScoutingQuestions('pit').then((spqs: QuestionWithConditions[]) => {
+            this.pitScoutingQuestionsBS.next(spqs);
+            if (spqs.length <= 0) allLoaded = false;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading pit scouting form from cache.'));
+            resolve(false);
+          }
+          else
+            resolve(true);
+
+          this.outstandingInitPitScoutingCall = false;
+        }, () => {
+          this.outstandingInitPitScoutingCall = false;
         });
-
-        this.pitScoutingQuestionsBS.next(init.scoutQuestions);
-
-        let ids = this.pitScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-        this.cs.QuestionWithConditions.RemoveRangeAsync(ids).then(() => {
-          this.cs.QuestionWithConditions.AddBulkAsync(this.pitScoutingQuestionsBS.value);
-        });
-
-        if (callbackFn) callbackFn(result);
-      }, (err: any) => {
-        /** 
-         * On fail load results from db
-         **/
-        let allLoaded = true;
-
-        this.cs.Team.getAll((t) => t.where({ pitResult: 1 })).then(ts => {
-          this.completedPitScoutingTeamsBS.next(ts);
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
-        });
-
-        this.getScoutingQuestions('pit').then((spqs: QuestionWithConditions[]) => {
-          this.pitScoutingQuestionsBS.next(spqs);
-          if (spqs.length <= 0) allLoaded = false;
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
-        });
-
-        if (!allLoaded) {
-          this.gs.addBanner(new Banner('Error loading pit scouting form from cache.'));
-        }
-
-        this.outstandingInitPitScoutingCall = false;
-      }, () => {
-        this.outstandingInitPitScoutingCall = false;
       });
     }
 

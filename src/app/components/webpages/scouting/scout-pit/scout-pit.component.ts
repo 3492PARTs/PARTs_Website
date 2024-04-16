@@ -66,9 +66,14 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   spInit(): void {
-    this.ss.initFieldScouting(true, () => {
-      this.ss.initPitScouting(true);
-    });
+    const p = this.ss.initFieldScouting(true);
+
+    if (p) {
+      p.then((success) => {
+        this.ss.initPitScouting(true);
+      });
+    }
+
     this.populateOutstandingResponses();
   }
 
