@@ -212,9 +212,9 @@ export class ScoutingService {
 
         resolve(true);
       }, (err: any) => {
+        this.startUploadOutstandingResponsesTimeout();
         if (!id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-          this.startUploadOutstandingResponsesTimeout();
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
@@ -336,9 +336,10 @@ export class ScoutingService {
 
         resolve(true);
       }, (err: any) => {
+        this.startUploadOutstandingResponsesTimeout();
         if (!id) this.cs.ScoutPitResponse.AddAsync(spr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-          this.startUploadOutstandingResponsesTimeout();
+
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
