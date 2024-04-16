@@ -331,17 +331,18 @@ export class AuthService {
           this.refreshUserLinksInCache(this.userLinksBS.value);
 
           // Cache data for endpoints we want to use offline.
-          this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name)).forEach(ul => {
-            switch (ul.menu_name) {
-              case 'Field Scouting':
-                this.ss.initFieldScouting(false, (result: any) => {
-                  if (this.userLinksBS.value.filter(ul => ul.menu_name === 'Pit Scouting').length > 0) {
-                    this.ss.initPitScouting(false);
-                  }
-                });
-                break;
+          const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
+
+          //This will need changed if offline menu names ever includes endpoints that don't need teams
+          if (offlineLinks.length > 0) {
+            this.ss.loadTeams(false);
+            if (offlineLinks.find((value: UserLinks) => value.menu_name === 'Field Scouting')) {
+              this.ss.initFieldScouting(false);
             }
-          });
+            if (offlineLinks.find((value: UserLinks) => value.menu_name === 'Pit Scouting')) {
+              this.ss.initPitScouting(false);
+            }
+          }
 
           this.ss.startUploadOutstandingResponsesTimeout();
 

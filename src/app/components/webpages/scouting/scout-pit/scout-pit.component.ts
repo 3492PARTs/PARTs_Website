@@ -46,6 +46,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.ss.teams.subscribe(t => this.buildOutstandingTeamsList());
+
     this.ss.completedPitScoutingTeams.subscribe(cpsts => {
       this.completedTeams = cpsts;
       this.buildOutstandingTeamsList();
@@ -66,13 +68,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   spInit(): void {
-    const p = this.ss.initFieldScouting(true);
-
-    if (p) {
-      p.then((success) => {
-        this.ss.initPitScouting(true);
-      });
-    }
+    this.ss.loadTeams();
+    this.ss.initPitScouting();
 
     this.populateOutstandingResponses();
   }

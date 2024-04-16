@@ -113,6 +113,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   scoutFieldInit(): void {
+    this.ss.loadTeams();
     this.ss.initFieldScouting();
     this.populateOutstandingResponses();
   }

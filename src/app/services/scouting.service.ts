@@ -33,6 +33,7 @@ export class ScoutingService {
 
   private outstandingResponsesTimeout: number | undefined;
 
+  private outstandingLoadTeamCall = false;
   private outstandingInitFieldScoutingCall = false;
   private outstandingInitPitScoutingCall = false;
 
@@ -70,6 +71,56 @@ export class ScoutingService {
     });
   }
 
+  // Load Teams -----------------------------------------------------------
+  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
+    if (!this.outstandingLoadTeamCall) {
+      this.outstandingLoadTeamCall = true;
+
+      return new Promise<boolean>(resolve => {
+        this.api.get(loadingScreen, 'scouting/teams/', undefined, async (result: any) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          const res = (result as Team[]);
+          await this.updateTeams(res);
+
+          if (callbackFn) callbackFn(result);
+          resolve(true);
+        }, (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          this.getTeams().then((ts: Team[]) => {
+            this.teamsBS.next(ts);
+            if (ts.length <= 0) allLoaded = false;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
+            resolve(false);
+          }
+          else
+            resolve(true);
+
+          this.outstandingLoadTeamCall = false;
+        }, () => {
+          this.outstandingLoadTeamCall = false;
+        });
+      });
+    }
+  }
+
+  private async updateTeams(ts: Team[]): Promise<void> {
+    this.teamsBS.next(ts);
+    await this.cs.Team.RemoveAllAsync();
+    await this.cs.Team.AddBulkAsync(this.teamsBS.value);
+  }
+
   // Field Scouting -----------------------------------------------------------
   initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
     if (!this.outstandingInitFieldScoutingCall) {
@@ -80,11 +131,6 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          const res = (result['teams'] as Team[]);
-          this.teamsBS.next(res);
-          await this.cs.Team.RemoveAllAsync();
-          await this.cs.Team.AddBulkAsync(this.teamsBS.value);
-
           this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
           await this.cs.ScoutFieldSchedule.RemoveAllAsync();
           if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) await this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
@@ -107,14 +153,6 @@ export class ScoutingService {
            * On fail load results from db
            **/
           let allLoaded = true;
-
-          this.getTeams().then((ts: Team[]) => {
-            this.teamsBS.next(ts);
-            if (ts.length <= 0) allLoaded = false;
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
 
           this.cs.Match.getAll().then((ms: Match[]) => {
             this.matchesBS.next(ms);
