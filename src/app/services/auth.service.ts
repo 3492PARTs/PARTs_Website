@@ -344,8 +344,6 @@ export class AuthService {
             }
           }
 
-          this.ss.startUploadOutstandingResponsesTimeout();
-
           break;
 
         case APIStatus.off:
@@ -366,6 +364,7 @@ export class AuthService {
           break;
       }
 
+      this.ss.startUploadOutstandingResponsesTimeout();
     });
   }
 
