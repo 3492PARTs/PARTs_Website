@@ -2,7 +2,7 @@
 
   <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResults.length > 0">
     <div id="outstanding-results" class="flex align-items-center gap-1rem">
-      <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResults()"></app-button>
+      <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResponses()"></app-button>
       <app-button [ButtonType]="'main'" *ngFor="let or of outstandingResults"
         (FunctionCallBack)="viewResult(or.id)">{{or.team}}</app-button>
     </div>

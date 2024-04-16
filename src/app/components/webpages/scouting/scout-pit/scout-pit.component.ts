@@ -32,7 +32,6 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  private outstandingResultsTimeout: number | undefined;
   outstandingResults: { id: number, team: number }[] = [];
 
   constructor(private api: APIService,
@@ -50,8 +49,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.ss.completedPitScoutingTeams.subscribe(cpsts => {
       this.completedTeams = cpsts;
       this.buildOutstandingTeamsList();
-    })
-
+    });
   }
 
   ngOnInit() {
@@ -59,12 +57,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     //TODO: FIx this
     this.checkTeamInterval = window.setInterval(() => {
-      this.api.get(false, 'scouting/pit/init/', undefined, (result: any) => {
-        this.outstandingTeams = (result as ScoutPitInit).teams;
-        this.completedTeams = (result as ScoutPitInit).comp_teams;
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
+      //this.ss.initPitScouting();
     }, 1000 * 60 * 3); //3 min
   }
 
@@ -73,8 +66,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   spInit(): void {
-    this.ss.initPitScouting();
-    this.populateOutstandingResults();
+    this.ss.initFieldScouting(true, () => {
+      this.ss.initPitScouting(true);
+    });
+    this.populateOutstandingResponses();
   }
 
   buildOutstandingTeamsList(): void {
@@ -87,28 +82,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     });
   }
 
-  startUploadOutstandingResultsTimeout(): void {
-    if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
-
-    this.outstandingResultsTimeout = window.setTimeout(() => {
-      this.uploadOutstandingResults();
-    }, 1000 * 60 * 3); // try to send again after 3 mins
-
-  }
-
-  uploadOutstandingResults() {
-    this.cs.ScoutPitResponse.getAll().then(sprs => {
-      let count = 1;
-      sprs.forEach(s => {
-        window.setTimeout(() => {
-          //console.log(s);
-          this.save(s, s.id);
-        }, 1000 * count++);
-      });
-    });
-  }
-
-  populateOutstandingResults(): void {
+  populateOutstandingResponses(): void {
     this.cs.ScoutPitResponse.getAll().then(sprs => {
       this.outstandingResults = [];
 
@@ -130,7 +104,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutPitResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
         this.reset();
-        this.populateOutstandingResults();
+        this.populateOutstandingResponses();
       });
     });
 
@@ -190,13 +164,19 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
-    this.ss.getScoutingQuestions('pit').then(psqs => {
-      this.previousTeam = NaN;
-      this.scoutPitResponse = new ScoutPitResponse();
-      this.scoutPitResponse.question_answers = psqs;
-      this.formDisabled = false;
-      this.gs.scrollTo(0);
-    });
+    this.previousTeam = NaN;
+    this.scoutPitResponse = new ScoutPitResponse();
+    this.formDisabled = false;
+    this.gs.scrollTo(0);
+    this.ss.initPitScouting();
+    /*
+  this.ss.getScoutingQuestions('pit').then(psqs => {
+    this.previousTeam = NaN;
+    this.scoutPitResponse = new ScoutPitResponse();
+    this.scoutPitResponse.question_answers = psqs;
+    this.formDisabled = false;
+    this.gs.scrollTo(0);
+  });*/
   }
 
   save(spr?: ScoutPitResponse, id?: number): void | null {
@@ -212,70 +192,14 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    let scoutQuestions = this.gs.cloneObject(spr.question_answers) as QuestionWithConditions[];
-
-    scoutQuestions.forEach(r => {
-      r.answer = this.gs.formatQuestionAnswer(r.answer);
+    this.ss.savePitScoutingResponse(spr, id).then((success: boolean) => {
+      if (success && !id) this.reset();
+      this.populateOutstandingResponses();
     });
+  }
 
-    spr.question_answers = scoutQuestions;
-    spr.form_typ = 'pit';
-
-    const sprPost = this.gs.cloneObject(spr);
-    sprPost.robotPics = []; // we don't want to upload the images here
-
-    this.api.post(true, 'form/save-answers/', sprPost, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-
-      this.gs.incrementOutstandingCalls();
-
-      let count = 0;
-
-      spr?.robotPics.forEach(pic => {
-        if (pic && pic.size >= 0) {
-          const team_no = spr?.team;
-
-          window.setTimeout(() => {
-            this.gs.incrementOutstandingCalls();
-
-            this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
-              if (resizedPic) {
-                const formData = new FormData();
-                formData.append('file', resizedPic);
-                formData.append('team_no', team_no?.toString() || '');
-
-                this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                  this.gs.successfulResponseBanner(result);
-                  this.removeRobotPicture();
-                }, (err: any) => {
-                  this.gs.triggerError(err);
-                });
-              }
-            }).finally(() => {
-              this.gs.decrementOutstandingCalls();
-            });
-          }, 1500 * ++count);
-        }
-      });
-
-      window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
-
-      if (id) {
-        this.cs.ScoutPitResponse.RemoveAsync(id).then(() => {
-          this.populateOutstandingResults();
-        });
-      }
-
-      this.reset();
-      this.spInit();
-      this.gs.scrollTo(0);
-    }, (err: any) => {
-      if (!id) this.cs.ScoutPitResponse.AddAsync(this.scoutPitResponse).then(() => {
-        this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-        this.populateOutstandingResults();
-        this.reset();
-      });
-    });
+  uploadOutstandingResponses(): void {
+    this.ss.uploadOutstandingResponses();
   }
 
   preview() {
@@ -307,7 +231,9 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
-    this.formElements = fes;
+    this.gs.triggerChange(() => {
+      this.formElements = fes;
+    });
   }
 }
 

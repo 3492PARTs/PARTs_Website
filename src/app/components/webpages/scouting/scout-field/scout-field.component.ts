@@ -29,8 +29,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   private checkScoutTimeout: number | undefined;
   user!: User;
 
-  private outstandingResultsTimeout: number | undefined;
-  outstandingResults: { id: number, team: number }[] = [];
+  outstandingResponses: { id: number, team: number }[] = [];
 
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
@@ -39,15 +38,15 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private fss: ScoutingService) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService) {
     this.authService.user.subscribe(u => this.user = u);
 
-    this.fss.teams.subscribe(ts => {
+    this.ss.teams.subscribe(ts => {
       this.scoutFieldResponse.team = NaN;
       this.buildTeamList();
     });
 
-    this.fss.matches.subscribe(ms => {
+    this.ss.matches.subscribe(ms => {
       this.matches = ms;
       this.scoutFieldResponse.match = null;
       this.scoutFieldResponse.team = NaN;
@@ -55,50 +54,28 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.buildTeamList();
     });
 
-    this.fss.fieldScoutingQuestions.subscribe(sfq => {
+    this.ss.fieldScoutingQuestions.subscribe(sfq => {
       this.scoutFieldResponse.question_answers = sfq;
       this.sortQuestions();
     });
 
-    this.fss.scoutFieldSchedule.subscribe(sfs => this.scoutFieldSchedule = sfs);
+    this.ss.scoutFieldSchedule.subscribe(sfs => this.scoutFieldSchedule = sfs);
   }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
-    this.populateOutstandingResults();
   }
 
   ngOnDestroy(): void {
     window.clearTimeout(this.checkScoutTimeout);
   }
 
-  startUploadOutstandingResultsTimeout(): void {
-    if (this.outstandingResultsTimeout != null) window.clearTimeout(this.outstandingResultsTimeout);
-
-    this.outstandingResultsTimeout = window.setTimeout(() => {
-      this.uploadOutstandingResults();
-    }, 1000 * 60 * 3); // try to send again after 3 mins
-
-  }
-
-  uploadOutstandingResults() {
+  populateOutstandingResponses(): void {
     this.cs.ScoutFieldResponse.getAll().then(sfrc => {
-      let count = 1;
-      sfrc.forEach(s => {
-        window.setTimeout(() => {
-          //console.log(s);
-          this.save(s, s.id, false);
-        }, 1000 * count++);
-      });
-    });
-  }
-
-  populateOutstandingResults(): void {
-    this.cs.ScoutFieldResponse.getAll().then(sfrc => {
-      this.outstandingResults = [];
+      this.outstandingResponses = [];
 
       sfrc.forEach(s => {
-        this.outstandingResults.push({ id: s.id, team: s.team });
+        this.outstandingResponses.push({ id: s.id, team: s.team });
       });
 
     });
@@ -129,15 +106,15 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutFieldResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
         this.reset();
-        this.populateOutstandingResults();
+        this.populateOutstandingResponses();
       });
     });
 
   }
 
   scoutFieldInit(): void {
-    this.fss.initFieldScouting();
-    this.startUploadOutstandingResultsTimeout();
+    this.ss.initFieldScouting();
+    this.populateOutstandingResponses();
   }
 
   checkInScout(): void {
@@ -305,6 +282,12 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   reset() {
+    this.scoutFieldResponse = new ScoutFieldResponse();
+    this.noMatch = false;
+    this.formDisabled = false;
+    this.gs.scrollTo(0);
+    this.ss.initFieldScouting();
+    /*
     this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
       this.scoutFieldResponse = new ScoutFieldResponse();
       this.scoutFieldResponse.question_answers = sfqs;
@@ -314,10 +297,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.amendMatchList();
       this.gs.scrollTo(0);
       this.formDisabled = false;
-    });
+    });*/
   }
 
-  save(sfr?: ScoutFieldResponse, id?: number, resetForm = true): void | null {
+  save(sfr?: ScoutFieldResponse, id?: number): void | null {
     if (!sfr) {
       if (this.gs.strNoE(this.scoutFieldResponse.team)) {
         this.gs.triggerError('Must select a team to scout!');
@@ -335,38 +318,17 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         response.push(this.gs.cloneObject(sq));
       });
 
-      response.forEach(r => {
-        r.answer = this.gs.formatQuestionAnswer(r.answer);
-
-        r.conditions.forEach((c: QuestionCondition) => {
-          if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
-        });
-      });
-
       sfr = { question_answers: response, team: this.scoutFieldResponse.team || 0, match: this.scoutFieldResponse.match, form_typ: 'field' };
     }
 
-    this.api.post(true, 'form/save-answers/', { question_answers: sfr.question_answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-
-      if (resetForm) {
-        this.reset();
-        //this.scoutFieldInit();
-      }
-
-
-      if (id) {
-        this.cs.ScoutFieldResponse.RemoveAsync(id).then(() => {
-          this.populateOutstandingResults();
-        });
-      }
-    }, (err: any) => {
-      if (sfr && !id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
-        this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-        this.populateOutstandingResults();
-        this.reset();
-      });
+    this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {
+      if (success && !id) this.reset();
+      this.populateOutstandingResponses();
     });
+  }
+
+  uploadOutstandingResponses(): void {
+    this.ss.uploadOutstandingResponses();
   }
 
   setAutoFormElements(fes: QueryList<FormElementComponent>): void {

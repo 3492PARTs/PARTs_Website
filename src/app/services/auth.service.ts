@@ -343,6 +343,8 @@ export class AuthService {
             }
           });
 
+          this.ss.startUploadOutstandingResponsesTimeout();
+
           break;
         case APIStatus.off:
           let newUserLinks: UserLinks[] = [];
