@@ -63,7 +63,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutFieldInit() : null);
+    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.init() : null);
   }
 
   ngOnDestroy(): void {
@@ -113,7 +113,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   }
 
-  scoutFieldInit(): void {
+  init(): void {
     this.ss.loadTeams();
     this.ss.initFieldScouting();
     this.populateOutstandingResponses();
@@ -288,7 +288,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.noMatch = false;
     this.formDisabled = false;
     this.gs.scrollTo(0);
-    this.ss.initFieldScouting();
+    this.init();
     /*
     this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
       this.scoutFieldResponse = new ScoutFieldResponse();

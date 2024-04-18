@@ -53,7 +53,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.spInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
 
     //TODO: FIx this
     this.checkTeamInterval = window.setInterval(() => {
@@ -65,14 +65,14 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     window.clearInterval(this.checkTeamInterval);
   }
 
-  spInit(): void {
+  init(): void {
     this.ss.loadTeams();
     this.ss.initPitScouting();
 
     this.populateOutstandingResponses();
   }
 
-  buildTeamLists(teams?: Team[]): void {
+  buildTeamLists(teams?: Team[], amendWithOutstandingResponses = true): void {
     window.clearTimeout(this.buildOutstandingTeamsTimeout);
 
     this.buildOutstandingTeamsTimeout = window.setTimeout(async () => {
@@ -83,7 +83,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
       }
 
       this.outstandingTeams = teams?.filter(t => t.pit_result === 0) || [];
-      this.amendOutstandTeamsList();
+      if (amendWithOutstandingResponses) this.amendOutstandTeamsList();
 
       this.completedTeams = teams?.filter(t => t.pit_result === 1) || [];
     }, 200);
@@ -113,10 +113,11 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.amendOutstandTeamsList();
   }
 
-  viewResult(id: number): void {
+  viewResponse(id: number): void {
     this.formDisabled = true;
     this.cs.ScoutPitResponse.getById(id).then(spr => {
       this.scoutPitResponse = spr as ScoutPitResponse;
+      this.buildTeamLists(undefined, false);
     });
   }
 
@@ -188,7 +189,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.scoutPitResponse = new ScoutPitResponse();
     this.formDisabled = false;
     this.gs.scrollTo(0);
-    this.ss.initPitScouting();
+    this.init();
     /*
   this.ss.getScoutingQuestions('pit').then(psqs => {
     this.previousTeam = NaN;
