@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Match, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, Team } from '../models/scouting.models';
+import { Match, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Team } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
@@ -245,6 +245,37 @@ export class ScoutingService {
       });
     });
 
+  }
+
+  getFieldScoutingResponses(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
+        console.log(sfrcs);
+      });
+
+      this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
+        console.log(sfrrs);
+      });
+
+      this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
+        console.log(sfrr);
+      });
+
+      this.api.get(true, 'scouting/field/results/', undefined, async (result: any) => {
+        const tmp = result as ScoutResults;
+
+        await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
+        await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
+
+        await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
+        await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+
+        resolve(true);
+      }, (err: any) => {
+        this.gs.triggerError(err);
+        resolve(false);
+      });
+    });
   }
 
 

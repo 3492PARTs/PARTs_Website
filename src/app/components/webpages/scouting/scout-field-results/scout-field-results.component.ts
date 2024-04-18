@@ -7,6 +7,7 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutResults } from 'src/app/models/scouting.models';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -37,7 +38,8 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   constructor(private api: APIService,
     private gs: GeneralService,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private ss: ScoutingService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
@@ -54,6 +56,8 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   scoutFieldResultsInit(): void {
+    this.ss.getFieldScoutingResponses();
+    return;
     this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
       this.scoutResults = result as ScoutResults;
       this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults.scoutCols);

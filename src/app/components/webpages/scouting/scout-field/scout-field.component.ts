@@ -89,21 +89,23 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.formDisabled = true;
     this.scoutFieldResponse = new ScoutFieldResponse();
     this.cs.ScoutFieldResponse.getById(id).then(async sfr => {
-      this.scoutFieldResponse.id = sfr?.id;
+      if (sfr) {
+        this.scoutFieldResponse.id = sfr.id;
 
-      await this.cs.Match.getAll().then((ms: Match[]) => {
-        this.matches = ms;
-        if (sfr?.match) {
-          this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
-        }
+        await this.cs.Match.getAll().then((ms: Match[]) => {
+          this.matches = ms;
+          if (sfr?.match) {
+            this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
+          }
 
-      });
+        });
 
-      this.scoutFieldResponse.team = sfr?.team || 0;
-      this.buildTeamList();
+        this.scoutFieldResponse.team = sfr?.team || 0;
+        this.buildTeamList();
 
-      this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
-      this.sortQuestions();
+        this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
+        this.sortQuestions();
+      }
     });
   }
 
@@ -324,7 +326,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         response.push(this.gs.cloneObject(sq));
       });
 
-      sfr = { question_answers: response, team: this.scoutFieldResponse.team || 0, match: this.scoutFieldResponse.match, form_typ: 'field' };
+      sfr = { id: NaN, question_answers: response, team: this.scoutFieldResponse.team || 0, match: this.scoutFieldResponse.match, form_typ: 'field' };
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {

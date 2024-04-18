@@ -60,7 +60,7 @@ export const DBStores = {
     },
     ScoutFieldResponsesResponse: {
         TableName: 'ScoutFieldResponsesResponse',
-        Columns: '++id,team,rank,match'//generateColumns(scoutFieldResponseInstance),
+        Columns: 'scout_field_id,team,rank,match,time'//generateColumns(scoutFieldResponseInstance),
     },
     ScoutPitResponse: {
         TableName: 'ScoutPitResponse',

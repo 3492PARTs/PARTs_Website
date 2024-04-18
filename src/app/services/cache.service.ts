@@ -19,8 +19,8 @@ export class CacheService {
   ScoutFieldSchedule!: DexieCrud<IScoutFieldSchedule, number>;
   ScoutFieldResponse!: DexieCrud<IScoutFieldResponse, number>;
   // These are used for the responses page
-  ScoutFieldResponsesColumn!: DexieCrud<object, number>;
-  ScoutFieldResponsesResponse!: DexieCrud<object, number>;
+  ScoutFieldResponsesColumn!: DexieCrud<any, number>;
+  ScoutFieldResponsesResponse!: DexieCrud<any, number>;
 
   ScoutPitResponse!: DexieCrud<IScoutPitResponse, number>;
 

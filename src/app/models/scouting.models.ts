@@ -174,7 +174,7 @@ export class ScoutQuestion implements IScoutQuestion {
 }
 
 export interface IScoutFieldResponse {
-    id?: number;
+    id: number;
     question_answers: IQuestionWithConditions[];
     team: number;
     match: IMatch | null;
@@ -182,7 +182,7 @@ export interface IScoutFieldResponse {
 }
 
 export class ScoutFieldResponse implements IScoutFieldResponse {
-    id?: number;
+    id = NaN;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     match!: Match | null;
@@ -190,16 +190,16 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
 }
 
 export interface IScoutPitResponse {
-    id?: number;
+    id: number;
     question_answers: IQuestionWithConditions[];
     team: number;
     response_id: number;
     form_typ: string;
-    //robotPics: File[];
+    robotPics: File[];
 }
 
 export class ScoutPitResponse implements IScoutPitResponse {
-    id?: number;
+    id = NaN;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     response_id = NaN;

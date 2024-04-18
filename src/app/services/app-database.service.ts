@@ -21,8 +21,8 @@ export class AppDatabaseService extends Dexie {
   ScoutFieldScheduleTable!: Dexie.Table<IScoutFieldSchedule, number>;
   ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
   // These are used for the responses page
-  ScoutFieldResponsesColumnTable!: Dexie.Table<object, number>;
-  ScoutFieldResponsesResponseTable!: Dexie.Table<object, number>;
+  ScoutFieldResponsesColumnTable!: Dexie.Table<any, number>;
+  ScoutFieldResponsesResponseTable!: Dexie.Table<any, number>;
 
   ScoutPitResponseTable!: Dexie.Table<IScoutPitResponse, number>;
 
