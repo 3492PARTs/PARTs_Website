@@ -50,6 +50,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.ss.teams.subscribe(t => {
       this.buildTeamLists(t);
     });
+
+    this.ss.outstandingResponsesUploaded.subscribe(b => {
+      this.populateOutstandingResponses();
+    });
   }
 
   ngOnInit() {

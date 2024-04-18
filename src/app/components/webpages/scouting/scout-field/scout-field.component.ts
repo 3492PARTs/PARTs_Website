@@ -60,6 +60,10 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.ss.scoutFieldSchedule.subscribe(sfs => this.scoutFieldSchedule = sfs);
+
+    this.ss.outstandingResponsesUploaded.subscribe(b => {
+      this.populateOutstandingResponses();
+    });
   }
 
   ngOnInit() {

@@ -35,6 +35,10 @@ export class ScoutingService {
   private outstandingInitFieldScoutingCall = false;
   private outstandingInitPitScoutingCall = false;
 
+  private outstandingResponsesUploadedTimeout: number | undefined;
+  private outstandingResponsesUploadedBS = new BehaviorSubject<boolean>(false);
+  outstandingResponsesUploaded = this.outstandingResponsesUploadedBS.asObservable();
+
   constructor(private api: APIService,
     private cs: CacheService,
     private gs: GeneralService) { }
@@ -55,19 +59,34 @@ export class ScoutingService {
       sfrs.forEach(s => {
         window.setTimeout(() => {
           //console.log(s);
-          this.saveFieldScoutingResponse(s, s.id);
+          this.saveFieldScoutingResponse(s, s.id).then(() => {
+            this.responsesUploaded();
+          });
         }, 1000 * count++);
       });
     });
 
-    this.cs.ScoutPitResponse.getAll().then(sprs => {
+    await this.cs.ScoutPitResponse.getAll().then(sprs => {
       sprs.forEach(s => {
         window.setTimeout(() => {
-          this.savePitScoutingResponse(s, s.id);
+          this.savePitScoutingResponse(s, s.id).then(() => {
+            this.responsesUploaded();
+          });
         }, 1000 * count++);
       });
     });
+
+    this.responsesUploaded();
   }
+
+  private responsesUploaded(): void {
+    window.clearTimeout(this.outstandingResponsesUploadedTimeout);
+
+    this.outstandingResponsesUploadedTimeout = window.setTimeout(() => {
+      this.outstandingResponsesUploadedBS.next(true);
+    }, 200);
+  }
+
 
   // Load Teams -----------------------------------------------------------
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
