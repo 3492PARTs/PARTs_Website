@@ -18,6 +18,9 @@ export class CacheService {
   Match!: DexieCrud<IMatch, string>;
   ScoutFieldSchedule!: DexieCrud<IScoutFieldSchedule, number>;
   ScoutFieldResponse!: DexieCrud<IScoutFieldResponse, number>;
+  // These are used for the responses page
+  ScoutFieldResponsesColumn!: DexieCrud<object, number>;
+  ScoutFieldResponsesResponse!: DexieCrud<object, number>;
 
   ScoutPitResponse!: DexieCrud<IScoutPitResponse, number>;
 
@@ -33,6 +36,8 @@ export class CacheService {
     this.Match = new DexieCrud<IMatch, string>(this.appDB.MatchTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.appDB.ScoutFieldScheduleTable);
     this.ScoutFieldResponse = new DexieCrud<IScoutFieldResponse, number>(this.appDB.ScoutFieldResponseTable);
+    this.ScoutFieldResponsesColumn = new DexieCrud<object, number>(this.appDB.ScoutFieldResponsesColumnTable);
+    this.ScoutFieldResponsesResponse = new DexieCrud<object, number>(this.appDB.ScoutFieldResponsesResponseTable);
 
     this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.appDB.ScoutPitResponseTable);
 

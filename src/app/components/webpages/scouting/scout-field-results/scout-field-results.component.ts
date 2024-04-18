@@ -6,6 +6,7 @@ import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.componen
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutResults } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -186,8 +187,4 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.filterText = '';
     this.filter();
   }
-}
-export class ScoutResults {
-  scoutCols: any[] = [];
-  scoutAnswers: any[] = [];
 }

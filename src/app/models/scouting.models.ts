@@ -206,3 +206,13 @@ export class ScoutPitResponse implements IScoutPitResponse {
     form_typ = 'field';
     robotPics: File[] = [];
 }
+
+export interface IScoutResults {
+    scoutCols: any[];
+    scoutAnswers: any[];
+}
+
+export class ScoutResults {
+    scoutCols: any[] = [];
+    scoutAnswers: any[] = [];
+}

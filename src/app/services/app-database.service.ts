@@ -20,6 +20,9 @@ export class AppDatabaseService extends Dexie {
   MatchTable!: Dexie.Table<IMatch, string>;
   ScoutFieldScheduleTable!: Dexie.Table<IScoutFieldSchedule, number>;
   ScoutFieldResponseTable!: Dexie.Table<IScoutFieldResponse, number>;
+  // These are used for the responses page
+  ScoutFieldResponsesColumnTable!: Dexie.Table<object, number>;
+  ScoutFieldResponsesResponseTable!: Dexie.Table<object, number>;
 
   ScoutPitResponseTable!: Dexie.Table<IScoutPitResponse, number>;
 
@@ -60,6 +63,8 @@ export class AppDatabaseService extends Dexie {
     this.MatchTable = this.table(DBStores.Match.TableName);
     this.ScoutFieldScheduleTable = this.table(DBStores.ScoutFieldSchedule.TableName);
     this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
+    this.ScoutFieldResponsesColumnTable = this.table(DBStores.ScoutFieldResponsesColumn.TableName);
+    this.ScoutFieldResponsesResponseTable = this.table(DBStores.ScoutFieldResponsesResponse.TableName);
 
     this.ScoutPitResponseTable = this.table(DBStores.ScoutPitResponse.TableName);
 

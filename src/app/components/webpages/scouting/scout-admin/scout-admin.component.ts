@@ -1,14 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.service';
 import { AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
-import { HttpClient } from '@angular/common/http';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
-import { ScoutResults } from '../scout-field-results/scout-field-results.component';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team, Event, ScoutFieldSchedule } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule, ScoutResults } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
