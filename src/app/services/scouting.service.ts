@@ -280,23 +280,15 @@ export class ScoutingService {
 
         if (params) {
           // we are only loading the diff
-          console.log('load diff');
+          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
           await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
         }
         else {
           // loading all
-          console.log('load all');
+          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
           await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
           await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
         }
-
-        console.log(1);
-
-        await this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
-          console.log(sfrrs);
-        });
-
-        console.log(1.5);
 
         resolve(true);
       }, (err: any) => {
@@ -309,9 +301,7 @@ export class ScoutingService {
   getRemovedFieldScoutingResponses(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
       let last = null;
-      console.log(2);
       await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-        //console.log(sfrr);
         if (sfrr) last = sfrr['time'];
       });
 
@@ -326,8 +316,6 @@ export class ScoutingService {
           const tmp = result as ScoutField[];
 
           let ids = tmp.map(t => { return t.scout_field_id });
-
-          console.log('removing removed responses');
 
           await this.cs.ScoutFieldResponsesColumn.RemoveRangeAsync(ids);
 
@@ -348,8 +336,8 @@ export class ScoutingService {
     return this.cs.ScoutFieldResponsesColumn.getAll();
   }
 
-  getFieldResponsesResponses(): PromiseExtended<any[]> {
-    return this.cs.ScoutFieldResponsesResponse.getAll();
+  getFieldResponsesResponses(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
+    return this.cs.ScoutFieldResponsesResponse.getAll(filterDelegate);
   }
 
 

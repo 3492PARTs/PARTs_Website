@@ -40,8 +40,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService,
-    private cs: CacheService) { }
+    private ss: ScoutingService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
@@ -60,22 +59,15 @@ export class ScoutFieldResultsComponent implements OnInit {
   scoutFieldResultsInit(): void {
     this.ss.getFieldScoutingResponses().then((success: boolean) => {
       this.ss.getRemovedFieldScoutingResponses().then(async (success2: boolean) => {
-        console.log(3);
-        this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
-          console.log(sfrcs);
-        });
-
-        this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
-          console.log(sfrrs);
-        });
-
+        console.log('scout field init');
+        this.gs.incrementOutstandingCalls();
         this.scoutResponses = new ScoutResults();
 
-        await this.ss.getFieldResponsesResponses().then(frrs => {
+        await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
           this.scoutResponses.scoutAnswers = frrs;
         });
 
-        this.ss.getFieldResponsesColumns().then(frcs => {
+        await this.ss.getFieldResponsesColumns().then(frcs => {
           this.scoutResponses.scoutCols = frcs;
 
           this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
@@ -88,8 +80,11 @@ export class ScoutFieldResultsComponent implements OnInit {
           this.filter();
 
           this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
+
+
         });
 
+        this.gs.decrementOutstandingCalls();
       });
     });
   }

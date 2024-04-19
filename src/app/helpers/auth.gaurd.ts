@@ -20,7 +20,7 @@ export class AuthGuard {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     return this.authService.authInFlight.pipe(skipWhile(val => val === AuthCallStates.prcs), map(val => {
-      this.gs.devConsoleLog('Auth Guard is session expired below');
+      //this.gs.devConsoleLog('Auth Guard is session expired below');
       switch (val) {
         case AuthCallStates.comp:
           if (!this.authService.isSessionExpired())

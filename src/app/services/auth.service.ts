@@ -70,7 +70,7 @@ export class AuthService {
       const tmp = result as Token;
       this.tokenBS.next(tmp);
 
-      this.gs.devConsoleLog('authorizeUser', 'login tokens below');
+      //this.gs.devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
       this.getTokenExp(tmp.refresh);
 
@@ -105,7 +105,7 @@ export class AuthService {
           next: (result: any) => {
             if (this.gs.checkResponse(result)) {
               const token = result as Token;
-              this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+              //this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
               this.getTokenExp(token.access);
               this.getTokenExp(token.refresh);
               //this.token.next(token); handled in pipe call below
@@ -197,7 +197,7 @@ export class AuthService {
     return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh }).pipe(
       map(res => {
         const token = res as Token;
-        this.gs.devConsoleLog('refreshToken', 'new tokens below');
+        //('refreshToken', 'new tokens below');
         this.getTokenExp(token.access);
         this.getTokenExp(token.refresh);
 
@@ -212,7 +212,7 @@ export class AuthService {
       .pipe(
         map(res => {
           const token = res as Token;
-          this.gs.devConsoleLog('refreshToken', 'new tokens below');
+          //this.gs.devConsoleLog('refreshToken', 'new tokens below');
           this.getTokenExp(token.access);
           this.getTokenExp(token.refresh);
 
@@ -273,7 +273,7 @@ export class AuthService {
     const d = new Date(0);
     let tokenLoad = this.getTokenLoad(tkn);
     d.setUTCSeconds(tokenLoad.exp);
-    this.gs.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
+    //this.gs.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
     return d;
   }
 
@@ -282,12 +282,12 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    this.gs.devConsoleLog('isAuthenticated', 'current access token below');
+    //this.gs.devConsoleLog('isAuthenticated', 'current access token below');
     return !this.gs.strNoE(this.tokenBS.value.access) && !this.isTokenExpired(this.tokenBS.value.access);
   }
 
   isSessionExpired(): boolean {
-    this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
+    //this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
     return this.gs.strNoE(this.tokenBS.value.refresh) || this.isTokenExpired(this.tokenBS.value.refresh);
   }
 
