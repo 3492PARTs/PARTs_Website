@@ -872,7 +872,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getFieldResults(): void {
-    this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
+    this.api.get(true, 'scouting/field/responses/', undefined, (result: any) => {
       this.scoutResults = result as ScoutResults;
     }, (err: any) => {
       this.gs.triggerError(err);

@@ -11,7 +11,7 @@ import { IQuestionWithConditions } from '../models/form.models';
 @Injectable({
   providedIn: 'root'
 })
-export class AppDatabaseService extends Dexie {
+export class DatabaseService extends Dexie {
   UserTable!: Dexie.Table<IUser, number>;
   UserLinksTable!: Dexie.Table<IUserLinks, number>;
 

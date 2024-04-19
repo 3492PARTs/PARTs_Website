@@ -9,6 +9,7 @@ import { APIService } from 'src/app/services/api.service';
 import { ScoutResults } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { CacheService } from 'src/app/services/cache.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -64,7 +65,10 @@ export class ScoutFieldResultsComponent implements OnInit {
         this.scoutResponses = new ScoutResults();
 
         await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-          this.scoutResponses.scoutAnswers = frrs;
+          if (environment.production)
+            this.scoutResponses.scoutAnswers = frrs;
+          else
+            this.scoutResponses.scoutAnswers = frrs.slice(0, 30);
         });
 
         await this.ss.getFieldResponsesColumns().then(frcs => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
 import { IMatch, IScoutFieldResponse, IScoutFieldSchedule, IScoutPitResponse, ITeam } from '../models/scouting.models';
-import { AppDatabaseService } from './app-database.service';
+import { DatabaseService } from './database.service';
 import { IUser } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
 import { IUserLinks } from '../models/navigation.models';
@@ -28,21 +28,21 @@ export class CacheService {
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
-  constructor(private appDB: AppDatabaseService) {
-    this.User = new DexieCrud<IUser, number>(this.appDB.UserTable);
-    this.UserLinks = new DexieCrud<IUserLinks, number>(this.appDB.UserLinksTable);
+  constructor(private dbs: DatabaseService) {
+    this.User = new DexieCrud<IUser, number>(this.dbs.UserTable);
+    this.UserLinks = new DexieCrud<IUserLinks, number>(this.dbs.UserLinksTable);
 
-    this.Team = new DexieCrud<ITeam, number>(this.appDB.TeamTable);
-    this.Match = new DexieCrud<IMatch, string>(this.appDB.MatchTable);
-    this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.appDB.ScoutFieldScheduleTable);
-    this.ScoutFieldResponse = new DexieCrud<IScoutFieldResponse, number>(this.appDB.ScoutFieldResponseTable);
-    this.ScoutFieldResponsesColumn = new DexieCrud<object, number>(this.appDB.ScoutFieldResponsesColumnTable);
-    this.ScoutFieldResponsesResponse = new DexieCrud<object, number>(this.appDB.ScoutFieldResponsesResponseTable);
+    this.Team = new DexieCrud<ITeam, number>(this.dbs.TeamTable);
+    this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
+    this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.dbs.ScoutFieldScheduleTable);
+    this.ScoutFieldResponse = new DexieCrud<IScoutFieldResponse, number>(this.dbs.ScoutFieldResponseTable);
+    this.ScoutFieldResponsesColumn = new DexieCrud<object, number>(this.dbs.ScoutFieldResponsesColumnTable);
+    this.ScoutFieldResponsesResponse = new DexieCrud<object, number>(this.dbs.ScoutFieldResponsesResponseTable);
 
-    this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.appDB.ScoutPitResponseTable);
+    this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.dbs.ScoutPitResponseTable);
 
-    this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.appDB.QuestionWithConditionsTable);
+    this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.dbs.QuestionWithConditionsTable);
 
-    this.LoadedStores = new DexieCrud<LoadedStores, number>(this.appDB.LoadedStoresTable);
+    this.LoadedStores = new DexieCrud<LoadedStores, number>(this.dbs.LoadedStoresTable);
   }
 }

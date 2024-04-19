@@ -317,7 +317,7 @@ export class ScoutingService {
 
           let ids = tmp.map(t => { return t.scout_field_id });
 
-          await this.cs.ScoutFieldResponsesColumn.RemoveRangeAsync(ids);
+          await this.cs.ScoutFieldResponsesResponse.RemoveRangeAsync(ids);
 
           resolve(true);
         }, (err: any) => {
