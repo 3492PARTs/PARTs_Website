@@ -230,6 +230,7 @@ export class ScoutResults {
     scoutAnswers: any[] = [];
     current_season = new Season();
     current_event = new Event();
+    removed_responses: ScoutField[] = [];
 }
 
 export class ScoutField {

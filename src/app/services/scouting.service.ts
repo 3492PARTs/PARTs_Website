@@ -324,6 +324,11 @@ export class ScoutingService {
             await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
             await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
           }
+
+          const ids = tmp.removed_responses.map(t => { return t.scout_field_id });
+
+          await this.cs.ScoutFieldResponsesResponse.RemoveRangeAsync(ids);
+
           resolve(true);
         }
         else {
@@ -337,40 +342,6 @@ export class ScoutingService {
         //this.gs.triggerError(err);
         resolve(false);
       });
-    });
-  }
-
-  getRemovedFieldScoutingResponses(): Promise<boolean> {
-    return new Promise<boolean>(async resolve => {
-      let last = null;
-      await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-        if (sfrr) last = sfrr['time'];
-      });
-
-      let params = {};
-
-      if (last) {
-        params = {
-          before_date_time: last
-        }
-
-        this.api.get(true, 'scouting/field/removed-responses/', params, async (result: any) => {
-          const tmp = result as ScoutField[];
-
-          let ids = tmp.map(t => { return t.scout_field_id });
-
-          await this.cs.ScoutFieldResponsesResponse.RemoveRangeAsync(ids);
-
-          resolve(true);
-        }, (err: any) => {
-          //this.gs.triggerError(err);
-          resolve(false);
-        }, () => {
-          resolve(false);
-        });
-      }
-      else
-        resolve(true);
     });
   }
 

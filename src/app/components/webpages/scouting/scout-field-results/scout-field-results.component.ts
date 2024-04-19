@@ -58,38 +58,36 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   scoutFieldResultsInit(): void {
-    this.ss.getFieldScoutingResponses().then((success: boolean) => {
-      this.ss.getRemovedFieldScoutingResponses().then(async (success2: boolean) => {
-        console.log('scout field init');
-        this.gs.incrementOutstandingCalls();
-        this.scoutResponses = new ScoutResults();
+    this.ss.getFieldScoutingResponses().then(async (success: boolean) => {
+      console.log('scout field init');
+      this.gs.incrementOutstandingCalls();
+      this.scoutResponses = new ScoutResults();
 
-        await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-          if (environment.production)
-            this.scoutResponses.scoutAnswers = frrs;
-          else
-            this.scoutResponses.scoutAnswers = frrs.slice(0, 30);
-        });
-
-        await this.ss.getFieldResponsesColumns().then(frcs => {
-          this.scoutResponses.scoutCols = frcs;
-
-          this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
-
-          for (let i = 0; i < this.showScoutFieldCols.length; i++) {
-            this.showScoutFieldCols[i]['checked'] = true;
-          }
-
-          this.showHideTableCols();
-          this.filter();
-
-          this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
-
-
-        });
-
-        this.gs.decrementOutstandingCalls();
+      await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+        if (environment.production)
+          this.scoutResponses.scoutAnswers = frrs;
+        else
+          this.scoutResponses.scoutAnswers = frrs.slice(0, 30);
       });
+
+      await this.ss.getFieldResponsesColumns().then(frcs => {
+        this.scoutResponses.scoutCols = frcs;
+
+        this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
+
+        for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+          this.showScoutFieldCols[i]['checked'] = true;
+        }
+
+        this.showHideTableCols();
+        this.filter();
+
+        this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
+
+
+      });
+
+      this.gs.decrementOutstandingCalls();
     });
   }
 
