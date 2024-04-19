@@ -17,7 +17,7 @@ import { CacheService } from 'src/app/services/cache.service';
 })
 export class ScoutFieldResultsComponent implements OnInit {
 
-  scoutResults: ScoutResults = new ScoutResults();
+  scoutResponses: ScoutResults = new ScoutResults();
 
   teamScoutResultsModalVisible = false;
   teamScoutResults: ScoutResults = new ScoutResults();
@@ -59,7 +59,7 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   scoutFieldResultsInit(): void {
     this.ss.getFieldScoutingResponses().then((success: boolean) => {
-      this.ss.getRemovedFieldScoutingResponses().then((success2: boolean) => {
+      this.ss.getRemovedFieldScoutingResponses().then(async (success2: boolean) => {
         console.log(3);
         this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
           console.log(sfrcs);
@@ -68,23 +68,29 @@ export class ScoutFieldResultsComponent implements OnInit {
         this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
           console.log(sfrrs);
         });
+
+        this.scoutResponses = new ScoutResults();
+
+        await this.ss.getFieldResponsesResponses().then(frrs => {
+          this.scoutResponses.scoutAnswers = frrs;
+        });
+
+        this.ss.getFieldResponsesColumns().then(frcs => {
+          this.scoutResponses.scoutCols = frcs;
+
+          this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
+
+          for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+            this.showScoutFieldCols[i]['checked'] = true;
+          }
+
+          this.showHideTableCols();
+          this.filter();
+
+          this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
+        });
+
       });
-    });
-    return;
-    this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
-      this.scoutResults = result as ScoutResults;
-      this.showScoutFieldCols = this.gs.cloneObject(this.scoutResults.scoutCols);
-
-      for (let i = 0; i < this.showScoutFieldCols.length; i++) {
-        this.showScoutFieldCols[i]['checked'] = true;
-      }
-
-      this.showHideTableCols();
-      this.filter();
-
-      this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
-    }, (err: any) => {
-      this.gs.triggerError(err);
     });
   }
 
@@ -94,7 +100,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     if (individual) {
       export_file = this.teamScoutResults;
     } else {
-      export_file = this.scoutResults;
+      export_file = this.scoutResponses;
     }
 
     if (export_file.scoutAnswers.length <= 0) {
@@ -175,7 +181,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   filter(): void {
-    let temp = this.scoutResults.scoutAnswers;
+    let temp = this.scoutResponses.scoutAnswers;
 
     if (!this.gs.strNoE(this.filterRank)) {
 
@@ -183,7 +189,7 @@ export class ScoutFieldResultsComponent implements OnInit {
         temp = temp.filter(r => r.rank >= (this.filterRank || 0) && r.rank <= (this.filterRange || 0))
       }
       else { // get those above or below the desired rank
-        for (let i = 0; i < this.scoutResults.scoutAnswers.length; i++) {
+        for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
           temp = temp.filter(r => (this.filterAboveRank && r.rank >= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank <= (this.filterRank || 0)))
         }
       }

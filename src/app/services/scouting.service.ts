@@ -344,6 +344,14 @@ export class ScoutingService {
     });
   }
 
+  getFieldResponsesColumns(): PromiseExtended<any[]> {
+    return this.cs.ScoutFieldResponsesColumn.getAll();
+  }
+
+  getFieldResponsesResponses(): PromiseExtended<any[]> {
+    return this.cs.ScoutFieldResponsesResponse.getAll();
+  }
+
 
   // Pit Scouting --------------------------------------------------------------
   initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
