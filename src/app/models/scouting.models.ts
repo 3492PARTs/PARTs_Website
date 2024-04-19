@@ -216,3 +216,14 @@ export class ScoutResults {
     scoutCols: any[] = [];
     scoutAnswers: any[] = [];
 }
+
+export class ScoutField {
+    scout_field_id = NaN
+    response = ''
+    event = NaN
+    team_no = NaN
+    user = NaN
+    time?: Date;
+    match = NaN
+    void_ind = 'n'
+}

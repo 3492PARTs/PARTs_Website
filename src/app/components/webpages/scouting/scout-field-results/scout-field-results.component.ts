@@ -8,6 +8,7 @@ import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutResults } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-scout-field-results',
@@ -39,7 +40,8 @@ export class ScoutFieldResultsComponent implements OnInit {
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService) { }
+    private ss: ScoutingService,
+    private cs: CacheService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
@@ -56,7 +58,18 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   scoutFieldResultsInit(): void {
-    this.ss.getFieldScoutingResponses();
+    this.ss.getFieldScoutingResponses().then((success: boolean) => {
+      this.ss.getRemovedFieldScoutingResponses().then((success2: boolean) => {
+        console.log(3);
+        this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
+          console.log(sfrcs);
+        });
+
+        this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
+          console.log(sfrrs);
+        });
+      });
+    });
     return;
     this.api.get(true, 'scouting/field/results/', undefined, (result: any) => {
       this.scoutResults = result as ScoutResults;

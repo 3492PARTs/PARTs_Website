@@ -982,15 +982,6 @@ export class EventToTeams {
   teams: Team[] = [];
 }
 
-export class ScoutField {
-  scout_field_id!: number;
-  event!: number;
-  team_no!: number;
-  user!: number;
-  time = new Date()
-  match!: number;
-}
-
 export class ScoutFieldResultsSerializer {
   scoutCols: any[] = [];
   scoutAnswers: any[] = [];

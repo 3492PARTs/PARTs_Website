@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Match, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Team } from '../models/scouting.models';
+import { Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Team } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
@@ -248,7 +248,8 @@ export class ScoutingService {
   }
 
   getFieldScoutingResponses(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>(async resolve => {
+      /*
       this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
         console.log(sfrcs);
       });
@@ -256,25 +257,90 @@ export class ScoutingService {
       this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
         console.log(sfrrs);
       });
+      */
 
-      this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-        console.log(sfrr);
+      let last = null;
+      await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
+        //console.log(sfrr);
+        if (sfrr) last = sfrr['time'];
       });
 
-      this.api.get(true, 'scouting/field/results/', undefined, async (result: any) => {
+      let params: any = undefined;
+
+      if (last)
+        params = {
+          after_date_time: last
+        }
+
+      this.api.get(true, 'scouting/field/responses/', params, async (result: any) => {
         const tmp = result as ScoutResults;
 
         await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
         await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
 
-        await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
-        await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+        if (params) {
+          // we are only loading the diff
+          console.log('load diff');
+          await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+        }
+        else {
+          // loading all
+          console.log('load all');
+          await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
+          await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+        }
+
+        console.log(1);
+
+        await this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
+          console.log(sfrrs);
+        });
+
+        console.log(1.5);
 
         resolve(true);
       }, (err: any) => {
         this.gs.triggerError(err);
         resolve(false);
       });
+    });
+  }
+
+  getRemovedFieldScoutingResponses(): Promise<boolean> {
+    return new Promise<boolean>(async resolve => {
+      let last = null;
+      console.log(2);
+      await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
+        //console.log(sfrr);
+        if (sfrr) last = sfrr['time'];
+      });
+
+      let params = {};
+
+      if (last) {
+        params = {
+          before_date_time: last
+        }
+
+        this.api.get(true, 'scouting/field/removed-responses/', params, async (result: any) => {
+          const tmp = result as ScoutField[];
+
+          let ids = tmp.map(t => { return t.scout_field_id });
+
+          console.log('removing removed responses');
+
+          await this.cs.ScoutFieldResponsesColumn.RemoveRangeAsync(ids);
+
+          resolve(true);
+        }, (err: any) => {
+          this.gs.triggerError(err);
+          resolve(false);
+        }, () => {
+          resolve(false);
+        });
+      }
+      else
+        resolve(true);
     });
   }
 
