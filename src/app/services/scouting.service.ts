@@ -307,7 +307,6 @@ export class ScoutingService {
           });
         });
 
-        await this.cs.Season.AddOrEditAsync(tmp.current_season);
         await this.cs.Event.AddOrEditAsync(tmp.current_event);
 
         if (!seasonEventChanged) {
@@ -335,7 +334,7 @@ export class ScoutingService {
           });
         }
       }, (err: any) => {
-        this.gs.triggerError(err);
+        //this.gs.triggerError(err);
         resolve(false);
       });
     });
@@ -364,7 +363,7 @@ export class ScoutingService {
 
           resolve(true);
         }, (err: any) => {
-          this.gs.triggerError(err);
+          //this.gs.triggerError(err);
           resolve(false);
         }, () => {
           resolve(false);
