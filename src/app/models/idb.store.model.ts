@@ -1,6 +1,6 @@
 import { QuestionWithConditions } from "./form.models";
 import { UserLinks } from "./navigation.models";
-import { Match, ScoutFieldResponse, ScoutFieldSchedule, Team } from "./scouting.models";
+import { Match, ScoutFieldResponse, ScoutFieldSchedule, Season, Team, Event } from "./scouting.models";
 import { User } from "./user.models";
 
 export class LoadedStores {
@@ -21,6 +21,8 @@ function generateColumns<T extends Record<string, any>>(instance: T): string {
 const userInstance = new User();
 const userLinksInstance = new UserLinks('', '');
 
+const seasonInstance = new Season();
+const eventInstance = new Event();
 const teamInstance = new Team();
 const matchInstance = new Match();
 const scoutFieldScheduleInstance = new ScoutFieldSchedule();
@@ -37,6 +39,14 @@ export const DBStores = {
     UserLinks: {
         TableName: 'UserLinks',
         Columns: generateColumns(userLinksInstance),
+    },
+    Season: {
+        TableName: 'Season',
+        Columns: generateColumns(seasonInstance),
+    },
+    Event: {
+        TableName: 'Event',
+        Columns: generateColumns(eventInstance),
     },
     Team: {
         TableName: 'Team',

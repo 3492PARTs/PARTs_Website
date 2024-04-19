@@ -6,7 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team, Event, ScoutFieldSchedule, ScoutResults } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule, ScoutResults, Season } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
@@ -939,12 +939,6 @@ export class ScoutAdminComponent implements OnInit {
       });
     });
   }
-}
-
-export class Season {
-  season_id!: number;
-  season!: string;
-  current!: string;
 }
 
 export class ScoutPitSchedule {

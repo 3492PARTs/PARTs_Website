@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Team } from '../models/scouting.models';
+import { Event, Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Season, Team } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
@@ -275,22 +275,65 @@ export class ScoutingService {
       this.api.get(true, 'scouting/field/responses/', params, async (result: any) => {
         const tmp = result as ScoutResults;
 
-        await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
-        await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
+        console.log(tmp);
 
-        if (params) {
-          // we are only loading the diff
-          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-          await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+        let seasonEventChanged = false;
+
+        await this.cs.Season.filterAll((obj: Season) => {
+          return obj.season_id !== tmp.current_season.season_id && obj.current === 'y';
+        }).then((value: Season[]) => {
+          console.log('filter season ');
+          console.log(value);
+
+          value.forEach(async v => {
+            v.current = 'n';
+            seasonEventChanged = true;
+            await this.cs.Season.AddOrEditAsync(v);
+          });
+        });
+
+        await this.cs.Season.AddOrEditAsync(tmp.current_season);
+
+        await this.cs.Event.filterAll((obj: Event) => {
+          return obj.event_id !== tmp.current_event.event_id && obj.current === 'y';
+        }).then((value: Event[]) => {
+          console.log('filter event');
+          console.log(value);
+
+          value.forEach(async v => {
+            v.current = 'n';
+            seasonEventChanged = true;
+            await this.cs.Event.AddOrEditAsync(v);
+          });
+        });
+
+        await this.cs.Season.AddOrEditAsync(tmp.current_season);
+        await this.cs.Event.AddOrEditAsync(tmp.current_event);
+
+        if (!seasonEventChanged) {
+          await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
+          await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
+
+          if (params) {
+            // we are only loading the diff
+            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
+            await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+          }
+          else {
+            // loading all
+            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
+            await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
+            await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+          }
+          resolve(true);
         }
         else {
-          // loading all
-          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
+          console.log('refresh results for season change');
           await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
-          await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+          await this.getFieldScoutingResponses().then(value => {
+            resolve(value);
+          });
         }
-
-        resolve(true);
       }, (err: any) => {
         this.gs.triggerError(err);
         resolve(false);

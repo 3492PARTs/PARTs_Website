@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { IMatch, IScoutFieldResponse, IScoutFieldSchedule, IScoutPitResponse, ITeam, ScoutFieldResponse } from '../models/scouting.models';
+import { IEvent, IMatch, IScoutFieldResponse, IScoutFieldSchedule, IScoutPitResponse, ISeason, ITeam, ScoutFieldResponse } from '../models/scouting.models';
 import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
@@ -15,6 +15,8 @@ export class DatabaseService extends Dexie {
   UserTable!: Dexie.Table<IUser, number>;
   UserLinksTable!: Dexie.Table<IUserLinks, number>;
 
+  SeasonTable!: Dexie.Table<ISeason, number>;
+  EventTable!: Dexie.Table<IEvent, number>;
   TeamTable!: Dexie.Table<ITeam, number>;
 
   MatchTable!: Dexie.Table<IMatch, string>;
@@ -58,6 +60,8 @@ export class DatabaseService extends Dexie {
     this.UserTable = this.table(DBStores.User.TableName);
     this.UserLinksTable = this.table(DBStores.UserLinks.TableName);
 
+    this.SeasonTable = this.table(DBStores.Season.TableName);
+    this.EventTable = this.table(DBStores.Event.TableName);
     this.TeamTable = this.table(DBStores.Team.TableName);
 
     this.MatchTable = this.table(DBStores.Match.TableName);

@@ -8,6 +8,10 @@ export class DexieCrud<T, Tkey> {
         this.dbSet = dbSet;
     }
 
+    filterAll(fn: (obj: T) => boolean): PromiseExtended<T[]> {
+        return this.dbSet.filter(fn).toArray()
+    }
+
     getAll(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<T[]> {
         if (!!filterDelegate) {
             return this.filterDB(filterDelegate).toArray();

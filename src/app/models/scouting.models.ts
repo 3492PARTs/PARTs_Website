@@ -1,6 +1,19 @@
 import { IQuestionWithConditions, QuestionWithConditions } from "./form.models";
 import { User } from "./user.models";
 
+export interface ISeason {
+    season_id: number;
+    season: string;
+    current: string;
+}
+
+
+export class Season implements ISeason {
+    season_id = NaN;
+    season = '';
+    current = 'n';
+}
+
 export interface ITeam {
     team_no: number;
     team_nm: string;
@@ -215,6 +228,8 @@ export interface IScoutResults {
 export class ScoutResults {
     scoutCols: any[] = [];
     scoutAnswers: any[] = [];
+    current_season = new Season();
+    current_event = new Event();
 }
 
 export class ScoutField {
