@@ -15,7 +15,7 @@
   <app-box *ngFor="let res of scoutPitResults" [Title]="res.teamNo + ' - ' + res.teamNm" [Width]="resultWidth">
     <app-scout-pic-display [ScoutPitResult]="res"></app-scout-pic-display>
 
-    <div *ngFor="let r of res.results">
+    <div *ngFor="let r of res.responses">
       <p>{{ r.question }}: {{ r.answer }}</p>
     </div>
   </app-box>

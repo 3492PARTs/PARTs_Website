@@ -9,7 +9,7 @@
     <div class="team-info">
 
         <ng-container *ngIf="ScoutPitResult">
-            <div *ngFor="let r of ScoutPitResult.results">
+            <div *ngFor="let r of ScoutPitResult.responses">
                 <p>{{ r.question }}: {{ r.answer }}</p>
             </div>
         </ng-container>

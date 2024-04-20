@@ -26,12 +26,15 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 
   scoutPitResultsInit(): void {
+    this.search();
+    return;
     this.api.get(true, 'scouting/pit/results-init/', undefined, (result: any) => {
       this.teams = result as Team[];
       this.teamsList = result as Team[];
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+
   }
 
   search(): void {
@@ -42,8 +45,9 @@ export class ScoutPitResultsComponent implements OnInit {
       }
     });
 
-    this.api.post(true, 'scouting/pit/results/', this.teams, (result: any) => {
-      this.scoutPitResults = result as ScoutPitResults[];
+    this.api.get(true, 'scouting/pit/responses/', undefined, (result: any) => {
+      //this.scoutPitResults = result as ScoutPitResults[];
+      console.log(result);
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -58,7 +62,7 @@ export class ScoutPitResultsComponent implements OnInit {
     }
 
     let csv = 'Team Number,';
-    export_file[0].results.forEach(r => {
+    export_file[0].responses.forEach(r => {
       csv += '"' + r.question + '"' + ',';
     })
 
@@ -69,7 +73,7 @@ export class ScoutPitResultsComponent implements OnInit {
 
     export_file.forEach(element => {
       csv += element.teamNo + ',';
-      element.results.forEach(r => {
+      element.responses.forEach(r => {
         csv += '"' + r.answer + '"' + ',';
       });
 
@@ -90,7 +94,7 @@ export class ScoutPitResults {
   teamNm!: string;
   pics: ScoutPitImage[] = [];
   pic = 0;
-  results: ScoutPitResultAnswer[] = [];
+  responses: ScoutPitResultAnswer[] = [];
 }
 
 export class ScoutPitResultAnswer {
