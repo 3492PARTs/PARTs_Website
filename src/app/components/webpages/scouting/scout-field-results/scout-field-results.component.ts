@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import { ScoutPitResponse } from '../scout-pit-results/scout-pit-results.component';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
@@ -22,7 +22,7 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   teamScoutResultsModalVisible = false;
   teamScoutResults: ScoutResults = new ScoutResults();
-  scoutPitResult: ScoutPitResults = new ScoutPitResults();
+  scoutPitResult: ScoutPitResponse = new ScoutPitResponse();
   showScoutFieldCols!: any[];
   showScoutFieldColsList!: any[];
   scoutTableCols: any[] = [];
@@ -138,11 +138,11 @@ export class ScoutFieldResultsComponent implements OnInit {
       team_nm: 'no team lol',
       checked: true
     }], (result: any) => {
-      if ((result as ScoutPitResults[])[0]) {
-        this.scoutPitResult = (result as ScoutPitResults[])[0];
+      if ((result as ScoutPitResponse[])[0]) {
+        this.scoutPitResult = (result as ScoutPitResponse[])[0];
 
       } else {
-        this.scoutPitResult = new ScoutPitResults();
+        this.scoutPitResult = new ScoutPitResponse();
       }
 
       this.teamScoutResultsModalVisible = true;

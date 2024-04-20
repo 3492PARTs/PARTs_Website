@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import { ScoutPitResponse } from '../scout-pit-results/scout-pit-results.component';
 import { NavigationService } from 'src/app/services/navigation.service';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 import { Match, Team } from 'src/app/models/scouting.models';
@@ -294,7 +294,7 @@ export class TeamNote {
 
 export class MatchPlanning {
   team!: Team;
-  pitData = new ScoutPitResults();
+  pitData = new ScoutPitResponse();
   fieldCols!: any;
   fieldAnswers!: any;
   notes: TeamNote[] = [];

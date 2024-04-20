@@ -3,7 +3,7 @@ import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.se
 import { AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
-import { ScoutPitResults } from '../scout-pit-results/scout-pit-results.component';
+import { ScoutPitResponse } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
 import { Team, Event, ScoutFieldSchedule, ScoutResults, Season } from 'src/app/models/scouting.models';
@@ -148,13 +148,13 @@ export class ScoutAdminComponent implements OnInit {
   scoutResultModalVisible = false;
   activeScoutResult: any;
 
-  scoutPitResults: ScoutPitResults[] = [];
+  scoutPitResults: ScoutPitResponse[] = [];
   scoutPitResultsCols: object[] = [
     { PropertyName: 'teamNo', ColLabel: 'Team' },
     { PropertyName: 'teamNm', ColLabel: 'Name' },
   ];
   scoutPitResultModalVisible = false;
-  activePitScoutResult = new ScoutPitResults();
+  activePitScoutResult = new ScoutPitResponse();
 
   constructor(private gs: GeneralService,
     private api: APIService,
@@ -909,7 +909,7 @@ export class ScoutAdminComponent implements OnInit {
         });
 
         this.api.post(true, 'scouting/pit/results/', teams, (result: any) => {
-          this.scoutPitResults = result as ScoutPitResults[];
+          this.scoutPitResults = result as ScoutPitResponse[];
         }, (err: any) => {
           this.gs.triggerError(err);
         });
@@ -919,7 +919,7 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
-  showPitScoutResultModal(rec: ScoutPitResults): void {
+  showPitScoutResultModal(rec: ScoutPitResponse): void {
     this.activePitScoutResult = rec;
     this.scoutPitResultModalVisible = true;
     //console.log(rec);
@@ -932,7 +932,7 @@ export class ScoutAdminComponent implements OnInit {
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getPitResults();
-        this.activePitScoutResult = new ScoutPitResults();
+        this.activePitScoutResult = new ScoutPitResponse();
         this.scoutPitResultModalVisible = false;
       }, (err: any) => {
         this.gs.triggerError(err);

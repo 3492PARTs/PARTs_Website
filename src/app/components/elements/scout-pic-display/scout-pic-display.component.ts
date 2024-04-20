@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { ScoutPitImage, ScoutPitResults } from '../../webpages/scouting/scout-pit-results/scout-pit-results.component';
+import { ScoutPitImage, ScoutPitResponse } from '../../webpages/scouting/scout-pit-results/scout-pit-results.component';
 import * as LoadImg from 'blueimp-load-image';
 import { HttpClient } from '@angular/common/http';
 import { APIService } from 'src/app/services/api.service';
@@ -12,29 +12,29 @@ import { APIService } from 'src/app/services/api.service';
 })
 export class ScoutPicDisplayComponent {
   @Input()
-  set ScoutPitResult(spr: ScoutPitResults) {
+  set ScoutPitResult(spr: ScoutPitResponse) {
     this._ScoutPitResult = spr;
     this.preview(this._ScoutPitResult);
   }
-  _ScoutPitResult = new ScoutPitResults();
+  _ScoutPitResult = new ScoutPitResponse();
 
   constructor(private gs: GeneralService, private api: APIService) { }
 
-  prevImage(sp: ScoutPitResults): void {
+  prevImage(sp: ScoutPitResponse): void {
     if (sp.pic - 1 < 0) sp.pic = sp.pics.length - 1;
     else sp.pic--;
 
     this.preview(sp, sp.pic)
   }
 
-  nextImage(sp: ScoutPitResults): void {
+  nextImage(sp: ScoutPitResponse): void {
     if (sp.pic + 1 > sp.pics.length - 1) sp.pic = 0;
     else sp.pic++;
 
     this.preview(sp, sp.pic)
   }
 
-  preview(sp: ScoutPitResults, index?: number): void {
+  preview(sp: ScoutPitResponse, index?: number): void {
     if (sp && sp.pics.length > 0) {
       let link = '';
 

@@ -15,7 +15,7 @@ import { APIService } from 'src/app/services/api.service';
 export class ScoutPitResultsComponent implements OnInit {
   teams: Team[] = [];
   teamsList: Team[] = [];
-  scoutPitResults: ScoutPitResults[] = [];
+  scoutPitResults: ScoutPitResponse[] = [];
   resultWidth = '350px';
 
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService) { }
@@ -88,16 +88,16 @@ export class ScoutPitResultsComponent implements OnInit {
     this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
   }
 }
-export class ScoutPitResults {
+export class ScoutPitResponse {
   scout_pit_id!: number;
   teamNo!: string;
   teamNm!: string;
   pics: ScoutPitImage[] = [];
   pic = 0;
-  responses: ScoutPitResultAnswer[] = [];
+  responses: ScoutPitResponseAnswer[] = [];
 }
 
-export class ScoutPitResultAnswer {
+export class ScoutPitResponseAnswer {
   question!: string;
   answer!: string;
 }
