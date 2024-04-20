@@ -5,7 +5,7 @@ import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
-import { ScoutPitResponse, ScoutResults } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, ScoutFieldResponsesReturn } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,10 +16,10 @@ import { environment } from 'src/environments/environment';
 })
 export class ScoutFieldResultsComponent implements OnInit {
 
-  scoutResponses: ScoutResults = new ScoutResults();
+  scoutResponses: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
 
   teamScoutResultsModalVisible = false;
-  teamScoutResults: ScoutResults = new ScoutResults();
+  teamScoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutPitResult: ScoutPitResponse = new ScoutPitResponse();
   showScoutFieldCols!: any[];
   showScoutFieldColsList!: any[];
@@ -59,7 +59,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.ss.getFieldScoutingResponses().then(async (success: boolean) => {
       console.log('scout field init');
       this.gs.incrementOutstandingCalls();
-      this.scoutResponses = new ScoutResults();
+      this.scoutResponses = new ScoutFieldResponsesReturn();
 
       await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
         if (environment.production)
@@ -90,7 +90,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   download(individual: boolean): void | null {
-    let export_file = new ScoutResults();
+    let export_file = new ScoutFieldResponsesReturn();
 
     if (individual) {
       export_file = this.teamScoutResults;
@@ -126,7 +126,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.api.get(true, 'scouting/field/results/', {
       team: String(row['team'])
     }, (result: any) => {
-      this.teamScoutResults = result as ScoutResults;
+      this.teamScoutResults = result as ScoutFieldResponsesReturn;
     }, (err: any) => {
       this.gs.triggerError(err);
     });

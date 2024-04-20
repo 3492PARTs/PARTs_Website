@@ -5,7 +5,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team, Event, ScoutFieldSchedule, ScoutResults, Season, ScoutPitResponse } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule, ScoutFieldResponsesReturn, Season, ScoutPitResponse } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
@@ -137,7 +137,7 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
-  scoutResults: ScoutResults = new ScoutResults();
+  scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutResultsCols: object[] = [
     { PropertyName: 'team', ColLabel: 'Team' },
     { PropertyName: 'match', ColLabel: 'Match' },
@@ -872,7 +872,7 @@ export class ScoutAdminComponent implements OnInit {
 
   getFieldResults(): void {
     this.api.get(true, 'scouting/field/responses/', undefined, (result: any) => {
-      this.scoutResults = result as ScoutResults;
+      this.scoutResults = result as ScoutFieldResponsesReturn;
     }, (err: any) => {
       this.gs.triggerError(err);
     });

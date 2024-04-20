@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutField, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutResults, Season, Team } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
-import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
 import { Banner, GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
 import { IFilterDelegate } from '../models/dexie.models';
@@ -273,43 +272,15 @@ export class ScoutingService {
         }
 
       this.api.get(true, 'scouting/field/responses/', params, async (result: any) => {
-        const tmp = result as ScoutResults;
+        const tmp = result as ScoutFieldResponsesReturn;
 
         console.log(tmp);
 
-        let seasonEventChanged = false;
+        let changed = await this.updateSeason(tmp.current_season);
 
-        await this.cs.Season.filterAll((obj: Season) => {
-          return obj.season_id !== tmp.current_season.season_id && obj.current === 'y';
-        }).then((value: Season[]) => {
-          console.log('filter season ');
-          console.log(value);
+        changed = changed || await this.updateEvent(tmp.current_event);
 
-          value.forEach(async v => {
-            v.current = 'n';
-            seasonEventChanged = true;
-            await this.cs.Season.AddOrEditAsync(v);
-          });
-        });
-
-        await this.cs.Season.AddOrEditAsync(tmp.current_season);
-
-        await this.cs.Event.filterAll((obj: Event) => {
-          return obj.event_id !== tmp.current_event.event_id && obj.current === 'y';
-        }).then((value: Event[]) => {
-          console.log('filter event');
-          console.log(value);
-
-          value.forEach(async v => {
-            v.current = 'n';
-            seasonEventChanged = true;
-            await this.cs.Event.AddOrEditAsync(v);
-          });
-        });
-
-        await this.cs.Event.AddOrEditAsync(tmp.current_event);
-
-        if (!seasonEventChanged) {
+        if (!changed) {
           await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
           await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
 
@@ -473,6 +444,89 @@ export class ScoutingService {
         else
           resolve(false);
       });
+    });
+  }
+
+  getPitScoutingResponses(): Promise<boolean> {
+    return new Promise<boolean>(async resolve => {
+      /*
+            let last = null;
+            await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
+              //console.log(sfrr);
+              if (sfrr) last = sfrr['time'];
+            });
+      
+            let params: any = undefined;
+      
+            if (last)
+              params = {
+                after_date_time: last
+              }
+      */
+      this.api.get(true, 'scouting/pit/responses/', undefined, async (result: any) => {
+        const tmp = result as ScoutPitResponsesReturn;
+
+        console.log(tmp);
+
+        let changed = await this.updateSeason(tmp.current_season);
+
+        changed = changed || await this.updateEvent(tmp.current_event);
+
+
+        resolve(true);
+      }, (err: any) => {
+        //this.gs.triggerError(err);
+        resolve(false);
+      });
+    });
+  }
+
+  // Others ----------------------------------------------------------------------
+  private updateSeason(s: Season): Promise<boolean> {
+    // return true if season changed
+    return new Promise(async resolve => {
+      let changed = false;
+
+      await this.cs.Season.filterAll((obj: Season) => {
+        return obj.season_id !== s.season_id && obj.current === 'y';
+      }).then((value: Season[]) => {
+        console.log('filter season ');
+        console.log(value);
+
+        value.forEach(async v => {
+          v.current = 'n';
+          changed = true;
+          await this.cs.Season.AddOrEditAsync(v);
+        });
+      });
+
+      await this.cs.Season.AddOrEditAsync(s);
+
+      resolve(changed);
+    });
+  }
+
+  private updateEvent(e: Event): Promise<boolean> {
+    // return true if event changed
+    return new Promise<boolean>(async resolve => {
+      let changed = false;
+
+      await this.cs.Event.filterAll((obj: Event) => {
+        return obj.event_id !== e.event_id && obj.current === 'y';
+      }).then((value: Event[]) => {
+        console.log('filter event');
+        console.log(value);
+
+        value.forEach(async v => {
+          v.current = 'n';
+          changed = true;
+          await this.cs.Event.AddOrEditAsync(v);
+        });
+      });
+
+      await this.cs.Event.AddOrEditAsync(e);
+
+      resolve(changed);
     });
   }
 

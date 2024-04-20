@@ -5,6 +5,7 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize } from '../../../../services/general.service';
 import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-pit-results',
@@ -17,7 +18,10 @@ export class ScoutPitResultsComponent implements OnInit {
   scoutPitResults: ScoutPitResponse[] = [];
   resultWidth = '350px';
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private api: APIService,
+    private gs: GeneralService,
+    private authService: AuthService,
+    private ss: ScoutingService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
@@ -37,19 +41,7 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 
   search(): void {
-
-    this.teams.forEach((t) => {
-      if (!t.checked) {
-        t.checked = false;
-      }
-    });
-
-    this.api.get(true, 'scouting/pit/responses/', undefined, (result: any) => {
-      //this.scoutPitResults = result as ScoutPitResults[];
-      console.log(result);
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    this.ss.getPitScoutingResponses();
   }
 
   download(): void | null {

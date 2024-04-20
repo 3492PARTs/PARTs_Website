@@ -225,7 +225,7 @@ export interface IScoutResults {
     scoutAnswers: any[];
 }
 
-export class ScoutResults {
+export class ScoutFieldResponsesReturn {
     scoutCols: any[] = [];
     scoutAnswers: any[] = [];
     current_season = new Season();
@@ -275,11 +275,17 @@ export interface IScoutPitResponse {
     responses: IScoutPitResponseAnswer[];
 }
 
-export class ScoutPitResponse {
+export class ScoutPitResponse implements IScoutPitResponse {
     scout_pit_id!: number;
     teamNo!: string;
     teamNm!: string;
     pics: ScoutPitImage[] = [];
     display_pic_index = 0;
     responses: ScoutPitResponseAnswer[] = [];
+}
+
+export class ScoutPitResponsesReturn {
+    current_season = new Season();
+    current_event = new Event();
+    teams: ScoutPitResponse[] = [];
 }
