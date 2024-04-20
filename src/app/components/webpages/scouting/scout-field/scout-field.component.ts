@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Banner, GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { Match, ScoutFieldResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
+import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
@@ -15,7 +15,7 @@ import { ScoutingService } from 'src/app/services/scouting.service';
   styleUrls: ['./scout-field.component.scss']
 })
 export class ScoutFieldComponent implements OnInit, OnDestroy {
-  scoutFieldResponse = new ScoutFieldResponse();
+  scoutFieldResponse = new ScoutFieldFormResponse();
   teams: Team[] = [];
   //team: number = NaN;
   matches: Match[] = [];
@@ -75,7 +75,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   populateOutstandingResponses(): void {
-    this.cs.ScoutFieldResponse.getAll().then(sfrc => {
+    this.cs.ScoutFieldFormResponse.getAll().then(sfrc => {
       this.outstandingResponses = [];
 
       sfrc.forEach(s => {
@@ -87,8 +87,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.scoutFieldResponse = new ScoutFieldResponse();
-    this.cs.ScoutFieldResponse.getById(id).then(async sfr => {
+    this.scoutFieldResponse = new ScoutFieldFormResponse();
+    this.cs.ScoutFieldFormResponse.getById(id).then(async sfr => {
       if (sfr) {
         this.scoutFieldResponse.id = sfr.id;
 
@@ -111,7 +111,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   removeResult(): void {
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
-      this.cs.ScoutFieldResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
+      this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
       });
@@ -186,8 +186,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.cs.Match.getAll().then((ms: Match[]) => {
       this.matches = ms;
 
-      this.cs.ScoutFieldResponse.getAll().then((sfrc: ScoutFieldResponse[]) => {
-        sfrc.forEach((s: ScoutFieldResponse) => {
+      this.cs.ScoutFieldFormResponse.getAll().then((sfrc: ScoutFieldFormResponse[]) => {
+        sfrc.forEach((s: ScoutFieldFormResponse) => {
           const index = this.gs.arrayObjectIndexOf(this.matches, s.match?.match_id, 'match_id');
 
           if (index !== -1) {
@@ -290,7 +290,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.scoutFieldResponse = new ScoutFieldResponse();
+    this.scoutFieldResponse = new ScoutFieldFormResponse();
     this.noMatch = false;
     this.formDisabled = false;
     this.gs.scrollTo(0);
@@ -308,7 +308,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });*/
   }
 
-  save(sfr?: ScoutFieldResponse, id?: number): void | null {
+  save(sfr?: ScoutFieldFormResponse, id?: number): void | null {
     if (!sfr) {
       if (this.gs.strNoE(this.scoutFieldResponse.team)) {
         this.gs.triggerError('Must select a team to scout!');

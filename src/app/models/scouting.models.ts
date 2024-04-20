@@ -186,7 +186,7 @@ export class ScoutQuestion implements IScoutQuestion {
     void_ind = 'n';
 }
 
-export interface IScoutFieldResponse {
+export interface IScoutFieldFormResponse {
     id: number;
     question_answers: IQuestionWithConditions[];
     team: number;
@@ -194,7 +194,7 @@ export interface IScoutFieldResponse {
     form_typ: string;
 }
 
-export class ScoutFieldResponse implements IScoutFieldResponse {
+export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     id = NaN;
     question_answers: QuestionWithConditions[] = [];
     team!: number;

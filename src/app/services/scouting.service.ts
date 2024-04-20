@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutResults, Season, Team } from '../models/scouting.models';
+import { Event, Match, ScoutField, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutResults, Season, Team } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
@@ -55,7 +55,7 @@ export class ScoutingService {
   async uploadOutstandingResponses() {
     let count = 1;
 
-    await this.cs.ScoutFieldResponse.getAll().then(sfrs => {
+    await this.cs.ScoutFieldFormResponse.getAll().then(sfrs => {
       sfrs.forEach(s => {
         window.setTimeout(() => {
           //console.log(s);
@@ -208,7 +208,7 @@ export class ScoutingService {
     }
   }
 
-  saveFieldScoutingResponse(sfr: ScoutFieldResponse, id?: number): Promise<boolean> {
+  saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       let response = this.gs.cloneObject(sfr.question_answers) as QuestionWithConditions[];
 
@@ -226,13 +226,13 @@ export class ScoutingService {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
-          await this.cs.ScoutFieldResponse.RemoveAsync(id)
+          await this.cs.ScoutFieldFormResponse.RemoveAsync(id)
         }
 
         resolve(true);
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
-        if (!id) this.cs.ScoutFieldResponse.AddAsync(sfr).then(() => {
+        if (!id) this.cs.ScoutFieldFormResponse.AddAsync(sfr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
         }).catch((reason: any) => {
