@@ -6,7 +6,7 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 import { QuestionWithConditions } from 'src/app/models/form.models';
-import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
+import { ScoutPitFormResponse, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { CacheService } from 'src/app/services/cache.service';
@@ -24,7 +24,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   private previousTeam!: number;
   robotPic!: File;
   previewUrl: any = null;
-  scoutPitResponse = new ScoutPitResponse();
+  scoutPitResponse = new ScoutPitFormResponse();
 
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
@@ -95,7 +95,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   amendOutstandTeamsList(): void {
-    this.cs.ScoutPitResponse.getAll().then((sprs: ScoutPitResponse[]) => {
+    this.cs.ScoutPitFormResponse.getAll().then((sprs: ScoutPitFormResponse[]) => {
       sprs.forEach(spr => {
         for (let i = 0; i < this.outstandingTeams.length; i++) {
           if (this.outstandingTeams[i].team_no === spr.team) this.outstandingTeams.splice(i, 1);
@@ -105,7 +105,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   populateOutstandingResponses(): void {
-    this.cs.ScoutPitResponse.getAll().then(sprs => {
+    this.cs.ScoutPitFormResponse.getAll().then(sprs => {
       this.outstandingResults = [];
 
       sprs.forEach(s => {
@@ -119,15 +119,15 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   viewResponse(id: number): void {
     this.formDisabled = true;
-    this.cs.ScoutPitResponse.getById(id).then(spr => {
-      this.scoutPitResponse = spr as ScoutPitResponse;
+    this.cs.ScoutPitFormResponse.getById(id).then(spr => {
+      this.scoutPitResponse = spr as ScoutPitFormResponse;
       this.buildTeamLists(undefined, false);
     });
   }
 
   removeResult(): void {
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
-      this.cs.ScoutPitResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
+      this.cs.ScoutPitFormResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
       });
@@ -166,7 +166,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   private setNewTeam(load: boolean): void {
     this.ss.getScoutingQuestions('pit').then(psqs => {
       this.previousTeam = this.scoutPitResponse.team;
-      this.scoutPitResponse = new ScoutPitResponse();
+      this.scoutPitResponse = new ScoutPitFormResponse();
       this.scoutPitResponse.team = this.previousTeam;
       this.scoutPitResponse.question_answers = psqs;
       this.robotPic = new File([], '');
@@ -190,7 +190,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   reset(): void {
     this.previousTeam = NaN;
-    this.scoutPitResponse = new ScoutPitResponse();
+    this.scoutPitResponse = new ScoutPitFormResponse();
     this.formDisabled = false;
     this.gs.scrollTo(0);
     this.init();
@@ -204,7 +204,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   });*/
   }
 
-  save(spr?: ScoutPitResponse, id?: number): void | null {
+  save(spr?: ScoutPitFormResponse, id?: number): void | null {
     if (!spr) spr = this.scoutPitResponse;
 
     if (this.gs.strNoE(spr.team)) {

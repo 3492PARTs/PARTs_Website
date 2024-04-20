@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitResponse, ScoutResults, Season, Team } from '../models/scouting.models';
+import { Event, Match, ScoutField, ScoutFieldResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutResults, Season, Team } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { ScoutPitInit } from '../components/webpages/scouting/scout-pit/scout-pit.component';
@@ -66,7 +66,7 @@ export class ScoutingService {
       });
     });
 
-    await this.cs.ScoutPitResponse.getAll().then(sprs => {
+    await this.cs.ScoutPitFormResponse.getAll().then(sprs => {
       sprs.forEach(s => {
         window.setTimeout(() => {
           this.savePitScoutingResponse(s, s.id).then(() => {
@@ -406,7 +406,7 @@ export class ScoutingService {
 
   }
 
-  savePitScoutingResponse(spr: ScoutPitResponse, id?: number): Promise<boolean> {
+  savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number): Promise<boolean> {
     return new Promise(resolve => {
       let scoutQuestions = this.gs.cloneObject(spr.question_answers) as QuestionWithConditions[];
 
@@ -456,13 +456,13 @@ export class ScoutingService {
         window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
 
         if (id) {
-          await this.cs.ScoutPitResponse.RemoveAsync(id);
+          await this.cs.ScoutPitFormResponse.RemoveAsync(id);
         }
 
         resolve(true);
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
-        if (!id) this.cs.ScoutPitResponse.AddAsync(spr).then(() => {
+        if (!id) this.cs.ScoutPitFormResponse.AddAsync(spr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
 
           resolve(true);

@@ -202,7 +202,7 @@ export class ScoutFieldResponse implements IScoutFieldResponse {
     form_typ = 'field';
 }
 
-export interface IScoutPitResponse {
+export interface IScoutPitFormResponse {
     id: number;
     question_answers: IQuestionWithConditions[];
     team: number;
@@ -211,7 +211,7 @@ export interface IScoutPitResponse {
     robotPics: File[];
 }
 
-export class ScoutPitResponse implements IScoutPitResponse {
+export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id = NaN;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
