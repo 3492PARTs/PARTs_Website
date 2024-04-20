@@ -472,6 +472,14 @@ export class ScoutingService {
 
         changed = changed || await this.updateEvent(tmp.current_event);
 
+        await this.cs.ScoutPitResponsesResponse.RemoveAllAsync();
+
+        await this.cs.ScoutPitResponsesResponse.AddBulkAsync(tmp.teams);
+
+        await this.cs.ScoutPitResponsesResponse.getAll().then(r => {
+          console.log(r);
+        });
+
 
         resolve(true);
       }, (err: any) => {
