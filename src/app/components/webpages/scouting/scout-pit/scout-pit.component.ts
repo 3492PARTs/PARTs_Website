@@ -3,10 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { ScoutPitImage } from '../scout-pit-results/scout-pit-results.component';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 import { QuestionWithConditions } from 'src/app/models/form.models';
-import { ScoutPitFormResponse, Team } from 'src/app/models/scouting.models';
+import { ScoutPitFormResponse, ScoutPitImage, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { CacheService } from 'src/app/services/cache.service';

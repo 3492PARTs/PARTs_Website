@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { GeneralService } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize } from '../../../../services/general.service';
-import { Team } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
 
 @Component({
@@ -87,23 +86,4 @@ export class ScoutPitResultsComponent implements OnInit {
 
     this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
   }
-}
-export class ScoutPitResponse {
-  scout_pit_id!: number;
-  teamNo!: string;
-  teamNm!: string;
-  pics: ScoutPitImage[] = [];
-  pic = 0;
-  responses: ScoutPitResponseAnswer[] = [];
-}
-
-export class ScoutPitResponseAnswer {
-  question!: string;
-  answer!: string;
-}
-
-export class ScoutPitImage {
-  scout_pit_img_id!: number;
-  pic!: string;
-  default = false;
 }

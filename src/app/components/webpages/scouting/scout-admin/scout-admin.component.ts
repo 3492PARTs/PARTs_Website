@@ -3,10 +3,9 @@ import { AppSize, GeneralService, RetMessage } from 'src/app/services/general.se
 import { AuthService, PhoneType, AuthCallStates } from 'src/app/services/auth.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
-import { ScoutPitResponse } from '../scout-pit-results/scout-pit-results.component';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team, Event, ScoutFieldSchedule, ScoutResults, Season } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule, ScoutResults, Season, ScoutPitResponse } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';

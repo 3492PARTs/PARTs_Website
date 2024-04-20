@@ -1,14 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutPitResponse } from '../scout-pit-results/scout-pit-results.component';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
-import { ScoutResults } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, ScoutResults } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
-import { CacheService } from 'src/app/services/cache.service';
 import { environment } from 'src/environments/environment';
 
 @Component({

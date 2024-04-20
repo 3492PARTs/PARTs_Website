@@ -2,8 +2,8 @@
     <ng-container *ngIf="_ScoutPitResult && _ScoutPitResult.pics">
         <div class="default-pic-btn" *ngIf="_ScoutPitResult.pics.length > 1">
             <app-button [ButtonType]="'check'"
-                [BackgroundColor]="_ScoutPitResult.pics[_ScoutPitResult.pic].default ? 'green' : ''"
-                (FunctionCallBack)="setDefaultPic(_ScoutPitResult.pics[_ScoutPitResult.pic])"></app-button>
+                [BackgroundColor]="_ScoutPitResult.pics[_ScoutPitResult.display_pic_index].default ? 'green' : ''"
+                (FunctionCallBack)="setDefaultPic(_ScoutPitResult.pics[_ScoutPitResult.display_pic_index])"></app-button>
         </div>
 
         <div class="team-pic" [id]="_ScoutPitResult.teamNo">

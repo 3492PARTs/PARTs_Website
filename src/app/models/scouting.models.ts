@@ -243,3 +243,43 @@ export class ScoutField {
     match = NaN
     void_ind = 'n'
 }
+
+export interface IScoutPitResponseAnswer {
+    question: string;
+    answer: string;
+}
+
+export class ScoutPitResponseAnswer implements IScoutPitResponseAnswer {
+    question = '';
+    answer = '';
+}
+
+export interface IScoutPitImage {
+    scout_pit_img_id: number;
+    pic: string;
+    default: boolean;
+}
+
+export class ScoutPitImage implements IScoutPitImage {
+    scout_pit_img_id = NaN;
+    pic = '';
+    default = false;
+}
+
+export interface IScoutPitResponse {
+    scout_pit_id: number;
+    teamNo: string;
+    teamNm: string;
+    pics: IScoutPitImage[];
+    display_pic_index: number;
+    responses: IScoutPitResponseAnswer[];
+}
+
+export class ScoutPitResponse {
+    scout_pit_id!: number;
+    teamNo!: string;
+    teamNm!: string;
+    pics: ScoutPitImage[] = [];
+    display_pic_index = 0;
+    responses: ScoutPitResponseAnswer[] = [];
+}

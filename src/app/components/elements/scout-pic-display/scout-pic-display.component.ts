@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { ScoutPitImage, ScoutPitResponse } from '../../webpages/scouting/scout-pit-results/scout-pit-results.component';
+import { Component, Input } from '@angular/core';
+import { GeneralService } from 'src/app/services/general.service';
 import * as LoadImg from 'blueimp-load-image';
-import { HttpClient } from '@angular/common/http';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutPitResponse, ScoutPitImage } from 'src/app/models/scouting.models';
 
 @Component({
   selector: 'app-scout-pic-display',
@@ -21,17 +20,17 @@ export class ScoutPicDisplayComponent {
   constructor(private gs: GeneralService, private api: APIService) { }
 
   prevImage(sp: ScoutPitResponse): void {
-    if (sp.pic - 1 < 0) sp.pic = sp.pics.length - 1;
-    else sp.pic--;
+    if (sp.display_pic_index - 1 < 0) sp.display_pic_index = sp.pics.length - 1;
+    else sp.display_pic_index--;
 
-    this.preview(sp, sp.pic)
+    this.preview(sp, sp.display_pic_index)
   }
 
   nextImage(sp: ScoutPitResponse): void {
-    if (sp.pic + 1 > sp.pics.length - 1) sp.pic = 0;
-    else sp.pic++;
+    if (sp.display_pic_index + 1 > sp.pics.length - 1) sp.display_pic_index = 0;
+    else sp.display_pic_index++;
 
-    this.preview(sp, sp.pic)
+    this.preview(sp, sp.display_pic_index)
   }
 
   preview(sp: ScoutPitResponse, index?: number): void {
@@ -40,12 +39,12 @@ export class ScoutPicDisplayComponent {
 
       if (index !== undefined) {
         link = sp.pics[index].pic;
-        sp.pic = index;
+        sp.display_pic_index = index;
       }
       else {
         for (let i = 0; i < sp.pics.length; i++) {
           if (sp.pics[i].default) {
-            sp.pic = i;
+            sp.display_pic_index = i;
             link = sp.pics[i].pic;
             break;
           }
@@ -53,7 +52,7 @@ export class ScoutPicDisplayComponent {
 
         if (this.gs.strNoE(link)) {
           link = sp.pics[0].pic;
-          sp.pic = 0;
+          sp.display_pic_index = 0;
         }
       }
 
