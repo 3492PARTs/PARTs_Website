@@ -323,7 +323,7 @@ export class AuthService {
 
   getUserLinks() {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
-      const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results'];
+      const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results'];
 
       switch (this.apiStatus) {
         case APIStatus.on:

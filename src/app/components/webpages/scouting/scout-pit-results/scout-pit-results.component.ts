@@ -91,4 +91,9 @@ export class ScoutPitResultsComponent implements OnInit {
 
     this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
   }
+
+  reset(): void {
+    this.scoutPitResults = [];
+    this.teams.forEach(t => t.checked = false);
+  }
 }
