@@ -218,12 +218,18 @@ export interface IScoutPitFormResponse {
 }
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
-    id = NaN;
+    id!: number;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     response_id = NaN;
     form_typ = 'field';
     robotPics: File[] = [];
+
+    constructor(question_answers?: QuestionWithConditions[], team?: number, robotPics?: File[]) {
+        this.question_answers = question_answers || [];
+        this.team = team || NaN;
+        this.robotPics = robotPics || [];
+    }
 }
 
 export interface IScoutResults {
