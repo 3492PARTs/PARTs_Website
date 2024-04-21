@@ -13,8 +13,8 @@ import { ScoutingService } from 'src/app/services/scouting.service';
   styleUrls: ['./scout-pit-results.component.scss']
 })
 export class ScoutPitResultsComponent implements OnInit {
+  teamsSelectList: Team[] = [];
   teams: Team[] = [];
-  teamsList: Team[] = [];
   scoutPitResults: ScoutPitResponse[] = [];
   resultWidth = '350px';
 
@@ -29,19 +29,32 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 
   scoutPitResultsInit(): void {
-    this.search();
-    return;
-    this.api.get(true, 'scouting/pit/results-init/', undefined, (result: any) => {
-      this.teams = result as Team[];
-      this.teamsList = result as Team[];
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    this.ss.getPitScoutingResponses().then(async success => {
 
+      await this.ss.getPitResponsesResponses().then(sprs => {
+        //console.log(sprs);
+        let tmp: Team[] = [];
+
+        sprs.forEach(spr => {
+          if (spr.scout_pit_id) {
+            let team = new Team();
+            team.team_no = spr.team_no;
+            team.team_nm = spr.team_nm;
+            tmp.push(team);
+          }
+        });
+
+        this.teamsSelectList = tmp.sort(this.ss.teamSortFunction);
+      });
+    });
   }
 
-  search(): void {
-    this.ss.getPitScoutingResponses();
+  filter(): void {
+    let teams = this.teams.filter(t => t.checked).map(t => { return t.team_no; });
+
+    this.ss.filterPitResponsesResponses(pr => teams.includes(pr.team_no)).then(prs => {
+      this.scoutPitResults = prs.sort(this.ss.teamSortFunction);
+    });
   }
 
   download(): void | null {
@@ -63,7 +76,7 @@ export class ScoutPitResultsComponent implements OnInit {
     csv += '\n';
 
     export_file.forEach(element => {
-      csv += element.teamNo + ',';
+      csv += element.team_no + ',';
       element.responses.forEach(r => {
         csv += '"' + r.answer + '"' + ',';
       });

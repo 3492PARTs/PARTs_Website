@@ -56,7 +56,7 @@ export class ScoutPicDisplayComponent {
         }
       }
 
-      let el = document.getElementById(sp.teamNo);
+      let el = document.getElementById(sp.team_no.toString());
 
       if (el) el.replaceChildren();
 
@@ -65,7 +65,7 @@ export class ScoutPicDisplayComponent {
         (img: any) => {
           img.style.width = '100%';
           img.style.height = 'auto';
-          document.getElementById(sp.teamNo)!.appendChild(img);
+          document.getElementById(sp.team_no.toString())!.appendChild(img);
         },
         {
           //maxWidth: 600,

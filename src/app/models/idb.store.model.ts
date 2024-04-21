@@ -82,7 +82,7 @@ export const DBStores = {
     },
     ScoutPitResponsesResponse: {
         TableName: 'ScoutPitResponsesResponse',
-        Columns: 'teamNo,teamNm,scout_pit_id',//generateColumns(scoutPitResponseInstance),
+        Columns: 'team_no,team_nm,scout_pit_id',//generateColumns(scoutPitResponseInstance),
     },
     LoadedStores: {
         TableName: 'LoadedStores',

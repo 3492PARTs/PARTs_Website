@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -248,16 +248,6 @@ export class ScoutingService {
 
   getFieldScoutingResponses(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
-      /*
-      this.cs.ScoutFieldResponsesColumn.getAll().then(sfrcs => {
-        console.log(sfrcs);
-      });
-
-      this.cs.ScoutFieldResponsesResponse.getAll(sfrrs => sfrrs.orderBy('time')).then(sfrrs => {
-        console.log(sfrrs);
-      });
-      */
-
       let last = null;
       await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
         //console.log(sfrr);
@@ -449,20 +439,6 @@ export class ScoutingService {
 
   getPitScoutingResponses(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
-      /*
-            let last = null;
-            await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-              //console.log(sfrr);
-              if (sfrr) last = sfrr['time'];
-            });
-      
-            let params: any = undefined;
-      
-            if (last)
-              params = {
-                after_date_time: last
-              }
-      */
       this.api.get(true, 'scouting/pit/responses/', undefined, async (result: any) => {
         const tmp = result as ScoutPitResponsesReturn;
 
@@ -476,11 +452,6 @@ export class ScoutingService {
 
         await this.cs.ScoutPitResponsesResponse.AddBulkAsync(tmp.teams);
 
-        await this.cs.ScoutPitResponsesResponse.getAll().then(r => {
-          console.log(r);
-        });
-
-
         resolve(true);
       }, (err: any) => {
         //this.gs.triggerError(err);
@@ -489,6 +460,13 @@ export class ScoutingService {
     });
   }
 
+  getPitResponsesResponses(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutPitResponse[]> {
+    return this.cs.ScoutPitResponsesResponse.getAll(filterDelegate);
+  }
+
+  filterPitResponsesResponses(fn: (obj: ScoutPitResponse) => boolean): PromiseExtended<ScoutPitResponse[]> {
+    return this.cs.ScoutPitResponsesResponse.filterAll(fn);
+  }
   // Others ----------------------------------------------------------------------
   private updateSeason(s: Season): Promise<boolean> {
     // return true if season changed
@@ -544,5 +522,11 @@ export class ScoutingService {
 
   getTeams(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
     return this.cs.Team.getAll(filterDelegate);
+  }
+
+  teamSortFunction(t1: Team | ScoutPitResponse, t2: Team | ScoutPitResponse): number {
+    if (t1.team_no < t2.team_no) return -1;
+    else if (t1.team_no > t2.team_no) return 1;
+    else return 0;
   }
 }

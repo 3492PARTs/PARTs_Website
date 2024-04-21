@@ -268,8 +268,8 @@ export class ScoutPitImage implements IScoutPitImage {
 
 export interface IScoutPitResponse {
     scout_pit_id: number;
-    teamNo: string;
-    teamNm: string;
+    team_no: number;
+    team_nm: string;
     pics: IScoutPitImage[];
     display_pic_index: number;
     responses: IScoutPitResponseAnswer[];
@@ -277,8 +277,8 @@ export interface IScoutPitResponse {
 
 export class ScoutPitResponse implements IScoutPitResponse {
     scout_pit_id = NaN;
-    teamNo = '';
-    teamNm = '';
+    team_no = NaN;
+    team_nm = '';
     pics: ScoutPitImage[] = [];
     display_pic_index = 0;
     responses: ScoutPitResponseAnswer[] = [];
