@@ -52,33 +52,42 @@ export class ScoutingService {
   }
 
   async uploadOutstandingResponses() {
-    let count = 1;
+    let fieldUploaded = false;
 
     await this.cs.ScoutFieldFormResponse.getAll().then(sfrs => {
-      sfrs.forEach(s => {
-        window.setTimeout(() => {
-          //console.log(s);
-          this.saveFieldScoutingResponse(s, s.id).then(() => {
-            this.responsesUploaded();
-          });
-        }, 1000 * count++);
+      sfrs.forEach(async s => {
+        await this.saveFieldScoutingResponse(s, s.id).then(success => {
+          if (success)
+            fieldUploaded = success;
+        });
       });
     });
+
+    if (fieldUploaded) {
+      this.loadTeams();
+      this.initFieldScouting();
+    }
+
+    let pitUploaded = false;
 
     await this.cs.ScoutPitFormResponse.getAll().then(sprs => {
-      sprs.forEach(s => {
-        window.setTimeout(() => {
-          this.savePitScoutingResponse(s, s.id).then(() => {
-            this.responsesUploaded();
-          });
-        }, 1000 * count++);
+      sprs.forEach(async s => {
+        await this.savePitScoutingResponse(s, s.id).then(success => {
+          if (success)
+            pitUploaded = success;
+        });
       });
     });
 
-    this.responsesUploaded();
+    if (pitUploaded) {
+      if (!fieldUploaded) this.loadTeams();
+      this.initPitScouting();
+    }
+
+    this.triggerResponsesUploaded();
   }
 
-  private responsesUploaded(): void {
+  private triggerResponsesUploaded(): void {
     window.clearTimeout(this.outstandingResponsesUploadedTimeout);
 
     this.outstandingResponsesUploadedTimeout = window.setTimeout(() => {
