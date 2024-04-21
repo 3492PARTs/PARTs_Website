@@ -231,11 +231,14 @@ export class ScoutingService {
         resolve(true);
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
+        //sfr.id = 1;
+        console.log(sfr);
         if (!id) this.cs.ScoutFieldFormResponse.AddAsync(sfr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
+          this.gs.triggerError(reason);
           resolve(false);
         });
         else {
@@ -246,7 +249,7 @@ export class ScoutingService {
 
   }
 
-  getFieldScoutingResponses(): Promise<boolean> {
+  getFieldScoutingResponses(loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
       let last = null;
       await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
@@ -261,7 +264,7 @@ export class ScoutingService {
           after_date_time: last
         }
 
-      this.api.get(true, 'scouting/field/responses/', params, async (result: any) => {
+      this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: any) => {
         const tmp = result as ScoutFieldResponsesReturn;
 
         console.log(tmp);
@@ -437,9 +440,9 @@ export class ScoutingService {
     });
   }
 
-  getPitScoutingResponses(): Promise<boolean> {
+  getPitScoutingResponses(loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
-      this.api.get(true, 'scouting/pit/responses/', undefined, async (result: any) => {
+      this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: any) => {
         const tmp = result as ScoutPitResponsesReturn;
 
         console.log(tmp);

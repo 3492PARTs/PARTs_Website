@@ -315,7 +315,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let response: any[] = [];
+      let response: QuestionWithConditions[] = [];
       this.scoutAutoQuestions.forEach(sq => {
         response.push(this.gs.cloneObject(sq));
       });
@@ -326,7 +326,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
         response.push(this.gs.cloneObject(sq));
       });
 
-      sfr = { id: NaN, question_answers: response, team: this.scoutFieldResponse.team || 0, match: this.scoutFieldResponse.match, form_typ: 'field' };
+      sfr = new ScoutFieldFormResponse(response, this.scoutFieldResponse.team, this.scoutFieldResponse.match);
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {

@@ -336,12 +336,23 @@ export class AuthService {
           //This will need changed if offline menu names ever includes endpoints that don't need teams
           if (offlineLinks.length > 0) {
             this.ss.loadTeams(false);
-            if (offlineLinks.find((value: UserLinks) => value.menu_name === 'Field Scouting')) {
-              this.ss.initFieldScouting(false);
-            }
-            if (offlineLinks.find((value: UserLinks) => value.menu_name === 'Pit Scouting')) {
-              this.ss.initPitScouting(false);
-            }
+
+            offlineLinks.forEach(ol => {
+              switch (ol.menu_name) {
+                case 'Field Scouting':
+                  this.ss.initFieldScouting(false);
+                  break;
+                case 'Field Results':
+                  this.ss.getFieldScoutingResponses(false);
+                  break;
+                case 'Pit Scouting':
+                  this.ss.initPitScouting(false);
+                  break;
+                case 'Pit Results':
+                  this.ss.getPitScoutingResponses(false);
+                  break;
+              }
+            });
           }
 
           break;

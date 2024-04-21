@@ -195,11 +195,17 @@ export interface IScoutFieldFormResponse {
 }
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
-    id = NaN;
+    id!: number;
     question_answers: QuestionWithConditions[] = [];
     team!: number;
     match!: Match | null;
     form_typ = 'field';
+
+    constructor(question_answers?: QuestionWithConditions[], team?: number, match?: Match | null) {
+        this.question_answers = question_answers || [];
+        this.team = team || NaN;
+        this.match = match || null;
+    }
 }
 
 export interface IScoutPitFormResponse {
