@@ -117,7 +117,7 @@ export class ScoutingService {
            **/
           let allLoaded = true;
 
-          this.getTeams().then((ts: Team[]) => {
+          this.getTeamsFromCache().then((ts: Team[]) => {
             this.teamsBS.next(ts);
             if (ts.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
@@ -143,7 +143,7 @@ export class ScoutingService {
   private async updateTeams(ts: Team[]): Promise<void> {
     this.teamsBS.next(ts);
     await this.cs.Team.RemoveAllAsync();
-    await this.cs.Team.AddBulkAsync(this.teamsBS.value);
+    await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
   }
 
   // Field Scouting -----------------------------------------------------------
@@ -157,19 +157,20 @@ export class ScoutingService {
            * On success load results and store in db 
            **/
           this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
-          await this.cs.ScoutFieldSchedule.RemoveAllAsync();
-          if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id)) await this.cs.ScoutFieldSchedule.AddAsync(this.scoutFieldScheduleBS.value);
+          //await this.cs.ScoutFieldSchedule.RemoveAllAsync();
+          if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id))
+            await this.cs.ScoutFieldSchedule.AddOrEditAsync(this.scoutFieldScheduleBS.value);
 
 
           this.fieldScoutingQuestionsBS.next(result['scoutQuestions'] as QuestionWithConditions[]);
           let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
 
-          await this.cs.QuestionWithConditions.RemoveRangeAsync(ids);
-          await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
+          await this.cs.QuestionWithConditions.RemoveBulkAsync(ids);
+          await this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.fieldScoutingQuestionsBS.value);
 
           this.matchesBS.next(result['matches'] as Match[]);
           await this.cs.Match.RemoveAllAsync();
-          await this.cs.Match.AddBulkAsync(this.matchesBS.value);
+          await this.cs.Match.AddOrEditBulkAsync(this.matchesBS.value);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -193,7 +194,7 @@ export class ScoutingService {
             allLoaded = false;
           });
 
-          this.getScoutingQuestions('field').then((sfqs: QuestionWithConditions[]) => {
+          this.getScoutingQuestionsFromCache('field').then((sfqs: QuestionWithConditions[]) => {
             this.fieldScoutingQuestionsBS.next(sfqs);
             if (sfqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
@@ -241,7 +242,6 @@ export class ScoutingService {
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
         //sfr.id = 1;
-        console.log(sfr);
         if (!id) this.cs.ScoutFieldFormResponse.AddAsync(sfr).then(() => {
           this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
@@ -276,36 +276,34 @@ export class ScoutingService {
       this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: any) => {
         const tmp = result as ScoutFieldResponsesReturn;
 
-        console.log(tmp);
+        let changed = await this.updateSeasonInCache(tmp.current_season);
 
-        let changed = await this.updateSeason(tmp.current_season);
-
-        changed = changed || await this.updateEvent(tmp.current_event);
+        changed = changed || await this.updateEventInCache(tmp.current_event);
 
         if (!changed) {
           await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
-          await this.cs.ScoutFieldResponsesColumn.AddBulkAsync(tmp.scoutCols);
+          await this.cs.ScoutFieldResponsesColumn.AddOrEditBulkAsync(tmp.scoutCols);
 
           if (params) {
             // we are only loading the diff
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-            await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+            await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(tmp.scoutAnswers);
           }
           else {
             // loading all
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
             await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
-            await this.cs.ScoutFieldResponsesResponse.AddBulkAsync(tmp.scoutAnswers);
+            await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(tmp.scoutAnswers);
           }
 
           const ids = tmp.removed_responses.map(t => { return t.scout_field_id });
 
-          await this.cs.ScoutFieldResponsesResponse.RemoveRangeAsync(ids);
+          await this.cs.ScoutFieldResponsesResponse.RemoveBulkAsync(ids);
 
           resolve(true);
         }
         else {
-          console.log('refresh results for season change');
+          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
           await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
           await this.getFieldScoutingResponses().then(value => {
             resolve(value);
@@ -318,11 +316,11 @@ export class ScoutingService {
     });
   }
 
-  getFieldResponsesColumns(): PromiseExtended<any[]> {
+  getFieldResponsesColumnsFromCache(): PromiseExtended<any[]> {
     return this.cs.ScoutFieldResponsesColumn.getAll();
   }
 
-  getFieldResponsesResponses(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
+  getFieldResponsesResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
     return this.cs.ScoutFieldResponsesResponse.getAll(filterDelegate);
   }
 
@@ -343,8 +341,8 @@ export class ScoutingService {
           this.pitScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
           let ids = this.pitScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-          this.cs.QuestionWithConditions.RemoveRangeAsync(ids).then(() => {
-            this.cs.QuestionWithConditions.AddBulkAsync(this.pitScoutingQuestionsBS.value);
+          this.cs.QuestionWithConditions.RemoveBulkAsync(ids).then(() => {
+            this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.pitScoutingQuestionsBS.value);
           });
 
           if (callbackFn) callbackFn(result);
@@ -355,7 +353,7 @@ export class ScoutingService {
            **/
           let allLoaded = true;
 
-          this.getScoutingQuestions('pit').then((spqs: QuestionWithConditions[]) => {
+          this.getScoutingQuestionsFromCache('pit').then((spqs: QuestionWithConditions[]) => {
             this.pitScoutingQuestionsBS.next(spqs);
             if (spqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
@@ -454,15 +452,13 @@ export class ScoutingService {
       this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: any) => {
         const tmp = result as ScoutPitResponsesReturn;
 
-        console.log(tmp);
+        let changed = await this.updateSeasonInCache(tmp.current_season);
 
-        let changed = await this.updateSeason(tmp.current_season);
-
-        changed = changed || await this.updateEvent(tmp.current_event);
+        changed = changed || await this.updateEventInCache(tmp.current_event);
 
         await this.cs.ScoutPitResponsesResponse.RemoveAllAsync();
 
-        await this.cs.ScoutPitResponsesResponse.AddBulkAsync(tmp.teams);
+        await this.cs.ScoutPitResponsesResponse.AddOrEditBulkAsync(tmp.teams);
 
         resolve(true);
       }, (err: any) => {
@@ -472,15 +468,69 @@ export class ScoutingService {
     });
   }
 
-  getPitResponsesResponses(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutPitResponse[]> {
+  getPitResponsesResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutPitResponse[]> {
     return this.cs.ScoutPitResponsesResponse.getAll(filterDelegate);
   }
 
-  filterPitResponsesResponses(fn: (obj: ScoutPitResponse) => boolean): PromiseExtended<ScoutPitResponse[]> {
+  filterPitResponsesResponsesFromCache(fn: (obj: ScoutPitResponse) => boolean): PromiseExtended<ScoutPitResponse[]> {
     return this.cs.ScoutPitResponsesResponse.filterAll(fn);
   }
+
+  // Schedules -------------------------------------------------------------------------
+  loadSchedules(loadingScreen = true): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.api.get(loadingScreen, 'scouting/schedules/', undefined, (result: any) => {
+        /** 
+         * On success load results and store in db 
+         **/
+        console.log(result)
+        resolve(true);
+      }, (error: any) => {
+        /** 
+         * On fail load results from db
+         **/
+        let allLoaded = true;
+
+        this.getTeamsFromCache().then((ts: Team[]) => {
+          this.teamsBS.next(ts);
+          if (ts.length <= 0) allLoaded = false;
+        }).catch((reason: any) => {
+          console.log(reason);
+          allLoaded = false;
+        });
+
+        if (!allLoaded) {
+          this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
+          resolve(false);
+        }
+        else
+          resolve(true);
+
+        this.outstandingLoadTeamCall = false;
+      }, () => {
+        this.outstandingLoadTeamCall = false;
+      });
+    });
+  }
+  // Portal -------------------------------------------------------------------
+  initPortal(loadingScreen = true): Promise<boolean> | void {
+    return new Promise<boolean>(resolve => {
+      this.api.get(loadingScreen, 'scouting/portal/init/', undefined, (result: any) => {
+        const init = result;
+
+        //this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(init.fieldSchedule);
+        console.log(init);
+        resolve(true);
+      }, (err: any) => {
+        this.gs.triggerError(err);
+        resolve(false);
+      });
+    });
+
+  }
+
   // Others ----------------------------------------------------------------------
-  private updateSeason(s: Season): Promise<boolean> {
+  private updateSeasonInCache(s: Season): Promise<boolean> {
     // return true if season changed
     return new Promise(async resolve => {
       let changed = false;
@@ -488,8 +538,8 @@ export class ScoutingService {
       await this.cs.Season.filterAll((obj: Season) => {
         return obj.season_id !== s.season_id && obj.current === 'y';
       }).then((value: Season[]) => {
-        console.log('filter season ');
-        console.log(value);
+        //console.log('filter season ');
+        //console.log(value);
 
         value.forEach(async v => {
           v.current = 'n';
@@ -504,7 +554,7 @@ export class ScoutingService {
     });
   }
 
-  private updateEvent(e: Event): Promise<boolean> {
+  private updateEventInCache(e: Event): Promise<boolean> {
     // return true if event changed
     return new Promise<boolean>(async resolve => {
       let changed = false;
@@ -512,8 +562,8 @@ export class ScoutingService {
       await this.cs.Event.filterAll((obj: Event) => {
         return obj.event_id !== e.event_id && obj.current === 'y';
       }).then((value: Event[]) => {
-        console.log('filter event');
-        console.log(value);
+        //console.log('filter event');
+        //console.log(value);
 
         value.forEach(async v => {
           v.current = 'n';
@@ -528,11 +578,11 @@ export class ScoutingService {
     });
   }
 
-  getScoutingQuestions(form_typ: string): PromiseExtended<any[]> {
+  getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<any[]> {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
   }
 
-  getTeams(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
+  getTeamsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
     return this.cs.Team.getAll(filterDelegate);
   }
 

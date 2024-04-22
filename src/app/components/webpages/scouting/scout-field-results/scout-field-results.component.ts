@@ -61,14 +61,14 @@ export class ScoutFieldResultsComponent implements OnInit {
       this.gs.incrementOutstandingCalls();
       this.scoutResponses = new ScoutFieldResponsesReturn();
 
-      await this.ss.getFieldResponsesResponses(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+      await this.ss.getFieldResponsesResponsesFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
         if (environment.production)
           this.scoutResponses.scoutAnswers = frrs;
         else
           this.scoutResponses.scoutAnswers = frrs.slice(0, 30);
       });
 
-      await this.ss.getFieldResponsesColumns().then(frcs => {
+      await this.ss.getFieldResponsesColumnsFromCache().then(frcs => {
         this.scoutResponses.scoutCols = frcs;
 
         this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);

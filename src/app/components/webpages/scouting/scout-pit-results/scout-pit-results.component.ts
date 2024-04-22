@@ -31,7 +31,7 @@ export class ScoutPitResultsComponent implements OnInit {
   scoutPitResultsInit(): void {
     this.ss.getPitScoutingResponses().then(async success => {
 
-      await this.ss.getPitResponsesResponses().then(sprs => {
+      await this.ss.getPitResponsesResponsesFromCache().then(sprs => {
         //console.log(sprs);
         let tmp: Team[] = [];
 
@@ -52,7 +52,7 @@ export class ScoutPitResultsComponent implements OnInit {
   filter(): void {
     let teams = this.teams.filter(t => t.checked).map(t => { return t.team_no; });
 
-    this.ss.filterPitResponsesResponses(pr => teams.includes(pr.team_no)).then(prs => {
+    this.ss.filterPitResponsesResponsesFromCache(pr => teams.includes(pr.team_no)).then(prs => {
       this.scoutPitResults = prs.sort(this.ss.teamSortFunction);
     });
   }

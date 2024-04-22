@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Event, ScoutFieldSchedule } from '../../../../models/scouting.models';
+import { Schedule, ScheduleType } from '../../../../models/scouting.models';
 import { GeneralService } from 'src/app/services/general.service';
-import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/user.models';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -13,7 +13,7 @@ import { APIService } from 'src/app/services/api.service';
 })
 export class ScoutPortalComponent implements OnInit {
 
-  init: ScoutPortalInit = new ScoutPortalInit();
+  init: any; //ScoutPortalInit = new ScoutPortalInit();
   user: User = new User();
 
   scoutFieldScheduleData: any[] = [];
@@ -54,7 +54,10 @@ export class ScoutPortalComponent implements OnInit {
   ];
 
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private ss: ScoutingService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
@@ -62,6 +65,8 @@ export class ScoutPortalComponent implements OnInit {
   }
 
   portalInit(): void {
+    this.ss.loadSchedules();
+    /*
     this.api.get(true, 'scouting/portal/init/', undefined, (result: any) => {
       this.init = result as ScoutPortalInit;
       //console.log(this.init);
@@ -99,6 +104,7 @@ export class ScoutPortalComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+    */
   }
 
   showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
@@ -165,37 +171,4 @@ export class ScoutPortalComponent implements OnInit {
     }
     return false;
   }
-}
-
-export class ScoutPortalInit {
-  fieldSchedule: ScoutFieldSchedule[] = [];
-  schedule: Schedule[] = [];
-  allFieldSchedule: ScoutFieldSchedule[] = [];
-  allSchedule: ScheduleByType[] = [];
-  users: User[] = [];
-  scheduleTypes: ScheduleType[] = [];
-}
-
-export class Schedule {
-  sch_id!: number;
-  sch_typ = ''
-  sch_nm = ''
-  event_id: Event | number = new Event();
-  red_one_id!: User | number | null | any;
-  user: User | number | null | any = new User();
-  user_name = '';
-  st_time!: Date;
-  end_time!: Date;
-  notified = false;
-  void_ind = 'n';
-}
-
-export class ScheduleType {
-  sch_typ = '';
-  sch_nm = '';
-}
-
-export class ScheduleByType {
-  sch_typ = new ScheduleType();
-  sch: Schedule[] = [];
 }

@@ -39,11 +39,22 @@ export class DexieCrud<T, Tkey> {
         await this.dbSet.add(item);
     }
 
+    async AddBulkAsync(items: T[]) {
+        const batchSize = 1000;
+        let processed = 0;
+
+        while (processed < items.length) {
+            const batch = items.slice(processed, processed + batchSize);
+            await this.dbSet.bulkAdd(batch);
+            processed += batchSize;
+        }
+    }
+
     async AddOrEditAsync(item: T): Promise<void> {
         await this.dbSet.put(item);
     }
 
-    async AddBulkAsync(items: T[]) {
+    async AddOrEditBulkAsync(items: T[]) {
         const batchSize = 1000;
         let processed = 0;
 
@@ -62,7 +73,7 @@ export class DexieCrud<T, Tkey> {
         await this.dbSet.delete(id);
     }
 
-    async RemoveRangeAsync(ids: Tkey[]): Promise<void> {
+    async RemoveBulkAsync(ids: Tkey[]): Promise<void> {
         await this.dbSet.bulkDelete(ids);
     }
 

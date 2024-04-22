@@ -80,7 +80,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
     this.buildOutstandingTeamsTimeout = window.setTimeout(async () => {
       if (!teams) {
-        await this.ss.getTeams().then((ts) => {
+        await this.ss.getTeamsFromCache().then((ts) => {
           teams = ts;
         });
       }
@@ -163,7 +163,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   private setNewTeam(load: boolean): void {
-    this.ss.getScoutingQuestions('pit').then(psqs => {
+    this.ss.getScoutingQuestionsFromCache('pit').then(psqs => {
       this.previousTeam = this.scoutPitResponse.team;
       this.scoutPitResponse = new ScoutPitFormResponse();
       this.scoutPitResponse.team = this.previousTeam;

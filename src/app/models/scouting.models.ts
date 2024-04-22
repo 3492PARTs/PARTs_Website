@@ -301,3 +301,36 @@ export class ScoutPitResponsesReturn {
     current_event = new Event();
     teams: ScoutPitResponse[] = [];
 }
+
+export interface ISchedule {
+    sch_id!: number;
+sch_typ = ''
+sch_nm = ''
+event_id: Event | number = new Event();
+red_one_id!: User | number | null | any;
+user: User | number | null | any = new User();
+user_name = '';
+st_time!: Date;
+end_time!: Date;
+notified = false;
+void_ind = 'n';
+}
+
+export class Schedule {
+    sch_id!: number;
+    sch_typ = ''
+    sch_nm = ''
+    event_id: Event | number = new Event();
+    red_one_id!: User | number | null | any;
+    user: User | number | null | any = new User();
+    user_name = '';
+    st_time!: Date;
+    end_time!: Date;
+    notified = false;
+    void_ind = 'n';
+}
+
+export class ScheduleType {
+    sch_typ = '';
+    sch_nm = '';
+}
