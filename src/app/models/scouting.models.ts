@@ -303,26 +303,26 @@ export class ScoutPitResponsesReturn {
 }
 
 export interface ISchedule {
-    sch_id!: number;
-sch_typ = ''
-sch_nm = ''
-event_id: Event | number = new Event();
-red_one_id!: User | number | null | any;
-user: User | number | null | any = new User();
-user_name = '';
-st_time!: Date;
-end_time!: Date;
-notified = false;
-void_ind = 'n';
+    sch_id: number;
+    sch_typ: string;
+    sch_nm: string;
+    event_id: Event | number;
+    red_one_id: User | number | null;
+    user: User | number | null;
+    user_name: string;
+    st_time: Date;
+    end_time: Date;
+    notified: boolean;
+    void_ind: string;
 }
 
-export class Schedule {
-    sch_id!: number;
+export class Schedule implements ISchedule {
+    sch_id = NaN;
     sch_typ = ''
     sch_nm = ''
     event_id: Event | number = new Event();
-    red_one_id!: User | number | null | any;
-    user: User | number | null | any = new User();
+    red_one_id!: User | number | null;
+    user: User | number | null = new User();
     user_name = '';
     st_time!: Date;
     end_time!: Date;
