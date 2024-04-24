@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { IEvent, IMatch, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ScoutFieldFormResponse } from '../models/scouting.models';
+import { IEvent, IMatch, ISchedule, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ScoutFieldFormResponse } from '../models/scouting.models';
 import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
@@ -25,6 +25,8 @@ export class DatabaseService extends Dexie {
   // These are used for the responses page
   ScoutFieldResponsesColumnTable!: Dexie.Table<any, number>;
   ScoutFieldResponsesResponseTable!: Dexie.Table<any, number>;
+
+  ScheduleTable!: Dexie.Table<ISchedule, number>;
 
   ScoutPitFormResponseTable!: Dexie.Table<IScoutPitFormResponse, number>;
   ScoutPitResponsesResponseTable!: Dexie.Table<IScoutPitResponse, number>;
@@ -70,6 +72,8 @@ export class DatabaseService extends Dexie {
     this.ScoutFieldFormResponseTable = this.table(DBStores.ScoutFieldFormResponse.TableName);
     this.ScoutFieldResponsesColumnTable = this.table(DBStores.ScoutFieldResponsesColumn.TableName);
     this.ScoutFieldResponsesResponseTable = this.table(DBStores.ScoutFieldResponsesResponse.TableName);
+
+    this.ScheduleTable = this.table(DBStores.Schedule.TableName);
 
     this.ScoutPitFormResponseTable = this.table(DBStores.ScoutPitFormResponse.TableName);
     this.ScoutPitResponsesResponseTable = this.table(DBStores.ScoutPitResponsesResponse.TableName);

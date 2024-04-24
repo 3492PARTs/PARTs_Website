@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -479,11 +479,15 @@ export class ScoutingService {
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.api.get(loadingScreen, 'scouting/schedules/', undefined, (result: any) => {
+      this.api.get(loadingScreen, 'scouting/schedules/', undefined, async (result: any) => {
         /** 
          * On success load results and store in db 
          **/
-        console.log(result)
+        console.log(result);
+
+        await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result['field_schedule'] as ScoutFieldSchedule[]);
+        await this.cs.Schedule.AddOrEditBulkAsync(result['schedule'] as Schedule[]);
+
         resolve(true);
       }, (error: any) => {
         /** 

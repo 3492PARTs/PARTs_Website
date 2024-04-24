@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IEvent, IMatch, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam } from '../models/scouting.models';
+import { IEvent, IMatch, ISchedule, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
 import { IUser } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
@@ -24,6 +24,8 @@ export class CacheService {
   ScoutFieldResponsesColumn!: DexieCrud<any, number>;
   ScoutFieldResponsesResponse!: DexieCrud<any, number>;
 
+  Schedule!: DexieCrud<ISchedule, number>;
+
   ScoutPitFormResponse!: DexieCrud<IScoutPitFormResponse, number>;
   ScoutPitResponsesResponse!: DexieCrud<IScoutPitResponse, number>;
 
@@ -43,6 +45,8 @@ export class CacheService {
     this.ScoutFieldFormResponse = new DexieCrud<IScoutFieldFormResponse, number>(this.dbs.ScoutFieldFormResponseTable);
     this.ScoutFieldResponsesColumn = new DexieCrud<any, number>(this.dbs.ScoutFieldResponsesColumnTable);
     this.ScoutFieldResponsesResponse = new DexieCrud<any, number>(this.dbs.ScoutFieldResponsesResponseTable);
+
+    this.Schedule = new DexieCrud<ISchedule, number>(this.dbs.ScheduleTable);
 
     this.ScoutPitFormResponse = new DexieCrud<IScoutPitFormResponse, number>(this.dbs.ScoutPitFormResponseTable);
     this.ScoutPitResponsesResponse = new DexieCrud<IScoutPitResponse, number>(this.dbs.ScoutPitResponsesResponseTable);
