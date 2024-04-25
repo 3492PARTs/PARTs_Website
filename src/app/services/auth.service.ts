@@ -328,9 +328,9 @@ export class AuthService {
     });
   }
 
-  async getUserLinks() {
-    await this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
-      const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results'];
+  getUserLinks() {
+    this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
+      const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal'];
 
       switch (this.apiStatus) {
         case APIStatus.on:
@@ -358,6 +358,9 @@ export class AuthService {
                 case 'Pit Results':
                   this.ss.getPitScoutingResponses(false);
                   break;
+                case 'Portal':
+                  this.ss.loadSchedules(false);
+                  break;
               }
             });
           }
@@ -368,7 +371,7 @@ export class AuthService {
           let newUserLinks: UserLinks[] = [];
 
           // get the pages that we are able to use offline from the list of links for the user
-          this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
+          await this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
             uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
               if (ul1.order < ul2.order) return 1;
               else if (ul1.order > ul2.order) return -1;

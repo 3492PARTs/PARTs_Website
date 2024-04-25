@@ -79,6 +79,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.user.subscribe(u => this.user = u);
 
     this.auth.userLinks.subscribe((ul) => {
+      console.log(ul);
       this.userLinks = ul;
 
       this.appMenu.forEach(mi => {
@@ -94,7 +95,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
         this.appMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
-            if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+            if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) this.setActiveMenuItem(mi, mii);
           });
         });
       });
@@ -125,7 +126,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           this.resetMenuItemNames();
           this.appMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
-              if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+              if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) this.setActiveMenuItem(mi, mii);
             });
           });
         }
