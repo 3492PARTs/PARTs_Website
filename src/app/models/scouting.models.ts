@@ -92,15 +92,28 @@ export interface IMatch {
     match_number: number;
     event: IEvent;
     red_one: ITeam | number;
+    red_one_rank: number;
+    red_one_field_response: boolean;
     red_two: ITeam | number;
+    red_two_rank: number;
+    red_two_field_response: boolean;
     red_three: ITeam | number;
+    red_three_rank: number;
+    red_three_field_response: boolean;
     blue_one: ITeam | number;
+    blue_one_rank: number;
+    blue_one_field_response: boolean;
     blue_two: ITeam | number;
+    blue_two_rank: number;
+    blue_two_field_response: boolean;
     blue_three: ITeam | number;
+    blue_three_rank: number;
+    blue_three_field_response: boolean;
+
     red_score: number;
     blue_score: number;
     comp_level: string | ICompetitionLevel;
-    scout_field_result: boolean;
+
     time: Date;
     void_ind: string;
 
@@ -110,16 +123,27 @@ export class Match implements IMatch {
     match_id = '';
     match_number = NaN;
     event!: Event;
-    red_one!: Team | number;
-    red_two!: Team | number;
-    red_three!: Team | number;
-    blue_one!: Team | number;
-    blue_two!: Team | number;
-    blue_three!: Team | number;
+    red_one!: ITeam | number;
+    red_one_rank!: number;
+    red_one_field_response!: boolean;
+    red_two!: ITeam | number;
+    red_two_rank!: number;
+    red_two_field_response!: boolean;
+    red_three!: ITeam | number;
+    red_three_rank!: number;
+    red_three_field_response!: boolean;
+    blue_one!: ITeam | number;
+    blue_one_rank!: number;
+    blue_one_field_response!: boolean;
+    blue_two!: ITeam | number;
+    blue_two_rank!: number;
+    blue_two_field_response!: boolean;
+    blue_three!: ITeam | number;
+    blue_three_rank!: number;
+    blue_three_field_response!: boolean;
     red_score!: number;
     blue_score!: number;
     comp_level!: string | CompetitionLevel;
-    scout_field_result = false;
     time!: Date;
     void_ind!: string;
 
