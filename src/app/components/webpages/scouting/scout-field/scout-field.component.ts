@@ -132,6 +132,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.ss.loadTeams();
+    this.ss.loadMatches();
     this.ss.initFieldScouting();
     this.populateOutstandingResponses();
   }
