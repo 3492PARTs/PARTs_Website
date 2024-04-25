@@ -71,7 +71,7 @@ export class AuthService {
     this.authInFlightBS.next(AuthCallStates.prcs);
     userData.username = userData.username.toLocaleLowerCase();
 
-    this.api.post(true, 'user/token/', userData, (result: any) => {
+    this.api.post(true, 'user/token/', userData, async (result: any) => {
       const tmp = result as Token;
       this.tokenBS.next(tmp);
 
@@ -82,7 +82,7 @@ export class AuthService {
       localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
       localStorage.setItem(environment.loggedInHereBefore, 'hi');
 
-      this.getLoggedInUserData();
+      await this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
       if (this.gs.strNoE(returnUrl)) {
@@ -331,19 +331,19 @@ export class AuthService {
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
                   case 'Field Scouting':
-                    offlineCalls.push(this.ss.initFieldScouting(false));
+                    offlineCalls.push(this.ss.initFieldScouting());
                     break;
                   case 'Field Results':
-                    offlineCalls.push(this.ss.getFieldScoutingResponses(false));
+                    offlineCalls.push(this.ss.getFieldScoutingResponses());
                     break;
                   case 'Pit Scouting':
-                    offlineCalls.push(this.ss.initPitScouting(false));
+                    offlineCalls.push(this.ss.initPitScouting());
                     break;
                   case 'Pit Results':
-                    offlineCalls.push(this.ss.getPitScoutingResponses(false));
+                    offlineCalls.push(this.ss.getPitScoutingResponses());
                     break;
                   case 'Portal':
-                    offlineCalls.push(this.ss.loadSchedules(false));
+                    offlineCalls.push(this.ss.loadSchedules());
                     break;
                 }
               });
