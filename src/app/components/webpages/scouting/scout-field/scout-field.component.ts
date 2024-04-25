@@ -48,7 +48,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.ss.matches.subscribe(ms => {
-      this.matches = ms;
+      this.matches = this.gs.cloneObject(ms);
 
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];
@@ -234,6 +234,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   async buildTeamList(teams?: Team[]): Promise<void> {
 
     this.noMatch = false;
+
+    this.scoutFieldResponse.team = NaN;
 
     if (!teams) {
       teams = await this.cs.Team.getAll();
