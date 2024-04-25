@@ -43,11 +43,22 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
     this.ss.teams.subscribe(ts => {
       this.scoutFieldResponse.team = NaN;
-      this.buildTeamList();
+      this.teams = ts;
+      this.buildTeamList(ts);
     });
 
     this.ss.matches.subscribe(ms => {
       this.matches = ms;
+
+      for (let i = 0; i < this.matches.length; i++) {
+        const match = this.matches[i];
+
+        if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
+          match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+          this.matches.splice(i--, 1);
+        }
+      }
+
       this.scoutFieldResponse.match = null;
       this.scoutFieldResponse.team = NaN;
       this.amendMatchList();
@@ -183,76 +194,74 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   amendMatchList(): void {
-    this.cs.Match.getAll().then((ms: Match[]) => {
-      this.matches = ms;
+    this.cs.ScoutFieldFormResponse.getAll().then((sfrc: ScoutFieldFormResponse[]) => {
+      sfrc.forEach((s: ScoutFieldFormResponse) => {
+        const index = this.gs.arrayObjectIndexOf(this.matches, s.match?.match_id, 'match_id');
 
-      this.cs.ScoutFieldFormResponse.getAll().then((sfrc: ScoutFieldFormResponse[]) => {
-        sfrc.forEach((s: ScoutFieldFormResponse) => {
-          const index = this.gs.arrayObjectIndexOf(this.matches, s.match?.match_id, 'match_id');
+        if (index !== -1) {
+          let match = this.matches[index];
 
-          if (index !== -1) {
-            let match = this.matches[index];
-
-            if (match.red_one === s.team) {
-              match.red_one = NaN;
-            }
-            else if (match.red_two === s.team) {
-              match.red_two = NaN;
-            }
-            else if (match.red_three === s.team) {
-              match.red_three = NaN;
-            }
-            else if (match.blue_one === s.team) {
-              match.blue_one = NaN;
-            }
-            else if (match.blue_two === s.team) {
-              match.blue_two = NaN;
-            }
-            else if (match.blue_three === s.team) {
-              match.blue_three = NaN;
-            }
-
-            if (!match.red_one && !match.red_two && !match.red_three &&
-              !match.blue_one && !match.blue_two && !match.blue_three) {
-              this.matches.splice(index, 1);
-            }
+          if (match.red_one === s.team) {
+            match.red_one_field_response = true;
+          }
+          else if (match.red_two === s.team) {
+            match.red_two_field_response = true;
+          }
+          else if (match.red_three === s.team) {
+            match.red_three_field_response = true;
+          }
+          else if (match.blue_one === s.team) {
+            match.blue_one_field_response = true;
+          }
+          else if (match.blue_two === s.team) {
+            match.blue_two_field_response = true;
+          }
+          else if (match.blue_three === s.team) {
+            match.blue_three_field_response = true;
           }
 
-        });
+          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
+            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+            this.matches.splice(index, 1);
+          }
+        }
+
       });
     });
   }
 
-  buildTeamList(): void {
+  async buildTeamList(teams?: Team[]): Promise<void> {
 
     this.noMatch = false;
+
+    if (!teams) {
+      teams = await this.cs.Team.getAll();
+    }
     // only run if there are matchs
     if (this.scoutFieldResponse.match && this.matches.length > 0) {
 
       // get the teams for the match from the teams list
-      this.cs.Team.getAll().then((ts: Team[]) => {
-        this.teams = [];
-        ts.forEach(t => {
-          if (t.team_no === this.scoutFieldResponse.match?.blue_one) {
-            this.teams.push(t);
-          }
-          if (t.team_no === this.scoutFieldResponse.match?.blue_two) {
-            this.teams.push(t);
-          }
-          if (t.team_no == this.scoutFieldResponse.match?.blue_three) {
-            this.teams.push(t);
-          }
+      this.teams = [];
+      teams.forEach(t => {
+        if (!this.scoutFieldResponse.match?.blue_one_field_response && t.team_no === this.scoutFieldResponse.match?.blue_one) {
+          this.teams.push(t);
+        }
+        if (!this.scoutFieldResponse.match?.blue_two_field_response && t.team_no === this.scoutFieldResponse.match?.blue_two) {
+          this.teams.push(t);
+        }
+        if (!this.scoutFieldResponse.match?.blue_three_field_response && t.team_no == this.scoutFieldResponse.match?.blue_three) {
+          this.teams.push(t);
+        }
 
-          if (t.team_no === this.scoutFieldResponse.match?.red_one) {
-            this.teams.push(t);
-          }
-          if (t.team_no === this.scoutFieldResponse.match?.red_two) {
-            this.teams.push(t);
-          }
-          if (t.team_no === this.scoutFieldResponse.match?.red_three) {
-            this.teams.push(t);
-          }
-        });
+        if (!this.scoutFieldResponse.match?.red_one_field_response && t.team_no === this.scoutFieldResponse.match?.red_one) {
+          this.teams.push(t);
+        }
+        if (!this.scoutFieldResponse.match?.red_two_field_response && t.team_no === this.scoutFieldResponse.match?.red_two) {
+          this.teams.push(t);
+        }
+        if (!this.scoutFieldResponse.match?.red_three_field_response && t.team_no === this.scoutFieldResponse.match?.red_three) {
+          this.teams.push(t);
+        }
       });
 
 
@@ -283,9 +292,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       }
     }
     else {
-      this.cs.Team.getAll().then((ts: Team[]) => {
-        this.teams = this.teams.concat(ts);
-      });
+      this.teams = teams;
     }
   }
 
