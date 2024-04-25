@@ -332,6 +332,8 @@ export class AuthService {
     this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
       const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal'];
 
+      this.ss.loadMatches();
+
       switch (this.apiStatus) {
         case APIStatus.on:
           this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));

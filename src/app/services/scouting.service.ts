@@ -33,7 +33,8 @@ export class ScoutingService {
 
   private outstandingResponsesTimeout: number | undefined;
 
-  private outstandingLoadTeamCall = false;
+  private outstandingLoadTeamsCall = false;
+  private outstandingLoadMatchesCall = false;
   private outstandingInitFieldScoutingCall = false;
   private outstandingInitPitScoutingCall = false;
   private outstandingLoadScheduleCall = false;
@@ -102,8 +103,8 @@ export class ScoutingService {
 
   // Load Teams -----------------------------------------------------------
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
-    if (!this.outstandingLoadTeamCall) {
-      this.outstandingLoadTeamCall = true;
+    if (!this.outstandingLoadTeamsCall) {
+      this.outstandingLoadTeamsCall = true;
 
       return new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'scouting/teams/', undefined, async (result: any) => {
@@ -136,9 +137,9 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingLoadTeamCall = false;
+          this.outstandingLoadTeamsCall = false;
         }, () => {
-          this.outstandingLoadTeamCall = false;
+          this.outstandingLoadTeamsCall = false;
         });
       });
     }
@@ -148,6 +149,49 @@ export class ScoutingService {
     this.teamsBS.next(ts);
     await this.cs.Team.RemoveAllAsync();
     await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
+  }
+
+  // Load Matches -----------------------------------------------------------
+  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
+    if (!this.outstandingLoadMatchesCall) {
+      this.outstandingLoadMatchesCall = true;
+
+      return new Promise<boolean>(resolve => {
+        this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: any) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          console.log(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(true);
+        }, (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          this.getTeamsFromCache().then((ts: Team[]) => {
+            this.teamsBS.next(ts);
+            if (ts.length <= 0) allLoaded = false;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
+            resolve(false);
+          }
+          else
+            resolve(true);
+
+          this.outstandingLoadMatchesCall = false;
+        }, () => {
+          this.outstandingLoadMatchesCall = false;
+        });
+      });
+    }
   }
 
   // Field Scouting -----------------------------------------------------------
@@ -488,8 +532,6 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          console.log(result);
-
           await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result.field_schedule);
           await this.cs.Schedule.AddOrEditBulkAsync(result.schedule);
           this.scheduleTypesBS.next(result.schedule_types);

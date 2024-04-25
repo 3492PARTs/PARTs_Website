@@ -79,7 +79,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.user.subscribe(u => this.user = u);
 
     this.auth.userLinks.subscribe((ul) => {
-      console.log(ul);
       this.userLinks = ul;
 
       this.appMenu.forEach(mi => {
