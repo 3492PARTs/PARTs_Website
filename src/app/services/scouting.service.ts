@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules, IMatch, ITeam } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -124,7 +124,6 @@ export class ScoutingService {
 
           this.getTeamsFromCache().then((ts: Team[]) => {
             this.teamsBS.next(ts);
-            if (ts.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -151,17 +150,28 @@ export class ScoutingService {
     await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
   }
 
+  getTeamsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeam[]> {
+    return this.cs.Team.getAll(filterDelegate);
+  }
+
+  teamSortFunction(t1: Team | ScoutPitResponse, t2: Team | ScoutPitResponse): number {
+    if (t1.team_no < t2.team_no) return -1;
+    else if (t1.team_no > t2.team_no) return 1;
+    else return 0;
+  }
+
   // Load Matches -----------------------------------------------------------
   loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
     if (!this.outstandingLoadMatchesCall) {
       this.outstandingLoadMatchesCall = true;
 
       return new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: any) => {
+        this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
            **/
           console.log(result);
+          await this.updateMatches(result);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -171,9 +181,8 @@ export class ScoutingService {
            **/
           let allLoaded = true;
 
-          this.getTeamsFromCache().then((ts: Team[]) => {
-            this.teamsBS.next(ts);
-            if (ts.length <= 0) allLoaded = false;
+          this.getMatchesFromCache().then((ms: Match[]) => {
+            this.matchesBS.next(ms);
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -192,6 +201,16 @@ export class ScoutingService {
         });
       });
     }
+  }
+
+  private async updateMatches(ms: Match[]): Promise<void> {
+    this.matchesBS.next(ms);
+    await this.cs.Match.RemoveAllAsync();
+    await this.cs.Match.AddOrEditBulkAsync(ms);
+  }
+
+  getMatchesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatch[]> {
+    return this.cs.Match.getAll(filterDelegate);
   }
 
   // Field Scouting -----------------------------------------------------------
@@ -637,13 +656,5 @@ export class ScoutingService {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
   }
 
-  getTeamsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
-    return this.cs.Team.getAll(filterDelegate);
-  }
 
-  teamSortFunction(t1: Team | ScoutPitResponse, t2: Team | ScoutPitResponse): number {
-    if (t1.team_no < t2.team_no) return -1;
-    else if (t1.team_no > t2.team_no) return 1;
-    else return 0;
-  }
 }
