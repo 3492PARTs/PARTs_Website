@@ -107,10 +107,11 @@ export class MatchPlanningComponent implements OnInit {
     /*this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
       this.initData = (result as Init);
     });*/
-
-
-
-
+    this.gs.incrementOutstandingCalls();
+    let p = this.ss.loadMatches();
+    if (p) p.then(success => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   saveNote(): void {

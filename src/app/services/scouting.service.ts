@@ -35,6 +35,7 @@ export class ScoutingService {
 
   private outstandingLoadTeamsCall = false;
   private outstandingLoadMatchesCall = false;
+  private outstandingLoadMatchesPromise: Promise<boolean> | null = null;
   private outstandingInitFieldScoutingCall = false;
   private outstandingInitPitScoutingCall = false;
   private outstandingLoadScheduleCall = false;
@@ -169,11 +170,11 @@ export class ScoutingService {
   }
 
   // Load Matches -----------------------------------------------------------
-  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
+  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | null {
     if (!this.outstandingLoadMatchesCall) {
       this.outstandingLoadMatchesCall = true;
 
-      return new Promise<boolean>(resolve => {
+      this.outstandingLoadMatchesPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
@@ -204,11 +205,14 @@ export class ScoutingService {
             resolve(true);
 
           this.outstandingLoadMatchesCall = false;
+          this.outstandingLoadMatchesPromise = null;
         }, () => {
           this.outstandingLoadMatchesCall = false;
+          this.outstandingLoadMatchesPromise = null;
         });
       });
     }
+    return this.outstandingLoadMatchesPromise;
   }
 
   private async updateMatches(ms: Match[]): Promise<void> {

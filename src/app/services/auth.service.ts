@@ -331,25 +331,25 @@ export class AuthService {
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
                   case 'Field Scouting':
-                    offlineCalls.push(this.ss.initFieldScouting());
+                    offlineCalls.push(this.ss.initFieldScouting(false));
                     break;
                   case 'Field Results':
-                    offlineCalls.push(this.ss.getFieldScoutingResponses());
+                    offlineCalls.push(this.ss.getFieldScoutingResponses(false));
                     break;
                   case 'Pit Scouting':
-                    offlineCalls.push(this.ss.initPitScouting());
+                    offlineCalls.push(this.ss.initPitScouting(false));
                     break;
                   case 'Pit Results':
-                    offlineCalls.push(this.ss.getPitScoutingResponses());
+                    offlineCalls.push(this.ss.getPitScoutingResponses(false));
                     break;
                   case 'Portal':
-                    offlineCalls.push(this.ss.loadSchedules());
+                    offlineCalls.push(this.ss.loadSchedules(false));
                     break;
                 }
               });
             }
 
-            await Promise.all(offlineCalls);
+            //await Promise.all(offlineCalls);
 
             break;
 
