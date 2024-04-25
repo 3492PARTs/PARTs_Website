@@ -200,51 +200,31 @@ export class ScoutingService {
       this.outstandingInitFieldScoutingCall = true;
 
       return new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/field/init/', undefined, async (result: any) => {
+        this.api.get(loadingScreen, 'form/get-questions/', {
+          form_typ: 'field',
+          active: 'y'
+        }, (result: any) => {
           /** 
            * On success load results and store in db 
            **/
-          this.scoutFieldScheduleBS.next(result['scoutFieldSchedule'] || new ScoutFieldSchedule());
-          //await this.cs.ScoutFieldSchedule.RemoveAllAsync();
-          if (!Number.isNaN(this.scoutFieldScheduleBS.value.scout_field_sch_id))
-            await this.cs.ScoutFieldSchedule.AddOrEditAsync(this.scoutFieldScheduleBS.value);
+          this.fieldScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
-
-          this.fieldScoutingQuestionsBS.next(result['scoutQuestions'] as QuestionWithConditions[]);
           let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-
-          await this.cs.QuestionWithConditions.RemoveBulkAsync(ids);
-          await this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.fieldScoutingQuestionsBS.value);
-
-          this.matchesBS.next(result['matches'] as Match[]);
-          await this.cs.Match.RemoveAllAsync();
-          await this.cs.Match.AddOrEditBulkAsync(this.matchesBS.value);
+          this.cs.QuestionWithConditions.RemoveBulkAsync(ids).then(() => {
+            this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.fieldScoutingQuestionsBS.value);
+          });
 
           if (callbackFn) callbackFn(result);
           resolve(true);
-        }, (error: any) => {
+        }, (err: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
 
-          this.cs.Match.getAll().then((ms: Match[]) => {
-            this.matchesBS.next(ms);
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
-
-          this.cs.ScoutFieldSchedule.getAll().then((sfss: ScoutFieldSchedule[]) => {
-            sfss.forEach(sfs => this.scoutFieldScheduleBS.next(sfs));
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
-
-          this.getScoutingQuestionsFromCache('field').then((sfqs: QuestionWithConditions[]) => {
-            this.fieldScoutingQuestionsBS.next(sfqs);
-            if (sfqs.length <= 0) allLoaded = false;
+          this.getScoutingQuestionsFromCache('field').then((spqs: QuestionWithConditions[]) => {
+            this.fieldScoutingQuestionsBS.next(spqs);
+            if (spqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
