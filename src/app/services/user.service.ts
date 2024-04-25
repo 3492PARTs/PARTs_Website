@@ -10,9 +10,6 @@ import { APIService } from './api.service';
 })
 export class UserService {
 
-  private users = new BehaviorSubject<User[]>([]);
-  currentUsers = this.users.asObservable();
-
   private groups = new BehaviorSubject<AuthGroup[]>([]);
   currentGroups = this.groups.asObservable();
 
@@ -21,12 +18,16 @@ export class UserService {
 
   constructor(private api: APIService, private gs: GeneralService) { }
 
-  getUsers(is_active = 0, is_admin = 0) {
-    this.api.get(true, 'user/users/', {
-      is_active: is_active,
-      is_admin: is_admin
-    }, (result: any) => {
-      this.users.next(result as User[]);
+  getUsers(is_active = 0, is_admin = 0): Promise<User[] | null> {
+    return new Promise<User[] | null>(resolve => {
+      this.api.get(true, 'user/users/', {
+        is_active: is_active,
+        is_admin: is_admin
+      }, (result: User[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
     });
   }
 
@@ -40,6 +41,14 @@ export class UserService {
       this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
       if (fn) fn();
     });
+  }
+
+  getUserGroups(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
+    if (userId) {
+      this.api.get(true, 'user/groups/', {
+        user_id: userId
+      }, onNext, onError);
+    }
   }
 
   getGroups() {
@@ -64,6 +73,14 @@ export class UserService {
       if (fn) fn();
       this.getGroups();
     });
+  }
+
+  getUserPermissions(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
+    if (userId) {
+      this.api.get(true, 'user/permissions/', {
+        user_id: userId
+      }, onNext, onError);
+    }
   }
 
   getPermissions() {

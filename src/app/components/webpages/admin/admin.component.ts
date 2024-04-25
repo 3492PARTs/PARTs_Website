@@ -142,7 +142,9 @@ export class AdminComponent implements OnInit {
           this.getResponses('team-cntct');
           break;
         case 'security':
-          this.us.getUsers(1, 1);
+          this.us.getUsers(1, 1).then(us => {
+            this.users = us || [];
+          });;
           this.us.getGroups();
           this.us.getPermissions();
           this.runSecurityAudit();
@@ -150,7 +152,6 @@ export class AdminComponent implements OnInit {
       }
     });
 
-    this.us.currentUsers.subscribe(u => this.users = u);
     this.us.currentGroups.subscribe(g => this.groups = g);
     this.us.currentPermissions.subscribe(p => this.permissions = p);
   }
@@ -182,13 +183,15 @@ export class AdminComponent implements OnInit {
   }
 
   getUsers() {
-    this.us.getUsers(this.userOption, this.adminOption);
+    this.us.getUsers(this.userOption, this.adminOption).then(us => {
+      this.users = us || [];
+    });
   }
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.authService.getUserGroups(u.id.toString(), (result: any) => {
+    this.us.getUserGroups(u.id.toString(), (result: any) => {
       this.userGroups = result as AuthGroup[];
       this.buildAvailableUserGroups();
     }, (err: any) => {
@@ -221,7 +224,9 @@ export class AdminComponent implements OnInit {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
-      this.us.getUsers(this.userOption, this.adminOption);
+      this.us.getUsers(this.userOption, this.adminOption).then(us => {
+        this.users = us || [];
+      });
     });
   }
 

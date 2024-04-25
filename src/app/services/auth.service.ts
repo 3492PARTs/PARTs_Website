@@ -6,7 +6,7 @@ import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
-import { IUser, User } from '../models/user.models';
+import { AuthPermission, IUser, User } from '../models/user.models';
 import { CacheService } from './cache.service';
 import { IUserLinks, UserLinks } from '../models/navigation.models';
 import { DataService } from './data.service';
@@ -14,6 +14,7 @@ import Dexie from 'dexie';
 import { APIService } from './api.service';
 import { APIStatus } from '../models/api.models';
 import { ScoutingService } from './scouting.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,9 @@ export class AuthService {
 
   private userBS = new BehaviorSubject<User>(new User());
   user = this.userBS.asObservable();
+
+  private userPermissionsBS = new BehaviorSubject<AuthPermission[]>([]);
+  userPermissions = this.userPermissionsBS.asObservable();
 
   private userLinksBS = new BehaviorSubject<UserLinks[]>([]);
   userLinks = this.userLinksBS.asObservable();
@@ -45,7 +49,8 @@ export class AuthService {
     private ns: NotificationsService,
     private cs: CacheService,
     private ds: DataService,
-    private ss: ScoutingService) {
+    private ss: ScoutingService,
+    private us: UserService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -255,14 +260,6 @@ export class AuthService {
     }
   }*/
 
-  getUserGroups(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
-    if (userId) {
-      this.api.get(true, 'user/groups/', {
-        user_id: userId
-      }, onNext, onError);
-    }
-  }
-
   getTokenLoad(tkn: string): TokenLoad {
     const tokenParts = tkn.split(/\./);
     const tokenDecoded = JSON.parse(window.atob(tokenParts[1]));
@@ -293,6 +290,7 @@ export class AuthService {
 
   getLoggedInUserData(): void {
     this.getUser();
+
     this.getUserLinks();
     this.ns.getUserAlerts('notification');
     this.ns.getUserAlerts('message');
@@ -301,16 +299,27 @@ export class AuthService {
   getUser() {
     this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
       return u.where({ 'id': this.getTokenLoad(this.tokenBS.value.refresh).user_id })
-    }, (result: any) => {
+    }, (result: User) => {
       // console.log(Response);
       if (Array.isArray(result))
         result = result[0];
       result = (result as User);
 
       if (result.id > 0) {
-        this.userBS.next(result as User);
-        this.cs.User.AddOrEditAsync(result as User);
+        this.userBS.next(result);
+        this.cs.User.AddOrEditAsync(result);
         this.authInFlightBS.next(AuthCallStates.comp);
+
+        this.us.getUserPermissions(result.id.toString(), async (result: AuthPermission[]) => {
+          this.userPermissionsBS.next(result);
+          await this.cs.UserPermissions.RemoveAllAsync();
+          this.cs.UserPermissions.AddBulkAsync(result);
+        }, (err: any) => {
+          this.cs.UserPermissions.getAll().then(ups => {
+            this.userPermissionsBS.next(ups);
+          });
+
+        });
       }
       else {
         this.authInFlightBS.next(AuthCallStates.err);
@@ -321,8 +330,8 @@ export class AuthService {
     });
   }
 
-  getUserLinks() {
-    this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
+  async getUserLinks() {
+    await this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: any) => {
       const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results'];
 
       switch (this.apiStatus) {

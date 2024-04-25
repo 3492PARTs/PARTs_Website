@@ -1,7 +1,7 @@
 import { QuestionWithConditions } from "./form.models";
 import { UserLinks } from "./navigation.models";
 import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule } from "./scouting.models";
-import { User } from "./user.models";
+import { AuthPermission, User } from "./user.models";
 
 export class LoadedStores {
     Id: number;
@@ -19,6 +19,7 @@ function generateColumns<T extends Record<string, any>>(instance: T): string {
 }
 
 const userInstance = new User();
+const userPermissionsInstance = new AuthPermission();
 const userLinksInstance = new UserLinks('', '');
 
 const seasonInstance = new Season();
@@ -36,6 +37,10 @@ export const DBStores = {
     User: {
         TableName: 'User',
         Columns: generateColumns(userInstance),
+    },
+    UserPermissions: {
+        TableName: 'UserPermissions',
+        Columns: generateColumns(userPermissionsInstance),
     },
     UserLinks: {
         TableName: 'UserLinks',

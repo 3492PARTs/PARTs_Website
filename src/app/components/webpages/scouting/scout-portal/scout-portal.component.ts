@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Schedule, ScheduleType } from '../../../../models/scouting.models';
+import { Schedule, ScheduleByType, ScheduleType, Schedules, ScoutFieldSchedule } from '../../../../models/scouting.models';
 import { GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user.models';
+import { AuthPermission, User } from 'src/app/models/user.models';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-scout-portal',
@@ -13,10 +14,23 @@ import { ScoutingService } from 'src/app/services/scouting.service';
 })
 export class ScoutPortalComponent implements OnInit {
 
-  init: any; //ScoutPortalInit = new ScoutPortalInit();
+  schedules = new Schedules();
   user: User = new User();
+  userPermissions: AuthPermission[] = [];
 
-  scoutFieldScheduleData: any[] = [];
+  users: User[] | null = [];
+
+  scheduleByType: ScheduleByType[] = [];
+  schedule: Schedule[] = [];
+  fieldSchedule: {
+    position: string,
+    st_time: Date,
+    end_time: Date,
+    notification1: boolean,
+    notification2: boolean,
+    notification3: boolean,
+  }[] = [];
+
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
@@ -57,15 +71,67 @@ export class ScoutPortalComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
-    private ss: ScoutingService) { }
+    private ss: ScoutingService,
+    private us: UserService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
     this.authService.user.subscribe(u => this.user = u);
+    this.authService.userPermissions.subscribe(ups => this.userPermissions = ups);
   }
 
   portalInit(): void {
-    this.ss.loadSchedules();
+    this.ss.loadSchedules().then(ss => {
+      if (ss) {
+        this.schedules = ss;
+
+        this.schedule = this.schedules.schedule.filter(s => (s.user as User).id = this.user.id);
+
+        this.schedules.field_schedule.forEach(fs => {
+          let pos = '';
+          if ((fs.red_one_id as User)?.id === this.user.id) {
+            pos = 'red one'
+          }
+          else if ((fs.red_two_id as User)?.id === this.user.id) {
+            pos = 'red two'
+          }
+          else if ((fs.red_three_id as User)?.id === this.user.id) {
+            pos = 'red three'
+          }
+          else if ((fs.blue_one_id as User)?.id === this.user.id) {
+            pos = 'blue one'
+          }
+          else if ((fs.blue_two_id as User)?.id === this.user.id) {
+            pos = 'blue two'
+          }
+          else if ((fs.blue_three_id as User)?.id === this.user.id) {
+            pos = 'blue three'
+          }
+
+          if (!this.gs.strNoE(pos)) {
+            this.fieldSchedule.push({
+              position: pos,
+              st_time: new Date(fs.st_time),
+              end_time: new Date(fs.end_time),
+              notification1: fs.notification1,
+              notification2: fs.notification2,
+              notification3: fs.notification3,
+            });
+          }
+        })
+
+        if (this.userPermissions.map(up => up.name).includes('scheduling')) {
+          this.us.getUsers(1, 0).then(us => {
+            this.users = us;
+          });
+
+          this.schedules.schedule_types.forEach(st => {
+            const tmp = this.schedules.schedule.filter(s => s.sch_typ = st.sch_typ);
+            this.scheduleByType.push({ sch_typ: st, schedule: tmp })
+          });
+        }
+      }
+    });
     /*
     this.api.get(true, 'scouting/portal/init/', undefined, (result: any) => {
       this.init = result as ScoutPortalInit;

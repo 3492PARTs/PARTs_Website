@@ -334,3 +334,15 @@ export class ScheduleType {
     sch_typ = '';
     sch_nm = '';
 }
+
+
+export class Schedules {
+    field_schedule: ScoutFieldSchedule[] = [];
+    schedule: Schedule[] = [];
+    schedule_types: ScheduleType[] = [];
+}
+
+export class ScheduleByType {
+    schedule: Schedule[] = [];
+    sch_typ = new ScheduleType();
+}

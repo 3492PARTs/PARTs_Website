@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -25,6 +25,9 @@ export class ScoutingService {
   private fieldScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
   fieldScoutingQuestions = this.fieldScoutingQuestionsBS.asObservable();
 
+  private scheduleTypesBS = new BehaviorSubject<ScheduleType[]>([]);
+  scheduleTypes = this.scheduleTypesBS.asObservable();
+
   private pitScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
   pitScoutingQuestions = this.pitScoutingQuestionsBS.asObservable();
 
@@ -33,6 +36,7 @@ export class ScoutingService {
   private outstandingLoadTeamCall = false;
   private outstandingInitFieldScoutingCall = false;
   private outstandingInitPitScoutingCall = false;
+  private outstandingLoadScheduleCall = false;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<boolean>(false);
@@ -477,44 +481,69 @@ export class ScoutingService {
   }
 
   // Schedules -------------------------------------------------------------------------
-  loadSchedules(loadingScreen = true): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.api.get(loadingScreen, 'scouting/schedules/', undefined, async (result: any) => {
-        /** 
-         * On success load results and store in db 
-         **/
-        console.log(result);
+  loadSchedules(loadingScreen = true): Promise<Schedules | null> {
+    if (!this.outstandingLoadScheduleCall)
+      return new Promise<Schedules | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/schedules/', undefined, async (result: Schedules) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          console.log(result);
 
-        await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result['field_schedule'] as ScoutFieldSchedule[]);
-        await this.cs.Schedule.AddOrEditBulkAsync(result['schedule'] as Schedule[]);
+          await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result.field_schedule);
+          await this.cs.Schedule.AddOrEditBulkAsync(result.schedule);
+          this.scheduleTypesBS.next(result.schedule_types);
 
-        resolve(true);
-      }, (error: any) => {
-        /** 
-         * On fail load results from db
-         **/
-        let allLoaded = true;
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
 
-        this.getTeamsFromCache().then((ts: Team[]) => {
-          this.teamsBS.next(ts);
-          if (ts.length <= 0) allLoaded = false;
-        }).catch((reason: any) => {
-          console.log(reason);
-          allLoaded = false;
+          const result = new Schedules();
+
+          await this.cs.ScoutFieldSchedule.getAll().then(sfss => {
+            result.field_schedule = sfss;
+          }).catch(reason => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.cs.Schedule.getAll().then(ss => {
+            result.schedule = ss;
+          }).catch(reason => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (allLoaded) resolve(result);
+          else resolve(null);
+          this.outstandingLoadScheduleCall = false;
+        }, () => {
+          this.outstandingLoadScheduleCall = false;
+        });
+      });
+    else
+      return new Promise<Schedules | null>(async resolve => {
+        while (this.outstandingLoadScheduleCall) {
+          continue;
+        }
+
+        const result = new Schedules();
+
+        await this.cs.ScoutFieldSchedule.getAll().then(sfss => {
+          result.field_schedule = sfss;
         });
 
-        if (!allLoaded) {
-          this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-          resolve(false);
-        }
-        else
-          resolve(true);
+        await this.cs.Schedule.getAll().then(ss => {
+          result.schedule = ss;
+        });
 
-        this.outstandingLoadTeamCall = false;
-      }, () => {
-        this.outstandingLoadTeamCall = false;
+        result.schedule_types = this.scheduleTypesBS.value;
+
+        resolve(result);
       });
-    });
   }
   // Portal -------------------------------------------------------------------
   initPortal(loadingScreen = true): Promise<boolean> | void {

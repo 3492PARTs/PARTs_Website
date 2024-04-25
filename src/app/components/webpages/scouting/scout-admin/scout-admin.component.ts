@@ -165,10 +165,14 @@ export class ScoutAdminComponent implements OnInit {
 
       switch (this.page) {
         case 'users':
-          this.us.getUsers(1);
+          this.us.getUsers(1).then(us => {
+            this.users = us || [];
+          });
           break;
         case 'mngSch':
-          this.us.getUsers(1, 1);
+          this.us.getUsers(1, 1).then(us => {
+            this.users = us || [];
+          });
           break;
         case 'scoutAct':
           this.getScoutingActivity();
@@ -188,7 +192,6 @@ export class ScoutAdminComponent implements OnInit {
           break;
       }
     });
-    this.us.currentUsers.subscribe(u => this.users = u);
   }
 
   ngOnInit() {
@@ -393,7 +396,7 @@ export class ScoutAdminComponent implements OnInit {
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.authService.getUserGroups(u.id.toString(), (result: any) => {
+    this.us.getUserGroups(u.id.toString(), (result: any) => {
       if (this.gs.checkResponse(result)) {
         this.userGroups = result as AuthGroup[];
         this.buildAvailableUserGroups();
@@ -443,7 +446,9 @@ export class ScoutAdminComponent implements OnInit {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
-      this.us.getUsers(1);
+      this.us.getUsers(1).then(us => {
+        this.users = us || [];
+      });
     });
   }
 

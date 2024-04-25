@@ -4,7 +4,7 @@ import { IEvent, IMatch, ISchedule, IScoutFieldFormResponse, IScoutFieldSchedule
 import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
-import { IUser } from '../models/user.models';
+import { IAuthPermission, IUser } from '../models/user.models';
 import { IUserLinks } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
 
@@ -13,6 +13,7 @@ import { IQuestionWithConditions } from '../models/form.models';
 })
 export class DatabaseService extends Dexie {
   UserTable!: Dexie.Table<IUser, number>;
+  UserPermissionsTable!: Dexie.Table<IAuthPermission, number>;
   UserLinksTable!: Dexie.Table<IUserLinks, number>;
 
   SeasonTable!: Dexie.Table<ISeason, number>;
@@ -61,6 +62,7 @@ export class DatabaseService extends Dexie {
     this.gs.devConsoleLog('app-database.service', 'database initialized');
 
     this.UserTable = this.table(DBStores.User.TableName);
+    this.UserPermissionsTable = this.table(DBStores.UserPermissions.TableName);
     this.UserLinksTable = this.table(DBStores.UserLinks.TableName);
 
     this.SeasonTable = this.table(DBStores.Season.TableName);

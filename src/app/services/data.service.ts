@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { IEntitySyncDTO } from '../models/dexie.models';
 import { CacheService } from './cache.service';
 import { APIService } from './api.service';
@@ -13,9 +13,9 @@ export class DataService {
   constructor(private cacheService: CacheService, private api: APIService) { }
 
   async get(loadingScreen: boolean, endpoint: string, params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } | undefined = undefined, repo: string, filterDelegate: any = undefined,
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => Observable<any>,
   ) {
-    this.api.get(loadingScreen, endpoint, params, (result: any) => {
+    return this.api.get(loadingScreen, endpoint, params, (result: any) => {
       if (onNext) onNext(result);
     }, async (error: any) => {
 

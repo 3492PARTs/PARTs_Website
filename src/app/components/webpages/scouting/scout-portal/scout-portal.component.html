@@ -1,16 +1,15 @@
 <app-box [Title]="'Portal'">
-  <!--
-  <app-form-element-group [LabelText]="'Full Scouting Schedule'" *ngIf="init.users && init.users.length > 0">
-    <app-table *ngIf="init.allFieldSchedule && init.allFieldSchedule.length > 0"
-      [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="init.allFieldSchedule" [Scrollable]="true"
-      [EnableFilter]="true">
+
+  <app-form-element-group [LabelText]="'Full Scouting Schedule'" *ngIf="users">
+    <app-table [TableCols]="expandedScoutFieldScheduleTableCols" [TableData]="schedules.field_schedule"
+      [Scrollable]="true" [EnableFilter]="true">
     </app-table>
   </app-form-element-group>
 
-  <ng-container *ngIf="init.users && init.users.length > 0">
+  <ng-container *ngIf="users">
     <app-form-element-group [LabelText]="'All Subgroup Schedules'">
-      <app-table *ngFor="let sch of init.allSchedule" [TableTitle]="sch.sch_typ.sch_nm"
-        [TableCols]="expandedScheduleTableCols" [TableData]="sch.sch" [Scrollable]="true" [ShowAddButton]="true"
+      <app-table *ngFor="let sch of scheduleByType" [TableTitle]="sch.sch_typ.sch_nm"
+        [TableCols]="expandedScheduleTableCols" [TableData]="sch.schedule" [Scrollable]="true" [ShowAddButton]="true"
         (AddRecordCallBack)="showScoutScheduleModal(sch.sch_typ)" [ShowEditButton]="true"
         (EditRecordCallBack)="showScoutScheduleModal(sch.sch_typ, $event)" [EnableFilter]="true">
       </app-table>
@@ -19,14 +18,14 @@
         <app-form>
           <app-form-element-group>
             <app-form (SubmitFunction)="saveScheduleEntry()">
-              <app-form-element [LabelText]="'User'" [FormGroup]="true" [Type]="'select'" [SelectList]="init.users"
+              <app-form-element [LabelText]="'User'" [FormGroup]="true" [Type]="'select'" [SelectList]="users"
                 [DisplayProperty]="'first_name'" [DisplayProperty2]="'last_name'" [DisplayEmptyOption]="true"
                 [(Model)]="currentSchedule.user" [FormGroupInline]="true"
                 [SelectComparatorFunction]="compareUserObjects" [Required]="true">
               </app-form-element>
 
               <app-form-element [LabelText]="'Type'" [FormGroup]="true" [Type]="'select'"
-                [SelectList]="init.scheduleTypes" [DisplayProperty]="'sch_nm'" [BindingProperty]="'sch_typ'"
+                [SelectList]="schedules.schedule_types" [DisplayProperty]="'sch_nm'" [BindingProperty]="'sch_typ'"
                 [(Model)]="currentSchedule.sch_typ" [FormGroupInline]="true" [Required]="true">
               </app-form-element>
 
@@ -58,23 +57,22 @@
   </ng-container>
 
   <app-form-element-group [LabelText]="'Your Scouting Schedule'">
-    <div *ngIf="scoutFieldScheduleData.length <= 0">
+    <div *ngIf="fieldSchedule.length <= 0">
       <p>You do not currently have any scheduled scouting.</p>
     </div>
 
-    <app-table *ngIf="scoutFieldScheduleData && scoutFieldScheduleData.length > 0"
-      [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldScheduleData" [Scrollable]="true">
+    <app-table *ngIf="fieldSchedule.length > 0" [TableCols]="scoutFieldScheduleTableCols" [TableData]="fieldSchedule"
+      [Scrollable]="true">
     </app-table>
   </app-form-element-group>
 
   <app-form-element-group [LabelText]="'Your Pit Schedule'">
-    <div *ngIf="init.schedule && init.schedule.length <= 0">
+    <div *ngIf="schedule.length <= 0">
       <p>You do not currently have any scheduled pit times.</p>
     </div>
 
-    <app-table *ngIf="init.schedule && init.schedule.length > 0" [TableCols]="scheduleTableCols"
-      [TableData]="init.schedule" [Scrollable]="true">
+    <app-table *ngIf="schedule.length > 0" [TableCols]="scheduleTableCols" [TableData]="schedule" [Scrollable]="true">
     </app-table>
   </app-form-element-group>
--->
+
 </app-box>

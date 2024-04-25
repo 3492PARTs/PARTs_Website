@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
 import { IEvent, IMatch, ISchedule, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
-import { IUser } from '../models/user.models';
+import { IAuthPermission, IUser } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
 import { IUserLinks } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
@@ -12,6 +12,7 @@ import { IQuestionWithConditions } from '../models/form.models';
 })
 export class CacheService {
   User!: DexieCrud<IUser, number>;
+  UserPermissions!: DexieCrud<IAuthPermission, number>;
   UserLinks!: DexieCrud<IUserLinks, number>;
 
   Season!: DexieCrud<ISeason, number>;
@@ -35,6 +36,7 @@ export class CacheService {
 
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<IUser, number>(this.dbs.UserTable);
+    this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
     this.UserLinks = new DexieCrud<IUserLinks, number>(this.dbs.UserLinksTable);
 
     this.Season = new DexieCrud<ISeason, number>(this.dbs.SeasonTable);
