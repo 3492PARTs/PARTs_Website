@@ -322,7 +322,7 @@ export class Schedule implements ISchedule {
     sch_nm = ''
     event_id: Event | number = new Event();
     red_one_id!: User | number | null;
-    user: User | number | null = new User();
+    user: User | number | null = null;
     user_name = '';
     st_time!: Date;
     end_time!: Date;

@@ -6,10 +6,10 @@ export interface IAuthPermission {
 }
 
 export class AuthPermission implements IAuthPermission {
-    id!: number;
-    codename!: string;
-    content_type!: number;
-    name!: string;
+    id = NaN;
+    codename = '';
+    content_type = NaN;
+    name = '';
 }
 
 export interface IAuthGroup {

@@ -85,8 +85,9 @@ export class ScoutPortalComponent implements OnInit {
       if (ss) {
         this.schedules = ss;
 
-        this.schedule = this.schedules.schedule.filter(s => (s.user as User).id = this.user.id);
+        this.schedule = this.schedules.schedule.filter(s => (s.user as User).id === this.user.id);
 
+        this.fieldSchedule = [];
         this.schedules.field_schedule.forEach(fs => {
           let pos = '';
           if ((fs.red_one_id as User)?.id === this.user.id) {
@@ -120,14 +121,15 @@ export class ScoutPortalComponent implements OnInit {
           }
         })
 
-        if (this.userPermissions.map(up => up.name).includes('scheduling')) {
+        if (this.userPermissions.map(up => up.codename).includes('scheduling')) {
           this.us.getUsers(1, 0).then(us => {
             this.users = us;
           });
 
+          this.scheduleByType = [];
           this.schedules.schedule_types.forEach(st => {
-            const tmp = this.schedules.schedule.filter(s => s.sch_typ = st.sch_typ);
-            this.scheduleByType.push({ sch_typ: st, schedule: tmp })
+            const tmp = this.schedules.schedule.filter(s => s.sch_typ === st.sch_typ);
+            if (tmp) this.scheduleByType.push({ sch_typ: st, schedule: tmp })
           });
         }
       }

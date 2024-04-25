@@ -290,7 +290,6 @@ export class AuthService {
 
   getLoggedInUserData(): void {
     this.getUser();
-
     this.getUserLinks();
     this.ns.getUserAlerts('notification');
     this.ns.getUserAlerts('message');
@@ -318,7 +317,6 @@ export class AuthService {
           this.cs.UserPermissions.getAll().then(ups => {
             this.userPermissionsBS.next(ups);
           });
-
         });
       }
       else {
