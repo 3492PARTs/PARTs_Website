@@ -372,3 +372,22 @@ export class ScheduleByType {
     schedule: Schedule[] = [];
     sch_typ = new ScheduleType();
 }
+
+export class TeamNote {
+    team_note_id!: number;
+    event!: Event | number;
+    team_no!: Team | number;
+    match!: Match | number;
+    user!: User | number;
+    note = '';
+    time!: Date;
+    void_ind = 'n';
+}
+
+export class MatchPlanning {
+    team!: Team;
+    pitData = new ScoutPitResponse();
+    scoutAnswers!: any;
+    notes: TeamNote[] = [];
+    alliance = '';
+}

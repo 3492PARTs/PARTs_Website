@@ -150,8 +150,16 @@ export class ScoutingService {
     await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
   }
 
+  getTeamFromCache(id: number): PromiseExtended<ITeam | undefined> {
+    return this.cs.Team.getById(id);
+  }
+
   getTeamsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeam[]> {
     return this.cs.Team.getAll(filterDelegate);
+  }
+
+  filterTeamsFromCache(fn: (obj: Team) => boolean): PromiseExtended<Team[]> {
+    return this.cs.Team.filterAll(fn);
   }
 
   teamSortFunction(t1: Team | ScoutPitResponse, t2: Team | ScoutPitResponse): number {
@@ -211,6 +219,10 @@ export class ScoutingService {
 
   getMatchesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatch[]> {
     return this.cs.Match.getAll(filterDelegate);
+  }
+
+  filterMatchesFromCache(fn: (obj: Match) => boolean): PromiseExtended<Match[]> {
+    return this.cs.Match.filterAll(fn);
   }
 
   // Field Scouting -----------------------------------------------------------
@@ -367,7 +379,7 @@ export class ScoutingService {
     return this.cs.ScoutFieldResponsesColumn.getAll();
   }
 
-  getFieldResponsesResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
+  getFieldResponsesResponseFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
     return this.cs.ScoutFieldResponsesResponse.getAll(filterDelegate);
   }
 
@@ -515,6 +527,10 @@ export class ScoutingService {
     });
   }
 
+  getPitResponsesResponseFromCache(id: number): PromiseExtended<ScoutPitResponse | undefined> {
+    return this.cs.ScoutPitResponsesResponse.getById(id);
+  }
+
   getPitResponsesResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutPitResponse[]> {
     return this.cs.ScoutPitResponsesResponse.getAll(filterDelegate);
   }
@@ -615,12 +631,20 @@ export class ScoutingService {
         //console.log('filter season ');
         //console.log(value);
 
+        changed = !value;
+
         value.forEach(async v => {
           v.current = 'n';
           changed = true;
           await this.cs.Season.AddOrEditAsync(v);
         });
       });
+
+      if (changed) {
+        this.loadMatches();
+        this.loadTeams();
+        this.loadSchedules();
+      }
 
       await this.cs.Season.AddOrEditAsync(s);
 
@@ -639,12 +663,20 @@ export class ScoutingService {
         //console.log('filter event');
         //console.log(value);
 
+        changed = !value;
+
         value.forEach(async v => {
           v.current = 'n';
           changed = true;
           await this.cs.Event.AddOrEditAsync(v);
         });
       });
+
+      if (changed) {
+        this.loadMatches();
+        this.loadTeams();
+        this.loadSchedules();
+      }
 
       await this.cs.Event.AddOrEditAsync(e);
 

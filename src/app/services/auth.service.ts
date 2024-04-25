@@ -107,7 +107,7 @@ export class AuthService {
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       this.refreshToken().subscribe(
         {
-          next: (result: any) => {
+          next: async (result: any) => {
             if (this.gs.checkResponse(result)) {
               const token = result as Token;
               //this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
@@ -115,15 +115,16 @@ export class AuthService {
               this.getTokenExp(token.refresh);
               //this.token.next(token); handled in pipe call below
 
-              this.getLoggedInUserData();
+              await this.getLoggedInUserData();
               this.ps.subscribeToNotifications();
+              this.authInFlightBS.next(AuthCallStates.comp);
             }
             else {
               this.authInFlightBS.next(AuthCallStates.err);
               this.logOut();
             }
           },
-          error: (err: any) => {
+          error: async (err: any) => {
             console.log('error', err);
 
             if (this.isSessionExpired()) {
@@ -131,8 +132,8 @@ export class AuthService {
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              this.getLoggedInUserData();
-              //auth process calls get set to complete in get user info
+              await this.getLoggedInUserData();
+              this.authInFlightBS.next(AuthCallStates.comp);
             }
           }
         }
@@ -211,23 +212,6 @@ export class AuthService {
         return token;
       })
     );
-
-    return this.http
-      .post<Token>('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
-      .pipe(
-        map(res => {
-          const token = res as Token;
-          //this.gs.devConsoleLog('refreshToken', 'new tokens below');
-          this.getTokenExp(token.access);
-          this.getTokenExp(token.refresh);
-
-          this.tokenBS.next(token);
-
-          //this.gs.decrementOutstandingCalls();
-
-          return token;
-        })
-      );
   }
 
   setToken(tkn: Token): void {
@@ -288,27 +272,27 @@ export class AuthService {
     return this.gs.strNoE(this.tokenBS.value.refresh) || this.isTokenExpired(this.tokenBS.value.refresh);
   }
 
-  getLoggedInUserData(): void {
-    this.getUser();
-    this.getUserLinks();
+  async getLoggedInUserData(): Promise<void> {
+    await this.getUser();
+    await this.getUserLinks();
     this.ns.getUserAlerts('notification');
     this.ns.getUserAlerts('message');
   }
 
-  getUser() {
-    this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
-      return u.where({ 'id': this.getTokenLoad(this.tokenBS.value.refresh).user_id })
-    }, (result: User) => {
-      // console.log(Response);
-      if (Array.isArray(result))
-        result = result[0];
-      result = (result as User);
+  getUser(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
+        return u.where({ 'id': this.getTokenLoad(this.tokenBS.value.refresh).user_id })
+      }, async (result: User) => {
+        // console.log(Response);
+        if (Array.isArray(result))
+          result = result[0];
+        result = (result as User);
 
-      if (result.id > 0) {
         this.userBS.next(result);
-        this.cs.User.AddOrEditAsync(result);
-        this.authInFlightBS.next(AuthCallStates.comp);
+        await this.cs.User.AddOrEditAsync(result);
 
+        // api call to get user permissions
         this.us.getUserPermissions(result.id.toString(), async (result: AuthPermission[]) => {
           this.userPermissionsBS.next(result);
           await this.cs.UserPermissions.RemoveAllAsync();
@@ -318,76 +302,79 @@ export class AuthService {
             this.userPermissionsBS.next(ups);
           });
         });
-      }
-      else {
-        this.authInFlightBS.next(AuthCallStates.err);
-      }
 
-    }, (error: any) => {
-      this.authInFlightBS.next(AuthCallStates.err);
+        resolve(true);
+      });
     });
+
   }
 
-  getUserLinks() {
-    this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
-      const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal'];
+  getUserLinks(): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
+        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal'];
 
-      this.ss.loadMatches();
+        switch (this.apiStatus) {
+          case APIStatus.on:
+            this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
+            this.refreshUserLinksInCache(this.userLinksBS.value);
 
-      switch (this.apiStatus) {
-        case APIStatus.on:
-          this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
-          this.refreshUserLinksInCache(this.userLinksBS.value);
+            // Cache data for endpoints we want to use offline.
+            const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
+            const offlineCalls: any[] = [];
 
-          // Cache data for endpoints we want to use offline.
-          const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
+            //This will need changed if offline menu names ever includes endpoints that don't need teams
+            if (offlineLinks.length > 0) {
+              this.ss.loadTeams(false);
+              this.ss.loadMatches(false);
 
-          //This will need changed if offline menu names ever includes endpoints that don't need teams
-          if (offlineLinks.length > 0) {
-            this.ss.loadTeams(false);
+              offlineLinks.forEach(ol => {
+                switch (ol.menu_name) {
+                  case 'Field Scouting':
+                    offlineCalls.push(this.ss.initFieldScouting(false));
+                    break;
+                  case 'Field Results':
+                    offlineCalls.push(this.ss.getFieldScoutingResponses(false));
+                    break;
+                  case 'Pit Scouting':
+                    offlineCalls.push(this.ss.initPitScouting(false));
+                    break;
+                  case 'Pit Results':
+                    offlineCalls.push(this.ss.getPitScoutingResponses(false));
+                    break;
+                  case 'Portal':
+                    offlineCalls.push(this.ss.loadSchedules(false));
+                    break;
+                }
+              });
+            }
 
-            offlineLinks.forEach(ol => {
-              switch (ol.menu_name) {
-                case 'Field Scouting':
-                  this.ss.initFieldScouting(false);
-                  break;
-                case 'Field Results':
-                  this.ss.getFieldScoutingResponses(false);
-                  break;
-                case 'Pit Scouting':
-                  this.ss.initPitScouting(false);
-                  break;
-                case 'Pit Results':
-                  this.ss.getPitScoutingResponses(false);
-                  break;
-                case 'Portal':
-                  this.ss.loadSchedules(false);
-                  break;
-              }
+            await Promise.all(offlineCalls);
+
+            break;
+
+          case APIStatus.off:
+            let newUserLinks: UserLinks[] = [];
+
+            // get the pages that we are able to use offline from the list of links for the user
+            await this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
+              uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
+                if (ul1.order < ul2.order) return 1;
+                else if (ul1.order > ul2.order) return -1;
+                else return 0;
+              }).forEach(ul => {
+                newUserLinks.unshift(ul);
+              });
             });
-          }
 
-          break;
+            this.userLinksBS.next(newUserLinks);
+            break;
+        }
 
-        case APIStatus.off:
-          let newUserLinks: UserLinks[] = [];
+        this.ss.startUploadOutstandingResponsesTimeout();
 
-          // get the pages that we are able to use offline from the list of links for the user
-          await this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
-            uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
-              if (ul1.order < ul2.order) return 1;
-              else if (ul1.order > ul2.order) return -1;
-              else return 0;
-            }).forEach(ul => {
-              newUserLinks.unshift(ul);
-            });
-          });
-
-          this.userLinksBS.next(newUserLinks);
-          break;
-      }
-
-      this.ss.startUploadOutstandingResponsesTimeout();
+        resolve(true);
+      });
     });
   }
 

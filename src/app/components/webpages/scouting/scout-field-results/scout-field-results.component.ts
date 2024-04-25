@@ -3,9 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { TeamNote } from '../match-planning/match-planning.component';
 import { APIService } from 'src/app/services/api.service';
-import { ScoutPitResponse, ScoutFieldResponsesReturn } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, ScoutFieldResponsesReturn, TeamNote } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { environment } from 'src/environments/environment';
 
@@ -61,7 +60,7 @@ export class ScoutFieldResultsComponent implements OnInit {
       this.gs.incrementOutstandingCalls();
       this.scoutResponses = new ScoutFieldResponsesReturn();
 
-      await this.ss.getFieldResponsesResponsesFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+      await this.ss.getFieldResponsesResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
         if (environment.production)
           this.scoutResponses.scoutAnswers = frrs;
         else

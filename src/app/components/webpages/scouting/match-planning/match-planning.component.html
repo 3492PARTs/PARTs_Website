@@ -1,5 +1,5 @@
 <app-box *ngIf="page === 'matches'" [Title]="'Matches'">
-    <div *ngIf="matchPlanningResults.length <= 0">
+    <div *ngIf="matchPlanning.length <= 0">
         <app-form-element-group [LabelText]="'Legend'">
             <div id="legend" class="flex justify-content-space-between">
                 <div class="flex align-items-center">
@@ -25,13 +25,13 @@
             </div>
         </app-form-element-group>
 
-        <app-table [TableCols]="matchesTableCols" [TableData]="initData.matches"
-            (RecordClickCallBack)="planMatch($event)" [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true"
-            [Width]="'100%'" [ScrollHeight]="'50rem'" [CursorPointer]="true">
+        <app-table [TableCols]="matchesTableCols" [TableData]="matches" (RecordClickCallBack)="planMatch($event)"
+            [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'" [ScrollHeight]="'50rem'"
+            [CursorPointer]="true">
         </app-table>
     </div>
 
-    <div *ngIf="matchPlanningResults.length > 0">
+    <div *ngIf="matchPlanning.length > 0">
         <div id="back-button">
             <app-button-ribbon [TextAlign]="'left'">
                 <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
@@ -58,7 +58,7 @@
         </div>
 
         <app-tab-container>
-            <app-tab *ngFor="let mpr of matchPlanningResults" [TabName]="mpr.team.team_no.toString()">
+            <app-tab *ngFor="let mpr of matchPlanning" [TabName]="mpr.team.team_no.toString()">
                 <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
 
                 <app-form-element-group [LabelText]="'Notes'">
@@ -69,7 +69,7 @@
 
                 <div class="padding-bottom-1rem"></div>
 
-                <app-table [TableCols]="mpr.fieldCols" [TableData]="mpr.fieldAnswers" [EnableFilter]="true"
+                <app-table [TableCols]="scoutCols" [TableData]="mpr.scoutAnswers" [EnableFilter]="true"
                     [Width]="tableWidth" [Responsive]="true" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
                 </app-table>
             </app-tab>
@@ -82,7 +82,7 @@
     <app-modal [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
         [(visible)]="teamNoteModalVisible">
         <app-form>
-            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="initData.teams"
+            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
                 [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no">
             </app-form-element>
@@ -98,7 +98,7 @@
 
     <app-modal [ButtonType]="'main'" [ButtonText]="'View notes'" [Title]="'View Team Notes'">
         <app-form>
-            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="initData.teams"
+            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
                 [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" (FunctionCallBack)="loadTeamNotes()">
             </app-form-element>

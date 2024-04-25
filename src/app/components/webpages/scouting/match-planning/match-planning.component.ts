@@ -4,10 +4,11 @@ import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
-import { Match, ScoutPitResponse, Team } from 'src/app/models/scouting.models';
+import { Match, MatchPlanning, ScoutPitResponse, Team, TeamNote } from 'src/app/models/scouting.models';
 import { User } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-match-planning',
@@ -17,7 +18,8 @@ import { APIService } from 'src/app/services/api.service';
 export class MatchPlanningComponent implements OnInit {
   page = 'matches';
 
-  initData = new Init();
+  matches: Match[] = [];
+  teams: Team[] = [];
 
   currentTeamNote = new TeamNote();
   teamNoteModalVisible = false;
@@ -26,16 +28,16 @@ export class MatchPlanningComponent implements OnInit {
     { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
     { PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'match_number', ColLabel: 'Match' },
-    { PropertyName: 'red_one_id', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_two_id', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_three_id', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_one_id', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_two_id', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_three_id', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this) },
+    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this) },
   ];
 
-  matchPlanningResults: MatchPlanning[] = [];
-
+  scoutCols: any[] = [];
+  matchPlanning: MatchPlanning[] = [];
   teamNotes: TeamNote[] = [];
 
   tableWidth = '200%';
@@ -50,7 +52,8 @@ export class MatchPlanningComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private ns: NavigationService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private ss: ScoutingService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
       let r = 9;
@@ -74,6 +77,21 @@ export class MatchPlanningComponent implements OnInit {
     ]);
     this.ns.setSubPage('matches');
     this.setTableSize();
+
+    this.ss.matches.subscribe(ms => {
+      const ourMatches = ms.filter(m => m.blue_one === 3492 || m.blue_two === 3492 || m.blue_three === 3492 || m.red_one === 3492 || m.red_two === 349 || m.red_three === 3492);
+      this.matches = ourMatches;
+    });
+
+    this.ss.teams.subscribe(ts => {
+      this.teams = ts;
+    });
+
+    this.ss.getFieldResponsesColumnsFromCache().then(frcs => {
+      this.scoutCols = frcs;
+
+      this.buildGraphOptionsList();
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -86,9 +104,13 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   init(): void {
-    this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
+    /*this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
       this.initData = (result as Init);
-    });
+    });*/
+
+
+
+
   }
 
   saveNote(): void {
@@ -106,22 +128,74 @@ export class MatchPlanningComponent implements OnInit {
     });
   }
 
-  planMatch(match: Match): void {
-    this.api.get(true, 'scouting/match-planning/plan-match/', {
-      match_id: match.match_id
-    }, (result: any) => {
-      this.matchPlanningResults = result as MatchPlanning[];
+  async planMatch(match: Match): Promise<void> {
+    this.gs.incrementOutstandingCalls();
+    console.log('plan match');
 
-      this.buildGraphOptionsList();
-    }, undefined, () => {
-      // TODO: Check still needed
-      window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1);
-    });
+    this.matchPlanning = [];
+    let tmp: MatchPlanning[] = [];
+
+    const allianceMembers = [
+      { team: match.red_one, alliance: 'red' },
+      { team: match.red_two, alliance: 'red' },
+      { team: match.red_three, alliance: 'red' },
+      { team: match.blue_one, alliance: 'blue' },
+      { team: match.blue_two, alliance: 'blue' },
+      { team: match.blue_three, alliance: 'blue' },
+
+    ]
+
+    for (const allianceMember of allianceMembers) {
+      let team = new Team();
+      let pitData = new ScoutPitResponse();
+      let scoutAnswers: any = null;
+
+      await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
+        if (t) {
+          team = t;
+          await this.ss.getPitResponsesResponseFromCache(t.team_no).then(spr => {
+            if (spr) {
+              pitData = spr;
+            }
+          });
+
+          await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
+            scoutAnswers = sprs;
+          });
+
+
+        }
+      });
+
+      console.log('push team');
+      console.log({
+        team: team,
+        pitData: pitData,
+        scoutAnswers: scoutAnswers,
+        notes: [],
+        alliance: allianceMember.alliance
+      });
+
+      tmp.push(
+        {
+          team: team,
+          pitData: pitData,
+          scoutAnswers: scoutAnswers,
+          notes: [],
+          alliance: allianceMember.alliance
+        });
+    }
+
+    this.matchPlanning = tmp;
+
+    console.log('finish plan match');
+
+    this.gs.decrementOutstandingCalls();
   }
 
   buildGraphOptionsList(): void {
     this.graphOptionsList = [];
-    this.matchPlanningResults[0].fieldCols.forEach((fc: any) => {
+    this.scoutCols.forEach((fc: any) => {
       if (fc['scorable']) {
         this.graphOptionsList.push(fc);
       }
@@ -134,7 +208,7 @@ export class MatchPlanningComponent implements OnInit {
     // red
     let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    let red = this.matchPlanningResults.filter(mp => mp.alliance === 'red');
+    let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
     dataSets = this.getAllianceDataSets(red);
     let count = 0;
     dataSets.forEach(ds => {
@@ -145,7 +219,7 @@ export class MatchPlanningComponent implements OnInit {
     // blue
     let dataSets2: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    let blue = this.matchPlanningResults.filter(mp => mp.alliance === 'blue');
+    let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
     dataSets2 = this.getAllianceDataSets(blue);
     labels = [];
     count = 0;
@@ -183,7 +257,7 @@ export class MatchPlanningComponent implements OnInit {
       //console.log(mp.team);
       //console.log(mp.fieldAnswers);
 
-      mp.fieldAnswers.forEach((fa: any) => {
+      mp.scoutAnswers.forEach((fa: any) => {
         let sum = 0;
         this.graphOptionsSelected.forEach((gos: any) => {
           if (gos['checked']) {
@@ -207,30 +281,25 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   clearResults(): void {
-    this.matchPlanningResults = [];
+    this.matchPlanning = [];
   }
 
   rankToColor(team: number): string {
-    /*
-    TODO Fix this
-    if (this.initData) {
-      for (let m of this.initData.matches) {
-        if (m.blue_one === team)
-          return this.rankToColorConverter(m.blue_one_rank);
-        if (m.blue_two === team)
-          return this.rankToColorConverter(m.blue_two_rank);
-        if (m.blue_three === team)
-          return this.rankToColorConverter(m.blue_three);
+    for (let m of this.matches) {
+      if (m.blue_one === team)
+        return this.rankToColorConverter(m.blue_one_rank);
+      if (m.blue_two === team)
+        return this.rankToColorConverter(m.blue_two_rank);
+      if (m.blue_three === team)
+        return this.rankToColorConverter(m.blue_three);
 
-        if (m.red_one === team)
-          return this.rankToColorConverter(m.red_one_rank);
-        if (m.red_two === team)
-          return this.rankToColorConverter(m.red_two_rank);
-        if (m.red_three === team)
-          return this.rankToColorConverter(m.red_three_rank);
-      }
+      if (m.red_one === team)
+        return this.rankToColorConverter(m.red_one_rank);
+      if (m.red_two === team)
+        return this.rankToColorConverter(m.red_two_rank);
+      if (m.red_three === team)
+        return this.rankToColorConverter(m.red_three_rank);
     }
-    */
 
     return 'initial'
 
@@ -244,17 +313,6 @@ export class MatchPlanningComponent implements OnInit {
     else if (rank <= 30) return '#ff6600';
     else return '#ff0000'
   }
-
-  /*
-  
-  [
-          {
-            label: label,
-            data: data,
-            borderWidth: 1,
-          },
-        ]
-        */
 
   private createLineChart(id: string, labels: string[], datasets: ChartDataset<'line', (number | Point | [number, number] | BubbleDataPoint | null)[]>[]): Chart {
     return new Chart(id, {
@@ -272,30 +330,4 @@ export class MatchPlanningComponent implements OnInit {
       },
     });
   }
-}
-
-export class Init {
-  event!: Event | null;
-  matches: Match[] = [];
-  teams: Team[] = [];
-}
-
-export class TeamNote {
-  team_note_id!: number;
-  event!: Event | number;
-  team_no!: Team | number;
-  match!: Match | number;
-  user!: User | number;
-  note = '';
-  time!: Date;
-  void_ind = 'n';
-}
-
-export class MatchPlanning {
-  team!: Team;
-  pitData = new ScoutPitResponse();
-  fieldCols!: any;
-  fieldAnswers!: any;
-  notes: TeamNote[] = [];
-  alliance = '';
 }
