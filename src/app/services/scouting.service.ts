@@ -33,12 +33,11 @@ export class ScoutingService {
 
   private outstandingResponsesTimeout: number | undefined;
 
-  private outstandingLoadTeamsCall = false;
-  private outstandingLoadMatchesCall = false;
+  private outstandingLoadTeamsPromise: Promise<boolean> | null = null;
   private outstandingLoadMatchesPromise: Promise<boolean> | null = null;
-  private outstandingInitFieldScoutingCall = false;
-  private outstandingInitPitScoutingCall = false;
-  private outstandingLoadScheduleCall = false;
+  private outstandingInitFieldScoutingPromise: Promise<boolean> | null = null;
+  private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
+  private outstandingLoadSchedulePromise: Promise<Schedules | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<boolean>(false);
@@ -103,11 +102,9 @@ export class ScoutingService {
 
 
   // Load Teams -----------------------------------------------------------
-  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
-    if (!this.outstandingLoadTeamsCall) {
-      this.outstandingLoadTeamsCall = true;
-
-      return new Promise<boolean>(resolve => {
+  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+    if (!this.outstandingLoadTeamsPromise) {
+      this.outstandingLoadTeamsPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'scouting/teams/', undefined, async (result: any) => {
           /** 
            * On success load results and store in db 
@@ -137,12 +134,14 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingLoadTeamsCall = false;
+          this.outstandingLoadTeamsPromise = null;
         }, () => {
-          this.outstandingLoadTeamsCall = false;
+          this.outstandingLoadTeamsPromise = null;
         });
       });
     }
+
+    return this.outstandingLoadTeamsPromise;
   }
 
   private async updateTeams(ts: Team[]): Promise<void> {
@@ -170,10 +169,8 @@ export class ScoutingService {
   }
 
   // Load Matches -----------------------------------------------------------
-  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | null {
-    if (!this.outstandingLoadMatchesCall) {
-      this.outstandingLoadMatchesCall = true;
-
+  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+    if (!this.outstandingLoadMatchesPromise) {
       this.outstandingLoadMatchesPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: Match[]) => {
           /** 
@@ -204,10 +201,8 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingLoadMatchesCall = false;
           this.outstandingLoadMatchesPromise = null;
         }, () => {
-          this.outstandingLoadMatchesCall = false;
           this.outstandingLoadMatchesPromise = null;
         });
       });
@@ -230,11 +225,9 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
-    if (!this.outstandingInitFieldScoutingCall) {
-      this.outstandingInitFieldScoutingCall = true;
-
-      return new Promise<boolean>(resolve => {
+  initFieldScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+    if (!this.outstandingInitFieldScoutingPromise) {
+      this.outstandingInitFieldScoutingPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'field',
           active: 'y'
@@ -272,12 +265,14 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingInitFieldScoutingCall = false;
+          this.outstandingInitFieldScoutingPromise = null;
         }, () => {
-          this.outstandingInitFieldScoutingCall = false;
+          this.outstandingInitFieldScoutingPromise = null;
         });
       });
     }
+
+    return this.outstandingInitFieldScoutingPromise;
   }
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number): Promise<boolean> {
@@ -389,11 +384,9 @@ export class ScoutingService {
 
 
   // Pit Scouting --------------------------------------------------------------
-  initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> | void {
-    if (!this.outstandingInitPitScoutingCall) {
-      this.outstandingInitPitScoutingCall = true;
-
-      return new Promise<boolean>(resolve => {
+  initPitScouting(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+    if (!this.outstandingInitPitScoutingPromise) {
+      this.outstandingInitPitScoutingPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'pit',
           active: 'y'
@@ -431,13 +424,14 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingInitPitScoutingCall = false;
+          this.outstandingInitPitScoutingPromise = null;
         }, () => {
-          this.outstandingInitPitScoutingCall = false;
+          this.outstandingInitPitScoutingPromise = null;
         });
       });
     }
 
+    return this.outstandingInitPitScoutingPromise;
   }
 
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number): Promise<boolean> {
@@ -545,8 +539,8 @@ export class ScoutingService {
 
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true): Promise<Schedules | null> {
-    if (!this.outstandingLoadScheduleCall)
-      return new Promise<Schedules | null>(resolve => {
+    if (!this.outstandingLoadSchedulePromise)
+      this.outstandingLoadSchedulePromise = new Promise<Schedules | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/schedules/', undefined, async (result: Schedules) => {
           /** 
            * On success load results and store in db 
@@ -580,31 +574,13 @@ export class ScoutingService {
 
           if (allLoaded) resolve(result);
           else resolve(null);
-          this.outstandingLoadScheduleCall = false;
+          this.outstandingLoadSchedulePromise = null;
         }, () => {
-          this.outstandingLoadScheduleCall = false;
+          this.outstandingLoadSchedulePromise = null;
         });
       });
-    else
-      return new Promise<Schedules | null>(async resolve => {
-        while (this.outstandingLoadScheduleCall) {
-          continue;
-        }
 
-        const result = new Schedules();
-
-        await this.cs.ScoutFieldSchedule.getAll().then(sfss => {
-          result.field_schedule = sfss;
-        });
-
-        await this.cs.Schedule.getAll().then(ss => {
-          result.schedule = ss;
-        });
-
-        result.schedule_types = this.scheduleTypesBS.value;
-
-        resolve(result);
-      });
+    return this.outstandingLoadSchedulePromise;
   }
   // Portal -------------------------------------------------------------------
   initPortal(loadingScreen = true): Promise<boolean> | void {
@@ -691,6 +667,4 @@ export class ScoutingService {
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<any[]> {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
   }
-
-
 }
