@@ -55,20 +55,13 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   scoutFieldResultsInit(): void {
-    this.ss.getFieldScoutingResponses().then(async (success: boolean) => {
-      console.log('scout field init');
-      this.gs.incrementOutstandingCalls();
-      this.scoutResponses = new ScoutFieldResponsesReturn();
+    this.gs.incrementOutstandingCalls();
+    this.ss.getFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
+      if (result) {
+        this.scoutResponses = result;
 
-      await this.ss.getFieldResponsesResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-        if (environment.production)
-          this.scoutResponses.scoutAnswers = frrs;
-        else
-          this.scoutResponses.scoutAnswers = frrs.slice(0, 30);
-      });
-
-      await this.ss.getFieldResponsesColumnsFromCache().then(frcs => {
-        this.scoutResponses.scoutCols = frcs;
+        if (!environment.production)
+          this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
 
         this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
 
@@ -80,9 +73,7 @@ export class ScoutFieldResultsComponent implements OnInit {
         this.filter();
 
         this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
-
-
-      });
+      }
 
       this.gs.decrementOutstandingCalls();
     });

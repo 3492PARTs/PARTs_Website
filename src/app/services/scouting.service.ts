@@ -36,6 +36,7 @@ export class ScoutingService {
   private outstandingLoadTeamsPromise: Promise<boolean> | null = null;
   private outstandingLoadMatchesPromise: Promise<boolean> | null = null;
   private outstandingInitFieldScoutingPromise: Promise<boolean> | null = null;
+  private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
   private outstandingLoadSchedulePromise: Promise<Schedules | null> | null = null;
 
@@ -316,62 +317,86 @@ export class ScoutingService {
 
   }
 
-  getFieldScoutingResponses(loadingScreen = true): Promise<boolean> {
-    return new Promise<boolean>(async resolve => {
-      let last = null;
-      await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-        //console.log(sfrr);
-        if (sfrr) last = sfrr['time'];
-      });
+  getFieldScoutingResponses(loadingScreen = true): Promise<ScoutFieldResponsesReturn | null> {
+    if (!this.outstandingGetFieldScoutingResponsesPromise)
+      this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
+        let last = null;
+        await this.cs.ScoutFieldResponsesResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
+          //console.log(sfrr);
+          if (sfrr) last = sfrr['time'];
+        });
 
-      let params: any = undefined;
+        let params: any = undefined;
 
-      if (last)
-        params = {
-          after_date_time: last
-        }
+        if (last)
+          params = {
+            after_date_time: last
+          }
 
-      this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: any) => {
-        const tmp = result as ScoutFieldResponsesReturn;
+        this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
 
-        let changed = await this.updateSeasonInCache(tmp.current_season);
+          let changed = await this.updateSeasonInCache(result.current_season);
 
-        changed = changed || await this.updateEventInCache(tmp.current_event);
+          changed = changed || await this.updateEventInCache(result.current_event);
 
-        if (!changed) {
-          await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
-          await this.cs.ScoutFieldResponsesColumn.AddOrEditBulkAsync(tmp.scoutCols);
+          if (!changed) {
+            await this.cs.ScoutFieldResponsesColumn.RemoveAllAsync();
+            await this.cs.ScoutFieldResponsesColumn.AddOrEditBulkAsync(result.scoutCols);
 
-          if (params) {
-            // we are only loading the diff
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-            await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(tmp.scoutAnswers);
+            if (params) {
+              // we are only loading the diff
+              this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
+              await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(result.scoutAnswers);
+            }
+            else {
+              // loading all
+              this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
+              await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
+              await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(result.scoutAnswers);
+            }
+
+            const ids = result.removed_responses.map(t => { return t.scout_field_id });
+
+            await this.cs.ScoutFieldResponsesResponse.RemoveBulkAsync(ids);
+
+            resolve(result);
           }
           else {
-            // loading all
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
+            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
             await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
-            await this.cs.ScoutFieldResponsesResponse.AddOrEditBulkAsync(tmp.scoutAnswers);
+            await this.getFieldScoutingResponses().then(value => {
+              resolve(value);
+            });
           }
+        }, async (err: any) => {
+          const scoutResponses = new ScoutFieldResponsesReturn();
 
-          const ids = tmp.removed_responses.map(t => { return t.scout_field_id });
+          let allLoaded = true;
 
-          await this.cs.ScoutFieldResponsesResponse.RemoveBulkAsync(ids);
-
-          resolve(true);
-        }
-        else {
-          this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
-          await this.cs.ScoutFieldResponsesResponse.RemoveAllAsync();
-          await this.getFieldScoutingResponses().then(value => {
-            resolve(value);
+          await this.getFieldResponsesResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+            scoutResponses.scoutAnswers = frrs;
+          }).catch(reason => {
+            console.log(reason);
+            allLoaded = false;
           });
-        }
-      }, (err: any) => {
-        //this.gs.triggerError(err);
-        resolve(false);
+
+          await this.getFieldResponsesColumnsFromCache().then(frcs => {
+            scoutResponses.scoutCols = frcs;
+          }).catch(reason => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field scouting responses from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(scoutResponses);
+        });
       });
-    });
+
+    return this.outstandingGetFieldScoutingResponsesPromise;
   }
 
   getFieldResponsesColumnsFromCache(): PromiseExtended<any[]> {
