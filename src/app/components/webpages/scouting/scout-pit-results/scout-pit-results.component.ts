@@ -29,23 +29,23 @@ export class ScoutPitResultsComponent implements OnInit {
   }
 
   scoutPitResultsInit(): void {
-    this.ss.getPitScoutingResponses().then(async success => {
+    this.gs.incrementOutstandingCalls();
+    this.ss.getPitScoutingResponses().then(async result => {
 
-      await this.ss.getPitResponsesResponsesFromCache().then(sprs => {
-        //console.log(sprs);
-        let tmp: Team[] = [];
+      let tmp: Team[] = [];
 
-        sprs.forEach(spr => {
-          if (spr.scout_pit_id) {
-            let team = new Team();
-            team.team_no = spr.team_no;
-            team.team_nm = spr.team_nm;
-            tmp.push(team);
-          }
-        });
-
-        this.teamsSelectList = tmp.sort(this.ss.teamSortFunction);
+      result?.teams.forEach(spr => {
+        if (spr.scout_pit_id) {
+          let team = new Team();
+          team.team_no = spr.team_no;
+          team.team_nm = spr.team_nm;
+          tmp.push(team);
+        }
       });
+
+      this.teamsSelectList = tmp.sort(this.ss.teamSortFunction);
+
+      this.gs.decrementOutstandingCalls();
     });
   }
 

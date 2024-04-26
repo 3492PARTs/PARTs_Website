@@ -38,6 +38,7 @@ export class ScoutingService {
   private outstandingInitFieldScoutingPromise: Promise<boolean> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
+  private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
   private outstandingLoadSchedulePromise: Promise<Schedules | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
@@ -529,25 +530,43 @@ export class ScoutingService {
     });
   }
 
-  getPitScoutingResponses(loadingScreen = true): Promise<boolean> {
-    return new Promise<boolean>(async resolve => {
-      this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: any) => {
-        const tmp = result as ScoutPitResponsesReturn;
+  getPitScoutingResponses(loadingScreen = true): Promise<ScoutPitResponsesReturn | null> {
+    if (!this.outstandingGetPitScoutingResponsesPromise)
+      this.outstandingGetPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
+        this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: ScoutPitResponsesReturn) => {
 
-        let changed = await this.updateSeasonInCache(tmp.current_season);
+          let changed = await this.updateSeasonInCache(result.current_season);
 
-        changed = changed || await this.updateEventInCache(tmp.current_event);
+          changed = changed || await this.updateEventInCache(result.current_event);
 
-        await this.cs.ScoutPitResponsesResponse.RemoveAllAsync();
+          await this.cs.ScoutPitResponsesResponse.RemoveAllAsync();
 
-        await this.cs.ScoutPitResponsesResponse.AddOrEditBulkAsync(tmp.teams);
+          await this.cs.ScoutPitResponsesResponse.AddOrEditBulkAsync(result.teams);
 
-        resolve(true);
-      }, (err: any) => {
-        //this.gs.triggerError(err);
-        resolve(false);
+          resolve(result);
+        }, async (err: any) => {
+          const result = new ScoutPitResponsesReturn();
+
+          let allLoaded = true;
+
+          await this.getPitResponsesResponsesFromCache().then(sprs => {
+            //console.log(sprs);
+            result.teams = sprs;
+          }).catch(reason => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading pit scouting responses from cache.'));
+            resolve(result);
+          }
+          else
+            resolve(null);
+        });
       });
-    });
+
+    return this.outstandingGetPitScoutingResponsesPromise;
   }
 
   getPitResponsesResponseFromCache(id: number): PromiseExtended<ScoutPitResponse | undefined> {
