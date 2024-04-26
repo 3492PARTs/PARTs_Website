@@ -116,11 +116,11 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   async getTeamInfo(row: any) {
     this.gs.incrementOutstandingCalls();
-    await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': row['team_no'] })).then(sprs => {
+    await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': row['team_no'] })).then(sprs => {
       this.teamScoutResults = sprs;
     });
 
-    await this.ss.getPitResponsesResponseFromCache(row['team_no']).then(spr => {
+    await this.ss.getPitResponseFromCache(row['team_no']).then(spr => {
       if (spr) {
         this.teamScoutPitResult = spr;
       }

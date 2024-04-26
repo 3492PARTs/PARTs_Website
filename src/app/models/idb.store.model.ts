@@ -75,12 +75,12 @@ export const DBStores = {
         TableName: 'ScoutFieldFormResponse',
         Columns: '++id'//generateColumns(scoutFieldResponseInstance),
     },
-    ScoutFieldResponsesColumn: {
-        TableName: 'ScoutFieldResponsesColumn',
+    ScoutFieldResponseColumn: {
+        TableName: 'ScoutFieldResponseColumn',
         Columns: '++id'//generateColumns(scoutFieldResponseInstance),
     },
-    ScoutFieldResponsesResponse: {
-        TableName: 'ScoutFieldResponsesResponse',
+    ScoutFieldResponse: {
+        TableName: 'ScoutFieldResponse',
         Columns: 'scout_field_id,team_no,rank,match,time'//generateColumns(scoutFieldResponseInstance),
     },
     Schedule: {
@@ -95,8 +95,8 @@ export const DBStores = {
         TableName: 'QuestionWithConditions',
         Columns: generateColumns(questionWithConditionsInstance),
     },
-    ScoutPitResponsesResponse: {
-        TableName: 'ScoutPitResponsesResponse',
+    ScoutPitResponse: {
+        TableName: 'ScoutPitResponse',
         Columns: 'team_no,team_nm,scout_pit_id',//generateColumns(scoutPitResponseInstance),
     },
     LoadedStores: {

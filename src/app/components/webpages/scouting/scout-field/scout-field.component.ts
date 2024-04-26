@@ -136,7 +136,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.initFieldScouting().then(success => {
+    this.ss.getFieldScoutingForm().then(success => {
       this.gs.decrementOutstandingCalls();
     });
 

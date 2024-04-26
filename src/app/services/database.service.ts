@@ -25,13 +25,13 @@ export class DatabaseService extends Dexie {
   ScoutFieldScheduleTable!: Dexie.Table<IScoutFieldSchedule, number>;
   ScoutFieldFormResponseTable!: Dexie.Table<IScoutFieldFormResponse, number>;
   // These are used for the responses page
-  ScoutFieldResponsesColumnTable!: Dexie.Table<any, number>;
-  ScoutFieldResponsesResponseTable!: Dexie.Table<any, number>;
+  ScoutFieldResponseColumnTable!: Dexie.Table<any, number>;
+  ScoutFieldResponseTable!: Dexie.Table<any, number>;
 
   ScheduleTable!: Dexie.Table<ISchedule, number>;
 
   ScoutPitFormResponseTable!: Dexie.Table<IScoutPitFormResponse, number>;
-  ScoutPitResponsesResponseTable!: Dexie.Table<IScoutPitResponse, number>;
+  ScoutPitResponseTable!: Dexie.Table<IScoutPitResponse, number>;
 
   QuestionWithConditionsTable!: Dexie.Table<IQuestionWithConditions, number>;
 
@@ -74,13 +74,13 @@ export class DatabaseService extends Dexie {
     this.MatchTable = this.table(DBStores.Match.TableName);
     this.ScoutFieldScheduleTable = this.table(DBStores.ScoutFieldSchedule.TableName);
     this.ScoutFieldFormResponseTable = this.table(DBStores.ScoutFieldFormResponse.TableName);
-    this.ScoutFieldResponsesColumnTable = this.table(DBStores.ScoutFieldResponsesColumn.TableName);
-    this.ScoutFieldResponsesResponseTable = this.table(DBStores.ScoutFieldResponsesResponse.TableName);
+    this.ScoutFieldResponseColumnTable = this.table(DBStores.ScoutFieldResponseColumn.TableName);
+    this.ScoutFieldResponseTable = this.table(DBStores.ScoutFieldResponse.TableName);
 
     this.ScheduleTable = this.table(DBStores.Schedule.TableName);
 
     this.ScoutPitFormResponseTable = this.table(DBStores.ScoutPitFormResponse.TableName);
-    this.ScoutPitResponsesResponseTable = this.table(DBStores.ScoutPitResponsesResponse.TableName);
+    this.ScoutPitResponseTable = this.table(DBStores.ScoutPitResponse.TableName);
 
     this.QuestionWithConditionsTable = this.table(DBStores.QuestionWithConditions.TableName);
 

@@ -87,7 +87,7 @@ export class MatchPlanningComponent implements OnInit {
       this.teams = ts;
     });
 
-    this.ss.getFieldResponsesColumnsFromCache().then(frcs => {
+    this.ss.getFieldResponseColumnsFromCache().then(frcs => {
       this.scoutCols = frcs;
 
       this.buildGraphOptionsList();
@@ -159,13 +159,13 @@ export class MatchPlanningComponent implements OnInit {
       await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
         if (t) {
           team = t;
-          await this.ss.getPitResponsesResponseFromCache(t.team_no).then(spr => {
+          await this.ss.getPitResponseFromCache(t.team_no).then(spr => {
             if (spr) {
               pitData = spr;
             }
           });
 
-          await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
+          await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
             scoutAnswers = sprs;
           });
 

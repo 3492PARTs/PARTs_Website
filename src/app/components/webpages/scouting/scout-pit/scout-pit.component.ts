@@ -75,7 +75,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.initPitScouting().then(success => {
+    this.ss.getPitScoutingForm().then(success => {
       this.gs.decrementOutstandingCalls();
     });
 
@@ -200,14 +200,6 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.formDisabled = false;
     this.gs.scrollTo(0);
     this.init();
-    /*
-  this.ss.getScoutingQuestions('pit').then(psqs => {
-    this.previousTeam = NaN;
-    this.scoutPitResponse = new ScoutPitResponse();
-    this.scoutPitResponse.question_answers = psqs;
-    this.formDisabled = false;
-    this.gs.scrollTo(0);
-  });*/
   }
 
   save(spr?: ScoutPitFormResponse, id?: number): void | null {

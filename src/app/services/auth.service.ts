@@ -309,7 +309,10 @@ export class AuthService {
         });
 
         resolve(true);
-      });
+      }, (error => {
+        this.logOut();
+        resolve(false);
+      }));
     });
 
   }
@@ -337,14 +340,14 @@ export class AuthService {
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
                   case 'Field Scouting':
-                    offlineCalls.push(this.ss.initFieldScouting(false));
+                    offlineCalls.push(this.ss.getFieldScoutingForm(false));
                     break;
                   case 'Field Results':
                     offlineCalls.push(this.ss.getFieldScoutingResponses(false));
                     offlineCalls.push(this.ss.loadTeamNotes(false));
                     break;
                   case 'Pit Scouting':
-                    offlineCalls.push(this.ss.initPitScouting(false));
+                    offlineCalls.push(this.ss.getPitScoutingForm(false));
                     break;
                   case 'Pit Results':
                     offlineCalls.push(this.ss.getPitScoutingResponses(false));
@@ -382,7 +385,9 @@ export class AuthService {
         this.ss.startUploadOutstandingResponsesTimeout();
 
         resolve(true);
-      });
+      }, (error => {
+        resolve(false);
+      }));
     });
   }
 

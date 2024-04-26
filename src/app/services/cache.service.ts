@@ -23,13 +23,13 @@ export class CacheService {
   ScoutFieldSchedule!: DexieCrud<IScoutFieldSchedule, number>;
   ScoutFieldFormResponse!: DexieCrud<IScoutFieldFormResponse, number>;
   // These are used for the responses page
-  ScoutFieldResponsesColumn!: DexieCrud<any, number>;
-  ScoutFieldResponsesResponse!: DexieCrud<any, number>;
+  ScoutFieldResponseColumn!: DexieCrud<any, number>;
+  ScoutFieldResponse!: DexieCrud<any, number>;
 
   Schedule!: DexieCrud<ISchedule, number>;
 
   ScoutPitFormResponse!: DexieCrud<IScoutPitFormResponse, number>;
-  ScoutPitResponsesResponse!: DexieCrud<IScoutPitResponse, number>;
+  ScoutPitResponse!: DexieCrud<IScoutPitResponse, number>;
 
   QuestionWithConditions!: DexieCrud<IQuestionWithConditions, number>;
 
@@ -47,13 +47,13 @@ export class CacheService {
     this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.dbs.ScoutFieldScheduleTable);
     this.ScoutFieldFormResponse = new DexieCrud<IScoutFieldFormResponse, number>(this.dbs.ScoutFieldFormResponseTable);
-    this.ScoutFieldResponsesColumn = new DexieCrud<any, number>(this.dbs.ScoutFieldResponsesColumnTable);
-    this.ScoutFieldResponsesResponse = new DexieCrud<any, number>(this.dbs.ScoutFieldResponsesResponseTable);
+    this.ScoutFieldResponseColumn = new DexieCrud<any, number>(this.dbs.ScoutFieldResponseColumnTable);
+    this.ScoutFieldResponse = new DexieCrud<any, number>(this.dbs.ScoutFieldResponseTable);
 
     this.Schedule = new DexieCrud<ISchedule, number>(this.dbs.ScheduleTable);
 
     this.ScoutPitFormResponse = new DexieCrud<IScoutPitFormResponse, number>(this.dbs.ScoutPitFormResponseTable);
-    this.ScoutPitResponsesResponse = new DexieCrud<IScoutPitResponse, number>(this.dbs.ScoutPitResponsesResponseTable);
+    this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.dbs.ScoutPitResponseTable);
 
     this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.dbs.QuestionWithConditionsTable);
 

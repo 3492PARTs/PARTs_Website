@@ -52,7 +52,7 @@ export class ScoutPitResultsComponent implements OnInit {
   filter(): void {
     let teams = this.teams.filter(t => t.checked).map(t => { return t.team_no; });
 
-    this.ss.filterPitResponsesResponsesFromCache(pr => teams.includes(pr.team_no)).then(prs => {
+    this.ss.filterPitResponsesFromCache(pr => teams.includes(pr.team_no)).then(prs => {
       this.scoutPitResults = prs.sort(this.ss.teamSortFunction);
     });
   }
