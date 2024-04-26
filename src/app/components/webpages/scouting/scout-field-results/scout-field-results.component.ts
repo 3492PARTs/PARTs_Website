@@ -42,7 +42,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     private ss: ScoutingService) { }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.scoutFieldResultsInit() : null);
+    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
     this.setTableSize();
   }
 
@@ -55,9 +55,9 @@ export class ScoutFieldResultsComponent implements OnInit {
     if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
-  scoutFieldResultsInit(): void {
+  init(forceCall = false): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.getFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
+    this.ss.getFieldScoutingResponses(true, forceCall).then(async (result: ScoutFieldResponsesReturn | null) => {
       if (result) {
         this.scoutResponses = result;
 

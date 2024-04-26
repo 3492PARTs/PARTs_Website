@@ -409,8 +409,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       let ext = tmp.split('.')[tmp.split('.').length - 1];
 
-      if (tmp.length > 18) {
-        this.fileName = tmp.substring(0, (17 - ext.length)).trim() + '....' + ext;
+      if (tmp.length > 16) {
+        this.fileName = tmp.substring(0, (15 - ext.length)).trim() + '....' + ext;
       }
       else {
         this.fileName = tmp;
