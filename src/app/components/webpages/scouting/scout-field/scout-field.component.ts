@@ -41,7 +41,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.ss.teams.subscribe(ts => {
       this.scoutFieldResponse.team = NaN;
       this.teams = ts;
-      this.buildTeamList(ts);
+      this.buildTeamList(NaN, ts);
     });
 
     this.ss.matches.subscribe(ms => {
@@ -106,8 +106,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
         });
 
-        this.scoutFieldResponse.team = sfr?.team || 0;
-        this.buildTeamList();
+        this.buildTeamList(sfr?.team || NaN);
 
         this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
         this.sortQuestions();
@@ -257,11 +256,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
   }
 
-  async buildTeamList(teams?: Team[]): Promise<void> {
+  async buildTeamList(team = NaN, teams?: Team[]): Promise<void> {
 
     this.noMatch = false;
 
-    this.scoutFieldResponse.team = NaN;
+    this.scoutFieldResponse.team = team;
 
     if (!teams) {
       teams = await this.cs.Team.getAll();
