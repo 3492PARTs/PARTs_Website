@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules, IMatch, ITeam } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules, IMatch, ITeam, TeamNote, ITeamNote } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -40,6 +40,7 @@ export class ScoutingService {
   private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
   private outstandingLoadSchedulePromise: Promise<Schedules | null> | null = null;
+  private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<boolean>(false);
@@ -112,7 +113,7 @@ export class ScoutingService {
            * On success load results and store in db 
            **/
           const res = (result as Team[]);
-          await this.updateTeams(res);
+          await this.updateTeamsBSAndCache(res);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -146,7 +147,7 @@ export class ScoutingService {
     return this.outstandingLoadTeamsPromise;
   }
 
-  private async updateTeams(ts: Team[]): Promise<void> {
+  private async updateTeamsBSAndCache(ts: Team[]): Promise<void> {
     this.teamsBS.next(ts);
     await this.cs.Team.RemoveAllAsync();
     await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
@@ -179,7 +180,7 @@ export class ScoutingService {
            * On success load results and store in db 
            **/
           console.log(result);
-          await this.updateMatches(result);
+          await this.updateMatchesBSAndCache(result);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -212,7 +213,7 @@ export class ScoutingService {
     return this.outstandingLoadMatchesPromise;
   }
 
-  private async updateMatches(ms: Match[]): Promise<void> {
+  private async updateMatchesBSAndCache(ms: Match[]): Promise<void> {
     this.matchesBS.next(ms);
     await this.cs.Match.RemoveAllAsync();
     await this.cs.Match.AddOrEditBulkAsync(ms);
@@ -626,6 +627,7 @@ export class ScoutingService {
 
     return this.outstandingLoadSchedulePromise;
   }
+
   // Portal -------------------------------------------------------------------
   initPortal(loadingScreen = true): Promise<boolean> | void {
     return new Promise<boolean>(resolve => {
@@ -641,6 +643,60 @@ export class ScoutingService {
       });
     });
 
+  }
+
+  // Team Notes -----------------------------------------------------------
+  loadTeamNotes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<TeamNote[] | null> {
+    if (!this.outstandingLoadTeamNotesPromise) {
+      this.outstandingLoadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/match-planning/load-team-notes/', undefined, async (result: TeamNote[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          this.updateTeamNotesInCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          let result: TeamNote[] = [];
+
+          await this.getTeamNotesFromCache().then((tns: TeamNote[]) => {
+            result = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading team notes form from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadTeamNotesPromise = null;
+        }, () => {
+          this.outstandingLoadTeamNotesPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadTeamNotesPromise;
+  }
+
+  private updateTeamNotesInCache(notes: TeamNote[]) {
+    this.cs.TeamNote.RemoveAllAsync().then(() => {
+      this.cs.TeamNote.AddBulkAsync(notes);
+    });
+  }
+
+  getTeamNotesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
+    return this.cs.TeamNote.getAll(filterDelegate);
   }
 
   // Others ----------------------------------------------------------------------

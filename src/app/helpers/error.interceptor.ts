@@ -34,7 +34,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           // comes back from the refreshToken call.
           this.tokenSubject.next(null);
 
-          return this.auth.refreshToken().pipe(
+          return this.auth.pipeRefreshToken().pipe(
             switchMap((token: Token) => {
               if (token) {
                 this.tokenSubject.next(token.access);

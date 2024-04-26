@@ -78,6 +78,11 @@ export class ScoutFieldResultsComponent implements OnInit {
 
       this.gs.decrementOutstandingCalls();
     });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadTeamNotes().then((result: TeamNote[] | null) => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   download(individual: boolean): void | null {
@@ -124,10 +129,8 @@ export class ScoutFieldResultsComponent implements OnInit {
       }
     });
 
-    this.api.get(true, 'scouting/match-planning/load-team-notes/', {
-      team_no: String(row['team'])
-    }, (result: any) => {
-      this.teamNotes = result as TeamNote[];
+    await this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_no': row['team_no'] })).then(tns => {
+      this.teamNotes = tns;
     });
 
     this.teamScoutResultsModalVisible = true;

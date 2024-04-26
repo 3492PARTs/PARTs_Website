@@ -373,12 +373,23 @@ export class ScheduleByType {
     sch_typ = new ScheduleType();
 }
 
-export class TeamNote {
-    team_note_id!: number;
-    event!: Event | number;
-    team_no!: Team | number;
-    match!: Match | number;
-    user!: User | number;
+export interface ITeamNote {
+    team_note_id: number;
+    event: Event | number;
+    team_no: Team | number;
+    match: Match | number;
+    user: User | number;
+    note: string;
+    time: Date;
+    void_ind: string;
+}
+
+export class TeamNote implements ITeamNote {
+    team_note_id = NaN;
+    event: Event | number = NaN;
+    team_no: Team | number = NaN;
+    match: Match | number = NaN;
+    user: User | number = NaN;
     note = '';
     time!: Date;
     void_ind = 'n';

@@ -1,6 +1,6 @@
 import { QuestionWithConditions } from "./form.models";
 import { UserLinks } from "./navigation.models";
-import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule } from "./scouting.models";
+import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote } from "./scouting.models";
 import { AuthPermission, User } from "./user.models";
 
 export class LoadedStores {
@@ -25,6 +25,7 @@ const userLinksInstance = new UserLinks('', '');
 const seasonInstance = new Season();
 const eventInstance = new Event();
 const teamInstance = new Team();
+const teamNoteInstance = new TeamNote();
 const matchInstance = new Match();
 const scoutFieldScheduleInstance = new ScoutFieldSchedule();
 const questionWithConditionsInstance = new QuestionWithConditions();
@@ -57,6 +58,10 @@ export const DBStores = {
     Team: {
         TableName: 'Team',
         Columns: generateColumns(teamInstance),
+    },
+    TeamNote: {
+        TableName: 'TeamNote',
+        Columns: generateColumns(teamNoteInstance),
     },
     Match: {
         TableName: 'Match',

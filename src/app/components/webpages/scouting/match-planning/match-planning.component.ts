@@ -116,6 +116,7 @@ export class MatchPlanningComponent implements OnInit {
 
   saveNote(): void {
     this.api.post(true, 'scouting/match-planning/save-note/', this.currentTeamNote, (result: any) => {
+      this.gs.successfulResponseBanner(result);
       this.currentTeamNote = new TeamNote();
       this.teamNoteModalVisible = false;
     });

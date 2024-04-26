@@ -104,6 +104,7 @@ export class AuthService {
 
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
     this.tokenBS.next(tmpTkn);
+
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       this.refreshToken().subscribe(
         {
@@ -199,8 +200,12 @@ export class AuthService {
   }
 
   // Refreshes the JWT token, to extend the time the user is logged in
-  public refreshToken(): Observable<Token> {
-    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh }).pipe(
+  public refreshToken(): Observable<any> {
+    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh });
+  }
+
+  public pipeRefreshToken(): Observable<Token> {
+    return this.refreshToken().pipe(
       map(res => {
         const token = res as Token;
         //('refreshToken', 'new tokens below');
@@ -312,7 +317,7 @@ export class AuthService {
   getUserLinks(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
-        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal'];
+        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal', 'Match Planning'];
 
         switch (this.apiStatus) {
           case APIStatus.on:
@@ -335,6 +340,7 @@ export class AuthService {
                     break;
                   case 'Field Results':
                     offlineCalls.push(this.ss.getFieldScoutingResponses(false));
+                    offlineCalls.push(this.ss.loadTeamNotes(false));
                     break;
                   case 'Pit Scouting':
                     offlineCalls.push(this.ss.initPitScouting(false));
@@ -344,6 +350,9 @@ export class AuthService {
                     break;
                   case 'Portal':
                     offlineCalls.push(this.ss.loadSchedules(false));
+                    break;
+                  case 'Match Planning':
+
                     break;
                 }
               });
