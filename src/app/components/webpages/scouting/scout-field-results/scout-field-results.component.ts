@@ -121,6 +121,10 @@ export class ScoutFieldResultsComponent implements OnInit {
       this.gs.triggerError(err);
     });
 
+    await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': row['team'] })).then(sprs => {
+      scoutAnswers = sprs;
+    });
+
     this.api.post(true, 'scouting/pit/results/', [{
       team_no: String(row['team']),
       team_nm: 'no team lol',
