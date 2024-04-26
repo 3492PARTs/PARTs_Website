@@ -382,7 +382,8 @@ export class AuthService {
             break;
         }
 
-        this.ss.startUploadOutstandingResponsesTimeout();
+
+        this.ss.uploadOutstandingResponses();
 
         resolve(true);
       }, (error => {
