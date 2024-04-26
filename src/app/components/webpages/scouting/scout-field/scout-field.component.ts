@@ -296,27 +296,27 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
 
       // set the selected team based on which user is assigned to which team
-      if (this.scoutFieldResponse.match?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+      if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_one as number;
       }
 
-      if (this.scoutFieldResponse.match?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+      if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_two as number;
       }
 
-      if (this.scoutFieldResponse.match?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+      if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_three as number;
       }
 
-      if (this.scoutFieldResponse.match?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+      if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_one as number;
       }
 
-      if (this.scoutFieldResponse.match?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+      if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_two as number;
       }
 
-      if (this.scoutFieldResponse.match?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+      if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
         this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_three as number;
       }
     }

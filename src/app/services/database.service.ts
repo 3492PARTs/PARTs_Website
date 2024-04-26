@@ -43,7 +43,7 @@ export class DatabaseService extends Dexie {
   private dbName: string = 'index-db-parts-app';
   constructor(private gs: GeneralService) {
     super('index-db-parts-app');
-    this.clearDB();
+    //this.clearDB();
     //this.migrateDB();
     this.setIndexDbTable();
     this.seedData();
