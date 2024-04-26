@@ -332,6 +332,7 @@ export class AuthService {
             if (offlineLinks.length > 0) {
               this.ss.loadTeams(false);
               this.ss.loadMatches(false);
+              offlineCalls.push(this.ss.loadSchedules(false));
 
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
@@ -349,10 +350,8 @@ export class AuthService {
                     offlineCalls.push(this.ss.getPitScoutingResponses(false));
                     break;
                   case 'Portal':
-                    offlineCalls.push(this.ss.loadSchedules(false));
                     break;
                   case 'Match Planning':
-
                     break;
                 }
               });

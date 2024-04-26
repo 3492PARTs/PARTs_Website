@@ -628,6 +628,14 @@ export class ScoutingService {
     return this.outstandingLoadSchedulePromise;
   }
 
+  getFieldSchedulesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutFieldSchedule[]> {
+    return this.cs.ScoutFieldSchedule.getAll(filterDelegate);
+  }
+
+  filterFieldSchedulesFromCache(fn: (obj: ScoutFieldSchedule) => boolean): PromiseExtended<ScoutFieldSchedule[]> {
+    return this.cs.ScoutFieldSchedule.filterAll(fn);
+  }
+
   // Portal -------------------------------------------------------------------
   initPortal(loadingScreen = true): Promise<boolean> | void {
     return new Promise<boolean>(resolve => {

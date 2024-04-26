@@ -17,11 +17,8 @@ import { ScoutingService } from 'src/app/services/scouting.service';
 export class ScoutFieldComponent implements OnInit, OnDestroy {
   scoutFieldResponse = new ScoutFieldFormResponse();
   teams: Team[] = [];
-  //team: number = NaN;
   matches: Match[] = [];
   noMatch = false;
-  //teamMatch: Match | null = null;
-  //scoutQuestions: QuestionWithConditions[] = [];
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
   scoutAutoQuestions: QuestionWithConditions[] = [];
   scoutTeleopQuestions: QuestionWithConditions[] = [];
@@ -69,8 +66,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.scoutFieldResponse.question_answers = sfq;
       this.sortQuestions();
     });
-
-    this.ss.scoutFieldSchedule.subscribe(sfs => this.scoutFieldSchedule = sfs);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
@@ -146,8 +141,15 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
       this.gs.decrementOutstandingCalls();
     });
 
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadSchedules().then(async result => {
+      await this.updateScoutFieldSchedule();
+      this.gs.decrementOutstandingCalls();
+    });
+
 
     this.populateOutstandingResponses();
+    this.setUpdateScoutFieldScheduleTimeout();
   }
 
   checkInScout(): void {
@@ -171,10 +173,21 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.checkScoutTimeout = window.setTimeout(() => this.updateScoutFieldSchedule(), interval);
   }
 
-  updateScoutFieldSchedule(): void {
-    this.api.get(false, 'scouting/field/questions/', undefined, (result: any) => {
-      this.scoutFieldSchedule = result['scoutFieldSchedule'] || new ScoutFieldSchedule();
-      this.checkInScout();
+  async updateScoutFieldSchedule(): Promise<void> {
+    await this.ss.getFieldSchedulesFromCache().then(sfss => {
+      console.log(sfss);
+    });
+
+    await this.ss.filterFieldSchedulesFromCache(sfs => {
+      const date = new Date();
+      const start = new Date(sfs.st_time);
+      const end = new Date(sfs.end_time);
+      return start <= date && date < end;
+    }).then(sfss => {
+      if (sfss.length > 1)
+        this.gs.addBanner(new Banner('Multiple active field schedules active.', 5000));
+
+      if (sfss.length > 0) this.scoutFieldSchedule = sfss[0];
     });
   }
 
