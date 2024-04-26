@@ -9,6 +9,7 @@ import { ScoutPitFormResponse, ScoutPitImage, Team } from 'src/app/models/scouti
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { CacheService } from 'src/app/services/cache.service';
+import { APIStatus } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-scout-field',
@@ -34,6 +35,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   outstandingResults: { id: number, team: number }[] = [];
 
+  apiStatus = APIStatus.prcs;
+
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
@@ -53,6 +56,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
+
+    this.api.apiStatus.subscribe(s => this.apiStatus = s)
   }
 
   ngOnInit() {

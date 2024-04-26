@@ -565,10 +565,10 @@ export class ScoutingService {
 
           if (!allLoaded) {
             this.gs.addBanner(new Banner('Error loading pit scouting responses from cache.'));
-            resolve(result);
+            resolve(null);
           }
           else
-            resolve(null);
+            resolve(result);
         });
       });
 
