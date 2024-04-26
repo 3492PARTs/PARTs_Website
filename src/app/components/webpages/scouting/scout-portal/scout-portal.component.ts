@@ -18,7 +18,7 @@ export class ScoutPortalComponent implements OnInit {
   user: User = new User();
   userPermissions: AuthPermission[] = [];
 
-  users: User[] | null = [];
+  users: User[] | null = null;
 
   scheduleByType: ScheduleByType[] = [];
   schedule: Schedule[] = [];
