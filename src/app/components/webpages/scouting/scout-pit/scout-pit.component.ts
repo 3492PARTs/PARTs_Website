@@ -69,8 +69,15 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
-    this.ss.loadTeams();
-    this.ss.initPitScouting();
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadTeams().then(success => {
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.initPitScouting().then(success => {
+      this.gs.decrementOutstandingCalls();
+    });
 
     this.populateOutstandingResponses();
   }
