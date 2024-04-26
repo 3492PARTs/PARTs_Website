@@ -319,8 +319,8 @@ export class ScoutingService {
 
   }
 
-  getFieldScoutingResponses(loadingScreen = true): Promise<ScoutFieldResponsesReturn | null> {
-    if (!this.outstandingGetFieldScoutingResponsesPromise)
+  getFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
+    if (forceCall || !this.outstandingGetFieldScoutingResponsesPromise)
       this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
         let last = null;
         await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
@@ -371,10 +371,12 @@ export class ScoutingService {
           else {
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
             await this.cs.ScoutFieldResponse.RemoveAllAsync();
-            await this.getFieldScoutingResponses().then(value => {
+            await this.getFieldScoutingResponses(true, true).then(value => {
               resolve(value);
             });
           }
+
+          this.outstandingGetFieldScoutingResponsesPromise = null;
         }, async (err: any) => {
           const scoutResponses = new ScoutFieldResponsesReturn();
 
@@ -400,6 +402,8 @@ export class ScoutingService {
           }
           else
             resolve(scoutResponses);
+
+          this.outstandingGetFieldScoutingResponsesPromise = null;
         });
       });
 
