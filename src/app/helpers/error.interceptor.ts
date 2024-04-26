@@ -58,7 +58,8 @@ export class ErrorInterceptor implements HttpInterceptor {
           }));
         }
 
-      } else if ([400, 403].includes(err.status) && this.user && this.user.id) {
+      }
+      else if ([400, 403].includes(err.status) && this.user && this.user.id) {
         this.auth.logOut();
       }
 

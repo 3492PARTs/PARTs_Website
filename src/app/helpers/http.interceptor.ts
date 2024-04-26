@@ -32,7 +32,7 @@ export class HTTPInterceptor implements HttpInterceptor {
   ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
     //const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
     const baseURL = environment.baseUrl;
-    //this.gs.devConsoleLog('HTTP Interceptor access token may be below');
+    this.gs.devConsoleLog('HTTP Interceptor access token may be below');
     if (request.url.includes('./assets')) { // this is for the icons used on the front end
       return next.handle(request);
     } else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
