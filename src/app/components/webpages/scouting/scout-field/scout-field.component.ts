@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { Banner, GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
+import { CompetitionLevel, Match, ScoutFieldFormResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
 import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
 import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
@@ -45,7 +45,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.ss.matches.subscribe(ms => {
-      this.matches = this.gs.cloneObject(ms);
+      this.matches = ms.filter(m => (m.comp_level as CompetitionLevel).comp_lvl_typ === 'qm');
 
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];

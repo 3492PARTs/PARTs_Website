@@ -330,7 +330,7 @@ export class ScoutingService {
 
         let params: any = undefined;
 
-        if (last)
+        if (!forceCall && last)
           params = {
             after_date_time: last
           }
@@ -548,6 +548,8 @@ export class ScoutingService {
           let changed = await this.updateSeasonInCache(result.current_season);
 
           changed = changed || await this.updateEventInCache(result.current_event);
+
+          if (changed) this.getFieldScoutingResponses(false, true);
 
           await this.cs.ScoutPitResponse.RemoveAllAsync();
 
