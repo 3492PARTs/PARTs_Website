@@ -9,6 +9,7 @@ import { User } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
+import { APIStatus } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-match-planning',
@@ -48,6 +49,8 @@ export class MatchPlanningComponent implements OnInit {
   blueChart: Chart | null = null;
   chosenGraphDataPoints = '';
 
+  apiStatus = APIStatus.prcs;
+
 
   constructor(private gs: GeneralService,
     private api: APIService,
@@ -56,12 +59,9 @@ export class MatchPlanningComponent implements OnInit {
     private ss: ScoutingService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
-      let r = 9;
-      /*
-      switch (this.page) {
-        
-      }*/
     });
+
+    this.api.apiStatus.subscribe(s => this.apiStatus = s);
   }
 
   ngOnInit(): void {
@@ -114,6 +114,11 @@ export class MatchPlanningComponent implements OnInit {
     });
 
     this.gs.incrementOutstandingCalls();
+    this.ss.loadTeams().then(result => {
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.gs.incrementOutstandingCalls();
     this.ss.loadTeamNotes().then(result => {
       this.gs.decrementOutstandingCalls();
     });
@@ -125,6 +130,8 @@ export class MatchPlanningComponent implements OnInit {
       this.currentTeamNote = new TeamNote();
       this.teamNoteModalVisible = false;
       this.ss.loadTeamNotes();
+    }, (error) => {
+      this.gs.triggerError(error);
     });
   }
 

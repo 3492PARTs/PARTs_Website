@@ -117,13 +117,13 @@ export class ScoutingService {
 
           if (callbackFn) callbackFn(result);
           resolve(true);
-        }, (error: any) => {
+        }, async (error: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
 
-          this.getTeamsFromCache().then((ts: Team[]) => {
+          await this.getTeamsFromCache().then((ts: Team[]) => {
             this.teamsBS.next(ts);
           }).catch((reason: any) => {
             console.log(reason);

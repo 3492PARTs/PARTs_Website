@@ -79,7 +79,7 @@
 </app-box>
 
 <app-box *ngIf="page === 'notes'" [Title]="'Team Notes'">
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
+    <app-modal *ngIf="apiStatus === 'on'" [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
         [(visible)]="teamNoteModalVisible">
         <app-form (SubmitFunction)="saveNote()">
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
