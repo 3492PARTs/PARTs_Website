@@ -330,17 +330,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.formDisabled = false;
     this.gs.scrollTo(0);
     this.init();
-    /*
-    this.cs.QuestionWithConditions.getAll((q) => q.where({ form_typ: 'field' })).then((sfqs: QuestionWithConditions[]) => {
-      this.scoutFieldResponse = new ScoutFieldResponse();
-      this.scoutFieldResponse.question_answers = sfqs;
-      this.noMatch = false;
-      this.sortQuestions();
-      this.buildTeamList();
-      this.amendMatchList();
-      this.gs.scrollTo(0);
-      this.formDisabled = false;
-    });*/
   }
 
   save(sfr?: ScoutFieldFormResponse, id?: number): void | null {

@@ -85,18 +85,14 @@ export class ScoutFieldResultsComponent implements OnInit {
     });
   }
 
-  download(individual: boolean): void | null {
+  download(): void {
     let export_file = new ScoutFieldResponsesReturn();
 
-    if (individual) {
-      //export_file = this.teamScoutResults;
-    } else {
-      export_file = this.scoutResponses;
-    }
+    export_file = this.scoutResponses;
 
     if (export_file.scoutAnswers.length <= 0) {
       this.gs.triggerError('Cannot export empty dataset.');
-      return null;
+      return;
     }
 
     let csv = '';
@@ -119,6 +115,7 @@ export class ScoutFieldResultsComponent implements OnInit {
   }
 
   async getTeamInfo(row: any) {
+    this.gs.incrementOutstandingCalls();
     await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': row['team_no'] })).then(sprs => {
       this.teamScoutResults = sprs;
     });
@@ -134,6 +131,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     });
 
     this.teamScoutResultsModalVisible = true;
+    this.gs.decrementOutstandingCalls();
   }
 
   showHideTableCols(): void {
