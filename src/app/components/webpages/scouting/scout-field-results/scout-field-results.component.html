@@ -35,7 +35,7 @@
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
-    <app-pit-result-display [ScoutPitResult]="scoutPitResult"></app-pit-result-display>
+    <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
 
     <app-form-element-group [LabelText]="'Notes'">
       <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr">
@@ -47,9 +47,8 @@
       <app-button [ButtonType]="'main'" (FunctionCallBack)="download(true)">Download</app-button>
     </app-button-ribbon>
 
-    <app-table [TableCols]="teamScoutResults['scoutCols']" [TableData]="teamScoutResults['scoutAnswers']"
-      [Scrollable]="true" [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Width]="tableWidth"
-      [Responsive]="true">
+    <app-table [TableCols]="scoutResponses.scoutCols" [TableData]="teamScoutResults" [Scrollable]="true"
+      [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Width]="tableWidth" [Responsive]="true">
     </app-table>
   </app-modal>
 </app-box>

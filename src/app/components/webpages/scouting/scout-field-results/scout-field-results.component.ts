@@ -18,8 +18,9 @@ export class ScoutFieldResultsComponent implements OnInit {
   scoutResponses: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
 
   teamScoutResultsModalVisible = false;
-  teamScoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
-  scoutPitResult: ScoutPitResponse = new ScoutPitResponse();
+  teamScoutResults: any[] = [];
+  teamScoutPitResult: ScoutPitResponse = new ScoutPitResponse();
+
   showScoutFieldCols!: any[];
   showScoutFieldColsList!: any[];
   scoutTableCols: any[] = [];
@@ -83,7 +84,7 @@ export class ScoutFieldResultsComponent implements OnInit {
     let export_file = new ScoutFieldResponsesReturn();
 
     if (individual) {
-      export_file = this.teamScoutResults;
+      //export_file = this.teamScoutResults;
     } else {
       export_file = this.scoutResponses;
     }
@@ -112,36 +113,15 @@ export class ScoutFieldResultsComponent implements OnInit {
     this.gs.downloadFileAs('ScoutFieldResults.csv', csv, 'text/csv');
   }
 
-  getTeamInfo(row: any) {
-    this.api.get(true, 'scouting/field/results/', {
-      team: String(row['team'])
-    }, (result: any) => {
-      this.teamScoutResults = result as ScoutFieldResponsesReturn;
-    }, (err: any) => {
-      this.gs.triggerError(err);
+  async getTeamInfo(row: any) {
+    await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': row['team_no'] })).then(sprs => {
+      this.teamScoutResults = sprs;
     });
 
-    await this.ss.getFieldResponsesResponseFromCache(f => f.where({ 'team_no': row['team'] })).then(sprs => {
-      scoutAnswers = sprs;
-    });
-
-    this.api.post(true, 'scouting/pit/results/', [{
-      team_no: String(row['team']),
-      team_nm: 'no team lol',
-      checked: true
-    }], (result: any) => {
-      if ((result as ScoutPitResponse[])[0]) {
-        this.scoutPitResult = (result as ScoutPitResponse[])[0];
-
-      } else {
-        this.scoutPitResult = new ScoutPitResponse();
+    await this.ss.getPitResponsesResponseFromCache(row['team_no']).then(spr => {
+      if (spr) {
+        this.teamScoutPitResult = spr;
       }
-
-      this.teamScoutResultsModalVisible = true;
-    }, (err: any) => {
-      console.log('error', err);
-      this.gs.triggerError(err);
-      this.gs.decrementOutstandingCalls();
     });
 
     this.api.get(true, 'scouting/match-planning/load-team-notes/', {
@@ -149,6 +129,8 @@ export class ScoutFieldResultsComponent implements OnInit {
     }, (result: any) => {
       this.teamNotes = result as TeamNote[];
     });
+
+    this.teamScoutResultsModalVisible = true;
   }
 
   showHideTableCols(): void {
