@@ -21,6 +21,8 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];
 
+  questions: QuestionWithConditions[] = [];
+
   private previousTeam!: number;
   robotPic!: File;
   previewUrl: any = null;
@@ -44,8 +46,10 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     private cs: CacheService) {
 
     this.ss.pitScoutingQuestions.subscribe(psqs => {
+      this.questions = this.gs.cloneObject(psqs);
       if (this.gs.strNoE(this.scoutPitResponse.team)) {
-        this.scoutPitResponse.question_answers = psqs;
+
+        this.scoutPitResponse.question_answers = this.gs.cloneObject(psqs);
       }
     });
 
@@ -202,6 +206,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
   reset(): void {
     this.previousTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
+    this.scoutPitResponse.question_answers = this.gs.cloneObject(this.questions);
     this.formDisabled = false;
     this.gs.scrollTo(0);
     this.init();
