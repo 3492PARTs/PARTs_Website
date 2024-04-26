@@ -112,21 +112,25 @@ export class MatchPlanningComponent implements OnInit {
     if (p) p.then(success => {
       this.gs.decrementOutstandingCalls();
     });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadTeamNotes().then(result => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   saveNote(): void {
-    this.api.post(true, 'scouting/match-planning/save-note/', this.currentTeamNote, (result: any) => {
+    this.api.post(true, 'scouting/match-planning/team-notes/', this.currentTeamNote, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.currentTeamNote = new TeamNote();
       this.teamNoteModalVisible = false;
+      this.ss.loadTeamNotes();
     });
   }
 
   loadTeamNotes(): void {
-    this.api.get(true, 'scouting/match-planning/load-team-notes/', {
-      team_no: this.currentTeamNote.team_no as number
-    }, (result: any) => {
-      this.teamNotes = result as TeamNote[];
+    this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_no': this.currentTeamNote.team_no })).then(tns => {
+      this.teamNotes = tns;
     });
   }
 

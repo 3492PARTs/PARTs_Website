@@ -377,7 +377,7 @@ export interface ITeamNote {
     team_note_id: number;
     event: Event | number;
     team_no: Team | number;
-    match: Match | number;
+    match_id: Match | string;
     user: User | number;
     note: string;
     time: Date;
@@ -388,7 +388,7 @@ export class TeamNote implements ITeamNote {
     team_note_id = NaN;
     event: Event | number = NaN;
     team_no: Team | number = NaN;
-    match: Match | number = NaN;
+    match_id: Match | string = '';
     user: User | number = NaN;
     note = '';
     time!: Date;

@@ -79,7 +79,7 @@ export class APIService {
     obs.subscribe(
       {
         next: (result: any) => {
-          this.onNext(result, onNext);
+          this.onNext(result, onNext, onError);
         },
         error: (err: any) => {
           this.onError(loadingScreen, err, onError);
@@ -105,7 +105,7 @@ export class APIService {
     obs.subscribe(
       {
         next: (result: any) => {
-          this.onNext(result, onNext);
+          this.onNext(result, onNext, onError);
         },
         error: (err: any) => {
           this.onError(loadingScreen, err, onError);
@@ -134,7 +134,7 @@ export class APIService {
     obs.subscribe(
       {
         next: (result: any) => {
-          this.onNext(result, onNext);
+          this.onNext(result, onNext, onError);
         },
         error: (err: any) => {
           this.onError(loadingScreen, err, onError);
@@ -160,7 +160,7 @@ export class APIService {
     obs.subscribe(
       {
         next: (result: any) => {
-          this.onNext(result, onNext);
+          this.onNext(result, onNext, onError);
         },
         error: (err: any) => {
           this.onError(loadingScreen, err, onError);
@@ -174,14 +174,17 @@ export class APIService {
     return obs;
   }
 
-  private onNext(result: any, onNext?: (result: any) => void): void {
+  private onNext(result: any, onNext?: (result: any) => void, onError?: (error: any) => void): void {
     // On successful calls set api status to on if it was off
     if (this.apiStatusBS.value === APIStatus.off) {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (this.gs.checkResponse(result))
+    if (this.gs.checkResponse(result)) {
       if (onNext) onNext(result);
+    }
+    else
+      if (onError) onError(result);
   }
 
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {

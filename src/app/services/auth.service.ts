@@ -114,7 +114,7 @@ export class AuthService {
               //this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
               this.getTokenExp(token.access);
               this.getTokenExp(token.refresh);
-              //this.token.next(token); handled in pipe call below
+              this.tokenBS.next(token);
 
               await this.getLoggedInUserData();
               this.ps.subscribeToNotifications();

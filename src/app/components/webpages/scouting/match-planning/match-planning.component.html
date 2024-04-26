@@ -81,19 +81,20 @@
 <app-box *ngIf="page === 'notes'" [Title]="'Team Notes'">
     <app-modal [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
         [(visible)]="teamNoteModalVisible">
-        <app-form>
+        <app-form (SubmitFunction)="saveNote()">
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no">
+                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" [Required]="true">
             </app-form-element>
 
             <app-form-element [LabelText]="'Note'" [Type]="'area'" [(Model)]="currentTeamNote.note" [Width]="'100%'"
-                [Rows]="5"></app-form-element>
+                [Rows]="8" [Required]="true"></app-form-element>
+            <app-button-ribbon>
+                <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+            </app-button-ribbon>
         </app-form>
 
-        <app-button-ribbon>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="saveNote()">Save</app-button>
-        </app-button-ribbon>
+
     </app-modal>
 
     <app-modal [ButtonType]="'main'" [ButtonText]="'View notes'" [Title]="'View Team Notes'">
