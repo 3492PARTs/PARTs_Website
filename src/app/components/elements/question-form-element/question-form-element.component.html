@@ -8,7 +8,7 @@
             [Required]="Question.required === 'y'"
             [Width]="['area', 'multiCheckbox', 'number'].includes(Question.question_typ.question_typ) ? '100%' : 'auto'"
             [FieldSize]="Question.question_typ.question_typ === 'multiCheckbox' ? 1000 : Question.question_typ.question_typ === 'text' ? 255 : 2000"
-            [Rows]="8" [Disabled]="Disabled">
+            [Rows]="8" [Disabled]="Disabled" [NumberIncDec]="true">
         </app-form-element>
     </div>
 </div>

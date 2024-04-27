@@ -105,6 +105,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   valid = true;
   hasValue = false;
 
+  @Input() NumberIncDec = false;
+
   @Input() ValidityFunction?: Function;
   @Input() SelectComparatorFunction!: (o1: any, o2: any) => boolean;
 
@@ -586,7 +588,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           const width = this.input.nativeElement.offsetWidth;
           this.renderer.setStyle(
             this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 50px)`
+            'max-width', `calc(${width}px - 16px - 16px)`
           );
         }
 
