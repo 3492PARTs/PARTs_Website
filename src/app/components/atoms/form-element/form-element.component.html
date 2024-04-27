@@ -44,15 +44,21 @@
         }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
+      <div *ngSwitchCase="'number'" class="number">
+        <input type="number" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
         }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+          (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
+        <div class="number-stepper inline-flex flex-wrap gap-1rem flex-grow-2">
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment()"></app-button>
+
+          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement()"></app-button>
+        </div>
+      </div>
       <input *ngSwitchCase="'phone'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
         [ngClass]="{
         'disabled': Disabled, 

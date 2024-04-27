@@ -91,7 +91,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   //@Input() RadioList: any[] = [];
   //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
-  @Input() FieldSize = 524288;
+  @Input() FieldSize = 2000;
   @Input() MinValue!: number;
   @Input() MaxValue!: number;
   //@Input() FormElementInline: boolean = true;
@@ -649,4 +649,16 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       if (!init) this.change(phone);
     }, 1);
   };
+
+  increment(): void {
+    if (this.gs.strNoE(this.Model)) this.Model = 0;
+    this.Model++;
+    this.change(this.Model);
+  }
+
+  decrement(): void {
+    if (this.gs.strNoE(this.Model)) this.Model = 0;
+    if (this.Model > 0) this.Model--;
+    this.change(this.Model);
+  }
 }

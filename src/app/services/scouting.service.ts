@@ -601,7 +601,10 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
+          await this.cs.ScoutFieldSchedule.RemoveAllAsync();
           await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result.field_schedule);
+
+          await this.cs.Schedule.RemoveAllAsync();
           await this.cs.Schedule.AddOrEditBulkAsync(result.schedule);
           this.scheduleTypesBS.next(result.schedule_types);
 
