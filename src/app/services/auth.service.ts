@@ -266,7 +266,7 @@ export class AuthService {
   }
 
   isTokenExpired(tkn: string): boolean {
-    return this.gs.strNoE(tkn) && this.getTokenExp(tkn) <= new Date();
+    return !(this.gs.strNoE(tkn) && this.getTokenExp(tkn) <= new Date());
   }
 
   isAuthenticated(): boolean {
@@ -276,7 +276,7 @@ export class AuthService {
 
   isSessionExpired(): boolean {
     this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
-    return this.gs.strNoE(this.tokenBS.value.refresh) || this.isTokenExpired(this.tokenBS.value.refresh);
+    return !this.isTokenExpired(this.tokenBS.value.refresh);
   }
 
   async getLoggedInUserData(): Promise<void> {
