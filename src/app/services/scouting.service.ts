@@ -234,16 +234,18 @@ export class ScoutingService {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'field',
           active: 'y'
-        }, (result: any) => {
+        }, async (result: any) => {
           /** 
            * On success load results and store in db 
            **/
           this.fieldScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
-          let ids = this.fieldScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-          this.cs.QuestionWithConditions.RemoveBulkAsync(ids).then(() => {
-            this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.fieldScoutingQuestionsBS.value);
+          await this.getScoutingQuestionsFromCache('field').then(qs => {
+            qs.forEach(async q => {
+              await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
+            });
           });
+          await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -426,16 +428,18 @@ export class ScoutingService {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'pit',
           active: 'y'
-        }, (result: any) => {
+        }, async (result: any) => {
           /** 
            * On success load results and store in db 
            **/
           this.pitScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
-          let ids = this.pitScoutingQuestionsBS.value.map(q => { return q.question_id || 0 });
-          this.cs.QuestionWithConditions.RemoveBulkAsync(ids).then(() => {
-            this.cs.QuestionWithConditions.AddOrEditBulkAsync(this.pitScoutingQuestionsBS.value);
+          await this.getScoutingQuestionsFromCache('pit').then(qs => {
+            qs.forEach(async q => {
+              await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
+            });
           });
+          await this.cs.QuestionWithConditions.AddBulkAsync(this.pitScoutingQuestionsBS.value);
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -556,6 +560,7 @@ export class ScoutingService {
           await this.cs.ScoutPitResponse.AddOrEditBulkAsync(result.teams);
 
           resolve(result);
+          this.outstandingGetPitScoutingResponsesPromise = null;
         }, async (err: any) => {
           const result = new ScoutPitResponsesReturn();
 
@@ -575,6 +580,8 @@ export class ScoutingService {
           }
           else
             resolve(result);
+
+          this.outstandingGetPitScoutingResponsesPromise = null;
         });
       });
 

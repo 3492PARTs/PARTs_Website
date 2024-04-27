@@ -366,7 +366,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setIndicatorPosition(): void {
-    console.log(this.Type);
     this.gs.triggerChange(() => {
       if (this.label && this.validationIndicator) {
         if (['radio', 'multiCheckbox'].includes(this.Type))

@@ -139,7 +139,7 @@ export class QuestionAggregateType {
 export class QuestionAggregate {
     question_aggregate_id!: number;
     field_name = '';
-    question_aggregate_typ = new QuestionAggregateType()
+    question_aggregate_typ?: QuestionAggregateType;
     questions: QuestionWithConditions[] = [];
     active = 'y'
 }

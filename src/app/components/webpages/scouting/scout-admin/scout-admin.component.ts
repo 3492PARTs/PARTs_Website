@@ -828,7 +828,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   compareQuestionAggregateTypes(qat1: QuestionAggregateType, qat2: QuestionAggregateType): boolean {
-    return qat1.question_aggregate_typ === qat2.question_aggregate_typ;
+    return qat1 && qat2 && qat1.question_aggregate_typ === qat2.question_aggregate_typ;
   }
 
   getScoutFieldQuestions(): void {
@@ -848,6 +848,8 @@ export class ScoutAdminComponent implements OnInit {
 
     this.fieldQuestions.forEach(q => {
       let match = false;
+
+      // keep those already in the list from showing as an option
       this.activeFieldQuestionAggregate.questions.forEach(aq => {
         if (q.question_id === aq.question_id) match = true;
       });
@@ -859,7 +861,7 @@ export class ScoutAdminComponent implements OnInit {
   addQuestionToFieldAggregate(): void {
     if (this.fieldQuestionToAddToAgg && !this.gs.strNoE(this.fieldQuestionToAddToAgg.question_id)) {
       this.activeFieldQuestionAggregate.questions.push(this.fieldQuestionToAddToAgg);
-      this.fieldQuestionToAddToAgg = new QuestionWithConditions();
+      this.fieldQuestionToAddToAgg = null;
       this.buildFieldQuestionAggQuestionList();
     }
   }
