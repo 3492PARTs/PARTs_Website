@@ -114,11 +114,14 @@ export class GeneralService {
     this.errorMessage = '';
   }
 
-  triggerError(message: string | HttpErrorResponse) {
+  triggerError(message: any) {
     this.showErrorModal = true;
 
-    if (message instanceof HttpErrorResponse) {
+    if (message.hasOwnProperty('message')) {
       this.errorMessage = message.message;
+    }
+    else if (message.hasOwnProperty('retMessage')) {
+      this.errorMessage = message.retMessage;
     }
     else
       this.errorMessage = message;

@@ -204,7 +204,8 @@
           'required': isFormElementRequired()
         }">
           <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
+            <input [ngClass]="{'disabled': Disabled}" matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model"
+              (ngModelChange)="change($event)">
             <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1"
               [stepMinute]="30" [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false"
@@ -222,8 +223,8 @@
       }">
         <div class="date" [ngClass]="{'disabled': Disabled}">
           <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)"
-              (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
+            <input [ngClass]="{'disabled': Disabled}" matInput [matDatepicker]="picker" [ngModel]="Model"
+              (ngModelChange)="change($event)" (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker" (click)="focusIn()">
             </mat-datepicker-toggle>

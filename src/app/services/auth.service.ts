@@ -201,6 +201,8 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<any> {
+    console.log('refresh');
+    console.log(this.tokenBS.value.refresh);
     return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh });
   }
 
