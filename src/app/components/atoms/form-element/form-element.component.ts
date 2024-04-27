@@ -145,6 +145,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
   @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
+  @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef = new ElementRef(null);
+
   @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef = new ElementRef(null);
   @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
 
@@ -155,6 +157,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   ngOnInit() {
     this.LabelID = this.gs.getNextGsId();
     this.originalMinWidth = this.MinWidth;
+
+    if (!this.FieldSize) this.FieldSize = 2000;
 
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
@@ -360,19 +364,28 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setIndicatorPosition(): void {
-    if (['radio', 'multiCheckbox'].includes(this.Type))
-      window.setTimeout(() => {
-        if (this.label && this.validationIndicator) {
+    console.log(this.Type);
+    this.gs.triggerChange(() => {
+      if (this.label && this.validationIndicator) {
+        if (['radio', 'multiCheckbox'].includes(this.Type))
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
-        }
-      }, 1);
-
-    if (['checkbox'].includes(this.Type))
-      window.setTimeout(() => {
-        if (this.label && this.validationIndicator) {
+        else if (['checkbox'].includes(this.Type))
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+        else if (this.input) {
+          let width = this.input.nativeElement.offsetWidth;
+
+          let offset = '0.5rem';
+
+          if (this.Type === 'select')
+            offset = '1.25rem'
+          //else if (this.Type === 'date')
+          //offset = '1rem'
+
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
         }
-      }, 1);
+      }
+    });
+
   }
 
   touchIt() {
@@ -565,8 +578,19 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   positionLabel(): void {
-    window.setTimeout(() => {
+
+    this.gs.triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
+
+        if (this.Type === 'number') {
+          const width = this.input.nativeElement.offsetWidth;
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'max-width', `calc(${width}px - 16px - 50px)`
+          );
+        }
+
+
         const { lineHeight } = getComputedStyle(this.label.nativeElement);
         const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
         const amountOfLinesTilAdjust = 2;
@@ -600,7 +624,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
         }
       }
-    }, 0);
+    });
   }
 
   strNoE(a: any): boolean {

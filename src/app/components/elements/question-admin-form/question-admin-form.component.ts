@@ -31,6 +31,7 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'required', ColLabel: 'Required' },
     { PropertyName: 'is_condition', ColLabel: 'Is Condition' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
