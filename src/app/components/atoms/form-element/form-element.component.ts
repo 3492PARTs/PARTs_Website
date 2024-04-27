@@ -84,7 +84,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
         this.change(tmp);
       }
-      this.positionLabel();
+      this.setElementPositions();
     }, 0);
   }
   _SelectList: any[] = [];
