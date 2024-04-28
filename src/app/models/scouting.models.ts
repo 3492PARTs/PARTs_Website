@@ -356,16 +356,14 @@ export class Schedule implements ISchedule {
     void_ind = 'n';
 }
 
-export class ScheduleType {
-    sch_typ = '';
-    sch_nm = '';
+export interface IScheduleType {
+    sch_typ: string;
+    sch_nm: string;
 }
 
-
-export class Schedules {
-    field_schedule: ScoutFieldSchedule[] = [];
-    schedule: Schedule[] = [];
-    schedule_types: ScheduleType[] = [];
+export class ScheduleType implements IScheduleType {
+    sch_typ = '';
+    sch_nm = '';
 }
 
 export class ScheduleByType {

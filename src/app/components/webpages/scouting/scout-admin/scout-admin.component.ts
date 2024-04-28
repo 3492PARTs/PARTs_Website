@@ -241,10 +241,11 @@ export class ScoutAdminComponent implements OnInit {
 
   adminInit(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadSchedules().then(result => {
-      if (result) {
-        this.scoutFieldSchedules = result.field_schedule;
-      }
+    this.ss.loadAllScoutingInfo().then(async success => {
+
+      await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
+        this.scoutFieldSchedules = sfss;
+      });
 
       this.gs.decrementOutstandingCalls();
     })
@@ -739,7 +740,7 @@ export class ScoutAdminComponent implements OnInit {
     const missing = 'missing';
     let schedule = '';
 
-    await this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
+    await this.ss.filterScoutFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
       (fs.red_two_id as User).id === user.id ||
       (fs.red_three_id as User).id === user.id ||
       (fs.blue_one_id as User).id === user.id ||
@@ -821,7 +822,7 @@ export class ScoutAdminComponent implements OnInit {
       this.activeUserScoutingScoutAnswers = frs;
     });
 
-    this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === ua.user.id ||
+    this.ss.filterScoutFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === ua.user.id ||
       (fs.red_two_id as User).id === ua.user.id ||
       (fs.red_three_id as User).id === ua.user.id ||
       (fs.blue_one_id as User).id === ua.user.id ||

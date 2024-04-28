@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Schedule, ScheduleByType, ScheduleType, Schedules, ScoutFieldSchedule } from '../../../../models/scouting.models';
+import { Schedule, ScheduleByType, ScheduleType, ScoutFieldSchedule } from '../../../../models/scouting.models';
 import { GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { AuthPermission, User } from 'src/app/models/user.models';
@@ -13,12 +13,14 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./scout-portal.component.scss']
 })
 export class ScoutPortalComponent implements OnInit {
-
-  schedules = new Schedules();
   user: User = new User();
   userPermissions: AuthPermission[] = [];
 
   users: User[] | null = null;
+
+  scheduleTypes: ScheduleType[] = [];
+
+  fullFieldSchedule: ScoutFieldSchedule[] = [];
 
   scheduleByType: ScheduleByType[] = [];
   schedule: Schedule[] = [];
@@ -81,15 +83,22 @@ export class ScoutPortalComponent implements OnInit {
   }
 
   portalInit(): void {
-    this.ss.loadSchedules().then(ss => {
-      if (ss) {
-        this.schedules = ss;
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadAllScoutingInfo().then(async success => {
 
-        this.schedule = this.schedules.schedule.filter(s => (s.user as User).id === this.user.id);
+      await this.ss.getScheduleTypesFromCache().then(sts => {
+        this.scheduleTypes = sts;
+      });
 
-        this.fieldSchedule = [];
-        this.schedules.field_schedule.forEach(fs => {
+      await this.ss.filterSchedulesFromCache(s => (s.user as User).id === this.user.id).then(ss => {
+        this.schedule = ss;
+      });
+
+      this.fieldSchedule = [];
+      await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
+        sfss.forEach(fs => {
           let pos = '';
+
           if ((fs.red_one_id as User)?.id === this.user.id) {
             pos = 'red one'
           }
@@ -119,20 +128,28 @@ export class ScoutPortalComponent implements OnInit {
               notification3: fs.notification3,
             });
           }
-        })
+        });
+      });
 
-        if (this.userPermissions.map(up => up.codename).includes('scheduling')) {
-          this.us.getUsers(1, 0).then(us => {
-            this.users = us;
-          });
+      if (this.userPermissions.map(up => up.codename).includes('scheduling')) {
+        await this.us.getUsers(1, 0).then(us => {
+          this.users = us;
+        });
 
-          this.scheduleByType = [];
-          this.schedules.schedule_types.forEach(st => {
-            const tmp = this.schedules.schedule.filter(s => s.sch_typ === st.sch_typ);
+        this.scheduleByType = [];
+        await this.ss.getScheduleTypesFromCache().then(sts => {
+          sts.forEach(async st => {
+            const tmp = await this.ss.filterSchedulesFromCache(s => s.sch_typ === st.sch_typ);
             if (tmp) this.scheduleByType.push({ sch_typ: st, schedule: tmp })
           });
-        }
+        });
+
+        await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
+          this.fullFieldSchedule = sfss;
+        });
       }
+
+      this.gs.decrementOutstandingCalls();
     });
     /*
     this.api.get(true, 'scouting/portal/init/', undefined, (result: any) => {

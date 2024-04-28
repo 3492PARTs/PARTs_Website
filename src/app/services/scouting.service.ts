@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, Schedules, IMatch, ITeam, TeamNote, ITeamNote } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -30,13 +30,18 @@ export class ScoutingService {
 
   private outstandingResponsesTimeout: number | undefined;
 
+  private outstandingLoadAllScoutingInfoPromise: Promise<boolean> | null = null;
+  private outstandingLoadSeasonsPromise: Promise<Season[] | null> | null = null;
+  private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
   private outstandingLoadTeamsPromise: Promise<boolean> | null = null;
   private outstandingLoadMatchesPromise: Promise<boolean> | null = null;
   private outstandingInitFieldScoutingPromise: Promise<boolean> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
-  private outstandingLoadSchedulePromise: Promise<Schedules | null> | null = null;
+  private outstandingLoadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
+  private outstandingLoadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
+  private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
   private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
@@ -100,17 +105,26 @@ export class ScoutingService {
     }, 200);
   }
 
-  // Load Teams -----------------------------------------------------------
+  // Load All Scouting Information -----------------------------------------------------------
   loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
-    if (!this.outstandingLoadTeamsPromise) {
-      this.outstandingLoadTeamsPromise = new Promise<boolean>(resolve => {
+    if (!this.outstandingLoadAllScoutingInfoPromise) {
+      this.outstandingLoadAllScoutingInfoPromise = new Promise<boolean>(resolve => {
         this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: any) => {
           /** 
            * On success load results and store in db 
            **/
           console.log(result);
 
+          await this.updateSeasonsCache(result['seasons'] as Season[]);
+          await this.updateEventsCache(result['events'] as Event[]);
+          await this.updateTeamsBSAndCache(result['teams'] as Team[]);
+          await this.updateMatchesBSAndCache(result['matches'] as Match[]);
+          await this.updateScheduleTypesCache(result['schedule_types'] as ScheduleType[]);
+          await this.updateSchedulesCache(result['schedules'] as Schedule[]);
+          await this.updateScoutFieldSchedulesCache(result['scout_field_schedules'] as ScoutFieldSchedule[]);
+
           if (callbackFn) callbackFn(result);
+
           resolve(true);
         }, async (error: any) => {
           /** 
@@ -118,12 +132,6 @@ export class ScoutingService {
            **/
           let allLoaded = true;
 
-          await this.getTeamsFromCache().then((ts: Team[]) => {
-            this.teamsBS.next(ts);
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
 
           if (!allLoaded) {
             this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
@@ -132,14 +140,182 @@ export class ScoutingService {
           else
             resolve(true);
 
-          this.outstandingLoadTeamsPromise = null;
+          this.outstandingLoadAllScoutingInfoPromise = null;
         }, () => {
-          this.outstandingLoadTeamsPromise = null;
+          this.outstandingLoadAllScoutingInfoPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadTeamsPromise;
+    return this.outstandingLoadAllScoutingInfoPromise;
+  }
+
+  // Load Seasons -----------------------------------------------------------
+  loadSeasons(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Season[] | null> {
+    if (!this.outstandingLoadSeasonsPromise) {
+      this.outstandingLoadSeasonsPromise = new Promise<Season[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/season/', undefined, async (result: Season[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateSeasonsCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+          let result: Season[] = [];
+
+          await this.getSeasonsFromCache().then((ss: Season[]) => {
+            result = ss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading seasons from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadSeasonsPromise = null;
+        }, () => {
+          this.outstandingLoadSeasonsPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadSeasonsPromise;
+  }
+
+  private async updateSeasonsCache(ss: Season[]): Promise<void> {
+    await this.cs.Season.RemoveAllAsync();
+    await this.cs.Season.AddBulkAsync(ss);
+  }
+
+  private updateSeasonInCache(s: Season): Promise<boolean> {
+    // return true if season changed
+    return new Promise(async resolve => {
+      let changed = false;
+
+      await this.cs.Season.filterAll((obj: Season) => {
+        return obj.season_id !== s.season_id && obj.current === 'y';
+      }).then((value: Season[]) => {
+        //console.log('filter season ');
+        //console.log(value);
+
+        changed = !value;
+
+        value.forEach(async v => {
+          v.current = 'n';
+          changed = true;
+          await this.cs.Season.AddOrEditAsync(v);
+        });
+      });
+
+      if (changed) {
+        this.loadMatches();
+        this.loadTeams();
+        this.loadSchedules();
+      }
+
+      await this.cs.Season.AddOrEditAsync(s);
+
+      resolve(changed);
+    });
+  }
+
+  getSeasonsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ISeason[]> {
+    return this.cs.Season.getAll(filterDelegate);
+  }
+
+  // Load Events -----------------------------------------------------------
+  loadEvents(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Event[] | null> {
+    if (!this.outstandingLoadEventsPromise) {
+      this.outstandingLoadEventsPromise = new Promise<Event[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/event/', undefined, async (result: Event[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateEventsCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+          let result: Event[] = [];
+
+          await this.getEventsFromCache().then((es: Event[]) => {
+            result = es;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading events from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadEventsPromise = null;
+        }, () => {
+          this.outstandingLoadEventsPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadEventsPromise;
+  }
+
+  private async updateEventsCache(es: Event[]): Promise<void> {
+    await this.cs.Event.RemoveAllAsync();
+    await this.cs.Event.AddBulkAsync(es);
+  }
+
+  private updateEventInCache(e: Event): Promise<boolean> {
+    // return true if event changed
+    return new Promise<boolean>(async resolve => {
+      let changed = false;
+
+      await this.cs.Event.filterAll((obj: Event) => {
+        return obj.event_id !== e.event_id && obj.current === 'y';
+      }).then((value: Event[]) => {
+        //console.log('filter event');
+        //console.log(value);
+
+        changed = !value;
+
+        value.forEach(async v => {
+          v.current = 'n';
+          changed = true;
+          await this.cs.Event.AddOrEditAsync(v);
+        });
+      });
+
+      if (changed) {
+        this.loadMatches();
+        this.loadTeams();
+        this.loadSchedules();
+      }
+
+      await this.cs.Event.AddOrEditAsync(e);
+
+      resolve(changed);
+    });
+  }
+
+  getEventsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IEvent[]> {
+    return this.cs.Event.getAll(filterDelegate);
   }
 
   // Load Teams -----------------------------------------------------------
@@ -460,7 +636,6 @@ export class ScoutingService {
     return this.cs.ScoutFieldResponse.getAll(filterDelegate);
   }
 
-
   // Pit Scouting --------------------------------------------------------------
   getPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
     if (!this.outstandingInitPitScoutingPromise) {
@@ -640,63 +815,169 @@ export class ScoutingService {
     return this.cs.ScoutPitResponse.filterAll(fn);
   }
 
-  // Schedules -------------------------------------------------------------------------
-  loadSchedules(loadingScreen = true): Promise<Schedules | null> {
-    if (!this.outstandingLoadSchedulePromise)
-      this.outstandingLoadSchedulePromise = new Promise<Schedules | null>(resolve => {
-        this.api.get(loadingScreen, 'scouting/schedules/', undefined, async (result: Schedules) => {
+  // Field Schedules -------------------------------------------------------------------------
+  loadScoutingFieldSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScoutFieldSchedule[] | null> {
+    if (!this.outstandingLoadScoutFieldSchedulesPromise) {
+      this.outstandingLoadScoutFieldSchedulesPromise = new Promise<ScoutFieldSchedule[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/scout-field-schedule/', undefined, async (result: ScoutFieldSchedule[]) => {
           /** 
            * On success load results and store in db 
            **/
-          await this.cs.ScoutFieldSchedule.RemoveAllAsync();
-          await this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(result.field_schedule);
+          await this.updateScoutFieldSchedulesCache(result);
 
-          await this.cs.Schedule.RemoveAllAsync();
-          await this.cs.Schedule.AddOrEditBulkAsync(result.schedule);
-          this.scheduleTypesBS.next(result.schedule_types);
-
+          if (callbackFn) callbackFn(result);
           resolve(result);
         }, async (error: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
+          let result: ScoutFieldSchedule[] = [];
 
-          const result = new Schedules();
-
-          await this.cs.ScoutFieldSchedule.getAll().then(sfss => {
-            result.field_schedule = sfss;
-          }).catch(reason => {
+          await this.getScoutFieldSchedulesFromCache().then((sfss: ScoutFieldSchedule[]) => {
+            result = sfss;
+          }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
           });
 
-          await this.cs.Schedule.getAll().then(ss => {
-            result.schedule = ss;
-          }).catch(reason => {
-            console.log(reason);
-            allLoaded = false;
-          });
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field schedules from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
 
-          if (allLoaded) resolve(result);
-          else resolve(null);
-          this.outstandingLoadSchedulePromise = null;
+          this.outstandingLoadScoutFieldSchedulesPromise = null;
         }, () => {
-          this.outstandingLoadSchedulePromise = null;
+          this.outstandingLoadScoutFieldSchedulesPromise = null;
         });
       });
+    }
 
-    return this.outstandingLoadSchedulePromise;
+    return this.outstandingLoadScoutFieldSchedulesPromise;
   }
 
-  getFieldSchedulesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutFieldSchedule[]> {
+  private async updateScoutFieldSchedulesCache(sfss: ScoutFieldSchedule[]): Promise<void> {
+    await this.cs.ScoutFieldSchedule.RemoveAllAsync();
+    await this.cs.ScoutFieldSchedule.AddBulkAsync(sfss);
+  }
+
+  getScoutFieldSchedulesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScoutFieldSchedule[]> {
     return this.cs.ScoutFieldSchedule.getAll(filterDelegate);
   }
 
-  filterFieldSchedulesFromCache(fn: (obj: ScoutFieldSchedule) => boolean): PromiseExtended<ScoutFieldSchedule[]> {
+  filterScoutFieldSchedulesFromCache(fn: (obj: ScoutFieldSchedule) => boolean): PromiseExtended<ScoutFieldSchedule[]> {
     return this.cs.ScoutFieldSchedule.filterAll(fn);
   }
 
+  // Schedules -------------------------------------------------------------------------
+  loadSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Schedule[] | null> {
+    if (!this.outstandingLoadSchedulesPromise) {
+      this.outstandingLoadSchedulesPromise = new Promise<Schedule[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/schedule/', undefined, async (result: Schedule[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateSchedulesCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+          let result: Schedule[] = [];
+
+          await this.getSchedulesFromCache().then((ss: Schedule[]) => {
+            result = ss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading schedules from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadSchedulesPromise = null;
+        }, () => {
+          this.outstandingLoadSchedulesPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadSchedulesPromise;
+  }
+
+  private async updateSchedulesCache(ss: Schedule[]): Promise<void> {
+    await this.cs.Schedule.RemoveAllAsync();
+    await this.cs.Schedule.AddBulkAsync(ss);
+  }
+
+  getSchedulesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<Schedule[]> {
+    return this.cs.Schedule.getAll(filterDelegate);
+  }
+
+  filterSchedulesFromCache(fn: (obj: Schedule) => boolean): PromiseExtended<Schedule[]> {
+    return this.cs.Schedule.filterAll(fn);
+  }
+
+  // Schedule Types -------------------------------------------------------------------------
+  loadScheduleTypes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScheduleType[] | null> {
+    if (!this.outstandingLoadScheduleTypesPromise) {
+      this.outstandingLoadScheduleTypesPromise = new Promise<ScheduleType[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/schedule-type/', undefined, async (result: ScheduleType[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateScheduleTypesCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+          let result: ScheduleType[] = [];
+
+          await this.getScheduleTypesFromCache().then((sts: ScheduleType[]) => {
+            result = sts;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading schedule types from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadScheduleTypesPromise = null;
+        }, () => {
+          this.outstandingLoadScheduleTypesPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadScheduleTypesPromise;
+  }
+
+  private async updateScheduleTypesCache(sts: ScheduleType[]): Promise<void> {
+    await this.cs.ScheduleType.RemoveAllAsync();
+    await this.cs.ScheduleType.AddBulkAsync(sts);
+  }
+
+  getScheduleTypesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScheduleType[]> {
+    return this.cs.ScheduleType.getAll(filterDelegate);
+  }
   // Portal -------------------------------------------------------------------
   initPortal(loadingScreen = true): Promise<boolean> | void {
     return new Promise<boolean>(resolve => {
@@ -770,69 +1051,6 @@ export class ScoutingService {
   }
 
   // Others ----------------------------------------------------------------------
-  private updateSeasonInCache(s: Season): Promise<boolean> {
-    // return true if season changed
-    return new Promise(async resolve => {
-      let changed = false;
-
-      await this.cs.Season.filterAll((obj: Season) => {
-        return obj.season_id !== s.season_id && obj.current === 'y';
-      }).then((value: Season[]) => {
-        //console.log('filter season ');
-        //console.log(value);
-
-        changed = !value;
-
-        value.forEach(async v => {
-          v.current = 'n';
-          changed = true;
-          await this.cs.Season.AddOrEditAsync(v);
-        });
-      });
-
-      if (changed) {
-        this.loadMatches();
-        this.loadTeams();
-        this.loadSchedules();
-      }
-
-      await this.cs.Season.AddOrEditAsync(s);
-
-      resolve(changed);
-    });
-  }
-
-  private updateEventInCache(e: Event): Promise<boolean> {
-    // return true if event changed
-    return new Promise<boolean>(async resolve => {
-      let changed = false;
-
-      await this.cs.Event.filterAll((obj: Event) => {
-        return obj.event_id !== e.event_id && obj.current === 'y';
-      }).then((value: Event[]) => {
-        //console.log('filter event');
-        //console.log(value);
-
-        changed = !value;
-
-        value.forEach(async v => {
-          v.current = 'n';
-          changed = true;
-          await this.cs.Event.AddOrEditAsync(v);
-        });
-      });
-
-      if (changed) {
-        this.loadMatches();
-        this.loadTeams();
-        this.loadSchedules();
-      }
-
-      await this.cs.Event.AddOrEditAsync(e);
-
-      resolve(changed);
-    });
-  }
 
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<QuestionWithConditions[]> {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
