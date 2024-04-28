@@ -22,6 +22,9 @@ export class ScoutAdminComponent implements OnInit {
 
   init: ScoutAdminInit = new ScoutAdminInit();
   users: User[] = [];
+
+  scoutFieldSchedules: ScoutFieldSchedule[] = [];
+
   //season!: number;
   newSeason!: number | null;
   delSeason!: number | null;
@@ -237,7 +240,16 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   adminInit(): void {
-    this.api.get(true, 'scouting/admin/init/', undefined, (result: any) => {
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadSchedules().then(result => {
+      if (result) {
+        this.scoutFieldSchedules = result.field_schedule;
+      }
+
+      this.gs.decrementOutstandingCalls();
+    })
+
+    /*this.api.get(true, 'scouting/admin/init/', undefined, (result: any) => {
       this.init = result as ScoutAdminInit;
       this.init.fieldSchedule.forEach(fs => {
         fs.st_time = new Date(fs.st_time),
@@ -248,7 +260,7 @@ export class ScoutAdminComponent implements OnInit {
       this.userTableCols = this.userTableCols;
     }, (err: any) => {
       this.gs.triggerError(err);
-    });
+    });*/
   }
 
   // Season -----------------------------------------------------------
@@ -723,11 +735,11 @@ export class ScoutAdminComponent implements OnInit {
     return name;
   }
 
-  getScoutSchedule(user: User): string {
+  async getScoutSchedule(user: User): Promise<string> {
     const missing = 'missing';
     let schedule = '';
 
-    this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
+    await this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
       (fs.red_two_id as User).id === user.id ||
       (fs.red_three_id as User).id === user.id ||
       (fs.blue_one_id as User).id === user.id ||
@@ -773,6 +785,8 @@ export class ScoutAdminComponent implements OnInit {
         });
     });
     */
+
+    console.log(schedule);
     return schedule;
   }
 

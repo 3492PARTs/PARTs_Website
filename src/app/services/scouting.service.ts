@@ -19,9 +19,6 @@ export class ScoutingService {
   private matchesBS = new BehaviorSubject<Match[]>([]);
   matches = this.matchesBS.asObservable();
 
-  private scoutFieldScheduleBS = new BehaviorSubject<ScoutFieldSchedule>(new ScoutFieldSchedule());
-  scoutFieldSchedule = this.scoutFieldScheduleBS.asObservable();
-
   private fieldScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
   fieldScoutingQuestions = this.fieldScoutingQuestionsBS.asObservable();
 
@@ -103,17 +100,60 @@ export class ScoutingService {
     }, 200);
   }
 
+  // Load Teams -----------------------------------------------------------
+  loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+    if (!this.outstandingLoadTeamsPromise) {
+      this.outstandingLoadTeamsPromise = new Promise<boolean>(resolve => {
+        this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: any) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          console.log(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(true);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          await this.getTeamsFromCache().then((ts: Team[]) => {
+            this.teamsBS.next(ts);
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
+            resolve(false);
+          }
+          else
+            resolve(true);
+
+          this.outstandingLoadTeamsPromise = null;
+        }, () => {
+          this.outstandingLoadTeamsPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadTeamsPromise;
+  }
 
   // Load Teams -----------------------------------------------------------
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
     if (!this.outstandingLoadTeamsPromise) {
       this.outstandingLoadTeamsPromise = new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/teams/', undefined, async (result: any) => {
+        this.api.get(loadingScreen, 'scouting/team/', undefined, async (result: any) => {
           /** 
            * On success load results and store in db 
            **/
           const res = (result as Team[]);
           await this.updateTeamsBSAndCache(res);
+
+          this.loadAllScoutingInfo();
 
           if (callbackFn) callbackFn(result);
           resolve(true);
@@ -175,7 +215,7 @@ export class ScoutingService {
   loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
     if (!this.outstandingLoadMatchesPromise) {
       this.outstandingLoadMatchesPromise = new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/matches/', undefined, async (result: Match[]) => {
+        this.api.get(loadingScreen, 'scouting/match/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
            **/
