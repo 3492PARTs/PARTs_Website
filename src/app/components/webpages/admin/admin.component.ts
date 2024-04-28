@@ -220,7 +220,7 @@ export class AdminComponent implements OnInit {
   }
 
   saveUser(): void {
-    this.us.saveUser(this.activeUser, this.userGroups, () => {
+    this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();

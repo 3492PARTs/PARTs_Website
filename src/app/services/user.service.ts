@@ -31,13 +31,9 @@ export class UserService {
     });
   }
 
-  saveUser(u: User, groups?: AuthGroup[], fn?: Function): void {
+  saveUser(u: User, fn?: Function): void {
 
-    let o: any = { user: u };
-
-    if (groups) o['groups'] = groups;
-
-    this.api.post(true, 'user/save/', o, (result: any) => {
+    this.api.post(true, 'user/save/', u, (result: any) => {
       this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
       if (fn) fn();
     });

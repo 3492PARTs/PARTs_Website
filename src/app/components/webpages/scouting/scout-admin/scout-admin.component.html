@@ -21,7 +21,7 @@
             [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [(Model)]="activeUser.phone_type_id" [SelectList]="phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
         </div>
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="activeUser.groups"
         [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
       <app-button-ribbon>
@@ -47,7 +47,7 @@
 
 
 <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
-  <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="init.fieldSchedule"
+  <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldSchedules"
     [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
     [ShowEditButton]="true" (EditRecordCallBack)="showScoutScheduleModal('Edit Scout Entry', $event)"
     [ScrollHeight]="'50rem'">
@@ -115,39 +115,39 @@
 
 <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
   <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
-    <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons" [DisplayProperty]="'season'"
-      [BindingProperty]="'season_id'" [(Model)]="init.currentSeason.season_id" (ModelChange)="getCurrentEvents()"
+    <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
+      [BindingProperty]="'season_id'" [(Model)]="currentSeason.season_id" (ModelChange)="getEventsForCurrentSeason()"
       [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList" [DisplayProperty]="'event_nm'"
-      [BindingProperty]="'event_id'" [(Model)]="init.currentEvent.event_id" [FormGroupInline]="true">
+      [BindingProperty]="'event_id'" [(Model)]="currentEvent.event_id" [FormGroupInline]="true">
     </app-form-element>
 
-    <app-form-element *ngIf="init.currentEvent && init.currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
-      [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="init.currentEvent.competition_page_active"
+    <app-form-element *ngIf="currentEvent && currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
+      [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="currentEvent.competition_page_active"
       (FunctionCallBack)="toggleCompetitionPage()" [FormGroupInline]="true">
     </app-form-element>
 
     <app-button-ribbon>
-      <app-button *ngIf="init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Save
+      <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Save
       </app-button>
 
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetSeasonForm()">Reset</app-button>
     </app-button-ribbon>
   </app-form-element-group>
 
-  <app-form-element-group *ngIf="init.currentSeason.season_id || init.currentEvent.event_id"
+  <app-form-element-group *ngIf="currentSeason.season_id || currentEvent.event_id"
     [LabelText]="'External Information Sources'">
     <div class="flex flex-wrap space-between">
-      <app-button *ngIf="init.currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+      <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
         Sync Season</app-button>
-      <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'"
-        (FunctionCallBack)="syncEvent(init.currentEvent.event_cd)">
+      <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'"
+        (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
         Sync Event</app-button>
-      <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+      <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
         Sync Matches</app-button>
-      <app-button *ngIf="init.currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
+      <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
         Sync Event-Team Info</app-button>
     </div>
   </app-form-element-group>
@@ -164,10 +164,9 @@
         </div>
 
         <div class="inline-flex align-items-center padding-right-half-em">
-          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="init.seasons"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="delSeason" [FormGroupInline]="true"
-            (FunctionCallBack)="getEvents(delSeason || -1, delEventList)">
+          <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons" [DisplayEmptyOption]="true"
+            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="delSeason" [FormGroupInline]="true"
+            (FunctionCallBack)="getEventsForDeleteEvent()">
           </app-form-element>
           <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
         </div>
@@ -189,9 +188,9 @@
 
           <p>OR</p>
 
-          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
-            [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-            [(Model)]="newEvent.season_id" [Required]="true" [Disabled]="newEvent.event_cd.length > 0">
+          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayEmptyOption]="true"
+            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="newEvent.season_id"
+            [Required]="true" [Disabled]="newEvent.event_cd.length > 0">
           </app-form-element>
 
           <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="newEvent.event_nm" [Required]="true"
@@ -266,10 +265,9 @@
       <app-modal [ButtonType]="'main'" [ButtonText]="'Link Team to Event'" [Title]="'Link Team to Event'"
         [visible]="linkTeamToEventModalVisible" [MaxWidth]="'400px'" (visibleChange)="showLinkTeamToEventModal($event)">
         <app-form (SubmitFunction)="addEventToTeams()">
-          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
-            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
-            (FunctionCallBack)="getEvents(linkTeamToEventSeason || -1, linkTeamToEventList)" [FormGroupInline]="true"
-            [Required]="true">
+          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
+            [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
+            (FunctionCallBack)="getEventsForLinkTeamToEvent()" [FormGroupInline]="true" [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
@@ -293,10 +291,9 @@
         [visible]="removeTeamFromEventModalVisible" [MaxWidth]="'400px'"
         (visibleChange)="showRemoveTeamFromEventModal($event)">
         <app-form (SubmitFunction)="removeEventToTeams()">
-          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="init.seasons"
-            [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="removeTeamFromEventSeason"
-            (FunctionCallBack)="getEvents(removeTeamFromEventSeason || -1, removeTeamFromEventList)"
-            [FormGroupInline]="true" [Required]="true">
+          <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
+            [BindingProperty]="'season_id'" [(Model)]="removeTeamFromEventSeason"
+            (FunctionCallBack)="getEventsForRemoveTeamFromEvent()" [FormGroupInline]="true" [Required]="true">
           </app-form-element>
 
           <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
@@ -304,8 +301,9 @@
             (FunctionCallBack)="buildRemoveTeamFromEventTeamList()" [Required]="true">
           </app-form-element>
 
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
-            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.team_no">
+          <app-form-element *ngIf="removeTeamFromEventEvent" [Type]="'multiSelect'" [LabelText]="'Teams'"
+            [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [(Model)]="removeTeamFromEventEvent.team_no">
           </app-form-element>
 
           <app-button-ribbon>
@@ -414,7 +412,7 @@
   <app-form (SubmitFunction)="savePhoneType()">
     <div class="flex align-items-center">
       <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
-        [(Model)]="phoneType" [SelectList]="init.phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
+        [(Model)]="phoneType" [SelectList]="phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
       </app-form-element>
 
       <app-button *ngIf="!newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">New Phone Type

@@ -45,7 +45,11 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     });
 
     this.ss.matches.subscribe(ms => {
-      this.matches = ms.filter(m => (m.comp_level as CompetitionLevel).comp_lvl_typ === 'qm');
+      this.matches = ms.filter(m => {
+        const compLvl = (m.comp_level as CompetitionLevel);
+
+        return compLvl && compLvl.comp_lvl_typ === 'qm';
+      });
 
       for (let i = 0; i < this.matches.length; i++) {
         const match = this.matches[i];
@@ -126,12 +130,8 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadTeams().then(success => {
-      this.gs.decrementOutstandingCalls();
-    });
-
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadMatches().then(success => {
+    this.ss.loadAllScoutingInfo().then(async success => {
+      await this.updateScoutFieldSchedule();
       this.gs.decrementOutstandingCalls();
     });
 
@@ -139,13 +139,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
     this.ss.getFieldScoutingForm().then(success => {
       this.gs.decrementOutstandingCalls();
     });
-
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadSchedules().then(async result => {
-      await this.updateScoutFieldSchedule();
-      this.gs.decrementOutstandingCalls();
-    });
-
 
     this.populateOutstandingResponses();
     this.setUpdateScoutFieldScheduleTimeout();

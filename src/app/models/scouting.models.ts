@@ -400,3 +400,13 @@ export class MatchPlanning {
     notes: TeamNote[] = [];
     alliance = '';
 }
+
+export class AllScoutInfo {
+    seasons: Season[] = [];
+    events: Event[] = [];
+    teams: Team[] = [];
+    matches: Match[] = [];
+    schedules: Schedule[] = [];
+    scout_field_schedules: ScoutFieldSchedule[] = [];
+    schedule_types: ScheduleType[] = [];
+}

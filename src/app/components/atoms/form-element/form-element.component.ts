@@ -45,7 +45,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input()
   set SelectList(sl: any) {
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       this._SelectList = sl;
 
       if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
@@ -84,8 +84,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
         this.change(tmp);
       }
+
+      if (this.LabelText === 'Event') {
+        console.log('pls' + new Date());
+      }
+
       this.setElementPositions();
-    }, 0);
+    });
   }
   _SelectList: any[] = [];
   //@Input() RadioList: any[] = [];
@@ -373,6 +378,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         else if (['checkbox'].includes(this.Type))
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         else if (this.input) {
+          if (this.LabelText === 'Event') {
+            console.log('ugg' + new Date());
+            console.log(this.input.nativeElement.offsetWidth);
+          }
           let width = this.input.nativeElement.offsetWidth;
 
           let offset = '0.5rem';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -30,7 +30,7 @@ export class ScoutingService {
 
   private outstandingResponsesTimeout: number | undefined;
 
-  private outstandingLoadAllScoutingInfoPromise: Promise<boolean> | null = null;
+  private outstandingLoadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
   private outstandingLoadSeasonsPromise: Promise<Season[] | null> | null = null;
   private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
   private outstandingLoadTeamsPromise: Promise<boolean> | null = null;
@@ -106,39 +106,89 @@ export class ScoutingService {
   }
 
   // Load All Scouting Information -----------------------------------------------------------
-  loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+  loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllScoutInfo | null> {
     if (!this.outstandingLoadAllScoutingInfoPromise) {
-      this.outstandingLoadAllScoutingInfoPromise = new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: any) => {
+      this.outstandingLoadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: AllScoutInfo) => {
           /** 
            * On success load results and store in db 
            **/
           console.log(result);
 
-          await this.updateSeasonsCache(result['seasons'] as Season[]);
-          await this.updateEventsCache(result['events'] as Event[]);
-          await this.updateTeamsBSAndCache(result['teams'] as Team[]);
-          await this.updateMatchesBSAndCache(result['matches'] as Match[]);
-          await this.updateScheduleTypesCache(result['schedule_types'] as ScheduleType[]);
-          await this.updateSchedulesCache(result['schedules'] as Schedule[]);
-          await this.updateScoutFieldSchedulesCache(result['scout_field_schedules'] as ScoutFieldSchedule[]);
+          await this.updateSeasonsCache(result.seasons);
+          await this.updateEventsCache(result.events);
+          await this.updateTeamsBSAndCache(result.teams);
+          await this.updateMatchesBSAndCache(result.matches);
+          await this.updateScheduleTypesCache(result.schedule_types);
+          await this.updateSchedulesCache(result.schedules);
+          await this.updateScoutFieldSchedulesCache(result.scout_field_schedules);
 
           if (callbackFn) callbackFn(result);
 
-          resolve(true);
-        }, async (error: any) => {
+          resolve(result);
+        }, async (err: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
 
+          let result = new AllScoutInfo();
+
+          await this.getSeasonsFromCache().then(ss => {
+            result.seasons = ss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getEventsFromCache().then(es => {
+            result.events = es;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getTeamsFromCache().then(ts => {
+            result.teams = ts;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getMatchesFromCache().then(ms => {
+            result.matches = ms;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getScheduleTypesFromCache().then(sts => {
+            result.schedule_types = sts;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getSchedulesFromCache().then(ss => {
+            result.schedules = ss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getScoutFieldSchedulesFromCache().then(sfs => {
+            result.scout_field_schedules = sfs;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-            resolve(false);
+            this.gs.addBanner(new Banner('Error loading all scouting info from cache.'));
+            resolve(null);
           }
           else
-            resolve(true);
+            resolve(result);
 
           this.outstandingLoadAllScoutingInfoPromise = null;
         }, () => {

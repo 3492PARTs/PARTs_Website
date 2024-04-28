@@ -86,12 +86,6 @@ export class MatchPlanningComponent implements OnInit {
     this.ss.teams.subscribe(ts => {
       this.teams = ts;
     });
-
-    this.ss.getFieldResponseColumnsFromCache().then(frcs => {
-      this.scoutCols = frcs;
-
-      this.buildGraphOptionsList();
-    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -108,13 +102,16 @@ export class MatchPlanningComponent implements OnInit {
       this.initData = (result as Init);
     });*/
     this.gs.incrementOutstandingCalls();
-    let p = this.ss.loadMatches();
-    if (p) p.then(success => {
+    this.ss.loadAllScoutingInfo().then(success => {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadTeams().then(result => {
+    this.ss.getFieldScoutingResponses().then(sfss => {
+      if (sfss) {
+        this.scoutCols = sfss.scoutCols;
+
+        this.buildGraphOptionsList();
+      }
       this.gs.decrementOutstandingCalls();
     });
 

@@ -20,8 +20,14 @@ export class ScoutAdminComponent implements OnInit {
   Model: any = {};
   page = 'users';
 
-  init: ScoutAdminInit = new ScoutAdminInit();
+  seasons: Season[] = [];
+  events: Event[] = [];
+  teams: Team[] = [];
+  currentSeason = new Season();
+  currentEvent = new Event();
   users: User[] = [];
+  phoneTypes: PhoneType[] = [];
+  userGroups: AuthGroup[] = [];
 
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
 
@@ -31,7 +37,7 @@ export class ScoutAdminComponent implements OnInit {
   newEvent: Event = new Event();
   delEvent!: number | null;
   delEventList: Event[] = [];
-  removeTeamFromEventEvent = new Event();
+  removeTeamFromEventEvent: Event | null = null;
   newTeam: Team = new Team();
   eventToTeams: EventToTeams = new EventToTeams();
   eventList: Event[] = [];
@@ -43,8 +49,6 @@ export class ScoutAdminComponent implements OnInit {
   removeTeamFromEventList: Event[] = [];
   removeTeamFromEventTeams: Team[] = [];
   competitionPageActive = 'n';
-  newPhoneType = false;
-  phoneType: PhoneType = new PhoneType();
 
   syncSeasonResponse = new RetMessage();
 
@@ -75,7 +79,6 @@ export class ScoutAdminComponent implements OnInit {
 
   manageUserModalVisible = false;
   activeUser: User = new User();
-  userGroups: AuthGroup[] = [];
   availableAuthGroups: AuthGroup[] = [];
   newAuthGroup: AuthGroup = new AuthGroup();
 
@@ -162,6 +165,9 @@ export class ScoutAdminComponent implements OnInit {
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResponse();
 
+  newPhoneType = false;
+  phoneType: PhoneType = new PhoneType();
+
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
@@ -241,33 +247,30 @@ export class ScoutAdminComponent implements OnInit {
 
   adminInit(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(async success => {
+    this.ss.loadAllScoutingInfo().then(async result => {
+      if (result) {
+        this.seasons = result.seasons;
+        this.events = result.events;
+        this.teams = result.teams;
+        this.currentSeason = result.seasons.filter(s => s.current === 'y')[0];
+        this.currentEvent = result.events.filter(e => e.current === 'y')[0];
+        this.scoutFieldSchedules = result.scout_field_schedules;
+        this.scoutFieldSchedules.forEach(fs => {
+          fs.st_time = new Date(fs.st_time),
+            fs.end_time = new Date(fs.end_time)
+        });
 
-      await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
-        this.scoutFieldSchedules = sfss;
-      });
+        this.getEventsForCurrentSeason();
+      };
 
       this.gs.decrementOutstandingCalls();
-    })
-
-    /*this.api.get(true, 'scouting/admin/init/', undefined, (result: any) => {
-      this.init = result as ScoutAdminInit;
-      this.init.fieldSchedule.forEach(fs => {
-        fs.st_time = new Date(fs.st_time),
-          fs.end_time = new Date(fs.end_time)
-      });
-      //this.eventToTeams.teams = JSON.parse(JSON.stringify(this.init.teams));
-      this.getEvents(this.init.currentSeason.season_id, this.eventList);
-      this.userTableCols = this.userTableCols;
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });*/
+    });
   }
 
   // Season -----------------------------------------------------------
   syncSeason(): void {
     this.api.get(true, 'scouting/admin/sync-season/', {
-      season_id: this.init.currentSeason.season_id.toString()
+      season_id: this.currentSeason.season_id.toString()
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
       this.adminInit();
@@ -277,7 +280,7 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   syncEvent(event_cd: string): void {
-    this.init.currentEvent.event_cd
+    this.currentEvent.event_cd
     this.api.get(true, 'scouting/admin/sync-event/', {
       event_cd: event_cd
     }, (result: any) => {
@@ -309,13 +312,13 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setSeason(): void | null {
-    if (!this.init.currentSeason.season_id || !this.init.currentEvent.event_id) {
+    if (!this.currentSeason.season_id || !this.currentEvent.event_id) {
       this.gs.triggerError('No season or event selected.');
       return null;
     }
     this.api.get(true, 'scouting/admin/set-season/', {
-      season_id: this.init.currentSeason.season_id.toString(),
-      event_id: this.init.currentEvent.event_id.toString()
+      season_id: this.currentSeason.season_id.toString(),
+      event_id: this.currentEvent.event_id.toString()
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.adminInit();
@@ -325,20 +328,20 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   toggleCompetitionPage(): void | null {
-    if (!this.init.currentEvent.event_id) {
+    if (!this.currentEvent.event_id) {
       this.gs.triggerError('No event set.');
       return null;
     }
 
     if (!confirm('Are you sure you want to toggle the competition page?')) {
-      if (this.init.currentEvent.competition_page_active !== 'no') {
+      if (this.currentEvent.competition_page_active !== 'no') {
         window.setTimeout(() => {
-          this.init.currentEvent.competition_page_active = 'no';
+          this.currentEvent.competition_page_active = 'no';
         }, 1);
       }
       else {
         window.setTimeout(() => {
-          this.init.currentEvent.competition_page_active = 'yes';
+          this.currentEvent.competition_page_active = 'yes';
         }, 1);
       }
       return null;
@@ -352,24 +355,36 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
-  getCurrentEvents(): void {
-    this.init.currentEvent = new Event();
-    this.getEvents(this.init.currentSeason.season_id, this.eventList);
+  async getEventsForCurrentSeason(): Promise<void> {
+    this.eventList = await this.getEventsForSeason(this.currentSeason.season_id);
+
+    console.log(this.eventList);
+
+    let current = this.eventList.filter(e => e.current === 'y');
+    if (current.length > 0) this.currentEvent = current[0];
+    else this.currentEvent = new Event();
   }
 
-  getEvents(season_id: number, events: Event[]): void {
-    if (!this.gs.strNoE(season_id)) {
-      this.api.get(true, 'scouting/admin/season-events/', {
-        season_id: season_id
-      }, (result: any) => {
-        window.setTimeout(() => {
-          events.splice(0, events.length);
-          (result as Event[]).forEach(e => { events.push(e) });
-        }, 1);
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
-    }
+  async getEventsForLinkTeamToEvent() {
+    this.linkTeamToEventList = await this.getEventsForSeason(this.linkTeamToEventSeason || NaN);
+  }
+
+  async getEventsForRemoveTeamFromEvent() {
+    this.removeTeamFromEventList = await this.getEventsForSeason(this.removeTeamFromEventSeason || NaN);
+  }
+
+  async getEventsForDeleteEvent() {
+    this.delEventList = await this.getEventsForSeason(this.delSeason || NaN);
+  }
+
+  async getEventsForSeason(season_id: number): Promise<Event[]> {
+    let eventsList: Event[] = [];
+
+    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
+      eventsList = es;
+    });
+
+    return eventsList;
   }
 
   resetSeasonForm(): void {
@@ -445,7 +460,7 @@ export class ScoutAdminComponent implements OnInit {
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.delEvent = null;
-        this.getEvents(this.delSeason || -1, this.delEventList);
+        this.getEventsForDeleteEvent();
         this.adminInit();
       }, (err: any) => {
         this.gs.triggerError(err);
@@ -479,7 +494,7 @@ export class ScoutAdminComponent implements OnInit {
       this.adminInit();
       this.linkTeamToEventModalVisible = false;
       this.linkTeamToEventSeason = null;
-      this.linkTeamToEventEvent = new Event();
+      this.linkTeamToEventEvent = null;
       this.linkTeamToEventTeams = [];
       this.eventToTeams = new EventToTeams();;
     }, (err: any) => {
@@ -493,11 +508,11 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.gs.cloneObject(this.removeTeamFromEventEvent.team_no);
+    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? this.gs.cloneObject(this.removeTeamFromEventEvent.team_no) : [];
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
-    let teamList = this.gs.cloneObject(this.init.teams);
+    let teamList = this.gs.cloneObject(this.teams);
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -514,14 +529,14 @@ export class ScoutAdminComponent implements OnInit {
 
   clearEventToTeams() {
     this.linkTeamToEventSeason = null;
-    this.linkTeamToEventEvent = new Event();
+    this.linkTeamToEventEvent = null;
     this.linkTeamToEventList = [];
     this.eventToTeams.teams = [];
   }
 
   removeEventToTeams(): void {
     this.api.post(true, 'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent, (result: any) => {
-      this.removeTeamFromEventEvent = new Event();
+      this.removeTeamFromEventEvent = null;
       this.adminInit();
       this.removeTeamFromEventModalVisible = false;
       this.removeTeamFromEventSeason = null;
@@ -534,7 +549,7 @@ export class ScoutAdminComponent implements OnInit {
 
   clearRemoveEventToTeams() {
     this.removeTeamFromEventSeason = null;
-    this.removeTeamFromEventEvent = new Event();
+    this.removeTeamFromEventEvent = null;
     this.removeTeamFromEventList = [];
   }
 
@@ -546,18 +561,11 @@ export class ScoutAdminComponent implements OnInit {
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.us.getUserGroups(u.id.toString(), (result: any) => {
-      if (this.gs.checkResponse(result)) {
-        this.userGroups = result as AuthGroup[];
-        this.buildAvailableUserGroups();
-      }
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    this.buildAvailableUserGroups();
   }
 
   private buildAvailableUserGroups(): void {
-    this.availableAuthGroups = this.init.userGroups.filter(ug => {
+    this.availableAuthGroups = this.userGroups.filter(ug => {
       return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
     });
   }
@@ -572,7 +580,7 @@ export class ScoutAdminComponent implements OnInit {
           return null;
         }
       }
-      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
+      this.activeUser.groups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
       this.newAuthGroup = new AuthGroup();
       this.buildAvailableUserGroups();
     }
@@ -582,7 +590,7 @@ export class ScoutAdminComponent implements OnInit {
     if (ug.name === 'lead_scout') {
       this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
     } else {
-      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+      this.activeUser.groups.splice(this.activeUser.groups.lastIndexOf(ug), 1);
       this.buildAvailableUserGroups();
     }
   }
@@ -592,7 +600,7 @@ export class ScoutAdminComponent implements OnInit {
 
     if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
 
-    this.us.saveUser(this.activeUser, this.userGroups, () => {
+    this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
       this.adminInit();
@@ -603,10 +611,9 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getPhoneType(type: number): string {
-    if (this.init)
-      for (let pt of this.init.phoneTypes) {
-        if (pt.phone_type_id === type) return pt.carrier;
-      }
+    for (let pt of this.phoneTypes) {
+      if (pt.phone_type_id === type) return pt.carrier;
+    }
 
     return '';
   }
@@ -627,7 +634,7 @@ export class ScoutAdminComponent implements OnInit {
 
   copyScoutFieldScheduleEntry(): void {
     let ss = new ScoutFieldSchedule();
-    ss.event_id = this.init.currentEvent.event_id;
+    ss.event_id = this.currentEvent.event_id;
     ss.red_one_id = this.scoutFieldSchedule.red_one_id;
     ss.red_two_id = this.scoutFieldSchedule.red_two_id;
     ss.red_three_id = this.scoutFieldSchedule.red_three_id;
@@ -638,12 +645,12 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   saveScoutFieldScheduleEntry(): void | null {
-    if (!this.init.currentEvent || this.init.currentEvent.event_id < 0) {
+    if (!this.currentEvent || this.currentEvent.event_id < 0) {
       this.gs.triggerError('Event not set, can\'t schedule scouts.');
       return null;
     }
     let sfs = JSON.parse(JSON.stringify(this.scoutFieldSchedule));
-    sfs.event_id = this.init.currentEvent.event_id;
+    sfs.event_id = this.currentEvent.event_id;
     sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
     sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
     sfs.red_three_id = sfs.red_three_id && (sfs!.red_three_id as User).id ? (sfs!.red_three_id as User).id : null;
@@ -662,16 +669,6 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   notifyUsers(scout_field_sch_id: number): void {
-    let ss = this.gs.cloneObject(this.init.fieldSchedule);
-    ss.forEach((sfs: ScoutFieldSchedule) => {
-      sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
-      sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
-      sfs.red_three_id = sfs.red_three_id && (sfs!.red_three_id as User).id ? (sfs!.red_three_id as User).id : null;
-      sfs.blue_one_id = sfs.blue_one_id && (sfs!.blue_one_id as User).id ? (sfs!.blue_one_id as User).id : null;
-      sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
-      sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
-    });
-
     this.api.get(true, 'scouting/admin/notify-users/', {
       id: scout_field_sch_id
     }, (result: any) => {
@@ -1032,10 +1029,12 @@ export class ScoutAdminInit {
   events: Event[] = [];
   currentSeason: Season = new Season();
   currentEvent: Event = new Event();
-  userGroups: AuthGroup[] = [];
-  phoneTypes: PhoneType[] = [];
   fieldSchedule: ScoutFieldSchedule[] = [];
   pitSchedule: ScoutPitSchedule[] = [];
+
+  userGroups: AuthGroup[] = [];
+  phoneTypes: PhoneType[] = [];
+
   //pastSchedule: ScoutSchedule[] = [];
   scoutQuestionType: FormType[] = [];
   teams: Team[] = [];
