@@ -9,6 +9,7 @@ import { Team, Event, ScoutFieldSchedule, ScoutFieldResponsesReturn, Season, Sco
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
+import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
   selector: 'app-scout-admin',
@@ -92,16 +93,17 @@ export class ScoutAdminComponent implements OnInit {
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
-  userActivity: UserActivity[] = [];
-  activeUserActivity: UserActivity = new UserActivity();
+  usersScoutingUserInfo: UserInfo[] = [];
+  activeUserScoutingUserInfo: UserInfo = new UserInfo();
   userActivityTableCols = [
     { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserName.bind(this) },
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
-    { PropertyName: 'user.id', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
+    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
   ];
   userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
 
+  activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
   userScoutActivityScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
@@ -117,6 +119,8 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'time', ColLabel: 'Time' },
   ];
 
+  activeUserScoutingScoutCols: any[] = [];
+  activeUserScoutingScoutAnswers: any[] = [];
   userScoutActivityResultsTableWidth = '200%';
 
   questionAggregateTypes: QuestionAggregateType[] = [];
@@ -159,7 +163,8 @@ export class ScoutAdminComponent implements OnInit {
     private api: APIService,
     private authService: AuthService,
     private ns: NavigationService,
-    private us: UserService) {
+    private us: UserService,
+    private ss: ScoutingService) {
     this.ns.currentSubPage.subscribe(p => {
       this.page = p;
 
@@ -175,7 +180,7 @@ export class ScoutAdminComponent implements OnInit {
           });
           break;
         case 'scoutAct':
-          this.getScoutingActivity();
+          this.getUsersScoutingUserInfo();
           break;
         case 'mngFldRes':
           this.getFieldResults();
@@ -246,6 +251,7 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
+  // Season -----------------------------------------------------------
   syncSeason(): void {
     this.api.get(true, 'scouting/admin/sync-season/', {
       season_id: this.init.currentSeason.season_id.toString()
@@ -393,74 +399,6 @@ export class ScoutAdminComponent implements OnInit {
     }
   }
 
-  showManageUserModal(u: User): void {
-    this.manageUserModalVisible = true;
-    this.activeUser = this.gs.cloneObject(u);
-    this.us.getUserGroups(u.id.toString(), (result: any) => {
-      if (this.gs.checkResponse(result)) {
-        this.userGroups = result as AuthGroup[];
-        this.buildAvailableUserGroups();
-      }
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-  }
-
-  private buildAvailableUserGroups(): void {
-    this.availableAuthGroups = this.init.userGroups.filter(ug => {
-      return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
-    });
-  }
-
-  addUserGroup(): void | null {
-    const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
-      return ag.id === this.newAuthGroup.id;
-    });
-    if (tmp[0]) {
-      if (tmp[0].name === 'lead_scout') {
-        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
-          return null;
-        }
-      }
-      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
-      this.newAuthGroup = new AuthGroup();
-      this.buildAvailableUserGroups();
-    }
-  }
-
-  removeUserGroup(ug: AuthGroup): void {
-    if (ug.name === 'lead_scout') {
-      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
-    } else {
-      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
-      this.buildAvailableUserGroups();
-    }
-  }
-
-  saveUser(u?: User): void {
-    if (u) this.activeUser = u;
-
-    if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
-
-    this.us.saveUser(this.activeUser, this.userGroups, () => {
-      this.manageUserModalVisible = false;
-      this.activeUser = new User();
-      this.adminInit();
-      this.us.getUsers(1).then(us => {
-        this.users = us || [];
-      });
-    });
-  }
-
-  getPhoneType(type: number): string {
-    if (this.init)
-      for (let pt of this.init.phoneTypes) {
-        if (pt.phone_type_id === type) return pt.carrier;
-      }
-
-    return '';
-  }
-
   saveEvent(): void {
     if (this.gs.strNoE(this.newEvent.event_cd)) {
       this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
@@ -591,6 +529,74 @@ export class ScoutAdminComponent implements OnInit {
     this.removeTeamFromEventModalVisible = visible;
     this.clearRemoveEventToTeams();
   }
+  // Users ----------------------------------------------------------------------
+  showManageUserModal(u: User): void {
+    this.manageUserModalVisible = true;
+    this.activeUser = this.gs.cloneObject(u);
+    this.us.getUserGroups(u.id.toString(), (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        this.userGroups = result as AuthGroup[];
+        this.buildAvailableUserGroups();
+      }
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  private buildAvailableUserGroups(): void {
+    this.availableAuthGroups = this.init.userGroups.filter(ug => {
+      return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
+    });
+  }
+
+  addUserGroup(): void | null {
+    const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
+      return ag.id === this.newAuthGroup.id;
+    });
+    if (tmp[0]) {
+      if (tmp[0].name === 'lead_scout') {
+        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
+          return null;
+        }
+      }
+      this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
+      this.newAuthGroup = new AuthGroup();
+      this.buildAvailableUserGroups();
+    }
+  }
+
+  removeUserGroup(ug: AuthGroup): void {
+    if (ug.name === 'lead_scout') {
+      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
+    } else {
+      this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+      this.buildAvailableUserGroups();
+    }
+  }
+
+  saveUser(u?: User): void {
+    if (u) this.activeUser = u;
+
+    if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
+
+    this.us.saveUser(this.activeUser, this.userGroups, () => {
+      this.manageUserModalVisible = false;
+      this.activeUser = new User();
+      this.adminInit();
+      this.us.getUsers(1).then(us => {
+        this.users = us || [];
+      });
+    });
+  }
+
+  getPhoneType(type: number): string {
+    if (this.init)
+      for (let pt of this.init.phoneTypes) {
+        if (pt.phone_type_id === type) return pt.carrier;
+      }
+
+    return '';
+  }
 
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
     this.scoutScheduleModalTitle = title;
@@ -691,14 +697,14 @@ export class ScoutAdminComponent implements OnInit {
     return false;
   }
 
-  getScoutingActivity(): void {
-    this.api.get(true, 'scouting/admin/scout-activity/', undefined, (result: any) => {
-      this.userActivity = result as UserActivity[];
+  getUsersScoutingUserInfo(): void {
+    this.api.get(true, 'scouting/admin/scouting-user-info/', undefined, (result: any) => {
+      this.usersScoutingUserInfo = result as UserInfo[];
 
-      if (this.activeUserActivity) {
-        this.userActivity.forEach(ua => {
-          if (ua.user.id == this.activeUserActivity.user.id)
-            this.activeUserActivity = this.gs.cloneObject(ua);
+      if (this.activeUserScoutingUserInfo) {
+        this.usersScoutingUserInfo.forEach(ua => {
+          if (ua.user.id == this.activeUserScoutingUserInfo.user.id)
+            this.activeUserScoutingUserInfo = this.gs.cloneObject(ua);
         });
       }
     }, (err: any) => {
@@ -709,7 +715,7 @@ export class ScoutAdminComponent implements OnInit {
   getUserName(id: number): string {
     let name = '';
 
-    this.userActivity.forEach(ua => {
+    this.usersScoutingUserInfo.forEach(ua => {
       if (ua.user.id === id)
         name = `${ua.user.first_name} ${ua.user.last_name}`;
     });
@@ -717,10 +723,35 @@ export class ScoutAdminComponent implements OnInit {
     return name;
   }
 
-  getScoutSchedule(id: number): string {
+  getScoutSchedule(user: User): string {
     const missing = 'missing';
     let schedule = '';
 
+    this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
+      (fs.red_two_id as User).id === user.id ||
+      (fs.red_three_id as User).id === user.id ||
+      (fs.blue_one_id as User).id === user.id ||
+      (fs.blue_two_id as User).id === user.id ||
+      (fs.blue_three_id as User).id === user.id)).then(schedules => {
+        schedules.forEach(s => {
+          schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
+          if ((s.red_one_id as User).id === user.id)
+            schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
+          else if ((s.red_two_id as User).id === user.id)
+            schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
+          else if ((s.red_three_id as User).id === user.id)
+            schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
+          else if ((s.blue_one_id as User).id === user.id)
+            schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
+          else if ((s.blue_two_id as User).id === user.id)
+            schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
+          else if ((s.blue_three_id as User).id === user.id)
+            schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
+
+          schedule += '\n';
+        });
+      });
+    /*
     this.userActivity.forEach(ua => {
       if (ua.user.id === id)
         ua.schedule.forEach(s => {
@@ -741,7 +772,7 @@ export class ScoutAdminComponent implements OnInit {
           schedule += '\n';
         });
     });
-
+    */
     return schedule;
   }
 
@@ -752,27 +783,47 @@ export class ScoutAdminComponent implements OnInit {
   getScoutingActivityScouts(sfs: ScoutFieldSchedule): string {
     const missing = 'missing';
     let str = '';
-    str += sfs.red_one_id ? `R1: ${sfs.red_one_id.first_name} ${sfs.red_one_id.last_name}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
-    str += sfs.red_two_id ? `R2: ${sfs.red_two_id.first_name} ${sfs.red_two_id.last_name}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
-    str += sfs.red_three_id ? `R3: ${sfs.red_three_id.first_name} ${sfs.red_three_id.last_name}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
-    str += sfs.blue_one_id ? `B1: ${sfs.blue_one_id.first_name} ${sfs.blue_one_id.last_name}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
-    str += sfs.blue_two_id ? `B2: ${sfs.blue_two_id.first_name} ${sfs.blue_two_id.last_name}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
-    str += sfs.blue_three_id ? `B3: ${sfs.blue_three_id.first_name} ${sfs.blue_three_id.last_name}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
+    str += sfs.red_one_id ? `R1: ${(sfs.red_one_id as User).get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
+    str += sfs.red_two_id ? `R2: ${(sfs.red_two_id as User).get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
+    str += sfs.red_three_id ? `R3: ${(sfs.red_three_id as User).get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
+    str += sfs.blue_one_id ? `B1: ${(sfs.blue_one_id as User).get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
+    str += sfs.blue_two_id ? `B2: ${(sfs.blue_two_id as User).get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
+    str += sfs.blue_three_id ? `B3: ${(sfs.blue_three_id as User).get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
     return str;
   }
 
-  showUserActivityModal(ua: UserActivity): void {
+  async showUserActivityModal(ua: UserInfo): Promise<void> {
     this.userActivityModalVisible = true;
-    this.activeUserActivity = ua;
+    this.activeUserScoutingUserInfo = ua;
+
+    this.activeUserScoutingScoutCols = [];
+    this.activeUserScoutingScoutAnswers = [];
+
+    await this.ss.getFieldResponseColumnsFromCache().then(frcs => {
+      this.activeUserScoutingScoutCols = frcs;
+    });
+
+    await this.ss.getFieldResponseFromCache(f => f.where({ 'user_id': ua.user.id })).then(frs => {
+      this.activeUserScoutingScoutAnswers = frs;
+    });
+
+    this.ss.filterFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === ua.user.id ||
+      (fs.red_two_id as User).id === ua.user.id ||
+      (fs.red_three_id as User).id === ua.user.id ||
+      (fs.blue_one_id as User).id === ua.user.id ||
+      (fs.blue_two_id as User).id === ua.user.id ||
+      (fs.blue_three_id as User).id === ua.user.id)).then(fsf => {
+        this.activeUserScoutingFieldSchedule = fsf;
+      })
   }
 
   toggleUserUnderReviewStatus(): void {
     this.gs.triggerConfirm('Are you sure you want to change this scout\'s under review status?', () => {
       this.api.get(true, 'scouting/admin/toggle-scout-under-review/', {
-        user_id: this.activeUserActivity.user.id.toString(),
+        user_id: this.activeUserScoutingUserInfo.user.id.toString(),
       }, (result: any) => {
         if (this.gs.checkResponse(result)) {
-          this.getScoutingActivity();
+          this.getUsersScoutingUserInfo();
           this.gs.successfulResponseBanner(result);
         }
       }, (err: any) => {
@@ -785,10 +836,10 @@ export class ScoutAdminComponent implements OnInit {
     this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
       this.api.get(true, 'scouting/admin/mark-scout-present/', {
         scout_field_sch_id: sfs.scout_field_sch_id,
-        user_id: this.activeUserActivity.user.id
+        user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
-        this.getScoutingActivity();
+        this.getUsersScoutingUserInfo();
       }, (err: any) => {
         this.gs.triggerError(err);
       });
@@ -961,8 +1012,6 @@ export class FormType {
   form_typ!: string;
   form_nm!: string;
 }
-
-
 export class ScoutAdminInit {
   seasons: Season[] = [];
   events: Event[] = [];
@@ -991,9 +1040,7 @@ export class ScoutingUserInfo {
   id!: number;
   under_review = false;
 }
-export class UserActivity {
+export class UserInfo {
   user = new User();
   user_info = new ScoutingUserInfo();
-  results = new ScoutFieldResultsSerializer();
-  schedule: ScoutFieldSchedule[] = [];
 }

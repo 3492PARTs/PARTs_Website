@@ -54,4 +54,8 @@ export class User implements IUser {
     phone_type_id!: number | null;
     groups: AuthGroup[] = [];
     image = '';
+
+    get_full_name(): string {
+        return `${this.first_name} ${this.last_name}`;
+    }
 }

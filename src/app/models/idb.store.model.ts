@@ -81,7 +81,7 @@ export const DBStores = {
     },
     ScoutFieldResponse: {
         TableName: 'ScoutFieldResponse',
-        Columns: 'scout_field_id,team_no,rank,match,time'//generateColumns(scoutFieldResponseInstance),
+        Columns: 'scout_field_id,team_no,rank,match,time,user_id'//generateColumns(scoutFieldResponseInstance),
     },
     Schedule: {
         TableName: 'Schedule',
