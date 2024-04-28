@@ -88,7 +88,7 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutScheduleModalVisible = false;
   scoutScheduleModalTitle = '';
-  scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
+  ActiveScoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
 
   manageSeasonModalVisible = false;
   manageEventsModalVisible = false;
@@ -625,9 +625,9 @@ export class ScoutAdminComponent implements OnInit {
       let ss1 = JSON.parse(JSON.stringify(ss));
       //ss1.st_time = new Date(ss1.st_time);
       //ss1.end_time = new Date(ss1.end_time);
-      this.scoutFieldSchedule = ss1;
+      this.ActiveScoutFieldSchedule = ss1;
     } else {
-      this.scoutFieldSchedule = new ScoutFieldSchedule();
+      this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
     }
     this.scoutScheduleModalVisible = true;
   }
@@ -635,13 +635,13 @@ export class ScoutAdminComponent implements OnInit {
   copyScoutFieldScheduleEntry(): void {
     let ss = new ScoutFieldSchedule();
     ss.event_id = this.currentEvent.event_id;
-    ss.red_one_id = this.scoutFieldSchedule.red_one_id;
-    ss.red_two_id = this.scoutFieldSchedule.red_two_id;
-    ss.red_three_id = this.scoutFieldSchedule.red_three_id;
-    ss.blue_one_id = this.scoutFieldSchedule.blue_one_id;
-    ss.blue_two_id = this.scoutFieldSchedule.blue_two_id;
-    ss.blue_three_id = this.scoutFieldSchedule.blue_three_id;
-    this.scoutFieldSchedule = ss;
+    ss.red_one_id = this.ActiveScoutFieldSchedule.red_one_id;
+    ss.red_two_id = this.ActiveScoutFieldSchedule.red_two_id;
+    ss.red_three_id = this.ActiveScoutFieldSchedule.red_three_id;
+    ss.blue_one_id = this.ActiveScoutFieldSchedule.blue_one_id;
+    ss.blue_two_id = this.ActiveScoutFieldSchedule.blue_two_id;
+    ss.blue_three_id = this.ActiveScoutFieldSchedule.blue_three_id;
+    this.ActiveScoutFieldSchedule = ss;
   }
 
   saveScoutFieldScheduleEntry(): void | null {
@@ -649,7 +649,7 @@ export class ScoutAdminComponent implements OnInit {
       this.gs.triggerError('Event not set, can\'t schedule scouts.');
       return null;
     }
-    let sfs = JSON.parse(JSON.stringify(this.scoutFieldSchedule));
+    let sfs = JSON.parse(JSON.stringify(this.ActiveScoutFieldSchedule));
     sfs.event_id = this.currentEvent.event_id;
     sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
     sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
@@ -660,7 +660,7 @@ export class ScoutAdminComponent implements OnInit {
 
     this.api.post(true, 'scouting/admin/save-scout-field-schedule-entry/', sfs, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.scoutFieldSchedule = new ScoutFieldSchedule();
+      this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
       this.scoutScheduleModalVisible = false;
       this.adminInit();
     }, (err: any) => {
@@ -695,9 +695,9 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   setEndTime() {
-    var dt = new Date(this.scoutFieldSchedule.st_time);
+    var dt = new Date(this.ActiveScoutFieldSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
-    this.scoutFieldSchedule.end_time = dt;
+    this.ActiveScoutFieldSchedule.end_time = dt;
   }
 
   compareUserObjects(u1: User, u2: User): boolean {
@@ -733,34 +733,49 @@ export class ScoutAdminComponent implements OnInit {
     return name;
   }
 
-  async getScoutSchedule(user: User): Promise<string> {
+  getScoutSchedule(user: User): string {
     const missing = 'missing';
     let schedule = '';
 
-    await this.ss.filterScoutFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === user.id ||
-      (fs.red_two_id as User).id === user.id ||
-      (fs.red_three_id as User).id === user.id ||
-      (fs.blue_one_id as User).id === user.id ||
-      (fs.blue_two_id as User).id === user.id ||
-      (fs.blue_three_id as User).id === user.id)).then(schedules => {
-        schedules.forEach(s => {
-          schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
-          if ((s.red_one_id as User).id === user.id)
-            schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
-          else if ((s.red_two_id as User).id === user.id)
-            schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
-          else if ((s.red_three_id as User).id === user.id)
-            schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
-          else if ((s.blue_one_id as User).id === user.id)
-            schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
-          else if ((s.blue_two_id as User).id === user.id)
-            schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
-          else if ((s.blue_three_id as User).id === user.id)
-            schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
+    let schedules = this.scoutFieldSchedules.filter(fs => {
+      let ids = [];
 
-          schedule += '\n';
-        });
-      });
+      let red_one = fs.red_one_id as User;
+      let red_two = fs.red_two_id as User;
+      let red_three = fs.red_three_id as User;
+
+      let blue_one = fs.blue_one_id as User;
+      let blue_two = fs.blue_two_id as User;
+      let blue_three = fs.blue_three_id as User;
+
+      if (red_one) ids.push(red_one.id);
+      if (red_two) ids.push(red_two.id);
+      if (red_three) ids.push(red_three.id);
+
+      if (blue_one) ids.push(blue_one.id);
+      if (blue_two) ids.push(blue_two.id);
+      if (blue_three) ids.push(blue_three.id);
+
+      return ids.includes(user.id);
+    });
+
+    schedules.forEach(s => {
+      schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
+      if ((s.red_one_id as User).id === user.id)
+        schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
+      else if ((s.red_two_id as User).id === user.id)
+        schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
+      else if ((s.red_three_id as User).id === user.id)
+        schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
+      else if ((s.blue_one_id as User).id === user.id)
+        schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
+      else if ((s.blue_two_id as User).id === user.id)
+        schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
+      else if ((s.blue_three_id as User).id === user.id)
+        schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
+
+      schedule += '\n';
+    });
     /*
     this.userActivity.forEach(ua => {
       if (ua.user.id === id)

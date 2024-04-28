@@ -85,10 +85,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.change(tmp);
       }
 
-      if (this.LabelText === 'Event') {
-        console.log('pls' + new Date());
-      }
-
       this.setElementPositions();
     });
   }
@@ -378,10 +374,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         else if (['checkbox'].includes(this.Type))
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         else if (this.input) {
-          if (this.LabelText === 'Event') {
-            console.log('ugg' + new Date());
-            console.log(this.input.nativeElement.offsetWidth);
-          }
           let width = this.input.nativeElement.offsetWidth;
 
           let offset = '0.5rem';
