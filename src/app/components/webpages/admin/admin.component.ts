@@ -323,8 +323,8 @@ export class AdminComponent implements OnInit {
   }
 
   runSecurityAudit() {
-    this.us.runSecurityAudit((result: any) => {
-      this.userAudit = result as User[];
+    this.us.runSecurityAudit((result: User[]) => {
+      this.userAudit = result;
     });
   }
 

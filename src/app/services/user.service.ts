@@ -105,6 +105,6 @@ export class UserService {
   }
 
   runSecurityAudit(onNext?: (result: any) => void): void {
-    this.api.get(true, 'user/security-audit/');
+    this.api.get(true, 'user/security-audit/', undefined, onNext);
   }
 }
