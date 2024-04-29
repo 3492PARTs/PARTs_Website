@@ -9,6 +9,7 @@ import { QuestionWithConditions } from 'src/app/models/form.models';
 import { User, AuthGroup, AuthPermission } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-admin',
@@ -171,15 +172,18 @@ export class AdminComponent implements OnInit {
       }
     });
 
-    this.ns.setSubPages([
+    let subPages = [
       new UserLinks('Users', 'users', 'account-group'),
       new UserLinks('Security', 'security', 'security'),
       new UserLinks('Error Log', 'errors', 'alert-circle-outline'),
-      new UserLinks('Requested Items', 'req-items', 'view-grid-plus'),
       new UserLinks('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new UserLinks('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
       new UserLinks('Phone Types', 'mngPhnTyp', 'phone'),
-    ]);
+    ];
+
+    if (!environment.production) subPages.push(new UserLinks('Requested Items', 'req-items', 'view-grid-plus'));
+
+    this.ns.setSubPages(subPages);
     this.ns.setSubPage('users');
     //this.ns.setSubPage('security');
   }

@@ -36,18 +36,19 @@ export class HTTPInterceptor implements HttpInterceptor {
       this.gs.devConsoleLog('HTTP Interceptor access token may be below');
 
     if (request.url.includes('./assets')) { // this is for the icons used on the front end
-      console.log('http interceptor if 1');
+      this.gs.devConsoleLog('http.interceptor.ts', 'if assets');
       return next.handle(request);
     }
     else if (request.url.includes('user/token/refresh/')) {
-      console.log('http interceptor rfrsh');
+      this.gs.devConsoleLog('http.interceptor.ts', 'else if refresh');
       request = request.clone({
         url: baseURL + request.url,
       });
     }
     else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
-      console.log('main http interceptor condition');
-      console.log(request.url);
+      this.gs.devConsoleLog('http.interceptor.ts', 'has access token');
+      this.auth.isTokenExpired(this.token.access);
+      this.gs.devConsoleLog('http.interceptor.ts', request.url);
       request = request.clone({
         url: baseURL + request.url,
         setHeaders: {
@@ -55,8 +56,8 @@ export class HTTPInterceptor implements HttpInterceptor {
         }
       });
     } else {
-      console.log('http interceptor else');
-      console.log(request.url);
+      this.gs.devConsoleLog('http.interceptor.ts', 'else');
+      this.gs.devConsoleLog('http.interceptor.ts', request.url);
       let withCredentials = request.url.includes('user/token/refresh/');
       //console.log(request.url, withCredentials);
       request = request.clone({

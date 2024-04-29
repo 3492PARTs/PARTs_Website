@@ -222,10 +222,10 @@ export class ScoutingAdminComponent implements OnInit {
       new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
       new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
       new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
+      new UserLinks('Field responses', 'mngFldRes', 'table-edit'),
       new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
       new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
-      new UserLinks('Field Results', 'mngFldRes', 'table-edit'),
-      new UserLinks('Pit Results', 'mngPitRes', 'table-edit'),
+      new UserLinks('Pit Responses', 'mngPitRes', 'table-edit'),
     ]);
 
 
