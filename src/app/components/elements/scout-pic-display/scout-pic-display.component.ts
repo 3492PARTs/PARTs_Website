@@ -63,9 +63,11 @@ export class ScoutPicDisplayComponent {
       LoadImg(
         link,
         (img: any) => {
-          img.style.width = '100%';
-          img.style.height = 'auto';
-          document.getElementById(sp.team_no.toString())!.appendChild(img);
+          if (img) {
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            document.getElementById(sp.team_no.toString())!.appendChild(img);
+          }
         },
         {
           //maxWidth: 600,
