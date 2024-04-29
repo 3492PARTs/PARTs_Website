@@ -137,10 +137,13 @@
 
   <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
     <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
+    <p>Time: {{ currentError.display_time }}</p>
     <p>Path: {{ currentError.path }}</p>
     <p>Message: {{ currentError.message }}</p>
     <p>Exception: {{ currentError.exception }}</p>
-    <p>Time: {{ currentError.display_time }}</p>
+    <p>Traceback:</p>
+    <p class="white-space-pre">{{ currentError.traceback }}</p>
+
   </app-modal>
 
   <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>

@@ -438,6 +438,7 @@ export class ErrorLog {
   path!: string;
   message!: string;
   exception!: string;
+  traceback!: string;
   time!: Date;
   display_time!: string;
   void_ind = 'n';
