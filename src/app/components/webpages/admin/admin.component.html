@@ -30,7 +30,7 @@
             [FormGroupInline]="true">
           </app-form-element>
           <app-form-element [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
-            [(Model)]="activeUser.phone_type_id" [SelectList]="init.phoneTypes" [BindingProperty]="'phone_type_id'"
+            [(Model)]="activeUser.phone_type_id" [SelectList]="phoneTypes" [BindingProperty]="'phone_type_id'"
             [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
           </app-form-element>
           <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeUser.is_active"
@@ -38,15 +38,14 @@
           </app-form-element>
         </div>
         <div class="vertical-center">
-          <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true" [(Model)]="newAuthGroup.id"
-            [SelectList]="availableAuthGroups" [BindingProperty]="'id'" [DisplayProperty]="'name'"
-            [DisplayEmptyOption]="true">
+          <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true" [(Model)]="newAuthGroup"
+            [SelectList]="availableAuthGroups" [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
           </app-form-element>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
         </div>
       </div>
 
-      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="userGroups"
+      <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="activeUser.groups"
         [Scrollable]="true" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
       <app-button-ribbon>
@@ -85,7 +84,7 @@
     </app-modal>
   </app-button-ribbon>
 
-  <app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
+  <app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="userGroups" [ShowEditButton]="true"
     (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
     [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)" [Width]="'100%'">
   </app-table>

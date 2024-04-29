@@ -19,7 +19,6 @@ export class AdminComponent implements OnInit {
 
   page = 'users';
 
-  init: AdminInit = new AdminInit();
   users: User[] = [];
 
   userTableCols = [
@@ -38,7 +37,6 @@ export class AdminComponent implements OnInit {
 
   manageUserModalVisible = false;
   activeUser: User = new User();
-  userGroups: AuthGroup[] = [];
   availableAuthGroups: AuthGroup[] = [];
   newAuthGroup: AuthGroup = new AuthGroup();
 
@@ -51,7 +49,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
-  groups: AuthGroup[] = []; //TODO: I have this in the init object too. remove it from there 
+  userGroups: AuthGroup[] = [];
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
@@ -160,7 +158,7 @@ export class AdminComponent implements OnInit {
       }
     });
 
-    this.us.currentGroups.subscribe(g => this.groups = g);
+    this.us.currentGroups.subscribe(g => this.userGroups = g);
     this.us.currentPermissions.subscribe(p => this.permissions = p);
   }
 
@@ -168,6 +166,8 @@ export class AdminComponent implements OnInit {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
+        this.getPhoneTypes();
+        this.us.getGroups();
       }
     });
 
@@ -185,10 +185,7 @@ export class AdminComponent implements OnInit {
   }
 
   adminInit(): void {
-    this.api.get(true, 'admin/init/', undefined, (result: any) => {
-      this.init = result as AdminInit;
-      this.userTableCols = this.userTableCols;
-    });
+
   }
 
   getUsers() {
@@ -200,31 +197,23 @@ export class AdminComponent implements OnInit {
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
     this.activeUser = this.gs.cloneObject(u);
-    this.us.getUserGroups(u.id.toString(), (result: any) => {
-      this.userGroups = result as AuthGroup[];
-      this.buildAvailableUserGroups();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    this.buildAvailableUserGroups();
   }
 
   private buildAvailableUserGroups(): void {
-    this.availableAuthGroups = this.init.userGroups.filter(ug => {
-      return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
+    this.availableAuthGroups = this.userGroups.filter(ug => {
+      return this.activeUser.groups.map(el => el.id).indexOf(ug.id) < 0;
     });
   }
 
   addUserGroup(): void {
-    const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
-      return ag.id === this.newAuthGroup.id;
-    });
-    this.userGroups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
+    this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
     this.newAuthGroup = new AuthGroup();
     this.buildAvailableUserGroups();
   }
 
   removeUserGroup(ug: AuthGroup): void {
-    this.userGroups.splice(this.userGroups.lastIndexOf(ug), 1);
+    this.activeUser.groups.splice(this.activeUser.groups.lastIndexOf(ug), 1);
     this.buildAvailableUserGroups();
   }
 
@@ -351,7 +340,7 @@ export class AdminComponent implements OnInit {
   }
 
   private buildAvailableScoutAuthGroups(): void {
-    this.availableScoutAuthGroups = this.groups.filter(g => {
+    this.availableScoutAuthGroups = this.userGroups.filter(g => {
       return this.scoutAuthGroups.map(el => el.id).indexOf(g.id) < 0;
     });
   }
@@ -381,10 +370,9 @@ export class AdminComponent implements OnInit {
   }
 
   getPhoneTypeForTable(type: number): string {
-    if (this.init)
-      for (let pt of this.init.phoneTypes) {
-        if (pt.phone_type_id === type) return pt.carrier;
-      }
+    for (let pt of this.phoneTypes) {
+      if (pt.phone_type_id === type) return pt.carrier;
+    }
 
     return '';
   }
@@ -499,11 +487,6 @@ export class AdminComponent implements OnInit {
   loadImage(ev: ProgressEvent<FileReader>): any {
     this.activeItem.img_url = ev.target?.result as string;
   }
-}
-
-export class AdminInit {
-  userGroups: AuthGroup[] = [];
-  phoneTypes: PhoneType[] = [];
 }
 
 export class Response {
