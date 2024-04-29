@@ -32,23 +32,19 @@ export class HTTPInterceptor implements HttpInterceptor {
   ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
     //const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
     const baseURL = environment.baseUrl;
-    if (!request.url.includes('user/token/refresh/') && !request.url.includes('./assets'))
-      this.gs.devConsoleLog('HTTP Interceptor access token may be below');
 
     if (request.url.includes('./assets')) { // this is for the icons used on the front end
-      this.gs.devConsoleLog('http.interceptor.ts', 'if assets');
+      this.gs.devConsoleLog('http.interceptor.ts', 'if: assets');
       return next.handle(request);
     }
     else if (request.url.includes('user/token/refresh/')) {
-      this.gs.devConsoleLog('http.interceptor.ts', 'else if refresh');
+      this.gs.devConsoleLog('http.interceptor.ts', 'else if: refresh');
       request = request.clone({
         url: baseURL + request.url,
       });
     }
     else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
-      this.gs.devConsoleLog('http.interceptor.ts', 'has access token');
-      this.auth.isTokenExpired(this.token.access);
-      this.gs.devConsoleLog('http.interceptor.ts', request.url);
+      this.gs.devConsoleLog('http.interceptor.ts', `has access token: ${request.url}`);
       request = request.clone({
         url: baseURL + request.url,
         setHeaders: {
@@ -56,8 +52,7 @@ export class HTTPInterceptor implements HttpInterceptor {
         }
       });
     } else {
-      this.gs.devConsoleLog('http.interceptor.ts', 'else');
-      this.gs.devConsoleLog('http.interceptor.ts', request.url);
+      this.gs.devConsoleLog('http.interceptor.ts', `else: ${request.url}`);
       let withCredentials = request.url.includes('user/token/refresh/');
       //console.log(request.url, withCredentials);
       request = request.clone({

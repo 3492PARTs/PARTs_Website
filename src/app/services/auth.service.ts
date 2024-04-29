@@ -264,7 +264,7 @@ export class AuthService {
   }
 
   isTokenExpired(tkn: string): boolean {
-    return this.gs.strNoE(tkn) || this.getTokenExp(tkn) > new Date();
+    return this.gs.strNoE(tkn) || this.getTokenExp(tkn) < new Date();
   }
 
   isAuthenticated(): boolean {
