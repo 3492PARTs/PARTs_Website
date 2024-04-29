@@ -75,7 +75,7 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     }
 
-    this.api.post(true, 'form/save-question/', save, (result: any) => {
+    this.api.post(true, 'form/question/', save, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.activeQuestion = new QuestionWithConditions();
       this.questionModalVisible = false;

@@ -43,7 +43,7 @@ export class TeamApplicationComponent implements OnInit {
   }
 
   applicationInit(): void {
-    this.api.get(true, 'form/get-questions/', {
+    this.api.get(true, 'form/question/', {
       form_typ: 'team-app',
       active: 'y'
     }, (result: any) => {

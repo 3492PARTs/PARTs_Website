@@ -20,6 +20,7 @@ export class ScoutingAdminComponent implements OnInit {
   Model: any = {};
   page = 'users';
 
+  // value variables
   phoneTypes: PhoneType[] = [];
 
   seasons: Season[] = [];
@@ -32,7 +33,26 @@ export class ScoutingAdminComponent implements OnInit {
 
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
 
-  //season!: number;
+  // user sub page
+  userTableCols = [
+    { PropertyName: 'name', ColLabel: 'User' },
+    { PropertyName: 'username', ColLabel: 'Username' },
+    { PropertyName: 'email', ColLabel: 'Email' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+    { PropertyName: 'phone', ColLabel: 'Phone' },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
+  ];
+
+  manageUserModalVisible = false;
+  activeUser: User = new User();
+  availableAuthGroups: AuthGroup[] = [];
+  newAuthGroup: AuthGroup = new AuthGroup();
+
+  userGroupsTableCols: object[] = [
+    { PropertyName: 'name', ColLabel: 'Name' }
+  ];
+
+  //manage season sub page
   newSeason!: number | null;
   delSeason!: number | null;
   newEvent: Event = new Event();
@@ -53,15 +73,7 @@ export class ScoutingAdminComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  userTableCols = [
-    { PropertyName: 'name', ColLabel: 'User' },
-    { PropertyName: 'username', ColLabel: 'Username' },
-    { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
-    { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
-  ];
-
+  // schedule sub page
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
@@ -69,22 +81,6 @@ export class ScoutingAdminComponent implements OnInit {
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
-  ];
-
-  pastScoutScheduleTableCols: object[] = [
-    { PropertyName: 'user', ColLabel: 'Name' },
-    { PropertyName: 'st_time_str', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time_str', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' }
-  ];
-
-  manageUserModalVisible = false;
-  activeUser: User = new User();
-  availableAuthGroups: AuthGroup[] = [];
-  newAuthGroup: AuthGroup = new AuthGroup();
-
-  userGroupsTableCols: object[] = [
-    { PropertyName: 'name', ColLabel: 'Name' }
   ];
 
   scoutScheduleModalVisible = false;
@@ -97,15 +93,17 @@ export class ScoutingAdminComponent implements OnInit {
   linkTeamToEventModalVisible = false;
   removeTeamFromEventModalVisible = false;
 
+  // manage questions sub pages
   manageScoutFieldQuestions = false;
   manageScoutPitQuestions = false;
 
+  // scout activity sub page
   usersScoutingUserInfo: UserInfo[] = [];
   activeUserScoutingUserInfo: UserInfo = new UserInfo();
   userActivityTableCols = [
-    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserName.bind(this) },
+    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserNameForTable.bind(this) },
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
-    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutSchedule.bind(this) },
+    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutScheduleForTable.bind(this) },
   ];
   userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
@@ -130,6 +128,7 @@ export class ScoutingAdminComponent implements OnInit {
   activeUserScoutingScoutAnswers: any[] = [];
   userScoutActivityResultsTableWidth = '200%';
 
+  // question aggregates sub page
   questionAggregateTypes: QuestionAggregateType[] = [];
   fieldQuestionAggregates: QuestionAggregate[] = [];
   fieldQuestionAggregateModalVisible = false;
@@ -148,6 +147,7 @@ export class ScoutingAdminComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
 
+  // field responses sub page
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutResultsCols: object[] = [
     { PropertyName: 'team_no', ColLabel: 'Team' },
@@ -158,6 +158,7 @@ export class ScoutingAdminComponent implements OnInit {
   scoutResultModalVisible = false;
   activeScoutResult: any;
 
+  // pit responses sub page
   scoutPitResults: ScoutPitResponse[] = [];
   scoutPitResultsCols: object[] = [
     { PropertyName: 'team_no', ColLabel: 'Team' },
@@ -567,6 +568,7 @@ export class ScoutingAdminComponent implements OnInit {
     this.removeTeamFromEventModalVisible = visible;
     this.clearRemoveEventToTeams();
   }
+
   // Users ----------------------------------------------------------------------
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
@@ -627,6 +629,7 @@ export class ScoutingAdminComponent implements OnInit {
     return '';
   }
 
+  // Field Scouting scheduling -----------------------------------------------------------------------------------------
   showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
     this.scoutScheduleModalTitle = title;
     if (ss) {
@@ -688,7 +691,6 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
-
   setEndTime() {
     var dt = new Date(this.ActiveScoutFieldSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
@@ -717,7 +719,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
-  getUserName(id: number): string {
+  getUserNameForTable(id: number): string {
     let name = '';
 
     this.usersScoutingUserInfo.forEach(ua => {
@@ -728,7 +730,7 @@ export class ScoutingAdminComponent implements OnInit {
     return name;
   }
 
-  getScoutSchedule(user: User): string {
+  getScoutScheduleForTable(user: User): string {
     const missing = 'missing';
     let schedule = '';
 
@@ -897,6 +899,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
+  // Field question aggregates -----------------------------------------------------------------------------------------------
   getFieldQuestionAggregates(): void {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: 'field'
@@ -934,6 +937,14 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   getScoutFieldQuestions(): void {
+    this.ss.loadFieldScoutingForm().then(result => {
+      if (result) {
+        this.fieldQuestions = result;// as QuestionWithConditions[];
+        this.buildFieldQuestionAggQuestionList();
+      }
+    });
+
+    /*
     this.api.get(true, 'form/get-questions/', {
       form_typ: 'field',
       active: 'y'
@@ -943,6 +954,7 @@ export class ScoutingAdminComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+    */
   }
 
   buildFieldQuestionAggQuestionList(): void {

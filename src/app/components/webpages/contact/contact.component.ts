@@ -26,7 +26,7 @@ export class ContactComponent implements OnInit {
   }
 
   contactInit(): void {
-    this.api.get(true, 'form/get-questions/', {
+    this.api.get(true, 'form/question/', {
       form_typ: 'team-cntct',
       active: 'y'
     }, (result: any) => {

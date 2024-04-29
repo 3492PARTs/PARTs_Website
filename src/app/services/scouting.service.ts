@@ -486,7 +486,7 @@ export class ScoutingService {
   loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
       this.outstandingInitFieldScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
-        this.api.get(loadingScreen, 'form/get-questions/', {
+        this.api.get(loadingScreen, 'form/question/', {
           form_typ: 'field',
           active: 'y'
         }, async (result: QuestionWithConditions[]) => {
@@ -668,7 +668,7 @@ export class ScoutingService {
   loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitPitScoutingPromise) {
       this.outstandingInitPitScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
-        this.api.get(loadingScreen, 'form/get-questions/', {
+        this.api.get(loadingScreen, 'form/question/', {
           form_typ: 'pit',
           active: 'y'
         }, async (result: QuestionWithConditions[]) => {
