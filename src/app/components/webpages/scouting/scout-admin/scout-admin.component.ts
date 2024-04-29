@@ -265,6 +265,11 @@ export class ScoutAdminComponent implements OnInit {
 
       this.gs.decrementOutstandingCalls();
     });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.getFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   // Season -----------------------------------------------------------
@@ -799,7 +804,6 @@ export class ScoutAdminComponent implements OnInit {
     });
     */
 
-    console.log(schedule);
     return schedule;
   }
 
@@ -810,12 +814,27 @@ export class ScoutAdminComponent implements OnInit {
   getScoutingActivityScouts(sfs: ScoutFieldSchedule): string {
     const missing = 'missing';
     let str = '';
-    str += sfs.red_one_id ? `R1: ${(sfs.red_one_id as User).get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
-    str += sfs.red_two_id ? `R2: ${(sfs.red_two_id as User).get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
-    str += sfs.red_three_id ? `R3: ${(sfs.red_three_id as User).get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
-    str += sfs.blue_one_id ? `B1: ${(sfs.blue_one_id as User).get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
-    str += sfs.blue_two_id ? `B2: ${(sfs.blue_two_id as User).get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
-    str += sfs.blue_three_id ? `B3: ${(sfs.blue_three_id as User).get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
+
+    let red_one = new User();
+    Object.assign(red_one, sfs.red_one_id);
+    let red_two = new User();
+    Object.assign(red_two, sfs.red_two_id);
+    let red_three = new User();
+    Object.assign(red_three, sfs.red_three_id);
+
+    let blue_one = new User();
+    Object.assign(blue_one, sfs.blue_one_id);
+    let blue_two = new User();
+    Object.assign(blue_two, sfs.blue_two_id);
+    let blue_three = new User();
+    Object.assign(blue_three, sfs.blue_three_id);
+
+    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
+    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
+    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
+    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
+    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
+    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
     return str;
   }
 
@@ -834,14 +853,29 @@ export class ScoutAdminComponent implements OnInit {
       this.activeUserScoutingScoutAnswers = frs;
     });
 
-    this.ss.filterScoutFieldSchedulesFromCache(fs => ((fs.red_one_id as User).id === ua.user.id ||
-      (fs.red_two_id as User).id === ua.user.id ||
-      (fs.red_three_id as User).id === ua.user.id ||
-      (fs.blue_one_id as User).id === ua.user.id ||
-      (fs.blue_two_id as User).id === ua.user.id ||
-      (fs.blue_three_id as User).id === ua.user.id)).then(fsf => {
-        this.activeUserScoutingFieldSchedule = fsf;
-      })
+    this.ss.filterScoutFieldSchedulesFromCache(fs => {
+      let ids = [];
+
+      let red_one = fs.red_one_id as User;
+      let red_two = fs.red_two_id as User;
+      let red_three = fs.red_three_id as User;
+
+      let blue_one = fs.blue_one_id as User;
+      let blue_two = fs.blue_two_id as User;
+      let blue_three = fs.blue_three_id as User;
+
+      if (red_one) ids.push(red_one.id);
+      if (red_two) ids.push(red_two.id);
+      if (red_three) ids.push(red_three.id);
+
+      if (blue_one) ids.push(blue_one.id);
+      if (blue_two) ids.push(blue_two.id);
+      if (blue_three) ids.push(blue_three.id);
+
+      return ids.includes(ua.user.id);
+    }).then(fsf => {
+      this.activeUserScoutingFieldSchedule = fsf;
+    });
   }
 
   toggleUserUnderReviewStatus(): void {
