@@ -242,6 +242,13 @@ export class ScoutingService {
   }
 
   private async updateSeasonsCache(ss: Season[]): Promise<void> {
+    let current = await this.getCurrentSeason();
+    let newCurrent = ss.filter(s => s.current === 'y');
+
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].season_id !== current[0].season_id) {
+      this.updateScoutFieldResponsesCache([]);
+      this.updateScoutFieldResponseColumnsCache([]);
+    }
     await this.cs.Season.RemoveAllAsync();
     await this.cs.Season.AddBulkAsync(ss);
   }
@@ -251,31 +258,33 @@ export class ScoutingService {
     return new Promise(async resolve => {
       let changed = false;
 
-      await this.cs.Season.filterAll((obj: Season) => {
-        return obj.season_id !== s.season_id && obj.current === 'y';
-      }).then((value: Season[]) => {
+      await this.getCurrentSeason().then((value: Season[]) => {
         //console.log('filter season ');
         //console.log(value);
 
         changed = !value;
 
         value.forEach(async v => {
-          v.current = 'n';
-          changed = true;
-          await this.cs.Season.AddOrEditAsync(v);
+          if (s.season_id !== v.season_id) {
+            v.current = 'n';
+            changed = true;
+            await this.cs.Season.AddOrEditAsync(v);
+          }
         });
       });
 
       if (changed) {
-        this.loadMatches();
-        this.loadTeams();
-        this.loadSchedules();
+        this.loadAllScoutingInfo();
       }
 
       await this.cs.Season.AddOrEditAsync(s);
 
       resolve(changed);
     });
+  }
+
+  private getCurrentSeason(): PromiseExtended<ISeason[]> {
+    return this.getSeasonsFromCache(s => s.where({ 'current': 'y' }));
   }
 
   getSeasonsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ISeason[]> {
@@ -326,6 +335,14 @@ export class ScoutingService {
   }
 
   private async updateEventsCache(es: Event[]): Promise<void> {
+    let current = await this.getCurrentEvent();
+    let newCurrent = es.filter(e => e.current === 'y');
+
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].event_id !== current[0].event_id) {
+      this.updateScoutFieldResponsesCache([]);
+      this.updateScoutFieldResponseColumnsCache([]);
+    }
+
     await this.cs.Event.RemoveAllAsync();
     await this.cs.Event.AddBulkAsync(es);
   }
@@ -335,31 +352,33 @@ export class ScoutingService {
     return new Promise<boolean>(async resolve => {
       let changed = false;
 
-      await this.cs.Event.filterAll((obj: Event) => {
-        return obj.event_id !== e.event_id && obj.current === 'y';
-      }).then((value: Event[]) => {
+      await this.getCurrentEvent().then((value: Event[]) => {
         //console.log('filter event');
         //console.log(value);
 
         changed = !value;
 
         value.forEach(async v => {
-          v.current = 'n';
-          changed = true;
-          await this.cs.Event.AddOrEditAsync(v);
+          if (e.event_id !== e.event_id) {
+            v.current = 'n';
+            changed = true;
+            await this.cs.Event.AddOrEditAsync(v);
+          }
         });
       });
 
       if (changed) {
-        this.loadMatches();
-        this.loadTeams();
-        this.loadSchedules();
+        this.loadAllScoutingInfo();
       }
 
       await this.cs.Event.AddOrEditAsync(e);
 
       resolve(changed);
     });
+  }
+
+  private getCurrentEvent(): PromiseExtended<IEvent[]> {
+    return this.getEventsFromCache(s => s.where({ 'current': 'y' }));
   }
 
   getEventsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IEvent[]> {
@@ -608,13 +627,13 @@ export class ScoutingService {
           changed = changed || await this.updateEventInCache(result.current_event);
 
           if (!changed) {
-            await this.cs.ScoutFieldResponseColumn.RemoveAllAsync();
-            await this.cs.ScoutFieldResponseColumn.AddOrEditBulkAsync(result.scoutCols);
+            await this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
             if (params) {
               // we are only loading the diff
               this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
               await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
+
               await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
                 result.scoutAnswers = frrs;
               }).catch(reason => {
@@ -624,12 +643,10 @@ export class ScoutingService {
             else {
               // loading all
               this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-              await this.cs.ScoutFieldResponse.RemoveAllAsync();
-              await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
+              await this.updateScoutFieldResponsesCache(result.scoutAnswers);
             }
 
             const ids = result.removed_responses.map(t => { return t.scout_field_id });
-
             await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
 
             resolve(result);
@@ -682,6 +699,16 @@ export class ScoutingService {
 
   getFieldResponseFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<any[]> {
     return this.cs.ScoutFieldResponse.getAll(filterDelegate);
+  }
+
+  private async updateScoutFieldResponseColumnsCache(cols: any[]): Promise<void> {
+    await this.cs.ScoutFieldResponseColumn.RemoveAllAsync();
+    await this.cs.ScoutFieldResponseColumn.AddBulkAsync(cols);
+  }
+
+  private async updateScoutFieldResponsesCache(rs: any[]): Promise<void> {
+    await this.cs.ScoutFieldResponse.RemoveAllAsync();
+    await this.cs.ScoutFieldResponse.AddBulkAsync(rs);
   }
 
   // Pit Scouting --------------------------------------------------------------

@@ -337,7 +337,7 @@ export class AuthService {
 
             //This will need changed if offline menu names ever includes endpoints that don't need teams
             if (offlineLinks.length > 0) {
-              this.ss.loadAllScoutingInfo(false);
+              await this.ss.loadAllScoutingInfo();
 
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
