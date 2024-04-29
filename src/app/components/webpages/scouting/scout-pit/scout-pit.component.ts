@@ -44,19 +44,6 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private ss: ScoutingService,
     private cs: CacheService) {
-
-    this.ss.pitScoutingQuestions.subscribe(psqs => {
-      this.questions = this.gs.cloneObject(psqs);
-      if (this.gs.strNoE(this.scoutPitResponse.team)) {
-
-        this.scoutPitResponse.question_answers = this.gs.cloneObject(psqs);
-      }
-    });
-
-    this.ss.teams.subscribe(t => {
-      this.buildTeamLists(t);
-    });
-
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
@@ -79,12 +66,22 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(success => {
+    this.ss.loadAllScoutingInfo().then(result => {
+      if (result) {
+        this.buildTeamLists(result.teams);
+      }
+
       this.gs.decrementOutstandingCalls();
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.getPitScoutingForm().then(success => {
+    this.ss.getPitScoutingForm().then(result => {
+      if (this.gs.strNoE(this.scoutPitResponse.team)) {
+
+        if (result) {
+          this.scoutPitResponse.question_answers = result;
+        }
+      }
       this.gs.decrementOutstandingCalls();
     });
 

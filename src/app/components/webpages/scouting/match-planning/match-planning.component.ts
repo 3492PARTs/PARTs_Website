@@ -77,15 +77,6 @@ export class MatchPlanningComponent implements OnInit {
     ]);
     this.ns.setSubPage('matches');
     this.setTableSize();
-
-    this.ss.matches.subscribe(ms => {
-      const ourMatches = ms.filter(m => m.blue_one === 3492 || m.blue_two === 3492 || m.blue_three === 3492 || m.red_one === 3492 || m.red_two === 349 || m.red_three === 3492);
-      this.matches = ourMatches;
-    });
-
-    this.ss.teams.subscribe(ts => {
-      this.teams = ts;
-    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -102,13 +93,20 @@ export class MatchPlanningComponent implements OnInit {
       this.initData = (result as Init);
     });*/
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(success => {
+    this.ss.loadAllScoutingInfo().then(result => {
+      if (result) {
+        this.teams = result.teams;
+
+        const ourMatches = result.matches.filter(m => m.blue_one === 3492 || m.blue_two === 3492 || m.blue_three === 3492 || m.red_one === 3492 || m.red_two === 349 || m.red_three === 3492);
+        this.matches = ourMatches;
+      }
+
       this.gs.decrementOutstandingCalls();
     });
 
-    this.ss.loadFieldScoutingResponses().then(sfss => {
-      if (sfss) {
-        this.scoutCols = sfss.scoutCols;
+    this.ss.loadFieldScoutingResponses().then(result => {
+      if (result) {
+        this.scoutCols = result.scoutCols;
 
         this.buildGraphOptionsList();
       }

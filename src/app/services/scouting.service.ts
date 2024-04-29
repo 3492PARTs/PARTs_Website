@@ -12,32 +12,16 @@ import { IFilterDelegate } from '../models/dexie.models';
   providedIn: 'root'
 })
 export class ScoutingService {
-
-  private teamsBS = new BehaviorSubject<Team[]>([]);
-  teams = this.teamsBS.asObservable();
-
-  private matchesBS = new BehaviorSubject<Match[]>([]);
-  matches = this.matchesBS.asObservable();
-
-  private fieldScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
-  fieldScoutingQuestions = this.fieldScoutingQuestionsBS.asObservable();
-
-  private scheduleTypesBS = new BehaviorSubject<ScheduleType[]>([]);
-  scheduleTypes = this.scheduleTypesBS.asObservable();
-
-  private pitScoutingQuestionsBS = new BehaviorSubject<QuestionWithConditions[]>([]);
-  pitScoutingQuestions = this.pitScoutingQuestionsBS.asObservable();
-
   private outstandingResponsesTimeout: number | undefined;
 
   private outstandingLoadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
   private outstandingLoadSeasonsPromise: Promise<Season[] | null> | null = null;
   private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
-  private outstandingLoadTeamsPromise: Promise<boolean> | null = null;
-  private outstandingLoadMatchesPromise: Promise<boolean> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<boolean> | null = null;
+  private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
+  private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
+  private outstandingInitFieldScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
-  private outstandingInitPitScoutingPromise: Promise<boolean> | null = null;
+  private outstandingInitPitScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
   private outstandingLoadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
   private outstandingLoadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
@@ -45,7 +29,7 @@ export class ScoutingService {
   private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
-  private outstandingResponsesUploadedBS = new BehaviorSubject<boolean>(false);
+  private outstandingResponsesUploadedBS = new BehaviorSubject<number>(0);
   outstandingResponsesUploaded = this.outstandingResponsesUploadedBS.asObservable();
 
   constructor(private api: APIService,
@@ -101,7 +85,7 @@ export class ScoutingService {
     window.clearTimeout(this.outstandingResponsesUploadedTimeout);
 
     this.outstandingResponsesUploadedTimeout = window.setTimeout(() => {
-      this.outstandingResponsesUploadedBS.next(true);
+      this.outstandingResponsesUploadedBS.next(this.outstandingResponsesUploadedBS.value + 1);
     }, 200);
   }
 
@@ -116,7 +100,7 @@ export class ScoutingService {
           await this.updateSeasonsCache(result.seasons);
           await this.updateEventsCache(result.events);
           await this.updateTeamsBSAndCache(result.teams);
-          await this.updateMatchesBSAndCache(result.matches);
+          await this.updateMatchesCache(result.matches);
           await this.updateScheduleTypesCache(result.schedule_types);
           await this.updateSchedulesCache(result.schedules);
           await this.updateScoutFieldSchedulesCache(result.scout_field_schedules);
@@ -386,39 +370,39 @@ export class ScoutingService {
   }
 
   // Load Teams -----------------------------------------------------------
-  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
     if (!this.outstandingLoadTeamsPromise) {
-      this.outstandingLoadTeamsPromise = new Promise<boolean>(resolve => {
-        this.api.get(loadingScreen, 'scouting/team/', undefined, async (result: any) => {
+      this.outstandingLoadTeamsPromise = new Promise<Team[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/team/', undefined, async (result: Team[]) => {
           /** 
            * On success load results and store in db 
            **/
-          const res = (result as Team[]);
-          await this.updateTeamsBSAndCache(res);
+          await this.updateTeamsBSAndCache(result);
 
           this.loadAllScoutingInfo();
 
           if (callbackFn) callbackFn(result);
-          resolve(true);
+          resolve(result);
         }, async (error: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
+          let result: Team[] = [];
 
           await this.getTeamsFromCache().then((ts: Team[]) => {
-            this.teamsBS.next(ts);
+            result = ts;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-            resolve(false);
+            this.gs.addBanner(new Banner('Error loading teams from cache.'));
+            resolve(null);
           }
           else
-            resolve(true);
+            resolve(result);
 
           this.outstandingLoadTeamsPromise = null;
         }, () => {
@@ -431,9 +415,8 @@ export class ScoutingService {
   }
 
   private async updateTeamsBSAndCache(ts: Team[]): Promise<void> {
-    this.teamsBS.next(ts);
     await this.cs.Team.RemoveAllAsync();
-    await this.cs.Team.AddOrEditBulkAsync(this.teamsBS.value);
+    await this.cs.Team.AddOrEditBulkAsync(ts);
   }
 
   getTeamFromCache(id: number): PromiseExtended<ITeam | undefined> {
@@ -455,37 +438,37 @@ export class ScoutingService {
   }
 
   // Load Matches -----------------------------------------------------------
-  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+  loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Match[] | null> {
     if (!this.outstandingLoadMatchesPromise) {
-      this.outstandingLoadMatchesPromise = new Promise<boolean>(resolve => {
+      this.outstandingLoadMatchesPromise = new Promise<Match[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/match/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
            **/
-          console.log(result);
-          await this.updateMatchesBSAndCache(result);
+          await this.updateMatchesCache(result);
 
           if (callbackFn) callbackFn(result);
-          resolve(true);
-        }, (error: any) => {
+          resolve(result);
+        }, async (error: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
+          let result: Match[] = [];
 
-          this.getMatchesFromCache().then((ms: Match[]) => {
-            this.matchesBS.next(ms);
+          await this.getMatchesFromCache().then((ms: Match[]) => {
+            result = ms;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-            resolve(false);
+            this.gs.addBanner(new Banner('Error loading matches from cache.'));
+            resolve(null);
           }
           else
-            resolve(true);
+            resolve(result);
 
           this.outstandingLoadMatchesPromise = null;
         }, () => {
@@ -496,8 +479,7 @@ export class ScoutingService {
     return this.outstandingLoadMatchesPromise;
   }
 
-  private async updateMatchesBSAndCache(ms: Match[]): Promise<void> {
-    this.matchesBS.next(ms);
+  private async updateMatchesCache(ms: Match[]): Promise<void> {
     await this.cs.Match.RemoveAllAsync();
     await this.cs.Match.AddOrEditBulkAsync(ms);
   }
@@ -511,35 +493,34 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  getFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+  getFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<boolean>(resolve => {
+      this.outstandingInitFieldScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'field',
           active: 'y'
-        }, async (result: any) => {
+        }, async (result: QuestionWithConditions[]) => {
           /** 
            * On success load results and store in db 
            **/
-          this.fieldScoutingQuestionsBS.next(result as QuestionWithConditions[]);
-
           await this.getScoutingQuestionsFromCache('field').then(qs => {
             qs.forEach(async q => {
               await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
             });
           });
-          await this.cs.QuestionWithConditions.AddBulkAsync(this.fieldScoutingQuestionsBS.value);
+          await this.cs.QuestionWithConditions.AddBulkAsync(result);
 
           if (callbackFn) callbackFn(result);
-          resolve(true);
-        }, (err: any) => {
+          resolve(result);
+        }, async (err: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
+          let result: QuestionWithConditions[] = [];
 
-          this.getScoutingQuestionsFromCache('field').then((spqs: QuestionWithConditions[]) => {
-            this.fieldScoutingQuestionsBS.next(spqs);
+          await this.getScoutingQuestionsFromCache('field').then((spqs: QuestionWithConditions[]) => {
+            result = spqs;
             if (spqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
             console.log(reason);
@@ -548,10 +529,10 @@ export class ScoutingService {
 
           if (!allLoaded) {
             this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
-            resolve(false);
+            resolve(null);
           }
           else
-            resolve(true);
+            resolve(result);
 
           this.outstandingInitFieldScoutingPromise = null;
         }, () => {
@@ -712,35 +693,35 @@ export class ScoutingService {
   }
 
   // Pit Scouting --------------------------------------------------------------
-  getPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<boolean> {
+  getPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitPitScoutingPromise) {
-      this.outstandingInitPitScoutingPromise = new Promise<boolean>(resolve => {
+      this.outstandingInitPitScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
           form_typ: 'pit',
           active: 'y'
-        }, async (result: any) => {
+        }, async (result: QuestionWithConditions[]) => {
           /** 
            * On success load results and store in db 
            **/
-          this.pitScoutingQuestionsBS.next(result as QuestionWithConditions[]);
 
           await this.getScoutingQuestionsFromCache('pit').then(qs => {
             qs.forEach(async q => {
               await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
             });
           });
-          await this.cs.QuestionWithConditions.AddBulkAsync(this.pitScoutingQuestionsBS.value);
+          await this.cs.QuestionWithConditions.AddBulkAsync(result);
 
           if (callbackFn) callbackFn(result);
-          resolve(true);
-        }, (err: any) => {
+          resolve(result);
+        }, async (err: any) => {
           /** 
            * On fail load results from db
            **/
           let allLoaded = true;
+          let result: QuestionWithConditions[] = [];
 
-          this.getScoutingQuestionsFromCache('pit').then((spqs: QuestionWithConditions[]) => {
-            this.pitScoutingQuestionsBS.next(spqs);
+          await this.getScoutingQuestionsFromCache('pit').then((spqs: QuestionWithConditions[]) => {
+            result = spqs;
             if (spqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
             console.log(reason);
@@ -749,10 +730,10 @@ export class ScoutingService {
 
           if (!allLoaded) {
             this.gs.addBanner(new Banner('Error loading pit scouting form from cache.'));
-            resolve(false);
+            resolve(null);
           }
           else
-            resolve(true);
+            resolve(result);
 
           this.outstandingInitPitScoutingPromise = null;
         }, () => {

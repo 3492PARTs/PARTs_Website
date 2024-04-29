@@ -38,39 +38,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService) {
     this.authService.user.subscribe(u => this.user = u);
 
-    this.ss.teams.subscribe(ts => {
-      this.scoutFieldResponse.team = NaN;
-      this.teams = ts;
-      this.buildTeamList(NaN, ts);
-    });
-
-    this.ss.matches.subscribe(ms => {
-      this.matches = ms.filter(m => {
-        const compLvl = (m.comp_level as CompetitionLevel);
-
-        return compLvl && compLvl.comp_lvl_typ === 'qm';
-      });
-
-      for (let i = 0; i < this.matches.length; i++) {
-        const match = this.matches[i];
-
-        if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
-          match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
-          this.matches.splice(i--, 1);
-        }
-      }
-
-      this.scoutFieldResponse.match = null;
-      this.scoutFieldResponse.team = NaN;
-      this.amendMatchList();
-      this.buildTeamList();
-    });
-
-    this.ss.fieldScoutingQuestions.subscribe(sfq => {
-      this.scoutFieldResponse.question_answers = sfq;
-      this.sortQuestions();
-    });
-
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
@@ -131,12 +98,37 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   init(): void {
     this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(async result => {
+      if (result) {
+        this.matches = result.matches.filter(m => {
+          const compLvl = (m.comp_level as CompetitionLevel);
+
+          return compLvl && compLvl.comp_lvl_typ === 'qm';
+        });
+
+        for (let i = 0; i < this.matches.length; i++) {
+          const match = this.matches[i];
+
+          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
+            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+            this.matches.splice(i--, 1);
+          }
+        }
+
+        this.scoutFieldResponse.match = null;
+        this.scoutFieldResponse.team = NaN;
+        this.amendMatchList();
+        this.buildTeamList(NaN, result.teams);
+      }
       await this.updateScoutFieldSchedule();
       this.gs.decrementOutstandingCalls();
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.getFieldScoutingForm().then(success => {
+    this.ss.getFieldScoutingForm().then(result => {
+      if (result) {
+        this.scoutFieldResponse.question_answers = result;
+        this.sortQuestions();
+      }
       this.gs.decrementOutstandingCalls();
     });
 
