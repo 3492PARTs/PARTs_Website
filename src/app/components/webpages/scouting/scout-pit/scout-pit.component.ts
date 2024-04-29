@@ -213,12 +213,12 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     if (!spr) spr = this.scoutPitResponse;
 
     if (this.gs.strNoE(spr.team)) {
-      this.gs.addBanner(new Banner("Must select a team.", 500));
+      this.gs.addBanner(new Banner("Must select a team.", 3500));
       return null;
     }
 
     if (this.robotPic && this.robotPic.size > 0) {
-      this.gs.addBanner(new Banner("Must add or remove staged image.", 500));
+      this.gs.addBanner(new Banner("Must add or remove staged image.", 3500));
       return null;
     }
 

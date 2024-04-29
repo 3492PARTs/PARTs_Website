@@ -1076,7 +1076,7 @@ export class ScoutingService {
   }
 
   private async updateScoutingQuestionsCache(form_typ: string, questions: QuestionWithConditions[]) {
-    await this.getScoutingQuestionsFromCache('field').then(qs => {
+    await this.getScoutingQuestionsFromCache(form_typ).then(qs => {
       qs.forEach(async q => {
         await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
       });
