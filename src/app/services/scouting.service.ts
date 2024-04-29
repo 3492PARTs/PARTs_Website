@@ -807,7 +807,7 @@ export class ScoutingService {
     });
   }
 
-  getPitScoutingResponses(loadingScreen = true): Promise<ScoutPitResponsesReturn | null> {
+  loadPitScoutingResponses(loadingScreen = true): Promise<ScoutPitResponsesReturn | null> {
     if (!this.outstandingGetPitScoutingResponsesPromise)
       this.outstandingGetPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
         this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: ScoutPitResponsesReturn) => {

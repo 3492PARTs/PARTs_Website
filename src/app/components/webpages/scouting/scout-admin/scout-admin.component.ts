@@ -160,8 +160,8 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutPitResults: ScoutPitResponse[] = [];
   scoutPitResultsCols: object[] = [
-    { PropertyName: 'teamNo', ColLabel: 'Team' },
-    { PropertyName: 'teamNm', ColLabel: 'Name' },
+    { PropertyName: 'team_no', ColLabel: 'Team' },
+    { PropertyName: 'team_nm', ColLabel: 'Name' },
   ];
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResponse();
@@ -1017,22 +1017,12 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getPitResults(): void {
-    this.api.get(true, 'scouting/pit/results-init/', undefined, (result: any) => {
-      if (this.gs.checkResponse(result)) {
-        let teams = result as Team[];
-
-        teams.forEach((t) => {
-          t.checked = true;
-        });
-
-        this.api.post(true, 'scouting/pit/results/', teams, (result: any) => {
-          this.scoutPitResults = result as ScoutPitResponse[];
-        }, (err: any) => {
-          this.gs.triggerError(err);
-        });
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadPitScoutingResponses().then(psrs => {
+      if (psrs) {
+        this.scoutPitResults = psrs.teams.filter(t => t.scout_pit_id !== null);
       }
-    }, (err: any) => {
-      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
     });
   }
 

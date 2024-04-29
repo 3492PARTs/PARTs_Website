@@ -352,7 +352,7 @@ export class AuthService {
                     offlineCalls.push(this.ss.getPitScoutingForm(false));
                     break;
                   case 'Pit Results':
-                    offlineCalls.push(this.ss.getPitScoutingResponses(false));
+                    offlineCalls.push(this.ss.loadPitScoutingResponses(false));
                     break;
                   case 'Portal':
                     break;

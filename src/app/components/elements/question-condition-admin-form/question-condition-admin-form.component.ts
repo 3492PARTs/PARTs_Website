@@ -86,7 +86,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   buildQuestionConditionToLists(): void {
     this.questionConditionQuestionToList = [];
 
-    this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as QuestionWithConditions);
+    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as QuestionWithConditions);
 
     this.questions.forEach(question => {
       let match = false;
@@ -101,9 +101,6 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       if (this.activeQuestionCondition.question_to &&
         !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
         this.activeQuestionCondition.question_to.question_id === question.question_id) match = false;
-
-      console.log(question);
-      console.log(match);
 
       if (!match)
         this.questionConditionQuestionToList.push(question);

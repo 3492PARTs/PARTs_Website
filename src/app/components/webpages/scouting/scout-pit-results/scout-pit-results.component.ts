@@ -30,7 +30,7 @@ export class ScoutPitResultsComponent implements OnInit {
 
   scoutPitResultsInit(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.getPitScoutingResponses().then(async result => {
+    this.ss.loadPitScoutingResponses().then(async result => {
 
       let tmp: Team[] = [];
 
