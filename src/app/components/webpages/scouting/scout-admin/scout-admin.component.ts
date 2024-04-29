@@ -268,6 +268,12 @@ export class ScoutAdminComponent implements OnInit {
     this.ss.loadFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
       this.gs.decrementOutstandingCalls();
     });
+
+    this.api.get(true, 'scouting/admin/scout-auth-group/', undefined, (result: AuthGroup[]) => {
+      this.userGroups = result;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   getPhoneTypes(): void {
@@ -577,7 +583,7 @@ export class ScoutAdminComponent implements OnInit {
 
   private buildAvailableUserGroups(): void {
     this.availableAuthGroups = this.userGroups.filter(ug => {
-      return this.userGroups.map(el => el.id).indexOf(ug.id) < 0;
+      return this.activeUser.groups.map(el => el.id).indexOf(ug.id) < 0;
     });
   }
 
@@ -614,7 +620,6 @@ export class ScoutAdminComponent implements OnInit {
     this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;
       this.activeUser = new User();
-      this.adminInit();
       this.us.getUsers(1).then(us => {
         this.users = us || [];
       });
@@ -1064,21 +1069,6 @@ export class ScoutPitSchedule {
 export class FormType {
   form_typ!: string;
   form_nm!: string;
-}
-export class ScoutAdminInit {
-  seasons: Season[] = [];
-  events: Event[] = [];
-  currentSeason: Season = new Season();
-  currentEvent: Event = new Event();
-  fieldSchedule: ScoutFieldSchedule[] = [];
-  pitSchedule: ScoutPitSchedule[] = [];
-
-  userGroups: AuthGroup[] = [];
-  phoneTypes: PhoneType[] = [];
-
-  //pastSchedule: ScoutSchedule[] = [];
-  scoutQuestionType: FormType[] = [];
-  teams: Team[] = [];
 }
 
 export class EventToTeams {
