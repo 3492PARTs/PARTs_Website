@@ -59,7 +59,7 @@ export class ScoutingService {
 
     if (fieldUploaded) {
       this.loadTeams();
-      this.getFieldScoutingForm();
+      this.loadFieldScoutingForm();
     }
 
     let pitUploaded = false;
@@ -75,7 +75,7 @@ export class ScoutingService {
 
     if (pitUploaded) {
       if (!fieldUploaded) this.loadTeams();
-      this.getPitScoutingForm();
+      this.loadPitScoutingForm();
     }
 
     this.triggerResponsesUploaded();
@@ -99,7 +99,7 @@ export class ScoutingService {
            **/
           await this.updateSeasonsCache(result.seasons);
           await this.updateEventsCache(result.events);
-          await this.updateTeamsBSAndCache(result.teams);
+          await this.updateTeamsCache(result.teams);
           await this.updateMatchesCache(result.matches);
           await this.updateScheduleTypesCache(result.schedule_types);
           await this.updateSchedulesCache(result.schedules);
@@ -230,9 +230,7 @@ export class ScoutingService {
     let newCurrent = ss.filter(s => s.current === 'y');
 
     if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].season_id !== current[0].season_id) {
-      this.updateScoutFieldResponsesCache([]);
-      this.updateScoutFieldResponseColumnsCache([]);
-      this.updateScoutPitResponsesCache([]);
+      await this.SeasonEventChangedClearCache();
     }
     await this.cs.Season.RemoveAllAsync();
     await this.cs.Season.AddBulkAsync(ss);
@@ -257,10 +255,6 @@ export class ScoutingService {
           }
         });
       });
-
-      if (changed) {
-        this.loadAllScoutingInfo();
-      }
 
       await this.cs.Season.AddOrEditAsync(s);
 
@@ -324,9 +318,7 @@ export class ScoutingService {
     let newCurrent = es.filter(e => e.current === 'y');
 
     if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].event_id !== current[0].event_id) {
-      this.updateScoutFieldResponsesCache([]);
-      this.updateScoutFieldResponseColumnsCache([]);
-      this.updateScoutPitResponsesCache([]);
+      await this.SeasonEventChangedClearCache();
     }
 
     await this.cs.Event.RemoveAllAsync();
@@ -353,10 +345,6 @@ export class ScoutingService {
         });
       });
 
-      if (changed) {
-        this.loadAllScoutingInfo();
-      }
-
       await this.cs.Event.AddOrEditAsync(e);
 
       resolve(changed);
@@ -379,7 +367,7 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          await this.updateTeamsBSAndCache(result);
+          await this.updateTeamsCache(result);
 
           this.loadAllScoutingInfo();
 
@@ -416,7 +404,7 @@ export class ScoutingService {
     return this.outstandingLoadTeamsPromise;
   }
 
-  private async updateTeamsBSAndCache(ts: Team[]): Promise<void> {
+  private async updateTeamsCache(ts: Team[]): Promise<void> {
     await this.cs.Team.RemoveAllAsync();
     await this.cs.Team.AddOrEditBulkAsync(ts);
   }
@@ -495,7 +483,7 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  getFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
+  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
       this.outstandingInitFieldScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
@@ -505,12 +493,7 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          await this.getScoutingQuestionsFromCache('field').then(qs => {
-            qs.forEach(async q => {
-              await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
-            });
-          });
-          await this.cs.QuestionWithConditions.AddBulkAsync(result);
+          await this.updateScoutingQuestionsCache('field', result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -605,42 +588,29 @@ export class ScoutingService {
 
         this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
 
-          let changed = await this.updateSeasonInCache(result.current_season);
+          await this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
-          changed = changed || await this.updateEventInCache(result.current_event);
+          if (params) {
+            // we are only loading the diff
+            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
+            await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
 
-          if (!changed) {
-            await this.updateScoutFieldResponseColumnsCache(result.scoutCols);
-
-            if (params) {
-              // we are only loading the diff
-              this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-              await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
-
-              await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-                result.scoutAnswers = frrs;
-              }).catch(reason => {
-                console.log(reason);
-              });
-            }
-            else {
-              // loading all
-              this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-              await this.updateScoutFieldResponsesCache(result.scoutAnswers);
-            }
-
-            const ids = result.removed_responses.map(t => { return t.scout_field_id });
-            await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
-
-            resolve(result);
-          }
-          else {
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
-            await this.cs.ScoutFieldResponse.RemoveAllAsync();
-            await this.loadFieldScoutingResponses(true, true).then(value => {
-              resolve(value);
+            await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+              result.scoutAnswers = frrs;
+            }).catch(reason => {
+              console.log(reason);
             });
           }
+          else {
+            // loading all
+            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
+            await this.updateScoutFieldResponsesCache(result.scoutAnswers);
+          }
+
+          const ids = result.removed_responses.map(t => { return t.scout_field_id });
+          await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
+
+          resolve(result);
 
           this.outstandingGetFieldScoutingResponsesPromise = null;
         }, async (err: any) => {
@@ -695,7 +665,7 @@ export class ScoutingService {
   }
 
   // Pit Scouting --------------------------------------------------------------
-  getPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
+  loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitPitScoutingPromise) {
       this.outstandingInitPitScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/get-questions/', {
@@ -706,12 +676,7 @@ export class ScoutingService {
            * On success load results and store in db 
            **/
 
-          await this.getScoutingQuestionsFromCache('pit').then(qs => {
-            qs.forEach(async q => {
-              await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
-            });
-          });
-          await this.cs.QuestionWithConditions.AddBulkAsync(result);
+          await this.updateScoutingQuestionsCache('pit', result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -821,12 +786,6 @@ export class ScoutingService {
     if (!this.outstandingGetPitScoutingResponsesPromise)
       this.outstandingGetPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
         this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: ScoutPitResponsesReturn) => {
-
-          let changed = await this.updateSeasonInCache(result.current_season);
-
-          changed = changed || await this.updateEventInCache(result.current_event);
-
-          if (changed) this.loadFieldScoutingResponses(false, true);
 
           await this.updateScoutPitResponsesCache(result.teams);
 
@@ -1064,7 +1023,7 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          this.updateTeamNotesInCache(result);
+          this.updateTeamNotesCache(result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -1100,7 +1059,7 @@ export class ScoutingService {
     return this.outstandingLoadTeamNotesPromise;
   }
 
-  private updateTeamNotesInCache(notes: TeamNote[]) {
+  private updateTeamNotesCache(notes: TeamNote[]) {
     this.cs.TeamNote.RemoveAllAsync().then(() => {
       this.cs.TeamNote.AddBulkAsync(notes);
     });
@@ -1115,4 +1074,28 @@ export class ScoutingService {
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<QuestionWithConditions[]> {
     return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
   }
+
+  private async updateScoutingQuestionsCache(form_typ: string, questions: QuestionWithConditions[]) {
+    await this.getScoutingQuestionsFromCache('field').then(qs => {
+      qs.forEach(async q => {
+        await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
+      });
+    });
+    await this.cs.QuestionWithConditions.AddBulkAsync(questions);
+  }
+
+  private async SeasonEventChangedClearCache(): Promise<void> {
+    await this.updateScoutFieldResponsesCache([]);
+    await this.updateScoutFieldResponseColumnsCache([]);
+    await this.updateScoutPitResponsesCache([]);
+    await this.updateScoutingQuestionsCache('field', []);
+    await this.updateScoutingQuestionsCache('pit', []);
+    await this.updateTeamsCache([]);
+    await this.updateTeamNotesCache([]);
+    await this.updateMatchesCache([]);
+    await this.updateScheduleTypesCache([]);
+    await this.updateSchedulesCache([]);
+    await this.updateScoutFieldSchedulesCache([]);
+  }
 }
+

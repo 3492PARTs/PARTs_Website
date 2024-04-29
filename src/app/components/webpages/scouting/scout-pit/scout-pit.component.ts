@@ -75,7 +75,7 @@ export class ScoutPitComponent implements OnInit, OnDestroy {
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.getPitScoutingForm().then(result => {
+    this.ss.loadPitScoutingForm().then(result => {
       if (this.gs.strNoE(this.scoutPitResponse.team)) {
 
         if (result) {
