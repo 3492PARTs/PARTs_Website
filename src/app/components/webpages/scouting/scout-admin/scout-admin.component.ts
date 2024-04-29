@@ -375,11 +375,13 @@ export class ScoutAdminComponent implements OnInit {
   async getEventsForCurrentSeason(): Promise<void> {
     this.eventList = await this.getEventsForSeason(this.currentSeason.season_id);
 
-    console.log(this.eventList);
-
     let current = this.eventList.filter(e => e.current === 'y');
     if (current.length > 0) this.currentEvent = current[0];
     else this.currentEvent = new Event();
+
+    console.log(this.currentSeason);
+    console.log(this.eventList);
+    console.log(this.currentEvent);
   }
 
   async getEventsForLinkTeamToEvent() {

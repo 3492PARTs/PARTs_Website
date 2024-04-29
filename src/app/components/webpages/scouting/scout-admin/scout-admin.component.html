@@ -45,7 +45,6 @@
 
 </app-box>
 
-
 <app-box *ngIf="page === 'mngSch'" [Title]="'Manage Schedule'">
   <app-table [TableTitle]="'Field'" [TableCols]="scoutFieldScheduleTableCols" [TableData]="scoutFieldSchedules"
     [Scrollable]="true" [ShowAddButton]="true" (AddRecordCallBack)="showScoutScheduleModal('Add Scout Entry')"
@@ -116,8 +115,7 @@
 <app-box *ngIf="page === 'mngSeason'" [Title]="'Manage Season'">
   <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
     <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
-      [BindingProperty]="'season_id'" [(Model)]="currentSeason.season_id" (ModelChange)="getEventsForCurrentSeason()"
-      [FormGroupInline]="true">
+      [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList" [DisplayProperty]="'event_nm'"
