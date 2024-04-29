@@ -232,6 +232,7 @@ export class ScoutingService {
     if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].season_id !== current[0].season_id) {
       this.updateScoutFieldResponsesCache([]);
       this.updateScoutFieldResponseColumnsCache([]);
+      this.updateScoutPitResponsesCache([]);
     }
     await this.cs.Season.RemoveAllAsync();
     await this.cs.Season.AddBulkAsync(ss);
@@ -325,6 +326,7 @@ export class ScoutingService {
     if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].event_id !== current[0].event_id) {
       this.updateScoutFieldResponsesCache([]);
       this.updateScoutFieldResponseColumnsCache([]);
+      this.updateScoutPitResponsesCache([]);
     }
 
     await this.cs.Event.RemoveAllAsync();
@@ -826,9 +828,7 @@ export class ScoutingService {
 
           if (changed) this.loadFieldScoutingResponses(false, true);
 
-          await this.cs.ScoutPitResponse.RemoveAllAsync();
-
-          await this.cs.ScoutPitResponse.AddOrEditBulkAsync(result.teams);
+          await this.updateScoutPitResponsesCache(result.teams);
 
           resolve(result);
           this.outstandingGetPitScoutingResponsesPromise = null;
@@ -857,6 +857,11 @@ export class ScoutingService {
       });
 
     return this.outstandingGetPitScoutingResponsesPromise;
+  }
+
+  private async updateScoutPitResponsesCache(sprs: ScoutPitResponse[]): Promise<void> {
+    await this.cs.ScoutPitResponse.RemoveAllAsync();
+    await this.cs.ScoutPitResponse.AddBulkAsync(sprs);
   }
 
   getPitResponseFromCache(id: number): PromiseExtended<ScoutPitResponse | undefined> {
