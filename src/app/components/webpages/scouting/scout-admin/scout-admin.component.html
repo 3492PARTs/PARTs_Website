@@ -408,30 +408,6 @@
   <app-question-condition-admin-form [FormType]="'pit'"></app-question-condition-admin-form>
 </app-box>
 
-<app-box *ngIf="page === 'mngPhnTyp'" [Title]="'Manage Phone Types'">
-  <app-form (SubmitFunction)="savePhoneType()">
-    <div class="flex align-items-center">
-      <app-form-element *ngIf="!newPhoneType" [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
-        [(Model)]="phoneType" [SelectList]="phoneTypes" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
-      </app-form-element>
-
-      <app-button *ngIf="!newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">New Phone Type
-      </app-button>
-      <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone Type
-      </app-button>
-    </div>
-
-    <app-form-element [Type]="'text'" [LabelText]="'Carrier'" [(Model)]="phoneType.carrier" [Required]="true">
-    </app-form-element>
-    <app-form-element [Type]="'text'" [LabelText]="'Address'" [(Model)]="phoneType.phone_type" [Required]="true">
-    </app-form-element>
-
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
-    </app-button-ribbon>
-  </app-form>
-</app-box>
-
 <app-box *ngIf="page === 'mngFldRes'" [Title]="'Manage Field Responses'">
   <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"
     [ScrollHeight]="'50rem'" [Scrollable]="true" [ShowViewButton]="true"

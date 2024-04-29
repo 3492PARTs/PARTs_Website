@@ -20,13 +20,14 @@ export class ScoutAdminComponent implements OnInit {
   Model: any = {};
   page = 'users';
 
+  phoneTypes: PhoneType[] = [];
+
   seasons: Season[] = [];
   events: Event[] = [];
   teams: Team[] = [];
   currentSeason = new Season();
   currentEvent = new Event();
   users: User[] = [];
-  phoneTypes: PhoneType[] = [];
   userGroups: AuthGroup[] = [];
 
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
@@ -58,7 +59,7 @@ export class ScoutAdminComponent implements OnInit {
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
     { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
   ];
 
   scoutFieldScheduleTableCols: object[] = [
@@ -165,9 +166,6 @@ export class ScoutAdminComponent implements OnInit {
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResponse();
 
-  newPhoneType = false;
-  phoneType: PhoneType = new PhoneType();
-
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
@@ -212,6 +210,7 @@ export class ScoutAdminComponent implements OnInit {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.adminInit();
+        this.getPhoneTypes();
       }
     });
 
@@ -227,7 +226,6 @@ export class ScoutAdminComponent implements OnInit {
       new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
       new UserLinks('Field Results', 'mngFldRes', 'table-edit'),
       new UserLinks('Pit Results', 'mngPitRes', 'table-edit'),
-      new UserLinks('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
 
 
@@ -269,6 +267,14 @@ export class ScoutAdminComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.ss.getFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
       this.gs.decrementOutstandingCalls();
+    });
+  }
+
+  getPhoneTypes(): void {
+    this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
+      this.phoneTypes = result;
+    }, (err: any) => {
+      this.gs.triggerError(err);
     });
   }
 
@@ -615,7 +621,7 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
-  getPhoneType(type: number): string {
+  getPhoneTypeForTable(type: number): string {
     for (let pt of this.phoneTypes) {
       if (pt.phone_type_id === type) return pt.carrier;
     }
@@ -684,20 +690,6 @@ export class ScoutAdminComponent implements OnInit {
     });
   }
 
-  toggleNewPhoneType(): void {
-    this.newPhoneType = !this.newPhoneType;
-    this.phoneType = new PhoneType();
-  }
-
-  savePhoneType(): void {
-    this.api.post(true, 'scouting/admin/save-phone-type/', this.phoneType, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.adminInit();
-      this.phoneType = new PhoneType();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-  }
 
   setEndTime() {
     var dt = new Date(this.ActiveScoutFieldSchedule.st_time);

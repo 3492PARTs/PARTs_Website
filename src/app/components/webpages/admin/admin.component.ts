@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit {
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
     { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneType.bind(this) },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
   ];
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
@@ -118,6 +118,11 @@ export class AdminComponent implements OnInit {
   activeItem = new Item();
   itemModalVisible = false;
 
+  //Phone Types
+  phoneTypes: PhoneType[] = [];
+  newPhoneType = false;
+  activePhoneType: PhoneType = new PhoneType();
+
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
@@ -149,6 +154,9 @@ export class AdminComponent implements OnInit {
           this.us.getPermissions();
           this.runSecurityAudit();
           break;
+        case 'mngPhnTyp':
+          this.getPhoneTypes();
+          break;
       }
     });
 
@@ -170,6 +178,7 @@ export class AdminComponent implements OnInit {
       new UserLinks('Requested Items', 'req-items', 'view-grid-plus'),
       new UserLinks('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new UserLinks('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
+      new UserLinks('Phone Types', 'mngPhnTyp', 'phone'),
     ]);
     this.ns.setSubPage('users');
     //this.ns.setSubPage('security');
@@ -371,7 +380,7 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  getPhoneType(type: number): string {
+  getPhoneTypeForTable(type: number): string {
     if (this.init)
       for (let pt of this.init.phoneTypes) {
         if (pt.phone_type_id === type) return pt.carrier;
@@ -422,6 +431,30 @@ export class AdminComponent implements OnInit {
       this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
     else
       this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+  }
+
+  // Phone Types -------------------------------------------------------------------------------------
+  getPhoneTypes(): void {
+    this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
+      this.phoneTypes = result;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  toggleNewPhoneType(): void {
+    this.newPhoneType = !this.newPhoneType;
+    this.activePhoneType = new PhoneType();
+  }
+
+  savePhoneType(): void {
+    this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.adminInit();
+      this.activePhoneType = new PhoneType();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   //----------------------------------------------------------------------------------------------------
