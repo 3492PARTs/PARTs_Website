@@ -86,22 +86,27 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   buildQuestionConditionToLists(): void {
     this.questionConditionQuestionToList = [];
 
-    this.questions.forEach(q => {
+    this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as QuestionWithConditions);
+
+    this.questions.forEach(question => {
       let match = false;
       this.questionConditions.forEach(qc => {
-        if ([qc.question_from.question_id, qc.question_to.question_id].includes(q.question_id)) match = true
+        if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) match = true
       });
 
       if (this.activeQuestionCondition.question_from &&
         !this.gs.strNoE(this.activeQuestionCondition.question_from.question_id) &&
-        this.activeQuestionCondition.question_from.question_id === q.question_id) match = true;
+        this.activeQuestionCondition.question_from.question_id === question.question_id) match = true;
 
       if (this.activeQuestionCondition.question_to &&
         !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === q.question_id) match = false;
+        this.activeQuestionCondition.question_to.question_id === question.question_id) match = false;
+
+      console.log(question);
+      console.log(match);
 
       if (!match)
-        this.questionConditionQuestionToList.push(q);
+        this.questionConditionQuestionToList.push(question);
     });
   }
 
