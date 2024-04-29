@@ -1051,7 +1051,6 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          console.log(result);
           this.updateTeamNotesInCache(result);
 
           if (callbackFn) callbackFn(result);

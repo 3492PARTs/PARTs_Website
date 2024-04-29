@@ -166,10 +166,6 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
   }
 
   async updateScoutFieldSchedule(): Promise<void> {
-    await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
-      console.log(sfss);
-    });
-
     await this.ss.filterScoutFieldSchedulesFromCache(sfs => {
       const date = new Date();
       const start = new Date(sfs.st_time);

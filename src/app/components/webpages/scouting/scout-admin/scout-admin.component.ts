@@ -264,11 +264,6 @@ export class ScoutAdminComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
-      this.gs.decrementOutstandingCalls();
-    });
-
     this.api.get(true, 'scouting/admin/scout-auth-group/', undefined, (result: AuthGroup[]) => {
       this.userGroups = result;
     }, (err: any) => {
@@ -378,10 +373,6 @@ export class ScoutAdminComponent implements OnInit {
     let current = this.eventList.filter(e => e.current === 'y');
     if (current.length > 0) this.currentEvent = current[0];
     else this.currentEvent = new Event();
-
-    console.log(this.currentSeason);
-    console.log(this.eventList);
-    console.log(this.currentEvent);
   }
 
   async getEventsForLinkTeamToEvent() {
