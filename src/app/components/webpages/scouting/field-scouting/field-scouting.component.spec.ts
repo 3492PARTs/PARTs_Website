@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ScoutAdminComponent } from './scout-admin.component';
+import { FieldScoutingComponent } from './field-scouting.component';
 
-describe('ScoutAdminComponent', () => {
-  let component: ScoutAdminComponent;
-  let fixture: ComponentFixture<ScoutAdminComponent>;
+describe('FieldScoutingComponent', () => {
+  let component: FieldScoutingComponent;
+  let fixture: ComponentFixture<FieldScoutingComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScoutAdminComponent ]
+      declarations: [FieldScoutingComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScoutAdminComponent);
+    fixture = TestBed.createComponent(FieldScoutingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

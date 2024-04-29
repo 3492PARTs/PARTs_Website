@@ -8,11 +8,11 @@ import { ScoutingService } from 'src/app/services/scouting.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-scout-portal',
-  templateUrl: './scout-portal.component.html',
-  styleUrls: ['./scout-portal.component.scss']
+  selector: 'app-scouting-portal',
+  templateUrl: './scouting-portal.component.html',
+  styleUrls: ['./scouting-portal.component.scss']
 })
-export class ScoutPortalComponent implements OnInit {
+export class ScoutingPortalComponent implements OnInit {
   user: User = new User();
   userPermissions: AuthPermission[] = [];
 

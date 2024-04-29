@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ScoutFieldComponent } from './scout-field.component';
+import { ScoutFieldComponent } from './pit-scouting.component';
 
 describe('ScoutFieldComponent', () => {
   let component: ScoutFieldComponent;
@@ -8,9 +8,9 @@ describe('ScoutFieldComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScoutFieldComponent ]
+      declarations: [ScoutFieldComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

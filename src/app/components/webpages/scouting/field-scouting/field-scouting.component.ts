@@ -10,11 +10,11 @@ import { User } from 'src/app/models/user.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
-  selector: 'app-scout-field',
-  templateUrl: './scout-field.component.html',
-  styleUrls: ['./scout-field.component.scss']
+  selector: 'app-field-scouting',
+  templateUrl: './field-scouting.component.html',
+  styleUrls: ['./field-scouting.component.scss']
 })
-export class ScoutFieldComponent implements OnInit, OnDestroy {
+export class FieldScoutingComponent implements OnInit, OnDestroy {
   scoutFieldResponse = new ScoutFieldFormResponse();
   teams: Team[] = [];
   matches: Match[] = [];

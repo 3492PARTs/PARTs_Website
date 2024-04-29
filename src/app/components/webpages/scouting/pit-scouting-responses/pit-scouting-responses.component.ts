@@ -8,11 +8,11 @@ import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
-  selector: 'app-scout-pit-results',
-  templateUrl: './scout-pit-results.component.html',
-  styleUrls: ['./scout-pit-results.component.scss']
+  selector: 'app-pit-scouting-responses',
+  templateUrl: './pit-scouting-responses.component.html',
+  styleUrls: ['./pit-scouting-responses.component.scss']
 })
-export class ScoutPitResultsComponent implements OnInit {
+export class ScoutPitResponsesComponent implements OnInit {
   teamsSelectList: Team[] = [];
   teams: Team[] = [];
   scoutPitResults: ScoutPitResponse[] = [];

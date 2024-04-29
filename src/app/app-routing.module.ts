@@ -5,12 +5,12 @@ import { AuthGuard } from './helpers/auth.gaurd';
 
 import { HomeComponent } from './components/webpages/home/home.component';
 import { LoginComponent } from './components/webpages/login/login.component';
-import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
-import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
-import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
-import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
-import { ScoutPitResultsComponent } from './components/webpages/scouting/scout-pit-results/scout-pit-results.component';
-import { ScoutPortalComponent } from './components/webpages/scouting/scout-portal/scout-portal.component';
+import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
+import { ScoutingAdminComponent } from './components/webpages/scouting/scouting-admin/scouting-admin.component';
+import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
+import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
+import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
+import { ScoutingPortalComponent } from './components/webpages/scouting/scouting-portal/scouting-portal.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
 import { JoinComponent } from './components/webpages/join/join.component';
 import { CommunityOutreachComponent } from './components/webpages/join/community-outreach/community-outreach.component';
@@ -39,13 +39,13 @@ import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-s
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'scout/scout-field', component: ScoutFieldComponent, canActivate: [AuthGuard] },
-  { path: 'scout/scout-pit', component: ScoutPitComponent, canActivate: [AuthGuard] },
-  { path: 'scout/scout-admin', component: ScoutAdminComponent, canActivate: [AuthGuard] },
-  { path: 'scout/scout-field-results', component: ScoutFieldResultsComponent, canActivate: [AuthGuard] },
-  { path: 'scout/scout-pit-results', component: ScoutPitResultsComponent, canActivate: [AuthGuard] },
-  { path: 'scout/scout-portal', component: ScoutPortalComponent, canActivate: [AuthGuard] },
-  { path: 'scout/match-planning', component: MatchPlanningComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/field', component: FieldScoutingComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/pit', component: PitScoutingComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/admin', component: ScoutingAdminComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/field-responses', component: FieldScoutingResponsesComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/pit-responses', component: ScoutPitResponsesComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/portal', component: ScoutingPortalComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/match-planning', component: MatchPlanningComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent },
   { path: 'join', component: JoinComponent },
   { path: 'join/community-outreach', component: CommunityOutreachComponent },

@@ -9,11 +9,11 @@ import { ScoutingService } from 'src/app/services/scouting.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-scout-field-results',
-  templateUrl: './scout-field-results.component.html',
-  styleUrls: ['./scout-field-results.component.scss']
+  selector: 'app-field-scouting-responses',
+  templateUrl: './field-scouting-responses.component.html',
+  styleUrls: ['./field-scouting-responses.component.scss']
 })
-export class ScoutFieldResultsComponent implements OnInit {
+export class FieldScoutingResponsesComponent implements OnInit {
 
   scoutResponses: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
 

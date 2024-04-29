@@ -12,11 +12,11 @@ import { CacheService } from 'src/app/services/cache.service';
 import { APIStatus } from 'src/app/models/api.models';
 
 @Component({
-  selector: 'app-scout-field',
-  templateUrl: './scout-pit.component.html',
-  styleUrls: ['./scout-pit.component.scss']
+  selector: 'app-pit-scouting',
+  templateUrl: './pit-scouting.component.html',
+  styleUrls: ['./pit-scouting.component.scss']
 })
-export class ScoutPitComponent implements OnInit, OnDestroy {
+export class PitScoutingComponent implements OnInit, OnDestroy {
   private buildOutstandingTeamsTimeout: number | undefined;
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];

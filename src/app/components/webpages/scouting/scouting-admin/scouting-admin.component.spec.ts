@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { ScoutPortalComponent } from './scout-portal.component';
+import { ScoutingAdminComponent } from './scouting-admin.component';
 
-describe('ScoutPortalComponent', () => {
-  let component: ScoutPortalComponent;
-  let fixture: ComponentFixture<ScoutPortalComponent>;
+describe('ScoutAdminComponent', () => {
+  let component: ScoutingAdminComponent;
+  let fixture: ComponentFixture<ScoutingAdminComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ScoutPortalComponent ]
+      declarations: [ScoutingAdminComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScoutPortalComponent);
+    fixture = TestBed.createComponent(ScoutingAdminComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

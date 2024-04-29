@@ -12,11 +12,11 @@ import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 
 @Component({
-  selector: 'app-scout-admin',
-  templateUrl: './scout-admin.component.html',
-  styleUrls: ['./scout-admin.component.scss']
+  selector: 'app-scouting-admin',
+  templateUrl: './scouting-admin.component.html',
+  styleUrls: ['./scouting-admin.component.scss']
 })
-export class ScoutAdminComponent implements OnInit {
+export class ScoutingAdminComponent implements OnInit {
   Model: any = {};
   page = 'users';
 
