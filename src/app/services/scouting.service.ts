@@ -113,8 +113,6 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          console.log(result);
-
           await this.updateSeasonsCache(result.seasons);
           await this.updateEventsCache(result.events);
           await this.updateTeamsBSAndCache(result.teams);
@@ -587,7 +585,7 @@ export class ScoutingService {
 
   }
 
-  getFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
+  loadFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
     if (forceCall || !this.outstandingGetFieldScoutingResponsesPromise)
       this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
         let last = null;
@@ -639,7 +637,7 @@ export class ScoutingService {
           else {
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'refresh results for season change');
             await this.cs.ScoutFieldResponse.RemoveAllAsync();
-            await this.getFieldScoutingResponses(true, true).then(value => {
+            await this.loadFieldScoutingResponses(true, true).then(value => {
               resolve(value);
             });
           }
@@ -818,7 +816,7 @@ export class ScoutingService {
 
           changed = changed || await this.updateEventInCache(result.current_event);
 
-          if (changed) this.getFieldScoutingResponses(false, true);
+          if (changed) this.loadFieldScoutingResponses(false, true);
 
           await this.cs.ScoutPitResponse.RemoveAllAsync();
 

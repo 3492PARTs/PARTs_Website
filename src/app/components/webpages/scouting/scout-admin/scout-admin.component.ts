@@ -150,7 +150,7 @@ export class ScoutAdminComponent implements OnInit {
 
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutResultsCols: object[] = [
-    { PropertyName: 'team', ColLabel: 'Team' },
+    { PropertyName: 'team_no', ColLabel: 'Team' },
     { PropertyName: 'match', ColLabel: 'Match' },
     { PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'user', ColLabel: 'Scout' },
@@ -265,7 +265,7 @@ export class ScoutAdminComponent implements OnInit {
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.getFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
+    this.ss.loadFieldScoutingResponses().then(async (result: ScoutFieldResponsesReturn | null) => {
       this.gs.decrementOutstandingCalls();
     });
   }
@@ -982,10 +982,10 @@ export class ScoutAdminComponent implements OnInit {
   }
 
   getFieldResults(): void {
-    this.api.get(true, 'scouting/field/responses/', undefined, (result: any) => {
-      this.scoutResults = result as ScoutFieldResponsesReturn;
-    }, (err: any) => {
-      this.gs.triggerError(err);
+    this.ss.loadFieldScoutingResponses(true, true).then(result => {
+      if (result) {
+        this.scoutResults = result;
+      }
     });
   }
 

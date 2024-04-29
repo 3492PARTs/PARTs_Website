@@ -106,7 +106,7 @@ export class MatchPlanningComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.ss.getFieldScoutingResponses().then(sfss => {
+    this.ss.loadFieldScoutingResponses().then(sfss => {
       if (sfss) {
         this.scoutCols = sfss.scoutCols;
 

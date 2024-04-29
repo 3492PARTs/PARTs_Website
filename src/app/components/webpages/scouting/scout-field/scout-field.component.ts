@@ -130,7 +130,7 @@ export class ScoutFieldComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(async success => {
+    this.ss.loadAllScoutingInfo().then(async result => {
       await this.updateScoutFieldSchedule();
       this.gs.decrementOutstandingCalls();
     });

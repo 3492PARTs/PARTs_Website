@@ -57,7 +57,7 @@ export class ScoutFieldResultsComponent implements OnInit {
 
   init(forceCall = false): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.getFieldScoutingResponses(true, forceCall).then(async (result: ScoutFieldResponsesReturn | null) => {
+    this.ss.loadFieldScoutingResponses(true, forceCall).then(async (result: ScoutFieldResponsesReturn | null) => {
       if (result) {
         this.scoutResponses = result;
 

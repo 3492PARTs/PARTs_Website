@@ -345,7 +345,7 @@ export class AuthService {
                     offlineCalls.push(this.ss.getFieldScoutingForm(false));
                     break;
                   case 'Field Results':
-                    offlineCalls.push(this.ss.getFieldScoutingResponses(false));
+                    offlineCalls.push(this.ss.loadFieldScoutingResponses(false));
                     offlineCalls.push(this.ss.loadTeamNotes(false));
                     break;
                   case 'Pit Scouting':
