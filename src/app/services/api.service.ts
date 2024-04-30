@@ -95,7 +95,7 @@ export class APIService {
 
   post(loadingScreen: boolean, endpoint: string, obj: any,
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<object> {
+  ): Observable<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     const obs = this.http.post(
@@ -121,7 +121,7 @@ export class APIService {
 
   delete(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<object> {
+  ): Observable<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     const obs = this.http.delete(
@@ -150,7 +150,7 @@ export class APIService {
 
   put(loadingScreen: boolean, endpoint: string, obj: any,
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<object> {
+  ): Observable<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     const obs = this.http.put(

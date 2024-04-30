@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -108,15 +108,16 @@ export class AuthService {
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       this.refreshToken().subscribe(
         {
-          next: async (result: any) => {
+          next: (result: any) => {
             if (this.gs.checkResponse(result)) {
               const token = result as Token;
               this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
               this.getTokenExp(token.access);
               this.getTokenExp(token.refresh);
               this.tokenBS.next(token);
+              localStorage.setItem(this.tokenStringLocalStorage, token.refresh);
 
-              await this.getLoggedInUserData();
+              this.getLoggedInUserData();
               this.ps.subscribeToNotifications();
               this.authInFlightBS.next(AuthCallStates.comp);
             }
@@ -125,15 +126,15 @@ export class AuthService {
               this.logOut();
             }
           },
-          error: async (err: any) => {
+          error: (err: HttpErrorResponse) => {
             console.log('error', err);
 
-            if (this.isSessionExpired()) {
+            if (err.status != 0 || this.isSessionExpired()) {
               this.logOut();
               this.authInFlightBS.next(AuthCallStates.err);
             }
             else {
-              await this.getLoggedInUserData();
+              this.getLoggedInUserData();
               this.authInFlightBS.next(AuthCallStates.comp);
             }
           }
@@ -201,10 +202,13 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(): Observable<any> {
+    console.log('refresh');
+    console.log(this.tokenBS.value.refresh);
     return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh });
   }
 
   public pipeRefreshToken(): Observable<Token> {
+    console.log('ugggggrefresh');
     return this.refreshToken().pipe(
       map(res => {
         const token = res as Token;
@@ -213,6 +217,7 @@ export class AuthService {
         this.getTokenExp(token.refresh);
 
         this.tokenBS.next(token);
+        localStorage.setItem(this.tokenStringLocalStorage, token.refresh);
 
         return token;
       })

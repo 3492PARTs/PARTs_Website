@@ -51,7 +51,8 @@ export class HTTPInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${this.token.access}`
         }
       });
-    } else {
+    }
+    else {
       this.gs.devConsoleLog('http.interceptor.ts', `else: ${request.url}`);
       let withCredentials = request.url.includes('user/token/refresh/');
       //console.log(request.url, withCredentials);
