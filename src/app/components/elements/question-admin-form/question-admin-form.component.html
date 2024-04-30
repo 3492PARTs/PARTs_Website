@@ -15,7 +15,7 @@
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
       [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
       [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
-      [FormGroup]="true" [FormGroupInline]="true">
+      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true">
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"

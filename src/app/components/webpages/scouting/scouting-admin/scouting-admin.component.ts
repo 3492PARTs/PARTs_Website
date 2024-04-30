@@ -1050,6 +1050,12 @@ export class ScoutingAdminComponent implements OnInit {
     }
   }
 
+  removeQuestionFromFieldAggregate(q: QuestionWithConditions): void {
+    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, q.question_id, 'question_id');
+    this.activeFieldQuestionAggregate.questions.splice(index, 1);
+    this.buildFieldQuestionAggQuestionList();
+  }
+
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeFieldQuestionAggregate, (result: any) => {
       this.gs.successfulResponseBanner(result);

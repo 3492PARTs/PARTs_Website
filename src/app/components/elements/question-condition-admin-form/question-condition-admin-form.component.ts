@@ -33,7 +33,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.api.get(true, 'form/get-questions/', {
+    this.api.get(true, 'form/get-question/', {
       form_typ: this.FormType,
       active: 'y'
     }, (result: any) => {

@@ -439,7 +439,7 @@
 
       <app-table [TableCols]="fieldQuestionAggregateQuestionsTableCols"
         [TableData]="activeFieldQuestionAggregate.questions" [Width]="'100%'" [ShowRemoveButton]="true"
-        (RecordClickCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
+        (RemoveRecordCallBack)="removeQuestionFromFieldAggregate($event)"></app-table>
     </app-form>
   </app-modal>
 </app-box>
