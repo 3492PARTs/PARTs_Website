@@ -150,10 +150,10 @@
       [Width]="'350px'"></app-form-element>
 
     <app-form-element [Type]="'area'" [LabelText]="'Exception'" [Disabled]="true" [Model]="currentError.exception"
-      [Width]="'100%'" [Rows]="5"></app-form-element>
+      [Width]="'100%'" [Rows]="5" [FieldSize]="4000"></app-form-element>
 
     <app-form-element [Type]="'area'" [LabelText]="'Traceback'" [Disabled]="true" [Model]="currentError.traceback"
-      [Width]="'100%'" [Rows]="8"></app-form-element>
+      [Width]="'100%'" [Rows]="8" [FieldSize]="4000"></app-form-element>
   </app-modal>
 
   <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
