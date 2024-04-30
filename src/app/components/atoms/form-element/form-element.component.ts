@@ -174,7 +174,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (this.Type === 'text') {
       if (isNaN(this.Model)) {
-        this.change('');
+        this.gs.triggerChange(() => {
+          this.change('');
+        });
       }
     }
 
