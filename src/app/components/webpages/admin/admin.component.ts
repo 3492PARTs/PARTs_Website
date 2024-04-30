@@ -175,10 +175,10 @@ export class AdminComponent implements OnInit {
     let subPages = [
       new UserLinks('Users', 'users', 'account-group'),
       new UserLinks('Security', 'security', 'security'),
-      new UserLinks('Error Log', 'errors', 'alert-circle-outline'),
       new UserLinks('Team Application Form', 'team-app-form', 'chat-question-outline'),
       new UserLinks('Team Contact Form', 'team-cntct-form', 'chat-question-outline'),
       new UserLinks('Phone Types', 'mngPhnTyp', 'phone'),
+      new UserLinks('Error Log', 'errors', 'alert-circle-outline'),
     ];
 
     if (!environment.production) subPages.push(new UserLinks('Requested Items', 'req-items', 'view-grid-plus'));
@@ -446,7 +446,7 @@ export class AdminComponent implements OnInit {
   savePhoneType(): void {
     this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.adminInit();
+      this.getPhoneTypes();
       this.activePhoneType = new PhoneType();
     }, (err: any) => {
       this.gs.triggerError(err);
