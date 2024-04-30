@@ -137,23 +137,21 @@
   </app-table>
 
   <app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
-    <app-form-element [Type]="'text'" [LabelText]="'User'" [Disabled]="true"
-      [Model]="currentError.user.first_name + ' ' + currentError.user.last_name"></app-form-element>
+    <app-form-element-group [LabelText]="'Information'">
+      <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
+      <p>Time: {{ currentError.display_time }}</p>
+      <p>Path: {{ currentError.path }}</p>
+      <p>Message: {{ currentError.message }}</p>
+    </app-form-element-group>
 
-    <app-form-element [Type]="'text'" [LabelText]="'Time'" [Disabled]="true"
-      [Model]="currentError.display_time"></app-form-element>
 
-    <app-form-element [Type]="'text'" [LabelText]="'Path'" [Disabled]="true" [Model]="currentError.path"
-      [Width]="'350px'"></app-form-element>
+    <app-form-element-group [LabelText]="'Exception'">
+      <p class="white-space-pre">{{ currentError.exception }}</p>
+    </app-form-element-group>
 
-    <app-form-element [Type]="'text'" [LabelText]="'Message'" [Disabled]="true" [Model]="currentError.message"
-      [Width]="'350px'"></app-form-element>
-
-    <app-form-element [Type]="'area'" [LabelText]="'Exception'" [Disabled]="true" [Model]="currentError.exception"
-      [Width]="'100%'" [Rows]="5" [FieldSize]="4000"></app-form-element>
-
-    <app-form-element [Type]="'area'" [LabelText]="'Traceback'" [Disabled]="true" [Model]="currentError.traceback"
-      [Width]="'100%'" [Rows]="8" [FieldSize]="4000"></app-form-element>
+    <app-form-element-group [LabelText]="'Traceback'">
+      <p class="white-space-pre">{{ currentError.traceback }}</p>
+    </app-form-element-group>
   </app-modal>
 
   <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
