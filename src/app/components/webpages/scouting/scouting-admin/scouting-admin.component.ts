@@ -5,7 +5,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { Team, Event, ScoutFieldSchedule, ScoutFieldResponsesReturn, Season, ScoutPitResponse } from 'src/app/models/scouting.models';
+import { Team, Event, ScoutFieldSchedule, ScoutFieldResponsesReturn, Season, ScoutPitResponse, ScheduleByType, Schedule, ScheduleType } from 'src/app/models/scouting.models';
 import { User, AuthGroup } from 'src/app/models/user.models';
 import { UserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
@@ -30,8 +30,6 @@ export class ScoutingAdminComponent implements OnInit {
   currentEvent = new Event();
   users: User[] = [];
   userGroups: AuthGroup[] = [];
-
-  scoutFieldSchedules: ScoutFieldSchedule[] = [];
 
   // user sub page
   userTableCols = [
@@ -73,7 +71,14 @@ export class ScoutingAdminComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
+  manageSeasonModalVisible = false;
+  manageEventsModalVisible = false;
+  manageTeamModalVisible = false;
+  linkTeamToEventModalVisible = false;
+  removeTeamFromEventModalVisible = false;
+
   // schedule sub page
+  scoutFieldSchedules: ScoutFieldSchedule[] = [];
   scoutFieldScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
@@ -87,11 +92,18 @@ export class ScoutingAdminComponent implements OnInit {
   scoutScheduleModalTitle = '';
   ActiveScoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
 
-  manageSeasonModalVisible = false;
-  manageEventsModalVisible = false;
-  manageTeamModalVisible = false;
-  linkTeamToEventModalVisible = false;
-  removeTeamFromEventModalVisible = false;
+  scheduleTypes: ScheduleType[] = [];
+  scheduleByType: ScheduleByType[] = [];
+  scheduleTableCols: object[] = [
+    { PropertyName: 'user_name', ColLabel: 'User' },
+    { PropertyName: 'sch_nm', ColLabel: 'Type' },
+    { PropertyName: 'st_time', ColLabel: 'Start Time' },
+    { PropertyName: 'end_time', ColLabel: 'End Time' },
+    { PropertyName: 'notified', ColLabel: 'Notified' },
+  ];
+
+  currentSchedule = new Schedule();
+  scheduleModalVisible = false;
 
   // manage questions sub pages
   manageScoutFieldQuestions = false;
@@ -223,7 +235,7 @@ export class ScoutingAdminComponent implements OnInit {
       new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
       new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
       new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
-      new UserLinks('Field responses', 'mngFldRes', 'table-edit'),
+      new UserLinks('Field Responses', 'mngFldRes', 'table-edit'),
       new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
       new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
       new UserLinks('Pit Responses', 'mngPitRes', 'table-edit'),
@@ -257,6 +269,12 @@ export class ScoutingAdminComponent implements OnInit {
         this.scoutFieldSchedules.forEach(fs => {
           fs.st_time = new Date(fs.st_time),
             fs.end_time = new Date(fs.end_time)
+        });
+        this.scheduleTypes = result.schedule_types;
+        this.scheduleByType = [];
+        result.schedule_types.forEach(async st => {
+          const tmp = result.schedules.filter(s => s.sch_typ === st.sch_typ);
+          if (tmp) this.scheduleByType.push({ sch_typ: st, schedule: tmp });
         });
 
         this.getEventsForCurrentSeason();
@@ -293,7 +311,6 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   syncEvent(event_cd: string): void {
-    this.currentEvent.event_cd
     this.api.get(true, 'scouting/admin/sync-event/', {
       event_cd: event_cd
     }, (result: any) => {
@@ -630,7 +647,7 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   // Field Scouting scheduling -----------------------------------------------------------------------------------------
-  showScoutScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
+  showScoutFieldScheduleModal(title: string, ss?: ScoutFieldSchedule): void {
     this.scoutScheduleModalTitle = title;
     if (ss) {
       //"2020-01-01T01:00"
@@ -681,8 +698,8 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   notifyUsers(scout_field_sch_id: number): void {
-    this.api.get(true, 'scouting/admin/notify-users/', {
-      id: scout_field_sch_id
+    this.api.get(true, 'scouting/admin/notify-user/', {
+      scout_field_sch_id: scout_field_sch_id
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.adminInit();
@@ -691,7 +708,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
-  setEndTime() {
+  setFieldScheduleEndTime() {
     var dt = new Date(this.ActiveScoutFieldSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
     this.ActiveScoutFieldSchedule.end_time = dt;
@@ -704,6 +721,63 @@ export class ScoutingAdminComponent implements OnInit {
     return false;
   }
 
+  // Scheduling ------------------------------------------------------------------------------------------------------------------------
+  showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
+    if (s) {
+      //"2020-01-01T01:00"
+      this.currentSchedule = this.gs.cloneObject(s);
+    }
+    else {
+      this.currentSchedule = new Schedule();
+    }
+
+    this.currentSchedule.sch_typ = sch_typ.sch_typ;
+    this.currentSchedule.sch_nm = sch_typ.sch_nm;
+
+    this.scheduleModalVisible = true;
+  }
+
+  saveScheduleEntry(): void {
+    let s = this.gs.cloneObject(this.currentSchedule);
+    s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
+    this.api.post(true, 'scouting/admin/save-schedule-entry/', s, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.currentSchedule = new Schedule();
+      this.scheduleModalVisible = false;
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  notifyUser(sch_id: number): void {
+    this.api.get(true, 'scouting/admin/notify-user/', {
+      sch_id: sch_id
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.scheduleModalVisible = false;
+      this.adminInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  copyScheduleEntry(): void {
+    let ss = new Schedule();
+    ss.user = this.currentSchedule.user;
+    ss.sch_typ = this.currentSchedule.sch_typ;
+    ss.st_time = this.currentSchedule.st_time;
+    ss.end_time = this.currentSchedule.end_time;
+    this.currentSchedule = ss;
+  }
+
+  setScheduleEndTime() {
+    var dt = new Date(this.currentSchedule.st_time);
+    dt.setHours(dt.getHours() + 1);
+    this.currentSchedule.end_time = dt;
+  }
+
+  // Scouting Activity -----------------------------------------------------------------------------------------------------------------
   getUsersScoutingUserInfo(): void {
     this.api.get(true, 'scouting/admin/scouting-user-info/', undefined, (result: any) => {
       this.usersScoutingUserInfo = result as UserInfo[];

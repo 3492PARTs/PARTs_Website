@@ -173,7 +173,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     ];
 
     // Check if comp page is available
-    /*
     this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
       if ((result as CompetitionInit).event) {
         this.gs.triggerChange(() => {
@@ -181,7 +180,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         });
       }
     });
-    */
 
     this.tokenString = environment.tokenString;
 

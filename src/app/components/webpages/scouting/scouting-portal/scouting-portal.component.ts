@@ -16,13 +16,9 @@ export class ScoutingPortalComponent implements OnInit {
   user: User = new User();
   userPermissions: AuthPermission[] = [];
 
-  users: User[] | null = null;
-
-  scheduleTypes: ScheduleType[] = [];
-
   fullFieldSchedule: ScoutFieldSchedule[] = [];
 
-  scheduleByType: ScheduleByType[] = [];
+
   schedule: Schedule[] = [];
   fieldSchedule: {
     position: string,
@@ -51,24 +47,12 @@ export class ScoutingPortalComponent implements OnInit {
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
-  currentSchedule = new Schedule();
-  scheduleModalVisible = false;
-
   scheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
-
-  expandedScheduleTableCols: object[] = [
-    { PropertyName: 'user_name', ColLabel: 'User' },
-    { PropertyName: 'sch_nm', ColLabel: 'Type' },
-    { PropertyName: 'st_time', ColLabel: 'Start Time' },
-    { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
-  ];
-
 
   constructor(private gs: GeneralService,
     private api: APIService,
@@ -84,19 +68,11 @@ export class ScoutingPortalComponent implements OnInit {
 
   portalInit(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(async success => {
-
-      await this.ss.getScheduleTypesFromCache().then(sts => {
-        this.scheduleTypes = sts;
-      });
-
-      await this.ss.filterSchedulesFromCache(s => (s.user as User).id === this.user.id).then(ss => {
-        this.schedule = ss;
-      });
-
-      this.fieldSchedule = [];
-      await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
-        sfss.forEach(fs => {
+    this.ss.loadAllScoutingInfo().then(result => {
+      if (result) {
+        this.schedule = result.schedules.filter(s => (s.user as User).id === this.user.id);
+        this.fullFieldSchedule = result.scout_field_schedules;
+        result.scout_field_schedules.forEach(fs => {
           let pos = '';
 
           if ((fs.red_one_id as User)?.id === this.user.id) {
@@ -129,89 +105,8 @@ export class ScoutingPortalComponent implements OnInit {
             });
           }
         });
-      });
-
-      if (this.userPermissions.map(up => up.codename).includes('scheduling')) {
-        await this.us.getUsers(1, 0).then(us => {
-          this.users = us;
-        });
-
-        this.scheduleByType = [];
-        await this.ss.getScheduleTypesFromCache().then(sts => {
-          sts.forEach(async st => {
-            const tmp = await this.ss.filterSchedulesFromCache(s => s.sch_typ === st.sch_typ);
-            if (tmp) this.scheduleByType.push({ sch_typ: st, schedule: tmp })
-          });
-        });
-
-        await this.ss.getScoutFieldSchedulesFromCache().then(sfss => {
-          this.fullFieldSchedule = sfss;
-        });
       }
-
       this.gs.decrementOutstandingCalls();
     });
-  }
-
-  showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
-    if (s) {
-      //"2020-01-01T01:00"
-      this.currentSchedule = this.gs.cloneObject(s);
-    }
-    else {
-      this.currentSchedule = new Schedule();
-    }
-
-    this.currentSchedule.sch_typ = sch_typ.sch_typ;
-    this.currentSchedule.sch_nm = sch_typ.sch_nm;
-
-    this.scheduleModalVisible = true;
-  }
-
-  saveScheduleEntry(): void {
-    let s = this.gs.cloneObject(this.currentSchedule);
-    s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
-    this.api.post(true, 'scouting/portal/save-schedule-entry/', s, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.currentSchedule = new Schedule();
-      this.scheduleModalVisible = false;
-      this.portalInit();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-  }
-
-  notifyUser(sch_id: number): void {
-    this.api.get(true, 'scouting/portal/notify-user/?', {
-      id: sch_id
-    }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.scheduleModalVisible = false;
-      this.portalInit();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-  }
-
-  copyScoutScheduleEntry(): void {
-    let ss = new Schedule();
-    ss.user = this.currentSchedule.user;
-    ss.sch_typ = this.currentSchedule.sch_typ;
-    ss.st_time = this.currentSchedule.st_time;
-    ss.end_time = this.currentSchedule.end_time;
-    this.currentSchedule = ss;
-  }
-
-  setEndTime() {
-    var dt = new Date(this.currentSchedule.st_time);
-    dt.setHours(dt.getHours() + 1);
-    this.currentSchedule.end_time = dt;
-  }
-
-  compareUserObjects(u1: User, u2: User): boolean {
-    if (u1 && u2 && u1.id && u2.id) {
-      return u1.id === u2.id;
-    }
-    return false;
   }
 }
