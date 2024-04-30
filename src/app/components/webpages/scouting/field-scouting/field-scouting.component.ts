@@ -51,6 +51,47 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     window.clearTimeout(this.checkScoutTimeout);
   }
 
+  init(): void {
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadAllScoutingInfo().then(async result => {
+      if (result) {
+        this.matches = result.matches.filter(m => {
+          const compLvl = (m.comp_level as CompetitionLevel);
+
+          return compLvl && compLvl.comp_lvl_typ === 'qm';
+        });
+
+        for (let i = 0; i < this.matches.length; i++) {
+          const match = this.matches[i];
+
+          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
+            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+            this.matches.splice(i--, 1);
+          }
+        }
+
+        this.scoutFieldResponse.match = null;
+        this.scoutFieldResponse.team = NaN;
+        this.amendMatchList();
+        this.buildTeamList(NaN, result.teams);
+      }
+      await this.updateScoutFieldSchedule();
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadFieldScoutingForm().then(result => {
+      if (result) {
+        this.scoutFieldResponse.question_answers = result;
+        this.sortQuestions();
+      }
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.populateOutstandingResponses();
+    this.setUpdateScoutFieldScheduleTimeout();
+  }
+
   populateOutstandingResponses(): void {
     this.cs.ScoutFieldFormResponse.getAll().then(sfrc => {
       this.outstandingResponses = [];
@@ -93,47 +134,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       });
     });
 
-  }
-
-  init(): void {
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(async result => {
-      if (result) {
-        this.matches = result.matches.filter(m => {
-          const compLvl = (m.comp_level as CompetitionLevel);
-
-          return compLvl && compLvl.comp_lvl_typ === 'qm';
-        });
-
-        for (let i = 0; i < this.matches.length; i++) {
-          const match = this.matches[i];
-
-          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
-            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
-            this.matches.splice(i--, 1);
-          }
-        }
-
-        this.scoutFieldResponse.match = null;
-        this.scoutFieldResponse.team = NaN;
-        this.amendMatchList();
-        this.buildTeamList(NaN, result.teams);
-      }
-      await this.updateScoutFieldSchedule();
-      this.gs.decrementOutstandingCalls();
-    });
-
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingForm().then(result => {
-      if (result) {
-        this.scoutFieldResponse.question_answers = result;
-        this.sortQuestions();
-      }
-      this.gs.decrementOutstandingCalls();
-    });
-
-    this.populateOutstandingResponses();
-    this.setUpdateScoutFieldScheduleTimeout();
   }
 
   checkInScout(): void {

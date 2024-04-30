@@ -104,19 +104,15 @@ export class MatchPlanningComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.ss.loadFieldScoutingResponses().then(result => {
+    this.ss.loadFieldScoutingResponses(false).then(result => {
       if (result) {
         this.scoutCols = result.scoutCols;
 
         this.buildGraphOptionsList();
       }
-      this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadTeamNotes().then(result => {
-      this.gs.decrementOutstandingCalls();
-    });
+    this.ss.loadTeamNotes();
   }
 
   saveNote(): void {
@@ -138,7 +134,6 @@ export class MatchPlanningComponent implements OnInit {
 
   async planMatch(match: Match): Promise<void> {
     this.gs.incrementOutstandingCalls();
-    console.log('plan match');
 
     this.matchPlanning = [];
     let tmp: MatchPlanning[] = [];
@@ -175,15 +170,6 @@ export class MatchPlanningComponent implements OnInit {
         }
       });
 
-      console.log('push team');
-      console.log({
-        team: team,
-        pitData: pitData,
-        scoutAnswers: scoutAnswers,
-        notes: [],
-        alliance: allianceMember.alliance
-      });
-
       tmp.push(
         {
           team: team,
@@ -195,8 +181,6 @@ export class MatchPlanningComponent implements OnInit {
     }
 
     this.matchPlanning = tmp;
-
-    console.log('finish plan match');
 
     this.gs.decrementOutstandingCalls();
   }

@@ -23,7 +23,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   questions: QuestionWithConditions[] = [];
 
-  private previousTeam!: number;
+  private previouslySelectedTeam!: number;
   robotPic!: File;
   previewUrl: any = null;
   scoutPitResponse = new ScoutPitFormResponse();
@@ -54,9 +54,12 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
 
-    //TODO: FIx this
     this.checkTeamInterval = window.setInterval(() => {
-      //this.ss.initPitScouting();
+      this.ss.loadTeams(false).then(result => {
+        if (result) {
+          this.buildTeamLists(result);
+        }
+      });
     }, 1000 * 60 * 3); //3 min
   }
 
@@ -166,7 +169,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         },
         () => {
           this.gs.triggerChange(() => {
-            this.scoutPitResponse.team = this.previousTeam;
+            this.scoutPitResponse.team = this.previouslySelectedTeam;
           });
         });
     }
@@ -177,9 +180,9 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   private setNewTeam(load: boolean): void {
     this.ss.getScoutingQuestionsFromCache('pit').then(psqs => {
-      this.previousTeam = this.scoutPitResponse.team;
+      this.previouslySelectedTeam = this.scoutPitResponse.team;
       this.scoutPitResponse = new ScoutPitFormResponse();
-      this.scoutPitResponse.team = this.previousTeam;
+      this.scoutPitResponse.team = this.previouslySelectedTeam;
       this.scoutPitResponse.question_answers = psqs;
       this.robotPic = new File([], '');
       this.previewUrl = null;
@@ -201,7 +204,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   reset(): void {
-    this.previousTeam = NaN;
+    this.previouslySelectedTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
     this.scoutPitResponse.question_answers = this.gs.cloneObject(this.questions);
     this.formDisabled = false;

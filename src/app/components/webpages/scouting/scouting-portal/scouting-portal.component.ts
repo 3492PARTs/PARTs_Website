@@ -151,54 +151,12 @@ export class ScoutingPortalComponent implements OnInit {
 
       this.gs.decrementOutstandingCalls();
     });
-    /*
-    this.api.get(true, 'scouting/portal/init/', undefined, (result: any) => {
-      this.init = result as ScoutPortalInit;
-      //console.log(this.init);
-      this.scoutFieldScheduleData = [];
-      this.init.fieldSchedule.forEach(elem => {
-        let pos = '';
-        if ((elem?.red_one_id as User)?.id === this.user.id) {
-          pos = 'red one'
-        }
-        else if ((elem?.red_two_id as User)?.id === this.user.id) {
-          pos = 'red two'
-        }
-        else if ((elem?.red_three_id as User)?.id === this.user.id) {
-          pos = 'red three'
-        }
-        else if ((elem?.blue_one_id as User)?.id === this.user.id) {
-          pos = 'blue one'
-        }
-        else if ((elem?.blue_two_id as User)?.id === this.user.id) {
-          pos = 'blue two'
-        }
-        else if ((elem?.blue_three_id as User)?.id === this.user.id) {
-          pos = 'blue three'
-        }
-
-        this.scoutFieldScheduleData.push({
-          position: pos,
-          st_time: new Date(elem.st_time),
-          end_time: new Date(elem.end_time),
-          notification1: elem.notification1,
-          notification2: elem.notification2,
-          notification3: elem.notification3,
-        });
-      });
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-    */
   }
 
   showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
     if (s) {
       //"2020-01-01T01:00"
-      let s1 = JSON.parse(JSON.stringify(s));
-      //ss1.st_time = new Date(ss1.st_time);
-      //ss1.end_time = new Date(ss1.end_time);
-      this.currentSchedule = s1;
+      this.currentSchedule = this.gs.cloneObject(s);
     }
     else {
       this.currentSchedule = new Schedule();
@@ -211,7 +169,7 @@ export class ScoutingPortalComponent implements OnInit {
   }
 
   saveScheduleEntry(): void {
-    let s = JSON.parse(JSON.stringify(this.currentSchedule));
+    let s = this.gs.cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
     this.api.post(true, 'scouting/portal/save-schedule-entry/', s, (result: any) => {
       this.gs.successfulResponseBanner(result);

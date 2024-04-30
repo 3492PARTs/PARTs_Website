@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { Banner, GeneralService } from './general.service';
@@ -138,7 +138,13 @@ export class ScoutingService {
           });
 
           await this.getMatchesFromCache().then(ms => {
-            result.matches = ms;
+            result.matches = ms.sort((m1, m2) => {
+              if ((m1.comp_level as CompetitionLevel).comp_lvl_order < (m2.comp_level as CompetitionLevel).comp_lvl_order) return -1;
+              else if ((m1.comp_level as CompetitionLevel).comp_lvl_order > (m2.comp_level as CompetitionLevel).comp_lvl_order) return 1;
+              else if (m1.match_number < m2.match_number) return -1;
+              else if (m1.match_number > m2.match_number) return 1;
+              else return 0;
+            });
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;

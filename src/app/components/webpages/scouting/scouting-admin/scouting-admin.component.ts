@@ -102,7 +102,7 @@ export class ScoutingAdminComponent implements OnInit {
   activeUserScoutingUserInfo: UserInfo = new UserInfo();
   userActivityTableCols = [
     { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserNameForTable.bind(this) },
-    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatus.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatusForTable.bind(this) },
     { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutScheduleForTable.bind(this) },
   ];
   userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
@@ -112,7 +112,7 @@ export class ScoutingAdminComponent implements OnInit {
   userScoutActivityScheduleTableCols: object[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScouts.bind(this) },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScoutsForTable.bind(this) },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
@@ -773,37 +773,15 @@ export class ScoutingAdminComponent implements OnInit {
 
       schedule += '\n';
     });
-    /*
-    this.userActivity.forEach(ua => {
-      if (ua.user.id === id)
-        ua.schedule.forEach(s => {
-          schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
-          if (s.red_one_id?.id === id)
-            schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
-          else if (s.red_two_id?.id === id)
-            schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
-          else if (s.red_three_id?.id === id)
-            schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
-          else if (s.blue_one_id?.id === id)
-            schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
-          else if (s.blue_two_id?.id === id)
-            schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
-          else if (s.blue_three_id?.id === id)
-            schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
-
-          schedule += '\n';
-        });
-    });
-    */
 
     return schedule;
   }
 
-  getUserReviewStatus(status: boolean): string {
+  getUserReviewStatusForTable(status: boolean): string {
     return status ? 'Yes' : 'No';
   }
 
-  getScoutingActivityScouts(sfs: ScoutFieldSchedule): string {
+  getScoutingActivityScoutsForTable(sfs: ScoutFieldSchedule): string {
     const missing = 'missing';
     let str = '';
 
@@ -939,22 +917,10 @@ export class ScoutingAdminComponent implements OnInit {
   getScoutFieldQuestions(): void {
     this.ss.loadFieldScoutingForm().then(result => {
       if (result) {
-        this.fieldQuestions = result;// as QuestionWithConditions[];
+        this.fieldQuestions = result;
         this.buildFieldQuestionAggQuestionList();
       }
     });
-
-    /*
-    this.api.get(true, 'form/get-questions/', {
-      form_typ: 'field',
-      active: 'y'
-    }, (result: any) => {
-      this.fieldQuestions = result as QuestionWithConditions[];
-      this.buildFieldQuestionAggQuestionList();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
-    */
   }
 
   buildFieldQuestionAggQuestionList(): void {
@@ -991,6 +957,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
+  // Manage field results ------------------------------------------------------------------------
   getFieldResults(): void {
     this.ss.loadFieldScoutingResponses(true, true).then(result => {
       if (result) {
@@ -1019,6 +986,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
+  // Manage pit results ---------------------------------------------------------------------------------
   getPitResults(): void {
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingResponses().then(psrs => {

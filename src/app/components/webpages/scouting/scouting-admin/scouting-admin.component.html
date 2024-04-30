@@ -119,7 +119,7 @@
     </app-form-element>
 
     <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList" [DisplayProperty]="'event_nm'"
-      [BindingProperty]="'event_id'" [(Model)]="currentEvent.event_id" [FormGroupInline]="true">
+      [(Model)]="currentEvent" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element *ngIf="currentEvent && currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
@@ -330,7 +330,7 @@
     <app-form-element-group [LabelText]="'User Status'">
       <div class="flex justify-content-space-between align-items-center">
         <p class="margin-bottom-0">Under Review:
-          {{getUserReviewStatus(activeUserScoutingUserInfo.user_info.under_review)}}</p>
+          {{getUserReviewStatusForTable(activeUserScoutingUserInfo.user_info.under_review)}}</p>
 
         <app-button [ButtonType]="'main'" (FunctionCallBack)="toggleUserUnderReviewStatus()">Toggle Review
           Status</app-button>
