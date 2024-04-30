@@ -63,12 +63,13 @@
       </app-table>
     </app-modal>
 
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Scout Admin Auth Groups'" [Title]="'Scout Admin Auth Groups'"
+    <app-modal [ButtonType]="'main'" [ButtonText]="'Scouting Admin Groups'" [Title]="'Scouting Admin Groups'"
       [visible]="scoutAuthGroupsModalVisible" (visibleChange)="getScoutAuthGroups($event)">
       <app-form (SubmitFunction)="saveScoutAuthGroups()">
         <div class="vertical-center">
-          <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true" [(Model)]="scoutAuthGroup"
-            [SelectList]="availableScoutAuthGroups" [DisplayProperty]="'name'">
+          <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
+            [(Model)]="selectedScoutAuthGroup" [SelectList]="availableScoutAuthGroups" [DisplayProperty]="'name'"
+            [DisplayEmptyOption]="true">
           </app-form-element>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addScoutAuthGroup()"></app-button>
         </div>

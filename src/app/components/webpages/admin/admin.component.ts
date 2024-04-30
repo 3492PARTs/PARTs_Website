@@ -64,7 +64,7 @@ export class AdminComponent implements OnInit {
 
   scoutAuthGroups: AuthGroup[] = [];
   availableScoutAuthGroups: AuthGroup[] = [];
-  scoutAuthGroup = new AuthGroup();
+  selectedScoutAuthGroup = new AuthGroup();
   scoutAuthGroupsModalVisible = false;
 
   userAudit: User[] = [];
@@ -350,9 +350,13 @@ export class AdminComponent implements OnInit {
   }
 
   addScoutAuthGroup() {
-    this.scoutAuthGroups.push(this.scoutAuthGroup);
-    this.scoutAuthGroup = new AuthGroup();
-    this.buildAvailableScoutAuthGroups()
+    if (this.selectedScoutAuthGroup.id) {
+      this.scoutAuthGroups.push(this.selectedScoutAuthGroup);
+      this.selectedScoutAuthGroup = new AuthGroup();
+      this.buildAvailableScoutAuthGroups()
+    }
+    else
+      this.gs.triggerError('Cannot add empty group.');
   }
 
   removeScoutAuthGroup(ag: AuthGroup) {
@@ -368,7 +372,7 @@ export class AdminComponent implements OnInit {
   saveScoutAuthGroups() {
     this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.scoutAuthGroup = new AuthGroup();
+      this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
     });
   }
