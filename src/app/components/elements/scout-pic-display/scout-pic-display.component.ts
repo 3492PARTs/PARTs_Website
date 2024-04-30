@@ -63,7 +63,7 @@ export class ScoutPicDisplayComponent {
       LoadImg(
         link,
         (img: any) => {
-          if (img) {
+          if (img && img.style) {
             img.style.width = '100%';
             img.style.height = 'auto';
             document.getElementById(sp.team_no.toString())!.appendChild(img);
