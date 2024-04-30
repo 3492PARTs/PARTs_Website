@@ -945,6 +945,31 @@ export class ScoutingAdminComponent implements OnInit {
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getUsersScoutingUserInfo();
+        this.ss.loadScoutingFieldSchedules().then(result => {
+          this.activeUserScoutingFieldSchedule = [];
+          if (result)
+            this.activeUserScoutingFieldSchedule = result.filter(fs => {
+              let ids = [];
+
+              let red_one = fs.red_one_id as User;
+              let red_two = fs.red_two_id as User;
+              let red_three = fs.red_three_id as User;
+
+              let blue_one = fs.blue_one_id as User;
+              let blue_two = fs.blue_two_id as User;
+              let blue_three = fs.blue_three_id as User;
+
+              if (red_one) ids.push(red_one.id);
+              if (red_two) ids.push(red_two.id);
+              if (red_three) ids.push(red_three.id);
+
+              if (blue_one) ids.push(blue_one.id);
+              if (blue_two) ids.push(blue_two.id);
+              if (blue_three) ids.push(blue_three.id);
+
+              return ids.includes(this.activeUserScoutingUserInfo.user.id);
+            });
+        })
       }, (err: any) => {
         this.gs.triggerError(err);
       });
