@@ -33,7 +33,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.api.get(true, 'form/get-question/', {
+    this.api.get(true, 'form/question/', {
       form_typ: this.FormType,
       active: 'y'
     }, (result: any) => {
@@ -91,16 +91,22 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.questions.forEach(question => {
       let match = false;
       this.questionConditions.forEach(qc => {
-        if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) match = true
+        if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) {
+          match = true;
+        }
       });
 
       if (this.activeQuestionCondition.question_from &&
         !this.gs.strNoE(this.activeQuestionCondition.question_from.question_id) &&
-        this.activeQuestionCondition.question_from.question_id === question.question_id) match = true;
+        this.activeQuestionCondition.question_from.question_id === question.question_id) {
+        match = true;
+      }
 
       if (this.activeQuestionCondition.question_to &&
         !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === question.question_id) match = false;
+        this.activeQuestionCondition.question_to.question_id === question.question_id) {
+        match = false;
+      }
 
       if (!match)
         this.questionConditionQuestionToList.push(question);
@@ -119,6 +125,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       this.gs.successfulResponseBanner(result);
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
+      this.getQuestions();
       this.getQuestionConditions();
     }, (err: any) => {
       this.gs.triggerError(err);
