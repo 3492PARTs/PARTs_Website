@@ -172,6 +172,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     else if (this.Type === 'phone') {
       this.phoneMaskFn(this.Model, true);
     }
+    else if (this.Type === 'text') {
+      if (isNaN(this.Model)) {
+        this.change('');
+      }
+    }
 
     this.markRequired();
 
