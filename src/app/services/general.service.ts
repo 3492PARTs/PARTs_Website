@@ -333,7 +333,7 @@ export class GeneralService {
   formatDateString(s: string | Date): string {
     let d = new Date(s);
     let day = d.getDate();
-    let month = d.getMonth();
+    let month = d.getMonth() + 1;
     let year = d.getFullYear().toString().substring(2);
     let hour = d.getHours();
     let min = d.getMinutes();

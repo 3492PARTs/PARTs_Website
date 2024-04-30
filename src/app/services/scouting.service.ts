@@ -670,6 +670,12 @@ export class ScoutingService {
     await this.cs.ScoutFieldResponse.AddBulkAsync(rs);
   }
 
+  scoutFieldResponseSortFunction(r1: any, r2: any): number {
+    if (r1['time'] < r2['time']) return -1;
+    else if (r1['time'] > r2['time']) return 1;
+    else return 0;
+  }
+
   // Pit Scouting --------------------------------------------------------------
   loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
     if (!this.outstandingInitPitScoutingPromise) {
@@ -897,6 +903,11 @@ export class ScoutingService {
     return this.cs.ScoutFieldSchedule.filterAll(fn);
   }
 
+  scoutFieldScheduleSortFunction(r1: ScoutFieldSchedule, r2: ScoutFieldSchedule): number {
+    if (r1.st_time < r2.st_time) return -1;
+    else if (r1.st_time > r2.st_time) return 1;
+    else return 0;
+  }
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Schedule[] | null> {
     if (!this.outstandingLoadSchedulesPromise) {

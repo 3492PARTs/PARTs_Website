@@ -894,7 +894,7 @@ export class ScoutingAdminComponent implements OnInit {
     });
 
     await this.ss.getFieldResponseFromCache(f => f.where({ 'user_id': ua.user.id })).then(frs => {
-      this.activeUserScoutingScoutAnswers = frs;
+      this.activeUserScoutingScoutAnswers = frs.sort(this.ss.scoutFieldResponseSortFunction);
     });
 
     this.ss.filterScoutFieldSchedulesFromCache(fs => {
@@ -918,7 +918,7 @@ export class ScoutingAdminComponent implements OnInit {
 
       return ids.includes(ua.user.id);
     }).then(fsf => {
-      this.activeUserScoutingFieldSchedule = fsf;
+      this.activeUserScoutingFieldSchedule = fsf.sort(this.ss.scoutFieldScheduleSortFunction);
     });
   }
 
@@ -947,7 +947,8 @@ export class ScoutingAdminComponent implements OnInit {
         this.getUsersScoutingUserInfo();
         this.ss.loadScoutingFieldSchedules().then(result => {
           this.activeUserScoutingFieldSchedule = [];
-          if (result)
+          if (result) {
+            this.scoutFieldSchedules = result;
             this.activeUserScoutingFieldSchedule = result.filter(fs => {
               let ids = [];
 
@@ -969,7 +970,11 @@ export class ScoutingAdminComponent implements OnInit {
 
               return ids.includes(this.activeUserScoutingUserInfo.user.id);
             });
-        })
+
+            //trigger an update
+            this.usersScoutingUserInfo = this.usersScoutingUserInfo;
+          }
+        });
       }, (err: any) => {
         this.gs.triggerError(err);
       });
