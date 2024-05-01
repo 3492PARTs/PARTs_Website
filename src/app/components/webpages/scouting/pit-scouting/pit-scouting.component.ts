@@ -208,6 +208,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.scoutPitResponse = new ScoutPitFormResponse();
     this.scoutPitResponse.question_answers = this.gs.cloneObject(this.questions);
     this.formDisabled = false;
+    this.previewImages = [];
     this.gs.scrollTo(0);
     this.init();
   }
