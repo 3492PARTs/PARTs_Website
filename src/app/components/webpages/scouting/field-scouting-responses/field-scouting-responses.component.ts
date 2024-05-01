@@ -4,9 +4,10 @@ import { AppSize, GeneralService } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { APIService } from 'src/app/services/api.service';
-import { ScoutPitResponse, ScoutFieldResponsesReturn, TeamNote } from 'src/app/models/scouting.models';
+import { ScoutPitResponse, ScoutFieldResponsesReturn, TeamNote, ScoutPitResponsesReturn } from 'src/app/models/scouting.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { environment } from 'src/environments/environment';
+import { QuestionWithConditions } from 'src/app/models/form.models';
 
 @Component({
   selector: 'app-field-scouting-responses',
@@ -84,6 +85,11 @@ export class FieldScoutingResponsesComponent implements OnInit {
     this.ss.loadTeamNotes().then((result: TeamNote[] | null) => {
       this.gs.decrementOutstandingCalls();
     });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadPitScoutingResponses().then((result: ScoutPitResponsesReturn | null) => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   download(): void {
@@ -120,6 +126,8 @@ export class FieldScoutingResponsesComponent implements OnInit {
     await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': row['team_no'] })).then(sprs => {
       this.teamScoutResults = sprs;
     });
+
+
 
     await this.ss.getPitResponseFromCache(row['team_no']).then(spr => {
       if (spr) {

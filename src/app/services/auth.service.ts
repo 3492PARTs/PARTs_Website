@@ -324,7 +324,7 @@ export class AuthService {
   getUserLinks(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
-        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Results', 'Pit Results', 'Portal', 'Match Planning'];
+        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Match Planning'];
 
         switch (this.apiStatus) {
           case APIStatus.on:
@@ -344,14 +344,14 @@ export class AuthService {
                   case 'Field Scouting':
                     offlineCalls.push(this.ss.loadFieldScoutingForm(false));
                     break;
-                  case 'Field Results':
+                  case 'Field Responses':
                     offlineCalls.push(this.ss.loadFieldScoutingResponses(false));
                     offlineCalls.push(this.ss.loadTeamNotes(false));
                     break;
                   case 'Pit Scouting':
                     offlineCalls.push(this.ss.loadPitScoutingForm(false));
                     break;
-                  case 'Pit Results':
+                  case 'Pit Responses':
                     offlineCalls.push(this.ss.loadPitScoutingResponses(false));
                     break;
                   case 'Portal':
