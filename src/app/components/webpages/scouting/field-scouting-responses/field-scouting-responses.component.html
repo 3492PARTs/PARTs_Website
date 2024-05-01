@@ -19,13 +19,23 @@
     <div class="flex align-items-baseline justify-content-space-between flex-wrap">
       <app-form-element [Type]="'text'" [LabelText]="'Team Search'" [(Model)]="filterTeam"
         (FunctionCallBack)="filter()"></app-form-element>
+
       <app-form-element [Type]="'text'" [LabelText]="'Wildcard Search'" [(Model)]="filterText"></app-form-element>
-      <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="filterRank" [MinValue]="1"></app-form-element>
-      <app-form-element [Type]="'number'" [LabelText]="'Rank Range'" [(Model)]="filterRange"
-        [MinValue]="(filterRank || 0) + 1" [Disabled]="filterAboveRank"></app-form-element>
+
+      <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="filterRank" [MinValue]="1"
+        [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
+
       <app-form-element [Type]="'checkbox'" [LabelText]="'Above'" [(Model)]="filterAboveRank"
-        [Disabled]="filterRange !== null"></app-form-element>
+        [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
+
+      <app-form-element [Type]="'number'" [LabelText]="'Rank GTE'" [(Model)]="filterRankGTE" [MinValue]="1"
+        [Disabled]="filterRank !== null"></app-form-element>
+
+      <app-form-element [Type]="'number'" [LabelText]="'Rank LTE'" [(Model)]="filterRankLTE"
+        [MinValue]="(filterRankGTE || 0) + 1" [Disabled]="filterRank !== null"></app-form-element>
+
       <app-button [ButtonType]="'main'" (FunctionCallBack)="filter()">Filter by Rank</app-button>
+
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetFilter()">Reset Filters</app-button>
     </div>
   </app-form-element-group>

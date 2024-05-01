@@ -29,8 +29,9 @@ export class FieldScoutingResponsesComponent implements OnInit {
   filterText = '';
   filterTeam = '';
   filterRank: number | null = null;
-  filterRange: number | null = null;
   filterAboveRank = false;
+  filterRankGTE: number | null = null;
+  filterRankLTE: number | null = null;
 
   teamNotes: TeamNote[] = [];
 
@@ -155,27 +156,30 @@ export class FieldScoutingResponsesComponent implements OnInit {
   filter(): void {
     let temp = this.scoutResponses.scoutAnswers;
 
-    if (!this.gs.strNoE(this.filterRank)) {
+    if (!this.gs.strNoE(this.filterTeam)) {
+      temp = temp.filter(r => r['team_no'].toString().includes(this.filterTeam));
+    }
 
-      if (!this.gs.strNoE(this.filterRange)) { //get those in a range of ranks
-        temp = temp.filter(r => r.rank >= (this.filterRank || 0) && r.rank <= (this.filterRange || 0))
-      }
-      else { // get those above or below the desired rank
-        for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
-          temp = temp.filter(r => (this.filterAboveRank && r.rank >= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank <= (this.filterRank || 0)))
-        }
+    if (!this.gs.strNoE(this.filterRank)) {
+      for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
+        temp = temp.filter(r => (this.filterAboveRank && r.rank >= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank <= (this.filterRank || 0)))
       }
     }
 
-    if (!this.gs.strNoE(this.filterTeam)) {
-      temp = temp.filter(r => r.team.toString() === this.filterTeam);
+    if (!this.gs.strNoE(this.filterRankGTE)) { //get those in a range of ranks
+      temp = temp.filter(r => r.rank >= (this.filterRankGTE || 0))
+    }
+
+    if (!this.gs.strNoE(this.filterRankLTE)) { //get those in a range of ranks
+      temp = temp.filter(r => r.rank <= (this.filterRankLTE || 0))
     }
 
     this.scoutTableRows = temp;
   }
 
   resetFilter(): void {
-    this.filterRange = null;
+    this.filterRankGTE = null;
+    this.filterRankLTE = null;
     this.filterRank = null;
     this.filterAboveRank = false;
     this.filterTeam = '';
