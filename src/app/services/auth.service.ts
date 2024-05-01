@@ -384,9 +384,9 @@ export class AuthService {
             break;
         }
 
-
-        this.ss.uploadOutstandingResponses();
-
+        window.setTimeout(() => {
+          this.ss.uploadOutstandingResponses();
+        }, 1000 * 30);
         resolve(true);
       }, (error => {
         resolve(false);

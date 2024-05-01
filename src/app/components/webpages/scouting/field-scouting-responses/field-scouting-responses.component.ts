@@ -170,7 +170,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
     if (!this.gs.strNoE(this.filterRank)) {
       for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
-        temp = temp.filter(r => (this.filterAboveRank && r.rank >= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank <= (this.filterRank || 0)))
+        temp = temp.filter(r => (this.filterAboveRank && r.rank <= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank >= (this.filterRank || 0)))
       }
     }
 

@@ -31,8 +31,8 @@
       <app-form-element [Type]="'number'" [LabelText]="'Rank GTE'" [(Model)]="filterRankGTE" [MinValue]="1"
         [Disabled]="filterRank !== null"></app-form-element>
 
-      <app-form-element [Type]="'number'" [LabelText]="'Rank LTE'" [(Model)]="filterRankLTE"
-        [MinValue]="(filterRankGTE || 0) + 1" [Disabled]="filterRank !== null"></app-form-element>
+      <app-form-element [Type]="'number'" [LabelText]="'Rank LTE'" [(Model)]="filterRankLTE" [MinValue]="1"
+        [Disabled]="filterRank !== null"></app-form-element>
 
       <app-button [ButtonType]="'main'" (FunctionCallBack)="filter()">Filter by Rank</app-button>
 
