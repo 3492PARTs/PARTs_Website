@@ -296,7 +296,7 @@ export class MatchPlanningComponent implements OnInit {
       if (m.blue_two === team)
         return this.rankToColorConverter(m.blue_two_rank);
       if (m.blue_three === team)
-        return this.rankToColorConverter(m.blue_three);
+        return this.rankToColorConverter(m.blue_three_rank);
 
       if (m.red_one === team)
         return this.rankToColorConverter(m.red_one_rank);
