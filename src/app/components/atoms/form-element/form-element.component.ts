@@ -173,7 +173,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskFn(this.Model, true);
     }
     else if (this.Type === 'text') {
-      if (isNaN(this.Model)) {
+      if (typeof this.Model === 'number' && isNaN(this.Model)) {
         this.gs.triggerChange(() => {
           this.change('');
         });

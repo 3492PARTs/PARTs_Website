@@ -55,7 +55,8 @@ export class ProfileComponent implements OnInit {
 
     this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = this.gs.cloneObject(u);
+      this.editUser = this.gs.cloneObject(u) as User;
+      console.log(this.editUser);
     });
 
     this.ns.notifications.subscribe(ns => this.notifications = ns);
@@ -158,6 +159,7 @@ export class ProfileComponent implements OnInit {
     return blob;
   }
 
+  // Alerts --------------------------------------------------------------------------------
   dismissAlert(a: Alert) {
     this.ns.dismissAlert(a);
     this.alertModalVisible = false;
