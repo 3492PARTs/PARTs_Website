@@ -20,8 +20,8 @@ export class EventCompetitionComponent implements OnInit {
   }
 
   competitionInit(): void {
-    this.api.get(true, 'public/competition/init/', undefined, (result: any) => {
-      this.competitionInfo = (result as CompetitionInit);
+    this.api.get(true, 'public/competition/init/', undefined, (result: CompetitionInit) => {
+      this.competitionInfo = result;
       this.buildMatchSchedule();
     });
   }
