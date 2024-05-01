@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
 
     this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = JSON.parse(JSON.stringify(u));
+      this.editUser = this.gs.cloneObject(u);
     });
 
     this.ns.notifications.subscribe(ns => this.notifications = ns);
