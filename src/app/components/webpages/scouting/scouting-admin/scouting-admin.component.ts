@@ -363,25 +363,17 @@ export class ScoutingAdminComponent implements OnInit {
       return null;
     }
 
-    if (!confirm('Are you sure you want to toggle the competition page?')) {
-      if (this.currentEvent.competition_page_active !== 'no') {
-        window.setTimeout(() => {
-          this.currentEvent.competition_page_active = 'no';
-        }, 1);
-      }
-      else {
-        window.setTimeout(() => {
-          this.currentEvent.competition_page_active = 'yes';
-        }, 1);
-      }
-      return null;
-    }
-
-    this.api.get(true, 'scouting/admin/toggle-competition-page/', undefined, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.adminInit();
-    }, (err: any) => {
-      this.gs.triggerError(err);
+    this.gs.triggerConfirm('Are you sure you want to toggle the competition page?', () => {
+      this.api.get(true, 'scouting/admin/toggle-competition-page/', undefined, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        this.adminInit();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
+    }, () => {
+      this.gs.triggerChange(() => {
+        this.currentEvent.competition_page_active = this.currentEvent.competition_page_active === 'y' ? 'n' : 'y';
+      });
     });
   }
 
