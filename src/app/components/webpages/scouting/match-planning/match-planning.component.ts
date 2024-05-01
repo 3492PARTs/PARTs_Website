@@ -104,15 +104,25 @@ export class MatchPlanningComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.ss.loadFieldScoutingResponses(false).then(result => {
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadFieldScoutingResponses().then(result => {
       if (result) {
         this.scoutCols = result.scoutCols;
 
         this.buildGraphOptionsList();
       }
+      this.gs.decrementOutstandingCalls();
     });
 
-    this.ss.loadTeamNotes();
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadPitScoutingResponses().then(result => {
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadTeamNotes().then(result => {
+      this.gs.decrementOutstandingCalls();
+    });
   }
 
   saveNote(): void {
@@ -152,6 +162,7 @@ export class MatchPlanningComponent implements OnInit {
       let team = new Team();
       let pitData = new ScoutPitResponse();
       let scoutAnswers: any = null;
+      let notes: TeamNote[] = [];
 
       await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
         if (t) {
@@ -166,7 +177,9 @@ export class MatchPlanningComponent implements OnInit {
             scoutAnswers = sprs;
           });
 
-
+          await this.ss.getTeamNotesFromCache(f => f.where({ 'team_no': t.team_no })).then(tns => {
+            notes = tns;
+          });
         }
       });
 
@@ -175,7 +188,7 @@ export class MatchPlanningComponent implements OnInit {
           team: team,
           pitData: pitData,
           scoutAnswers: scoutAnswers,
-          notes: [],
+          notes: notes,
           alliance: allianceMember.alliance
         });
     }
