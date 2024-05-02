@@ -341,12 +341,12 @@ export class ScoutingAdminComponent implements OnInit {
     });
   }
 
-  setSeason(): void | null {
+  setSeasonEvent(): void | null {
     if (!this.currentSeason.season_id || !this.currentEvent.event_id) {
       this.gs.triggerError('No season or event selected.');
       return null;
     }
-    this.api.get(true, 'scouting/admin/set-season/', {
+    this.api.get(true, 'scouting/admin/set-season-event/', {
       season_id: this.currentSeason.season_id.toString(),
       event_id: this.currentEvent.event_id.toString()
     }, (result: any) => {
@@ -413,9 +413,9 @@ export class ScoutingAdminComponent implements OnInit {
 
   addSeason(): void {
     if (this.newSeason) {
-      this.api.get(true, 'scouting/admin/add-season/', {
-        season: this.newSeason.toString()
-      }, (result: any) => {
+      const s = new Season();
+      s.season = this.newSeason.toString();
+      this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.adminInit();
         this.newSeason = null;
@@ -432,7 +432,7 @@ export class ScoutingAdminComponent implements OnInit {
         return null;
       }
 
-      this.api.get(true, 'scouting/admin/delete-season/', {
+      this.api.delete(true, 'scouting/admin/season/', {
         season_id: this.delSeason.toString()
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
@@ -451,7 +451,7 @@ export class ScoutingAdminComponent implements OnInit {
     if (this.gs.strNoE(this.newEvent.event_cd)) {
       this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
-      this.api.post(true, 'scouting/admin/add-event/', this.newEvent, (result: any) => {
+      this.api.post(true, 'scouting/admin/event/', this.newEvent, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.manageEventsModalVisible = false;
         this.adminInit();
@@ -475,7 +475,7 @@ export class ScoutingAdminComponent implements OnInit {
         return null;
       }
 
-      this.api.get(true, 'scouting/admin/delete-event/', {
+      this.api.delete(true, 'scouting/admin/event/', {
         event_id: this.delEvent.toString()
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
@@ -489,7 +489,7 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   saveTeam(): void {
-    this.api.post(true, 'scouting/admin/add-team/', this.newTeam, (result: any) => {
+    this.api.post(true, 'scouting/admin/team/', this.newTeam, (result: any) => {
       this.adminInit();
       this.manageTeamModalVisible = false;
       this.newTeam = new Team();
@@ -510,7 +510,7 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   addEventToTeams(): void {
-    this.api.post(true, 'scouting/admin/add-team-to-event/', this.eventToTeams, (result: any) => {
+    this.api.post(true, 'scouting/admin/team-to-event/', this.eventToTeams, (result: any) => {
       this.adminInit();
       this.linkTeamToEventModalVisible = false;
       this.linkTeamToEventSeason = null;
@@ -679,7 +679,7 @@ export class ScoutingAdminComponent implements OnInit {
     sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
 
-    this.api.post(true, 'scouting/admin/save-scout-field-schedule-entry/', sfs, (result: any) => {
+    this.api.post(true, 'scouting/admin/scout-field-schedule/', sfs, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
       this.scoutScheduleModalVisible = false;
@@ -732,7 +732,7 @@ export class ScoutingAdminComponent implements OnInit {
   saveScheduleEntry(): void {
     let s = this.gs.cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
-    this.api.post(true, 'scouting/admin/save-schedule-entry/', s, (result: any) => {
+    this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.currentSchedule = new Schedule();
       this.scheduleModalVisible = false;

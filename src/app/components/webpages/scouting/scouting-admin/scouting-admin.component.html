@@ -179,7 +179,7 @@
     </app-form-element>
 
     <app-button-ribbon>
-      <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeason()">Save
+      <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="setSeasonEvent()">Save
       </app-button>
 
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetSeasonForm()">Reset</app-button>
