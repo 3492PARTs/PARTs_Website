@@ -428,22 +428,22 @@ export class ScoutingAdminComponent implements OnInit {
 
   deleteSeason(): void | null {
     if (this.delSeason) {
-      if (!confirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.')) {
-        return null;
-      }
-
-      this.api.delete(true, 'scouting/admin/season/', {
-        season_id: this.delSeason.toString()
-      }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
-        this.adminInit();
-        this.delSeason = null;
-        this.delEvent = null;
-        this.delEventList = [];
-        this.manageSeasonModalVisible = false;
-      }, (err: any) => {
-        this.gs.triggerError(err);
+      this.gs.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
+        this.api.delete(true, 'scouting/admin/season/', {
+          season_id: this.delSeason?.toString() || ''
+        }, (result: any) => {
+          this.gs.successfulResponseBanner(result);
+          this.adminInit();
+          this.delSeason = null;
+          this.delEvent = null;
+          this.delEventList = [];
+          this.manageSeasonModalVisible = false;
+        }, (err: any) => {
+          this.gs.triggerError(err);
+        });
       });
+
+
     }
   }
 
@@ -470,22 +470,19 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   deleteEvent(): void | null {
-    if (this.delEvent) {
-      if (!confirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.')) {
-        return null;
-      }
-
-      this.api.delete(true, 'scouting/admin/event/', {
-        event_id: this.delEvent.toString()
-      }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
-        this.delEvent = null;
-        this.getEventsForDeleteEvent();
-        this.adminInit();
-      }, (err: any) => {
-        this.gs.triggerError(err);
+    if (this.delEvent)
+      this.gs.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
+        this.api.delete(true, 'scouting/admin/event/', {
+          event_id: this.delEvent?.toString() || ''
+        }, (result: any) => {
+          this.gs.successfulResponseBanner(result);
+          this.delEvent = null;
+          this.getEventsForDeleteEvent();
+          this.adminInit();
+        }, (err: any) => {
+          this.gs.triggerError(err);
+        });
       });
-    }
   }
 
   saveTeam(): void {
@@ -592,23 +589,22 @@ export class ScoutingAdminComponent implements OnInit {
   }
 
   addUserGroup(): void | null {
-    const tmp: AuthGroup[] = this.availableAuthGroups.filter(ag => {
-      return ag.id === this.newAuthGroup.id;
-    });
-    if (tmp[0]) {
-      if (tmp[0].name === 'lead_scout') {
-        if (!confirm('Are you sure you want to add another lead scout? This can only be undone by an admin.')) {
-          return null;
-        }
-      }
-      this.activeUser.groups.push({ id: this.newAuthGroup.id, name: tmp[0].name, permissions: [] });
+    if (this.newAuthGroup.name === 'Lead Scout') {
+      this.gs.triggerConfirm('Are you sure you want to add another lead scout? This can only be undone by an admin.', () => {
+        this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
+        this.newAuthGroup = new AuthGroup();
+        this.buildAvailableUserGroups();
+      });
+    }
+    else {
+      this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
       this.newAuthGroup = new AuthGroup();
       this.buildAvailableUserGroups();
     }
   }
 
   removeUserGroup(ug: AuthGroup): void {
-    if (ug.name === 'lead_scout') {
+    if (ug.name === 'Lead Scout') {
       this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
     } else {
       this.activeUser.groups.splice(this.activeUser.groups.lastIndexOf(ug), 1);
