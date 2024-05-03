@@ -591,16 +591,18 @@ export class ScoutingAdminComponent implements OnInit {
   addUserGroup(): void | null {
     if (this.newAuthGroup.name === 'Lead Scout') {
       this.gs.triggerConfirm('Are you sure you want to add another lead scout? This can only be undone by an admin.', () => {
-        this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
-        this.newAuthGroup = new AuthGroup();
-        this.buildAvailableUserGroups();
+        this.pushUserGroup();
       });
     }
     else {
-      this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
-      this.newAuthGroup = new AuthGroup();
-      this.buildAvailableUserGroups();
+      this.pushUserGroup();
     }
+  }
+
+  private pushUserGroup() {
+    this.activeUser.groups.push({ id: this.newAuthGroup.id, name: this.newAuthGroup.name, permissions: [] });
+    this.newAuthGroup = new AuthGroup();
+    this.buildAvailableUserGroups();
   }
 
   removeUserGroup(ug: AuthGroup): void {
