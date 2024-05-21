@@ -1,8 +1,8 @@
 {
   "name": "PARTs App",
   "short_name": "PARTs",
-  "theme_color": "#2E3094",
-  "background_color": "#FF6A00",
+  "theme_color": "#FF6A00",
+  "background_color": "#2E3094",
   "display_override": ["standalone", "fullscreen", "minimal-ui"],
   "display": "browser",
   "scope": "./",
