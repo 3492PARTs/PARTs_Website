@@ -194,6 +194,11 @@ export class ScoutingAdminComponent implements OnInit {
             this.users = us || [];
           });
           break;
+        case 'mngSeason':
+          this.ss.getTeams(true, false).then((result: Team[] | null) => {
+            if (result) this.teams = result;
+          });
+          break;
         case 'mngSch':
           this.us.getUsers(1, 1).then(us => {
             this.users = us || [];
@@ -262,7 +267,7 @@ export class ScoutingAdminComponent implements OnInit {
       if (result) {
         this.seasons = result.seasons;
         this.events = result.events;
-        this.teams = result.teams;
+        //this.teams = result.teams; this is a list of current. we need all teams
         this.currentSeason = result.seasons.filter(s => s.current === 'y')[0];
         this.currentEvent = result.events.filter(e => e.current === 'y')[0];
         this.scoutFieldSchedules = result.scout_field_schedules;
@@ -513,7 +518,7 @@ export class ScoutingAdminComponent implements OnInit {
       this.linkTeamToEventSeason = null;
       this.linkTeamToEventEvent = null;
       this.linkTeamToEventTeams = [];
-      this.eventToTeams = new EventToTeams();;
+      this.eventToTeams = new EventToTeams();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -521,11 +526,11 @@ export class ScoutingAdminComponent implements OnInit {
 
   buildLinkTeamToEventTeamList(): void {
     this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
-    this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.team_no || []);
+    this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.teams || []);
   }
 
   buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? this.gs.cloneObject(this.removeTeamFromEventEvent.team_no) : [];
+    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? this.gs.cloneObject(this.removeTeamFromEventEvent.teams) : [];
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {

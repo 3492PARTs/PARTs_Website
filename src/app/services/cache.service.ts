@@ -1,43 +1,43 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote } from '../models/scouting.models';
+import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
-import { IAuthPermission, IUser } from '../models/user.models';
+import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
-import { IUserLinks } from '../models/navigation.models';
-import { IQuestionWithConditions } from '../models/form.models';
+import { IUserLinks, UserLinks } from '../models/navigation.models';
+import { IQuestionWithConditions, QuestionWithConditions } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CacheService {
-  User!: DexieCrud<IUser, number>;
-  UserPermissions!: DexieCrud<IAuthPermission, number>;
-  UserLinks!: DexieCrud<IUserLinks, number>;
+  User!: DexieCrud<User, number>;
+  UserPermissions!: DexieCrud<AuthPermission, number>;
+  UserLinks!: DexieCrud<UserLinks, number>;
 
-  Season!: DexieCrud<ISeason, number>;
-  Event!: DexieCrud<IEvent, number>;
-  Team!: DexieCrud<ITeam, number>;
-  TeamNote!: DexieCrud<ITeamNote, number>;
-  Match!: DexieCrud<IMatch, string>;
-  ScoutFieldSchedule!: DexieCrud<IScoutFieldSchedule, number>;
-  ScoutFieldFormResponse!: DexieCrud<IScoutFieldFormResponse, number>;
+  Season!: DexieCrud<Season, number>;
+  Event!: DexieCrud<Event, number>;
+  Team!: DexieCrud<Team, number>;
+  TeamNote!: DexieCrud<TeamNote, number>;
+  Match!: DexieCrud<Match, string>;
+  ScoutFieldSchedule!: DexieCrud<ScoutFieldSchedule, number>;
+  ScoutFieldFormResponse!: DexieCrud<ScoutFieldFormResponse, number>;
   // These are used for the responses page
   ScoutFieldResponseColumn!: DexieCrud<any, number>;
   ScoutFieldResponse!: DexieCrud<any, number>;
 
-  ScheduleType!: DexieCrud<IScheduleType, string>;
-  Schedule!: DexieCrud<ISchedule, number>;
+  ScheduleType!: DexieCrud<ScheduleType, string>;
+  Schedule!: DexieCrud<Schedule, number>;
 
-  ScoutPitFormResponse!: DexieCrud<IScoutPitFormResponse, number>;
-  ScoutPitResponse!: DexieCrud<IScoutPitResponse, number>;
+  ScoutPitFormResponse!: DexieCrud<ScoutPitFormResponse, number>;
+  ScoutPitResponse!: DexieCrud<ScoutPitResponse, number>;
 
-  QuestionWithConditions!: DexieCrud<IQuestionWithConditions, number>;
+  QuestionWithConditions!: DexieCrud<QuestionWithConditions, number>;
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
   constructor(private dbs: DatabaseService) {
-    this.User = new DexieCrud<IUser, number>(this.dbs.UserTable);
+    this.User = new DexieCrud<User, number>(this.dbs.UserTable);
     this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
     this.UserLinks = new DexieCrud<IUserLinks, number>(this.dbs.UserLinksTable);
 

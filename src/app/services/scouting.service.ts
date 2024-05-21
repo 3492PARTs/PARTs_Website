@@ -361,45 +361,24 @@ export class ScoutingService {
     return this.getEventsFromCache(s => s.where({ 'current': 'y' }));
   }
 
-  getEventsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IEvent[]> {
+  getEventsFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<Event[]> {
     return this.cs.Event.getAll(filterDelegate);
   }
 
   // Load Teams -----------------------------------------------------------
-  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
+  getTeams(loadingScreen = true, current: boolean): Promise<Team[] | null> {
     if (!this.outstandingLoadTeamsPromise) {
       this.outstandingLoadTeamsPromise = new Promise<Team[] | null>(resolve => {
-        this.api.get(loadingScreen, 'scouting/team/', undefined, async (result: Team[]) => {
+        this.api.get(loadingScreen, 'scouting/team/', { current: current }, async (result: Team[]) => {
           /** 
            * On success load results and store in db 
            **/
-          await this.updateTeamsCache(result);
-
-          this.loadAllScoutingInfo();
-
-          if (callbackFn) callbackFn(result);
           resolve(result);
         }, async (error: any) => {
           /** 
            * On fail load results from db
            **/
-          let allLoaded = true;
-          let result: Team[] = [];
-
-          await this.getTeamsFromCache().then((ts: Team[]) => {
-            result = ts;
-          }).catch((reason: any) => {
-            console.log(reason);
-            allLoaded = false;
-          });
-
-          if (!allLoaded) {
-            this.gs.addBanner(new Banner('Error loading teams from cache.'));
-            resolve(null);
-          }
-          else
-            resolve(result);
-
+          resolve(null);
           this.outstandingLoadTeamsPromise = null;
         }, () => {
           this.outstandingLoadTeamsPromise = null;
@@ -408,6 +387,45 @@ export class ScoutingService {
     }
 
     return this.outstandingLoadTeamsPromise;
+  }
+
+  loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
+    return new Promise<Team[] | null>(resolve => {
+      this.getTeams(true, true).then(async (result: Team[] | null) => {
+        /** 
+         * On success load results and store in db 
+         **/
+        if (result) {
+          await this.updateTeamsCache(result);
+
+          this.loadAllScoutingInfo();
+
+          if (callbackFn) callbackFn(result);
+        }
+
+        resolve(result);
+      }).catch(async (error: any) => {
+        /** 
+         * On fail load results from db
+         **/
+        let allLoaded = true;
+        let result: Team[] = [];
+
+        await this.getTeamsFromCache().then((ts: Team[]) => {
+          result = ts;
+        }).catch((reason: any) => {
+          console.log(reason);
+          allLoaded = false;
+        });
+
+        if (!allLoaded) {
+          this.gs.addBanner(new Banner('Error loading teams from cache.'));
+          resolve(null);
+        }
+        else
+          resolve(result);
+      });
+    });
   }
 
   private async updateTeamsCache(ts: Team[]): Promise<void> {

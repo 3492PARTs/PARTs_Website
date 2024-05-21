@@ -4,7 +4,7 @@ import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, ISco
 import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
-import { IAuthPermission, IUser } from '../models/user.models';
+import { IAuthPermission, IUser, User } from '../models/user.models';
 import { IUserLinks } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
 
@@ -12,7 +12,7 @@ import { IQuestionWithConditions } from '../models/form.models';
   providedIn: 'root'
 })
 export class DatabaseService extends Dexie {
-  UserTable!: Dexie.Table<IUser, number>;
+  UserTable!: Dexie.Table<User, number>;
   UserPermissionsTable!: Dexie.Table<IAuthPermission, number>;
   UserLinksTable!: Dexie.Table<IUserLinks, number>;
 

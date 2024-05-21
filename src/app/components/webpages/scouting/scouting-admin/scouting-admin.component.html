@@ -351,7 +351,12 @@
 
           <app-form-element *ngIf="removeTeamFromEventEvent" [Type]="'multiSelect'" [LabelText]="'Teams'"
             [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-            [(Model)]="removeTeamFromEventEvent.team_no">
+            [(Model)]="removeTeamFromEventEvent.teams" [Required]="true">
+          </app-form-element>
+
+          <app-form-element *ngIf="!removeTeamFromEventEvent" [Type]="'multiSelect'" [LabelText]="'Teams'"
+            [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [Required]="true">
           </app-form-element>
 
           <app-button-ribbon>

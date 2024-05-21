@@ -49,7 +49,7 @@ export interface IEvent {
     timezone: string;
     void_ind: string;
     competition_page_active: string;
-    team_no: ITeam[];
+    teams: ITeam[];
 }
 
 export class Event implements IEvent {
@@ -71,7 +71,7 @@ export class Event implements IEvent {
     timezone = 'America/New_York';
     void_ind = 'n';
     competition_page_active = 'n';
-    team_no: Team[] = [];
+    teams: Team[] = [];
 }
 
 export interface ICompetitionLevel {
