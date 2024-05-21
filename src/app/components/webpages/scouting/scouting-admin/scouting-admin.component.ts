@@ -195,9 +195,7 @@ export class ScoutingAdminComponent implements OnInit {
           });
           break;
         case 'mngSeason':
-          this.ss.getTeams(true, false).then((result: Team[] | null) => {
-            if (result) this.teams = result;
-          });
+          this.getAllTeams();
           break;
         case 'mngSch':
           this.us.getUsers(1, 1).then(us => {
@@ -490,11 +488,18 @@ export class ScoutingAdminComponent implements OnInit {
       });
   }
 
+  getAllTeams(): void {
+    this.ss.getTeams(true, false).then((result: Team[] | null) => {
+      if (result) this.teams = result;
+    });
+  }
+
   saveTeam(): void {
     this.api.post(true, 'scouting/admin/team/', this.newTeam, (result: any) => {
       this.adminInit();
       this.manageTeamModalVisible = false;
       this.newTeam = new Team();
+      this.getAllTeams();
     }, (err: any) => {
       console.log('error', err);
       this.gs.triggerError(err);
