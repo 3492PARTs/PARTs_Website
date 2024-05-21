@@ -13,7 +13,8 @@ COPY ./ /usr/local/app/
 RUN npm install
 
 # Generate the build of the application
-RUN npx ng build --configuration=uat
+RUN npx ng build 
+# --configuration=uat
 # npm run build --configuration=uat
 
 
