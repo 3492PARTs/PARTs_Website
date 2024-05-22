@@ -410,7 +410,7 @@ export class AdminComponent implements OnInit {
   }
 
   getResponses(form_typ: string): void {
-    this.api.get(true, 'form/get-responses/', {
+    this.api.get(true, 'form/responses/', {
       form_typ: form_typ
     }, (result: any) => {
       if (form_typ === 'team-app')
@@ -427,6 +427,19 @@ export class AdminComponent implements OnInit {
       this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
     else
       this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+  }
+
+  deleteResponse(res: Response): void {
+    this.gs.triggerConfirm('Are you sure you want to delete this response?', () => {
+      this.api.delete(true, 'form/response/', {
+        response_id: res.response_id
+      }, (result: any) => {
+        this.getResponses(res.form_typ);
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
+    });
+
   }
 
   // Phone Types -------------------------------------------------------------------------------------

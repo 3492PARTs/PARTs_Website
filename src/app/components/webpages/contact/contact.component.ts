@@ -62,7 +62,7 @@ export class ContactComponent implements OnInit {
   }
 
   getResponse(response_id: string): void {
-    this.api.get(true, 'form/get-response/', {
+    this.api.get(true, 'form/response/', {
       response_id: response_id
     }, (result: any) => {
       this.questions = result as QuestionWithConditions[];
