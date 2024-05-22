@@ -17,11 +17,13 @@ RUN npx ng build
 # --configuration=uat
 # npm run build --configuration=uat
 
-
 # Stage 2: Serve app with nginx server
 
 # Use official nginx image as the base image
 FROM nginx:latest
+
+# Copy nginx conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/parts-website /usr/share/nginx/html
