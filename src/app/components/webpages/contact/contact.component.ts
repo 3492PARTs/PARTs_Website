@@ -71,4 +71,8 @@ export class ContactComponent implements OnInit {
       this.gs.triggerError(err);
     });
   }
+
+  export(): void {
+    this.gs.downloadFileAs('TeamContact.csv', this.gs.questionsToCSV(this.questions), 'text/csv');
+  }
 }

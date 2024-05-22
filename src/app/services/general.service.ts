@@ -8,6 +8,7 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { QuestionWithConditions } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
@@ -495,6 +496,54 @@ export class GeneralService {
     });
   }
   */
+
+  tableToCSV(tableCols: any[], tableData: any[]): string {
+    if (tableData.length <= 0) {
+      this.triggerError('Cannot export empty dataset.');
+      return '';
+    }
+
+    let csv = '';
+    tableCols.forEach(element => {
+      csv += '"' + element['ColLabel'] + '",';
+    });
+
+    csv = csv.substring(0, csv.length - 1);
+    csv += '\n';
+
+    for (let i = 0; i < tableData.length; i++) {
+      tableCols.forEach(element => {
+        csv += '"' + this.getDisplayValue(tableData[i], element['PropertyName']).replaceAll('"', '""') + '",';
+      });
+      csv = csv.substring(0, csv.length - 1);
+      csv += '\n';
+    }
+
+    return csv;
+  }
+
+  questionsToCSV(questions: QuestionWithConditions[]): string {
+    let header = '';
+    let body = '';
+    questions.forEach(q => {
+      header += `"${q.question}",`
+      body += `"${this.formatQuestionAnswer(q.answer)}",`
+    });
+    header = header.substring(0, header.length - 1);
+    body = body.substring(0, body.length - 1);
+
+    return `${header}\n${body}`;
+  }
+
+  getDisplayValue(rec: any, property: string): string {
+    if (!property) {
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+    }
+    let ret = '';
+    const comand = 'ret = rec.' + property + ';';
+    eval(comand);
+    return ret?.toString();
+  }
 }
 
 export class RetMessage {

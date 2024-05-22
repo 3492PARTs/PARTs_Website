@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { QuestionWithConditions } from 'src/app/models/form.models';
+import { Question, QuestionWithConditions } from 'src/app/models/form.models';
 import { APIService } from 'src/app/services/api.service';
 import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
 import { GeneralService, Banner, RetMessage } from 'src/app/services/general.service';
@@ -109,6 +109,12 @@ export class TeamApplicationComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  export(): void {
+    let questions: QuestionWithConditions[] = [];
+    this.questions.forEach(fsw => fsw.questions.forEach(question => questions.push(question)));
+    this.gs.downloadFileAs('TeamApplication.csv', this.gs.questionsToCSV(questions), 'text/csv');
   }
 }
 

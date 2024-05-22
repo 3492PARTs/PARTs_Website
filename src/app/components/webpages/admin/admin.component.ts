@@ -439,7 +439,22 @@ export class AdminComponent implements OnInit {
         this.gs.triggerError(err);
       });
     });
+  }
 
+  exportResponses(form_typ: string): void {
+    let csv = '';
+    let name = '';
+    switch (form_typ) {
+      case 'team-cntct':
+        csv = this.gs.tableToCSV(this.teamContactResponsesCols, this.teamContactResponses);
+        name = 'TeamContact';
+        break;
+      case 'team-app':
+        csv = this.gs.tableToCSV(this.teamApplicationResponsesCols, this.teamApplicationResponses);
+        name = 'TeamApplication';
+        break;
+    }
+    if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
 
   // Phone Types -------------------------------------------------------------------------------------
