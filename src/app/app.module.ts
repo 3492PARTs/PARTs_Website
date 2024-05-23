@@ -89,6 +89,14 @@ import { ScoutPicDisplayComponent } from './components/elements/scout-pic-displa
 import { QuestionConditionAdminFormComponent } from './components/elements/question-condition-admin-form/question-condition-admin-form.component';
 import { QuestionFormElementComponent } from './components/elements/question-form-element/question-form-element.component';
 import { PitResultDisplayComponent } from './components/elements/pit-result-display/pit-result-display.component';
+import { AdminUsersComponent } from './components/webpages/admin/admin-users/admin-users.component';
+import { SecurityComponent } from './components/webpages/admin/security/security.component';
+import { TeamApplicationFormComponent } from './components/webpages/admin/team-application-form/team-application-form.component';
+import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
+import { PhoneTypesComponent } from './components/webpages/admin/phone-types/phone-types.component';
+import { ErrorLogComponent } from './components/webpages/admin/error-log/error-log.component';
+import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
+import { FormManagerComponent } from './components/elements/form-manager/form-manager.component';
 
 @NgModule({
   declarations: [
@@ -154,7 +162,15 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     ScoutPicDisplayComponent,
     QuestionConditionAdminFormComponent,
     QuestionFormElementComponent,
-    PitResultDisplayComponent
+    PitResultDisplayComponent,
+    AdminUsersComponent,
+    SecurityComponent,
+    TeamApplicationFormComponent,
+    TeamContactFormComponent,
+    PhoneTypesComponent,
+    ErrorLogComponent,
+    RequestedItemsComponent,
+    FormManagerComponent
   ],
   imports: [
     BrowserModule,

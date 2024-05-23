@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { UserLinks } from '../models/navigation.models';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +21,14 @@ export class NavigationService {
   private navigationState = new BehaviorSubject<NavigationState>(NavigationState.expanded);
   currentNavigationState = this.navigationState.asObservable();
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService, private router: Router) { }
 
   setSubPage(s: string): void {
     this.gs.scrollTo(0);
     this.subPage.next(s);
+    if (s.includes('/')) {
+      this.router.navigate([s]);
+    }
   }
 
   setSubPages(s: UserLinks[]): void {

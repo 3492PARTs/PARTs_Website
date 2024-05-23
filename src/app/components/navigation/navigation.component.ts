@@ -94,7 +94,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
         this.appMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
-            if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) this.setActiveMenuItem(mi, mii);
+            this.checkActiveMenuItem(this.urlEnd, mi, mii);
           });
         });
       });
@@ -120,12 +120,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
-          this.urlEnd = event.url.substr(1, event.url.length - 1);
+          this.urlEnd = event.url;
 
           this.resetMenuItemNames();
           this.appMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
-              if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) this.setActiveMenuItem(mi, mii);
+              this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
         }
@@ -222,6 +222,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.screenXs = this.gs.getAppSize() === AppSize.XS;
     }, 200);
   }
+
   scrollEvents(scrollY: number, innerScrollElement = false): void {
     this.subNav = '';
 
@@ -459,15 +460,21 @@ let max = document.documentElement.scrollHeight;
     return this.pageIDs[key];
   }
 
+  checkActiveMenuItem(urlEnd: string, mi: UserLinks, mii: SubUserLinks): void {
+    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuItem(mi, mii);
+  }
+
   setActiveMenuItem(parent: UserLinks, child: SubUserLinks): void {
     this.resetMenuItemNames();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
-    else this.appMenu.forEach(mi => {
+    else
+      parent.menu_name_active_item = child.menu_name;
+    /*else this.appMenu.forEach(mi => {
       if (mi.menu_name === parent.menu_name) {
         mi.menu_name_active_item = child.menu_name;
       }
-    });
+    });*/
   }
 
   resetMenuItemNames(): void {

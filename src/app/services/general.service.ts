@@ -542,7 +542,7 @@ export class GeneralService {
     let ret = '';
     const comand = 'ret = rec.' + property + ';';
     eval(comand);
-    return ret?.toString();
+    return ret; // do not turn into a string this will bite objects in the butt
   }
 }
 

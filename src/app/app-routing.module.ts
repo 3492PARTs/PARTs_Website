@@ -64,10 +64,15 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/admin-users', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/error-log', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/phone-types', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/requested-items', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/security', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/team-application-form', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/team-contact-form', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'competition', component: EventCompetitionComponent },
   { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  // otherwise redirect to home
-  //{ path: '**', redirectTo: '' }
 ];
 
 @NgModule({

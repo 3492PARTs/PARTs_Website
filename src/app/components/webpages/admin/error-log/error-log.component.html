@@ -1,0 +1,23 @@
+<app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
+    (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'" [CursorPointer]="true">
+</app-table>
+
+<app-modal [Title]="'Error Detail'" [(visible)]="errorDetailModalVisible">
+    <app-form-element-group [LabelText]="'Information'">
+        <p>User: {{ currentError.user.first_name }} {{ currentError.user.last_name }}</p>
+        <p>Time: {{ currentError.display_time }}</p>
+        <p>Path: {{ currentError.path }}</p>
+        <p>Message: {{ currentError.message }}</p>
+    </app-form-element-group>
+
+
+    <app-form-element-group [LabelText]="'Exception'">
+        <p class="white-space-pre">{{ currentError.exception }}</p>
+    </app-form-element-group>
+
+    <app-form-element-group [LabelText]="'Traceback'">
+        <p class="white-space-pre">{{ currentError.traceback }}</p>
+    </app-form-element-group>
+</app-modal>
+
+<app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
