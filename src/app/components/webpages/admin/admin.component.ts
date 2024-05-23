@@ -49,7 +49,7 @@ export class AdminComponent implements OnInit {
 
     if (!environment.production) subPages.push(new UserLinks('Requested Items', 'admin/requested-items', 'view-grid-plus'));
 
-    this.ns.setSubPages(subPages);
+    //this.ns.setSubPages(subPages);
 
   }
 

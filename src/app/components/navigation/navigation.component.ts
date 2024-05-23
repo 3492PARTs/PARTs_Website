@@ -122,6 +122,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         if (event instanceof NavigationEnd) {
           this.urlEnd = event.url;
 
+          this.navigationService.setSubPages(this.urlEnd);
+          this.navigationService.setSubPage(this.urlEnd);
+
           this.resetMenuItemNames();
           this.appMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {

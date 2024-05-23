@@ -70,11 +70,11 @@ export class MatchPlanningComponent implements OnInit {
         this.init();
       }
     });
-
-    this.ns.setSubPages([
-      new UserLinks('Matches', 'matches', 'soccer-field'),
-      new UserLinks('Team Notes', 'notes', 'note-multiple'),
-    ]);
+    /*
+        this.ns.setSubPages([
+          new UserLinks('Matches', 'matches', 'soccer-field'),
+          new UserLinks('Team Notes', 'notes', 'note-multiple'),
+        ]);*/
     this.ns.setSubPage('matches');
     this.setTableSize();
   }

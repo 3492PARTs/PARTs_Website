@@ -229,20 +229,20 @@ export class ScoutingAdminComponent implements OnInit {
         this.getPhoneTypes();
       }
     });
-
-    this.ns.setSubPages([
-      new UserLinks('Users', 'users', 'account-group'),
-      new UserLinks('Season', 'mngSeason', 'card-bulleted-settings-outline'),
-      new UserLinks('Schedule', 'mngSch', 'clipboard-text-clock'),
-      new UserLinks('Scouting Activity', 'scoutAct', 'account-reactivate'),
-      new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
-      new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
-      new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
-      new UserLinks('Field Responses', 'mngFldRes', 'table-edit'),
-      new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
-      new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
-      new UserLinks('Pit Responses', 'mngPitRes', 'table-edit'),
-    ]);
+    /*
+        this.ns.setSubPages([
+          new UserLinks('Users', 'users', 'account-group'),
+          new UserLinks('Season', 'mngSeason', 'card-bulleted-settings-outline'),
+          new UserLinks('Schedule', 'mngSch', 'clipboard-text-clock'),
+          new UserLinks('Scouting Activity', 'scoutAct', 'account-reactivate'),
+          new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
+          new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
+          new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
+          new UserLinks('Field Responses', 'mngFldRes', 'table-edit'),
+          new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
+          new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
+          new UserLinks('Pit Responses', 'mngPitRes', 'table-edit'),
+        ]);*/
 
 
     if (environment.production) this.ns.setSubPage('users');

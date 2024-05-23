@@ -32,6 +32,12 @@ import { MatchPlanningComponent } from './components/webpages/scouting/match-pla
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { TeamApplicationComponent } from './components/webpages/join/team-application/team-application.component';
 import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
+import { AdminUsersComponent } from './components/webpages/admin/admin-users/admin-users.component';
+import { ErrorLogComponent } from './components/webpages/admin/error-log/error-log.component';
+import { PhoneTypesComponent } from './components/webpages/admin/phone-types/phone-types.component';
+import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
+import { SecurityComponent } from './components/webpages/admin/security/security.component';
+import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
 
 
 
@@ -64,13 +70,13 @@ const routes: Routes = [
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/admin-users', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/error-log', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/phone-types', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/requested-items', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/security', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/team-application-form', component: AdminComponent, canActivate: [AuthGuard] },
-  { path: 'admin/team-contact-form', component: AdminComponent, canActivate: [AuthGuard] },
+  { path: 'admin/admin-users', component: AdminUsersComponent, canActivate: [AuthGuard] },
+  { path: 'admin/error-log', component: ErrorLogComponent, canActivate: [AuthGuard] },
+  { path: 'admin/phone-types', component: PhoneTypesComponent, canActivate: [AuthGuard] },
+  { path: 'admin/requested-items', component: RequestedItemsComponent, canActivate: [AuthGuard] },
+  { path: 'admin/security', component: SecurityComponent, canActivate: [AuthGuard] },
+  { path: 'admin/team-application-form', component: TeamApplicationComponent, canActivate: [AuthGuard] },
+  { path: 'admin/team-contact-form', component: TeamContactFormComponent, canActivate: [AuthGuard] },
   { path: 'competition', component: EventCompetitionComponent },
   { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard] },
 ];
