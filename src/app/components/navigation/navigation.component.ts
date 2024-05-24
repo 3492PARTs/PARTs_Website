@@ -123,7 +123,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           this.urlEnd = event.url;
 
           this.navigationService.setSubPages(this.urlEnd);
-          this.navigationService.setSubPage(this.urlEnd);
 
           this.resetMenuItemNames();
           this.appMenu.forEach(mi => {
@@ -464,16 +463,16 @@ let max = document.documentElement.scrollHeight;
   }
 
   checkActiveMenuItem(urlEnd: string, mi: UserLinks, mii: SubUserLinks): void {
-    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuItem(mi, mii);
+    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuItem(mi, mii, urlEnd);
   }
 
-  setActiveMenuItem(parent: UserLinks, child: SubUserLinks): void {
+  setActiveMenuItem(parent: UserLinks, child: SubUserLinks, routerLink: string): void {
     this.resetMenuItemNames();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
     else {
       parent.menu_name_active_item = child.menu_name;
-      this.navigationService.setSubPages(`/${child.routerlink}`);
+      this.navigationService.setSubPages(routerLink);
     }
 
     /*else this.appMenu.forEach(mi => {

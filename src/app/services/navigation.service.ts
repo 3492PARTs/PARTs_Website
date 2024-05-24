@@ -27,9 +27,9 @@ export class NavigationService {
   setSubPage(routerLink: string): void {
     this.gs.scrollTo(0);
     this.subPageBS.next(routerLink);
-    if (routerLink.includes('/')) {
-      this.router.navigate([routerLink]);
-    }
+
+    //if (this.router.url !== routerLink && routerLink.includes('/'))
+    //this.router.navigate([routerLink]);
   }
 
   setSubPages(routerLink: string): void {
@@ -49,7 +49,13 @@ export class NavigationService {
         break;
     }
 
-    this.setSubPage(subPages[0].routerlink);
+    let match = subPages.filter(sp => sp.routerlink === routerLink);
+
+    this.setSubPage(match.length > 0 ? match[0].routerlink : subPages.length > 0 ? subPages[0].routerlink : '');
+
+    if (match.length <= 0 && subPages.length > 0) {
+      this.router.navigate([subPages[0].routerlink]);
+    }
 
     this.subPagesBS.next(subPages);
   }
