@@ -37,6 +37,7 @@ import { PhoneTypesComponent } from './components/webpages/admin/phone-types/pho
 import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
 import { SecurityComponent } from './components/webpages/admin/security/security.component';
 import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
+import { TeamApplicationFormComponent } from './components/webpages/admin/team-application-form/team-application-form.component';
 
 
 
@@ -73,10 +74,12 @@ const routes: Routes = [
   { path: 'admin/phone-types', component: PhoneTypesComponent, canActivate: [AuthGuard] },
   { path: 'admin/requested-items', component: RequestedItemsComponent, canActivate: [AuthGuard] },
   { path: 'admin/security', component: SecurityComponent, canActivate: [AuthGuard] },
-  { path: 'admin/team-application-form', component: TeamApplicationComponent, canActivate: [AuthGuard] },
+  { path: 'admin/team-application-form', component: TeamApplicationFormComponent, canActivate: [AuthGuard] },
   { path: 'admin/team-contact-form', component: TeamContactFormComponent, canActivate: [AuthGuard] },
   { path: 'competition', component: EventCompetitionComponent },
   { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  // otherwise redirect to home
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
