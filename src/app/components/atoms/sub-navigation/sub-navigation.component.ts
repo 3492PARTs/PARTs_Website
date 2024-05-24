@@ -22,8 +22,8 @@ export class SubNavigationComponent {
 
 
   constructor(private ns: NavigationService) {
-    this.ns.currentSubPages.subscribe(sp => this.navItems = sp);
-    this.ns.currentSubPage.subscribe(p => this.page = p);
+    this.ns.subPages.subscribe(sp => this.navItems = sp);
+    this.ns.subPage.subscribe(p => this.page = p);
   }
 
   ngOnInit(): void {

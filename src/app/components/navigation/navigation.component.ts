@@ -471,8 +471,11 @@ let max = document.documentElement.scrollHeight;
     this.resetMenuItemNames();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
-    else
+    else {
       parent.menu_name_active_item = child.menu_name;
+      this.navigationService.setSubPages(`/${child.routerlink}`);
+    }
+
     /*else this.appMenu.forEach(mi => {
       if (mi.menu_name === parent.menu_name) {
         mi.menu_name_active_item = child.menu_name;

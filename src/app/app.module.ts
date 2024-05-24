@@ -59,7 +59,6 @@ import { BoxSideNavWrapperComponent } from './components/atoms/box-side-nav-wrap
 //import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
-import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
 import { BannersComponent } from './components/elements/banners/banners.component';
@@ -147,7 +146,6 @@ import { FormManagerComponent } from './components/elements/form-manager/form-ma
     MediaCommunityOutreachComponent,
     ResourcesComponent,
     FirstComponent,
-    AdminComponent,
     PaginationComponent,
     OnCreateDirective,
     BannersComponent,

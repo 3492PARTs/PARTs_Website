@@ -1,72 +1,74 @@
-<app-button-ribbon>
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Security Audit'" [Title]="'User Security'">
-        <app-table [TableCols]="userAuditTableCols" [TableData]="userAudit" [Width]="'100%'" [Scrollable]="true"
-            [ScrollHeight]="'calc(100vh - 21rem)'">
-        </app-table>
-    </app-modal>
+<app-box [Title]="'Manage Security'">
+    <app-button-ribbon>
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Security Audit'" [Title]="'User Security'">
+            <app-table [TableCols]="userAuditTableCols" [TableData]="userAudit" [Width]="'100%'" [Scrollable]="true"
+                [ScrollHeight]="'calc(100vh - 21rem)'">
+            </app-table>
+        </app-modal>
 
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Scouting Admin Groups'" [Title]="'Scouting Admin Groups'"
-        [visible]="scoutAuthGroupsModalVisible" (visibleChange)="getScoutAuthGroups($event)">
-        <app-form (SubmitFunction)="saveScoutAuthGroups()">
+        <app-modal [ButtonType]="'main'" [ButtonText]="'Scouting Admin Groups'" [Title]="'Scouting Admin Groups'"
+            [visible]="scoutAuthGroupsModalVisible" (visibleChange)="getScoutAuthGroups($event)">
+            <app-form (SubmitFunction)="saveScoutAuthGroups()">
+                <div class="vertical-center">
+                    <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
+                        [(Model)]="selectedScoutAuthGroup" [SelectList]="availableScoutAuthGroups"
+                        [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
+                    </app-form-element>
+                    <app-button [ButtonType]="'add'" (FunctionCallBack)="addScoutAuthGroup()"></app-button>
+                </div>
+
+                <app-table [TableCols]="groupsTableCols" [TableData]="scoutAuthGroups" [ShowRemoveButton]="true"
+                    (RemoveRecordCallBack)="removeScoutAuthGroup($event)" [Width]="'100%'">
+                </app-table>
+
+                <app-button-ribbon>
+                    <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+                </app-button-ribbon>
+            </app-form>
+        </app-modal>
+    </app-button-ribbon>
+
+    <app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="userGroups" [ShowEditButton]="true"
+        (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
+        [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)" [Width]="'100%'">
+    </app-table>
+
+    <app-modal [Title]="'Manage Group'" [(visible)]="groupModalVisible">
+        <app-form>
+            <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeGroup.name"></app-form-element>
+
             <div class="vertical-center">
-                <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
-                    [(Model)]="selectedScoutAuthGroup" [SelectList]="availableScoutAuthGroups"
-                    [DisplayProperty]="'name'" [DisplayEmptyOption]="true">
-                </app-form-element>
-                <app-button [ButtonType]="'add'" (FunctionCallBack)="addScoutAuthGroup()"></app-button>
+                <app-form-element [FormGroupInline]="true" [Type]="'select'" [LabelText]="'Permission'"
+                    [SelectList]="availablePermissions" [DisplayProperty]="'name'" [(Model)]="activePermission"
+                    [DisplayEmptyOption]="true"></app-form-element>
+
+                <app-button [ButtonType]="'add'" (FunctionCallBack)="addPermissionToGroup()"></app-button>
             </div>
 
-            <app-table [TableCols]="groupsTableCols" [TableData]="scoutAuthGroups" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="removeScoutAuthGroup($event)" [Width]="'100%'">
+            <app-table [TableCols]="permissionsTableCols" [TableData]="activeGroup.permissions"
+                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removePermissionFromGroup($event)">
             </app-table>
 
             <app-button-ribbon>
-                <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+                <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="saveGroup()">Save</app-button>
             </app-button-ribbon>
         </app-form>
     </app-modal>
-</app-button-ribbon>
 
-<app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="userGroups" [ShowEditButton]="true"
-    (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
-    [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)" [Width]="'100%'">
-</app-table>
+    <app-table [TableTitle]="'Permissions'" [TableCols]="permissionsTableCols" [TableData]="permissions"
+        [ShowEditButton]="true" (EditRecordCallBack)="showPermissionModal($event)" [ShowAddButton]="true"
+        (AddRecordCallBack)="showPermissionModal()" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="deletePermission($event)" [Width]="'100%'">
+    </app-table>
 
-<app-modal [Title]="'Manage Group'" [(visible)]="groupModalVisible">
-    <app-form>
-        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeGroup.name"></app-form-element>
+    <app-modal [Title]="'Manage Permission'" [(visible)]="permissionsModalVisible">
+        <app-form>
+            <app-form-element [Type]="'text'" [LabelText]="'Codename'" [(Model)]="activePermission.codename">
+            </app-form-element>
 
-        <div class="vertical-center">
-            <app-form-element [FormGroupInline]="true" [Type]="'select'" [LabelText]="'Permission'"
-                [SelectList]="availablePermissions" [DisplayProperty]="'name'" [(Model)]="activePermission"
-                [DisplayEmptyOption]="true"></app-form-element>
+            <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activePermission.name"></app-form-element>
 
-            <app-button [ButtonType]="'add'" (FunctionCallBack)="addPermissionToGroup()"></app-button>
-        </div>
-
-        <app-table [TableCols]="permissionsTableCols" [TableData]="activeGroup.permissions" [ShowRemoveButton]="true"
-            (RemoveRecordCallBack)="removePermissionFromGroup($event)">
-        </app-table>
-
-        <app-button-ribbon>
-            <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="saveGroup()">Save</app-button>
-        </app-button-ribbon>
-    </app-form>
-</app-modal>
-
-<app-table [TableTitle]="'Permissions'" [TableCols]="permissionsTableCols" [TableData]="permissions"
-    [ShowEditButton]="true" (EditRecordCallBack)="showPermissionModal($event)" [ShowAddButton]="true"
-    (AddRecordCallBack)="showPermissionModal()" [ShowRemoveButton]="true"
-    (RemoveRecordCallBack)="deletePermission($event)" [Width]="'100%'">
-</app-table>
-
-<app-modal [Title]="'Manage Permission'" [(visible)]="permissionsModalVisible">
-    <app-form>
-        <app-form-element [Type]="'text'" [LabelText]="'Codename'" [(Model)]="activePermission.codename">
-        </app-form-element>
-
-        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activePermission.name"></app-form-element>
-
-        <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="savePermission()">Save</app-button>
-    </app-form>
-</app-modal>
+            <app-button [ButtonType]="'main'" [Type]="'submit'" (FunctionCallBack)="savePermission()">Save</app-button>
+        </app-form>
+    </app-modal>
+</app-box>

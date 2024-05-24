@@ -57,7 +57,7 @@ export class MatchPlanningComponent implements OnInit {
     private ns: NavigationService,
     private authService: AuthService,
     private ss: ScoutingService) {
-    this.ns.currentSubPage.subscribe(p => {
+    this.ns.subPage.subscribe(p => {
       this.page = p;
     });
 

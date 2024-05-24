@@ -185,7 +185,7 @@ export class ScoutingAdminComponent implements OnInit {
     private ns: NavigationService,
     private us: UserService,
     private ss: ScoutingService) {
-    this.ns.currentSubPage.subscribe(p => {
+    this.ns.subPage.subscribe(p => {
       this.page = p;
 
       switch (this.page) {

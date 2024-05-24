@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Item } from '../admin.component';
 import { APIService } from 'src/app/services/api.service';
 import * as moment from 'moment';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
@@ -74,4 +73,27 @@ export class RequestedItemsComponent implements OnInit {
   loadImage(ev: ProgressEvent<FileReader>): any {
     this.activeItem.img_url = ev.target?.result as string;
   }
+}
+
+export class Item {
+  item_id!: number;
+  item_nm = '';
+  item_desc = '';
+  quantity!: number;
+  sponsor_quantity!: number;
+  cart_quantity!: number;
+  reset_date = new Date();
+  active = 'y';
+  img!: any;
+  img_url = '';
+  void_ind = '';
+}
+
+export class Sponsor {
+  sponsor_id!: number;
+  sponsor_nm = '';
+  phone = '';
+  email = '';
+  can_send_emails = false;
+  void_ind = '';
 }

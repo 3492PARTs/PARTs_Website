@@ -11,12 +11,12 @@ import { environment } from 'src/environments/environment';
 export class NavigationService {
 
   /* Active sub Page */
-  private subPage = new BehaviorSubject<string>('');
-  currentSubPage = this.subPage.asObservable();
+  private subPageBS = new BehaviorSubject<string>('');
+  subPage = this.subPageBS.asObservable();
 
   /* Sub Pages */
-  private subPages = new BehaviorSubject<UserLinks[]>([]);
-  currentSubPages = this.subPages.asObservable();
+  private subPagesBS = new BehaviorSubject<UserLinks[]>([]);
+  subPages = this.subPagesBS.asObservable();
 
   /* State of navigation expander */
   private navigationState = new BehaviorSubject<NavigationState>(NavigationState.expanded);
@@ -24,11 +24,11 @@ export class NavigationService {
 
   constructor(private gs: GeneralService, private router: Router) { }
 
-  setSubPage(s: string): void {
+  setSubPage(routerLink: string): void {
     this.gs.scrollTo(0);
-    this.subPage.next(s);
-    if (s.includes('/')) {
-      this.router.navigate([s]);
+    this.subPageBS.next(routerLink);
+    if (routerLink.includes('/')) {
+      this.router.navigate([routerLink]);
     }
   }
 
@@ -47,10 +47,11 @@ export class NavigationService {
         ];
         if (!environment.production) subPages.push(new UserLinks('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
-
     }
 
-    this.subPages.next(subPages);
+    this.setSubPage(subPages[0].routerlink);
+
+    this.subPagesBS.next(subPages);
   }
 
   setNavigationState(n: NavigationState): void {

@@ -26,7 +26,6 @@ import { EventCompetitionComponent } from './components/webpages/event-competiti
 import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
 import { FirstComponent } from './components/webpages/first/first.component';
-import { AdminComponent } from './components/webpages/admin/admin.component';
 import { CompetitionComponent } from './components/webpages/media/competition/competition.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
@@ -69,7 +68,6 @@ const routes: Routes = [
   { path: 'media/wallpapers', component: WallpapersComponent },
   { path: 'resources', component: ResourcesComponent },
   { path: 'first', component: FirstComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'admin/admin-users', component: AdminUsersComponent, canActivate: [AuthGuard] },
   { path: 'admin/error-log', component: ErrorLogComponent, canActivate: [AuthGuard] },
   { path: 'admin/phone-types', component: PhoneTypesComponent, canActivate: [AuthGuard] },
