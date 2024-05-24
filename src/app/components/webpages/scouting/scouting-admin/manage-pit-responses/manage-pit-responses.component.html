@@ -1,1 +1,18 @@
-<p>manage-pit-responses works!</p>
+<app-box [Title]="'Manage Pit Responses'">
+    <app-table [TableCols]="scoutPitResultsCols" [TableData]="scoutPitResults" [Width]="'100%'" [ScrollHeight]="'50rem'"
+        [Scrollable]="true" [ShowViewButton]="true" (ViewRecordCallBack)="showPitScoutResultModal($event)"></app-table>
+
+    <app-modal [(visible)]="scoutPitResultModalVisible" [Title]="'Pit Result'">
+        <div>
+            <app-scout-pic-display [ScoutPitResult]="activePitScoutResult"></app-scout-pic-display>
+
+            <div *ngFor="let r of activePitScoutResult.responses">
+                <p>{{ r.question }}: {{ r.answer }}</p>
+            </div>
+        </div>
+
+        <app-button-ribbon>
+            <app-button [ButtonType]="'danger'" (FunctionCallBack)="deletePitResult()">Delete</app-button>
+        </app-button-ribbon>
+    </app-modal>
+</app-box>

@@ -1,1 +1,31 @@
-<p>scouting-activity works!</p>
+<app-box [Title]="'Scouting Activity'">
+    <app-table [TableCols]="userActivityTableCols" [TableData]="usersScoutingUserInfo" [Scrollable]="true"
+        [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)"
+        [ScrollHeight]="'calc(100vh - 24rem)'">
+    </app-table>
+
+    <app-modal [Title]="'User Scouting Activity'" [(visible)]="userActivityModalVisible">
+        <app-form-element-group [LabelText]="'User Status'">
+            <div class="flex justify-content-space-between align-items-center">
+                <p class="margin-bottom-0">Under Review:
+                    {{getUserReviewStatusForTable(activeUserScoutingUserInfo.user_info.under_review)}}</p>
+
+                <app-button [ButtonType]="'main'" (FunctionCallBack)="toggleUserUnderReviewStatus()">Toggle Review
+                    Status</app-button>
+            </div>
+        </app-form-element-group>
+
+        <app-form-element-group [LabelText]="'Schedule'">
+            <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserScoutingFieldSchedule"
+                [TableDataButtons]="userActivityTableButtons" [Width]="'100%'">
+            </app-table>
+        </app-form-element-group>
+
+        <app-form-element-group [LabelText]="'Results'">
+            <app-table [TableCols]="activeUserScoutingScoutCols" [TableData]="activeUserScoutingScoutAnswers"
+                [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'" [Width]="userScoutActivityResultsTableWidth"
+                [Responsive]="true">
+            </app-table>
+        </app-form-element-group>
+    </app-modal>
+</app-box>

@@ -1,1 +1,3 @@
-<p>manage-pit-questions works!</p>
+<app-box *ngIf="page === 'mngPitQ'" [Title]="'Manage Pit Questions'">
+    <app-question-admin-form [questionType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
+</app-box>

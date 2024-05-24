@@ -1,1 +1,14 @@
-<p>manage-field-responses works!</p>
+<app-box [Title]="'Manage Field Responses'">
+    <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"
+        [ScrollHeight]="'50rem'" [Scrollable]="true" [ShowViewButton]="true"
+        (ViewRecordCallBack)="showScoutFieldResultModal($event)"></app-table>
+
+    <app-modal [(visible)]="scoutResultModalVisible" [Title]="'Field Result'">
+        <app-table [TableCols]="scoutResults.scoutCols" [TableData]="[activeScoutResult || {}]"
+            [Width]="tableWidth"></app-table>
+
+        <app-button-ribbon>
+            <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteFieldResult()">Delete</app-button>
+        </app-button-ribbon>
+    </app-modal>
+</app-box>
