@@ -96,6 +96,17 @@ import { PhoneTypesComponent } from './components/webpages/admin/phone-types/pho
 import { ErrorLogComponent } from './components/webpages/admin/error-log/error-log.component';
 import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
 import { FormManagerComponent } from './components/elements/form-manager/form-manager.component';
+import { ScoutingUsersComponent } from './components/webpages/scouting/scouting-admin/scouting-users/scouting-users.component';
+import { ScoutingScheduleComponent } from './components/webpages/scouting/scouting-admin/scouting-schedule/scouting-schedule.component';
+import { ManageSeasonComponent } from './components/webpages/scouting/scouting-admin/manage-season/manage-season.component';
+import { ScoutingActivityComponent } from './components/webpages/scouting/scouting-admin/scouting-activity/scouting-activity.component';
+import { ManageFieldQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-questions/manage-field-questions.component';
+import { ManageFieldQuestionAggregatesComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component';
+import { ManageFieldQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-conditions/manage-field-question-conditions.component';
+import { ManagePitQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-questions/manage-pit-questions.component';
+import { ManagePitQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component';
+import { ManageFieldResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component';
+import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
 
 @NgModule({
   declarations: [
@@ -168,7 +179,18 @@ import { FormManagerComponent } from './components/elements/form-manager/form-ma
     PhoneTypesComponent,
     ErrorLogComponent,
     RequestedItemsComponent,
-    FormManagerComponent
+    FormManagerComponent,
+    ScoutingUsersComponent,
+    ScoutingScheduleComponent,
+    ManageSeasonComponent,
+    ScoutingActivityComponent,
+    ManageFieldQuestionsComponent,
+    ManageFieldQuestionAggregatesComponent,
+    ManageFieldQuestionConditionsComponent,
+    ManagePitQuestionsComponent,
+    ManagePitQuestionConditionsComponent,
+    ManageFieldResponsesComponent,
+    ManagePitResponsesComponent
   ],
   imports: [
     BrowserModule,
