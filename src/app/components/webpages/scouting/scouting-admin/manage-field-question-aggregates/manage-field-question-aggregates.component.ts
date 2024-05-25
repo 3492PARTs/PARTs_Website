@@ -48,7 +48,6 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
       form_typ: 'field'
     }, (result: any) => {
       if (this.gs.checkResponse(result)) {
-        console.log(result);
         this.fieldQuestionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {

@@ -1033,22 +1033,6 @@ export class ScoutingService {
   getScheduleTypesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ScheduleType[]> {
     return this.cs.ScheduleType.getAll(filterDelegate);
   }
-  // Portal -------------------------------------------------------------------
-  initPortal(loadingScreen = true): Promise<boolean> | void {
-    return new Promise<boolean>(resolve => {
-      this.api.get(loadingScreen, 'scouting/portal/init/', undefined, (result: any) => {
-        const init = result;
-
-        //this.cs.ScoutFieldSchedule.AddOrEditBulkAsync(init.fieldSchedule);
-        console.log(init);
-        resolve(true);
-      }, (err: any) => {
-        this.gs.triggerError(err);
-        resolve(false);
-      });
-    });
-
-  }
 
   // Team Notes -----------------------------------------------------------
   loadTeamNotes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<TeamNote[] | null> {
