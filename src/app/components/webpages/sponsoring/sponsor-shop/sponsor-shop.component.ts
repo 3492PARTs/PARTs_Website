@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { Banner, GeneralService } from 'src/app/services/general.service';
-import { Item, Sponsor } from '../../admin/admin.component';
 import { APIService } from 'src/app/services/api.service';
+import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
 
 @Component({
   selector: 'app-sponsor-shop',

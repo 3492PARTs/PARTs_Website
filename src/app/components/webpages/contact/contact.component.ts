@@ -62,7 +62,7 @@ export class ContactComponent implements OnInit {
   }
 
   getResponse(response_id: string): void {
-    this.api.get(true, 'form/get-response/', {
+    this.api.get(true, 'form/response/', {
       response_id: response_id
     }, (result: any) => {
       this.questions = result as QuestionWithConditions[];
@@ -70,5 +70,9 @@ export class ContactComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  export(): void {
+    this.gs.downloadFileAs('TeamContact.csv', this.gs.questionsToCSV(this.questions), 'text/csv');
   }
 }

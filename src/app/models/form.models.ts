@@ -159,3 +159,8 @@ export class QuestionCondition implements IQuestionCondition {
     question_to!: Question;
     active = 'y';
 }
+
+export class FormType {
+    form_typ!: string;
+    form_nm!: string;
+}

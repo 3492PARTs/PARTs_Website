@@ -1,0 +1,11 @@
+<app-form-element-group [LabelText]="'Responses'">
+    <app-button-ribbon>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="exportResponses('team-app')">Export</app-button>
+    </app-button-ribbon>
+
+    <app-table [TableCols]="ResponsesCols" [TableData]="responses" (RecordClickCallBack)="openResponse($event)"
+        [Width]="'100%'" [CursorPointer]="true" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="deleteResponse($event)"></app-table>
+</app-form-element-group>
+
+<app-question-admin-form [questionType]="'team-app'"></app-question-admin-form>

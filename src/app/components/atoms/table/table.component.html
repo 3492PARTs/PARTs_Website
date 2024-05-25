@@ -58,8 +58,7 @@
                 :EnableRemovedFilter
                 :RemovedFilterProperty
                 :RemovedFilterPropertyValue; let i = index
-          " (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)"
-        [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer }">
+          " [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer }">
         <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as first column-->
           <div>
@@ -79,7 +78,7 @@
             </ng-container>
           </div>
         </td>
-        <td *ngFor="let col of TableCols" [ngStyle]="{ 
+        <td *ngFor="let col of TableCols" (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{ 
             'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
             'color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)) === 'initial' ? 'initial' : 'white',
             'width': col.Width ? col.Width : 'auto' 

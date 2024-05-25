@@ -99,8 +99,13 @@
             <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
-                <a routerLink="{{ mii.routerlink }}" routerLinkActive="active-link"
-                  (click)="setActiveMenuItem(mi, mii)">
+                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())" routerLink="{{ mii.routerlink }}"
+                  routerLinkActive="active-link" (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                  {{ mii.menu_name }}
+                </a>
+
+                <a *ngIf="pagesWithNavs.includes(mii.menu_name.toLowerCase())"
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
                   {{ mii.menu_name }}
                 </a>
               </li>
@@ -180,7 +185,7 @@
 
                 <div class="notification-message">
                   <p>{{ n.alert_subject }}</p>
-                  <p>{{ n.alert_body }}</p>
+                  <p [innerHTML]="n.alert_body"></p>
                 </div>
               </div>
             </div>
@@ -210,7 +215,7 @@
                 <div class="notification-content">
                   <div class="notification-message">
                     <p>{{ m.alert_subject }}</p>
-                    <p>{{ m.alert_body }}</p>
+                    <p [innerHTML]="m.alert_body"></p>
                   </div>
                   <div class="notification-time">
                     <p>Person &middot; {{ m.staged_time | dateToStr:true:true }}</p>

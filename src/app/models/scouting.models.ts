@@ -410,3 +410,32 @@ export class AllScoutInfo {
     scout_field_schedules: ScoutFieldSchedule[] = [];
     schedule_types: ScheduleType[] = [];
 }
+
+export class ScoutPitSchedule {
+    scout_pit_sch_id!: number;
+    event = new Event();
+    user = new User();
+    st_time!: Date;
+    end_time!: Date;
+    notified = 'n';
+    void_ind = 'n';
+}
+
+export class EventToTeams {
+    event_id!: number;
+    teams: Team[] = [];
+}
+
+export class ScoutFieldResultsSerializer {
+    scoutCols: any[] = [];
+    scoutAnswers: any[] = [];
+}
+
+export class ScoutingUserInfo {
+    id!: number;
+    under_review = false;
+}
+export class UserInfo {
+    user = new User();
+    user_info = new ScoutingUserInfo();
+}

@@ -1,7 +1,7 @@
 <div id="nav">
     <ng-container *ngFor="let ni of navItems; last as isLast">
         <div class="nav-item title" [ngClass]="{ expanded : navExpanded, active: page === ni.routerlink}"
-            (click)="setPage(ni.routerlink)">
+            (click)="setPage(ni.routerlink)" [routerLink]="ni.routerlink">
             <mat-icon class="icon" [svgIcon]="ni.icon"></mat-icon>
             <span [ngClass]="{ expanded : navExpanded}">{{ ni.menu_name }}</span>
         </div>
