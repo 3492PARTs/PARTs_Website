@@ -1,29 +1,19 @@
-import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import { Component, HostListener, OnInit } from '@angular/core';
 import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
 import { Match, MatchPlanning, ScoutPitResponse, Team, TeamNote } from 'src/app/models/scouting.models';
-import { User } from 'src/app/models/user.models';
-import { UserLinks } from 'src/app/models/navigation.models';
-import { APIService } from 'src/app/services/api.service';
+import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
-import { APIStatus } from 'src/app/models/api.models';
 
 @Component({
-  selector: 'app-match-planning',
-  templateUrl: './match-planning.component.html',
-  styleUrls: ['./match-planning.component.scss']
+  selector: 'app-plan-matches',
+  templateUrl: './plan-matches.component.html',
+  styleUrls: ['./plan-matches.component.scss']
 })
-export class MatchPlanningComponent implements OnInit {
-  page = 'matches';
+export class PlanMatchesComponent implements OnInit {
 
   matches: Match[] = [];
   teams: Team[] = [];
-
-  currentTeamNote = new TeamNote();
-  teamNoteModalVisible = false;
 
   matchesTableCols: object[] = [
     { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
@@ -39,7 +29,6 @@ export class MatchPlanningComponent implements OnInit {
 
   scoutCols: any[] = [];
   matchPlanning: MatchPlanning[] = [];
-  teamNotes: TeamNote[] = [];
 
   tableWidth = '200%';
 
@@ -49,20 +38,7 @@ export class MatchPlanningComponent implements OnInit {
   blueChart: Chart | null = null;
   chosenGraphDataPoints = '';
 
-  apiStatus = APIStatus.prcs;
-
-
-  constructor(private gs: GeneralService,
-    private api: APIService,
-    private ns: NavigationService,
-    private authService: AuthService,
-    private ss: ScoutingService) {
-    this.ns.subPage.subscribe(p => {
-      this.page = p;
-    });
-
-    this.api.apiStatus.subscribe(s => this.apiStatus = s);
-  }
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe(r => {
@@ -70,12 +46,6 @@ export class MatchPlanningComponent implements OnInit {
         this.init();
       }
     });
-    /*
-        this.ns.setSubPages([
-          new UserLinks('Matches', 'matches', 'soccer-field'),
-          new UserLinks('Team Notes', 'notes', 'note-multiple'),
-        ]);*/
-    this.ns.setSubPage('matches');
     this.setTableSize();
   }
 
@@ -89,9 +59,6 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   init(): void {
-    /*this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
-      this.initData = (result as Init);
-    });*/
     this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(result => {
       if (result) {
@@ -122,23 +89,6 @@ export class MatchPlanningComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.ss.loadTeamNotes().then(result => {
       this.gs.decrementOutstandingCalls();
-    });
-  }
-
-  saveNote(): void {
-    this.api.post(true, 'scouting/match-planning/team-notes/', this.currentTeamNote, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.currentTeamNote = new TeamNote();
-      this.teamNoteModalVisible = false;
-      this.ss.loadTeamNotes();
-    }, (error) => {
-      this.gs.triggerError(error);
-    });
-  }
-
-  loadTeamNotes(): void {
-    this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_no': this.currentTeamNote.team_no })).then(tns => {
-      this.teamNotes = tns;
     });
   }
 

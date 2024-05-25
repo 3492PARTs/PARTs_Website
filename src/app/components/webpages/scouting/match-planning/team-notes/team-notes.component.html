@@ -1,0 +1,32 @@
+<app-box [Title]="'Team Notes'">
+    <app-modal *ngIf="apiStatus === 'on'" [ButtonType]="'main'" [ButtonText]="'Take note'" [Title]="'Team Note'"
+        [(visible)]="teamNoteModalVisible">
+        <app-form (SubmitFunction)="saveNote()">
+            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
+                [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" [Required]="true">
+            </app-form-element>
+
+            <app-form-element [LabelText]="'Note'" [Type]="'area'" [(Model)]="currentTeamNote.note" [Width]="'100%'"
+                [Rows]="8" [Required]="true"></app-form-element>
+            <app-button-ribbon>
+                <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+            </app-button-ribbon>
+        </app-form>
+
+
+    </app-modal>
+
+    <app-modal [ButtonType]="'main'" [ButtonText]="'View notes'" [Title]="'View Team Notes'">
+        <app-form>
+            <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
+                [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" (FunctionCallBack)="loadTeamNotes()">
+            </app-form-element>
+
+            <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr ">
+                <p>{{ note.note }}</p>
+            </app-form-element-group>
+        </app-form>
+    </app-modal>
+</app-box>

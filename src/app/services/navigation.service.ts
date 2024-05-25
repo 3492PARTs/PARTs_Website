@@ -64,6 +64,12 @@ export class NavigationService {
               new UserLinks('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
             ];
             break;
+          case 'match-planning':
+            subPages = [
+              new UserLinks('Matches', '/scouting/match-planning/plan-matches', 'soccer-field'),
+              new UserLinks('Team Notes', '/scouting/match-planning/team-notes', 'note-multiple'),
+            ];
+            break;
         }
         break;
     }

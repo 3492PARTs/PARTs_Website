@@ -74,7 +74,6 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { SubNavigationComponent } from './components/atoms/sub-navigation/sub-navigation.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
@@ -106,6 +105,8 @@ import { ManagePitQuestionsComponent } from './components/webpages/scouting/scou
 import { ManagePitQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component';
 import { ManageFieldResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component';
 import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
+import { PlanMatchesComponent } from './components/webpages/scouting/match-planning/plan-matches/plan-matches.component';
+import { TeamNotesComponent } from './components/webpages/scouting/match-planning/team-notes/team-notes.component';
 
 @NgModule({
   declarations: [
@@ -159,7 +160,6 @@ import { ManagePitResponsesComponent } from './components/webpages/scouting/scou
     OnCreateDirective,
     BannersComponent,
     EventCompetitionComponent,
-    MatchPlanningComponent,
     SubNavigationComponent,
     ProfileComponent,
     TeamApplicationComponent,
@@ -188,7 +188,9 @@ import { ManagePitResponsesComponent } from './components/webpages/scouting/scou
     ManagePitQuestionsComponent,
     ManagePitQuestionConditionsComponent,
     ManageFieldResponsesComponent,
-    ManagePitResponsesComponent
+    ManagePitResponsesComponent,
+    PlanMatchesComponent,
+    TeamNotesComponent
   ],
   imports: [
     BrowserModule,
