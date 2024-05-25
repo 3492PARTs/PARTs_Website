@@ -20,7 +20,6 @@ import { ButtonComponent } from './components/atoms/button/button.component';
 import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
 import { FormElementComponent } from './components/atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from './components/atoms/form-element-group/form-element-group.component';
-import { ScoutingAdminComponent } from './components/webpages/scouting/scouting-admin/scouting-admin.component';
 import { HeaderComponent } from './components/atoms/header/header.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
 import { FormComponent } from './components/atoms/form/form.component';
@@ -121,7 +120,6 @@ import { ManagePitResponsesComponent } from './components/webpages/scouting/scou
     ButtonRibbonComponent,
     FormElementComponent,
     FormElementGroupComponent,
-    ScoutingAdminComponent,
     HeaderComponent,
     ModalComponent,
     TableComponent,

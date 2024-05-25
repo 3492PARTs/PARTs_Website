@@ -47,20 +47,24 @@ export class NavigationService {
         ];
         if (!environment.production) subPages.push(new UserLinks('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
-      case 'scouting-admin':
-        subPages = [
-          new UserLinks('Users', 'users', 'account-group'),
-          new UserLinks('Season', 'mngSeason', 'card-bulleted-settings-outline'),
-          new UserLinks('Schedule', 'mngSch', 'clipboard-text-clock'),
-          new UserLinks('Scouting Activity', 'scoutAct', 'account-reactivate'),
-          new UserLinks('Field Form', 'mngFldQ', 'chat-question-outline'),
-          new UserLinks('Field Form Aggregates', 'mngFldQAgg', 'sigma'),
-          new UserLinks('Field Form Conditions', 'mngFldQCond', 'code-equal'),
-          new UserLinks('Field Responses', 'mngFldRes', 'table-edit'),
-          new UserLinks('Pit Form', 'mngPitQ', 'chat-question-outline'),
-          new UserLinks('Pit Form Conditions', 'mngPitQCond', 'code-equal'),
-          new UserLinks('Pit Responses', 'mngPitRes', 'table-edit'),
-        ];
+      case 'scouting':
+        switch (area[2]) {
+          case 'scouting-admin':
+            subPages = [
+              new UserLinks('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
+              new UserLinks('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
+              new UserLinks('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
+              new UserLinks('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
+              new UserLinks('Field Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
+              new UserLinks('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
+              new UserLinks('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
+              new UserLinks('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
+              new UserLinks('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
+              new UserLinks('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
+              new UserLinks('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
+            ];
+            break;
+        }
         break;
     }
 
@@ -68,6 +72,7 @@ export class NavigationService {
 
     this.setSubPage(match.length > 0 ? match[0].routerlink : subPages.length > 0 ? subPages[0].routerlink : '');
 
+    // this handles when someone click on a sub group of pages routing them to the default page
     if (match.length <= 0 && subPages.length > 0) {
       this.router.navigate([subPages[0].routerlink]);
     }

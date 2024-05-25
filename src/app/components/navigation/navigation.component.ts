@@ -124,7 +124,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
           this.navigationService.setSubPages(this.urlEnd);
 
-          this.resetMenuItemNames();
+          this.resetActiveMenuItem();
           this.appMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
@@ -355,7 +355,7 @@ let max = document.documentElement.scrollHeight;
     }
 
     this.subNav = '';
-    if (resetNames) this.resetMenuItemNames();
+    if (resetNames) this.resetActiveMenuItem();
   }
 
   toggleForceNavExpand(): void {
@@ -463,11 +463,11 @@ let max = document.documentElement.scrollHeight;
   }
 
   checkActiveMenuItem(urlEnd: string, mi: UserLinks, mii: SubUserLinks): void {
-    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuItem(mi, mii, urlEnd);
+    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
   }
 
-  setActiveMenuItem(parent: UserLinks, child: SubUserLinks, routerLink: string): void {
-    this.resetMenuItemNames();
+  setActiveMenuSubmenuAndItem(parent: UserLinks, child: SubUserLinks, routerLink: string): void {
+    this.resetActiveMenuItem();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
     else {
@@ -482,7 +482,7 @@ let max = document.documentElement.scrollHeight;
     });*/
   }
 
-  resetMenuItemNames(): void {
+  resetActiveMenuItem(): void {
     this.appMenu.forEach(mi => mi.menu_name_active_item = '');
   }
 

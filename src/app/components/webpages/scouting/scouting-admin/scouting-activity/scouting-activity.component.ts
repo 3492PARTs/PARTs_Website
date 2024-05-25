@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule } from 'src/app/models/scouting.models';
+import { ScoutFieldSchedule, UserInfo } from 'src/app/models/scouting.models';
 import { User } from 'src/app/models/user.models';
 import { APIService } from 'src/app/services/api.service';
 import { GeneralService } from 'src/app/services/general.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
-import { UserInfo } from '../scouting-admin.component';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -45,7 +44,7 @@ export class ScoutingActivityComponent implements OnInit {
   activeUserScoutingScoutAnswers: any[] = [];
   userScoutActivityResultsTableWidth = '200%';
 
-  constructor(private api: APIService, private gs: GeneralService; private ss: ScoutingService, private authService: AuthService) { }
+  constructor(private api: APIService, private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {

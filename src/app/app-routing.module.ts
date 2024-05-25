@@ -6,7 +6,6 @@ import { AuthGuard } from './helpers/auth.gaurd';
 import { HomeComponent } from './components/webpages/home/home.component';
 import { LoginComponent } from './components/webpages/login/login.component';
 import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
-import { ScoutingAdminComponent } from './components/webpages/scouting/scouting-admin/scouting-admin.component';
 import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
 import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
 import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
@@ -38,6 +37,17 @@ import { RequestedItemsComponent } from './components/webpages/admin/requested-i
 import { SecurityComponent } from './components/webpages/admin/security/security.component';
 import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
 import { TeamApplicationFormComponent } from './components/webpages/admin/team-application-form/team-application-form.component';
+import { ScoutingUsersComponent } from './components/webpages/scouting/scouting-admin/scouting-users/scouting-users.component';
+import { ManageSeasonComponent } from './components/webpages/scouting/scouting-admin/manage-season/manage-season.component';
+import { ScoutingScheduleComponent } from './components/webpages/scouting/scouting-admin/scouting-schedule/scouting-schedule.component';
+import { ScoutingActivityComponent } from './components/webpages/scouting/scouting-admin/scouting-activity/scouting-activity.component';
+import { ManageFieldQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-questions/manage-field-questions.component';
+import { ManageFieldQuestionAggregatesComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component';
+import { ManageFieldQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-conditions/manage-field-question-conditions.component';
+import { ManagePitQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-questions/manage-pit-questions.component';
+import { ManagePitQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component';
+import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
+import { ManageFieldResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component';
 
 
 
@@ -47,7 +57,17 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'scouting/field', component: FieldScoutingComponent, canActivate: [AuthGuard] },
   { path: 'scouting/pit', component: PitScoutingComponent, canActivate: [AuthGuard] },
-  { path: 'scouting/admin', component: ScoutingAdminComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/scouting-users', component: ScoutingUsersComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-season', component: ManageSeasonComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/schedule', component: ScoutingScheduleComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/activity', component: ScoutingActivityComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-field-questions', component: ManageFieldQuestionsComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-field-question-aggregates', component: ManageFieldQuestionAggregatesComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-field-question-conditions', component: ManageFieldQuestionConditionsComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-field-responses', component: ManageFieldResponsesComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-pit-questions', component: ManagePitQuestionsComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-pit-question-conditions', component: ManagePitQuestionConditionsComponent, canActivate: [AuthGuard] },
+  { path: 'scouting/scouting-admin/manage-pit-responses', component: ManagePitResponsesComponent, canActivate: [AuthGuard] },
   { path: 'scouting/field-responses', component: FieldScoutingResponsesComponent, canActivate: [AuthGuard] },
   { path: 'scouting/pit-responses', component: ScoutPitResponsesComponent, canActivate: [AuthGuard] },
   { path: 'scouting/portal', component: ScoutingPortalComponent, canActivate: [AuthGuard] },

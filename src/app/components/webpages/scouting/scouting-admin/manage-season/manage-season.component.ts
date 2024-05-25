@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Season, Team, Event } from 'src/app/models/scouting.models';
+import { Season, Team, Event, EventToTeams } from 'src/app/models/scouting.models';
 import { APIService } from 'src/app/services/api.service';
 import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { EventToTeams } from '../scouting-admin.component';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 
