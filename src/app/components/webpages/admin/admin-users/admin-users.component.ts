@@ -13,7 +13,7 @@ export class AdminUsersComponent implements OnInit {
 
   users: User[] = [];
   phoneTypes: PhoneType[] = [];
-  userGroups: AuthGroup[] = [];
+  groups: AuthGroup[] = [];
 
   userTableCols = [
     { PropertyName: 'name', ColLabel: 'User' },
@@ -39,7 +39,6 @@ export class AdminUsersComponent implements OnInit {
   ];
 
   constructor(private us: UserService, private authService: AuthService, private gs: GeneralService) {
-    this.us.currentGroups.subscribe(g => this.userGroups = g);
   }
 
 
@@ -47,13 +46,28 @@ export class AdminUsersComponent implements OnInit {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.getUsers();
+        this.getGroups();
+        this.getPhoneTypes();
       }
     });
   }
 
-  getUsers() {
+  getUsers(): void {
     this.us.getUsers(this.userOption, this.adminOption).then(us => {
       this.users = us || [];
+    });
+  }
+
+  getGroups(): void {
+    this.us.getGroups().then(gs => {
+      this.groups = gs || [];
+    });
+  }
+
+  getPhoneTypes(): void {
+    this.us.getPhoneTypes().then(result => {
+      if (result)
+        this.phoneTypes = result;
     });
   }
 
@@ -64,7 +78,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   private buildAvailableUserGroups(): void {
-    this.availableAuthGroups = this.userGroups.filter(ug => {
+    this.availableAuthGroups = this.groups.filter(ug => {
       return this.activeUser.groups.map(el => el.id).indexOf(ug.id) < 0;
     });
   }

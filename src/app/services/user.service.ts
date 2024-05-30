@@ -1,20 +1,13 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { Banner, GeneralService, RetMessage } from './general.service';
 import { User, AuthGroup, AuthPermission } from '../models/user.models';
 import { APIService } from './api.service';
+import { PhoneType } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
-  private groups = new BehaviorSubject<AuthGroup[]>([]);
-  currentGroups = this.groups.asObservable();
-
-  private permissions = new BehaviorSubject<AuthPermission[]>([]);
-  currentPermissions = this.permissions.asObservable();
 
   constructor(private api: APIService, private gs: GeneralService) { }
 
@@ -40,16 +33,18 @@ export class UserService {
   }
 
   getUserGroups(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
-    if (userId) {
-      this.api.get(true, 'user/groups/', {
-        user_id: userId
-      }, onNext, onError);
-    }
+    this.api.get(true, 'user/groups/', {
+      user_id: userId
+    }, onNext, onError);
   }
 
-  getGroups() {
-    this.api.get(true, 'user/groups/', undefined, (result: any) => {
-      this.groups.next(result as AuthGroup[]);
+  getGroups(): Promise<AuthGroup[] | null> {
+    return new Promise<AuthGroup[] | null>(resolve => {
+      this.api.get(true, 'user/groups/', undefined, (result: AuthGroup[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
     });
   }
 
@@ -57,7 +52,6 @@ export class UserService {
     this.api.post(true, 'user/groups/', grp, (result: any) => {
       this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
       if (fn) fn();
-      this.getGroups();
     });
   }
 
@@ -67,7 +61,6 @@ export class UserService {
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
       if (fn) fn();
-      this.getGroups();
     });
   }
 
@@ -79,10 +72,13 @@ export class UserService {
     }
   }
 
-  getPermissions() {
-    this.api.get(true, 'user/permissions/', undefined, (result: any) => {
-      this.permissions.next(result as AuthPermission[]);
-      this.getGroups();
+  getPermissions(): Promise<AuthPermission[] | null> {
+    return new Promise<AuthPermission[] | null>(resolve => {
+      this.api.get(true, 'user/permissions/', undefined, (result: AuthPermission[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
     });
   }
 
@@ -106,5 +102,15 @@ export class UserService {
 
   runSecurityAudit(onNext?: (result: any) => void): void {
     this.api.get(true, 'user/security-audit/', undefined, onNext);
+  }
+
+  getPhoneTypes(): Promise<PhoneType[] | null> {
+    return new Promise<PhoneType[] | null>(resolve => {
+      this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
   }
 }

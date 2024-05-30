@@ -28,7 +28,7 @@
         </app-modal>
     </app-button-ribbon>
 
-    <app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="userGroups" [ShowEditButton]="true"
+    <app-table [TableTitle]="'Groups'" [TableCols]="groupsTableCols" [TableData]="groups" [ShowEditButton]="true"
         (EditRecordCallBack)="showGroupModal($event)" [ShowAddButton]="true" (AddRecordCallBack)="showGroupModal()"
         [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteGroup($event)" [Width]="'100%'">
     </app-table>

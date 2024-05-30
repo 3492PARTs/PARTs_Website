@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { QuestionWithConditions } from '../models/form.models';
+import { QuestionWithConditions, Response } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
@@ -513,7 +513,7 @@ export class GeneralService {
 
     for (let i = 0; i < tableData.length; i++) {
       tableCols.forEach(element => {
-        csv += '"' + this.getDisplayValue(tableData[i], element['PropertyName']).replaceAll('"', '""') + '",';
+        csv += '"' + this.getDisplayValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
       });
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
@@ -523,16 +523,38 @@ export class GeneralService {
   }
 
   questionsToCSV(questions: QuestionWithConditions[]): string {
-    let header = '';
-    let body = '';
-    questions.forEach(q => {
-      header += `"${q.question}",`
-      body += `"${this.formatQuestionAnswer(q.answer)}",`
-    });
-    header = header.substring(0, header.length - 1);
-    body = body.substring(0, body.length - 1);
+    let header = this.questionsToCSVHeader(questions);
+    let body = this.questionsToCSVBody(questions);
 
     return `${header}\n${body}`;
+  }
+
+  questionsToCSVHeader(questions: QuestionWithConditions[]): string {
+    let header = '';
+    questions.forEach(q => {
+      header += `"${q.question}",`
+    });
+    header = header.substring(0, header.length - 1);
+    return header;
+  }
+
+  questionsToCSVBody(questions: QuestionWithConditions[]): string {
+    let body = '';
+    questions.forEach(q => {
+      body += `"${this.formatQuestionAnswer(q.answer)}",`
+    });
+    body = body.substring(0, body.length - 1);
+    return body;
+  }
+
+  responsesToCSV(responses: Response[]): string {
+    let csv = '';
+    if (responses[0])
+      csv += `${this.questionsToCSVHeader(responses[0].questionanswer_set)},Time\n`;
+    responses.forEach(r => {
+      csv += `${this.questionsToCSVBody(r.questionanswer_set)},${r.time}\n`;
+    });
+    return csv;
   }
 
   getDisplayValue(rec: any, property: string): string {

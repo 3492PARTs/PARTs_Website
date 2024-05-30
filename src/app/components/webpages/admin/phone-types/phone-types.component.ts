@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { APIService } from 'src/app/services/api.service';
 import { AuthCallStates, AuthService, PhoneType } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-phone-types',
@@ -14,7 +15,7 @@ export class PhoneTypesComponent implements OnInit {
   newPhoneType = false;
   activePhoneType: PhoneType = new PhoneType();
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService) { }
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private us: UserService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -25,10 +26,9 @@ export class PhoneTypesComponent implements OnInit {
   }
 
   getPhoneTypes(): void {
-    this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
-      this.phoneTypes = result;
-    }, (err: any) => {
-      this.gs.triggerError(err);
+    this.us.getPhoneTypes().then(result => {
+      if (result)
+        this.phoneTypes = result;
     });
   }
 
