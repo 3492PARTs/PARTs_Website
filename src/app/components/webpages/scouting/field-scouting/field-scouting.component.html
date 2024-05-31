@@ -1,0 +1,103 @@
+<app-box [Title]="'Field Scouting Form'">
+
+  <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResponses.length > 0">
+    <div id="outstanding-results" class="flex align-items-center gap-1rem">
+      <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResponses()"></app-button>
+      <app-button [ButtonType]="'main'" *ngFor="let or of outstandingResponses"
+        (FunctionCallBack)="viewResult(or.id)">{{or.team}}</app-button>
+    </div>
+
+  </app-form-element-group>
+  <br *ngIf="outstandingResponses.length > 0">
+
+  <div id="scout-header">
+    <div id="scouts">
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_one_id?.first_name }} {{ scoutFieldSchedule.red_one_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.red_one_field_response && scoutFieldResponse.match?.red_one">
+          <hr>
+          <p>{{scoutFieldResponse.match?.red_one}}</p>
+        </div>
+      </div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_one_id?.first_name }} {{ scoutFieldSchedule.blue_one_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.blue_one_field_response && scoutFieldResponse.match?.blue_one">
+          <hr>
+          <p>{{scoutFieldResponse.match?.blue_one}}</p>
+        </div>
+      </div>
+
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_two_id?.first_name }} {{ scoutFieldSchedule.red_two_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.red_two_field_response && scoutFieldResponse.match?.red_two">
+          <hr>
+          <p>{{scoutFieldResponse.match?.red_two}}</p>
+        </div>
+      </div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_two_id?.first_name }} {{ scoutFieldSchedule.blue_two_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.blue_two_field_response && scoutFieldResponse.match?.blue_two">
+          <hr>
+          <p>{{scoutFieldResponse.match?.blue_two}}</p>
+        </div>
+      </div>
+
+      <div class="red">
+        <p>{{ scoutFieldSchedule.red_three_id?.first_name }} {{ scoutFieldSchedule.red_three_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.red_three_field_response && scoutFieldResponse.match?.red_three">
+          <hr>
+          <p>{{scoutFieldResponse.match?.red_three}}</p>
+        </div>
+      </div>
+
+      <div class="blue">
+        <p>{{ scoutFieldSchedule.blue_three_id?.first_name }} {{ scoutFieldSchedule.blue_three_id?.last_name }}</p>
+        <div *ngIf="!scoutFieldResponse.match?.blue_three_field_response && scoutFieldResponse.match?.blue_three">
+          <hr>
+          <p>{{scoutFieldResponse.match?.blue_three}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <app-form (SubmitFunction)="save()" [FormElements]="formElements">
+    <div *ngIf="formDisabled" class="padding-bottom-1rem">
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
+    </div>
+
+    <div *ngIf="matches.length > 0" class="flex align-items-baseline">
+      <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
+        [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.match"
+        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled">
+      </app-form-element>
+
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
+      </app-button>
+    </div>
+    <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
+      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+      [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team" [Required]="true" [Disabled]="formDisabled">
+    </app-form-element>
+
+    <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
+      (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
+    </app-question-display-form>
+
+    <app-question-display-form [LabelText]="'Teleoperated'" [(Questions)]="scoutTeleopQuestions"
+      (FormElementsChange)="setTeleopFormElements($event)" [Disabled]="formDisabled">
+    </app-question-display-form>
+
+    <app-question-display-form *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'"
+      [(Questions)]="scoutOtherQuestions" (FormElementsChange)="setOtherFormElements($event)" [Disabled]="formDisabled">
+    </app-question-display-form>
+
+    <app-button-ribbon>
+      <app-button [Type]="'submit'" [ButtonType]="'main'" [Disabled]="formDisabled">Save</app-button>
+    </app-button-ribbon>
+
+  </app-form>
+</app-box>

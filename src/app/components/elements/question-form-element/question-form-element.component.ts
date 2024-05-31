@@ -19,15 +19,4 @@ export class QuestionFormElementComponent {
     this.Question.answer = answer;
     this.QuestionChange.emit(this.Question);
   }
-
-  increment(sq: any): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    sq.answer = parseInt(sq.answer.toString()) + 1;
-  }
-
-  decrement(sq: any): void {
-    if (!sq.answer || this.gs.strNoE(sq.answer.toString())) sq.answer = 0;
-    if (parseInt(sq.answer.toString()) > 0) sq.answer = parseInt(sq.answer.toString()) - 1;
-  }
-
 }

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { APIStatus, AuthService } from './services/auth.service';
+import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
 import { GeneralService } from './services/general.service';
@@ -17,9 +17,6 @@ declare let gtag: Function;
 })
 export class AppComponent implements OnInit {
 
-  private apiStatus = APIStatus.prcs;
-  private firstRun = true;
-
   constructor(private authService: AuthService, public router: Router, public gs: GeneralService, @Inject(DOCUMENT) private document: Document) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
@@ -32,15 +29,6 @@ export class AppComponent implements OnInit {
         })
       }
     });
-
-    /*
-    this.authService.apiStatus.subscribe(a => {
-      this.apiStatus = a;
-      if (a !== APIStatus.prcs && a !== APIStatus.off && this.firstRun) {
-        this.authService.previouslyAuthorized();
-        this.firstRun = false;
-      }
-    });*/
 
     console.log('prod: ' + environment.production);
   }

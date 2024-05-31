@@ -319,6 +319,41 @@ nav {
   }
 }
 
+#site-banner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  background-color: $accent_color;
+  z-index: 17;
+  padding-left: 1rem;
+
+  .banner-message {
+    .icon {
+      fill: #fff !important;
+    }
+
+    p {
+      color: white;
+      margin: 0;
+    }
+  }
+}
+
+#site-banner,
+header {
+  transition: width 0.15s ease, top 0.15s linear;
+  width: calc(100% - 10.4rem);
+
+  &.expanded {
+    width: calc(100% - 22.4rem) !important;
+  }
+
+  &.hideNav {
+    width: 100% !important;
+  }
+}
+
 header {
   position: fixed;
   z-index: 16;
@@ -332,8 +367,6 @@ header {
   box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
   height: 7rem;
   padding-left: 1.6rem;
-  width: calc(100% - 10.4rem);
-  transition: width 0.15s ease, top 0.15s linear;
 
   &.remove-header {
     display: none;
@@ -342,14 +375,6 @@ header {
   &.right-hand-nav {
     right: unset;
     left: 0;
-  }
-
-  &.expanded {
-    width: calc(100% - 22.4rem) !important;
-  }
-
-  &.hideNav {
-    width: 100% !important;
   }
 
   .vertical-divider {

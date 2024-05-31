@@ -1,0 +1,79 @@
+<app-box [Title]="'Matches'">
+    <div *ngIf="matchPlanning.length <= 0">
+        <app-form-element-group [LabelText]="'Legend'">
+            <div id="legend" class="flex justify-content-space-between">
+                <div class="flex align-items-center">
+                    <div class="box ten"></div>
+                    <p>top 10</p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box fifteen"></div>
+                    <p>top 15</p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box twenty"></div>
+                    <p>top 20</p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box thirty"></div>
+                    <p>top 30</p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box left-overs"></div>
+                    <p>remaining</p>
+                </div>
+            </div>
+        </app-form-element-group>
+
+        <app-table [TableCols]="matchesTableCols" [TableData]="matches" (RecordClickCallBack)="planMatch($event)"
+            [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'" [ScrollHeight]="'50rem'"
+            [CursorPointer]="true">
+        </app-table>
+    </div>
+
+    <div *ngIf="matchPlanning.length > 0">
+        <div id="back-button">
+            <app-button-ribbon [TextAlign]="'left'">
+                <app-button [ButtonType]="'main'" (FunctionCallBack)="clearResults()">Back</app-button>
+
+                <app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
+                    <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'"
+                        [SelectList]="graphOptionsList" [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'"
+                        (FunctionCallBack)="buildGraph()">
+                    </app-form-element>
+
+                    <app-form-element-group [LabelText]="'Red Alliance'">
+                        <p>{{chosenGraphDataPoints}}</p>
+
+                        <canvas id="red-chart">{{redChart}}</canvas>
+                    </app-form-element-group>
+
+                    <app-form-element-group [LabelText]="'Blue Alliance'">
+                        <p>{{chosenGraphDataPoints}}</p>
+
+                        <canvas id="blue-chart">{{blueChart}}</canvas>
+                    </app-form-element-group>
+                </app-modal>
+            </app-button-ribbon>
+        </div>
+
+        <app-tab-container>
+            <app-tab *ngFor="let mpr of matchPlanning" [TabName]="mpr.team.team_no.toString()">
+                <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
+
+                <app-form-element-group [LabelText]="'Notes'">
+                    <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="note.time | dateToStr">
+                        <p>{{ note.note }}</p>
+                    </app-form-element-group>
+                </app-form-element-group>
+
+                <div class="padding-bottom-1rem"></div>
+
+                <app-table [TableCols]="scoutCols" [TableData]="mpr.scoutAnswers" [EnableFilter]="true"
+                    [Width]="tableWidth" [Responsive]="true" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
+                </app-table>
+            </app-tab>
+        </app-tab-container>
+    </div>
+
+</app-box>

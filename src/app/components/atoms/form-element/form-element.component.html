@@ -15,8 +15,8 @@
     </div>
 
     <ng-container [ngSwitch]="Type">
-      <input *ngSwitchCase="'text'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{
+      <input *ngSwitchCase="'text'" #input type="text" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
@@ -25,8 +25,8 @@
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'email'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{
+      <input *ngSwitchCase="'email'" #input type="text" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
@@ -44,17 +44,24 @@
         }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
         (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'number'" type="number" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
+      <div *ngSwitchCase="'number'" class="number">
+        <input type="number" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
         }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+          (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'phone'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{
+        <div *ngIf="NumberIncDec" class="number-stepper inline-flex flex-wrap gap-1rem align-items-center">
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="increment()"></app-button>
+
+          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement()"></app-button>
+        </div>
+      </div>
+
+      <input *ngSwitchCase="'phone'" #input type="text" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
@@ -88,14 +95,14 @@
 
       <ng-container *ngSwitchCase="'select'">
         <ng-container *ngIf="!SelectComparatorFunction; else hasFunction">
-          <select class="form-control" id="{{ LabelID }}" [ngClass]="{
+          <select #input class="form-control" id="{{ LabelID }}" [ngClass]="{
             'disabled': Disabled, 
             'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
           }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
-            <option [ngValue]="strNoE(Model) ? Model : ''" [disabled]="!DisplayEmptyOption"></option>
+            <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
             <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
@@ -113,7 +120,7 @@
           </select>
         </ng-container>
         <ng-template #hasFunction>
-          <select *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngClass]="{
+          <select #input *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngClass]="{
             'disabled': Disabled, 
             'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
@@ -121,7 +128,7 @@
           }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
             (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
             [compareWith]="SelectComparatorFunction">
-            <option [ngValue]="strNoE(Model) ? Model : ''" [disabled]="!DisplayEmptyOption"></option>
+            <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
             <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj">
@@ -135,7 +142,7 @@
 
       <div *ngSwitchCase="'area'" class="area"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}">
-        <textarea class="form-control" [ngClass]="{
+        <textarea #input class="form-control" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
@@ -197,14 +204,15 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'datetime'">
-        <div (focus)="focusIn()" (focusout)="focusOut()" class="datetime form-control" [ngClass]="{
+        <div #input (focus)="focusIn()" (focusout)="focusOut()" class="datetime form-control" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
         }">
           <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)">
+            <input [ngClass]="{'disabled': Disabled}" matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model"
+              (ngModelChange)="change($event)">
             <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1"
               [stepMinute]="30" [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false"
@@ -214,7 +222,7 @@
         </div>
       </ng-container>
 
-      <div *ngSwitchCase="'date'" class="date-form-control form-control" [ngClass]="{
+      <div *ngSwitchCase="'date'" #input class="date-form-control form-control" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
@@ -222,8 +230,8 @@
       }">
         <div class="date" [ngClass]="{'disabled': Disabled}">
           <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="picker" [ngModel]="Model" (ngModelChange)="change($event)"
-              (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
+            <input [ngClass]="{'disabled': Disabled}" matInput [matDatepicker]="picker" [ngModel]="Model"
+              (ngModelChange)="change($event)" (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker" (click)="focusIn()">
             </mat-datepicker-toggle>
@@ -232,14 +240,14 @@
         </div>
       </div>
 
-      <div class="file-upload form-control" *ngSwitchCase="'file'">
+      <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }">
 
         <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none;"
           [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
         <div>
           <p>{{ Model ? (fileName || "No file uploaded yet.") : "No file uploaded yet."}}</p>
         </div>
-        <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()"></app-button>
+        <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()" [Disabled]="Disabled"></app-button>
       </div>
 
       <input *ngSwitchCase="'image'" class="form-control" type="file" id="{{ LabelID }}"
@@ -276,7 +284,7 @@
       </div>
 
       <div *ngSwitchCase="'stopwatch'" class="stopwatch">
-        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),

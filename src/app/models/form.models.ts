@@ -1,7 +1,7 @@
 import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
 
 export interface IQuestionWithConditions {
-    question_id: number | null;
+    question_id: number;
     form_typ: string;
     form_sub_typ: string;
     form_sub_nm: string;
@@ -23,7 +23,7 @@ export interface IQuestionWithConditions {
 }
 
 export interface IQuestion {
-    question_id: number | null;
+    question_id: number;
     form_typ: string;
     form_sub_typ: string;
     form_sub_nm: string;
@@ -44,13 +44,13 @@ export interface IQuestion {
 }
 
 export class QuestionWithConditions implements IQuestionWithConditions {
-    question_id: number | null = null;
-    form_typ!: string;
-    form_sub_typ!: string;
-    form_sub_nm!: string;
+    question_id = NaN;
+    form_typ = '';
+    form_sub_typ = '';
+    form_sub_nm = '';
     question_typ!: QuestionType;
-    question!: string;
-    order!: number;
+    question = '';
+    order = NaN;
     required = 'n';
     active = 'y';
     void_ind = 'n';
@@ -67,7 +67,7 @@ export class QuestionWithConditions implements IQuestionWithConditions {
 }
 
 export class Question implements IQuestion {
-    question_id: number | null = null;
+    question_id = NaN;
     form_typ!: string;
     form_sub_typ!: string;
     form_sub_nm!: string;
@@ -139,7 +139,7 @@ export class QuestionAggregateType {
 export class QuestionAggregate {
     question_aggregate_id!: number;
     field_name = '';
-    question_aggregate_typ = new QuestionAggregateType()
+    question_aggregate_typ?: QuestionAggregateType;
     questions: QuestionWithConditions[] = [];
     active = 'y'
 }
@@ -158,4 +158,16 @@ export class QuestionCondition implements IQuestionCondition {
     question_from!: Question;
     question_to!: Question;
     active = 'y';
+}
+
+export class FormType {
+    form_typ!: string;
+    form_nm!: string;
+}
+
+export class Response {
+    response_id!: number;
+    form_typ = '';
+    time = new Date();
+    questionanswer_set: QuestionWithConditions[] = [];
 }

@@ -3,7 +3,8 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpSentEvent, Ht
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
 
-import { AuthService, User, Token } from '../services/auth.service';
+import { AuthService, Token } from '../services/auth.service';
+import { User } from '../models/user.models';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -14,8 +15,8 @@ export class ErrorInterceptor implements HttpInterceptor {
   private token: Token = new Token();
 
   constructor(private auth: AuthService) {
-    this.auth.currentUser.subscribe(u => this.user = u);
-    this.auth.currentToken.subscribe(t => this.token = t);
+    this.auth.user.subscribe(u => this.user = u);
+    this.auth.token.subscribe(t => this.token = t);
   }
 
   intercept(
@@ -33,7 +34,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           // comes back from the refreshToken call.
           this.tokenSubject.next(null);
 
-          return this.auth.refreshToken().pipe(
+          return this.auth.pipeRefreshToken().pipe(
             switchMap((token: Token) => {
               if (token) {
                 this.tokenSubject.next(token.access);
@@ -57,13 +58,14 @@ export class ErrorInterceptor implements HttpInterceptor {
           }));
         }
 
-      } else if ([400, 403].includes(err.status) && this.user && this.user.id) {
+      }
+      else if ([400, 403].includes(err.status) && this.user && this.user.id) {
         this.auth.logOut();
       }
 
-      const error = (err && err.error && err.error.message) || err.statusText;
+      //const error = (err && err.error && err.error.message) || err.statusText;
       //console.error(err);
-      return throwError(error);
+      return throwError(() => err);
     }));
   }
 

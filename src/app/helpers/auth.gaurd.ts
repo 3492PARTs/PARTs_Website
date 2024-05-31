@@ -3,7 +3,7 @@ import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/ro
 import { Observable } from 'rxjs';
 import { map, skipWhile } from 'rxjs/operators';
 
-import { AuthCallStates, AuthService, User } from '../services/auth.service';
+import { AuthCallStates, AuthService } from '../services/auth.service';
 import { GeneralService } from '../services/general.service';
 
 @Injectable({ providedIn: 'root' })

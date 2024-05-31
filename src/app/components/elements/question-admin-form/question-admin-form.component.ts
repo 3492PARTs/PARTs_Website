@@ -3,6 +3,7 @@ import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType } from 'src/app/models/form.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -30,6 +31,7 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'required', ColLabel: 'Required' },
     { PropertyName: 'is_condition', ColLabel: 'Is Condition' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];
@@ -39,37 +41,20 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
   }
 
   questionInit(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'form/form-init/', {
-      params: {
-        form_typ: this.questionType
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.init = result as Init;
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'form/form-init/', {
+      form_typ: this.questionType
+    }, (result: any) => {
+      this.init = result as Init;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   showQuestionModal(q?: QuestionWithConditions): void {
@@ -78,7 +63,6 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   saveQuestion(): void {
-    this.gs.incrementOutstandingCalls();
     this.activeQuestion.form_typ = this.questionType;
 
 
@@ -91,29 +75,14 @@ export class QuestionAdminFormComponent implements OnInit {
       }
     }
 
-    this.http.post(
-      'form/save-question/', save
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            this.activeQuestion = new QuestionWithConditions();
-            this.questionModalVisible = false;
-            this.questionInit();
-            //console.log(this.question);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'form/question/', save, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.activeQuestion = new QuestionWithConditions();
+      this.questionModalVisible = false;
+      this.questionInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   addOption(list: any): void {

@@ -1,13 +1,18 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { AuthService, User } from 'src/app/services/auth.service';
-import { Router, NavigationStart, NavigationEnd, Event as NavigationEvent } from '@angular/router';
+import { AppSize, Banner, GeneralService } from 'src/app/services/general.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 import { PwaService } from 'src/app/services/pwa.service';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
+import { User } from 'src/app/models/user.models';
+import { UserLinks, SubUserLinks } from 'src/app/models/navigation.models';
+import { APIService } from 'src/app/services/api.service';
+import { APIStatus } from 'src/app/models/api.models';
+import { CacheService } from 'src/app/services/cache.service';
 
 @Component({
   selector: 'app-navigation',
@@ -47,8 +52,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: MenuItem[] = [];
-  userLinks: MenuItem[] = [];
+  appMenu: UserLinks[] = [];
+  userLinks: UserLinks[] = [];
+
+  siteHeaderHeight = 7;
+  siteBannerHeight = 0;
+  persistentSiteBanners: Banner[] = [];
 
   removeHeader = false;
 
@@ -57,26 +66,35 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   notifications: Alert[] = [];
   messages: Alert[] = [];
 
-  constructor(private gs: GeneralService, private renderer: Renderer2, public auth: AuthService, private router: Router, private http: HttpClient, private pwa: PwaService, private ns: NotificationsService, private navigationService: NavigationService) {
-    this.auth.currentUser.subscribe(u => this.user = u);
-    this.auth.currentUserLinks.subscribe((ul) => {
+  constructor(private gs: GeneralService,
+    private renderer: Renderer2,
+    private auth: AuthService,
+    private cs: CacheService,
+    private router: Router,
+    private api: APIService,
+    private pwa: PwaService,
+    private ns: NotificationsService,
+    private navigationService: NavigationService) {
+
+    this.auth.user.subscribe(u => this.user = u);
+
+    this.auth.userLinks.subscribe((ul) => {
       this.userLinks = ul;
 
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new MenuItem('Logout', ''));
-          else mi.menu_items.push(new MenuItem('Login', 'login'))
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubUserLinks('Logout', ''));
+          else mi.menu_items.push(new SubUserLinks('Login', 'login'))
         }
       });
 
-      //this.pages = [];
       this.userLinks.forEach(ul => {
         this.removeHeader = false;
 
         this.appMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
-            if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+            this.checkActiveMenuItem(this.urlEnd, mi, mii);
           });
         });
       });
@@ -89,7 +107,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
-              mi.menu_items.push(new MenuItem('Install', ''));
+              mi.menu_items.push(new UserLinks('Install', ''));
             }
             else if (!e && index !== -1) {
               mi.menu_items.splice(index, 1);
@@ -102,12 +120,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
-          this.urlEnd = event.url.substr(1, event.url.length - 1);
+          this.urlEnd = event.url;
 
-          this.resetMenuItemNames();
+          this.navigationService.setSubPages(this.urlEnd);
+
+          this.resetActiveMenuItem();
           this.appMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
-              if (!this.gs.strNoE(mii.routerlink) && mii.routerlink === this.urlEnd) mi.menu_name_active_item = mii.menu_name;
+              this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
         }
@@ -116,6 +136,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.ns.notifications.subscribe(n => this.notifications = n);
     this.ns.messages.subscribe(m => this.messages = m);
 
+    this.gs.persistentSiteBanners.subscribe(psb => {
+      this.persistentSiteBanners = psb;
+      this.siteBannerHeight = 4 * this.persistentSiteBanners.length;
+    });
 
     this.gs.scrollPosition$.subscribe(scrollY => {
       this.scrollEvents(scrollY, true);
@@ -132,24 +156,32 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
     this.appMenu = [
-      new MenuItem('Join PARTs', 'join', 'account-supervisor', [
-        new MenuItem('Mechanical', 'join/mechanical'),
-        new MenuItem('Electrical', 'join/electrical'),
-        new MenuItem('Programming', 'join/programming'),
-        new MenuItem('Community Outreach', 'join/community-outreach'),
-        new MenuItem('Application Form', 'join/team-application'),
+      new UserLinks('Join PARTs', 'join', 'account-supervisor', [
+        new UserLinks('Mechanical', 'join/mechanical'),
+        new UserLinks('Electrical', 'join/electrical'),
+        new UserLinks('Programming', 'join/programming'),
+        new UserLinks('Community Outreach', 'join/community-outreach'),
+        new UserLinks('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
-      new MenuItem('Contact Us', 'contact', 'card-account-details'),
-      new MenuItem('Sponsoring', 'sponsor', 'account-child-circle'),
-      new MenuItem('About', 'about', 'information'),
-      new MenuItem('Media', 'media', 'image-multiple'),
-      new MenuItem('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
-      new MenuItem('FIRST', 'first', 'first'),
-      new MenuItem('Members', '', 'folder', [
-        new MenuItem('Login', 'login'),
+      new UserLinks('Contact Us', 'contact', 'card-account-details'),
+      new UserLinks('Sponsoring', 'sponsor', 'account-child-circle'),
+      new UserLinks('About', 'about', 'information'),
+      new UserLinks('Media', 'media', 'image-multiple'),
+      new UserLinks('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
+      new UserLinks('FIRST', 'first', 'first'),
+      new UserLinks('Members', '', 'folder', [
+        new UserLinks('Login', 'login'),
       ], 'Members Area'),
     ];
-    this.competitionInit();
+
+    // Check if comp page is available
+    this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
+      if ((result as CompetitionInit).event) {
+        this.gs.triggerChange(() => {
+          this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
+        });
+      }
+    });
 
     this.tokenString = environment.tokenString;
 
@@ -165,31 +197,32 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.scrollPosition = window.scrollY;
   }
 
-  competitionInit(): void {
-    this.http.get(
-      'public/competition/init/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if ((result as CompetitionInit).event) {
-            window.setTimeout(() => {
-              this.appMenu.unshift(new MenuItem('Competition', 'competition', 'robot-excited-outline'));
-            }, 1);
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-        }
-      }
-    );
-  }
-
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event: any) {
     this.scrollEvents(window.scrollY);
 
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimeout != null) {
+      window.clearTimeout(this.resizeTimeout);
+    }
+
+    this.resizeTimeout = window.setTimeout(() => {
+      if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
+        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
+        this.manualNavExpander = false;
+        this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
+
+        if (!this.hideNavExpander) {
+          this.setShowNav(true);
+          this.renderer.setStyle(this.header.nativeElement, 'top', '0');
+        }
+      }
+
+      this.screenXs = this.gs.getAppSize() === AppSize.XS;
+    }, 200);
   }
 
   scrollEvents(scrollY: number, innerScrollElement = false): void {
@@ -286,28 +319,6 @@ let max = document.documentElement.scrollHeight;
     this.renderer.setStyle(this.main.nativeElement, 'paddingTop', (top + 70) + 'px');
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.resizeTimeout != null) {
-      window.clearTimeout(this.resizeTimeout);
-    }
-
-    this.resizeTimeout = window.setTimeout(() => {
-      if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
-        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
-        this.manualNavExpander = false;
-        this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
-
-        if (!this.hideNavExpander) {
-          this.setShowNav(true);
-          this.renderer.setStyle(this.header.nativeElement, 'top', '0');
-        }
-      }
-
-      this.screenXs = this.gs.getAppSize() === AppSize.XS;
-    }, 200);
-  }
-
   openSubNav(pgID: string, elemID: string): void {
     if (this.gs.strNoE(this.subNav) || this.subNav !== elemID) {
       this.closeSubNav();
@@ -344,7 +355,7 @@ let max = document.documentElement.scrollHeight;
     }
 
     this.subNav = '';
-    if (resetNames) this.resetMenuItemNames();
+    if (resetNames) this.resetActiveMenuItem();
   }
 
   toggleForceNavExpand(): void {
@@ -443,7 +454,7 @@ let max = document.documentElement.scrollHeight;
   logOut(): void {
     this.auth.logOut();
     //this.page = 'Members';
-    this.resetMenuItemNames();
+    //this.resetMenuItemNames();
   }
 
   getNavPageID(key: string): string {
@@ -451,18 +462,27 @@ let max = document.documentElement.scrollHeight;
     return this.pageIDs[key];
   }
 
-  setActiveMenuItem(parent: MenuItem, child: MenuItem): void {
-    this.resetMenuItemNames();
+  checkActiveMenuItem(urlEnd: string, mi: UserLinks, mii: SubUserLinks): void {
+    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
+  }
+
+  setActiveMenuSubmenuAndItem(parent: UserLinks, child: SubUserLinks, routerLink: string): void {
+    this.resetActiveMenuItem();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();
-    else this.appMenu.forEach(mi => {
+    else {
+      parent.menu_name_active_item = child.menu_name;
+      this.navigationService.setSubPages(routerLink);
+    }
+
+    /*else this.appMenu.forEach(mi => {
       if (mi.menu_name === parent.menu_name) {
         mi.menu_name_active_item = child.menu_name;
       }
-    });
+    });*/
   }
 
-  resetMenuItemNames(): void {
+  resetActiveMenuItem(): void {
     this.appMenu.forEach(mi => mi.menu_name_active_item = '');
   }
 
@@ -479,31 +499,11 @@ let max = document.documentElement.scrollHeight;
   }
 
   openURL(url: string): void {
-    window.open(url, 'noopener');
+    this.gs.openURL(url);
   }
 }
 
 export class PageSpecificNavOption {
   optionName!: string;
   optionFunction!: () => void;
-}
-
-export class MenuItem {
-  menu_name = '';
-  menu_name_active_item = '';
-  menu_header = '';
-  order = -1;
-  permission = -1;
-  routerlink = '';
-  user_links_id = -1;
-  icon = 'clipboard-text-multiple-outline';
-  menu_items: MenuItem[] = [];
-
-  constructor(menu_name: string, routerlink: string, icon?: string, menu_items?: MenuItem[], menu_header?: string) {
-    this.menu_name = menu_name;
-    this.routerlink = routerlink;
-    this.icon = icon || 'clipboard-text-multiple-outline';
-    this.menu_items = menu_items || [];
-    this.menu_header = menu_header || '';
-  }
 }

@@ -1,237 +1,116 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthGroup, AuthPermission, User } from './auth.service';
 import { Banner, GeneralService, RetMessage } from './general.service';
+import { User, AuthGroup, AuthPermission } from '../models/user.models';
+import { APIService } from './api.service';
+import { PhoneType } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private users = new BehaviorSubject<User[]>([]);
-  currentUsers = this.users.asObservable();
+  constructor(private api: APIService, private gs: GeneralService) { }
 
-  private groups = new BehaviorSubject<AuthGroup[]>([]);
-  currentGroups = this.groups.asObservable();
-
-  private permissions = new BehaviorSubject<AuthPermission[]>([]);
-  currentPermissions = this.permissions.asObservable();
-
-  constructor(private http: HttpClient, private gs: GeneralService) { }
-
-  getUsers(is_active = 0, is_admin = 0) {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/users/',
-      {
-        params: {
-          is_active: is_active,
-          is_admin: is_admin
-        }
-      }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result))
-            this.users.next(result as User[]);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+  getUsers(is_active = 0, is_admin = 0): Promise<User[] | null> {
+    return new Promise<User[] | null>(resolve => {
+      this.api.get(true, 'user/users/', {
+        is_active: is_active,
+        is_admin: is_admin
+      }, (result: User[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
   }
 
-  saveUser(u: User, groups?: AuthGroup[], fn?: Function): void {
-    this.gs.incrementOutstandingCalls();
+  saveUser(u: User, fn?: Function): void {
 
-    let o: any = { user: u };
-
-    if (groups) o['groups'] = groups;
-
-    this.http.post(
-      'user/save/', o
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
-            if (fn) fn();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'user/save/', u, (result: any) => {
+      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      if (fn) fn();
+    });
   }
 
-  getGroups() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/groups/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result))
-            this.groups.next(result as AuthGroup[]);
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+  getUserGroups(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
+    this.api.get(true, 'user/groups/', {
+      user_id: userId
+    }, onNext, onError);
+  }
+
+  getGroups(): Promise<AuthGroup[] | null> {
+    return new Promise<AuthGroup[] | null>(resolve => {
+      this.api.get(true, 'user/groups/', undefined, (result: AuthGroup[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
   }
 
   saveGroup(grp: AuthGroup, fn?: Function) {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/groups/', grp
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
-            if (fn) fn();
-            this.getGroups();
-          }
-
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'user/groups/', grp, (result: any) => {
+      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      if (fn) fn();
+    });
   }
 
   deleteGroup(group_id: number, fn?: Function) {
-    this.gs.incrementOutstandingCalls();
-    this.http.delete(
-      'user/groups/',
-      {
-        params: {
-          group_id: group_id,
-        }
-      }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
-            if (fn) fn();
-            this.getGroups();
-          }
-
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.delete(true, 'user/groups/', {
+      group_id: group_id,
+    }, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      if (fn) fn();
+    });
   }
 
-  getPermissions() {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/permissions/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.permissions.next(result as AuthPermission[]);
-            this.getGroups();
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+  getUserPermissions(userId: string, onNext?: (result: any) => void, onError?: (error: any) => void): void {
+    if (userId) {
+      this.api.get(true, 'user/permissions/', {
+        user_id: userId
+      }, onNext, onError);
+    }
   }
 
-  savePermission(prmsn: AuthPermission, fn?: Function) {
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'user/permissions/', prmsn
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
-            if (fn) fn();
-            this.getPermissions();
-          }
+  getPermissions(): Promise<AuthPermission[] | null> {
+    return new Promise<AuthPermission[] | null>(resolve => {
+      this.api.get(true, 'user/permissions/', undefined, (result: AuthPermission[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
+  }
 
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+  savePermission(permission: AuthPermission, fn?: Function) {
+    this.api.post(true, 'user/permissions/', permission, (result: any) => {
+      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      if (fn) fn();
+      this.getPermissions();
+    });
   }
 
   deletePermission(prmsn_id: number, fn?: Function) {
-    this.gs.incrementOutstandingCalls();
-    this.http.delete(
-      'user/permissions/',
-      {
-        params: {
-          prmsn_id: prmsn_id,
-        }
-      }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
-            if (fn) fn();
-            this.getPermissions();
-          }
-
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.delete(true, 'user/permissions/', {
+      prmsn_id: prmsn_id,
+    }, (result: any) => {
+      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      if (fn) fn();
+      this.getPermissions();
+    });
   }
 
-  runSecurityAudit(): Observable<object> | null {
-    return this.http.get(
-      'user/security-audit/'
-    )
+  runSecurityAudit(onNext?: (result: any) => void): void {
+    this.api.get(true, 'user/security-audit/', undefined, onNext);
+  }
+
+  getPhoneTypes(): Promise<PhoneType[] | null> {
+    return new Promise<PhoneType[] | null>(resolve => {
+      this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
   }
 }

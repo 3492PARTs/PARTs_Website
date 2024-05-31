@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { APIStatus, AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
-import { Banner, GeneralService } from 'src/app/services/general.service';
+import { AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -14,7 +14,6 @@ export class LoginComponent implements OnInit {
 
   input: UserData = new UserData;
   returnUrl: string | null = '';
-  apiStatus = APIStatus.prcs;
   page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
   rememberMe = false;
@@ -41,11 +40,6 @@ export class LoginComponent implements OnInit {
       this.input.token = this.gs.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
       this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
-    });
-
-    this.authService.apiStatus.subscribe(a => {
-      this.apiStatus = a;
-      if (a === APIStatus.off) this.gs.addBanner(new Banner('Unable to reach API. You will be unable to login.', 0, 1));
     });
 
     this.readRememberMe();

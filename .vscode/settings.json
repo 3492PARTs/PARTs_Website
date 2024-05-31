@@ -4,5 +4,11 @@
             "style": "scss",
             "externalTemplate": true
         }
-    }
+    },
+    "cSpell.words": [
+        "Dexie",
+        "prcs",
+        "prmsn",
+        "Tkey"
+    ]
 }

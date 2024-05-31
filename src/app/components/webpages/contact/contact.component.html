@@ -12,8 +12,9 @@
       [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 2000">
     </app-form-element>
 
-    <app-button-ribbon *ngIf="!disabled">
-      <app-button [Type]="'submit'">Submit</app-button>
+    <app-button-ribbon>
+      <app-button *ngIf="disabled" (FunctionCallBack)="export()">Export</app-button>
+      <app-button [Type]="'submit'" [Disabled]="disabled">Submit</app-button>
     </app-button-ribbon>
   </app-form>
 </app-box>

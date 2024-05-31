@@ -1,6 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { ScoutPitResponse } from 'src/app/models/scouting.models';
 import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutPitResults } from '../../webpages/scouting/scout-pit-results/scout-pit-results.component';
 
 @Component({
   selector: 'app-pit-result-display',
@@ -12,7 +12,7 @@ export class PitResultDisplayComponent implements OnInit {
   screenSize!: AppSize;
   appSizeXLG = AppSize.XLG;
   appSizeSM = AppSize.SM;
-  @Input() ScoutPitResult = new ScoutPitResults()
+  @Input() ScoutPitResult = new ScoutPitResponse()
 
   constructor(private gs: GeneralService) { }
 
