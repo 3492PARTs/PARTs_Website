@@ -3,8 +3,11 @@
 /*FONT*/
 
 * {
-  font-family: "Nunito-Regular";
   color: $fontColor;
+  font-weight: 400;
+  line-height: 20px;
+  font-family: Roboto, sans-serif;
+  letter-spacing: 0.0178571429em;
 }
 
 /*TEXT*/
@@ -34,8 +37,8 @@ h6 {
 }
 
 main p,
-main ul>li,
-main ol>li {
+main ul > li,
+main ol > li {
   font-size: 1em;
 }
 
