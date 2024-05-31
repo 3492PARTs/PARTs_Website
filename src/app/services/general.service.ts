@@ -8,6 +8,7 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { QuestionWithConditions, Response } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,9 @@ export class GeneralService {
   /* Site Banners */
   private siteBanners = new BehaviorSubject<Banner[]>([]);
   currentSiteBanners = this.siteBanners.asObservable();
-  private internalSiteBanners: Banner[] = [];
+
+  private persistentSiteBannersBS = new BehaviorSubject<Banner[]>([]);
+  persistentSiteBanners = this.persistentSiteBannersBS.asObservable();
 
   private gsId = 0;
 
@@ -65,31 +68,45 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
-    /*
-    let add = true;
-    this.internalSiteBanners.forEach(el => {
-      if (el.message === b.message) {
-        add = false;
-      }
-    });
-
-    if (add) {
-      this.internalSiteBanners.push(b);
-      this.siteBanners.next(this.internalSiteBanners);
-    }
-  */
-    this.internalSiteBanners.push(b);
-    this.siteBanners.next(this.internalSiteBanners);
+    this.siteBanners.next(this.siteBanners.value.concat([b]));
   }
 
   removeBanner(b: Banner): void {
-    let i = this.arrayObjectIndexOf(this.internalSiteBanners, b.message, 'message');
+    let banners = this.siteBanners.value;
+    let index = -1;
 
-    if (i !== -1) {
-      this.internalSiteBanners.splice(i, 1);
-      this.siteBanners.next(this.internalSiteBanners);
+    for (let i = 0; i < banners.length; i++) {
+      if (banners[i].message === b.message && banners[i].time === b.time) {
+        index = i;
+        break;
+      }
     }
 
+    if (index !== -1) {
+      banners.splice(index, 1);
+      this.siteBanners.next(banners);
+    }
+  }
+
+  addPersistentBanner(b: Banner) {
+    this.persistentSiteBannersBS.next(this.persistentSiteBannersBS.value.concat([b]));
+  }
+
+  removePersistentBanner(b: Banner): void {
+    let banners = this.persistentSiteBannersBS.value;
+    let index = -1;
+
+    for (let i = 0; i < banners.length; i++) {
+      if (banners[i].message === b.message && banners[i].time === b.time) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index !== -1) {
+      banners.splice(index, 1);
+      this.persistentSiteBannersBS.next(banners);
+    }
   }
 
   /* Error Service */
@@ -98,9 +115,17 @@ export class GeneralService {
     this.errorMessage = '';
   }
 
-  triggerError(message: string) {
+  triggerError(message: any) {
     this.showErrorModal = true;
-    this.errorMessage = message;
+
+    if (message.hasOwnProperty('message')) {
+      this.errorMessage = message.message;
+    }
+    else if (message.hasOwnProperty('retMessage')) {
+      this.errorMessage = message.retMessage;
+    }
+    else
+      this.errorMessage = message;
   }
 
   checkResponse(response: any): boolean {
@@ -168,10 +193,14 @@ export class GeneralService {
 
   /* helper functions */
   strNoE(s: any) {
+
+    if (Number.isNaN(s)) return true;
+
     let type = typeof s;
     if (s !== null && !['undefined', 'string'].includes(type)) {
       s = s.toString();
     }
+
     return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';
   }
 
@@ -305,7 +334,7 @@ export class GeneralService {
   formatDateString(s: string | Date): string {
     let d = new Date(s);
     let day = d.getDate();
-    let month = d.getMonth();
+    let month = d.getMonth() + 1;
     let year = d.getFullYear().toString().substring(2);
     let hour = d.getHours();
     let min = d.getMinutes();
@@ -467,6 +496,76 @@ export class GeneralService {
     });
   }
   */
+
+  tableToCSV(tableCols: any[], tableData: any[]): string {
+    if (tableData.length <= 0) {
+      this.triggerError('Cannot export empty dataset.');
+      return '';
+    }
+
+    let csv = '';
+    tableCols.forEach(element => {
+      csv += '"' + element['ColLabel'] + '",';
+    });
+
+    csv = csv.substring(0, csv.length - 1);
+    csv += '\n';
+
+    for (let i = 0; i < tableData.length; i++) {
+      tableCols.forEach(element => {
+        csv += '"' + this.getDisplayValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
+      });
+      csv = csv.substring(0, csv.length - 1);
+      csv += '\n';
+    }
+
+    return csv;
+  }
+
+  questionsToCSV(questions: QuestionWithConditions[]): string {
+    let header = this.questionsToCSVHeader(questions);
+    let body = this.questionsToCSVBody(questions);
+
+    return `${header}\n${body}`;
+  }
+
+  questionsToCSVHeader(questions: QuestionWithConditions[]): string {
+    let header = '';
+    questions.forEach(q => {
+      header += `"${q.question}",`
+    });
+    header = header.substring(0, header.length - 1);
+    return header;
+  }
+
+  questionsToCSVBody(questions: QuestionWithConditions[]): string {
+    let body = '';
+    questions.forEach(q => {
+      body += `"${this.formatQuestionAnswer(q.answer)}",`
+    });
+    body = body.substring(0, body.length - 1);
+    return body;
+  }
+
+  responsesToCSV(responses: Response[]): string {
+    let csv = '';
+    if (responses[0])
+      csv += `${this.questionsToCSVHeader(responses[0].questionanswer_set)},Time\n`;
+    responses.forEach(r => {
+      csv += `${this.questionsToCSVBody(r.questionanswer_set)},${r.time}\n`;
+    });
+    return csv;
+  }
+
+  getDisplayValue(rec: any, property: string): string {
+    if (!property) {
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+    }
+    let ret = '';
+    const comand = 'ret = rec.' + property + ';';
+    eval(comand);
+    return ret; // do not turn into a string this will bite objects in the butt
+  }
 }
 
 export class RetMessage {

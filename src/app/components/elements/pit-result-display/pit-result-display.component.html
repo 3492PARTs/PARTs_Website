@@ -1,7 +1,7 @@
 <div class="team-results"
     [ngClass]="{ 'flex-wrap-nowrap': appSize >= appSizeXLG || (isMobile() && screenSize > appSizeSM)}">
     <div class="team-header">
-        <app-header [h]="1">{{ ScoutPitResult.teamNo }} - {{ ScoutPitResult.teamNm }}</app-header>
+        <app-header [h]="1">{{ ScoutPitResult.team_no }} - {{ ScoutPitResult.team_nm }}</app-header>
 
         <app-scout-pic-display [ScoutPitResult]="ScoutPitResult"></app-scout-pic-display>
 
@@ -9,7 +9,7 @@
     <div class="team-info">
 
         <ng-container *ngIf="ScoutPitResult">
-            <div *ngFor="let r of ScoutPitResult.results">
+            <div *ngFor="let r of ScoutPitResult.responses">
                 <p>{{ r.question }}: {{ r.answer }}</p>
             </div>
         </ng-container>

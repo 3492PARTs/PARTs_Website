@@ -40,7 +40,6 @@ export class RemovedFilterPipe implements PipeTransform {
     return ObjectArray.filter((ObjectItem: { [x: string]: any; }) => {
       // let TextFound: boolean = false;
       const ret: boolean = ObjectItem[Property] === Value;
-      console.log();
       return ret;
     });
   }

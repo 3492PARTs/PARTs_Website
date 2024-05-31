@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { Banner, GeneralService } from 'src/app/services/general.service';
-import { Item, Sponsor } from '../../admin/admin.component';
+import { APIService } from 'src/app/services/api.service';
+import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
 
 @Component({
   selector: 'app-sponsor-shop',
@@ -23,7 +24,7 @@ export class SponsorShopComponent implements OnInit {
 
   cartModalVisible = false;
 
-  constructor(private gs: GeneralService, private http: HttpClient, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.initSponsorShop() : null);
@@ -35,45 +36,15 @@ export class SponsorShopComponent implements OnInit {
   }
 
   getItems(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'sponsoring/get-items/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.items = result as Item[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'sponsoring/get-items/', undefined, (result: any) => {
+      this.items = result as Item[];
+    });
   }
 
   getSponsors(): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'sponsoring/get-sponsors/'
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.sponsors = result as Sponsor[];
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'sponsoring/get-sponsors/', undefined, (result: any) => {
+      this.sponsors = result as Sponsor[];
+    });
   }
 
   addItemToCart(item: Item): void {
@@ -128,27 +99,12 @@ export class SponsorShopComponent implements OnInit {
       return;
     }
 
-    this.gs.incrementOutstandingCalls();
-    this.http.post(
-      'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
-            this.cart = [];
-            this.activeSponsor = new Sponsor();
-            this.initSponsorShop();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.post(true, 'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }, (result: any) => {
+      this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
+      this.cart = [];
+      this.activeSponsor = new Sponsor();
+      this.initSponsorShop();
+    });
   }
 
   previewImage(link: string, id: string): void {

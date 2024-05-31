@@ -1,4 +1,12 @@
 //form element
+.mat-calendar-body-today {
+  background-color: lighten($accent_color, 20%) !important;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: 0 !important;
+}
+
 .date-form-control {
   position: relative;
   display: inline-block;

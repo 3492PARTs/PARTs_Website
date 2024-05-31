@@ -14,7 +14,8 @@
 
         <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"
             [Required]="true" [SelectList]="questionConditionQuestionToList" [DisplayProperty]="'display_value'"
-            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionFromLists()">
+            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionFromLists()"
+            [DisplayEmptyOption]="true">
         </app-form-element>
 
         <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionCondition.active"

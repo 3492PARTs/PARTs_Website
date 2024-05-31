@@ -13,14 +13,13 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 //import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/webpages/login/login.component';
 import { LoadingComponent } from './components/atoms/loading/loading.component';
-import { ScoutFieldComponent } from './components/webpages/scouting/scout-field/scout-field.component';
-import { ScoutPitComponent } from './components/webpages/scouting/scout-pit/scout-pit.component';
+import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
+import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
 import { BoxComponent } from './components/atoms/box/box.component';
 import { ButtonComponent } from './components/atoms/button/button.component';
 import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
 import { FormElementComponent } from './components/atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from './components/atoms/form-element-group/form-element-group.component';
-import { ScoutAdminComponent } from './components/webpages/scouting/scout-admin/scout-admin.component';
 import { HeaderComponent } from './components/atoms/header/header.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
 import { FormComponent } from './components/atoms/form/form.component';
@@ -33,12 +32,12 @@ import {
 import { StrToTypePipe } from './pipes/str-to-type.pipe';
 import { DateToStrPipe } from './pipes/date-to-str.pipe';
 import { QuestionAdminFormComponent } from './components/elements/question-admin-form/question-admin-form.component';
-import { ScoutFieldResultsComponent } from './components/webpages/scouting/scout-field-results/scout-field-results.component';
-import { ScoutPitResultsComponent } from './components/webpages/scouting/scout-pit-results/scout-pit-results.component';
+import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
+import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
 
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
 import { ClickInsideDirective } from './directives/click-inside/click-inside.directive';
-import { ScoutPortalComponent } from './components/webpages/scouting/scout-portal/scout-portal.component';
+import { ScoutingPortalComponent } from './components/webpages/scouting/scouting-portal/scouting-portal.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
 import { JoinComponent } from './components/webpages/join/join.component';
 import { CommunityOutreachComponent } from './components/webpages/join/community-outreach/community-outreach.component';
@@ -59,10 +58,9 @@ import { BoxSideNavWrapperComponent } from './components/atoms/box-side-nav-wrap
 //import { ErrorMessageComponent } from './components/atoms/error-message/error-message.component';
 import { TabComponent } from './components/atoms/tab/tab.component';
 import { TabContainerComponent } from './components/atoms/tab-container/tab-container.component';
-import { AdminComponent } from './components/webpages/admin/admin.component';
 import { PaginationComponent } from './components/atoms/pagination/pagination.component';
 import { OnCreateDirective } from './directives/OnCreate/on-create.directive';
-import { BannersComponent } from './components/atoms/banners/banners.component';
+import { BannersComponent } from './components/elements/banners/banners.component';
 import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
 import { TableComponent } from './components/atoms/table/table.component';
 
@@ -76,7 +74,6 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { MatchPlanningComponent } from './components/webpages/scouting/match-planning/match-planning.component';
 import { SubNavigationComponent } from './components/atoms/sub-navigation/sub-navigation.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
@@ -89,6 +86,27 @@ import { ScoutPicDisplayComponent } from './components/elements/scout-pic-displa
 import { QuestionConditionAdminFormComponent } from './components/elements/question-condition-admin-form/question-condition-admin-form.component';
 import { QuestionFormElementComponent } from './components/elements/question-form-element/question-form-element.component';
 import { PitResultDisplayComponent } from './components/elements/pit-result-display/pit-result-display.component';
+import { AdminUsersComponent } from './components/webpages/admin/admin-users/admin-users.component';
+import { SecurityComponent } from './components/webpages/admin/security/security.component';
+import { TeamApplicationFormComponent } from './components/webpages/admin/team-application-form/team-application-form.component';
+import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
+import { PhoneTypesComponent } from './components/webpages/admin/phone-types/phone-types.component';
+import { ErrorLogComponent } from './components/webpages/admin/error-log/error-log.component';
+import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
+import { FormManagerComponent } from './components/elements/form-manager/form-manager.component';
+import { ScoutingUsersComponent } from './components/webpages/scouting/scouting-admin/scouting-users/scouting-users.component';
+import { ScoutingScheduleComponent } from './components/webpages/scouting/scouting-admin/scouting-schedule/scouting-schedule.component';
+import { ManageSeasonComponent } from './components/webpages/scouting/scouting-admin/manage-season/manage-season.component';
+import { ScoutingActivityComponent } from './components/webpages/scouting/scouting-admin/scouting-activity/scouting-activity.component';
+import { ManageFieldQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-questions/manage-field-questions.component';
+import { ManageFieldQuestionAggregatesComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component';
+import { ManageFieldQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-conditions/manage-field-question-conditions.component';
+import { ManagePitQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-questions/manage-pit-questions.component';
+import { ManagePitQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component';
+import { ManageFieldResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component';
+import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
+import { PlanMatchesComponent } from './components/webpages/scouting/match-planning/plan-matches/plan-matches.component';
+import { TeamNotesComponent } from './components/webpages/scouting/match-planning/team-notes/team-notes.component';
 
 @NgModule({
   declarations: [
@@ -98,12 +116,11 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     LoginComponent,
     LoadingComponent,
     BoxComponent,
-    ScoutFieldComponent,
+    FieldScoutingComponent,
     ButtonComponent,
     ButtonRibbonComponent,
     FormElementComponent,
     FormElementGroupComponent,
-    ScoutAdminComponent,
     HeaderComponent,
     ModalComponent,
     TableComponent,
@@ -118,12 +135,12 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     BoxSideNavWrapperComponent,
     TabComponent,
     TabContainerComponent,
-    ScoutPitComponent,
-    ScoutFieldResultsComponent,
-    ScoutPitResultsComponent,
+    PitScoutingComponent,
+    FieldScoutingResponsesComponent,
+    ScoutPitResponsesComponent,
     ClickOutsideDirective,
     ClickInsideDirective,
-    ScoutPortalComponent,
+    ScoutingPortalComponent,
     ContactComponent,
     JoinComponent,
     CommunityOutreachComponent,
@@ -139,12 +156,10 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     MediaCommunityOutreachComponent,
     ResourcesComponent,
     FirstComponent,
-    AdminComponent,
     PaginationComponent,
     OnCreateDirective,
     BannersComponent,
     EventCompetitionComponent,
-    MatchPlanningComponent,
     SubNavigationComponent,
     ProfileComponent,
     TeamApplicationComponent,
@@ -154,7 +169,28 @@ import { PitResultDisplayComponent } from './components/elements/pit-result-disp
     ScoutPicDisplayComponent,
     QuestionConditionAdminFormComponent,
     QuestionFormElementComponent,
-    PitResultDisplayComponent
+    PitResultDisplayComponent,
+    AdminUsersComponent,
+    SecurityComponent,
+    TeamApplicationFormComponent,
+    TeamContactFormComponent,
+    PhoneTypesComponent,
+    ErrorLogComponent,
+    RequestedItemsComponent,
+    FormManagerComponent,
+    ScoutingUsersComponent,
+    ScoutingScheduleComponent,
+    ManageSeasonComponent,
+    ScoutingActivityComponent,
+    ManageFieldQuestionsComponent,
+    ManageFieldQuestionAggregatesComponent,
+    ManageFieldQuestionConditionsComponent,
+    ManagePitQuestionsComponent,
+    ManagePitQuestionConditionsComponent,
+    ManageFieldResponsesComponent,
+    ManagePitResponsesComponent,
+    PlanMatchesComponent,
+    TeamNotesComponent
   ],
   imports: [
     BrowserModule,

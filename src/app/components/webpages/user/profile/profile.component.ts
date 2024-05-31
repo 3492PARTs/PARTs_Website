@@ -1,10 +1,12 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AuthService, User, UserData } from 'src/app/services/auth.service';
-import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { AuthService, UserData } from 'src/app/services/auth.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 import { ActivatedRoute } from '@angular/router';
+import { User } from 'src/app/models/user.models';
+import { APIService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,8 +21,8 @@ export class ProfileComponent implements OnInit {
 
   editProfileImageModalVisible = false;
   showCropper = false;
-  @ViewChild('EditProfileImageModalButtonRibbon', { read: ElementRef, static: false }) epimbr!: ElementRef;
-  @ViewChild('EditProfileImageModalCropper', { read: ElementRef, static: false }) epimc!: ElementRef;
+  @ViewChild('EditProfileImageModalButtonRibbon', { read: ElementRef, static: false }) editProfileImageModalButtonRibbon!: ElementRef;
+  @ViewChild('EditProfileImageModalCropper', { read: ElementRef, static: false }) editProfileImageModalCropper!: ElementRef;
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -41,14 +43,20 @@ export class ProfileComponent implements OnInit {
 
   activeTab = '';
 
-  constructor(private auth: AuthService, public gs: GeneralService, private http: HttpClient, private renderer: Renderer2, private ns: NotificationsService, private route: ActivatedRoute) {
+  constructor(private auth: AuthService,
+    public gs: GeneralService,
+    private api: APIService,
+    private renderer: Renderer2,
+    private ns: NotificationsService,
+    private route: ActivatedRoute) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.activeTab = queryParams.get('tab') || '';
     });
 
-    this.auth.currentUser.subscribe(u => {
+    this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = JSON.parse(JSON.stringify(u));
+      this.editUser = this.gs.cloneObject(u) as User;
+      console.log(this.editUser);
     });
 
     this.ns.notifications.subscribe(ns => this.notifications = ns);
@@ -83,31 +91,15 @@ export class ProfileComponent implements OnInit {
     form.append('email', this.editUser.email);
 
 
-    this.gs.incrementOutstandingCalls();
-    this.http.put(
-      'user/profile/',
-      form
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            this.gs.successfulResponseBanner(result);
+    this.api.put(true, 'user/profile/', form, (result: any) => {
+      this.gs.successfulResponseBanner(result);
 
-            this.auth.getUser();
-            this.userProfileImage = null;
-            this.input = new UserData();
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+      this.auth.getUser();
+      this.userProfileImage = null;
+      this.input = new UserData();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   /*---- Profile Image Helpers ----*/
@@ -117,9 +109,11 @@ export class ProfileComponent implements OnInit {
     this.imageChangedEvent = event;
     this.adjustProfileImageEditorSize();
   }
+
   imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
   }
+
   imageLoaded() {
     // show cropper
   }
@@ -127,6 +121,7 @@ export class ProfileComponent implements OnInit {
     // cropper ready
     this.gs.decrementOutstandingCalls();
   }
+
   loadImageFailed() {
     // show message
   }
@@ -142,11 +137,11 @@ export class ProfileComponent implements OnInit {
   }
 
   adjustProfileImageEditorSize() {
-    if (this.epimbr && this.epimc) {
-      const height = this.epimbr.nativeElement.children[0].scrollHeight;
+    if (this.editProfileImageModalButtonRibbon && this.editProfileImageModalCropper) {
+      const height = this.editProfileImageModalButtonRibbon.nativeElement.children[0].scrollHeight;
       const heightStr = 'calc(100vh - (1em + 2.813em + 2em + ' + height + 'px))';
       this.renderer.setStyle(
-        this.epimc.nativeElement,
+        this.editProfileImageModalCropper.nativeElement,
         'height',
         heightStr
       );
@@ -164,6 +159,7 @@ export class ProfileComponent implements OnInit {
     return blob;
   }
 
+  // Alerts --------------------------------------------------------------------------------
   dismissAlert(a: Alert) {
     this.ns.dismissAlert(a);
     this.alertModalVisible = false;

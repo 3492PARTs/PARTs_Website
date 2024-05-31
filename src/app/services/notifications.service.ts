@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { Banner, GeneralService, RetMessage } from './general.service';
 import { BehaviorSubject } from 'rxjs';
+import { APIService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,10 @@ export class NotificationsService {
   private messagesBS = new BehaviorSubject<Alert[]>(this.messages_);
   messages = this.messagesBS.asObservable();
 
-  constructor(private swPush: SwPush, private gs: GeneralService, private http: HttpClient, private router: Router) { }
+  constructor(private swPush: SwPush,
+    private gs: GeneralService,
+    private api: APIService,
+    private router: Router) { }
 
   subscribeToNotifications() {
     if (this.swPush.isEnabled) {
@@ -60,7 +64,6 @@ export class NotificationsService {
       serverPublicKey: this.VAPID_PUBLIC_KEY
     })
       .then(sub => {
-        this.gs.incrementOutstandingCalls();
         const detected = window.navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig);
         const browser = detected && (detected.length || 0) > 0 ? detected[0].toLowerCase() : 'undetectable';
         const data = {
@@ -69,26 +72,10 @@ export class NotificationsService {
           browser: browser,
           user_agent: window.navigator.userAgent
         };
-        this.http.post(
-          'user/webpush-save/',
-          data
-        ).subscribe(
-          {
-            next: (result: any) => {
-              if (this.gs.checkResponse(result)) {
-                //this.gs.addBanner({ message: (result as RetMessage).retMessage, severity: 1, time: 5000 });
-              }
-            },
-            error: (err: any) => {
-              this.gs.decrementOutstandingCalls();
-              console.log('error', err);
-              this.gs.addBanner(new Banner('Couldn\'t subscribe to push notifications.', 0));
-            },
-            complete: () => {
-              this.gs.decrementOutstandingCalls();
-            }
-          }
-        );
+
+        this.api.post(true, 'user/webpush-save/', data, undefined, (err: any) => {
+          this.gs.addBanner(new Banner('Couldn\'t subscribe to push notifications.', 0));
+        });
       })
       .catch(err => console.error("Could not subscribe to notifications", err));
   }
@@ -116,79 +103,46 @@ export class NotificationsService {
   }
 
   getUserAlerts(alert_comm_typ_id: string) {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'user/alerts/', {
-      params: {
-        alert_comm_typ_id: alert_comm_typ_id
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (alert_comm_typ_id === 'notification') {
-            for (let r of result as Alert[]) {
-              let found = false;
-              this.notifications_.forEach(n => {
-                if (n.alert_channel_send_id === r.alert_channel_send_id)
-                  found = true;
-              });
-              if (!found) this.pushNotification(r);
-            }
-          }
-
-          if (alert_comm_typ_id === 'message') {
-            for (let r of result as Alert[]) {
-              let found = false;
-              this.messages_.forEach(m => {
-                if (m.alert_channel_send_id === r.alert_channel_send_id)
-                  found = true;
-              });
-              if (!found) this.pushMessage(r);
-            }
-          }
-        },
-        error: (err: any) => {
-          this.gs.decrementOutstandingCalls();
-          console.log('error', err);
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
+    this.api.get(true, 'user/alerts/', {
+      alert_comm_typ_id: alert_comm_typ_id
+    }, (result: any) => {
+      if (alert_comm_typ_id === 'notification') {
+        for (let r of result as Alert[]) {
+          let found = false;
+          this.notifications_.forEach(n => {
+            if (n.alert_channel_send_id === r.alert_channel_send_id)
+              found = true;
+          });
+          if (!found) this.pushNotification(r);
         }
       }
-    );
+
+      if (alert_comm_typ_id === 'message') {
+        for (let r of result as Alert[]) {
+          let found = false;
+          this.messages_.forEach(m => {
+            if (m.alert_channel_send_id === r.alert_channel_send_id)
+              found = true;
+          });
+          if (!found) this.pushMessage(r);
+        }
+      }
+    });
   }
 
   dismissAlert(a: Alert): void {
-    this.gs.incrementOutstandingCalls();
-    this.http.get(
-      'alerts/dismiss/', {
-      params: {
-        alert_channel_send_id: a.alert_channel_send_id.toString()
-      }
-    }
-    ).subscribe(
-      {
-        next: (result: any) => {
-          if (this.gs.checkResponse(result)) {
-            let index = this.gs.arrayObjectIndexOf(this.notifications_, a.alert_channel_send_id, 'alert_channel_send_id');
-            if (index >= 0) this.removeNotification(index);
-            index = this.gs.arrayObjectIndexOf(this.messages_, a.alert_channel_send_id, 'alert_channel_send_id')
-            if (index >= 0) this.removeMessage(index);
-            this.getUserAlerts('notification');
-            this.getUserAlerts('message');
-          }
-        },
-        error: (err: any) => {
-          console.log('error', err);
-          this.gs.triggerError(err);
-          this.gs.decrementOutstandingCalls();
-        },
-        complete: () => {
-          this.gs.decrementOutstandingCalls();
-        }
-      }
-    );
+    this.api.get(true, 'alerts/dismiss/', {
+      alert_channel_send_id: a.alert_channel_send_id.toString()
+    }, (result: any) => {
+      let index = this.gs.arrayObjectIndexOf(this.notifications_, a.alert_channel_send_id, 'alert_channel_send_id');
+      if (index >= 0) this.removeNotification(index);
+      index = this.gs.arrayObjectIndexOf(this.messages_, a.alert_channel_send_id, 'alert_channel_send_id')
+      if (index >= 0) this.removeMessage(index);
+      this.getUserAlerts('notification');
+      this.getUserAlerts('message');
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 }
 
