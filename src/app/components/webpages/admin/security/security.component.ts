@@ -17,7 +17,7 @@ export class SecurityComponent implements OnInit {
     { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
-  userGroups: AuthGroup[] = [];
+  groups: AuthGroup[] = [];
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
@@ -43,17 +43,29 @@ export class SecurityComponent implements OnInit {
   ];
 
   constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService) {
-    this.us.currentGroups.subscribe(g => this.userGroups = g);
-    this.us.currentPermissions.subscribe(p => this.permissions = p);
   }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
-        this.us.getGroups();
-        this.us.getPermissions();
+        this.getGroups();
+        this.getPermissions();
         this.runSecurityAudit();
       }
+    });
+  }
+
+  getGroups(): void {
+    this.us.getGroups().then(result => {
+      if (result)
+        this.groups = result;
+    });
+  }
+
+  getPermissions(): void {
+    this.us.getPermissions().then(result => {
+      if (result)
+        this.permissions = result;
     });
   }
 
@@ -66,7 +78,7 @@ export class SecurityComponent implements OnInit {
   }
 
   showGroupModal(group?: AuthGroup): void {
-    this.activeGroup = group ? group : new AuthGroup();
+    this.activeGroup = group ? this.gs.cloneObject(group) : new AuthGroup();
     this.activePermission = new AuthPermission();
     this.buildAvailablePermissions();
     this.groupModalVisible = true;
@@ -106,43 +118,49 @@ export class SecurityComponent implements OnInit {
     this.buildAvailablePermissions();
   }
 
+  resetGroup(): void {
+    this.activeGroup = new AuthGroup();
+    this.activePermission = new AuthPermission();
+    this.availablePermissions = [];
+    this.groupModalVisible = false;
+    this.getGroups();
+  }
+
   saveGroup(): void {
     this.us.saveGroup(this.activeGroup, () => {
-      this.activeGroup = new AuthGroup();
-      this.activePermission = new AuthPermission();
-      this.availablePermissions = [];
-      this.groupModalVisible = false;
+      this.resetGroup();
     });
   }
 
   deleteGroup(group: AuthGroup): void {
     this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deleteGroup(group.id, () => {
-        this.activeGroup = new AuthGroup();
-        this.activePermission = new AuthPermission();
-        this.availablePermissions = [];
-        this.groupModalVisible = false;
+        this.resetGroup();
       });
     });
   }
 
   showPermissionModal(permisson?: AuthPermission): void {
-    this.activePermission = permisson ? permisson : new AuthPermission();
+    this.activePermission = permisson ? this.gs.cloneObject(permisson) : new AuthPermission();
     this.permissionsModalVisible = true;
+  }
+
+  resetPermission(): void {
+    this.activePermission = new AuthPermission();
+    this.permissionsModalVisible = false;
+    this.getPermissions();
   }
 
   savePermission(): void {
     this.us.savePermission(this.activePermission, () => {
-      this.activePermission = new AuthPermission();
-      this.permissionsModalVisible = false;
+      this.resetPermission();
     });
   }
 
   deletePermission(prmsn: AuthPermission): void {
     this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deletePermission(prmsn.id, () => {
-        this.activePermission = new AuthPermission();
-        this.permissionsModalVisible = false;
+        this.resetPermission();
       });
     });
   }
@@ -169,7 +187,7 @@ export class SecurityComponent implements OnInit {
   }
 
   private buildAvailableScoutAuthGroups(): void {
-    this.availableScoutAuthGroups = this.userGroups.filter(g => {
+    this.availableScoutAuthGroups = this.groups.filter(g => {
       return this.scoutAuthGroups.map(el => el.id).indexOf(g.id) < 0;
     });
   }

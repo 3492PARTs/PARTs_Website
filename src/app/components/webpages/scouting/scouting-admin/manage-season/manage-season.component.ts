@@ -226,9 +226,11 @@ export class ManageSeasonComponent implements OnInit {
 
   saveEvent(): void {
     if (this.gs.strNoE(this.newEvent.event_cd)) {
-      this.newEvent.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
-      this.api.post(true, 'scouting/admin/event/', this.newEvent, (result: any) => {
+      let event = this.gs.cloneObject(this.newEvent);
+      event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+
+      this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.manageEventsModalVisible = false;
         this.init();

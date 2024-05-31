@@ -164,3 +164,10 @@ export class FormType {
     form_typ!: string;
     form_nm!: string;
 }
+
+export class Response {
+    response_id!: number;
+    form_typ = '';
+    time = new Date();
+    questionanswer_set: QuestionWithConditions[] = [];
+}

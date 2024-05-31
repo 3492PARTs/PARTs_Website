@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { QuestionWithConditions } from 'src/app/models/form.models';
+import { Response } from 'src/app/models/form.models';
 import { APIService } from 'src/app/services/api.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { GeneralService } from 'src/app/services/general.service';
@@ -54,10 +54,10 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
-  exportResponses(form_typ: string): void {
-    let csv = this.gs.tableToCSV(this.ResponsesCols, this.responses);
+  exportResponses(): void {
+    let csv = this.gs.responsesToCSV(this.responses);
     let name = '';
-    switch (form_typ) {
+    switch (this.FormTyp) {
       case 'team-cntct':
         name = 'TeamContact';
         break;
@@ -67,11 +67,4 @@ export class FormManagerComponent implements OnInit {
     }
     if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
-}
-
-export class Response {
-  response_id!: number;
-  form_typ = '';
-  time = new Date();
-  questionanswer_set: QuestionWithConditions[] = [];
 }
