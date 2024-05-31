@@ -65,113 +65,48 @@ export class APIService {
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<any> {
+  ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
-    const obs =
-      this.http.get(
-        endpoint,
-        {
-          params: params
-        }
-      );
-
-    obs.subscribe(
-      {
-        next: (result: any) => {
-          this.onNext(result, onNext, onError);
-        },
-        error: (err: any) => {
-          this.onError(loadingScreen, err, onError);
-        },
-        complete: () => {
-          this.onComplete(loadingScreen, onComplete);
-        }
-      }
-    );
-
-    return obs;
-  }
-
-  post(loadingScreen: boolean, endpoint: string, obj: any,
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<any> {
-    if (loadingScreen) this.gs.incrementOutstandingCalls();
-
-    const obs = this.http.post(
-      endpoint, obj
-    );
-
-    obs.subscribe(
-      {
-        next: (result: any) => {
-          this.onNext(result, onNext, onError);
-        },
-        error: (err: any) => {
-          this.onError(loadingScreen, err, onError);
-        },
-        complete: () => {
-          this.onComplete(loadingScreen, onComplete);
-        }
-      }
-    );
-
-    return obs;
-  }
-
-  delete(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<any> {
-    if (loadingScreen) this.gs.incrementOutstandingCalls();
-
-    const obs = this.http.delete(
+    return this.subscriptionToPromise(this.http.get(
       endpoint,
       {
         params: params
       }
-    );
+    ), loadingScreen, onNext, onError, onComplete);
+  }
 
-    obs.subscribe(
+  post(loadingScreen: boolean, endpoint: string, obj: any,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+  ): Promise<any> {
+    if (loadingScreen) this.gs.incrementOutstandingCalls();
+
+    return this.subscriptionToPromise(this.http.post(
+      endpoint, obj
+    ), loadingScreen, onNext, onError, onComplete);
+  }
+
+  delete(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+  ): Promise<any> {
+    if (loadingScreen) this.gs.incrementOutstandingCalls();
+
+    return this.subscriptionToPromise(this.http.delete(
+      endpoint,
       {
-        next: (result: any) => {
-          this.onNext(result, onNext, onError);
-        },
-        error: (err: any) => {
-          this.onError(loadingScreen, err, onError);
-        },
-        complete: () => {
-          this.onComplete(loadingScreen, onComplete);
-        }
+        params: params
       }
-    );
-
-    return obs;
+    ), loadingScreen, onNext, onError, onComplete);
   }
 
   put(loadingScreen: boolean, endpoint: string, obj: any,
     onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
-  ): Observable<any> {
+  ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
-    const obs = this.http.put(
+    return this.subscriptionToPromise(this.http.put(
       endpoint, obj
-    )
-
-    obs.subscribe(
-      {
-        next: (result: any) => {
-          this.onNext(result, onNext, onError);
-        },
-        error: (err: any) => {
-          this.onError(loadingScreen, err, onError);
-        },
-        complete: () => {
-          this.onComplete(loadingScreen, onComplete);
-        }
-      }
-    );
-
-    return obs;
+    ), loadingScreen, onNext, onError, onComplete);
   }
 
   private onNext(result: any, onNext?: (result: any) => void, onError?: (error: any) => void): void {
@@ -200,6 +135,26 @@ export class APIService {
   private onComplete(loadingScreen: boolean, onComplete?: () => void): void {
     if (loadingScreen) this.gs.decrementOutstandingCalls();
     if (onComplete) onComplete();
+  }
+
+  private subscriptionToPromise(obs: Observable<any>, loadingScreen: boolean, onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void): Promise<any> {
+    return new Promise<any>(resolve => {
+      obs.subscribe(
+        {
+          next: (result: any) => {
+            this.onNext(result, onNext, onError);
+            resolve(result);
+          },
+          error: (err: any) => {
+            this.onError(loadingScreen, err, onError);
+            resolve(err);
+          },
+          complete: () => {
+            this.onComplete(loadingScreen, onComplete);
+          }
+        }
+      );
+    });
   }
 
 }
