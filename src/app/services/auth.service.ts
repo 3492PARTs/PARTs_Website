@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { Banner, GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
@@ -40,6 +40,8 @@ export class AuthService {
   private rememberMeTimeout: number | null | undefined;
 
   private apiStatus = APIStatus.on;
+
+  private outstandingRefreshTokenObservable: Observable<any> | null = null;
 
   constructor(private http: HttpClient,
     private api: APIService,
@@ -106,40 +108,29 @@ export class AuthService {
     this.tokenBS.next(tmpTkn);
 
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
-      this.refreshToken().subscribe(
-        {
-          next: (result: any) => {
-            if (this.gs.checkResponse(result)) {
-              const token = result as Token;
-              this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
-              this.getTokenExp(token.access);
-              this.getTokenExp(token.refresh);
-              this.tokenBS.next(token);
-              localStorage.setItem(this.tokenStringLocalStorage, token.refresh);
+      //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
+      this.refreshToken((result: Token) => {
+        this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+        this.getTokenExp(result.access);
+        this.getTokenExp(result.refresh);
+        this.tokenBS.next(result);
+        localStorage.setItem(this.tokenStringLocalStorage, result.refresh);
 
-              this.getLoggedInUserData();
-              this.ps.subscribeToNotifications();
-              this.authInFlightBS.next(AuthCallStates.comp);
-            }
-            else {
-              this.authInFlightBS.next(AuthCallStates.err);
-              this.logOut();
-            }
-          },
-          error: (err: HttpErrorResponse) => {
-            console.log('error', err);
+        this.getLoggedInUserData();
+        this.ps.subscribeToNotifications();
+        this.authInFlightBS.next(AuthCallStates.comp);
+      }, (err: HttpErrorResponse) => {
+        console.log('error', err);
 
-            if (err.status != 0 || this.isSessionExpired()) {
-              this.logOut();
-              this.authInFlightBS.next(AuthCallStates.err);
-            }
-            else {
-              this.getLoggedInUserData();
-              this.authInFlightBS.next(AuthCallStates.comp);
-            }
-          }
+        if (err.status != 0 || this.isSessionExpired()) {
+          this.logOut();
+          this.authInFlightBS.next(AuthCallStates.err);
         }
-      );
+        else {
+          this.getLoggedInUserData();
+          this.authInFlightBS.next(AuthCallStates.comp);
+        }
+      });
     }
   }
 
@@ -201,12 +192,12 @@ export class AuthService {
   }
 
   // Refreshes the JWT token, to extend the time the user is logged in
-  public refreshToken(): Observable<any> {
-    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh });
+  public refreshToken(onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void): Promise<any> {
+    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh }, onNext, onError, onComplete);
   }
 
   public pipeRefreshToken(): Observable<Token> {
-    return this.refreshToken().pipe(
+    return from(this.refreshToken()).pipe(
       map(res => {
         const token = res as Token;
         //('refreshToken', 'new tokens below');
