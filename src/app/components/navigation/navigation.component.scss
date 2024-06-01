@@ -369,7 +369,7 @@ header {
   padding-left: 1.6rem;
 
   &.remove-header {
-    display: none;
+    visibility: hidden;
   }
 
   &.right-hand-nav {
