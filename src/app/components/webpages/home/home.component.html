@@ -135,34 +135,21 @@
         <div id="homeJoin">
           <div class="joinCover" id="joinHomeCover"></div>
           <p id="joinText">
-            <span id="joinH1">Join P.A.R.T.s</span>
+            <span id="joinH1">J o i n<br><br>P A R T s</span>
           </p>
         </div>
       </a>
     </div>
+    <div id="homeMedia" class="flex" [ngClass]="{'flex-wrap': screenSize <= screenSizeLG}">
+      <div class="video" [ngClass]="{'smaller-width': screenSize <= screenSizeLG}">
+        <iframe width="1280" height="720" src="https://www.youtube.com/embed/JZvOvOb1-nE" frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
 
-    <table id="homeMedia">
-      <thead>
-
-      </thead>
-      <tbody>
-        <tr id="videos">
-          <td>
-            <div class="videoWrapper">
-              <iframe width="1280" height="720" src="https://www.youtube.com/embed/JZvOvOb1-nE" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-            </div>
-          </td>
-          <td>
-            <div class="videoWrapper">
-              <iframe width="1280" height="720" src="https://www.youtube.com/embed/CtGcWXQAWdA" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div class="video" [ngClass]="{'smaller-width': screenSize <= screenSizeLG}">
+        <iframe width="1280" height="720" src="https://www.youtube.com/embed/CtGcWXQAWdA" frameborder="0"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
   </main>
 </div>

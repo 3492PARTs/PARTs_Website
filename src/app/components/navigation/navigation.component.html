@@ -283,7 +283,8 @@
   <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}"
     (appClickInside)="closeNavOnMobile()">
     <!--main page content-->
-    <main #thisMain [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader}"
+    <main #thisMain
+      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader, 'full-height': hideNavExpander || removeHeader}"
       [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem'}">
       <ng-content>
 

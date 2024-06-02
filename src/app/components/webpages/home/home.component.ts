@@ -8,18 +8,24 @@ import { AppSize, GeneralService } from 'src/app/services/general.service';
 })
 export class HomeComponent implements OnInit {
 
+  screenSize!: AppSize;
+  screenSizeLG = AppSize.LG;
+
   constructor(private gs: GeneralService) { }
 
   ngOnInit() {
     this.resizeCSSSlider();
+    this.setScreenSize();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.resizeCSSSlider();
+    this.setScreenSize();
+    console.log(this.gs.getAppSize());
   }
 
-  resizeCSSSlider(): void {
+  private resizeCSSSlider(): void {
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const slider = document.getElementById('cssSliderWrapper') || new HTMLElement();
     if (this.gs.getAppSize() >= AppSize.LG) {
@@ -30,6 +36,10 @@ export class HomeComponent implements OnInit {
       slider.style.paddingBottom = 'calc((100% * 1365) / 2048)';
       slider.style.height = 'unset';
     }
+  }
+
+  private setScreenSize(): void {
+    this.screenSize = this.gs.getScreenSize();
   }
 
 }
