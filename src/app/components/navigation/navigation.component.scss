@@ -659,9 +659,14 @@ header {
           grid-column-start: 1;
           grid-column-end: span 2;
           //grid-row-start: 1;
-          font-size: 2.7em;
+          font-size: 3.3em;
           text-align: center;
           width: calc(100% - 1rem);
+
+          /*SCREEN SIZE:ULTRA WIDE SCREEN*/
+          @media only screen and (max-width: $screen-size-sm) {
+            font-size: 2.7em;
+          }
         }
 
         img {
