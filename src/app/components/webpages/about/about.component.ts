@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-about',
@@ -21,9 +22,21 @@ export class AboutComponent implements OnInit {
   bot2023ModalVisible = false;
   bot2024ModalVisible = false;
 
-  constructor() { }
+  screenSize!: AppSize;
+  screenSizeSmall = AppSize.SM;
+
+  constructor(private gs: GeneralService) { }
 
   ngOnInit() {
+    this.setScreenSize();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setScreenSize();
+  }
+
+  private setScreenSize(): void {
+    this.screenSize = this.gs.getScreenSize();
+  }
 }

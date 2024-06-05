@@ -1,8 +1,6 @@
 <div id="content">
 
-  <app-box>
-    <app-header [h]="1" [centered]="true" [underlined]="false">P.A.R.T.s</app-header>
-  </app-box>
+  <h1 id="parts" class="gear-box" [ngClass]="{'smaller': screenSize <= screenSizeSmall}">P A R T s</h1>
   <div id="banners">
     <ul class="banners">
       <li><img src="../../../../assets/icons/first.svg"> 2011
@@ -41,6 +39,11 @@
             promote S.T.E.M.</p>
           <h2>Awards and Accomplishments</h2>
           <ul id="awards">
+            <li>
+              2024 - Honorable Mention, <a target="_blank"
+                href="https://www.alticeusa.com/corporate/news/articles/optimum-announces-winners-its-2024-innovator-awards">Optimum
+                Innovator Award</a>
+            </li>
             <li>
               2024 - Team Sustainability Award sponsored by Dow, Miami Valley Regional
             </li>
@@ -82,7 +85,8 @@
         </app-box>
       </div>
       <app-box>
-        <app-header [h]="1" [centered]="true" [underlined]="false">Click on a Bot for Its Bio!</app-header>
+        <app-header [h]="1" [centered]="true" [underlined]="false" [marginBottom]="false" [marginTop]="false">Click on a
+          bot for its bio!</app-header>
       </app-box>
 
       <div id="robot-history">
