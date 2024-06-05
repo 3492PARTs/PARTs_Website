@@ -1,18 +1,7 @@
 <div id="content">
   <main id="mainMedia">
-    <table id="topMedia">
-      <tr>
-        <td id="blockLR">
-          <a id="leftArrow" routerLink=".."><img src="../../../../../assets/webImages/previous.svg"
-              alt="Previous" /></a>
-        </td>
-        <td>
-          <h1>Click an Image to Visit Its Album</h1>
-        </td>
-        <td id="blockLR">
-        </td>
-      </tr>
-    </table>
+    <app-return-card [Title]="'Click an image to visit its album'" [RouterLink]="'/media'"></app-return-card>
+
     <div class="albums">
       <a target="_blank" href="https://photos.app.goo.gl/yUQa9h7J8oeveurR9"><img
           src="../../../../../assets/albumCovers/CommunityOutreach/2016Senate.png" /></a>

@@ -10,6 +10,7 @@ export class HeaderComponent implements OnInit {
   @Input() centered = false;
   @Input() underlined = true;
   @Input() marginBottom = true;
+  @Input() marginTop = true;
   @Input() Width = 'auto';
 
   constructor() { }

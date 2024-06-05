@@ -107,6 +107,7 @@ import { ManageFieldResponsesComponent } from './components/webpages/scouting/sc
 import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
 import { PlanMatchesComponent } from './components/webpages/scouting/match-planning/plan-matches/plan-matches.component';
 import { TeamNotesComponent } from './components/webpages/scouting/match-planning/team-notes/team-notes.component';
+import { ReturnCardComponent } from './components/elements/return-card/return-card.component';
 
 @NgModule({
   declarations: [
@@ -190,7 +191,8 @@ import { TeamNotesComponent } from './components/webpages/scouting/match-plannin
     ManageFieldResponsesComponent,
     ManagePitResponsesComponent,
     PlanMatchesComponent,
-    TeamNotesComponent
+    TeamNotesComponent,
+    ReturnCardComponent
   ],
   imports: [
     BrowserModule,

@@ -10,6 +10,9 @@
   display: inline-block;
   margin: auto;
   padding: 0.5em;
+
+  -webkit-filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
+  filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
 }
 
 /*album image:WIDE SCREEN*/

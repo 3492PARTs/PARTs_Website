@@ -1,22 +1,22 @@
 <div id="content">
   <main id="mainMedia">
-    <table id="topMedia">
-      <tr>
-        <td id="blockLR">
-        </td>
-        <td style="text-align:center">
-          <h1>Click an Image to Visit Its Albums</h1>
-        </td>
-        <td id="blockLR">
-        </td>
-      </tr>
-    </table>
+    <app-box>
+      <app-header [h]="1" [centered]="true" [underlined]="false" [marginBottom]="false" [marginTop]="false">Click an
+        image to visit its albums</app-header>
+    </app-box>
     <div class="albums">
-      <a routerLink="competition"><img src="../../../../assets/albumCovers/Competition/Competition.png" /></a>
-      <a routerLink="build-season"><img src="../../../../assets/albumCovers/BuildSeason/BuildSeason.png" /></a>
-      <a routerLink="community-outreach"><img
-          src="../../../../assets/albumCovers/CommunityOutreach/CommunityOutreach.png" /></a>
-      <a routerLink="wallpapers"><img src="../../../../assets/albumCovers/Wallpapers/Wallpapers.png" /></a>
+      <a routerLink="competition">
+        <img src="../../../../assets/albumCovers/Competition/Competition.png" />
+      </a>
+      <a routerLink="build-season">
+        <img src="../../../../assets/albumCovers/BuildSeason/BuildSeason.png" />
+      </a>
+      <a routerLink="community-outreach">
+        <img src="../../../../assets/albumCovers/CommunityOutreach/CommunityOutreach.png" />
+      </a>
+      <a routerLink="wallpapers">
+        <img src="../../../../assets/albumCovers/Wallpapers/Wallpapers.png" />
+      </a>
     </div>
   </main>
 </div>
