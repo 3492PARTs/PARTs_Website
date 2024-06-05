@@ -11,6 +11,9 @@
   display: inline-block;
   margin: auto;
   padding: 0.5em;
+
+  -webkit-filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
+  filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
 }
 
 /*album image:WIDE SCREEN*/
@@ -31,52 +34,6 @@
   }
 }
 
-/*TABLE SIZE*/
-
-#topMedia {
-  width: 100%;
-}
-
-/*TEXT*/
-
-#topMedia h1 {
-  text-align: center;
-}
-
-/*table:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-  /*PREVIOUS PAGE ARROW*/
-  #leftArrow img {
-    width: 4em;
-  }
-  /*SPACER TO KEEP TEXT CENTERED*/
-  #blockLR {
-    width: 4em;
-  }
-}
-
-/*table:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-  /*PREVIOUS PAGE ARROW*/
-  #leftArrow img {
-    width: 3em;
-  }
-  /*SPACER TO KEEP TEXT CENTERED*/
-  #blockLR {
-    width: 3em;
-  }
-}
-
-/*WALLPAPER SIZE*/
-
-.wallpapers img {
-  display: inline-block;
-  width: 100%;
-  margin: auto;
-}
-
 /*WALLPAPER DOWNLOAD DROPDOWN*/
 
 .album {
@@ -85,6 +42,19 @@
 
 .wallpaperAccordion {
   padding: 0.5em;
+
+  & > div {
+    position: relative;
+
+    .article {
+      position: absolute;
+      width: 100%;
+      z-index: 2;
+      background-color: white;
+      border-radius: 0.35em;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+    }
+  }
 }
 
 /*wallpaper:WIDE SCREEN*/
@@ -129,6 +99,7 @@
 
 .article.ac-small h2 {
   text-align: center;
+  margin: 1rem 0;
 }
 
 .wallpapers .article.ac-small .downloadLine {
