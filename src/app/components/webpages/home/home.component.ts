@@ -14,28 +14,35 @@ export class HomeComponent implements OnInit {
   constructor(private gs: GeneralService) { }
 
   ngOnInit() {
-    this.resizeCSSSlider();
+    this.resizeContent();
     this.setScreenSize();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.resizeCSSSlider();
+    this.resizeContent();
     this.setScreenSize();
-    console.log(this.gs.getAppSize());
   }
 
-  private resizeCSSSlider(): void {
+  private resizeContent(): void {
+
     const appHeader = document.getElementById('site-header') || new HTMLElement();
+
     const slider = document.getElementById('cssSliderWrapper') || new HTMLElement();
+
+    const intro = document.getElementById('partsIntro') || new HTMLElement();
+
     if (this.gs.getAppSize() >= AppSize.LG) {
       slider.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
       slider.style.paddingBottom = 'unset';
+      intro.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
     }
     else {
       slider.style.paddingBottom = 'calc((100% * 1365) / 2048)';
       slider.style.height = 'unset';
+      intro.style.height = '100vh';
     }
+
   }
 
   private setScreenSize(): void {

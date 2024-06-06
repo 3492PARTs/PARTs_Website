@@ -21,19 +21,30 @@
   }
 }
 
+/*intro*/
 #partsIntro {
   width: 100%;
+  height: 100vh;
+
+  position: relative;
+  overflow: hidden;
+
+  #gears1 {
+    position: absolute;
+    right: -55rem;
+    bottom: -23rem;
+    transform: scaleY(-1);
+    rotate: -35deg;
+    height: 140rem;
+    width: 140rem;
+
+    fill: rgba($accent_color, 0.6);
+  }
 }
 
-/*intro*/
-
-#partsIntro {
-  padding-top: 1em;
-}
-
-#partsIntro-inner,
-#social {
+#partsIntro-inner {
   margin: auto;
+  z-index: 5;
   /*SCREEN SIZE:WIDE SCREEN*/
   @media only screen and (min-width: 1001px) {
     width: 70%;
@@ -182,7 +193,7 @@
   padding-top: 2em;
   padding-bottom: 4em;
   margin: auto;
-
+  z-index: 5;
   display: flex;
   justify-content: space-between;
   align-items: center;
