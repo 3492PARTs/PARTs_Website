@@ -246,7 +246,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       this.scrollPosition = scrollY;
 
-      const delta = up ? 1 + 1 : -1;
+      const delta = up ? 3 : -6;
       //if (!environment.production) console.log('delta : ' + delta);
 
       let top = parseInt(this.header.nativeElement.style.top.replace('px', ''), 10);
