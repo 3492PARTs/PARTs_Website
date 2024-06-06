@@ -32,15 +32,23 @@ export class HomeComponent implements OnInit {
 
     const intro = document.getElementById('partsIntro') || new HTMLElement();
 
+    const media = document.getElementById('homeMedia') || new HTMLElement();
+
+    const join = document.getElementById('homeJoin') || new HTMLElement();
+
     if (this.gs.getAppSize() >= AppSize.LG) {
       slider.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
       slider.style.paddingBottom = 'unset';
       intro.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
+      media.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
+      join.style.height = 'calc( 100vh - ' + (appHeader.offsetHeight || 0) + 'px)';
     }
     else {
       slider.style.paddingBottom = 'calc((100% * 1365) / 2048)';
       slider.style.height = 'unset';
       intro.style.height = '100vh';
+      media.style.height = '100vh';
+      join.style.height = '100vh';
     }
 
   }
