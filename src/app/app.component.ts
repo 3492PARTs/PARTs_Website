@@ -2,10 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
-import { Banner, GeneralService } from './services/general.service';
+import { GeneralService } from './services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { PwaService } from './services/pwa.service';
 import { DOCUMENT } from '@angular/common';
+import { Banner } from './models/api.models';
 
 // declare gtag as a function to set and sent the events
 declare let gtag: Function;
@@ -40,11 +41,11 @@ export class AppComponent implements OnInit {
     const date = new Date();
 
     if (date < new Date('07/14/2024')) {
-      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/programming\">Sign up for parts summer programming class.</a>"));
+      this.gs.addSiteBanner(new Banner(1, "<a style=\"color: white\" href=\"join/programming\">Sign up for parts summer programming class.</a>"));
     }
 
     if (date < new Date('08/01/2024')) {
-      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
+      this.gs.addSiteBanner(new Banner(2, "<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
     }
   }
 

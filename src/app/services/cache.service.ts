@@ -6,6 +6,7 @@ import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.mod
 import { LoadedStores } from '../models/idb.store.model';
 import { IUserLinks, UserLinks } from '../models/navigation.models';
 import { IQuestionWithConditions, QuestionWithConditions } from '../models/form.models';
+import { Banner } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,8 @@ export class CacheService {
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
+  Banner!: DexieCrud<Banner, number>;
+
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<User, number>(this.dbs.UserTable);
     this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
@@ -60,5 +63,7 @@ export class CacheService {
     this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.dbs.QuestionWithConditionsTable);
 
     this.LoadedStores = new DexieCrud<LoadedStores, number>(this.dbs.LoadedStoresTable);
+
+    this.Banner = new DexieCrud<Banner, number>(this.dbs.BannerTable);
   }
 }

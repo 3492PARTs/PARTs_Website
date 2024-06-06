@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { QuestionWithConditions, Response } from '../models/form.models';
+import { Banner } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +37,11 @@ export class GeneralService {
   confirmButtonCancelText = 'NO';
 
   /* Site Banners */
-  private siteBanners = new BehaviorSubject<Banner[]>([]);
-  currentSiteBanners = this.siteBanners.asObservable();
+  private bannersBS = new BehaviorSubject<Banner[]>([]);
+  banners = this.bannersBS.asObservable();
 
-  private persistentSiteBannersBS = new BehaviorSubject<Banner[]>([]);
-  persistentSiteBanners = this.persistentSiteBannersBS.asObservable();
+  private siteBannersBS = new BehaviorSubject<Banner[]>([]);
+  siteBanners = this.siteBannersBS.asObservable();
 
   private gsId = 0;
 
@@ -68,11 +69,11 @@ export class GeneralService {
 
   /* Site Banners */
   addBanner(b: Banner) {
-    this.siteBanners.next(this.siteBanners.value.concat([b]));
+    this.bannersBS.next(this.bannersBS.value.concat([b]));
   }
 
   removeBanner(b: Banner): void {
-    let banners = this.siteBanners.value;
+    let banners = this.bannersBS.value;
     let index = -1;
 
     for (let i = 0; i < banners.length; i++) {
@@ -84,16 +85,16 @@ export class GeneralService {
 
     if (index !== -1) {
       banners.splice(index, 1);
-      this.siteBanners.next(banners);
+      this.bannersBS.next(banners);
     }
   }
 
-  addPersistentBanner(b: Banner) {
-    this.persistentSiteBannersBS.next(this.persistentSiteBannersBS.value.concat([b]));
+  addSiteBanner(b: Banner) {
+    this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
   }
 
-  removePersistentBanner(b: Banner): void {
-    let banners = this.persistentSiteBannersBS.value;
+  removeSiteBanner(b: Banner): void {
+    let banners = this.siteBannersBS.value;
     let index = -1;
 
     for (let i = 0; i < banners.length; i++) {
@@ -105,7 +106,7 @@ export class GeneralService {
 
     if (index !== -1) {
       banners.splice(index, 1);
-      this.persistentSiteBannersBS.next(banners);
+      this.siteBannersBS.next(banners);
     }
   }
 
@@ -131,7 +132,7 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner(new Banner(response.retMessage, 5000));
+      this.addBanner(new Banner(0, response.retMessage, 5000));
       return false;
     }
     return true;
@@ -139,7 +140,7 @@ export class GeneralService {
 
   successfulResponseBanner(response: any) {
     const message = (response as RetMessage).retMessage;
-    if (!this.strNoE(message)) this.addBanner(new Banner(message, 3500));
+    if (!this.strNoE(message)) this.addBanner(new Banner(0, message, 3500));
   }
 
   handelHTTPError(error: HttpErrorResponse) {
@@ -577,19 +578,6 @@ export class Page {
   count = -1;
   previous: number | null = null;
   next: number | null = null;
-}
-
-export class Banner {
-  severity!: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
-  message!: string; //
-  time = -1; // time in ms to show banner, 0 means until dismissed
-  timeout: number | null | undefined;
-
-  constructor(message = '', time = -1, severity = 3) {
-    this.message = message;
-    this.time = time;
-    this.severity = severity;
-  }
 }
 
 export enum AppSize {

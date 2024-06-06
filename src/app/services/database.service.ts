@@ -7,6 +7,7 @@ import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { IAuthPermission, IUser, User } from '../models/user.models';
 import { IUserLinks } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
+import { Banner } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,9 @@ export class DatabaseService extends Dexie {
 
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
+  BannerTable!: Dexie.Table<Banner, number>;
 
-  versionNumber: number = 1;
+  versionNumber: number = 2;
 
   private dbName: string = 'index-db-parts-app';
   constructor(private gs: GeneralService) {
@@ -87,6 +89,8 @@ export class DatabaseService extends Dexie {
     this.QuestionWithConditionsTable = this.table(DBStores.QuestionWithConditions.TableName);
 
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
+
+    this.BannerTable = this.table(DBStores.Banner.TableName)
   }
 
   private setTablesSchema() {
