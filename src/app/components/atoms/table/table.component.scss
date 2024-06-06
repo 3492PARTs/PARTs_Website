@@ -34,7 +34,8 @@
   @media only screen and (max-width: 480px) {
     /* horizontal scrollbar for tables if mobile screen */
     overflow-x: auto;
-    display: block;
+    //display: block; i removed this because it was causing empty tables not to be full width.
+    // i may need to put back in based on the above comment. we shall see.
   }
 }
 
