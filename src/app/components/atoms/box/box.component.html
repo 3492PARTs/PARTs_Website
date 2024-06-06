@@ -1,13 +1,15 @@
-<div class="box" #thisBox>
-  <div>
-    <h2 *ngIf="Title !== ''">
-      <!--[ngClass]="{HeaderWithCollapse: Collapsible}"-->
-      <app-button *ngIf="Collapsible" [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
-        [Direction]="!Collapsed"></app-button>
-      <span id="title" [ngClass]="{HeaderWithCollapse: Collapsible}">{{ Title }}</span>
-    </h2>
-  </div>
-  <div #content class="box-content">
-    <ng-content></ng-content>
+<div class="box-padding" #thisBox>
+  <div class="box">
+    <div>
+      <h2 *ngIf="Title !== ''">
+        <!--[ngClass]="{HeaderWithCollapse: Collapsible}"-->
+        <app-button *ngIf="Collapsible" [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
+          [Direction]="!Collapsed"></app-button>
+        <span id="title" [ngClass]="{HeaderWithCollapse: Collapsible}">{{ Title }}</span>
+      </h2>
+    </div>
+    <div #content class="box-content">
+      <ng-content></ng-content>
+    </div>
   </div>
 </div>

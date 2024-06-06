@@ -18,6 +18,10 @@
   align-items: center;
 }
 
+.align-items-stretch {
+  align-items: stretch;
+}
+
 .align-items-flex-end {
   align-items: flex-end;
 }
@@ -34,6 +38,10 @@
 
 .justify-content-center {
   justify-content: center;
+}
+
+.justify-content-space-around {
+  justify-content: space-around;
 }
 
 .flex-grow-2 {
