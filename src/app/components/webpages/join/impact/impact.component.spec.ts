@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { CommunityOutreachComponent } from './community-outreach.component';
+import { ImpactComponent } from './impact.component';
 
 describe('CommunityOutreachComponent', () => {
-  let component: CommunityOutreachComponent;
-  let fixture: ComponentFixture<CommunityOutreachComponent>;
+  let component: ImpactComponent;
+  let fixture: ComponentFixture<ImpactComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommunityOutreachComponent ]
+      declarations: [ImpactComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommunityOutreachComponent);
+    fixture = TestBed.createComponent(ImpactComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

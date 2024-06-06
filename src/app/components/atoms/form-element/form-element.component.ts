@@ -601,10 +601,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
 
         const { lineHeight } = getComputedStyle(this.label.nativeElement);
-        const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
-        const amountOfLinesTilAdjust = 2;
+        const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
+        const amountOfLinesTilAdjust = 1.0;
 
-        if (this.LabelText.includes('Edit Team')) {
+        if (this.LabelText.includes('ou to the PARTs program')) {
           let x = 0;
         }
 
@@ -613,7 +613,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
           //if (this.LabelText.substring(0, 10) === 'How is you')
           //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0);
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-' + labelOffset + 'px'

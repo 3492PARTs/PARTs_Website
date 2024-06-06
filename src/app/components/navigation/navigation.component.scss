@@ -573,7 +573,7 @@ header {
   main {
     //margin here is equal to height of footer
     padding-top: 7rem;
-    padding-bottom: calc(100vh + 1.6rem); //11.6rem;
+    padding-bottom: 100vh; //calc(100vh + 1.6rem); //11.6rem;
     width: 100%;
     //min-height: 100%; TODO: confirm this does not mess up, this appears to be the culprit of the extra space at the bottom of pages
     position: relative;
@@ -584,9 +584,9 @@ header {
     }
 
     &.full-height {
-      padding-bottom: calc(
-        100vh + 1.6rem + 7rem
-      ); // 7rem is height of header when, the footer is usually this much shorter
+      //padding-bottom: calc(
+      //  100vh + 1.6rem + 7rem
+      //); // 7rem is height of header when, the footer is usually this much shorter
       // needed to account for adding space at the bottom on mobile
     }
   }
@@ -597,6 +597,8 @@ header {
     right: 0;
     height: calc(100vh - 7rem);
     background-color: $accent_color;
+    padding-top: 7rem;
+    box-sizing: content-box;
 
     width: calc(100% - 10.4rem);
 
@@ -610,6 +612,7 @@ header {
 
     &.full-height {
       height: 100vh;
+      padding-top: 0;
     }
 
     @include flex-center;

@@ -160,7 +160,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new UserLinks('Mechanical', 'join/mechanical'),
         new UserLinks('Electrical', 'join/electrical'),
         new UserLinks('Programming', 'join/programming'),
-        new UserLinks('Community Outreach', 'join/community-outreach'),
+        new UserLinks('Impact', 'join/impact'),
         new UserLinks('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
       new UserLinks('Contact Us', 'contact', 'card-account-details'),
@@ -246,7 +246,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       this.scrollPosition = scrollY;
 
-      const delta = up ? 1 + 1 : -1;
+      const delta = up ? 3 : -6;
       //if (!environment.production) console.log('delta : ' + delta);
 
       let top = parseInt(this.header.nativeElement.style.top.replace('px', ''), 10);

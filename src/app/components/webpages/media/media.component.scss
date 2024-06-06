@@ -16,6 +16,12 @@
   filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
 }
 
+.wallpapers img {
+  width: 100%;
+  -webkit-filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
+  filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
+}
+
 /*album image:WIDE SCREEN*/
 
 @media only screen and (min-width: 1001px) {

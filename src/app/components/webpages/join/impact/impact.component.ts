@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-community-outreach',
-  templateUrl: './community-outreach.component.html',
-  styleUrls: ['./community-outreach.component.scss']
+  selector: 'app-impact',
+  templateUrl: './impact.component.html',
+  styleUrls: ['./impact.component.scss']
 })
-export class CommunityOutreachComponent implements AfterViewInit {
+export class ImpactComponent implements AfterViewInit {
 
   @ViewChild('thisJoinPic', { read: ElementRef, static: true }) pic!: ElementRef;
 

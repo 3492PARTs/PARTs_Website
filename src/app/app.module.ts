@@ -40,7 +40,7 @@ import { ClickInsideDirective } from './directives/click-inside/click-inside.dir
 import { ScoutingPortalComponent } from './components/webpages/scouting/scouting-portal/scouting-portal.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
 import { JoinComponent } from './components/webpages/join/join.component';
-import { CommunityOutreachComponent } from './components/webpages/join/community-outreach/community-outreach.component';
+import { ImpactComponent } from './components/webpages/join/impact/impact.component';
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
@@ -144,7 +144,7 @@ import { ReturnCardComponent } from './components/elements/return-card/return-ca
     ScoutingPortalComponent,
     ContactComponent,
     JoinComponent,
-    CommunityOutreachComponent,
+    ImpactComponent,
     ElectricalComponent,
     MechanicalComponent,
     ProgrammingComponent,
