@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
-import { GeneralService } from './services/general.service';
+import { Banner, GeneralService } from './services/general.service';
 import { HttpClient } from '@angular/common/http';
 import { PwaService } from './services/pwa.service';
 import { DOCUMENT } from '@angular/common';
@@ -36,6 +36,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     //this.authService.checkAPIStatus();
     this.authService.previouslyAuthorized();
+
+    const date = new Date();
+
+    if (date < new Date('07/14/2024')) {
+      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/programming\">Sign up for parts summer programming class!</a>"));
+    }
   }
 
   getTitle(state: RouterState, parent: ActivatedRoute): string[] {
