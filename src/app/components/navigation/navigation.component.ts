@@ -160,7 +160,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new UserLinks('Mechanical', 'join/mechanical'),
         new UserLinks('Electrical', 'join/electrical'),
         new UserLinks('Programming', 'join/programming'),
-        new UserLinks('Community Outreach', 'join/community-outreach'),
+        new UserLinks('Impact', 'join/impact'),
         new UserLinks('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
       new UserLinks('Contact Us', 'contact', 'card-account-details'),

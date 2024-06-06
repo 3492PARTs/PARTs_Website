@@ -12,7 +12,7 @@ import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-s
 import { ScoutingPortalComponent } from './components/webpages/scouting/scouting-portal/scouting-portal.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
 import { JoinComponent } from './components/webpages/join/join.component';
-import { CommunityOutreachComponent } from './components/webpages/join/community-outreach/community-outreach.component';
+import { ImpactComponent } from './components/webpages/join/impact/impact.component';
 import { ProgrammingComponent } from './components/webpages/join/programming/programming.component';
 import { MechanicalComponent } from './components/webpages/join/mechanical/mechanical.component';
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
@@ -76,7 +76,7 @@ const routes: Routes = [
   { path: 'scouting/match-planning/team-notes', component: TeamNotesComponent, canActivate: [AuthGuard] },
   { path: 'contact', component: ContactComponent },
   { path: 'join', component: JoinComponent },
-  { path: 'join/community-outreach', component: CommunityOutreachComponent },
+  { path: 'join/impact', component: ImpactComponent },
   { path: 'join/programming', component: ProgrammingComponent },
   { path: 'join/mechanical', component: MechanicalComponent },
   { path: 'join/electrical', component: ElectricalComponent },
