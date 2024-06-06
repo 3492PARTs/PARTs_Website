@@ -43,7 +43,7 @@
 }
 
 #partsIntro-inner {
-  margin: auto;
+  //margin: auto;
   z-index: 5;
   /*SCREEN SIZE:WIDE SCREEN*/
   @media only screen and (min-width: 1001px) {
@@ -189,10 +189,11 @@
 }
 
 #mainHome > #partsIntro > .social {
+  align-self: flex-start;
   height: 3.5em;
-  padding-top: 2em;
-  padding-bottom: 4em;
-  margin: auto;
+  //padding-top: 2em;
+  //padding-bottom: 4em;
+  //argin: auto;
   z-index: 5;
   display: flex;
   justify-content: space-between;
