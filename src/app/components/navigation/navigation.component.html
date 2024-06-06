@@ -5,6 +5,9 @@
   <div class="banner-message flex align-items-center gap-1rem" *ngFor="let psb of persistentSiteBanners">
     <mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon>
     <p [innerHTML]="psb.message | safeHtml"></p>
+    <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
+        [Color]="'white'"></app-button></div>
+
   </div>
 
 </div>
