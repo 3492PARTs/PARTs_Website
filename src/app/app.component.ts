@@ -40,7 +40,11 @@ export class AppComponent implements OnInit {
     const date = new Date();
 
     if (date < new Date('07/14/2024')) {
-      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/programming\">Sign up for parts summer programming class!</a>"));
+      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/programming\">Sign up for parts summer programming class.</a>"));
+    }
+
+    if (date < new Date('08/01/2024')) {
+      this.gs.addPersistentBanner(new Banner("<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
     }
   }
 
