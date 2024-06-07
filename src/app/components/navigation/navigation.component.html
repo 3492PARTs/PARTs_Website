@@ -3,7 +3,8 @@
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
   <div class="banner-message flex align-items-center gap-1rem" *ngFor="let sb of siteBanners">
-    <mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon>
+    <div class="icon"><mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon></div>
+
     <p [innerHTML]="sb.message | safeHtml"></p>
     <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
         [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button></div>

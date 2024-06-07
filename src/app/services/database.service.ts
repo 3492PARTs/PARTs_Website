@@ -44,7 +44,7 @@ export class DatabaseService extends Dexie {
   versionNumber: number = 2;
 
   private dbName: string = 'index-db-parts-app';
-  constructor(private gs: GeneralService) {
+  constructor() {
     super('index-db-parts-app');
     //this.clearDB();
     //this.migrateDB();
@@ -63,7 +63,7 @@ export class DatabaseService extends Dexie {
 
   private setIndexDbTable() {
     this.version(this.versionNumber).stores(this.setTablesSchema());
-    this.gs.devConsoleLog('app-database.service', 'database initialized');
+    //console.log('database initialized');
 
     this.UserTable = this.table(DBStores.User.TableName);
     this.UserPermissionsTable = this.table(DBStores.UserPermissions.TableName);
@@ -109,7 +109,7 @@ export class DatabaseService extends Dexie {
         .then(this.getCanonicalComparableSchema);
       dynDb.close();
       if (declaredSchema !== installedSchema) {
-        this.gs.devConsoleLog('app-database.service', 'Db schema is not updated, so deleting the db.');
+        //this.gs.devConsoleLog('app-database.service', 'Db schema is not updated, so deleting the db.');
         await this.clearDB();
       }
     }
@@ -135,10 +135,10 @@ export class DatabaseService extends Dexie {
   }
 
   private async clearDB() {
-    this.gs.devConsoleLog('app-database.service', 'deleting DB...');
+    //this.gs.devConsoleLog('app-database.service', 'deleting DB...');
     this.close();
     await this.delete();
     await this.open();
-    this.gs.devConsoleLog('app-database.service', 'DB deleted.');
+    //this.gs.devConsoleLog('app-database.service', 'DB deleted.');
   }
 }

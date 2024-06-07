@@ -10,6 +10,7 @@ import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { QuestionWithConditions, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
+import { CacheService } from './cache.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +46,7 @@ export class GeneralService {
 
   private gsId = 0;
 
-  constructor(private router: Router, private deviceService: DeviceDetectorService) { }
+  constructor(private router: Router, private deviceService: DeviceDetectorService, private cs: CacheService) { }
 
 
   /* Loading Screen */
@@ -89,11 +90,18 @@ export class GeneralService {
     }
   }
 
-  addSiteBanner(b: Banner) {
-    this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
+  async addSiteBanner(b: Banner) {
+    if (b.id !== 0 && ! await this.bannerHasBeenDismissed(b))
+      this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
   }
 
   removeSiteBanner(b: Banner): void {
+    if (b.id !== 0) {
+      b.dismissed = true;
+      this.cs.Banner.AddOrEditAsync(b);
+    }
+
+
     let banners = this.siteBannersBS.value;
     let index = -1;
 
@@ -108,6 +116,20 @@ export class GeneralService {
       banners.splice(index, 1);
       this.siteBannersBS.next(banners);
     }
+  }
+
+  async bannerHasBeenDismissed(b: Banner): Promise<boolean> {
+    let cb = await this.getBanner(b.id);
+
+    if (cb && cb.id > 0) return cb.dismissed;
+    else {
+      this.cs.Banner.AddOrEditAsync(b);
+      return false;
+    }
+  }
+
+  async getBanner(id: number): Promise<Banner | undefined> {
+    return await this.cs.Banner.getById(id)
   }
 
   /* Error Service */

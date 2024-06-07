@@ -333,6 +333,8 @@ nav {
 
     .icon {
       fill: #fff !important;
+      width: 24px;
+      height: 24px;
     }
 
     p {
@@ -341,7 +343,7 @@ nav {
     }
 
     .banner-dismiss {
-      align-self: flex-end;
+      //align-self: flex-end;
     }
   }
 }

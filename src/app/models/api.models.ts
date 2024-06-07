@@ -4,7 +4,7 @@ export enum APIStatus {
     off = 'off'
 }
 
-export interface Banner {
+export interface IBanner {
     id: number;
     severity: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
     message: string; //
@@ -13,12 +13,13 @@ export interface Banner {
     dismissed: boolean;
 }
 
-export class Banner implements Banner {
-    id!: number;
+export class Banner implements IBanner {
+    id = 0;
     severity!: number; // 1 - high, 2 - med, 3 - low (Still needs implemented)
     message!: string; //
     time = -1; // time in ms to show banner, 0 means until dismissed
     timeout: number | null | undefined;
+    dismissed = false;
 
     constructor(id = 0, message = '', time = -1, severity = 3) {
         this.id = id;
