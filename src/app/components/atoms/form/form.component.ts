@@ -2,7 +2,8 @@ import { Component, OnInit, ContentChildren, QueryList, EventEmitter, Input, Out
 import { NgForm } from '@angular/forms';
 import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { FormElementComponent } from '../form-element/form-element.component';
-import { Banner, GeneralService } from 'src/app/services/general.service';
+import { GeneralService } from 'src/app/services/general.service';
+import { Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-form',
@@ -74,7 +75,7 @@ export class FormComponent implements OnInit {
       this.reset();
     }
     else {
-      this.gs.addBanner(new Banner(ret, 3500));
+      this.gs.addBanner(new Banner(0, ret, 3500));
     }
   }
 }
