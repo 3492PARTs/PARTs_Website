@@ -24,6 +24,7 @@ export class ModalComponent implements OnInit {
   set visible(v: boolean) {
     this._visible = v;
     this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
+    this.togglePageScrolling();
     this.clickOutsideCapture = true;
 
     if (this._visible) {
@@ -75,6 +76,7 @@ export class ModalComponent implements OnInit {
     this._visible = true;
     this.ms.incrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
+    this.togglePageScrolling();
     this.clickOutsideCapture = true;
 
     window.setTimeout(() => {
@@ -97,4 +99,19 @@ export class ModalComponent implements OnInit {
       this.clickOutsideCapture = true;
     }
   }
+
+  togglePageScrolling(): void {
+    const body = document.body;
+    const html = document.documentElement;
+
+    if (this._visible) {
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+    }
+    else {
+      html.style.overflow = 'initial';
+      body.style.overflow = 'initial';
+    }
+  };
 }
+

@@ -6,7 +6,7 @@
 
     <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
         <app-form (SubmitFunction)="saveUser()">
-            <div class="flex">
+            <div class="flex flex-wrap">
                 <div>
                     <app-form-element [Type]="'text'" [LabelText]="'First Name'" [(Model)]="activeUser.first_name"
                         [FormGroupInline]="true" [Required]="true">
@@ -25,7 +25,7 @@
                         [BindingProperty]="'phone_type_id'" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
                     </app-form-element>
                 </div>
-                <div class="vertical-center">
+                <div class="flex align-items-center">
                     <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
                         [(Model)]="newAuthGroup" [SelectList]="availableAuthGroups" [DisplayProperty]="'name'"
                         [DisplayEmptyOption]="true">

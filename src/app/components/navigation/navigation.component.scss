@@ -675,6 +675,8 @@ header {
           font-size: 3.3em;
           text-align: center;
           width: calc(100% - 1rem);
+          margin: 0;
+          align-self: center;
 
           /*SCREEN SIZE:ULTRA WIDE SCREEN*/
           @media only screen and (max-width: $screen-size-sm) {

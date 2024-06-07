@@ -12,7 +12,7 @@ import { HomeComponent } from './components/webpages/home/home.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 //import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/webpages/login/login.component';
-import { LoadingComponent } from './components/atoms/loading/loading.component';
+import { LoadingComponent } from './components/elements/loading/loading.component';
 import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
 import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
 import { BoxComponent } from './components/atoms/box/box.component';
