@@ -39,12 +39,13 @@
   justify-content: space-around;
   align-items: stretch;
   align-content: stretch;
-  column-gap: 1rem;
+  gap: 2rem;
 
   /*MOBILE */
   @media only screen and (max-width: $screen-size-xlg) {
     width: 100%;
   }
+
   app-box {
     cursor: pointer;
   }
