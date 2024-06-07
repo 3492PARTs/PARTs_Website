@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSize, Banner, GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import * as $ from 'jquery';
 import { ModalService } from 'src/app/services/modal.service';
+import { Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-banners',
@@ -26,7 +27,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.gs.currentSiteBanners.subscribe(sb => {
+    this.gs.banners.subscribe(sb => {
       this.banners = sb;
 
       this.banners.forEach(b => {
