@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Banner } from 'src/app/models/api.models';
 import { Question, QuestionWithConditions } from 'src/app/models/form.models';
 import { APIService } from 'src/app/services/api.service';
 import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
-import { GeneralService, Banner, RetMessage } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-team-application',
@@ -84,7 +85,7 @@ export class TeamApplicationComponent implements OnInit {
           return subForm.questions
         }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
       }, (result: any) => {
-        this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
+        this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
 
         this.applicationInit();
       }, (err: any) => {

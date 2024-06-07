@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Banner } from 'src/app/models/api.models';
 import { QuestionWithConditions } from 'src/app/models/form.models';
 import { APIService } from 'src/app/services/api.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 
 @Component({
   selector: 'app-contact',
@@ -53,7 +54,7 @@ export class ContactComponent implements OnInit {
     this.api.post(true, 'form/save-answers/',
       { question_answers: this.questions, form_typ: 'team-cntct' },
       (result: any) => {
-        this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
+        this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
 
         this.contactInit();
       }, (err: any) => {

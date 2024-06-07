@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Banner, GeneralService, RetMessage } from 'src/app/services/general.service';
+import { GeneralService, RetMessage } from 'src/app/services/general.service';
 
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
@@ -9,7 +8,7 @@ import { ScoutPitFormResponse, ScoutPitImage, Team } from 'src/app/models/scouti
 import { APIService } from 'src/app/services/api.service';
 import { ScoutingService } from 'src/app/services/scouting.service';
 import { CacheService } from 'src/app/services/cache.service';
-import { APIStatus } from 'src/app/models/api.models';
+import { APIStatus, Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-pit-scouting',
@@ -217,12 +216,12 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     if (!spr) spr = this.scoutPitResponse;
 
     if (this.gs.strNoE(spr.team)) {
-      this.gs.addBanner(new Banner("Must select a team.", 3500));
+      this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
       return null;
     }
 
     if (this.robotPic && this.robotPic.size > 0) {
-      this.gs.addBanner(new Banner("Must add or remove staged image.", 3500));
+      this.gs.addBanner(new Banner(0, "Must add or remove staged image.", 3500));
       return null;
     }
 

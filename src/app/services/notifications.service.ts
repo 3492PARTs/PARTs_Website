@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
-import { Banner, GeneralService, RetMessage } from './general.service';
+import { GeneralService, RetMessage } from './general.service';
 import { BehaviorSubject } from 'rxjs';
 import { APIService } from './api.service';
+import { Banner } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -74,7 +75,7 @@ export class NotificationsService {
         };
 
         this.api.post(true, 'user/webpush-save/', data, undefined, (err: any) => {
-          this.gs.addBanner(new Banner('Couldn\'t subscribe to push notifications.', 0));
+          this.gs.addBanner(new Banner(0, 'Couldn\'t subscribe to push notifications.', 0));
         });
       })
       .catch(err => console.error("Could not subscribe to notifications", err));
@@ -82,7 +83,7 @@ export class NotificationsService {
 
   pushNotification(n: Alert): void {
     this.notifications_.push(n);
-    this.gs.addBanner(new Banner(`New Notificaiton:\n${n.alert_subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.alert_subject}`, 3500));
     this.notificationsBS.next(this.notifications_);
   }
 
@@ -93,7 +94,7 @@ export class NotificationsService {
 
   pushMessage(m: Alert): void {
     this.messages_.push(m);
-    this.gs.addBanner(new Banner(`New Message:\n${m.alert_subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Message:\n${m.alert_subject}`, 3500));
     this.messagesBS.next(this.messages_);
   }
 

@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { Banner, GeneralService } from 'src/app/services/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { APIService } from 'src/app/services/api.service';
 import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
+import { Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-sponsor-shop',
@@ -90,17 +91,17 @@ export class SponsorShopComponent implements OnInit {
     });
 
     if (!hasItem) {
-      this.gs.addBanner(new Banner('Must have items to submit an order.', 3500));
+      this.gs.addBanner(new Banner(0, 'Must have items to submit an order.', 3500));
       return;
     }
 
     if (this.gs.strNoE(this.activeSponsor.sponsor_nm) || this.gs.strNoE(this.activeSponsor.email) || this.gs.strNoE(this.activeSponsor.phone)) {
-      this.gs.addBanner(new Banner('Please fill out all contact information.', 3500));
+      this.gs.addBanner(new Banner(0, 'Please fill out all contact information.', 3500));
       return;
     }
 
     this.api.post(true, 'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }, (result: any) => {
-      this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
+      this.gs.addBanner(new Banner(0, 'Thank you for your donation!.', 5000));
       this.cart = [];
       this.activeSponsor = new Sponsor();
       this.initSponsorShop();

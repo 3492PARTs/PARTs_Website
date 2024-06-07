@@ -1,10 +1,14 @@
-<div *ngIf="persistentSiteBanners.length > 0" id="site-banner" class="flex align-items-center"
+<div *ngIf="siteBanners.length > 0" id="site-banner" class="flex flex-wrap align-items-center"
   [ngStyle]="{ height: siteBannerHeight + 'rem'}"
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
-  <div class="banner-message flex align-items-center gap-1rem" *ngFor="let psb of persistentSiteBanners">
-    <mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon>
-    <p>{{ psb.message }}</p>
+  <div class="banner-message flex align-items-center gap-1rem" *ngFor="let sb of siteBanners">
+    <div class="icon"><mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon></div>
+
+    <p [innerHTML]="sb.message | safeHtml"></p>
+    <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
+        [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button></div>
+
   </div>
 
 </div>

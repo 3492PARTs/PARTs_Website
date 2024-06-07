@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { Router } from '@angular/router';
-import { Banner, GeneralService } from './general.service';
+import { GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
@@ -12,7 +12,7 @@ import { IUserLinks, UserLinks } from '../models/navigation.models';
 import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
-import { APIStatus } from '../models/api.models';
+import { APIStatus, Banner } from '../models/api.models';
 import { ScoutingService } from './scouting.service';
 import { UserService } from './user.service';
 
@@ -183,7 +183,7 @@ export class AuthService {
   resetPassword(input: UserData): void {
     this.api.post(true, 'user/reset-password/', { uuid: input.uuid, token: input.token, password: input.password },
       (result: any) => {
-        this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
+        this.gs.addBanner(new Banner(0, 'Password reset successfully.', 10000, 3));
         this.router.navigateByUrl('login?page=login');
       }, (err: any) => {
         this.gs.triggerError('Couldn\'t reset password.');

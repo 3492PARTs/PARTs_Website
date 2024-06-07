@@ -1,9 +1,8 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
-import { AppSize, Banner, GeneralService } from 'src/app/services/general.service';
+import { AppSize, GeneralService } from 'src/app/services/general.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
 import { CompetitionInit } from '../webpages/event-competition/event-competition.component';
 import { PwaService } from 'src/app/services/pwa.service';
 import { Alert, NotificationsService } from 'src/app/services/notifications.service';
@@ -11,8 +10,8 @@ import { NavigationService, NavigationState } from 'src/app/services/navigation.
 import { User } from 'src/app/models/user.models';
 import { UserLinks, SubUserLinks } from 'src/app/models/navigation.models';
 import { APIService } from 'src/app/services/api.service';
-import { APIStatus } from 'src/app/models/api.models';
 import { CacheService } from 'src/app/services/cache.service';
+import { Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-navigation',
@@ -57,7 +56,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   siteHeaderHeight = 7;
   siteBannerHeight = 0;
-  persistentSiteBanners: Banner[] = [];
+  siteBanners: Banner[] = [];
 
   removeHeader = false;
 
@@ -136,9 +135,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.ns.notifications.subscribe(n => this.notifications = n);
     this.ns.messages.subscribe(m => this.messages = m);
 
-    this.gs.persistentSiteBanners.subscribe(psb => {
-      this.persistentSiteBanners = psb;
-      this.siteBannerHeight = 4 * this.persistentSiteBanners.length;
+    this.gs.siteBanners.subscribe(psb => {
+      this.siteBanners = psb;
+      this.siteBannerHeight = 4 * this.siteBanners.length;
     });
 
     this.gs.scrollPosition$.subscribe(scrollY => {
@@ -500,6 +499,10 @@ let max = document.documentElement.scrollHeight;
 
   openURL(url: string): void {
     this.gs.openURL(url);
+  }
+
+  dismissSiteBanner(b: Banner): void {
+    this.gs.removeSiteBanner(b);
   }
 }
 

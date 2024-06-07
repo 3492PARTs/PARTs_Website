@@ -329,13 +329,21 @@ nav {
   padding-left: 1rem;
 
   .banner-message {
+    width: 100%;
+
     .icon {
       fill: #fff !important;
+      width: 24px;
+      height: 24px;
     }
 
     p {
       color: white;
       margin: 0;
+    }
+
+    .banner-dismiss {
+      //align-self: flex-end;
     }
   }
 }
@@ -571,10 +579,12 @@ header {
   }
 
   main {
-    //margin here is equal to height of footer
+    //padding here is equal to height of footer
     padding-top: 7rem;
     padding-bottom: 100vh; //calc(100vh + 1.6rem); //11.6rem;
     width: 100%;
+    min-height: calc(100vh - 7rem);
+    box-sizing: content-box;
     //min-height: 100%; TODO: confirm this does not mess up, this appears to be the culprit of the extra space at the bottom of pages
     position: relative;
 

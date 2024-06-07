@@ -88,13 +88,13 @@
     </svg>
   </button>
   <button #thisButton *ngSwitchCase="'dismiss'" class="btn-symbol dismiss"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }" (click)="RunFunction()" type="{{ Type }}"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, color: Color }" (click)="RunFunction()" type="{{ Type }}"
     [disabled]="Disabled">
     &times;
   </button>
   <button #thisButton *ngSwitchDefault="" class="btn-symbol"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor }" (click)="RunFunction()"
-    type="{{ Type }}" [disabled]="Disabled">
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
+    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
     <mat-icon class="icon" [svgIcon]="ButtonType"></mat-icon>
   </button>
 </ng-container>

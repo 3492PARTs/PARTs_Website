@@ -1,3 +1,4 @@
+import { Banner } from "./api.models";
 import { QuestionWithConditions } from "./form.models";
 import { UserLinks } from "./navigation.models";
 import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType } from "./scouting.models";
@@ -34,6 +35,8 @@ const scheduleTypeInstance = new ScheduleType();
 const scheduleInstance = new Schedule();
 
 const loadedStoresInstance = new LoadedStores();
+
+const bannerInstance = new Banner();
 
 export const DBStores = {
     User: {
@@ -107,5 +110,9 @@ export const DBStores = {
     LoadedStores: {
         TableName: 'LoadedStores',
         Columns: generateColumns(loadedStoresInstance),
+    },
+    Banner: {
+        TableName: 'Banner',
+        Columns: generateColumns(bannerInstance),
     },
 };

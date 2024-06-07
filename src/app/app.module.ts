@@ -108,6 +108,7 @@ import { ManagePitResponsesComponent } from './components/webpages/scouting/scou
 import { PlanMatchesComponent } from './components/webpages/scouting/match-planning/plan-matches/plan-matches.component';
 import { TeamNotesComponent } from './components/webpages/scouting/match-planning/team-notes/team-notes.component';
 import { ReturnCardComponent } from './components/elements/return-card/return-card.component';
+import { SafeHTMLPipe } from './pipes/safe-html.pipe';
 
 @NgModule({
   declarations: [
@@ -192,7 +193,8 @@ import { ReturnCardComponent } from './components/elements/return-card/return-ca
     ManagePitResponsesComponent,
     PlanMatchesComponent,
     TeamNotesComponent,
-    ReturnCardComponent
+    ReturnCardComponent,
+    SafeHTMLPipe
   ],
   imports: [
     BrowserModule,

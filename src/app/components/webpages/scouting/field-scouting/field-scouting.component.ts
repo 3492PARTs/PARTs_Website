@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { Banner, GeneralService } from 'src/app/services/general.service';
+import { GeneralService } from 'src/app/services/general.service';
 import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
 import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
 import { CompetitionLevel, Match, ScoutFieldFormResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
@@ -8,6 +8,7 @@ import { CacheService } from 'src/app/services/cache.service';
 import { APIService } from 'src/app/services/api.service';
 import { User } from 'src/app/models/user.models';
 import { ScoutingService } from 'src/app/services/scouting.service';
+import { Banner } from 'src/app/models/api.models';
 
 @Component({
   selector: 'app-field-scouting',
@@ -165,7 +166,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       return start <= date && date < end;
     }).then(sfss => {
       if (sfss.length > 1)
-        this.gs.addBanner(new Banner('Multiple active field schedules active.', 5000));
+        this.gs.addBanner(new Banner(0, 'Multiple active field schedules active.', 5000));
 
       if (sfss.length > 0) this.scoutFieldSchedule = sfss[0];
     });

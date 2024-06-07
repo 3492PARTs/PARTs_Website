@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Banner, GeneralService, RetMessage } from './general.service';
+import { GeneralService, RetMessage } from './general.service';
 import { User, AuthGroup, AuthPermission } from '../models/user.models';
 import { APIService } from './api.service';
 import { PhoneType } from './auth.service';
+import { Banner } from '../models/api.models';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,7 @@ export class UserService {
   saveUser(u: User, fn?: Function): void {
 
     this.api.post(true, 'user/save/', u, (result: any) => {
-      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
     });
   }
@@ -50,7 +51,7 @@ export class UserService {
 
   saveGroup(grp: AuthGroup, fn?: Function) {
     this.api.post(true, 'user/groups/', grp, (result: any) => {
-      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
     });
   }
@@ -84,7 +85,7 @@ export class UserService {
 
   savePermission(permission: AuthPermission, fn?: Function) {
     this.api.post(true, 'user/permissions/', permission, (result: any) => {
-      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
       this.getPermissions();
     });
@@ -94,7 +95,7 @@ export class UserService {
     this.api.delete(true, 'user/permissions/', {
       prmsn_id: prmsn_id,
     }, (result: any) => {
-      this.gs.addBanner(new Banner((result as RetMessage).retMessage, 5000));
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
       this.getPermissions();
     });

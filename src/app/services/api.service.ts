@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Banner, GeneralService } from './general.service';
-import { APIStatus } from '../models/api.models';
+import { GeneralService } from './general.service';
+import { APIStatus, Banner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthCallStates } from './auth.service';
 
@@ -17,7 +17,7 @@ export class APIService {
   private outstandingApiStatusCheck = false;
 
   constructor(private http: HttpClient, private gs: GeneralService) {
-    this.gs.persistentSiteBanners.subscribe(psb => this.persistentSiteBanners = psb);
+    this.gs.siteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
     // Bindings for app status to set banner
     this.apiStatus.subscribe(s => {
@@ -25,7 +25,7 @@ export class APIService {
 
       switch (s) {
         case APIStatus.on:
-          this.gs.removePersistentBanner(new Banner(message));
+          this.gs.removeSiteBanner(new Banner(0, message));
           break;
         case APIStatus.off:
           let found = false;
@@ -34,7 +34,7 @@ export class APIService {
           });
 
           if (!found) {
-            this.gs.addPersistentBanner(new Banner(message));
+            this.gs.addSiteBanner(new Banner(0, message));
           }
           break;
       }

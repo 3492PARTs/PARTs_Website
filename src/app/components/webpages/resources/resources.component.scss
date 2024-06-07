@@ -8,3 +8,12 @@
 h4 {
   text-align: center;
 }
+
+#resources {
+  gap: 2rem 2rem; /* row-gap column gap */
+  padding: 1rem;
+
+  .resource {
+    width: 30rem;
+  }
+}
