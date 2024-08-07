@@ -552,7 +552,7 @@ header {
   background-color: #f8f9fc;
   //width: calc(100% - 10.4rem);
   //transition: width 0.15s ease;
-
+  overflow-x: hidden;
   padding-left: 10.4rem;
   //width: calc(100% - 10.4rem);
   //transition: width 0.15s ease;
@@ -598,6 +598,10 @@ header {
       //  100vh + 1.6rem + 7rem
       //); // 7rem is height of header when, the footer is usually this much shorter
       // needed to account for adding space at the bottom on mobile
+    }
+
+    &.xsm {
+      width: 100vw;
     }
   }
 

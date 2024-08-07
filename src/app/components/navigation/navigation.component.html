@@ -288,7 +288,7 @@
     (appClickInside)="closeNavOnMobile()">
     <!--main page content-->
     <main #thisMain
-      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader, 'full-height': hideNavExpander || removeHeader}"
+      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader, 'full-height': hideNavExpander || removeHeader, 'xsm' : screenXs}"
       [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem'}">
       <ng-content>
 
