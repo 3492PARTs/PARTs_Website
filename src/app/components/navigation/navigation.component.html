@@ -125,6 +125,23 @@
           [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
       </div>
+
+      <hr *ngIf="pagesWithNavs.includes(getActiveMenuItemName())">
+
+      <div id="social-icons" class="flex justify-content-space-around">
+        <a target="_blank" href="https://www.facebook.com/team3492">
+          <div class="icon"><mat-icon class="icon" [svgIcon]="'facebook'"></mat-icon></div>
+        </a>
+        <a target="_blank" href="https://www.instagram.com/parts3492">
+          <div class="icon"><mat-icon class="icon" [svgIcon]="'instagram'"></mat-icon></div>
+        </a>
+        <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ">
+          <div class="icon"><mat-icon class="icon" [svgIcon]="'youtube'"></mat-icon></div>
+        </a>
+        <a target="_blank" href="https://github.com/3492PARTs">
+          <div class="icon"><mat-icon class="icon" [svgIcon]="'github'"></mat-icon></div>
+        </a>
+      </div>
     </div>
 
     <!--wide screen nav expander-->
@@ -305,8 +322,9 @@
           <img src="../../../assets/webImages/Sponsors/AEP.svg">
           <img src="../../../assets/webImages/Sponsors/PutnamCoSchools.png">
           <img src="../../../assets/webImages/Sponsors/Optimum.svg">
-          <img id="encova" src="../../../assets/webImages/Sponsors/EncovaFoundation.svg">
-          <img id="nasarap" src="../../../assets/webImages/Sponsors/NASARAP.gif">
+          <img src="../../../assets/webImages/Sponsors/EncovaFoundation.svg">
+          <img src="../../../assets/webImages/Sponsors/dow.svg">
+          <img id="nasarap" src="../../../assets/webImages/Sponsors/NASARAP.svg">
         </div>
       </div>
     </footer>

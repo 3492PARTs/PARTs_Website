@@ -211,6 +211,21 @@ nav {
       //height: calc(100% - 138px);
       width: 100%;
     }
+
+    #social-icons {
+      padding: 1rem 0;
+
+      .icon {
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+        fill: rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          fill: #fff !important;
+        }
+      }
+    }
   }
 
   .expanded .side-sidebar {
@@ -694,8 +709,7 @@ header {
           align-self: center;
         }
 
-        #nasarap,
-        #encova {
+        #nasarap {
           grid-column-start: 1;
           grid-column-end: span 2;
           //grid-row-start: 1;
