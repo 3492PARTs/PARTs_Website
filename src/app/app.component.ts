@@ -3,8 +3,6 @@ import { AuthService } from './services/auth.service';
 import { environment } from '../environments/environment';
 import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
 import { GeneralService } from './services/general.service';
-import { HttpClient } from '@angular/common/http';
-import { PwaService } from './services/pwa.service';
 import { DOCUMENT } from '@angular/common';
 import { Banner } from './models/api.models';
 
@@ -39,11 +37,11 @@ export class AppComponent implements OnInit {
     this.authService.previouslyAuthorized();
 
     const date = new Date();
-
-    if (date < new Date('07/14/2024')) {
-      this.gs.addSiteBanner(new Banner(1, "<a style=\"color: white\" href=\"join/programming\">Sign up for our summer programming class.</a>"));
-    }
-
+    /*
+        if (date < new Date('07/14/2024')) {
+          this.gs.addSiteBanner(new Banner(1, "<a style=\"color: white\" href=\"join/programming\">Sign up for our summer programming class.</a>"));
+        }
+    */
     if (date < new Date('08/01/2024')) {
       this.gs.addSiteBanner(new Banner(2, "<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
     }
