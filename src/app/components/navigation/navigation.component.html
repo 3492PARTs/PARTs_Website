@@ -128,7 +128,8 @@
 
       <hr *ngIf="pagesWithNavs.includes(getActiveMenuItemName())">
 
-      <div id="social-icons" class="flex justify-content-space-around">
+      <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
+        [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded}">
         <a target="_blank" href="https://www.facebook.com/team3492">
           <div class="icon"><mat-icon class="icon" [svgIcon]="'facebook'"></mat-icon></div>
         </a>

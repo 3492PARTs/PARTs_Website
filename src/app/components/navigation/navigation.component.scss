@@ -213,7 +213,26 @@ nav {
     }
 
     #social-icons {
+      width: 10.4rem;
       padding: 1rem 0;
+
+      &.expanded {
+        width: 22.4rem !important;
+      }
+
+      &.collapsed {
+        a {
+          padding: 0 0.25rem;
+
+          &:nth-child(odd) {
+            padding-left: 1rem;
+          }
+
+          &:nth-child(even) {
+            padding-right: 1rem;
+          }
+        }
+      }
 
       .icon {
         cursor: pointer;
