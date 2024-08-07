@@ -1,11 +1,12 @@
 <div class="box-padding" #thisBox>
   <div class="box">
     <div>
-      <h2 *ngIf="Title !== ''">
+      <h2 *ngIf="Title !== ''" [ngClass]="{ 'text-align-center': CenterTitle}">
         <!--[ngClass]="{HeaderWithCollapse: Collapsible}"-->
         <app-button *ngIf="Collapsible" [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
           [Direction]="!Collapsed"></app-button>
-        <span id="title" [ngClass]="{HeaderWithCollapse: Collapsible}">{{ Title }}</span>
+        <span id="title" [ngClass]="{HeaderWithCollapse: Collapsible}">{{ Title
+          }}</span>
       </h2>
     </div>
     <div #content class="box-content">
