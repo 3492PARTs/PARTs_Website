@@ -19,6 +19,7 @@ export class BoxComponent implements OnInit {
   @Input() MaxWidth = '0';
   @Input() Height = '0';
   @Input() InlineBlock = false;
+  @Input() CenterTitle = false;
 
   @Input() Title = '';
 
