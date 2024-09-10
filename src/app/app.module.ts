@@ -67,8 +67,6 @@ import { TableComponent } from './components/atoms/table/table.component';
 // Material
 import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule } from '@angular-material-components/datetime-picker';
-import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -202,12 +200,8 @@ import { SafeHTMLPipe } from './pipes/safe-html.pipe';
     FormsModule,
     HttpClientModule,
     MatIconModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    NgxMatNativeDateModule,
-    NgxMatMomentModule,
     MatInputModule,
     BrowserAnimationsModule,
     MatDatepickerModule,
