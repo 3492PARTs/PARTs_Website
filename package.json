@@ -10,18 +10,18 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^16.2.12",
+    "@angular/animations": "^17.3.12",
     "@angular/cdk": "^16.2.13",
-    "@angular/common": "^16.2.12",
-    "@angular/compiler": "^16.2.12",
-    "@angular/core": "^16.2.12",
-    "@angular/forms": "^16.2.12",
+    "@angular/common": "^17.3.12",
+    "@angular/compiler": "^17.3.12",
+    "@angular/core": "^17.3.12",
+    "@angular/forms": "^17.3.12",
     "@angular/material": "^16.2.13",
     "@angular/material-moment-adapter": "^16.2.13",
-    "@angular/platform-browser": "^16.2.12",
-    "@angular/platform-browser-dynamic": "^16.2.12",
-    "@angular/router": "^16.2.12",
-    "@angular/service-worker": "^16.2.12",
+    "@angular/platform-browser": "^17.3.12",
+    "@angular/platform-browser-dynamic": "^17.3.12",
+    "@angular/router": "^17.3.12",
+    "@angular/service-worker": "^17.3.12",
     "@mdi/angular-material": "^7.2.96",
     "blueimp-load-image": "^5.14.0",
     "browser-image-compression": "^2.0.2",
@@ -34,12 +34,12 @@
     "ngx-image-cropper": "^6.3.3",
     "rxjs": "^7.5.0",
     "tslib": "^2.3.0",
-    "zone.js": "^0.13.3"
+    "zone.js": "^0.14.10"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.12",
-    "@angular/cli": "^16.2.12",
-    "@angular/compiler-cli": "^16.2.12",
+    "@angular-devkit/build-angular": "^17.3.9",
+    "@angular/cli": "^17.3.9",
+    "@angular/compiler-cli": "^17.3.12",
     "@types/blueimp-load-image": "^5.14.4",
     "@types/file-saver": "^2.0.5",
     "@types/gtag.js": "^0.0.12",
@@ -51,6 +51,6 @@
     "karma-coverage": "^2.1.0",
     "karma-jasmine": "^4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "typescript": "^4.8.4"
+    "typescript": "^5.4.5"
   }
 }

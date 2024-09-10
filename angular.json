@@ -122,13 +122,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "PARTs_Website:build:production"
+              "buildTarget": "PARTs_Website:build:production"
             },
             "uat": {
-              "browserTarget": "PARTs_Website:build:uat"
+              "buildTarget": "PARTs_Website:build:uat"
             },
             "development": {
-              "browserTarget": "PARTs_Website:build:development"
+              "buildTarget": "PARTs_Website:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -136,7 +136,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PARTs_Website:build"
+            "buildTarget": "PARTs_Website:build"
           }
         },
         "test": {
