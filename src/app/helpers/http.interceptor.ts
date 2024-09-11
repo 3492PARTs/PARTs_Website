@@ -1,67 +1,48 @@
-import { Injectable, Injector } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpInterceptor,
-  HttpSentEvent,
-  HttpHeaderResponse,
-  HttpProgressEvent,
-  HttpResponse,
-  HttpUserEvent,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { GeneralService } from '../services/general.service';
-import { User } from '../models/user.models';
-import { AuthService, Token } from '../services/auth.service';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { environment } from "../../environments/environment";
+import { GeneralService } from "../services/general.service";
+import { AuthService } from "../services/auth.service";
+import { Observable } from "rxjs";
 
-@Injectable()
-export class HTTPInterceptor implements HttpInterceptor {
-  private token: Token = new Token();
-  private user: User = new User();
+export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+    const gs = inject(GeneralService);
+    const auth = inject(AuthService);
 
-  constructor(private auth: AuthService, private gs: GeneralService) {
-    this.auth.token.subscribe((t) => (this.token = t));
-    this.auth.user.subscribe(u => this.user = u);
-  }
+    const token = auth.getAccessToken();
+    const user = auth.getUser();
 
-  // function which will be called for all http calls
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
-    //const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
     const baseURL = environment.baseUrl;
 
-    if (request.url.includes('./assets')) { // this is for the icons used on the front end
-      this.gs.devConsoleLog('http.interceptor.ts', 'if: assets');
-      return next.handle(request);
+
+    if (req.url.includes('./assets')) { // this is for the icons used on the front end
+        gs.devConsoleLog('http.interceptor.ts', 'if: assets');
+        return next(req);
     }
-    else if (request.url.includes('user/token/refresh/')) {
-      this.gs.devConsoleLog('http.interceptor.ts', 'else if: refresh');
-      request = request.clone({
-        url: baseURL + request.url,
-      });
+    else if (req.url.includes('user/token/refresh/')) {
+        gs.devConsoleLog('http.interceptor.ts', 'else if: refresh');
+        req = req.clone({
+            url: baseURL + req.url,
+        });
     }
-    else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
-      this.gs.devConsoleLog('http.interceptor.ts', `has access token: ${request.url}`);
-      request = request.clone({
-        url: baseURL + request.url,
-        setHeaders: {
-          Authorization: `Bearer ${this.token.access}`
-        }
-      });
+    else if (user && token && token && !auth.isTokenExpired(token)) {
+        gs.devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
+        req = req.clone({
+            url: baseURL + req.url,
+            setHeaders: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
     else {
-      this.gs.devConsoleLog('http.interceptor.ts', `else: ${request.url}`);
-      let withCredentials = request.url.includes('user/token/refresh/');
-      //console.log(request.url, withCredentials);
-      request = request.clone({
-        url: baseURL + request.url,
-        //withCredentials: withCredentials,
-      });
+        gs.devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
+        let withCredentials = req.url.includes('user/token/refresh/');
+        //console.log(req.url, withCredentials);
+        req = req.clone({
+            url: baseURL + req.url,
+            //withCredentials: withCredentials,
+        });
     }
 
-    return next.handle(request);
-  }
+    return next(req);
 }

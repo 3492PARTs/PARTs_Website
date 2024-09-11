@@ -104,7 +104,7 @@ export class ProfileComponent implements OnInit {
     this.api.put(true, 'user/profile/', form, (result: any) => {
       this.gs.successfulResponseBanner(result);
 
-      this.auth.getUser();
+      this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
     }, (err: any) => {

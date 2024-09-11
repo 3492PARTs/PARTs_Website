@@ -23,7 +23,7 @@ export class AuthService {
   private authInFlightBS = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
   authInFlight = this.authInFlightBS.asObservable();
 
-  private tokenBS = new BehaviorSubject<Token>(new Token());
+  private tokenBS = new BehaviorSubject<Token | null>(null);
   token = this.tokenBS.asObservable();
 
   private userBS = new BehaviorSubject<User>(new User());
@@ -41,7 +41,7 @@ export class AuthService {
 
   private apiStatus = APIStatus.on;
 
-  private outstandingRefreshTokenObservable: Observable<any> | null = null;
+  private refreshingTokenFlag = false;
 
   constructor(private api: APIService,
     private router: Router,
@@ -95,6 +95,7 @@ export class AuthService {
 
       this.authInFlightBS.next(AuthCallStates.comp);
     }, (err: any) => {
+      console.log(err);
       this.authInFlightBS.next(AuthCallStates.err);
       this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
     });
@@ -192,7 +193,7 @@ export class AuthService {
 
   // Refreshes the JWT token, to extend the time the user is logged in
   public refreshToken(onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void): Promise<any> {
-    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value.refresh }, onNext, onError, onComplete);
+    return this.api.post(true, 'user/token/refresh/', { refresh: this.tokenBS.value?.refresh || '' }, onNext, onError, onComplete);
   }
 
   public pipeRefreshToken(): Observable<Token> {
@@ -211,12 +212,12 @@ export class AuthService {
     );
   }
 
-  setToken(tkn: Token): void {
+  setToken(tkn: Token | null): void {
     this.tokenBS.next(tkn);
   }
 
-  getAccessToken(): Observable<string> {
-    return of(this.tokenBS.value.access);
+  getAccessToken(): string {
+    return this.tokenBS.value?.access || '';
   }
   /*
   stayLoggedIn(): void {
@@ -261,25 +262,25 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     this.gs.devConsoleLog('isAuthenticated', 'current access token below');
-    return !this.gs.strNoE(this.tokenBS.value.access) && !this.isTokenExpired(this.tokenBS.value.access);
+    return !this.gs.strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
   }
 
   isSessionExpired(): boolean {
     this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
-    return this.isTokenExpired(this.tokenBS.value.refresh);
+    return this.isTokenExpired(this.tokenBS.value?.refresh || '');
   }
 
   async getLoggedInUserData(): Promise<void> {
-    await this.getUser();
+    await this.getUserObject();
     await this.getUserLinks();
     this.ns.getUserAlerts('notification');
     this.ns.getUserAlerts('message');
   }
 
-  getUser(): Promise<boolean> {
+  getUserObject(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
-        return u.where({ 'id': this.getTokenLoad(this.tokenBS.value.refresh).user_id })
+        return u.where({ 'id': this.getTokenLoad(this.tokenBS.value?.refresh || '').user_id })
       }, async (result: User) => {
         // console.log(Response);
         if (Array.isArray(result))
@@ -307,6 +308,10 @@ export class AuthService {
       }));
     });
 
+  }
+
+  getUser(): User {
+    return this.userBS.value;
   }
 
   getUserLinks(): Promise<boolean> {
@@ -386,6 +391,14 @@ export class AuthService {
     this.cs.UserLinks.RemoveAllAsync().then(() => {
       this.cs.UserLinks.AddOrEditBulkAsync(uls);
     });
+  }
+
+  setRefreshingTokenFlag(b: boolean) {
+    this.refreshingTokenFlag = b;
+  }
+
+  getOutstandingRefreshTokenCall(): boolean {
+    return this.refreshingTokenFlag;
   }
 }
 

@@ -1,75 +1,67 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
+import { HttpRequest, HttpHandlerFn, HttpEvent, HttpEventType } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { catchError, filter, finalize, Observable, switchMap, take, tap } from "rxjs";
+import { AuthService, Token } from "../services/auth.service";
 
-import { AuthService, Token } from '../services/auth.service';
-import { User } from '../models/user.models';
+export function errorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+    const auth = inject(AuthService);
 
-@Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
+    return next(req).pipe(tap(event => {
+        if (event.type === HttpEventType.Response) {
+            console.log(req.url, 'returned a response with status', event.status);
 
-  private user: User = new User();
-  private isRefreshingToken = false;
-  private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-  private token: Token = new Token();
 
-  constructor(private auth: AuthService) {
-    this.auth.user.subscribe(u => this.user = u);
-    this.auth.token.subscribe(t => this.token = t);
-  }
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
-    return next.handle(request).pipe(catchError(err => {
-      if ([401, 403].includes(err.status) && this.user && this.user.id) {
-        // 401 unauthorized, try to refresh the token
+            const user = auth.getUser();
 
-        if (!this.isRefreshingToken) {
-          this.isRefreshingToken = true;
+            if ([401, 403].includes(event.status) && user && user.id) {
 
-          // Reset here so that the following requests wait until the token
-          // comes back from the refreshToken call.
-          this.tokenSubject.next(null);
 
-          return this.auth.pipeRefreshToken().pipe(
-            switchMap((token: Token) => {
-              if (token) {
-                this.tokenSubject.next(token.access);
-                return next.handle(this.addTokenToRequest(request, this.token.access));
-              }
+                // 401 unauthorized, try to refresh the token
 
-              return this.auth.logOut() as any;
-            }),
-            catchError(rfshErr => {
-              return this.tokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
-                return next.handle(this.addTokenToRequest(request, this.token.access));
-              }));
-            }),
-            finalize(() => {
-              this.isRefreshingToken = false;
-            })
-          );
-        } else {
-          return this.tokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
-            return next.handle(this.addTokenToRequest(request, this.token.access));
-          }));
+                if (!auth.getOutstandingRefreshTokenCall()) {
+                    auth.setRefreshingTokenFlag(true);
+
+                    // Reset here so that the following requests wait until the token
+                    // comes back from the refreshToken call.
+                    auth.setToken(null);
+
+                    auth.pipeRefreshToken().pipe(
+                        switchMap((token: Token) => {
+                            if (token) {
+                                auth.setToken(token);
+                                return next(addTokenToRequest(req, token.access));
+                            }
+
+                            return auth.logOut() as any;
+                        }),
+                        catchError(rfshErr => {
+                            return auth.token.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
+                                return next(addTokenToRequest(req, auth.getAccessToken()));
+                            }));
+                        }),
+                        finalize(() => {
+                            auth.setRefreshingTokenFlag(false);
+                        })
+                    );
+                } else {
+                    auth.token.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
+                        return next(addTokenToRequest(req, auth.getAccessToken()));
+                    }));
+                }
+
+            }
+            else if ([400, 403].includes(event.status) && user && user.id) {
+                auth.logOut();
+            }
+
+            //const error = (err && err.error && err.error.message) || err.statusText;
+            //console.error(err);
+            //throwError(() => event);
         }
-
-      }
-      else if ([400, 403].includes(err.status) && this.user && this.user.id) {
-        this.auth.logOut();
-      }
-
-      //const error = (err && err.error && err.error.message) || err.statusText;
-      //console.error(err);
-      return throwError(() => err);
     }));
-  }
+}
 
-  private addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
-    return request.clone({ setHeaders: { Authorization: `Bearer ${this.token.access}` } });
-  }
+function addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 }
