@@ -1,12 +1,23 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import Chart, { BubbleDataPoint, ChartDataset, ChartItem, Point } from 'chart.js/auto';
-import { Match, MatchPlanning, ScoutPitResponse, Team, TeamNote } from 'src/app/models/scouting.models';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { Match, MatchPlanning, ScoutPitResponse, Team, TeamNote } from '../../../../../models/scouting.models';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService, AppSize } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { CommonModule } from '@angular/common';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
+import { TabComponent } from '../../../../atoms/tab/tab.component';
+import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
 
 @Component({
   selector: 'app-plan-matches',
+  standalone: true,
+  providers: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })

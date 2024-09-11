@@ -1,17 +1,26 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { CompetitionLevel, Match, ScoutFieldFormResponse, ScoutFieldSchedule, Team } from 'src/app/models/scouting.models';
-import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
-import { CacheService } from 'src/app/services/cache.service';
-import { APIService } from 'src/app/services/api.service';
-import { User } from 'src/app/models/user.models';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { Banner } from 'src/app/models/api.models';
+import { Banner } from '../../../../models/api.models';
+import { QuestionWithConditions } from '../../../../models/form.models';
+import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel } from '../../../../models/scouting.models';
+import { User } from '../../../../models/user.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { CacheService } from '../../../../services/cache.service';
+import { GeneralService } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { CommonModule } from '@angular/common';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-field-scouting',
+  standalone: true,
+  providers: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })

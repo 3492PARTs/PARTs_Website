@@ -1,17 +1,25 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
-
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { FormElementComponent } from 'src/app/components/atoms/form-element/form-element.component';
-import { QuestionWithConditions } from 'src/app/models/form.models';
-import { ScoutPitFormResponse, ScoutPitImage, Team } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { CacheService } from 'src/app/services/cache.service';
-import { APIStatus, Banner } from 'src/app/models/api.models';
+import { APIStatus, Banner } from '../../../../models/api.models';
+import { QuestionWithConditions } from '../../../../models/form.models';
+import { Team, ScoutPitFormResponse, ScoutPitImage } from '../../../../models/scouting.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { CacheService } from '../../../../services/cache.service';
+import { GeneralService } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { CommonModule } from '@angular/common';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-pit-scouting',
+  standalone: true,
+  providers: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })
