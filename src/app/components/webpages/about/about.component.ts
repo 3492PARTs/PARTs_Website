@@ -1,8 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { HeaderComponent } from '../../atoms/header/header.component';
+import { ModalComponent } from '../../atoms/modal/modal.component';
 
 @Component({
   selector: 'app-about',
+  standalone: true,
+  providers: [BoxComponent, HeaderComponent, ModalComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })

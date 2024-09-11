@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-resources',
+  standalone: true,
+  providers: [BoxComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './resources.component.html',
   styleUrls: ['./resources.component.scss']
 })
