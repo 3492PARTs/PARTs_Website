@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormManagerComponent } from '../../../elements/form-manager/form-manager.component';
 
 @Component({
   selector: 'app-team-contact-form',
+  standalone: true,
+  providers: [BoxComponent, FormManagerComponent],
   templateUrl: './team-contact-form.component.html',
   styleUrls: ['./team-contact-form.component.scss']
 })

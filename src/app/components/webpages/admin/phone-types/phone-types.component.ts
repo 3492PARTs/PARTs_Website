@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService, PhoneType } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { UserService } from 'src/app/services/user.service';
+import { APIService } from '../../../../services/api.service';
+import { PhoneType, AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { UserService } from '../../../../services/user.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-phone-types',
+  standalone: true,
+  providers: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './phone-types.component.html',
   styleUrls: ['./phone-types.component.scss']
 })

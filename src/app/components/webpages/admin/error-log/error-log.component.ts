@@ -1,10 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService, ErrorLog } from 'src/app/services/auth.service';
-import { Page } from 'src/app/services/general.service';
+import { APIService } from '../../../../services/api.service';
+import { ErrorLog, AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { Page } from '../../../../services/general.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { TableComponent } from '../../../atoms/table/table.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { PaginationComponent } from '../../../atoms/pagination/pagination.component';
 
 @Component({
   selector: 'app-error-log',
+  standalone: true,
+  providers: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
   templateUrl: './error-log.component.html',
   styleUrls: ['./error-log.component.scss']
 })
