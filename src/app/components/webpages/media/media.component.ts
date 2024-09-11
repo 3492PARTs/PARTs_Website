@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { HeaderComponent } from '../../atoms/header/header.component';
 
 @Component({
   selector: 'app-media',
+  standalone: true,
+  providers: [BoxComponent, HeaderComponent],
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })
