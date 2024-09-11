@@ -1,14 +1,21 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Banner } from 'src/app/models/api.models';
-import { Question, QuestionWithConditions } from 'src/app/models/form.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner } from '../../../../models/api.models';
+import { QuestionWithConditions } from '../../../../models/form.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService, RetMessage } from '../../../../services/general.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-team-application',
+  standalone: true,
+  providers: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })

@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { BoxComponent } from '../../../atoms/box/box.component';
 
 @Component({
   selector: 'app-programming',
+  standalone: true,
+  providers: [BoxComponent],
   templateUrl: './programming.component.html',
   styleUrls: ['./programming.component.scss']
 })

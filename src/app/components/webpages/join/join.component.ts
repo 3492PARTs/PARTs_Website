@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { BoxComponent } from '../../atoms/box/box.component';
 
 @Component({
   selector: 'app-join',
+  standalone: true,
+  providers: [BoxComponent],
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']
 })

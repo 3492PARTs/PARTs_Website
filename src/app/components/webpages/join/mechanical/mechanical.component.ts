@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { BoxComponent } from '../../../atoms/box/box.component';
 
 @Component({
   selector: 'app-mechanical',
+  standalone: true,
+  providers: [BoxComponent],
   templateUrl: './mechanical.component.html',
   styleUrls: ['./mechanical.component.scss']
 })

@@ -1,7 +1,10 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { BoxComponent } from '../../../atoms/box/box.component';
 
 @Component({
   selector: 'app-impact',
+  standalone: true,
+  providers: [BoxComponent],
   templateUrl: './impact.component.html',
   styleUrls: ['./impact.component.scss']
 })
