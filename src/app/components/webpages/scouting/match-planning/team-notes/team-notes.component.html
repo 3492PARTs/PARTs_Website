@@ -24,7 +24,8 @@
                 [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" (FunctionCallBack)="loadTeamNotes()">
             </app-form-element>
 
-            <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr ">
+            <app-form-element-group *ngFor="let note of teamNotes"
+                [LabelText]="(note.time | date:'mm/dd/yyyy hh:mm a') || ''">
                 <p>{{ note.note }}</p>
             </app-form-element-group>
         </app-form>

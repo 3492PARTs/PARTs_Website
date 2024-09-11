@@ -4,7 +4,7 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 @Component({
   selector: 'app-mechanical',
   standalone: true,
-  providers: [BoxComponent],
+  imports: [BoxComponent],
   templateUrl: './mechanical.component.html',
   styleUrls: ['./mechanical.component.scss']
 })

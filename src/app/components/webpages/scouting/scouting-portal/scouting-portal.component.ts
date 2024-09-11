@@ -14,7 +14,7 @@ import { FormElementGroupComponent } from '../../../atoms/form-element-group/for
 @Component({
   selector: 'app-scouting-portal',
   standalone: true,
-  providers: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
+  imports: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
   templateUrl: './scouting-portal.component.html',
   styleUrls: ['./scouting-portal.component.scss']
 })

@@ -12,7 +12,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 @Component({
   selector: 'app-phone-types',
   standalone: true,
-  providers: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './phone-types.component.html',
   styleUrls: ['./phone-types.component.scss']
 })

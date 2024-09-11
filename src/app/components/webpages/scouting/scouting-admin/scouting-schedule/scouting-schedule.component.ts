@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule } from '../../../../../models/scouting.models';
+import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule, Event } from '../../../../../models/scouting.models';
 import { User } from '../../../../../models/user.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-scouting-schedule',
   standalone: true,
-  providers: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
   templateUrl: './scouting-schedule.component.html',
   styleUrls: ['./scouting-schedule.component.scss']
 })

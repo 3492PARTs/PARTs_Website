@@ -9,11 +9,12 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
+import { ScoutPicDisplayComponent } from '../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
   selector: 'app-pit-scouting-responses',
   standalone: true,
-  providers: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
   templateUrl: './pit-scouting-responses.component.html',
   styleUrls: ['./pit-scouting-responses.component.scss']
 })

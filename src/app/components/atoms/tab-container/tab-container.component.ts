@@ -6,7 +6,7 @@ import { GeneralService } from '../../../services/general.service';
 @Component({
   selector: 'app-tab-container',
   standalone: true,
-  providers: [CommonModule],
+  imports: [CommonModule],
   templateUrl: './tab-container.component.html',
   styleUrls: ['./tab-container.component.scss']
 })

@@ -4,7 +4,7 @@ import { BoxComponent } from '../../atoms/box/box.component';
 @Component({
   selector: 'app-join',
   standalone: true,
-  providers: [BoxComponent],
+  imports: [BoxComponent],
   templateUrl: './join.component.html',
   styleUrls: ['./join.component.scss']
 })

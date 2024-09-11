@@ -20,7 +20,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 @Component({
   selector: 'app-field-scouting',
   standalone: true,
-  providers: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })

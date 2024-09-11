@@ -6,7 +6,7 @@ import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.c
 @Component({
   selector: 'app-resources',
   standalone: true,
-  providers: [BoxComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './resources.component.html',
   styleUrls: ['./resources.component.scss']
 })

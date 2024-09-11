@@ -8,11 +8,12 @@ import { FormComponent } from '../../atoms/form/form.component';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  providers: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })

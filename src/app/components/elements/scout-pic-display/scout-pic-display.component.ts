@@ -8,7 +8,7 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 @Component({
   selector: 'app-scout-pic-display',
   standalone: true,
-  providers: [ButtonComponent],
+  imports: [ButtonComponent],
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })

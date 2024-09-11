@@ -4,7 +4,7 @@ import { ReturnCardComponent } from '../../../elements/return-card/return-card.c
 @Component({
   selector: 'app-build-season',
   standalone: true,
-  providers: [ReturnCardComponent],
+  imports: [ReturnCardComponent],
   templateUrl: './build-season.component.html',
   styleUrls: ['../media.component.scss']
 })

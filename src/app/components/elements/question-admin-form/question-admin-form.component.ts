@@ -3,17 +3,17 @@ import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType } fro
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService } from '../../../services/general.service';
-import { TabComponent } from '../../atoms/tab/tab.component';
 import { ModalComponent } from '../../atoms/modal/modal.component';
 import { FormComponent } from '../../atoms/form/form.component';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { TableComponent } from '../../atoms/table/table.component';
 
 @Component({
   selector: 'app-question-admin-form',
   standalone: true,
-  providers: [TabComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './question-admin-form.component.html',
   styleUrls: ['./question-admin-form.component.scss']
 })

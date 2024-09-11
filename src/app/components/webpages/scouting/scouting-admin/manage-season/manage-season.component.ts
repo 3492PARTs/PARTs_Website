@@ -16,7 +16,7 @@ import { FormComponent } from '../../../../atoms/form/form.component';
 @Component({
   selector: 'app-manage-season',
   standalone: true,
-  providers: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
   templateUrl: './manage-season.component.html',
   styleUrls: ['./manage-season.component.scss']
 })

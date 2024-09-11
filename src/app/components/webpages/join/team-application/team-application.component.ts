@@ -15,7 +15,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 @Component({
   selector: 'app-team-application',
   standalone: true,
-  providers: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })

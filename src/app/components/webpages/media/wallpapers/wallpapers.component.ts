@@ -4,7 +4,7 @@ import { ReturnCardComponent } from '../../../elements/return-card/return-card.c
 @Component({
   selector: 'app-wallpapers',
   standalone: true,
-  providers: [ReturnCardComponent],
+  imports: [ReturnCardComponent],
   templateUrl: './wallpapers.component.html',
   styleUrls: ['../media.component.scss']
 })

@@ -15,7 +15,7 @@ import { ButtonComponent } from '../../../atoms/button/button.component';
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  providers: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
+  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss']
 })

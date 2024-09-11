@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-question-display-form',
   standalone: true,
-  providers: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
+  imports: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
   templateUrl: './question-display-form.component.html',
   styleUrls: ['./question-display-form.component.scss']
 })

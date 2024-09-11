@@ -14,7 +14,7 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 @Component({
   selector: 'app-scouting-activity',
   standalone: true,
-  providers: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
   templateUrl: './scouting-activity.component.html',
   styleUrls: ['./scouting-activity.component.scss']
 })

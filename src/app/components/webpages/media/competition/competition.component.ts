@@ -4,7 +4,7 @@ import { ReturnCardComponent } from '../../../elements/return-card/return-card.c
 @Component({
   selector: 'app-competition',
   standalone: true,
-  providers: [ReturnCardComponent],
+  imports: [ReturnCardComponent],
   templateUrl: './competition.component.html',
   styleUrls: ['../media.component.scss']
 })

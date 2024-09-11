@@ -5,7 +5,7 @@ import { Page } from '../../../services/general.service';
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  providers: [CommonModule],
+  imports: [CommonModule],
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })

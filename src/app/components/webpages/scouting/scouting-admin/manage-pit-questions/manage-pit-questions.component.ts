@@ -5,7 +5,7 @@ import { BoxComponent } from '../../../../atoms/box/box.component';
 @Component({
   selector: 'app-manage-pit-questions',
   standalone: true,
-  providers: [QuestionAdminFormComponent, BoxComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent],
   templateUrl: './manage-pit-questions.component.html',
   styleUrls: ['./manage-pit-questions.component.scss']
 })

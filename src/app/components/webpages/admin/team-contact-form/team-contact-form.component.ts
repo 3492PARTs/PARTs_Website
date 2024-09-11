@@ -5,7 +5,7 @@ import { FormManagerComponent } from '../../../elements/form-manager/form-manage
 @Component({
   selector: 'app-team-contact-form',
   standalone: true,
-  providers: [BoxComponent, FormManagerComponent],
+  imports: [BoxComponent, FormManagerComponent],
   templateUrl: './team-contact-form.component.html',
   styleUrls: ['./team-contact-form.component.scss']
 })

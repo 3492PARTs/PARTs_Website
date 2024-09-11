@@ -19,7 +19,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 @Component({
   selector: 'app-pit-scouting',
   standalone: true,
-  providers: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })

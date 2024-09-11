@@ -12,11 +12,12 @@ import { FormComponent } from '../../../../atoms/form/form.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-team-notes',
   standalone: true,
-  providers: [BoxComponent, ModalComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent],
+  imports: [BoxComponent, ModalComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule],
   templateUrl: './team-notes.component.html',
   styleUrls: ['./team-notes.component.scss']
 })

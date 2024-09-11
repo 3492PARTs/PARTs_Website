@@ -13,7 +13,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 @Component({
   selector: 'app-manage-field-responses',
   standalone: true,
-  providers: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-responses.component.html',
   styleUrls: ['./manage-field-responses.component.scss']
 })

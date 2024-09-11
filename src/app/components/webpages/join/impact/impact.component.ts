@@ -4,7 +4,7 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 @Component({
   selector: 'app-impact',
   standalone: true,
-  providers: [BoxComponent],
+  imports: [BoxComponent],
   templateUrl: './impact.component.html',
   styleUrls: ['./impact.component.scss']
 })

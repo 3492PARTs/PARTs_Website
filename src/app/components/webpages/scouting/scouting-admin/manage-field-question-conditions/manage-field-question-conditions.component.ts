@@ -5,7 +5,7 @@ import { BoxComponent } from '../../../../atoms/box/box.component';
 @Component({
   selector: 'app-manage-field-question-conditions',
   standalone: true,
-  providers: [QuestionConditionAdminFormComponent, BoxComponent],
+  imports: [QuestionConditionAdminFormComponent, BoxComponent],
   templateUrl: './manage-field-question-conditions.component.html',
   styleUrls: ['./manage-field-question-conditions.component.scss']
 })

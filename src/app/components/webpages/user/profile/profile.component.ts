@@ -14,11 +14,12 @@ import { TabContainerComponent } from '../../../atoms/tab-container/tab-containe
 import { TableComponent } from '../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
+import { FormComponent } from '../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  providers: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent],
+  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })

@@ -4,7 +4,7 @@ import { ReturnCardComponent } from '../../../elements/return-card/return-card.c
 @Component({
   selector: 'app-media-community-outreach',
   standalone: true,
-  providers: [ReturnCardComponent],
+  imports: [ReturnCardComponent],
   templateUrl: './community-outreach.component.html',
   styleUrls: ['../media.component.scss']
 })

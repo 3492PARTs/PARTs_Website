@@ -84,7 +84,8 @@
             'width': col.Width ? col.Width : 'auto' 
           }">
           <ng-container *ngIf="!col.Type; else Type">
-            <p class="margin-bottom-0" [innerHTML]="GetTableDisplayValue(rec, col.PropertyName) | dateToStr"></p>
+            <p class="margin-bottom-0"
+              [innerHTML]="GetTableDisplayValue(rec, col.PropertyName) | date:'mm/dd/yyyy hh:mm a'"></p>
           </ng-container>
           <ng-template #Type>
             <ng-container [ngSwitch]="col.Type">

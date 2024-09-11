@@ -5,7 +5,7 @@ import { HeaderComponent } from '../../atoms/header/header.component';
 @Component({
   selector: 'app-media',
   standalone: true,
-  providers: [BoxComponent, HeaderComponent],
+  imports: [BoxComponent, HeaderComponent],
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })

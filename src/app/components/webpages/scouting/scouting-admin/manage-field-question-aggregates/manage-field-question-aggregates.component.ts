@@ -15,7 +15,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 @Component({
   selector: 'app-manage-field-question-aggregates',
   standalone: true,
-  providers: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-question-aggregates.component.html',
   styleUrls: ['./manage-field-question-aggregates.component.scss']
 })

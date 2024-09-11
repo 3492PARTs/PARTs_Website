@@ -14,7 +14,7 @@ import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.c
 @Component({
   selector: 'app-contact',
   standalone: true,
-  providers: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })

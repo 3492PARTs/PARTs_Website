@@ -13,7 +13,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 @Component({
   selector: 'app-requested-items',
   standalone: true,
-  providers: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './requested-items.component.html',
   styleUrls: ['./requested-items.component.scss']
 })

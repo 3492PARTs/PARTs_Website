@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-return-card',
   standalone: true,
-  providers: [BoxComponent, HeaderComponent, RouterLink],
+  imports: [BoxComponent, HeaderComponent, RouterLink],
   templateUrl: './return-card.component.html',
   styleUrls: ['./return-card.component.scss']
 })

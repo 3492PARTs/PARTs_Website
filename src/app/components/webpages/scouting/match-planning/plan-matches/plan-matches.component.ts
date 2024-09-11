@@ -13,11 +13,13 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
 import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
+import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 
 @Component({
   selector: 'app-plan-matches',
   standalone: true,
-  providers: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })

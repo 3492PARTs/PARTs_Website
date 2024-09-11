@@ -23,6 +23,7 @@
     "@types/gtag.js": "^0.0.20",
     "blueimp-load-image": "^5.14.0",
     "browser-image-compression": "^2.0.2",
+    "chart.js": "^4.4.4",
     "dexie": "^4.0.2",
     "file-saver": "^2.0.5",
     "jquery": "^3.7.1",

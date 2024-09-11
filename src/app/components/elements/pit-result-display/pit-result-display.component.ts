@@ -8,7 +8,7 @@ import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display
 @Component({
   selector: 'app-pit-result-display',
   standalone: true,
-  providers: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],
+  imports: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],
   templateUrl: './pit-result-display.component.html',
   styleUrls: ['./pit-result-display.component.scss']
 })

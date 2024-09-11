@@ -10,11 +10,12 @@ import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { TableComponent } from '../../../atoms/table/table.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { BoxComponent } from '../../../atoms/box/box.component';
 
 @Component({
   selector: 'app-security',
   standalone: true,
-  providers: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent],
+  imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
   templateUrl: './security.component.html',
   styleUrls: ['./security.component.scss']
 })

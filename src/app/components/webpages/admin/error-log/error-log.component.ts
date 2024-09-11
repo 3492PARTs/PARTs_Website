@@ -11,7 +11,7 @@ import { PaginationComponent } from '../../../atoms/pagination/pagination.compon
 @Component({
   selector: 'app-error-log',
   standalone: true,
-  providers: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
   templateUrl: './error-log.component.html',
   styleUrls: ['./error-log.component.scss']
 })
