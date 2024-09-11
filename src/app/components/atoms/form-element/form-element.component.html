@@ -7,10 +7,9 @@
   <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
     <div *ngIf="!Disabled && ((Required && Touched) || !valid)" class="validation" #validationIndicator
       [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect', 'stopwatch': Type === 'stopwatch'}">
-      <mat-icon class="icon-valid" svgIcon="check" *ngIf="valid && hasValue; else invalid"></mat-icon>
+      <span *ngIf="valid && hasValue; else invalid" class="mdi mdi-check icon-valid"></span>
       <ng-template #invalid>
-        <mat-icon class="icon-invalid" svgIcon="alert-circle-outline">
-        </mat-icon>
+        <span class="mdi mdi-alert-circle-outline icon-invalid"></span>
       </ng-template>
     </div>
 
@@ -89,7 +88,7 @@
         }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
           (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()" (focusout)="focusOut()">
         <button>
-          <mat-icon id="magnify-icon" svgIcon="magnify"></mat-icon>
+          <span class="mdi mdi-magnify magnify-icon"></span>
         </button>
       </div>
 
@@ -229,14 +228,14 @@
         'required': isFormElementRequired()
       }">
         <div class="date" [ngClass]="{'disabled': Disabled}">
-          <mat-form-field appearance="fill">
+          <!--<mat-form-field appearance="fill">
             <input [ngClass]="{'disabled': Disabled}" matInput [matDatepicker]="picker" [ngModel]="Model"
               (ngModelChange)="change($event)" (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker" (click)="focusIn()">
             </mat-datepicker-toggle>
             <mat-datepicker #picker (closed)="focusOut()"></mat-datepicker>
-          </mat-form-field>
+          </mat-form-field>-->
         </div>
       </div>
 

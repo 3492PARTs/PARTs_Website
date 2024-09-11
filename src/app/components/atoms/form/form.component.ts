@@ -1,12 +1,13 @@
 import { Component, OnInit, ContentChildren, QueryList, EventEmitter, Input, Output } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { FormElementComponent } from '../form-element/form-element.component';
-import { GeneralService } from 'src/app/services/general.service';
-import { Banner } from 'src/app/models/api.models';
-
+import { Banner } from '../../../models/api.models';
+import { GeneralService } from '../../../services/general.service';
 @Component({
   selector: 'app-form',
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './form.component.html'
 })
 

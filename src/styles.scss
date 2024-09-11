@@ -1,13 +1,4 @@
-/*material styling*/
-@use "@angular/material" as mat;
-
-$my-palette: mat.$indigo-palette;
-
-/*imports*/
-//@import "./app/scss/_base/reset";
-//@import "./app/scss/_base/typography";
-//@import "./app/scss/_layout/screenSize";
-
+/* You can add global styles to this file, and also import other style files */
 @import "./scss/vendors/syncfusion.scss";
 @import "./scss/vendors/_cssSliderScss/_cssSlider";
 
@@ -21,43 +12,3 @@ $my-palette: mat.$indigo-palette;
 @import "./scss/abstracts/grid.scss";
 @import "./scss/abstracts/width.scss";
 @import "./scss/modules/generics.scss";
-
-//@import "./assets//typography/font.scss";
-
-/*TEXT
-
-#mainContact h2 {
-  text-align: center;
-}
-
-/*FLUID MAP
-
-#map {
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-}
-
-#mapWrapper {
-  width: 100%;
-  height: 35em;
-  margin: 2em auto 2em auto;
-}
-
-// TODO Move this some place better
-.flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  flex-wrap: wrap;
-}
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}*/

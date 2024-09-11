@@ -3,9 +3,9 @@
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
   <div class="banner-message flex align-items-center gap-1rem" *ngFor="let sb of siteBanners">
-    <div class="icon"><mat-icon class="icon" [svgIcon]="'alert-outline'"></mat-icon></div>
+    <div class="icon"><span class="mdi mdi-alert-outline"></span></div>
 
-    <p [innerHTML]="sb.message | safeHtml"></p>
+    <p [innerHTML]="sb.message"></p>
     <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
         [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button></div>
 
@@ -19,7 +19,7 @@
     <!--site logo-->
     <div class="height" id="logo">
       <a routerLink="">
-        <img src="../../../assets/appIcons/BeanieBotWhite.svg">
+        <img src="/appIcons/BeanieBotWhite.svg">
       </a>
     </div>
 
@@ -37,8 +37,8 @@
             routerLinkActive="active" [ngClass]="{'right-hand-nav': rightHandNav}"
             (click)="mi.routerlink && mi.routerlink.includes('https') ? openURL(mi.routerlink) : null">
 
-            <mat-icon class="icon" [svgIcon]="mi.icon" *ngIf="mi.icon !== 'first'"
-              [ngClass]="{'right-hand-nav': rightHandNav}"></mat-icon>
+            <span *ngIf="mi.icon !== 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
+              class="mdi icon mdi-{{mi.icon}}"></span>
             <svg class="icon" *ngIf="mi.icon === 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
               <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
@@ -131,16 +131,16 @@
       <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
         [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded}">
         <a target="_blank" href="https://www.facebook.com/team3492">
-          <div class="icon"><mat-icon class="icon" [svgIcon]="'facebook'"></mat-icon></div>
+          <div class="icon"><span class="mdi mdi-facebook"></span></div>
         </a>
         <a target="_blank" href="https://www.instagram.com/parts3492">
-          <div class="icon"><mat-icon class="icon" [svgIcon]="'instagram'"></mat-icon></div>
+          <div class="icon"><span class="mdi mdi-instagram"></span></div>
         </a>
         <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ">
-          <div class="icon"><mat-icon class="icon" [svgIcon]="'youtube'"></mat-icon></div>
+          <div class="icon"><span class="mdi mdi-youtube"></span></div>
         </a>
         <a target="_blank" href="https://github.com/3492PARTs">
-          <div class="icon"><mat-icon class="icon" [svgIcon]="'github'"></mat-icon></div>
+          <div class="icon"><span class="mdi mdi-github"></span></div>
         </a>
       </div>
     </div>
@@ -148,7 +148,7 @@
     <!--wide screen nav expander-->
     <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
       <div (click)="toggleForceNavExpand()">
-        <mat-icon id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" svgIcon="menu-right"></mat-icon>
+        <span id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" class="mdi mdi-menu-right"></span>
       </div>
     </div>
   </nav>
@@ -159,15 +159,15 @@
     [ngStyle]="{ height: siteHeaderHeight + 'rem', 'margin-top': siteBannerHeight + 'rem'}">
     <!--narrow screen nav expander-->
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
-      <mat-icon class="icon" svgIcon="menu"></mat-icon>
+      <span class="mdi mdi-menu icon"></span>
     </div>
 
     <!--app menu bar-->
     <div id="menu-bar" [ngClass]="{ small_search : screenXs}">
       <!--search, not in use, disabled-->
       <div id="search-icon-wrapper" *ngIf="screenXs">
-        <mat-icon *ngIf="false" class="icon" id="search-icon" svgIcon="magnify" (click)="xsToggleSearch()"
-          appClickOutside (appClickOutside)="xsShowSearch = false"></mat-icon>
+        <span *ngIf="false" class="mdi mdi-magnify icon" id="search-icon" (click)="xsToggleSearch()" appClickOutside
+          (appClickOutside)="xsShowSearch = false"></span>
       </div>
 
       <div id="search-wrapper" [ngClass]="{ xsShowSearch : xsShowSearch, full_width: !showNav}">
@@ -180,8 +180,8 @@
         (appClickOutside)="hideNotificationModal()">
         <!--notifications-->
         <div class="icon-wrapper">
-          <mat-icon class="icon" [ngClass]="{'active': notifications.length > 0}"
-            [svgIcon]="notifications.length <= 0 ? 'bell' : 'bell-ring'" (click)="showNotificationModal()"></mat-icon>
+          <span class="mdi mdi-{{ notifications.length <= 0 ? 'bell' : 'bell-ring' }} icon"
+            [ngClass]="{'active': notifications.length > 0}" (click)="showNotificationModal()"></span>
         </div>
 
         <div id="notification-modal"
@@ -194,14 +194,13 @@
               </div>
               <div class="notification-icon-wrapper">
                 <div class="notification-icon">
-                  <mat-icon class="icon" svgIcon="bell">
-                  </mat-icon>
+                  <span class="mdi mdi-bell icon"></span>
                 </div>
               </div>
 
               <div class="notification-content">
                 <div class="notification-time">
-                  <p>{{ n.staged_time | dateToStr:true:true }}</p>
+                  <p>{{ n.staged_time | date:'mm/dd/yyyy hh:mm a' }}</p>
                 </div>
 
 
@@ -220,8 +219,8 @@
 
         <!--messages-->
         <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
-          <mat-icon class="icon" [ngClass]="{'active': messages.length > 0}"
-            [svgIcon]="messages.length <= 0 ? 'email' : 'email-open'" (click)="showMessageModal()"></mat-icon>
+          <span [ngClass]="{'active': messages.length > 0}"
+            class="mdi mdi-{{messages.length <= 0 ? 'email' : 'email-open' }} icon" (click)="showMessageModal()"></span>
 
           <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModalVisible }">
             <h6>Message Center</h6>
@@ -229,8 +228,7 @@
               <div class="notification" *ngFor="let m of messages">
                 <div class="notification-icon-wrapper">
                   <div class="notification-icon">
-                    <mat-icon class="icon" svgIcon="bell">
-                    </mat-icon>
+                    <span class="mdi mdi-bell icon"></span>
                   </div>
                 </div>
 
@@ -240,7 +238,7 @@
                     <p [innerHTML]="m.alert_body"></p>
                   </div>
                   <div class="notification-time">
-                    <p>Person &middot; {{ m.staged_time | dateToStr:true:true }}</p>
+                    <p>Person &middot; {{ m.staged_time | date:'mm/dd/yyyy hh:mm a' }}</p>
                   </div>
                 </div>
               </div>
@@ -266,7 +264,7 @@
             [ngClass]="{ full_width: !showNav, growInAnimation : showUserModalVisible }">
             <div class="profile-option">
               <div>
-                <mat-icon class="icon" svgIcon="human-greeting"></mat-icon>
+                <span class="mdi mdi-human-greeting icon"></span>
               </div>
               <div>
                 <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
@@ -275,7 +273,7 @@
             <div class="profile-option" routerLink="user/profile" [queryParams]="{'tab': 'General'}"
               (click)="hideUserModal()">
               <div>
-                <mat-icon class="icon" svgIcon="cogs"></mat-icon>
+                <span class="mdi mdi-cogs icon"></span>
               </div>
               <div>
                 <p>Settings</p>
@@ -284,7 +282,7 @@
             <div id="user-profile-divider"></div>
             <div class="profile-option" id="logout" (click)="logOut(); hideUserModal()">
               <div>
-                <mat-icon class="icon" svgIcon="logout"></mat-icon>
+                <span class="mdi mdi-logout icon"></span>
               </div>
               <div>
                 <p>Logout</p>
@@ -319,13 +317,13 @@
       <div class="flex align-items-center">
         <div>
           <h1>OUR PARTners</h1>
-          <img src="../../../assets/webImages/Sponsors/Toyota.svg">
-          <img src="../../../assets/webImages/Sponsors/AEP.svg">
-          <img src="../../../assets/webImages/Sponsors/PutnamCoSchools.png">
-          <img src="../../../assets/webImages/Sponsors/Optimum.svg">
-          <img src="../../../assets/webImages/Sponsors/EncovaFoundation.svg">
-          <img src="../../../assets/webImages/Sponsors/dow.svg">
-          <img id="nasarap" src="../../../assets/webImages/Sponsors/NASARAP.svg">
+          <img src="/webImages/Sponsors/Toyota.svg">
+          <img src="/webImages/Sponsors/AEP.svg">
+          <img src="/webImages/Sponsors/PutnamCoSchools.png">
+          <img src="/webImages/Sponsors/Optimum.svg">
+          <img src="/webImages/Sponsors/EncovaFoundation.svg">
+          <img src="/webImages/Sponsors/dow.svg">
+          <img id="nasarap" src="/webImages/Sponsors/NASARAP.svg">
         </div>
       </div>
     </footer>

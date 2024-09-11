@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -13,12 +14,16 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
+import { GeneralService } from '../../../services/general.service';
+import { NavigationService, NavigationState } from '../../../services/navigation.service';
+import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../button/button.component';
 
-import { GeneralService } from 'src/app/services/general.service';
-import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-form-element',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ButtonComponent],
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
 })

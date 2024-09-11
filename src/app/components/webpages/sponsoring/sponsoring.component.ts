@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
+import { BoxComponent } from '../../atoms/box/box.component';
 
 @Component({
   selector: 'app-sponsoring',
+  standalone: true,
+  providers: [BoxComponent],
   templateUrl: './sponsoring.component.html',
   styleUrls: ['./sponsoring.component.scss']
 })

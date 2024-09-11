@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -8,9 +9,12 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-box',
+  standalone: true,
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './box.component.html',
   styleUrls: ['./box.component.scss']
 })

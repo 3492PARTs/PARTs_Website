@@ -1,20 +1,20 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { GeneralService } from './general.service';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { NotificationsService } from './notifications.service';
-import { AuthPermission, IUser, User } from '../models/user.models';
+import { AuthPermission, User } from '../models/user.models';
 import { CacheService } from './cache.service';
-import { IUserLinks, UserLinks } from '../models/navigation.models';
+import { UserLinks } from '../models/navigation.models';
 import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
 import { APIStatus, Banner } from '../models/api.models';
 import { ScoutingService } from './scouting.service';
 import { UserService } from './user.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +43,7 @@ export class AuthService {
 
   private outstandingRefreshTokenObservable: Observable<any> | null = null;
 
-  constructor(private http: HttpClient,
-    private api: APIService,
+  constructor(private api: APIService,
     private router: Router,
     private gs: GeneralService,
     private ps: NotificationsService,

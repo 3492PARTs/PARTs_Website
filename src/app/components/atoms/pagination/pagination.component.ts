@@ -1,8 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page } from 'src/app/services/general.service';
+import { Page } from '../../../services/general.service';
 
 @Component({
   selector: 'app-pagination',
+  standalone: true,
+  providers: [CommonModule],
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss']
 })

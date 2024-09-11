@@ -15,7 +15,7 @@
         <app-button-ribbon>
             <app-button (FunctionCallBack)="openCartModal()">
                 <span id="checkout">
-                    <mat-icon class="icon" [svgIcon]="cart.length > 0 ? 'cart' : 'cart-outline'"></mat-icon>
+                    <span class="mdi icon mdi-{{cart.length > 0 ? 'cart' : 'cart-outline'}}"></span>
                     {{ cart.length }}
                 </span>
             </app-button>
