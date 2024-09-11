@@ -1,13 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, UserInfo } from 'src/app/models/scouting.models';
-import { User } from 'src/app/models/user.models';
-import { APIService } from 'src/app/services/api.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
+import { ScoutFieldSchedule, UserInfo } from '../../../../../models/scouting.models';
+import { User } from '../../../../../models/user.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
 
 @Component({
   selector: 'app-scouting-activity',
+  standalone: true,
+  providers: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
   templateUrl: './scouting-activity.component.html',
   styleUrls: ['./scouting-activity.component.scss']
 })

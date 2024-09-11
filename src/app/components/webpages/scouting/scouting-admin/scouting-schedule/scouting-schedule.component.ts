@@ -1,14 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule, Event } from 'src/app/models/scouting.models';
-import { User } from 'src/app/models/user.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { UserService } from 'src/app/services/user.service';
+import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule } from '../../../../../models/scouting.models';
+import { User } from '../../../../../models/user.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { UserService } from '../../../../../services/user.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-scouting-schedule',
+  standalone: true,
+  providers: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
   templateUrl: './scouting-schedule.component.html',
   styleUrls: ['./scouting-schedule.component.scss']
 })

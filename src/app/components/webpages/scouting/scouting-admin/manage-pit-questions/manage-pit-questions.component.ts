@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
+import { QuestionAdminFormComponent } from '../../../../elements/question-admin-form/question-admin-form.component';
+import { BoxComponent } from '../../../../atoms/box/box.component';
 
 @Component({
   selector: 'app-manage-pit-questions',
+  standalone: true,
+  providers: [QuestionAdminFormComponent, BoxComponent],
   templateUrl: './manage-pit-questions.component.html',
   styleUrls: ['./manage-pit-questions.component.scss']
 })

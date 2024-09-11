@@ -1,12 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { Season, Team, Event, EventToTeams } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { Season, Team, EventToTeams, Event } from '../../../../../models/scouting.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { RetMessage, GeneralService } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-manage-season',
+  standalone: true,
+  providers: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
   templateUrl: './manage-season.component.html',
   styleUrls: ['./manage-season.component.scss']
 })
