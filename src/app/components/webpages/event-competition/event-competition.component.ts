@@ -5,11 +5,12 @@ import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { BoxComponent } from '../../atoms/box/box.component';
+import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-event-competition',
   standalone: true,
-  imports: [CommonModule, BoxComponent],
+  imports: [CommonModule, BoxComponent, DateToStrPipe],
   templateUrl: './event-competition.component.html',
   styleUrls: ['./event-competition.component.scss']
 })

@@ -19,6 +19,7 @@ import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';
 import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '../../../pipes/ObjectWildcardFilter';
+import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 
 //import * as $ from 'jquery';
@@ -26,7 +27,7 @@ import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '../../
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe],
+  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })

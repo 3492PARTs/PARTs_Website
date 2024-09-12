@@ -202,7 +202,7 @@
 
               <div class="notification-content">
                 <div class="notification-time">
-                  <p>{{ n.staged_time | date:'mm/dd/yyyy hh:mm a' }}</p>
+                  <p>{{ n.staged_time | dateToStr:true:true }}</p>
                 </div>
 
 
@@ -240,7 +240,7 @@
                     <p [innerHTML]="m.alert_body"></p>
                   </div>
                   <div class="notification-time">
-                    <p>Person &middot; {{ m.staged_time | date:'mm/dd/yyyy hh:mm a' }}</p>
+                    <p>Person &middot; {{ m.staged_time | dateToStr:true:true }}</p>
                   </div>
                 </div>
               </div>

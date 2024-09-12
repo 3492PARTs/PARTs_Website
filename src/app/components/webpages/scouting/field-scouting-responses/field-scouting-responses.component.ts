@@ -13,11 +13,12 @@ import { TableComponent } from '../../../atoms/table/table.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { PitResultDisplayComponent } from '../../../elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
+import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-field-scouting-responses',
   standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe],
   templateUrl: './field-scouting-responses.component.html',
   styleUrls: ['./field-scouting-responses.component.scss']
 })

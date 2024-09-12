@@ -48,7 +48,7 @@
             (ViewRecordCallBack)="viewAlert($event)" [Width]="'100%'"></app-table>
 
           <app-modal [Title]="activeAlert.alert_subject" [(visible)]="alertModalVisible">
-            <app-form-element [Type]="'area'" [LabelText]="(activeAlert.staged_time | date:'mm/dd/yyyy hh:mm a') || ''"
+            <app-form-element [Type]="'area'" [LabelText]="(activeAlert.staged_time | dateToStr) || ''"
               [(Model)]="activeAlert.alert_body" [Disabled]="true" [Width]="'100%'" [Rows]="5"></app-form-element>
 
             <app-button-ribbon>

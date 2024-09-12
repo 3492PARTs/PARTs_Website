@@ -13,11 +13,12 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { CommonModule } from '@angular/common';
+import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-team-notes',
   standalone: true,
-  imports: [BoxComponent, ModalComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule],
+  imports: [BoxComponent, ModalComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
   templateUrl: './team-notes.component.html',
   styleUrls: ['./team-notes.component.scss']
 })

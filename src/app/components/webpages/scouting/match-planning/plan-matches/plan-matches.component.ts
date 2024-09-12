@@ -15,11 +15,12 @@ import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
 import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-plan-matches',
   standalone: true,
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })

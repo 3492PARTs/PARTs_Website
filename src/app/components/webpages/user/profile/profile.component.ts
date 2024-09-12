@@ -15,11 +15,12 @@ import { TableComponent } from '../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
+import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent],
+  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
