@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { BoxComponent } from '../../../atoms/box/box.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-electrical',
   standalone: true,
-  imports: [BoxComponent],
+  imports: [BoxComponent, RouterLink],
   templateUrl: './electrical.component.html',
   styleUrls: ['./electrical.component.scss']
 })
