@@ -166,7 +166,7 @@ textarea.form-control {
   top: 50%;
   transform: translateY(-50%);
   //right: 1rem;
-  height: 24px;
+  //height: 24px;
 
   &.area {
     top: 1rem;
@@ -187,12 +187,16 @@ textarea.form-control {
     top: 11px;
   }
 
+  .icon {
+    font-size: 24px;
+  }
+
   .icon-valid {
-    fill: #198754;
+    color: #198754;
   }
 
   .icon-invalid {
-    fill: #dc3545;
+    color: #dc3545;
   }
 }
 
