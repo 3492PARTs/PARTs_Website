@@ -18,12 +18,14 @@ import { GeneralService } from '../../../services/general.service';
 import { NavigationService, NavigationState } from '../../../services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
+import { ClickInsideDirective } from '../../../directives/click-inside/click-inside.directive';
+import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
 
 
 @Component({
   selector: 'app-form-element',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonComponent],
+  imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective],
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
 })

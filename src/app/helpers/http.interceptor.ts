@@ -16,7 +16,7 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
 
 
     if (req.url.includes('user/token/refresh/')) {
-        gs.devConsoleLog('http.interceptor.ts', 'else if: refresh');
+        gs.devConsoleLog('http.interceptor.ts', 'if: refresh');
         req = req.clone({
             url: baseURL + req.url,
         });

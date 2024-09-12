@@ -356,15 +356,14 @@ let max = document.documentElement.scrollHeight;
   }
 
   closeSubNav(resetNames = false): void {
-    this.gs.devConsoleLog('navigation.component/closeSubNav', this.subNav);
     if (!this.gs.strNoE(this.subNav)) {
+      this.gs.devConsoleLog('navigation.component/closeSubNav', this.subNav);
       const id = this.subNav.substring(0, this.subNav.length - 2);
       const parent = document.getElementById(id);
       if (parent) parent.style.height = '6.8rem';
+      this.subNav = '';
+      if (resetNames) this.resetActiveMenuItem();
     }
-
-    this.subNav = '';
-    if (resetNames) this.resetActiveMenuItem();
   }
 
   toggleForceNavExpand(): void {
