@@ -388,12 +388,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         else if (this.input) {
           let width = this.input.nativeElement.offsetWidth;
 
-          let offset = '0.5rem';
+          let offset = '0';
 
           if (this.Type === 'select')
             offset = '1.25rem'
-          //else if (this.Type === 'date')
-          //offset = '1rem'
+          else if (this.Type === 'area')
+            offset = '2rem'
 
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
         }
