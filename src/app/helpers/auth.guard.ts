@@ -1,13 +1,13 @@
 import { CanActivateFn } from '@angular/router';
 import { skipWhile, map } from 'rxjs';
 import { AuthCallStates, AuthService } from '../services/auth.service';
-import { Inject } from '@angular/core';
 import { GeneralService } from '../services/general.service';
+import { inject } from '@angular/core';
 
 export const authGuard: CanActivateFn = (route, state) => {
 
-  const authService = Inject(AuthService);
-  const gs = Inject(GeneralService);
+  const authService = inject(AuthService);
+  const gs = inject(GeneralService);
 
   return authService.authInFlight.pipe(skipWhile(val => val === AuthCallStates.prcs), map(val => {
     gs.devConsoleLog('Auth Guard is session expired below');

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { Router } from '@angular/router';
 import { GeneralService } from './general.service';
-import { map } from 'rxjs/operators';
+import { map, skipWhile } from 'rxjs/operators';
 import { NotificationsService } from './notifications.service';
 import { AuthPermission, User } from '../models/user.models';
 import { CacheService } from './cache.service';
@@ -42,6 +42,7 @@ export class AuthService {
   private apiStatus = APIStatus.on;
 
   private refreshingTokenFlag = false;
+  public refreshingTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
 
   constructor(private api: APIService,
     private router: Router,
@@ -397,8 +398,16 @@ export class AuthService {
     this.refreshingTokenFlag = b;
   }
 
-  getOutstandingRefreshTokenCall(): boolean {
+  getRefreshingTokenFlag(): boolean {
     return this.refreshingTokenFlag;
+  }
+
+  setRefreshingTokenSubject(s: string | null) {
+    this.refreshingTokenSubject.next(s);
+  }
+
+  getRefreshingTokenSubject(): BehaviorSubject<string | null> {
+    return this.refreshingTokenSubject;
   }
 }
 

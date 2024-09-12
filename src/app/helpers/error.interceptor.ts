@@ -1,14 +1,17 @@
-import { HttpRequest, HttpHandlerFn, HttpEvent, HttpEventType } from "@angular/common/http";
+import { HttpRequest, HttpHandlerFn, HttpEvent, HttpEventType, HttpInterceptorFn } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { catchError, filter, finalize, Observable, switchMap, take, tap } from "rxjs";
 import { AuthService, Token } from "../services/auth.service";
 import { GeneralService } from "../services/general.service";
 
-export function errorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+export const errorInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
     const auth = inject(AuthService);
     const gs = inject(GeneralService);
 
     return next(req).pipe(tap(event => {
+        console.log('------------------------------------');
+        console.log(req);
+        console.log(event);
         if (event.type === HttpEventType.Response) {
             gs.devConsoleLog('error.interceptor.ts', `${req.url} returned a response with status ${event.status}`);
 
@@ -21,7 +24,7 @@ export function errorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
 
                 // 401 unauthorized, try to refresh the token
 
-                if (!auth.getOutstandingRefreshTokenCall()) {
+                if (!auth.getRefreshingTokenFlag()) {
                     auth.setRefreshingTokenFlag(true);
 
                     // Reset here so that the following requests wait until the token
