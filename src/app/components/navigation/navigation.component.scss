@@ -345,9 +345,8 @@ nav {
       }
 
       & > #navExpand-icon {
-        fill: rgba(255, 255, 255, 0.5);
-        width: 3rem;
-        height: 3rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 28px;
 
         &.rotate {
           transform: rotate(180deg);
@@ -522,12 +521,13 @@ header {
   .icon-wrapper {
     &:hover > .icon,
     .icon.active {
-      fill: #b7b9cc;
+      color: #b7b9cc;
     }
   }
 
   .icon {
-    fill: #d1d3e2;
+    color: #d1d3e2;
+    font-size: 24px;
   }
 
   #profile {

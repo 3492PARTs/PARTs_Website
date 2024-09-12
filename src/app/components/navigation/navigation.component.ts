@@ -16,11 +16,13 @@ import { CompetitionInit } from '../webpages/event-competition/event-competition
 import { ButtonComponent } from '../atoms/button/button.component';
 import { FormElementComponent } from '../atoms/form-element/form-element.component';
 import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.component';
+import { ClickOutsideDirective } from '../../directives/click-outside/click-outside.directive';
+import { ClickInsideDirective } from '../../directives/click-inside/click-inside.directive';
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive],
+  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
