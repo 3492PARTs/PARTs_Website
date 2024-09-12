@@ -11,11 +11,12 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-team-application',
   standalone: true,
-  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })
