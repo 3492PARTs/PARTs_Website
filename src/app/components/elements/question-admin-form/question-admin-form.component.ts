@@ -9,11 +9,12 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent } from '../../atoms/table/table.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-question-admin-form',
   standalone: true,
-  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './question-admin-form.component.html',
   styleUrls: ['./question-admin-form.component.scss']
 })

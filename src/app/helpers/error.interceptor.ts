@@ -2,13 +2,15 @@ import { HttpRequest, HttpHandlerFn, HttpEvent, HttpEventType } from "@angular/c
 import { inject } from "@angular/core";
 import { catchError, filter, finalize, Observable, switchMap, take, tap } from "rxjs";
 import { AuthService, Token } from "../services/auth.service";
+import { GeneralService } from "../services/general.service";
 
 export function errorInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
     const auth = inject(AuthService);
+    const gs = inject(GeneralService);
 
     return next(req).pipe(tap(event => {
         if (event.type === HttpEventType.Response) {
-            console.log(req.url, 'returned a response with status', event.status);
+            gs.devConsoleLog('error.interceptor.ts', `${req.url} returned a response with status ${event.status}`);
 
 
 

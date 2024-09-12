@@ -9,11 +9,12 @@ import { FormComponent } from '../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-requested-items',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './requested-items.component.html',
   styleUrls: ['./requested-items.component.scss']
 })
