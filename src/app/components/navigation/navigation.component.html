@@ -39,6 +39,7 @@
 
             <span *ngIf="mi.icon !== 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
               class="mdi icon mdi-{{mi.icon}}"></span>
+
             <svg class="icon" *ngIf="mi.icon === 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
               xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
               <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
@@ -88,13 +89,14 @@
             </svg>
 
             <!--menu item name-->
-            <span routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="menu-link">
+            <p routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="menu-link">
               {{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}
-            </span>
+            </p>
 
             <!--arrow icon for menu item with submenu items-->
-            <mat-icon *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}" class="icon page-options"
-              [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}" svgIcon="menu-right"></mat-icon>
+            <span *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}"
+              class="mdi icon page-options mdi-menu-right"
+              [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}"></span>
           </a>
 
           <!--submenu items-->
@@ -131,16 +133,16 @@
       <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
         [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded}">
         <a target="_blank" href="https://www.facebook.com/team3492">
-          <div class="icon"><span class="mdi mdi-facebook"></span></div>
+          <span class="mdi icon mdi-facebook"></span>
         </a>
         <a target="_blank" href="https://www.instagram.com/parts3492">
-          <div class="icon"><span class="mdi mdi-instagram"></span></div>
+          <span class="mdi icon mdi-instagram"></span>
         </a>
         <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ">
-          <div class="icon"><span class="mdi mdi-youtube"></span></div>
+          <span class="mdi icon mdi-youtube"></span>
         </a>
         <a target="_blank" href="https://github.com/3492PARTs">
-          <div class="icon"><span class="mdi mdi-github"></span></div>
+          <span class="mdi icon mdi-github"></span>
         </a>
       </div>
     </div>
