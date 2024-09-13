@@ -23,28 +23,13 @@
         </app-button-ribbon>
     </app-form-element-group>
 
-    <app-form-element-group *ngIf="currentSeason.season_id || currentEvent.event_id"
-        [LabelText]="'External Information Sources'">
-        <div class="flex flex-wrap space-between">
-            <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
-                Sync Season</app-button>
-            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'"
-                (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
-                Sync Event</app-button>
-            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
-                Sync Matches</app-button>
-            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
-                Sync Event-Team Info</app-button>
-        </div>
-    </app-form-element-group>
-
     <app-form-element-group [LabelText]="'Manage Seasons, Events, and Teams'">
         <div class="flex flex-wrap space-between">
             <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Seasons'" [Title]="'Manage Seasons'"
                 [(visible)]="manageSeasonModalVisible">
                 <div class="inline-flex align-items-center padding-right-half-em">
                     <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason"
-                        [FormGroupInline]="true">
+                        [FormGroupInline]="true" [MinWidth]="'100px'">
                     </app-form-element>
                     <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
                 </div>
@@ -52,7 +37,8 @@
                 <div class="inline-flex align-items-center padding-right-half-em">
                     <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons"
                         [DisplayEmptyOption]="true" [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
-                        [(Model)]="delSeason" [FormGroupInline]="true" (FunctionCallBack)="getEventsForDeleteEvent()">
+                        [(Model)]="delSeason" [FormGroupInline]="true" (FunctionCallBack)="getEventsForDeleteEvent()"
+                        [MinWidth]="'110px'">
                     </app-form-element>
                     <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
                 </div>
@@ -60,7 +46,7 @@
                 <div class="inline-flex align-items-center padding-right-half-em">
                     <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="delEventList"
                         [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
-                        [(Model)]="delEvent" [FormGroupInline]="true">
+                        [(Model)]="delEvent" [FormGroupInline]="true" [MinWidth]="'100px'">
                     </app-form-element>
                     <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
                 </div>
@@ -156,17 +142,18 @@
                 <app-form (SubmitFunction)="addEventToTeams()">
                     <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons"
                         [DisplayProperty]="'season'" [BindingProperty]="'season_id'" [(Model)]="linkTeamToEventSeason"
-                        (FunctionCallBack)="getEventsForLinkTeamToEvent()" [FormGroupInline]="true" [Required]="true">
+                        (FunctionCallBack)="getEventsForLinkTeamToEvent()" [FormGroupInline]="true" [Required]="true"
+                        [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
                         [DisplayProperty]="'event_nm'" [(Model)]="linkTeamToEventEvent" [Required]="true"
-                        (FunctionCallBack)="buildLinkTeamToEventTeamList()">
+                        (FunctionCallBack)="buildLinkTeamToEventTeamList()" [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="linkTeamToEventTeams"
                         [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="eventToTeams.teams"
-                        [Required]="true">
+                        [Required]="true" [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-button-ribbon>
@@ -183,22 +170,24 @@
                     <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons"
                         [DisplayProperty]="'season'" [BindingProperty]="'season_id'"
                         [(Model)]="removeTeamFromEventSeason" (FunctionCallBack)="getEventsForRemoveTeamFromEvent()"
-                        [FormGroupInline]="true" [Required]="true">
+                        [FormGroupInline]="true" [Required]="true" [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-form-element [Type]="'select'" [LabelText]="'Events'" [SelectList]="removeTeamFromEventList"
                         [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [(Model)]="removeTeamFromEventEvent"
-                        (FunctionCallBack)="buildRemoveTeamFromEventTeamList()" [Required]="true">
+                        (FunctionCallBack)="buildRemoveTeamFromEventTeamList()" [Required]="true" [MinWidth]="'100px'">
                     </app-form-element>
 
+                    <!--there are two of these because if the model is not initialized it will throw an error this is the best solution for the moment-->
                     <app-form-element *ngIf="removeTeamFromEventEvent" [Type]="'multiSelect'" [LabelText]="'Teams'"
                         [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'"
-                        [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.teams" [Required]="true">
+                        [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.teams" [Required]="true"
+                        [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-form-element *ngIf="!removeTeamFromEventEvent" [Type]="'multiSelect'" [LabelText]="'Teams'"
                         [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'"
-                        [DisplayProperty2]="'team_nm'" [Required]="true">
+                        [DisplayProperty2]="'team_nm'" [Required]="true" [MinWidth]="'100px'">
                     </app-form-element>
 
                     <app-button-ribbon>
@@ -208,6 +197,21 @@
                     </app-button-ribbon>
                 </app-form>
             </app-modal>
+        </div>
+    </app-form-element-group>
+
+    <app-form-element-group *ngIf="currentSeason.season_id || currentEvent.event_id"
+        [LabelText]="'External Information Sources'">
+        <div class="flex flex-wrap space-between">
+            <app-button *ngIf="currentSeason.season_id" [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+                Sync Season</app-button>
+            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'"
+                (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
+                Sync Event</app-button>
+            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+                Sync Matches</app-button>
+            <app-button *ngIf="currentEvent.event_id" [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
+                Sync Event-Team Info</app-button>
         </div>
     </app-form-element-group>
 
