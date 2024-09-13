@@ -210,8 +210,8 @@
             'required': isFormElementRequired()
           }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
           (ngModelChange)="change($event)">
-        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span
-            class="mdi mdi-calendar calendar-icon"></span></span>
+        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
+            [ngClass]="{ 'disabled': Disabled }"></span></span>
         <owl-date-time #dt [hour12Timer]="true" [panelClass]="'date-picker-panel'"
           [disabled]="Disabled"></owl-date-time>
 

@@ -454,4 +454,8 @@ textarea.form-control {
   transform: translateY(-50%);
   right: 1rem;
   cursor: pointer;
+
+  &.disabled {
+    cursor: auto;
+  }
 }

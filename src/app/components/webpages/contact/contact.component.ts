@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../models/api.models';
 import { QuestionWithConditions } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })

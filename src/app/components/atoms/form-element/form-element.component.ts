@@ -397,8 +397,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
           if (this.Type === 'select')
             offset = '1.25rem'
-          else if (this.Type === 'area')
-            offset = '2rem'
           else if (['date', 'datetime'].includes(this.Type))
             offset = '2.8rem'
 
