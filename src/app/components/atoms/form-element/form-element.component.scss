@@ -231,18 +231,6 @@ textarea.form-control {
 .valid,
 .invalid {
   padding-right: calc(1.5em + 0.75rem);
-
-  &.date-form-control {
-    padding-right: calc(1.5em + 20.8rem);
-  }
-
-  &.datetime {
-    padding-right: calc(1.5em + 1.4rem);
-  }
-
-  &.date {
-    padding-right: 0;
-  }
 }
 
 .invalid-message {
@@ -457,4 +445,12 @@ textarea.form-control {
 .number {
   display: grid;
   grid-template-columns: auto auto;
+}
+
+.calendar-icon {
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
 }
