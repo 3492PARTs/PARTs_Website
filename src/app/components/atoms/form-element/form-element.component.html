@@ -1,10 +1,12 @@
 <div #formElement class="form-element"
-  [ngClass]="{'form-group': FormGroup, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox', 'otherOptionCheckboxElement': Type === 'checkbox' && LabelText.toLowerCase() === 'other' }">
+  [ngClass]="{'form-group': FormGroup, 'form-group-inline': FormGroupInline, 'checkboxElement': Type === 'checkbox', 'otherOptionCheckboxElement': Type === 'checkbox' && LabelText.toLowerCase() === 'other' }"
+  [ngStyle]="{'width': Type === 'checkbox' ? Width : 'auto'}">
   <label *ngIf="LabelText !== ''" #label
     [ngClass]="{'checkboxLabel': ['checkbox', 'multiCheckbox'].includes(Type), 'otherOptionCheckboxLabel': Type === 'checkbox' && LabelText.toLowerCase() === 'other', 'radioLabel': Type === 'radio'}"
     for="{{ LabelID }}">{{LabelText }}</label>
 
-  <div class="inline-block relative" [ngStyle]="{'width': Width, 'min-width': MinWidth}">
+  <div class="inline-block relative"
+    [ngStyle]="{'width': Type !== 'checkbox' ? Width : 'auto', 'min-width': MinWidth, 'max-width': MaxWidth}">
     <div *ngIf="!Disabled && ((Required && Touched) || !valid)" class="validation" #validationIndicator
       [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect', 'stopwatch': Type === 'stopwatch'}">
       <span *ngIf="valid && hasValue; else invalid" class="mdi mdi-check icon icon-valid"></span>
@@ -20,9 +22,9 @@
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
-        (focusout)="focusOut()">
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+        (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'email'" #input type="text" class="form-control" id="{{ LabelID }}"
         placeholder="{{ Placeholder }}" [ngClass]="{
@@ -30,9 +32,9 @@
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
-        (focusout)="focusOut()">
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+        (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'password'" #input type="password" class="form-control" id="{{ LabelID }}"
         placeholder="{{ Placeholder }}" [ngClass]="{
@@ -40,8 +42,9 @@
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+        (focusout)="focusOut()">
 
       <div *ngSwitchCase="'number'" class="number">
         <input type="number" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
@@ -49,8 +52,9 @@
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-          (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+          [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+          (focusout)="focusOut()">
 
         <div *ngIf="NumberIncDec" class="number-stepper inline-flex flex-wrap gap-1rem align-items-center">
           <app-button [ButtonType]="'add'" (FunctionCallBack)="increment()"></app-button>
@@ -65,9 +69,9 @@
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="phoneMaskModel"
-        (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
-        (focusout)="focusOut()">
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        [ngModel]="phoneMaskModel" (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}"
+        [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'mac'" #input type="text" class="form-control" id="{{ LabelID }}"
         placeholder="{{ Placeholder }}" [ngClass]="{
@@ -75,8 +79,8 @@
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-        (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17" (focus)="focusIn()"
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        [ngModel]="Model" (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17" (focus)="focusIn()"
         (focusout)="focusOut()">
 
       <div *ngSwitchCase="'search'" id="search">
@@ -85,8 +89,9 @@
           'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-          (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()" (focusout)="focusOut()">
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+          [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()"
+          (focusout)="focusOut()">
         <button>
           <span class="mdi mdi-magnify magnify-icon"></span>
         </button>
@@ -99,8 +104,9 @@
             'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-            (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+            [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+            (focusout)="focusOut()">
             <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
             <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
@@ -124,9 +130,9 @@
             'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-            (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"
-            [compareWith]="SelectComparatorFunction">
+          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+            [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+            (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
             <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
             <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
@@ -140,15 +146,15 @@
       <!--TODO Fix display property 2 using ternary operator-->
 
       <div *ngSwitchCase="'area'" class="area"
-        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}">
+        [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}">
         <textarea #input class="form-control" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" rows="{{ Rows }}"
-          placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}"
-          [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+          rows="{{ Rows }}" placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
+          maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
         <p class="margin-bottom-0">{{Model ? Model.length : 0}}/{{FieldSize}}</p>
       </div>
 
@@ -280,8 +286,8 @@
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" #multiSelect
-        (appClickOutside)="multiSelectClose()">
+      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+        #multiSelect (appClickOutside)="multiSelectClose()">
         <span (click)="multiSelectMenu()">
           <p #multiSelectText>{{ LabelText }}</p>
           <div class="arrow-wrapper">
@@ -310,9 +316,9 @@
           'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
-        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth}" [ngModel]="Model"
-          (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
-          (focusout)="focusOut()">
+        }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
+          [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+          (focus)="focusIn()" (focusout)="focusOut()">
         <div class="flex justify-content-space-between">
           <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()"
             [Disabled]="Disabled">Start</app-button>

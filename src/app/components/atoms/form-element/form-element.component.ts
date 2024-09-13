@@ -38,7 +38,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() LabelText = '';
   @Input() Width = 'auto';
   @Input() MinWidth = 'auto';
-  //@Input() MaxWidth = 'auto';
+  @Input() MaxWidth = 'auto';
   private originalMinWidth = '';
   @Input() Placeholder = '';
   @Input() Rows = 0;
