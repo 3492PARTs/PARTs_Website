@@ -1,3 +1,7 @@
 .date-picker-panel {
   transform: scale(1.5);
 }
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+  background-color: $main_color;
+}
