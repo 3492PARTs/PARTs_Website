@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
+  test = null;
 
   questions: QuestionWithConditions[] = [];
   disabled = false;
