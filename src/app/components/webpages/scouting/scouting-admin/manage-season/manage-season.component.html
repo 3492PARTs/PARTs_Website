@@ -1,12 +1,13 @@
 <app-box [Title]="'Manage Season'">
     <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
         <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
-            [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true">
+            [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true"
+            [MinWidth]="'100px'">
         </app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList"
-            [DisplayProperty]="'event_nm'" [(Model)]="currentEvent" [FormGroupInline]="true"
-            [DisplayEmptyOption]="true">
+            [DisplayProperty]="'event_nm'" [(Model)]="currentEvent" [FormGroupInline]="true" [DisplayEmptyOption]="true"
+            [MinWidth]="'100px'">
         </app-form-element>
 
         <app-form-element *ngIf="currentEvent && currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
