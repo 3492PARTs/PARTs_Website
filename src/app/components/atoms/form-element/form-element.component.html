@@ -34,7 +34,7 @@
         (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'password'" type="password" class="form-control" id="{{ LabelID }}"
+      <input *ngSwitchCase="'password'" #input type="password" class="form-control" id="{{ LabelID }}"
         placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
@@ -69,8 +69,8 @@
         (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()"
         (focusout)="focusOut()">
 
-      <input *ngSwitchCase="'mac'" type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}"
-        [ngClass]="{
+      <input *ngSwitchCase="'mac'" #input type="text" class="form-control" id="{{ LabelID }}"
+        placeholder="{{ Placeholder }}" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
@@ -80,7 +80,7 @@
         (focusout)="focusOut()">
 
       <div *ngSwitchCase="'search'" id="search">
-        <input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        <input type="text" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           'disabled': Disabled, 
           'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),

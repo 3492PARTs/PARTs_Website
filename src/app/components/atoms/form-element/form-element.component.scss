@@ -74,6 +74,7 @@
     &.radioLabel {
       position: initial;
       padding: 0;
+      max-width: calc(100% - 2.5rem);
 
       &.otherOptionCheckboxLabel {
         position: absolute;

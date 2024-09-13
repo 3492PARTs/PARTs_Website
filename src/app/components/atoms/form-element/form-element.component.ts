@@ -600,7 +600,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.gs.triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
-
         if (this.Type === 'number') {
           const width = this.input.nativeElement.offsetWidth;
           this.renderer.setStyle(
@@ -608,7 +607,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             'max-width', `calc(${width}px - 16px - 16px)`
           );
         }
-        else {
+        else if (this.input) {
           const width = this.input.nativeElement.offsetWidth;
           this.renderer.setStyle(
             this.label.nativeElement,
@@ -626,8 +625,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
 
         if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-          if (this.LabelText.includes('Name'))
-            this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          //if (this.LabelText.includes('Have you participated in any of the following before?'))
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 2; //im hoping i can add this -2px offset to make it look a little beter 
           this.renderer.setStyle(
             this.label.nativeElement,
@@ -639,8 +638,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           );
         }
         else {
-          if (this.LabelText.includes('Name'))
-            this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          //if (this.LabelText.includes('Have you participated in any of the following before?'))
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-5px'
