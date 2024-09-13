@@ -610,6 +610,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             'max-width', `calc(${width}px - 16px - 16px)`
           );
         }
+        else {
+          const width = this.input.nativeElement.offsetWidth;
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'max-width', `calc(${width}px - 16px - 16px - 16px)`
+          );
+        }
 
 
         const { lineHeight } = getComputedStyle(this.label.nativeElement);
@@ -620,12 +627,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           let x = 0;
         }
 
-        // i need this to be . if i find a place where i need it to be
-        // strictly this is my reminder that i need to find another solution
-        if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.substring(0, 10) === 'How is you')
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0);
+        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+          if (this.LabelText.includes('Name'))
+            this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 2; //im hoping i can add this -2px offset to make it look a little beter 
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-' + labelOffset + 'px'
@@ -636,11 +641,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           );
         }
         else {
-          //if (this.LabelText.substring(0, 10) === 'Not Scouted Teams')
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          if (this.LabelText.includes('Name'))
+            this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
-            'top', '-7px'
+            'top', '-5px'
           );
           this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
         }

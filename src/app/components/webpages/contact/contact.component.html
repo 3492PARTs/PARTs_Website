@@ -2,7 +2,8 @@
   <p class="important">Click <a routerLink="../join/team-application">here</a> for our team application form</p>
   <br>
 
-  <app-form-element [Type]="'datetime'" [(Model)]="test" [Required]="true"></app-form-element>
+  <app-form-element [LabelText]="'fjsdafhksjdfjsdhfjsd sdakjfhjsdkahfjksda '" [Type]="'datetime'" [(Model)]="test"
+    [Required]="true"></app-form-element>
 
   <app-form (SubmitFunction)="save()">
     <app-form-element *ngFor="let q of questions" [LabelText]="q.question" [Type]="q.question_typ.question_typ"
