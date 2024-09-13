@@ -72,7 +72,8 @@
     <div *ngIf="matches.length > 0" class="flex align-items-baseline">
       <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
         [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.match"
-        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled">
+        [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled"
+        [MinWidth]="'100px'">
       </app-form-element>
 
       <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
@@ -80,7 +81,8 @@
     </div>
     <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
       [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-      [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team" [Required]="true" [Disabled]="formDisabled">
+      [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team" [Required]="true" [Disabled]="formDisabled"
+      [MinWidth]="'100px'">
     </app-form-element>
 
     <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
