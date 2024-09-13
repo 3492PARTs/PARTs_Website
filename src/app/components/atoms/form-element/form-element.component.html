@@ -6,7 +6,7 @@
     for="{{ LabelID }}">{{LabelText }}</label>
 
   <div class="inline-block relative"
-    [ngStyle]="{'width': Type !== 'checkbox' ? Width : 'auto', 'min-width': MinWidth, 'max-width': MaxWidth}">
+    [ngStyle]="{'width': Type !== 'checkbox' ? Width : 'auto', 'min-width': MinWidth, 'max-width': MaxWidth, 'flex-grow': Type === 'checkbox' && LabelText.toLowerCase() === 'other' ? '2' : 'unset'}">
     <div *ngIf="!Disabled && ((Required && Touched) || !valid)" class="validation" #validationIndicator
       [ngClass]="{'select': Type === 'select', 'area': Type === 'area','date': Type === 'date', 'radio': Type === 'radio', 'multiCheckbox': Type === 'multiCheckbox', 'multiSelect': Type === 'multiSelect', 'stopwatch': Type === 'stopwatch'}">
       <span *ngIf="valid && hasValue; else invalid" class="mdi mdi-check icon icon-valid"></span>

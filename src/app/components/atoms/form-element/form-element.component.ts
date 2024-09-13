@@ -628,9 +628,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
 
         if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.includes('Have you participated in any of the following before?'))
+          //if (this.LabelText.includes('Lining up '))
           //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 2; //im hoping i can add this -2px offset to make it look a little beter 
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-' + labelOffset + 'px'
@@ -641,11 +641,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           );
         }
         else {
-          //if (this.LabelText.includes('Have you participated in any of the following before?'))
+          //if (this.LabelText.includes('Lining up '))
           //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
-            'top', '-5px'
+            'top', '-4px'
           );
           this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
         }
