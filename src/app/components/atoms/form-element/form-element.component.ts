@@ -390,6 +390,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
               this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
           }
         }
+        else if (this.Type === 'area') {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
+        }
         else if (this.input) {
           let width = this.input.nativeElement.offsetWidth;
 
