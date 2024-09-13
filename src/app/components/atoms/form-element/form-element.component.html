@@ -208,9 +208,12 @@
             'valid': isFormElementValid(), 
             'invalid': isFormElementInvalid(),
             'required': isFormElementRequired()
-          }" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" placeholder="Date Time">
-        <span [owlDateTimeTrigger]="dt2"><span class="mdi mdi-calendar calendar-icon"></span></span>
-        <owl-date-time #dt2 [hour12Timer]="true"></owl-date-time>
+          }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
+          (ngModelChange)="change($event)">
+        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span
+            class="mdi mdi-calendar calendar-icon"></span></span>
+        <owl-date-time #dt [hour12Timer]="true" [panelClass]="'date-picker-panel'"
+          [disabled]="Disabled"></owl-date-time>
 
         <!--<div >
           
@@ -226,23 +229,37 @@
         </div>-->
       </ng-container>
 
-      <div *ngSwitchCase="'date'" #input class="date-form-control form-control" [ngClass]="{
+      <ng-container *ngSwitchCase="'date'">
+        <input #input (focus)="focusIn()" (focusout)="focusOut()" class="form-control" [ngClass]="{
+            'disabled': Disabled, 
+            'valid': isFormElementValid(), 
+            'invalid': isFormElementInvalid(),
+            'required': isFormElementRequired()
+          }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
+          (ngModelChange)="change($event)">
+        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span
+            class="mdi mdi-calendar calendar-icon"></span></span>
+        <owl-date-time #dt [pickerType]="'calendar'" [panelClass]="'date-picker-panel'"
+          [disabled]="Disabled"></owl-date-time>
+      </ng-container>
+
+      <!--<div *ngSwitchCase="'date'" #input class="date-form-control form-control" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
       }">
         <div class="date" [ngClass]="{'disabled': Disabled}">
-          <!--<mat-form-field appearance="fill">
+          <mat-form-field appearance="fill">
             <input [ngClass]="{'disabled': Disabled}" matInput [matDatepicker]="picker" [ngModel]="Model"
               (ngModelChange)="change($event)" (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matSuffix [for]="picker" (click)="focusIn()">
             </mat-datepicker-toggle>
             <mat-datepicker #picker (closed)="focusOut()"></mat-datepicker>
-          </mat-form-field>-->
+          </mat-form-field>
         </div>
-      </div>
+      </div>-->
 
       <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }">
 
