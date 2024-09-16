@@ -459,6 +459,6 @@ textarea.form-control {
   cursor: pointer;
 
   &.disabled {
-    cursor: auto;
+    cursor: default;
   }
 }
