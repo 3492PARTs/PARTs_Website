@@ -5,7 +5,7 @@
         <h4>We'll be playing at the <a target="_blank"
                 [href]="competitionInfo.event?.gmaps_url">{{competitionInfo.event?.location_name}}</a> in
             {{competitionInfo.event?.city}}, {{competitionInfo.event?.state_prov}}</h4>
-        <h4>From {{competitionInfo.event?.date_st | dateToStr :false'}} to {{competitionInfo.event?.date_end |
+        <h4>From {{competitionInfo.event?.date_st | dateToStr :false}} to {{competitionInfo.event?.date_end |
             dateToStr :false}}</h4>
 
     </app-box>
