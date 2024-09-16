@@ -93,7 +93,7 @@ export class TeamApplicationComponent implements OnInit {
         }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-
+        this.gs.scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
         this.gs.triggerError(err);
