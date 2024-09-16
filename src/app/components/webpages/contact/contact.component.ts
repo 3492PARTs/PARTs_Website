@@ -63,7 +63,7 @@ export class ContactComponent implements OnInit {
       { question_answers: this.questions, form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-
+        this.gs.scrollTo(0);
         this.contactInit();
       }, (err: any) => {
         this.gs.triggerError(err);
