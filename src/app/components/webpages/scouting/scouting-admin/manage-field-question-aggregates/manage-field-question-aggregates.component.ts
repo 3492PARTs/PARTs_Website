@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from 'src/app/models/form.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from '../../../../../models/form.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-manage-field-question-aggregates',
+  standalone: true,
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-question-aggregates.component.html',
   styleUrls: ['./manage-field-question-aggregates.component.scss']
 })

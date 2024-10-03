@@ -1,67 +1,93 @@
-import { Injectable, Injector } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpInterceptor,
-  HttpSentEvent,
-  HttpHeaderResponse,
-  HttpProgressEvent,
-  HttpResponse,
-  HttpUserEvent,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { GeneralService } from '../services/general.service';
-import { User } from '../models/user.models';
-import { AuthService, Token } from '../services/auth.service';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { environment } from "../../environments/environment";
+import { GeneralService } from "../services/general.service";
+import { AuthService, Token } from "../services/auth.service";
+import { catchError, filter, finalize, Observable, switchMap, take, throwError } from "rxjs";
 
-@Injectable()
-export class HTTPInterceptor implements HttpInterceptor {
-  private token: Token = new Token();
-  private user: User = new User();
+export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
+    const gs = inject(GeneralService);
+    const auth = inject(AuthService);
 
-  constructor(private auth: AuthService, private gs: GeneralService) {
-    this.auth.token.subscribe((t) => (this.token = t));
-    this.auth.user.subscribe(u => this.user = u);
-  }
+    const token = auth.getAccessToken();
+    const user = auth.getUser();
 
-  // function which will be called for all http calls
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any> | any> {
-    //const baseURL = this.apiStatus === 'on' || this.apiStatus === 'prcs' ? environment.baseUrl : environment.backupBaseUrl;
     const baseURL = environment.baseUrl;
 
-    if (request.url.includes('./assets')) { // this is for the icons used on the front end
-      this.gs.devConsoleLog('http.interceptor.ts', 'if: assets');
-      return next.handle(request);
+
+    if (req.url.includes('user/token/refresh/')) {
+        gs.devConsoleLog('http.interceptor.ts', 'if: refresh');
+        req = req.clone({
+            url: baseURL + req.url,
+        });
     }
-    else if (request.url.includes('user/token/refresh/')) {
-      this.gs.devConsoleLog('http.interceptor.ts', 'else if: refresh');
-      request = request.clone({
-        url: baseURL + request.url,
-      });
-    }
-    else if (this.user && this.token && this.token.access && !this.auth.isTokenExpired(this.token.access)) {
-      this.gs.devConsoleLog('http.interceptor.ts', `has access token: ${request.url}`);
-      request = request.clone({
-        url: baseURL + request.url,
-        setHeaders: {
-          Authorization: `Bearer ${this.token.access}`
-        }
-      });
+    else if (user && token && token && !auth.isTokenExpired(token)) {
+        gs.devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
+        req = req.clone({
+            url: baseURL + req.url,
+            setHeaders: {
+                Authorization: `Bearer ${token}`
+            }
+        });
     }
     else {
-      this.gs.devConsoleLog('http.interceptor.ts', `else: ${request.url}`);
-      let withCredentials = request.url.includes('user/token/refresh/');
-      //console.log(request.url, withCredentials);
-      request = request.clone({
-        url: baseURL + request.url,
-        //withCredentials: withCredentials,
-      });
+        gs.devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
+        let withCredentials = req.url.includes('user/token/refresh/');
+        //console.log(req.url, withCredentials);
+        req = req.clone({
+            url: baseURL + req.url,
+            //withCredentials: withCredentials,
+        });
     }
 
-    return next.handle(request);
-  }
+    return next(req).pipe(catchError((err) => {
+        if ([401, 403].includes(err.status) && user && user.id) {
+            // 401 unauthorized, try to refresh the token
+
+            if (!auth.getRefreshingTokenFlag()) {
+                auth.setRefreshingTokenFlag(true);
+
+                // Reset here so that the following requests wait until the token
+                // comes back from the refreshToken call.
+                auth.setRefreshingTokenSubject(null);
+
+                return auth.pipeRefreshToken().pipe(
+                    switchMap((token: Token) => {
+                        if (token) {
+                            auth.setToken(token);
+                            auth.setRefreshingTokenSubject(token.access);
+                            return next(addTokenToRequest(req, token.access));
+                        }
+
+                        auth.logOut() as any;
+                        return throwError(() => err);
+                    }),
+                    catchError(rfshErr => {
+                        return auth.refreshingTokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
+                            return next(addTokenToRequest(req, auth.getAccessToken()));
+                        }));
+                    }),
+                    finalize(() => {
+                        auth.setRefreshingTokenFlag(false);
+                    })
+                );
+            } else {
+                return auth.refreshingTokenSubject.pipe(filter(t1 => t1 != null), take(1), switchMap(t2 => {
+                    return next(addTokenToRequest(req, auth.getAccessToken()));
+                }));
+            }
+
+        }
+        else if ([400, 403].includes(err.status) && user && user.id) {
+            auth.logOut();
+        }
+
+        //const error = (err && err.error && err.error.message) || err.statusText;
+        //console.error(err);
+        return throwError(() => err);
+    }));
+}
+
+function addTokenToRequest(request: HttpRequest<any>, token: string): HttpRequest<any> {
+    return request.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 }

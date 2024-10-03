@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   OnInit,
@@ -12,13 +13,21 @@ import {
   HostListener,
   RendererStyleFlags2
 } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
+import { FormsModule } from '@angular/forms';
+import { GeneralService } from '../../../services/general.service';
+import { HeaderComponent } from '../header/header.component';
+import { FormElementComponent } from '../form-element/form-element.component';
+import { ButtonComponent } from '../button/button.component';
+import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '../../../pipes/ObjectWildcardFilter';
+import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 
 //import * as $ from 'jquery';
 
 @Component({
   selector: 'app-table',
+  standalone: true,
+  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })

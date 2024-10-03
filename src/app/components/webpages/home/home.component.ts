@@ -1,13 +1,15 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
+import { CommonModule } from '@angular/common';
+import { AppSize, GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
   screenSize!: AppSize;
   screenSizeLG = AppSize.LG;
 

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
-  name: 'dateToStr'
+  name: 'dateToStr', standalone: true
 })
 export class DateToStrPipe implements PipeTransform {
 

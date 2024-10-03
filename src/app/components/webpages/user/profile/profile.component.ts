@@ -1,15 +1,26 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AuthService, UserData } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { HttpClient } from '@angular/common/http';
-import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { Alert, NotificationsService } from 'src/app/services/notifications.service';
 import { ActivatedRoute } from '@angular/router';
-import { User } from 'src/app/models/user.models';
-import { APIService } from 'src/app/services/api.service';
+import { User } from '../../../../models/user.models';
+import { APIService } from '../../../../services/api.service';
+import { UserData, AuthService } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { Alert, NotificationsService } from '../../../../services/notifications.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { TabComponent } from '../../../atoms/tab/tab.component';
+import { TabContainerComponent } from '../../../atoms/tab-container/tab-container.component';
+import { TableComponent } from '../../../atoms/table/table.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { CommonModule } from '@angular/common';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-profile',
+  standalone: true,
+  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -94,7 +105,7 @@ export class ProfileComponent implements OnInit {
     this.api.put(true, 'user/profile/', form, (result: any) => {
       this.gs.successfulResponseBanner(result);
 
-      this.auth.getUser();
+      this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
     }, (err: any) => {
@@ -110,9 +121,9 @@ export class ProfileComponent implements OnInit {
     this.adjustProfileImageEditorSize();
   }
 
-  imageCropped(event: ImageCroppedEvent) {
+  /*imageCropped(event: ImageCroppedEvent) {
     this.croppedImage = event.base64;
-  }
+  }*/
 
   imageLoaded() {
     // show cropper

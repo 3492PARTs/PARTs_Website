@@ -23,7 +23,7 @@ RUN npx ng build
 FROM nginx:latest
 
 # Copy nginx conf
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/parts-website /usr/share/nginx/html

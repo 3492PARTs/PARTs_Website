@@ -6,11 +6,10 @@
   grid-template-rows: auto;
 
   .icon {
-    width: 35px;
-    height: 35px;
+    font-size: 35px;
     justify-self: center;
     align-self: center;
     cursor: pointer;
-    fill: $main_color;
+    color: $main_color;
   }
 }

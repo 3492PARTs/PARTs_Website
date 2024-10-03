@@ -1,12 +1,19 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ScoutFieldResponsesReturn } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { ScoutFieldResponsesReturn } from '../../../../../models/scouting.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService, AppSize } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-manage-field-responses',
+  standalone: true,
+  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-responses.component.html',
   styleUrls: ['./manage-field-responses.component.scss']
 })

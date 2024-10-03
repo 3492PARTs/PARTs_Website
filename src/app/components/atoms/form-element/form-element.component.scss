@@ -40,8 +40,8 @@
 
   & > label,
   .radio label {
-    font-size: 13px;
-    line-height: 15.6px;
+    font-size: 14px;
+    line-height: 16px;
     font-weight: 600;
     margin: 0;
     color: #1a1d20;
@@ -52,7 +52,8 @@
     ////text-align: justify;
     //line-height: 15.6px;
     //font-weight: 600;
-    display: block;
+    display: flex;
+    align-items: center;
     padding: 0 3px;
     //margin: 0;
     margin-right: 50px;
@@ -74,6 +75,7 @@
     &.radioLabel {
       position: initial;
       padding: 0;
+      max-width: calc(100% - 2.5rem);
 
       &.otherOptionCheckboxLabel {
         position: absolute;
@@ -88,7 +90,8 @@
     }
 
     &.checkboxLabel {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
     }
   }
 }
@@ -132,7 +135,7 @@ textarea.form-control {
 
   p {
     position: absolute;
-    right: 2.3rem;
+    right: 1.5rem;
     bottom: 0;
     opacity: 0.6;
   }
@@ -166,10 +169,10 @@ textarea.form-control {
   top: 50%;
   transform: translateY(-50%);
   //right: 1rem;
-  height: 24px;
+  //height: 24px;
 
   &.area {
-    top: 1rem;
+    top: 0.5rem;
     transform: initial;
   }
 
@@ -187,12 +190,16 @@ textarea.form-control {
     top: 11px;
   }
 
+  .icon {
+    font-size: 24px;
+  }
+
   .icon-valid {
-    fill: #198754;
+    color: #198754;
   }
 
   .icon-invalid {
-    fill: #dc3545;
+    color: #dc3545;
   }
 }
 
@@ -227,18 +234,6 @@ textarea.form-control {
 .valid,
 .invalid {
   padding-right: calc(1.5em + 0.75rem);
-
-  &.date-form-control {
-    padding-right: calc(1.5em + 20.8rem);
-  }
-
-  &.datetime {
-    padding-right: calc(1.5em + 1.4rem);
-  }
-
-  &.date {
-    padding-right: 0;
-  }
 }
 
 .invalid-message {
@@ -453,4 +448,17 @@ textarea.form-control {
 .number {
   display: grid;
   grid-template-columns: auto auto;
+}
+
+.calendar-icon {
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1rem;
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+  }
 }

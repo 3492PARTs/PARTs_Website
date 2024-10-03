@@ -1,9 +1,14 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { ScoutPitResponse } from 'src/app/models/scouting.models';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
+import { ScoutPitResponse } from '../../../models/scouting.models';
+import { AppSize, GeneralService } from '../../../services/general.service';
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../../atoms/header/header.component';
+import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';
 
 @Component({
   selector: 'app-pit-result-display',
+  standalone: true,
+  imports: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],
   templateUrl: './pit-result-display.component.html',
   styleUrls: ['./pit-result-display.component.scss']
 })

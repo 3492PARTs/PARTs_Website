@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
-
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { AppSize } from '../../../../services/general.service';
-import { ScoutPitResponse, Team } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { Team, ScoutPitResponse } from '../../../../models/scouting.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService, AppSize } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
+import { ScoutPicDisplayComponent } from '../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
   selector: 'app-pit-scouting-responses',
+  standalone: true,
+  imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
   templateUrl: './pit-scouting-responses.component.html',
   styleUrls: ['./pit-scouting-responses.component.scss']
 })

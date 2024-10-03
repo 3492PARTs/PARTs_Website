@@ -1,0 +1,12 @@
+.date-picker-panel {
+  transform: scale(1.5);
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+  background-color: $main_color;
+}
+
+.owl-dt-container-disabled,
+.owl-dt-trigger-disabled {
+  opacity: 1;
+}

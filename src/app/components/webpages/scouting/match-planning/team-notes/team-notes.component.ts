@@ -1,13 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { APIStatus } from 'src/app/models/api.models';
-import { Team, TeamNote } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
+import { APIStatus } from '../../../../../models/api.models';
+import { Team, TeamNote } from '../../../../../models/scouting.models';
+import { APIService } from '../../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService } from '../../../../../services/general.service';
+import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
+import { CommonModule } from '@angular/common';
+import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-team-notes',
+  standalone: true,
+  imports: [BoxComponent, ModalComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
   templateUrl: './team-notes.component.html',
   styleUrls: ['./team-notes.component.scss']
 })

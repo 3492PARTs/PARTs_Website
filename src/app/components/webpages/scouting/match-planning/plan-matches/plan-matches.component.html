@@ -62,7 +62,7 @@
                 <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
 
                 <app-form-element-group [LabelText]="'Notes'">
-                    <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="note.time | dateToStr">
+                    <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="(note.time | dateToStr) || ''">
                         <p>{{ note.note }}</p>
                     </app-form-element-group>
                 </app-form-element-group>

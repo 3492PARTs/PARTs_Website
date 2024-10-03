@@ -1,8 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'app-loading',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss']
 })

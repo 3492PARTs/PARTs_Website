@@ -1,12 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { User, AuthGroup } from 'src/app/models/user.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService, PhoneType } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { UserService } from 'src/app/services/user.service';
+import { User, AuthGroup } from '../../../../../models/user.models';
+import { APIService } from '../../../../../services/api.service';
+import { PhoneType, AuthService, AuthCallStates } from '../../../../../services/auth.service';
+import { GeneralService } from '../../../../../services/general.service';
+import { UserService } from '../../../../../services/user.service';
+import { BoxComponent } from '../../../../atoms/box/box.component';
+import { TableComponent } from '../../../../atoms/table/table.component';
+import { ModalComponent } from '../../../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-scouting-users',
+  standalone: true,
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
   templateUrl: './scouting-users.component.html',
   styleUrls: ['./scouting-users.component.scss']
 })

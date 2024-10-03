@@ -1,16 +1,24 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { APIService } from 'src/app/services/api.service';
-import { ScoutPitResponse, ScoutFieldResponsesReturn, TeamNote, ScoutPitResponsesReturn } from 'src/app/models/scouting.models';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { environment } from 'src/environments/environment';
-import { QuestionWithConditions } from 'src/app/models/form.models';
+import { environment } from '../../../../../environments/environment';
+import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn } from '../../../../models/scouting.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService, AppSize } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { TableComponent } from '../../../atoms/table/table.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { PitResultDisplayComponent } from '../../../elements/pit-result-display/pit-result-display.component';
+import { CommonModule } from '@angular/common';
+import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-field-scouting-responses',
+  standalone: true,
+  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe],
   templateUrl: './field-scouting-responses.component.html',
   styleUrls: ['./field-scouting-responses.component.scss']
 })

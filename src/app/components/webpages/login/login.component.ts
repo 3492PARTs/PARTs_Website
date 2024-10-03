@@ -1,12 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService, RegisterUser, UserData } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
+import { UserData, RegisterUser, AuthService } from '../../../services/auth.service';
+import { GeneralService } from '../../../services/general.service';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { FormComponent } from '../../atoms/form/form.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -18,7 +25,7 @@ export class LoginComponent implements OnInit {
   newUser: RegisterUser = new RegisterUser();
   rememberMe = false;
 
-  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private http: HttpClient, private router: Router) {
+  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router) {
     /*this.route.queryParamMap.subscribe(queryParams => {
       this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/

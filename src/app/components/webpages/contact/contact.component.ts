@@ -1,18 +1,26 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Banner } from 'src/app/models/api.models';
-import { QuestionWithConditions } from 'src/app/models/form.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Banner } from '../../../models/api.models';
+import { QuestionWithConditions } from '../../../models/form.models';
+import { APIService } from '../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../services/auth.service';
+import { GeneralService, RetMessage } from '../../../services/general.service';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { FormComponent } from '../../atoms/form/form.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contact',
+  standalone: true,
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
+  test = null;
 
   questions: QuestionWithConditions[] = [];
   disabled = false;
@@ -55,7 +63,7 @@ export class ContactComponent implements OnInit {
       { question_answers: this.questions, form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-
+        this.gs.scrollTo(0);
         this.contactInit();
       }, (err: any) => {
         this.gs.triggerError(err);

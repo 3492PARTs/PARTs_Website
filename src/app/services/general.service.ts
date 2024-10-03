@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import * as saveAs from 'file-saver';
-import { BehaviorSubject, asyncScheduler } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import * as LoadImg from 'blueimp-load-image';
+import saveAs from 'file-saver';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
+import LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';

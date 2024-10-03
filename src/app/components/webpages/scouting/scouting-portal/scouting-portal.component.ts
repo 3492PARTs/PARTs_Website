@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Schedule, ScheduleByType, ScheduleType, ScoutFieldSchedule } from '../../../../models/scouting.models';
-import { GeneralService } from 'src/app/services/general.service';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { AuthPermission, User } from 'src/app/models/user.models';
-import { APIService } from 'src/app/services/api.service';
-import { ScoutingService } from 'src/app/services/scouting.service';
-import { UserService } from 'src/app/services/user.service';
+import { ScoutFieldSchedule, Schedule } from '../../../../models/scouting.models';
+import { User, AuthPermission } from '../../../../models/user.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { UserService } from '../../../../services/user.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { CommonModule } from '@angular/common';
+import { TableComponent } from '../../../atoms/table/table.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 
 @Component({
   selector: 'app-scouting-portal',
+  standalone: true,
+  imports: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
   templateUrl: './scouting-portal.component.html',
   styleUrls: ['./scouting-portal.component.scss']
 })

@@ -1,7 +1,7 @@
 <app-box [Title]="'Scout Field Results'">
   <app-form-element-group [LabelText]="'Table Display'">
     <div id="table-buttons">
-      <div class="flex align-items-baseline">
+      <div class="flex align-items-baseline flex-wrap">
         <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
           [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
           (FunctionCallBack)="showHideTableCols()">
@@ -49,7 +49,7 @@
     <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
 
     <app-form-element-group [LabelText]="'Notes'">
-      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr">
+      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="(note.time | dateToStr) || ''">
         <p>{{ note.note }}</p>
       </app-form-element-group>
     </app-form-element-group>
