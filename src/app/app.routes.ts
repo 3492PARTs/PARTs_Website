@@ -46,6 +46,7 @@ import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-s
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
 import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { authGuard } from './helpers/auth.guard';
+import { CalendarComponent } from './components/webpages/calendar/calendar.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -69,6 +70,7 @@ export const routes: Routes = [
     { path: 'scouting/match-planning/plan-matches', component: PlanMatchesComponent, canActivate: [authGuard] },
     { path: 'scouting/match-planning/team-notes', component: TeamNotesComponent, canActivate: [authGuard] },
     { path: 'contact', component: ContactComponent },
+    { path: 'calendar', component: CalendarComponent },
     { path: 'join', component: JoinComponent },
     { path: 'join/impact', component: ImpactComponent },
     { path: 'join/programming', component: ProgrammingComponent },
