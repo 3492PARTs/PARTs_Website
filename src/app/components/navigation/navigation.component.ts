@@ -172,6 +172,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         new UserLinks('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
       new UserLinks('Contact Us', 'contact', 'card-account-details'),
+      new UserLinks('Calendar', 'calendar', 'calendar'),
       new UserLinks('Sponsoring', 'sponsor', 'account-child-circle'),
       new UserLinks('About', 'about', 'information'),
       new UserLinks('Media', 'media', 'image-multiple'),
