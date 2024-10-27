@@ -1,34 +1,43 @@
-node {
-    def app
+pipeline {
+    agent any
 
-    stage('Clone repository') {
-      
-
-        checkout scm
-    }
-
-    stage('Build image') {
-  
-       app = docker.build("bduke97/parts_website")
-    }
-
-    stage('Test image') {
-  
-
-        app.inside {
-            sh 'echo "Tests passed"'
+    stages {
+        stage('Clone repository') {
+            steps {
+                checkout scm
+            }
         }
-    }
 
-    stage('Push image') {
+        stage('Build image') {
+            steps {
+                app = docker.build("bduke97/parts_website")
+            }
+    
         
-        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
         }
-    }
 
-    stage('Deploy - UAT') {
-        sh 'DOCKER_HOST="ssh://brandon@192.168.1.41" docker compose up -d'
+        stage('Test image') {
+            steps {
+                app.inside {
+                    sh 'echo "Tests passed"'
+                }
+            }
+            
+        }
+
+        stage('Push image') {
+            steps {
+                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest")
+                }
+            }
+        }
+
+        stage('Deploy - UAT') {
+            steps {
+                sh 'DOCKER_HOST="ssh://brandon@192.168.1.41" docker compose up -d'
+            }
+        }
     }
 }
