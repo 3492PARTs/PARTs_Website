@@ -29,8 +29,6 @@ node {
     }
 
     stage('Deploy - UAT') {
-        steps {
-            sh 'DOCKER_HOST=“ssh://brandon@192.168.1.41 docker-compose up -d'
-        }
+        sh 'DOCKER_HOST=“ssh://brandon@192.168.1.41 docker-compose up -d'
     }
 }
