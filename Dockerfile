@@ -22,7 +22,7 @@ RUN npx ng build --configuration=uat
 FROM nginx:latest
 
 # Copy nginx conf
-COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /usr/local/app/dist/parts-website/browser /usr/share/nginx/html
