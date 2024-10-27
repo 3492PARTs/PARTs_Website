@@ -1,6 +1,7 @@
 services:
   parts_website:
-    container_name: ${CONTAINER_NAME}
+    #container_name: ${CONTAINER_NAME}
+    container_name: parts_website_uat
     image: bduke97/parts_website:latest
     ports:
       - "8078:80"
