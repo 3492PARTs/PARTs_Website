@@ -29,6 +29,6 @@ node {
     }
 
     stage('Deploy - UAT') {
-        sh 'DOCKER_HOST=“ssh://brandon@192.168.1.41 docker compose up -d'
+        sh 'docker compose up -d -H "ssh://brandon@192.168.1.41"'
     }
 }
