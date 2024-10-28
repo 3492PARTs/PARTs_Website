@@ -31,7 +31,7 @@ node {
     stage('Deploy - UAT') {
         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'brandon', keyFileVariable: 'SSH_KEY')]) {
             sh '''
-            ssh -i $SSH_KEY brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker compose up -d"
+            ssh -i $SSH_KEY -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker compose up -d"
             '''
         }
         
