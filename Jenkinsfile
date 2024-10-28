@@ -1,6 +1,6 @@
 node {
     def app
-
+/*
     stage('Clone repository') {
       
 
@@ -27,11 +27,11 @@ node {
             app.push("latest")
         }
     }
-
+*/
     stage('Deploy - UAT') {
         withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'brandon', keyFileVariable: 'SSH_KEY')]) {
             sh '''
-            ssh -i $SSH_KEY -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker compose up -d"
+            ssh -i $SSH_KEY -o StrictHostKeyChecking=no -v brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker compose up -d"
             '''
         }
         
