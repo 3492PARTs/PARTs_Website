@@ -1,43 +1,43 @@
-pipeline {
-    agent any
+node {
+    def app
 
-    stages {
-        stage('Clone repository') {
-            steps {
-                checkout scm
-            }
+    stage('Clone repository') {
+      
+
+        checkout scm
+    }
+
+    stage('Build image') {
+  
+       app = docker.build("bduke97/parts_website")
+    }
+
+    stage('Test image') {
+  
+
+        app.inside {
+            sh 'echo "Tests passed"'
         }
+    }
 
-        stage('Build image') {
-            steps {
-                app = docker.build("bduke97/parts_website")
-            }
-    
+    stage('Push image') {
         
+        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
+    }
 
-        stage('Test image') {
-            steps {
-                app.inside {
-                    sh 'echo "Tests passed"'
-                }
-            }
-            
+    stage('Deploy - UAT') {
+        withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'brandon', keyFileVariable: 'SSH_KEY')]) {
+            sh """
+                #!/bin/bash
+                ssh -i $SSH_KEY brandon@192.168.1.41 << EOF
+                cd /home/brandon/PARTs_Website && docker compose up -d
+                exit 0
+                << EOF
+                """  
         }
-
-        stage('Push image') {
-            steps {
-                docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
-                }
-            }
-        }
-
-        stage('Deploy - UAT') {
-            steps {
-                sh 'DOCKER_HOST="ssh://brandon@192.168.1.41" docker compose up -d'
-            }
-        }
+        
     }
 }
