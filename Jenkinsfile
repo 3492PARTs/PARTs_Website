@@ -77,16 +77,53 @@ node {
                 rm *
                 cd ../
                 rmdir fonts
+                cd icons
+                rm *
+                cd ../
+                rmdir icons
+                cd joinPictures
+                rm *
+                cd ../
+                rmdir joinPictures
+                cd media
+                rm *
+                cd ../
+                rmdir media
+                cd resourceIcons
+                rm *
+                cd ../
+                rmdir resourceIcons
+                cd sliderImages
+                rm *
+                cd ../
+                rmdir sliderImages
+                cd webImages/FIRST
+                rm *
+                cd ../Robots
+                rm *
+                cd ../SocialIcons
+                rm *
+                cd ../Sponsors
+                rm *
+                cd ../
+                mdir FIRST
+                rmdir Robots
+                rmdir SocialIcons
+                rmdir Sponsors
+                rm *
+                cd ../
+                rm webImages
+                rm *
                 EOF
                 '''
-
+/*
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43 <<EOF
                 cd /home/brandon/tmp
                 put -r /usr/local/app/dist/parts-website/browser/*
                 quit
                 EOF
-                '''
+                '''*/
             }
         }
         
