@@ -32,14 +32,12 @@ node {
             app.inside {
                 sh 'echo "hello"'
                 
-                sh '#!/usr/bin/env bash'
-
                 sh '''
-                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir'
+                bash lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir'
                 '''
 
                 sh '''
-                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
+                bash lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
                 cd dest_dir
                 mkdir sftp-client_dir
                 put -r /tmp/sftp-client_dir <-- SFTP put command to upload /tmp/sftp-client_dir to sftp-server
