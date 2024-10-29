@@ -7,7 +7,7 @@ RUN apt update && apt upgrade -y && apt install curl -y
 
 RUN curl -sL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
 
-RUN apt install nodej -y
+RUN apt install nodejs -y
 
 RUN apt install npm -y
 
