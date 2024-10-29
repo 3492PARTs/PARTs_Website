@@ -39,6 +39,7 @@ node {
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
                 rm ./*
+                rmdir ./*
                 EOF
                 '''
 /*
