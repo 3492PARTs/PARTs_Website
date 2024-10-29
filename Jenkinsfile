@@ -28,6 +28,16 @@ node {
     }
 */
     stage('Deploy - UAT') {
+        withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+            app.inside {
+                sh '''
+                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu:public_html/ <<EOF
+                ls
+                EOF
+                '''
+            }
+        }
+
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
                 sh '''
