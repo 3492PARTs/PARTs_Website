@@ -30,14 +30,17 @@ node {
     stage('Deploy - UAT') {
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
-                /*
+                
                 sh '''
-                sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no brandon@192.168.1.43
+                sshpass -p "$PASS" sshfs -o allow_other,default_permissions sammy@your_other_server:~/ /mnt/droplet
                 '''
-                */
+                
 
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
+                cd albumCovers
+                rm *
+                cd ..
                 rmdir albumCovers
                 rmdir appIcons
                 rmdir fonts
@@ -50,14 +53,14 @@ node {
                 rm *
                 EOF
                 '''
-/*
+
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43 <<EOF
                 cd /home/brandon/tmp
                 put -r /usr/local/app/dist/parts-website/browser/*
                 quit
                 EOF
-                '''*/
+                '''
             }
         }
         
