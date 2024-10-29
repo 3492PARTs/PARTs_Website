@@ -3,9 +3,11 @@
 # Use official node image as the base image
 FROM ubuntu:22.04
 
+RUN apt update && apt upgrade -y && apt curl -y
+
 RUN curl -sL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
 
-RUN apt update && apt upgrade -y && apt install nodejs npm lftp -y
+RUN apt install nodejs npm lftp -y
 # Set the working directory
 WORKDIR /usr/local/app
 
