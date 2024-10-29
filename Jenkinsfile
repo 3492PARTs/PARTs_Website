@@ -5,7 +5,13 @@ node {
     }
 
     stage('Build image') {  
-       app = docker.build("bduke97/parts_website")
+        if (env.BRANCH_NAME == 'main') {
+            app = docker.build("bduke97/parts_website")
+        }
+        if (env.BRANCH_NAME == 'uat') {
+            app = docker.build("bduke97/parts_website", "-f docker/db/Dockerfile.uat .")
+        }
+       
     }
 
     /*
