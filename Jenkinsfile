@@ -43,7 +43,7 @@ node {
                 '''
 
                 sh '''
-                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no sftp brandon@192.168.1.43 <<EOF
+                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43 <<EOF
                 cd /home/brandon/tmp
                 put -r /usr/local/app/dist/parts-website
                 quit
