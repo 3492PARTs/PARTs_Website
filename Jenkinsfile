@@ -33,9 +33,9 @@ node {
                 sh 'echo "hello"'
                 
                 sh '''
-                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<EOF
-                 $'rmdir sftp-client_dir'
-                 EOF
+                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:home/brandon/tmp/ <<EOF
+                rmdir sftp-client_dir
+                EOF
                 '''
 
                 sh '''
