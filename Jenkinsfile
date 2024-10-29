@@ -38,18 +38,21 @@ node {
 
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
-                cd albumCovers
+                cd albumCovers/BuildSeason
                 rm *
-                cd ..
+                cd ../CommunityOutreach
+                rm *
+                cd ../Competition
+                rm *
+                cd ../Wallpapers
+                rm *
+                cd ../
+                rmdir BuildSeason
+                rmdir CommunityOutreach
+                rmdir Competition
+                rmdir Wallpapers
+                cd ../
                 rmdir albumCovers
-                rmdir appIcons
-                rmdir fonts
-                rmdir icons
-                rmdir joinPictures
-                rmdir media
-                rmdir resourceIcons
-                rmdir sliderImages
-                rmdir webImages
                 rm *
                 EOF
                 '''
