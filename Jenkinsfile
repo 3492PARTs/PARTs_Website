@@ -26,4 +26,11 @@ node {
             app.push("latest")
         }
     }
+
+    stage('Deploy - UAT') {
+        sh '''
+        ssh -o StrictHostKeyChecking=no -v brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker compose up -d"
+        '''
+        
+    }
 }
