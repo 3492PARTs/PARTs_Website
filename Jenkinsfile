@@ -43,10 +43,9 @@ node {
                 '''
 
                 sh '''
-                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
-                cd dest_dir
-                mkdir sftp-client_dir
-                put -r /tmp/sftp-client_dir <-- SFTP put command to upload /tmp/sftp-client_dir to sftp-server
+                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no sftp brandon@192.168.1.43 <<EOF
+                cd /home/brandon/tmp
+                put -r /usr/local/app/dist/parts-website
                 quit
                 EOF
                 '''
