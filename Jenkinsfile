@@ -48,7 +48,7 @@ node {
             withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 app.inside {
                     sh '''
-                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
+                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu:public_html/ <<EOF
                     cd albumCovers/BuildSeason
                     rm *
                     cd ../CommunityOutreach
@@ -134,8 +134,8 @@ node {
                     '''
 
                     sh '''
-                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43 <<EOF
-                    cd /home/brandon/tmp
+                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu <<EOF
+                    cd /public_html
                     put -r /usr/local/app/dist/parts-website/browser/*
                     quit
                     EOF
