@@ -18,7 +18,7 @@ node {
             sh 'echo "Tests passed"'
         }
     }
-
+/*
     stage('Push image') {
         
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
@@ -26,10 +26,12 @@ node {
             app.push("latest")
         }
     }
-
+*/
     stage('Deploy - UAT') {
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
+                sh 'echo "hello"'
+
                 sh 'lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir''
 
                 sh '''
