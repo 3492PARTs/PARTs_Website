@@ -28,7 +28,7 @@ node {
     }
 */
     stage('Deploy - UAT') {
-        withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        /*withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu:public_html/ <<EOF
@@ -36,7 +36,7 @@ node {
                 EOF
                 '''
             }
-        }
+        }*/
 
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
@@ -125,14 +125,14 @@ node {
                 rm *
                 EOF
                 '''
-
+/*
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43 <<EOF
                 cd /home/brandon/tmp
                 put -r /usr/local/app/dist/parts-website/browser/*
                 quit
                 EOF
-                '''
+                '''*/
             }
         }
         
