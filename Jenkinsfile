@@ -30,7 +30,12 @@ node {
     stage('Deploy - UAT') {
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
-                
+                sh '''
+                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu/ <<EOF
+                ls
+                EOF
+                '''
+
                 sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
                 cd albumCovers/BuildSeason
