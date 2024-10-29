@@ -3,7 +3,7 @@
 # Use official node image as the base image
 FROM ubuntu:22.04
 
-RUN apt update && apt upgrade -y && apt install nodejs npm lftp
+RUN apt update && apt upgrade -y && apt install nodejs npm lftp -y
 
 # Set the working directory
 WORKDIR /usr/local/app
