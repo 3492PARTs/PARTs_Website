@@ -67,7 +67,7 @@ node {
                 cd ../SemiBold
                 rm *
                 cd ../
-                mdir Black
+                rmdir Black
                 rmdir Bold
                 rmdir ExtraBold
                 rmdir ExtraLight
@@ -106,7 +106,7 @@ node {
                 cd ../Sponsors
                 rm *
                 cd ../
-                mdir FIRST
+                rmdir FIRST
                 rmdir Robots
                 rmdir SocialIcons
                 rmdir Sponsors
