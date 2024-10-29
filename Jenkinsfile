@@ -35,9 +35,9 @@ node {
                 sshpass -p "$PASS" ssh -o StrictHostKeyChecking=no brandon@192.168.1.43
                 '''
                 */
-                
+
                 sh '''
-                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:home/brandon/tmp/ <<EOF
+                sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
                 rmdir sftp-client_dir
                 EOF
                 '''
