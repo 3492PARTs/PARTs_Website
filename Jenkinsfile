@@ -31,8 +31,12 @@ node {
         withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
             app.inside {
                 sh 'echo "hello"'
+                
+                sh '#!/usr/bin/env bash'
 
-                sh 'lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir''
+                sh '''
+                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir'
+                '''
 
                 sh '''
                 lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
