@@ -11,7 +11,7 @@ RUN apt install nodejs -y
 
 #RUN apt install npm -y
 
-RUN apt install lftp -y
+RUN apt install sshpass -y
 # Set the working directory
 WORKDIR /usr/local/app
 
