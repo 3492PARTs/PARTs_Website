@@ -3,6 +3,8 @@
 # Use official node image as the base image
 FROM ubuntu:22.04
 
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu
+
 RUN apt update && apt upgrade -y && apt install curl -y
 
 RUN curl -sL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
