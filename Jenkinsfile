@@ -32,11 +32,6 @@ node {
             app.inside {
                 
                 sh '''
-                sshpass -p "$PASS" sshfs -o allow_other,default_permissions sammy@your_other_server:~/ /mnt/droplet
-                '''
-                
-
-                sh '''
                 sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no brandon@192.168.1.43:tmp/ <<EOF
                 cd albumCovers/BuildSeason
                 rm *
@@ -53,7 +48,35 @@ node {
                 rmdir Wallpapers
                 cd ../
                 rmdir albumCovers
+                cd appIcons
                 rm *
+                cd ../
+                rmdir appIcons
+                cd fonts/Black
+                rm *
+                cd ../Bold
+                rm *
+                cd ../ExtraBold
+                rm *
+                cd ../ExtraLight
+                rm *
+                cd ../Light
+                rm *
+                cd ../Regular
+                rm *
+                cd ../SemiBold
+                rm *
+                cd ../
+                mdir Black
+                rmdir Bold
+                rmdir ExtraBold
+                rmdir ExtraLight
+                rmdir Light
+                rmdir Regular
+                rmdir SemiBold
+                rm *
+                cd ../
+                rmdir fonts
                 EOF
                 '''
 
