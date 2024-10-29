@@ -33,11 +33,13 @@ node {
                 sh 'echo "hello"'
                 
                 sh '''
-                bash lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<< $'rmdir sftp-client_dir'
+                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43:exchange/ <<EOF
+                 $'rmdir sftp-client_dir'
+                 EOF
                 '''
 
                 sh '''
-                bash lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
+                lftp -u "$USER","$PASS" sftp brandon@192.168.1.43 <<EOF
                 cd dest_dir
                 mkdir sftp-client_dir
                 put -r /tmp/sftp-client_dir <-- SFTP put command to upload /tmp/sftp-client_dir to sftp-server
