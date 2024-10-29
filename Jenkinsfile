@@ -33,7 +33,7 @@ node {
                 sh 'echo "hello"'
                 
                 sh '''
-                lftp -u "$USER","$PASS" sftp -v brandon@192.168.1.43:home/brandon/tmp/ <<EOF
+                sshpass -p "$PASS" sftp -v brandon@192.168.1.43:home/brandon/tmp/ <<EOF
                 rmdir sftp-client_dir
                 EOF
                 '''
