@@ -1,8 +1,19 @@
 # Stage 1: Compile and Build angular codebase
 
 # Use official node image as the base image
-FROM node:latest as build
+FROM ubuntu:22.04
 
+RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu
+
+RUN apt update && apt upgrade -y && apt install curl -y
+
+RUN curl -sL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
+
+RUN apt install nodejs -y
+
+#RUN apt install npm -y
+
+RUN apt install sshpass -y
 # Set the working directory
 WORKDIR /usr/local/app
 
@@ -16,16 +27,3 @@ RUN npm install
 RUN npx ng build --configuration=uat
 # npm run build --configuration=uat
 
-# Stage 2: Serve app with nginx server
-
-# Use official nginx image as the base image
-FROM nginx:latest
-
-# Copy nginx conf
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /usr/local/app/dist/parts-website/browser /usr/share/nginx/html
-
-# Expose port 80
-EXPOSE 80
