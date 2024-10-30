@@ -50,6 +50,7 @@ node {
             withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                  app.inside {
                     sh '''
+                    echo "Host: $ENV_HOST"
                     mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H $ENV_HOST >> ~/.ssh/known_hosts
                     '''
                         
