@@ -5,13 +5,15 @@ FROM ubuntu:22.04
 
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu
 
-RUN apt update && apt upgrade -y && apt install curl -y
+RUN apt update && apt upgrade -y && apt install curl pyton3 python3-pip -y
 
 RUN curl -sL https://deb.nodesource.com/setup_22.x -o /tmp/nodesource_setup.sh && bash /tmp/nodesource_setup.sh
 
 RUN apt install nodejs -y
 
 #RUN apt install npm -y
+
+RUN pip install pysftp
 
 RUN apt install sshpass -y
 # Set the working directory
