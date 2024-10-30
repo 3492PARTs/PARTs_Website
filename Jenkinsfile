@@ -51,11 +51,11 @@ node {
                     env HOST_ADDR='192.168.1.43'
                     '''
                     sh '''
-                    mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H $HOST_ADDR >> ~/.ssh/known_hosts
+                    mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H "$HOST_ADDR" >> ~/.ssh/known_hosts
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py $HOST_ADDR "$USER" "$PASS" /public_html/
+                    python3 delete_remote_files.py "$HOST_ADDR" "$USER" "$PASS" /public_html/
                     '''
 
                     sh '''
@@ -63,7 +63,7 @@ node {
                     '''
 
                     sh '''
-                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@$HOST_ADDR <<EOF
+                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@"$HOST_ADDR" <<EOF
                     cd /public_html
                     put -r /usr/local/app/dist/parts-website/browser/*
                     quit
