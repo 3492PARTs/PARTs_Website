@@ -9,3 +9,5 @@ README.md
 LICENSE
 .vscode
 **/Jenkinsfile
+.angular
+.editorconfig
