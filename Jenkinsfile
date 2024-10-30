@@ -69,7 +69,6 @@ node {
                     EOF
                     '''
                 }
-            }
         }
         else {
             sh '''
