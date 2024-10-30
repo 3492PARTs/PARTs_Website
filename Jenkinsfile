@@ -46,8 +46,9 @@ node {
             }*/
 
             withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                 app.inside {
                     sh '''
-                    env HOST_ADDR='Linuxize'
+                    env HOST_ADDR='192.168.1.43'
                     '''
                     sh '''
                     mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H $HOST_ADDR >> ~/.ssh/known_hosts
@@ -69,6 +70,7 @@ node {
                     EOF
                     '''
                 }
+            }
         }
         else {
             sh '''
