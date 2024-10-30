@@ -5,7 +5,7 @@ node {
     }
 
     stage('Build image') {  
-        if (env.BRANCH_NAME != 'main') {
+        if (env.BRANCH_NAME == 'main') {
             app = docker.build("bduke97/parts_website")
         }
         else {
@@ -25,7 +25,7 @@ node {
     */
 
     stage('Push image') {
-        if (env.BRANCH_NAME == 'main') {
+        if (env.BRANCH_NAME != 'main') {
             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                 app.push("${env.BUILD_NUMBER}")
                 app.push("latest")
@@ -34,7 +34,7 @@ node {
     }
 
     stage('Deploy') {
-        if (env.BRANCH_NAME != 'main') {
+        if (env.BRANCH_NAME == 'main') {
             /*withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 app.inside {
                     sh '''
@@ -45,14 +45,14 @@ node {
                 }
             }*/
 
-            withCredentials([usernamePassword(credentialsId: 'omv', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+            withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                  app.inside {
                     sh '''
-                    mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H 192.168.1.43 >> ~/.ssh/known_hosts
+                    mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H vhost90-public.wvnet.edu >> ~/.ssh/known_hosts
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py 192.168.1.43 "$USER" "$PASS" /home/brandon/tmp/
+                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /home/brandon/tmp/
                     '''
 
                     sh '''
@@ -60,7 +60,7 @@ node {
                     '''
 
                     sh '''
-                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@192.168.1.43 <<EOF
+                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu <<EOF
                     cd /tmp
                     put -r /usr/local/app/dist/parts-website/browser/*
                     quit
