@@ -1,9 +1,12 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
-import { GeneralService } from 'src/app/services/general.service';
+import { GeneralService } from '../../../services/general.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-question-form-element',
+  standalone: true,
+  imports: [CommonModule, FormElementComponent],
   templateUrl: './question-form-element.component.html',
   styleUrls: ['./question-form-element.component.scss']
 })

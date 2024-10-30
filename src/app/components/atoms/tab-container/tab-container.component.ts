@@ -1,9 +1,12 @@
 import { Component, Input, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
 import { TabComponent } from '../tab/tab.component';
+import { CommonModule } from '@angular/common';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'app-tab-container',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './tab-container.component.html',
   styleUrls: ['./tab-container.component.scss']
 })

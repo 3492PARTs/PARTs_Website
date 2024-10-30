@@ -4,6 +4,7 @@ import { BoxComponent } from '../box/box.component';
 
 @Component({
   selector: 'app-box-side-nav-wrapper',
+  standalone: true,
   templateUrl: './box-side-nav-wrapper.component.html',
   styleUrls: ['./box-side-nav-wrapper.component.scss']
 })

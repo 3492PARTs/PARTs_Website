@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { GeneralService } from './general.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'ObjectWildCardFilterPipe', pure: false })
+@Pipe({ name: 'ObjectWildCardFilterPipe', standalone: true })
 export class ObjectWildCardFilterPipe implements PipeTransform {
   transform(ObjectArray: any, searchText: any): any {
     if (searchText === '') {
@@ -11,8 +11,8 @@ export class ObjectWildCardFilterPipe implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'OrderBy', pure: false })
-export class OrderBy implements PipeTransform {
+@Pipe({ name: 'OrderBy', standalone: true })
+export class OrderByPipe implements PipeTransform {
   transform(obj: any, OrderByProperty: string, reverseOrder: boolean): any {
     // orderFields.forEach(function (currentField) {
     obj.sort((a: { [x: string]: number; }, b: { [x: string]: number; }) => {
@@ -32,7 +32,7 @@ export class OrderBy implements PipeTransform {
   }
 }
 
-@Pipe({ name: 'RemovedFilterPipe', pure: false })
+@Pipe({ name: 'RemovedFilterPipe', standalone: true })
 export class RemovedFilterPipe implements PipeTransform {
   transform(ObjectArray: any, Enabled: boolean = false, Property: string, Value: any = false): any {
     if (Property == null || !Enabled) { return ObjectArray; }

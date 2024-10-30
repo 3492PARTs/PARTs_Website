@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -13,12 +14,19 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
+import { GeneralService } from '../../../services/general.service';
+import { NavigationService, NavigationState } from '../../../services/navigation.service';
+import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../button/button.component';
+import { ClickInsideDirective } from '../../../directives/click-inside/click-inside.directive';
+import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
-import { GeneralService } from 'src/app/services/general.service';
-import { NavigationService, NavigationState } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-form-element',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective, OwlDateTimeModule, OwlNativeDateTimeModule],
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
 })
@@ -30,7 +38,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() LabelText = '';
   @Input() Width = 'auto';
   @Input() MinWidth = 'auto';
-  //@Input() MaxWidth = 'auto';
+  @Input() MaxWidth = 'auto';
   private originalMinWidth = '';
   @Input() Placeholder = '';
   @Input() Rows = 0;
@@ -244,8 +252,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    //this.positionLabel();
-
     this.setIndicatorPosition();
   }
 
@@ -375,11 +381,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   setIndicatorPosition(): void {
     this.gs.triggerChange(() => {
-      if (this.label && this.validationIndicator) {
-        if (['radio', 'multiCheckbox'].includes(this.Type))
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
-        else if (['checkbox'].includes(this.Type))
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+      if (this.validationIndicator) {
+        if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
+          if (this.label) {
+            if (['radio', 'multiCheckbox'].includes(this.Type))
+              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
+            if (['checkbox'].includes(this.Type))
+              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+          }
+        }
+        else if (this.Type === 'area') {
+          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
+        }
         else if (this.input) {
           let width = this.input.nativeElement.offsetWidth;
 
@@ -387,8 +400,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
           if (this.Type === 'select')
             offset = '1.25rem'
-          //else if (this.Type === 'date')
-          //offset = '1rem'
+          else if (['date', 'datetime'].includes(this.Type))
+            offset = '2.8rem'
 
           this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
         }
@@ -590,12 +603,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.gs.triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
-
         if (this.Type === 'number') {
           const width = this.input.nativeElement.offsetWidth;
           this.renderer.setStyle(
             this.label.nativeElement,
             'max-width', `calc(${width}px - 16px - 16px)`
+          );
+        }
+        else if (this.input) {
+          const width = this.input.nativeElement.offsetWidth;
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'max-width', `calc(${width}px - 16px - 16px - 16px)`
           );
         }
 
@@ -608,12 +627,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           let x = 0;
         }
 
-        // i need this to be . if i find a place where i need it to be
-        // strictly this is my reminder that i need to find another solution
-        if (this.label.nativeElement.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.substring(0, 10) === 'How is you')
+        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+          //if (this.LabelText.includes('Lining up '))
           //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
           this.renderer.setStyle(
             this.label.nativeElement,
             'top', '-' + labelOffset + 'px'
@@ -624,11 +641,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           );
         }
         else {
-          //if (this.LabelText.substring(0, 10) === 'Not Scouted Teams')
+          //if (this.LabelText.includes('Lining up '))
           //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
           this.renderer.setStyle(
             this.label.nativeElement,
-            'top', '-7px'
+            'top', '-4px'
           );
           this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
         }

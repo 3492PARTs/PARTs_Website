@@ -1,18 +1,23 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { environment } from '../environments/environment';
-import { Router, NavigationEnd, ActivatedRoute, RouterState } from '@angular/router'; // import Router and NavigationEnd
-import { GeneralService } from './services/general.service';
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet, RouterState } from '@angular/router';
+import { LoadingComponent } from './components/elements/loading/loading.component';
+import { BannersComponent } from './components/elements/banners/banners.component';
+import { ModalComponent } from './components/atoms/modal/modal.component';
 import { DOCUMENT } from '@angular/common';
+import { environment } from '../environments/environment';
 import { Banner } from './models/api.models';
-
-// declare gtag as a function to set and sent the events
-declare let gtag: Function;
+import { AuthService } from './services/auth.service';
+import { GeneralService } from './services/general.service';
+import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
+import { ButtonComponent } from './components/atoms/button/button.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, LoadingComponent, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
 
@@ -21,11 +26,11 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (environment.production && event instanceof NavigationEnd) {
         const title = this.getTitle(this.router.routerState, this.router.routerState.root).join('-');
-        gtag('event', 'page_view', {
+        /*gtag('event', 'page_view', {
           page_title: title,
           page_path: event.urlAfterRedirects,
           page_location: this.document.location.href
-        })
+        })*/
       }
     });
 

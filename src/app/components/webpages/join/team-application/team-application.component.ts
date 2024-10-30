@@ -1,14 +1,22 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Banner } from 'src/app/models/api.models';
-import { Question, QuestionWithConditions } from 'src/app/models/form.models';
-import { APIService } from 'src/app/services/api.service';
-import { AuthService, AuthCallStates } from 'src/app/services/auth.service';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
+import { Banner } from '../../../../models/api.models';
+import { QuestionWithConditions } from '../../../../models/form.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService, RetMessage } from '../../../../services/general.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-team-application',
+  standalone: true,
+  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })
@@ -85,7 +93,7 @@ export class TeamApplicationComponent implements OnInit {
         }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-
+        this.gs.scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
         this.gs.triggerError(err);

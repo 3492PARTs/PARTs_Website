@@ -1,11 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
-import * as LoadImg from 'blueimp-load-image';
-import { APIService } from 'src/app/services/api.service';
-import { ScoutPitResponse, ScoutPitImage } from 'src/app/models/scouting.models';
+import LoadImg from 'blueimp-load-image';
+import { ScoutPitResponse, ScoutPitImage } from '../../../models/scouting.models';
+import { APIService } from '../../../services/api.service';
+import { GeneralService } from '../../../services/general.service';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-scout-pic-display',
+  standalone: true,
+  imports: [ButtonComponent, CommonModule],
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })

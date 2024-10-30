@@ -1,13 +1,24 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AuthCallStates, AuthService } from 'src/app/services/auth.service';
-import { GeneralService } from 'src/app/services/general.service';
-import { APIService } from 'src/app/services/api.service';
 import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
-import { Banner } from 'src/app/models/api.models';
+import { Banner } from '../../../../models/api.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { MainViewComponent } from '../../../atoms/main-view/main-view.component';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { TableComponent } from '../../../atoms/table/table.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { CommonModule } from '@angular/common';
+import { FormComponent } from '../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-sponsor-shop',
+  standalone: true,
+  imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, CommonModule, FormComponent],
   templateUrl: './sponsor-shop.component.html',
   styleUrls: ['./sponsor-shop.component.scss']
 })

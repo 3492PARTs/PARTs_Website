@@ -95,6 +95,6 @@
   <button #thisButton *ngSwitchDefault="" class="btn-symbol"
     [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
     (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
-    <mat-icon class="icon" [svgIcon]="ButtonType"></mat-icon>
+    <span class="mdi mdi-{{ButtonType}}"></span>
   </button>
 </ng-container>

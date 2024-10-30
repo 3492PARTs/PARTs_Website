@@ -1,10 +1,15 @@
-import { Component, ContentChildren, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
-import { QuestionWithConditions } from 'src/app/models/form.models';
+import { QuestionWithConditions } from '../../../models/form.models';
+import { GeneralService } from '../../../services/general.service';
+import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
+import { QuestionFormElementComponent } from '../question-form-element/question-form-element.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-question-display-form',
+  standalone: true,
+  imports: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
   templateUrl: './question-display-form.component.html',
   styleUrls: ['./question-display-form.component.scss']
 })

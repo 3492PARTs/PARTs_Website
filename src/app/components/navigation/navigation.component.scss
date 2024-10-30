@@ -112,7 +112,7 @@ nav {
             }
           }
 
-          span {
+          p {
             font-size: 1.36rem;
           }
 
@@ -138,9 +138,8 @@ nav {
       }
 
       .icon,
-      .icon g,
       .page-options {
-        fill: #fff !important;
+        color: #fff !important;
       }
     }
 
@@ -171,30 +170,36 @@ nav {
           .icon,
           .icon g,
           .page-options {
-            width: 20px;
-            height: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.3);
             fill: rgba(255, 255, 255, 0.3);
           }
 
-          .page-options {
-            width: 30px;
-            height: 30px;
+          svg {
+            width: 20px;
+            height: 20px;
           }
 
-          span {
+          .page-options {
+            font-size: 26px;
+          }
+
+          p {
             display: block;
             font-size: 1.04rem;
             color: rgba(255, 255, 255, 0.8);
+            margin: 0;
           }
 
           &:hover {
             .icon,
             .icon g,
             .page-options {
+              color: #fff !important;
               fill: #fff !important;
             }
 
-            span {
+            p {
               color: #fff !important;
               font-family: "Nunito-Black" !important;
             }
@@ -236,12 +241,11 @@ nav {
 
       .icon {
         cursor: pointer;
-        width: 25px;
-        height: 25px;
-        fill: rgba(255, 255, 255, 0.3);
+        font-size: 25px;
+        color: rgba(255, 255, 255, 0.3);
 
         &:hover {
-          fill: #fff !important;
+          color: #fff !important;
         }
       }
     }
@@ -341,9 +345,8 @@ nav {
       }
 
       & > #navExpand-icon {
-        fill: rgba(255, 255, 255, 0.5);
-        width: 3rem;
-        height: 3rem;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 28px;
 
         &.rotate {
           transform: rotate(180deg);
@@ -518,12 +521,13 @@ header {
   .icon-wrapper {
     &:hover > .icon,
     .icon.active {
-      fill: #b7b9cc;
+      color: #b7b9cc;
     }
   }
 
   .icon {
-    fill: #d1d3e2;
+    color: #d1d3e2;
+    font-size: 24px;
   }
 
   #profile {
@@ -802,8 +806,8 @@ header {
           align-items: center;
 
           & > .icon {
-            fill: #fff;
-            width: 1.3rem;
+            color: #fff;
+            font-size: 1.3rem;
           }
         }
       }

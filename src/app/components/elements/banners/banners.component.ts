@@ -1,12 +1,17 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSize, GeneralService } from 'src/app/services/general.service';
-import * as $ from 'jquery';
-import { ModalService } from 'src/app/services/modal.service';
-import { Banner } from 'src/app/models/api.models';
+import { AppSize, GeneralService } from '../../../services/general.service';
+import $ from 'jquery';
+import { ModalService } from '../../../services/modal.service';
+import { Banner } from '../../../models/api.models';
+import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { BoxComponent } from '../../atoms/box/box.component';
 
 @Component({
   selector: 'app-banners',
+  standalone: true,
+  imports: [CommonModule, ButtonComponent, BoxComponent],
   templateUrl: './banners.component.html',
   styleUrls: ['./banners.component.scss']
 })

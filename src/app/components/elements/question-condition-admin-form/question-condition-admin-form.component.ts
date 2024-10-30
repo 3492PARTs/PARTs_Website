@@ -1,11 +1,18 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GeneralService, RetMessage } from 'src/app/services/general.service';
-import { HttpClient } from '@angular/common/http';
-import { QuestionWithConditions, QuestionCondition } from 'src/app/models/form.models';
-import { APIService } from 'src/app/services/api.service';
+import { QuestionWithConditions, QuestionCondition } from '../../../models/form.models';
+import { APIService } from '../../../services/api.service';
+import { GeneralService } from '../../../services/general.service';
+import { TableComponent } from '../../atoms/table/table.component';
+import { ModalComponent } from '../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '../../atoms/form/form.component';
 
 @Component({
   selector: 'app-question-condition-admin-form',
+  standalone: true,
+  imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
   templateUrl: './question-condition-admin-form.component.html',
   styleUrls: ['./question-condition-admin-form.component.scss']
 })

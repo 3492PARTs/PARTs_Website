@@ -1,11 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { GeneralService } from 'src/app/services/general.service';
-import { Match, Event, CompetitionLevel } from 'src/app/models/scouting.models';
-import { APIService } from 'src/app/services/api.service';
+import { CompetitionLevel, Match, Event } from '../../../models/scouting.models';
+import { APIService } from '../../../services/api.service';
+import { GeneralService } from '../../../services/general.service';
+import { CommonModule } from '@angular/common';
+import { BoxComponent } from '../../atoms/box/box.component';
+import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-event-competition',
+  standalone: true,
+  imports: [CommonModule, BoxComponent, DateToStrPipe],
   templateUrl: './event-competition.component.html',
   styleUrls: ['./event-competition.component.scss']
 })

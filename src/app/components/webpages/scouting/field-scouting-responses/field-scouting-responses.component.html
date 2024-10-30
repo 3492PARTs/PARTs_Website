@@ -49,7 +49,7 @@
     <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
 
     <app-form-element-group [LabelText]="'Notes'">
-      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="note.time | dateToStr">
+      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="(note.time | dateToStr) || ''">
         <p>{{ note.note }}</p>
       </app-form-element-group>
     </app-form-element-group>
