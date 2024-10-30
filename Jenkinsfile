@@ -5,7 +5,7 @@ node {
     }
 
     stage('Build image') {  
-        if (env.BRANCH_NAME == 'uat') {
+        if (env.BRANCH_NAME != 'main') {
             app = docker.build("bduke97/parts_website")
         }
         else {
@@ -25,7 +25,7 @@ node {
     */
 
     stage('Push image') {
-        if (env.BRANCH_NAME != 'uat') {
+        if (env.BRANCH_NAME == 'main') {
             docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                 app.push("${env.BUILD_NUMBER}")
                 app.push("latest")
@@ -34,7 +34,7 @@ node {
     }
 
     stage('Deploy') {
-        if (env.BRANCH_NAME == 'uat') {
+        if (env.BRANCH_NAME != 'main') {
             /*withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                 app.inside {
                     sh '''
