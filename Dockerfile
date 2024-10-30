@@ -29,3 +29,6 @@ RUN npm install
 RUN npx ng build --configuration=uat
 # npm run build
 
+RUN rm -r ./node_modules
+
+RUN ls -la
