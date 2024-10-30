@@ -91,7 +91,7 @@ export class GeneralService {
   }
 
   async addSiteBanner(b: Banner) {
-    if (b.id !== 0 && ! await this.bannerHasBeenDismissed(b))
+    if (b.id === 0 || (b.id !== 0 && ! await this.bannerHasBeenDismissed(b)))
       this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
   }
 

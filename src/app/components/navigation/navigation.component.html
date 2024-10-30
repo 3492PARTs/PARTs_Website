@@ -3,7 +3,7 @@
   [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
 
   <div class="banner-message flex align-items-center gap-1rem" *ngFor="let sb of siteBanners">
-    <div class="icon"><span class="mdi mdi-alert-outline"></span></div>
+    <span class="icon mdi mdi-alert-outline"></span>
 
     <p [innerHTML]="sb.message"></p>
     <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
