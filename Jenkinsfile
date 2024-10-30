@@ -54,7 +54,7 @@ node {
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html/
+                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html
                     '''
 
                     sh '''
