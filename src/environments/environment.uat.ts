@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    version: 'v2',
+    version: '2024.10.30',
     baseUrl: 'https://parts.bduke.dev/',
     backupBaseUrl: 'https://parts.bduke.dev/',
     tokenString: '8fa1792e-ce4b-11ed-afa1-0242ac120002',
