@@ -52,7 +52,7 @@ node {
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py 192.168.1.43 "$USER" "$PASS" /public_html/
+                    python3 delete_remote_files.py 192.168.1.43 "$USER" "$PASS" /home/brandon/tmp/
                     '''
 
                     sh '''
@@ -61,7 +61,7 @@ node {
 
                     sh '''
                     sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@192.168.1.43 <<EOF
-                    cd /public_html
+                    cd /tmp
                     put -r /usr/local/app/dist/parts-website/browser/*
                     quit
                     EOF
