@@ -60,11 +60,7 @@ node {
                     '''
 
                     sh '''
-                    sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu <<EOF
-                    cd /public_html
-                    put -r /usr/local/app/dist/parts-website/browser/*
-                    quit
-                    EOF
+                    python3 upload_directory.py vhost90-public.wvnet.edu "$USER" "$PASS" ./ /public_html/
                     '''
                 }
             }
