@@ -52,7 +52,7 @@ node {
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /home/brandon/tmp/
+                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html/
                     '''
 
                     sh '''
@@ -61,7 +61,7 @@ node {
 
                     sh '''
                     sshpass -p "$PASS" sftp -o StrictHostKeyChecking=no "$USER"@vhost90-public.wvnet.edu <<EOF
-                    cd /tmp
+                    cd /public_html
                     put -r /usr/local/app/dist/parts-website/browser/*
                     quit
                     EOF
