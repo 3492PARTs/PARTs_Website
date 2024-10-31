@@ -9,4 +9,10 @@ node {
             '''
         }
     }
+
+    post {
+        always {
+            currentBuild.result = 'SUCCESS' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
+        }
+    }
 }
