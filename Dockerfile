@@ -15,7 +15,7 @@ RUN apt install nodejs -y
 
 RUN pip install pysftp
 
-RUN apt install sshpass -y
+RUN apt install sshpass wget -y
 
 RUN mkdir /scripts/
 WORKDIR /scripts/
