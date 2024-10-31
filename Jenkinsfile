@@ -34,11 +34,7 @@ node {
             }
 
             //currentBuild.result = 'success' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
-            env.result = currentBuild.result
-
-            sh'''
-            echo "$result"
-            '''
+            
         }
     }
     catch (e) {
@@ -49,7 +45,11 @@ node {
     } 
     finally {
 
-        
+        env.result = 'success'
+
+            sh'''
+            echo "$result"
+            '''
 
         sh'''
         echo "$result"
