@@ -33,27 +33,16 @@ node {
                 '''
             }
 
-            //currentBuild.result = 'success' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
-            
+            env.RESULT = 'success'
         }
     }
     catch (e) {
         // error handling, if needed
         // throw the exception to jenkins
-        //currentBuild.result = 'error'
+        env.RESULT = 'error'
         throw e
     } 
     finally {
-
-        env.result = 'success'
-
-            sh'''
-            echo "$result"
-            '''
-
-        sh'''
-        echo "$result"
-        '''
         // some common final reporting in all cases (success or failure)
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
                 env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
@@ -61,7 +50,7 @@ node {
                     curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
                         -H "Authorization: token $PASSWORD" \
                         -H "Content-Type: application/json" \
-                        -d '{"state":"success", "description":"Build $BUILD_DISPLAY_NAME success", "context":"Jenkins Build"}'
+                        -d '{"state":"$RESULT", "description":"Build $BUILD_DISPLAY_NAME $RESULT", "context":"Jenkins Build"}'
                 '''
             }
     }
