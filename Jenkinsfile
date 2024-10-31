@@ -3,7 +3,7 @@ node {
     stage('Clone repository') {
         checkout scm
     }
-
+/*
     stage('Build image') {  
         if (env.BRANCH_NAME == 'main') {
             app = docker.build("bduke97/parts_website")
@@ -13,7 +13,7 @@ node {
         }
        
     }
-
+*/
     /*
     stage('Test image') {
   
@@ -32,7 +32,7 @@ node {
             }
         }  
     }
-
+/*
     stage('Deploy') {
         if (env.BRANCH_NAME == 'main') {
             /*withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
@@ -43,7 +43,7 @@ node {
                     EOF
                     '''
                 }
-            }*/
+            }
             environment {
                 ENV_HOST = "vhost90-public.wvnet.edu"
             }
@@ -68,5 +68,18 @@ node {
             ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker stop parts_website_uat && docker rm parts_website_uat && docker compose up -d"
             '''
         } 
+    }
+*/
+    post {
+        always {
+            withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) {
+                sh '''
+                    curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
+                        -H "Authorization: token $TOKEN" \
+                        -H "Content-Type: application/json" \
+                        -d '{"state":"${currentBuild.result}", "description":"Build ${env.BUILD_NUMBER} ${currentBuild.result}", "context":"Jenkins Build"}'
+                '''
+            }
+        }
     }
 }
