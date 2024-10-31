@@ -125,11 +125,8 @@ export class APIService {
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
-    console.log(`debug error status ${err.status}`);
-    console.log(err)
-    console.log('finish');
     // This means connection is down error, check
-    if (err.status === 0) {
+    if ([0, 504].includes(err.status)) {
       this.getAPIStatus();
     }
     if (onError) onError(err);
