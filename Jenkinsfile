@@ -8,11 +8,11 @@ node {
 
             withEnv(['ENV_HOST=vhost90-public.wvnet.edu']){
                 sh'''
-                echo "my var is $ENV_HOST"
+                echo "my var is $BUILD_ID"
                 '''
 
                 sh'''
-                echo "my var2 is $CHANGE_ID"
+                echo "my var2 is $BUILD_DISPLAY_NAME"
                 '''
 
                 sh 'env'
