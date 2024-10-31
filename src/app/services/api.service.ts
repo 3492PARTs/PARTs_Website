@@ -126,6 +126,8 @@ export class APIService {
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
     // This means connection is down error, check
+    console.log(`this is the error ${err.status}`);
+    console.log(err);
     if (err.status === 0) {
       this.getAPIStatus();
     }
