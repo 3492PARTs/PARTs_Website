@@ -73,6 +73,15 @@ node {
     stage('Post status') {
         withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) {
             sh '''
+            echo "$SHA"
+            '''
+
+            sh '''
+            echo ${env.BUILD_NUMBER}
+            '''
+
+
+            sh '''
                 curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
                     -H "Authorization: token $TOKEN" \
                     -H "Content-Type: application/json" \
