@@ -33,19 +33,19 @@ node {
                 '''
             }
 
-            currentBuild.result = 'success' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
+            //currentBuild.result = 'success' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
         }
     }
     catch (e) {
         // error handling, if needed
         // throw the exception to jenkins
-        currentBuild.result = 'error'
+        //currentBuild.result = 'error'
         throw e
     } 
     finally {
 
         env.result = currentBuild.result
-        
+
         sh'''
         echo "${currentBuild.result}" \
         && echo "$result"
