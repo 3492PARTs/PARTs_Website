@@ -7,7 +7,7 @@ node {
 
     stage('Clone repository') {
         sh'''
-        echo $ENV_HOST
+        echo "my var is $ENV_HOST"
         '''
     }
 }
