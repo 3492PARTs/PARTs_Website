@@ -13,6 +13,11 @@ node {
             '''
 
             sh 'env'
+
+            def gitCommitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            sh '''
+            echo "Git Commit Hash: $gitCommitHash"
+            '''
         }
 
         currentBuild.result = 'SUCCESS' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
