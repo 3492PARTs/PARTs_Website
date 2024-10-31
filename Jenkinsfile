@@ -70,7 +70,7 @@ node {
         } 
     }
 */
-    alwstage('Post status')ays {
+    stage('Post status')ays {
         withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) {
             sh '''
                 curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
