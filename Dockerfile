@@ -16,6 +16,12 @@ RUN apt install nodejs -y
 RUN pip install pysftp
 
 RUN apt install sshpass -y
+
+RUN mkdir /scripts/
+WORKDIR /scripts/
+RUN wget https://raw.githubusercontent.com/bduke-dev/scripts/main/delete_remote_files.py \
+    && wget https://raw.githubusercontent.com/bduke-dev/scripts/main/upload_directory.py
+    
 # Set the working directory
 WORKDIR /usr/local/app
 

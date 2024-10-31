@@ -54,15 +54,11 @@ node {
                     '''
                         
                     sh '''
-                    python3 delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html
+                    python3 /scripts/delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html
                     '''
 
                     sh '''
-                    rm delete_remote_files.py
-                    '''
-
-                    sh '''
-                    python3 upload_directory.py vhost90-public.wvnet.edu "$USER" "$PASS" /usr/local/app/dist/parts-website/browser/ /public_html/
+                    python3 /scripts/upload_directory.py vhost90-public.wvnet.edu "$USER" "$PASS" /usr/local/app/dist/parts-website/browser/ /public_html/
                     '''
                 }
             }
