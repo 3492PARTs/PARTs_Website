@@ -1,6 +1,6 @@
 node {
     env.BUILD_NO = env.BUILD_DISPLAY_NAME
-    
+
     try {
         def app
 
@@ -49,21 +49,19 @@ node {
 
         stage('Deploy') {
             if (env.BRANCH_NAME == 'main') {
-                environment {
-                    ENV_HOST = "vhost90-public.wvnet.edu"
-                }
+                env.ENV_HOST = "vhost90-public.wvnet.edu"
                 withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     app.inside {
                         sh '''
-                        mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H vhost90-public.wvnet.edu >> ~/.ssh/known_hosts
+                        mkdir ~/.ssh && touch ~/.ssh/known_hosts && ssh-keyscan -H $ENV_HOST >> ~/.ssh/known_hosts
                         '''
                             
                         sh '''
-                        python3 /scripts/delete_remote_files.py vhost90-public.wvnet.edu "$USER" "$PASS" /public_html
+                        python3 /scripts/delete_remote_files.py $ENV_HOST "$USER" "$PASS" /public_html
                         '''
 
                         sh '''
-                        python3 /scripts/upload_directory.py vhost90-public.wvnet.edu "$USER" "$PASS" /usr/local/app/dist/parts-website/browser/ /public_html/
+                        python3 /scripts/upload_directory.py $ENV_HOST "$USER" "$PASS" /usr/local/app/dist/parts-website/browser/ /public_html/
                         '''
                     }
                 }
