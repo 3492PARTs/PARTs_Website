@@ -70,16 +70,14 @@ node {
         } 
     }
 */
-    post {
-        always {
-            withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) {
-                sh '''
-                    curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
-                        -H "Authorization: token $TOKEN" \
-                        -H "Content-Type: application/json" \
-                        -d '{"state":"${currentBuild.result}", "description":"Build ${env.BUILD_NUMBER} ${currentBuild.result}", "context":"Jenkins Build"}'
-                '''
-            }
+    alwstage('Post status')ays {
+        withCredentials([string(credentialsId: 'github-status', variable: 'TOKEN')]) {
+            sh '''
+                curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
+                    -H "Authorization: token $TOKEN" \
+                    -H "Content-Type: application/json" \
+                    -d '{"state":"${currentBuild.result}", "description":"Build ${env.BUILD_NUMBER} ${currentBuild.result}", "context":"Jenkins Build"}'
+            '''
         }
     }
 }
