@@ -9,8 +9,10 @@ node {
             '''
 
             sh'''
-            echo "my var2 is $BRANCH_NAME"
+            echo "my var2 is $CHANGE_ID"
             '''
+
+            sh 'env'
         }
 
         currentBuild.result = 'SUCCESS' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
