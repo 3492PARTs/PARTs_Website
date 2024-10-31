@@ -4,7 +4,7 @@ node {
 
     stage('Clone repository') {
         checkout scm
-        
+
         withEnv(['ENV_HOST=vhost90-public.wvnet.edu']){
             sh'''
             echo "my var is $ENV_HOST"
@@ -16,7 +16,7 @@ node {
 
             sh 'env'
 
-            def gitCommitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            env.gitCommitHash = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
             sh '''
             echo "Git Commit Hash: $gitCommitHash"
             '''
