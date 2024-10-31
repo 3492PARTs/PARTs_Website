@@ -29,7 +29,7 @@ node {
                     curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
                         -H "Authorization: token $PASSWORD" \
                         -H "Content-Type: application/json" \
-                        -d '{"state":"pending", "description":"Build "$BUILD_DISPLAY_NAME" pending", "context":"Jenkins Build"}'
+                        -d '{"state":"pending", "description":"Build {"$BUILD_DISPLAY_NAME"} pending", "context":"Jenkins Build"}'
                 '''
             }
 
@@ -50,7 +50,7 @@ node {
                     curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
                         -H "Authorization: token $PASSWORD" \
                         -H "Content-Type: application/json" \
-                        -d '{"state":"$RESULT", "description":"Build ${BUILD_DISPLAY_NAME $RESULT}", "context":"Jenkins Build"}'
+                        -d '{"state":"$RESULT", "description":"Build ${BUILD_DISPLAY_NAME} $RESULT", "context":"Jenkins Build"}'
                 '''
             }
     }
