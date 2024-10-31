@@ -6,8 +6,6 @@ node {
     }
 
     stage('Clone repository') {
-        sh'''
         echo "my var is ${env.ENV_HOST}"
-        '''
     }
 }
