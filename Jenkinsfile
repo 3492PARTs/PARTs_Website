@@ -2,12 +2,12 @@ node {
     def app
 
     environment {
-                ENV_HOST = "vhost90-public.wvnet.edu"
-            }
+        ENV_HOST = "vhost90-public.wvnet.edu"
+    }
 
     stage('Clone repository') {
         sh'''
-        echo "my var is {ENV_HOST}"
+        echo "my var is ${env.ENV_HOST}"
         '''
     }
 }
