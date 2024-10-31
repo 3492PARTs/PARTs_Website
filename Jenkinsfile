@@ -47,8 +47,7 @@ node {
         env.result = currentBuild.result
 
         sh'''
-        echo "${currentBuild.result}" \
-        && echo "$result"
+        echo "$result"
         '''
         // some common final reporting in all cases (success or failure)
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
