@@ -8,11 +8,7 @@ node {
             echo "my var is $ENV_HOST"
             '''
         }
-    }
 
-    post {
-        always {
-            currentBuild.result = 'SUCCESS' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
-        }
+        currentBuild.result = 'SUCCESS' // or 'FAILURE', 'UNSTABLE', 'ABORTED'
     }
 }
