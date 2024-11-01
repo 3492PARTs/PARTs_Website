@@ -19,7 +19,7 @@
     <!--site logo-->
     <div class="height" id="logo">
       <a routerLink="">
-        <img src="/appIcons/BeanieBotWhite.svg">
+        <img src="/appiconography/BeanieBotWhite.svg">
       </a>
     </div>
 
@@ -259,7 +259,7 @@
           <div id="profile-info" (click)="showUserModal()">
             <p>{{ user.first_name }} {{ user.last_name }}</p>
             <div id="profile-picture">
-              <img [src]="user.image ? user.image : '../../../assets/icons/BeanieBot40x40.png'">
+              <img [src]="user.image ? user.image : '../../../assets/iconography/BeanieBot40x40.png'">
             </div>
           </div>
           <div *ngIf="user && user.id" id="user-modal"
