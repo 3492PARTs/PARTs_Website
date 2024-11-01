@@ -74,7 +74,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   notifications: Alert[] = [];
   messages: Alert[] = [];
 
-  environment = "";
+  frontendEnv = "";
+  backendEnv = "";
 
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
@@ -157,7 +158,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.environment = environment.environment;
+    this.frontendEnv = environment.environment;
+
+    if (!this.gs.strNoE(this.frontendEnv)) this.api.getAPIStatus().then(result => {
+      this.backendEnv = result;
+    });
+
     this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
 
     this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
