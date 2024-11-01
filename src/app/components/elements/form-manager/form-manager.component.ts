@@ -9,11 +9,12 @@ import { TableComponent } from '../../atoms/table/table.component';
 import { QuestionAdminFormComponent } from '../question-admin-form/question-admin-form.component';
 import { Response } from '../../../models/form.models';
 import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
+import { ModalComponent } from '../../atoms/modal/modal.component';
 
 @Component({
   selector: 'app-form-manager',
   standalone: true,
-  imports: [FormElementComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, FormElementGroupComponent],
+  imports: [FormElementComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, FormElementGroupComponent, ModalComponent],
   templateUrl: './form-manager.component.html',
   styleUrls: ['./form-manager.component.scss']
 })
