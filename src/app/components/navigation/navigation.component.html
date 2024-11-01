@@ -177,6 +177,10 @@
         </app-form-element>
       </div>
 
+      <div *ngIf="environment.length > 0" id="environment">
+        <p>{{environment}}</p>
+      </div>
+
       <!--user information/notifications/messages-->
       <div id="user-center-wrapper" *ngIf="user && user.id;else login" appClickOutside
         (appClickOutside)="hideNotificationModal()">
