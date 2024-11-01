@@ -23,6 +23,7 @@ export class FormManagerComponent implements OnInit {
   @Input() FormTyp = '';
   @Input() ResponsesCols: any[] = [];
   responses: Response[] = [];
+  archiveInd = 'n'
 
   constructor(private authService: AuthService, private api: APIService, private gs: GeneralService) { }
 
@@ -34,10 +35,10 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
-  getResponses(archiveInd = 'n'): void {
+  getResponses(): void {
     this.api.get(true, 'form/responses/', {
       form_typ: this.FormTyp,
-      archive_ind: archiveInd
+      archive_ind: this.archiveInd
     }, (result: any) => {
       this.responses = result as Response[];
     }, (err: any) => {
@@ -89,5 +90,10 @@ export class FormManagerComponent implements OnInit {
         break;
     }
     if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
+  }
+
+  switchArchiveInd(): void {
+    this.archiveInd = this.archiveInd === 'y' ? 'n' : 'y';
+    this.getResponses();
   }
 }
