@@ -89,6 +89,9 @@ export class FormManagerComponent implements OnInit {
         name = 'TeamApplication';
         break;
     }
+
+    name += this.archiveInd === 'y' ? '_Archived' : '';
+
     if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
 
