@@ -582,13 +582,14 @@ export class GeneralService {
 
   getDisplayValue(rec: any, property: string): string {
     if (!property) {
-      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
 
     let ret = '';
 
     try {
-      const comand = 'ret = rec.' + property + ';';
+      const variable = `rec?.${property.replaceAll(".", "?.")}`;
+      const comand = `ret = ${variable};`;
       eval(comand);
     }
     catch (err) {
