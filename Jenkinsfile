@@ -68,7 +68,7 @@ node {
             }
             else {
                 sh '''
-                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker stop parts_website_uat && docker rm parts_website_uat && docker compose up -d --env TAG=$BRANCH_NAME"
+                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker stop parts_website_uat && docker rm parts_website_uat && TAG=$BRANCH_NAME docker compose up -d"
                 '''
             } 
         }
