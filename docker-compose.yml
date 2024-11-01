@@ -1,7 +1,7 @@
 services:
   parts_website:
     container_name: ${CONTAINER_NAME}
-    image: bduke97/parts_website:latest
+    image: bduke97/parts_website:${TAG}
     ports:
       - "8078:80"
     restart: always
