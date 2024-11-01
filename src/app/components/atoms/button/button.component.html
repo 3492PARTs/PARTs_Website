@@ -92,6 +92,11 @@
     [disabled]="Disabled">
     &times;
   </button>
+  <button #thisButton *ngSwitchCase="'archive'" class="btn-symbol archive"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
+    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+    <span class="mdi mdi-broom"></span>
+  </button>
   <button #thisButton *ngSwitchDefault="" class="btn-symbol"
     [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
     (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">

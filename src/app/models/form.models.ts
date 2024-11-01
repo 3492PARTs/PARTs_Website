@@ -169,5 +169,6 @@ export class Response {
     response_id!: number;
     form_typ = '';
     time = new Date();
+    archive_ind = "n";
     questionanswer_set: QuestionWithConditions[] = [];
 }

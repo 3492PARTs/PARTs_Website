@@ -5,8 +5,8 @@
         </app-button-ribbon>
 
         <app-table [TableCols]="ResponsesCols" [TableData]="responses" (RecordClickCallBack)="openResponse($event)"
-            [Width]="'100%'" [CursorPointer]="true" [ShowRemoveButton]="true"
-            (RemoveRecordCallBack)="deleteResponse($event)"></app-table>
+            [Width]="'100%'" [CursorPointer]="true" [ShowArchiveButton]="true"
+            (ArchiveRecordCallBack)="archiveResponse($event)"></app-table>
     </app-modal>
 </app-button-ribbon>
 

@@ -59,6 +59,9 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() AddRecordCallBack: EventEmitter<any> = new EventEmitter();
   @Input() ShowAddButton = false;
 
+  @Output() ArchiveRecordCallBack: EventEmitter<any> = new EventEmitter();
+  @Input() ShowArchiveButton = false;
+
 
   @Output() RecordClickCallBack: EventEmitter<any> = new EventEmitter();
   @Output() DblClkRecordClickCallBack: EventEmitter<any> = new EventEmitter();
@@ -298,6 +301,10 @@ export class TableComponent implements OnInit, OnChanges {
       colWidth += 3.4;
     }
 
+    if (this.ShowArchiveButton) {
+      colWidth += 3.4;
+    }
+
     this.TableDataButtons.forEach(t => {
       if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
         colWidth += 6;
@@ -314,6 +321,7 @@ export class TableComponent implements OnInit, OnChanges {
       this.ShowRemoveButton ||
       this.ShowEditButton ||
       this.ShowViewButton ||
+      this.ShowArchiveButton ||
       this.TableDataButtons.length > 0
     ) {
       return true;
@@ -336,6 +344,10 @@ export class TableComponent implements OnInit, OnChanges {
 
   Add() {
     this.AddRecordCallBack.emit();
+  }
+
+  Archive(rec: any) {
+    this.ArchiveRecordCallBack.emit(rec);
   }
 
   private getScrollbarWidth() {

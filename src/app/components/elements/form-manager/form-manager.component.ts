@@ -34,9 +34,10 @@ export class FormManagerComponent implements OnInit {
     });
   }
 
-  getResponses(): void {
+  getResponses(archiveInd = 'n'): void {
     this.api.get(true, 'form/responses/', {
-      form_typ: this.FormTyp
+      form_typ: this.FormTyp,
+      archive_ind: archiveInd
     }, (result: any) => {
       this.responses = result as Response[];
     }, (err: any) => {
@@ -49,6 +50,19 @@ export class FormManagerComponent implements OnInit {
       this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
     else
       this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+  }
+
+  archiveResponse(res: Response): void {
+    this.gs.triggerConfirm('Are you sure you want to archive this response?', () => {
+
+      res.archive_ind = 'y';
+
+      this.api.post(true, 'form/response/', res, (result: any) => {
+        this.getResponses();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
+    });
   }
 
   deleteResponse(res: Response): void {

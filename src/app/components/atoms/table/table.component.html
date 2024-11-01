@@ -60,24 +60,33 @@
                 :RemovedFilterPropertyValue; let i = index
           "
         [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer, 'strike-through': StrikeThroughFn ? StrikeThroughFn(rec) : null }">
-        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
-          <!--Table buttons as first column-->
+
+        <ng-template #tableButtons>
           <div>
-            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true"
+            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]=" true"
               (FunctionCallBack)="View(rec)">
             </app-button>
-            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true"
+            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]=" true"
               (FunctionCallBack)="Edit(rec)">
             </app-button>
-            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
+            <app-button *ngIf="ShowArchiveButton" [ButtonType]="'archive'" [TableButton]="true"
+              (FunctionCallBack)="Archive(rec)">
+            </app-button>
+            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]=" true"
               (FunctionCallBack)="Remove(rec)"></app-button>
+
             <ng-container *ngFor="let btn of TableDataButtons">
               <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
                 [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
-                [Type]="btn.Type">{{ btn.Text }}
+                [Type]="btn.Type">{{
+                btn.Text }}
               </app-button>
             </ng-container>
           </div>
+        </ng-template>
+        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
+          <!--Table buttons as first column-->
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
         <td *ngFor="let col of TableCols" (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{ 
             'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
@@ -121,22 +130,7 @@
         </td>
         <td *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as last column-->
-          <div>
-            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true"
-              (FunctionCallBack)="View(rec)">
-            </app-button>
-            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true"
-              (FunctionCallBack)="Edit(rec)">
-            </app-button>
-            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
-              (FunctionCallBack)="Remove(rec)"></app-button>
-            <ng-container *ngFor="let btn of TableDataButtons">
-              <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
-                [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
-                [Type]="btn.Type">{{ btn.Text }}
-              </app-button>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
       </tr>
     </tbody>
