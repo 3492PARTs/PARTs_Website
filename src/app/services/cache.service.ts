@@ -4,7 +4,7 @@ import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, ISco
 import { DatabaseService } from './database.service';
 import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
-import { IUserLinks, UserLinks } from '../models/navigation.models';
+import { ILink, Link } from '../models/navigation.models';
 import { IQuestionWithConditions, QuestionWithConditions } from '../models/form.models';
 import { Banner } from '../models/api.models';
 
@@ -14,7 +14,7 @@ import { Banner } from '../models/api.models';
 export class CacheService {
   User!: DexieCrud<User, number>;
   UserPermissions!: DexieCrud<AuthPermission, number>;
-  UserLinks!: DexieCrud<UserLinks, number>;
+  UserLinks!: DexieCrud<Link, number>;
 
   Season!: DexieCrud<Season, number>;
   Event!: DexieCrud<Event, number>;
@@ -42,7 +42,7 @@ export class CacheService {
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<User, number>(this.dbs.UserTable);
     this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
-    this.UserLinks = new DexieCrud<IUserLinks, number>(this.dbs.UserLinksTable);
+    this.UserLinks = new DexieCrud<ILink, number>(this.dbs.UserLinksTable);
 
     this.Season = new DexieCrud<ISeason, number>(this.dbs.SeasonTable);
     this.Event = new DexieCrud<IEvent, number>(this.dbs.EventTable);

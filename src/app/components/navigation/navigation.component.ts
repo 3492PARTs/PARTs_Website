@@ -3,7 +3,7 @@ import { Router, NavigationEnd, Event as NavigationEvent, RouterLink, RouterLink
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { Banner } from '../../models/api.models';
-import { UserLinks, SubUserLinks } from '../../models/navigation.models';
+import { Link, SubLink } from '../../models/navigation.models';
 import { User } from '../../models/user.models';
 import { APIService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
@@ -60,8 +60,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: UserLinks[] = [];
-  userLinks: UserLinks[] = [];
+  appMenu: Link[] = [];
+  userLinks: Link[] = [];
 
   siteHeaderHeight = 7;
   siteBannerHeight = 0;
@@ -92,8 +92,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           mi.menu_items = ul;
-          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubUserLinks('Logout', ''));
-          else mi.menu_items.push(new SubUserLinks('Login', 'login'))
+          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
+          else mi.menu_items.push(new SubLink('Login', 'login'))
         }
       });
 
@@ -115,7 +115,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
-              mi.menu_items.push(new UserLinks('Install', ''));
+              mi.menu_items.push(new Link('Install', ''));
             }
             else if (!e && index !== -1) {
               mi.menu_items.splice(index, 1);
@@ -164,21 +164,21 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
     this.appMenu = [
-      new UserLinks('Join PARTs', 'join', 'account-supervisor', [
-        new UserLinks('Mechanical', 'join/mechanical'),
-        new UserLinks('Electrical', 'join/electrical'),
-        new UserLinks('Programming', 'join/programming'),
-        new UserLinks('Impact', 'join/impact'),
-        new UserLinks('Application Form', 'join/team-application'),
+      new Link('Join PARTs', 'join', 'account-supervisor', [
+        new Link('Mechanical', 'join/mechanical'),
+        new Link('Electrical', 'join/electrical'),
+        new Link('Programming', 'join/programming'),
+        new Link('Impact', 'join/impact'),
+        new Link('Application Form', 'join/team-application'),
       ], 'Our Subteams'),
-      new UserLinks('Contact Us', 'contact', 'card-account-details'),
-      new UserLinks('Sponsoring', 'sponsor', 'account-child-circle'),
-      new UserLinks('About', 'about', 'information'),
-      new UserLinks('Media', 'media', 'image-multiple'),
-      new UserLinks('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
-      new UserLinks('FIRST', 'first', 'first'),
-      new UserLinks('Members', '', 'folder', [
-        new UserLinks('Login', 'login'),
+      new Link('Contact Us', 'contact', 'card-account-details'),
+      new Link('Sponsoring', 'sponsor', 'account-child-circle'),
+      new Link('About', 'about', 'information'),
+      new Link('Media', 'media', 'image-multiple'),
+      new Link('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
+      new Link('FIRST', 'first', 'first'),
+      new Link('Members', '', 'folder', [
+        new Link('Login', 'login'),
       ], 'Members Area'),
     ];
 
@@ -186,7 +186,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
       if ((result as CompetitionInit).event) {
         this.gs.triggerChange(() => {
-          this.appMenu.unshift(new UserLinks('Competition', 'competition', 'robot-excited-outline'));
+          this.appMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
         });
       }
     });
@@ -470,11 +470,11 @@ let max = document.documentElement.scrollHeight;
     return this.pageIDs[key];
   }
 
-  checkActiveMenuItem(urlEnd: string, mi: UserLinks, mii: SubUserLinks): void {
+  checkActiveMenuItem(urlEnd: string, mi: Link, mii: SubLink): void {
     if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
   }
 
-  setActiveMenuSubmenuAndItem(parent: UserLinks, child: SubUserLinks, routerLink: string): void {
+  setActiveMenuSubmenuAndItem(parent: Link, child: SubLink, routerLink: string): void {
     this.resetActiveMenuItem();
     if (child.menu_name.toLocaleLowerCase() === 'logout') this.auth.logOut();
     else if (child.menu_name.toLocaleLowerCase() === 'install') this.pwa.installPwa();

@@ -584,9 +584,17 @@ export class GeneralService {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
     }
+
     let ret = '';
-    const comand = 'ret = rec.' + property + ';';
-    eval(comand);
+
+    try {
+      const comand = 'ret = rec.' + property + ';';
+      eval(comand);
+    }
+    catch (err) {
+      console.log(err);
+    }
+
     return ret; // do not turn into a string this will bite objects in the butt
   }
 }

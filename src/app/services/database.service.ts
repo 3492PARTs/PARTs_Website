@@ -5,7 +5,7 @@ import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { IAuthPermission, IUser, User } from '../models/user.models';
-import { IUserLinks } from '../models/navigation.models';
+import { ILink } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
 import { Banner } from '../models/api.models';
 
@@ -15,7 +15,7 @@ import { Banner } from '../models/api.models';
 export class DatabaseService extends Dexie {
   UserTable!: Dexie.Table<User, number>;
   UserPermissionsTable!: Dexie.Table<IAuthPermission, number>;
-  UserLinksTable!: Dexie.Table<IUserLinks, number>;
+  UserLinksTable!: Dexie.Table<ILink, number>;
 
   SeasonTable!: Dexie.Table<ISeason, number>;
   EventTable!: Dexie.Table<IEvent, number>;

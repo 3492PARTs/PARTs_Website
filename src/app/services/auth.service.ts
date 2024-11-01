@@ -7,7 +7,7 @@ import { map, skipWhile } from 'rxjs/operators';
 import { NotificationsService } from './notifications.service';
 import { AuthPermission, User } from '../models/user.models';
 import { CacheService } from './cache.service';
-import { UserLinks } from '../models/navigation.models';
+import { Link } from '../models/navigation.models';
 import { DataService } from './data.service';
 import Dexie from 'dexie';
 import { APIService } from './api.service';
@@ -32,7 +32,7 @@ export class AuthService {
   private userPermissionsBS = new BehaviorSubject<AuthPermission[]>([]);
   userPermissions = this.userPermissionsBS.asObservable();
 
-  private userLinksBS = new BehaviorSubject<UserLinks[]>([]);
+  private userLinksBS = new BehaviorSubject<Link[]>([]);
   userLinks = this.userLinksBS.asObservable();
 
   tokenStringLocalStorage = '';
@@ -322,7 +322,7 @@ export class AuthService {
 
         switch (this.apiStatus) {
           case APIStatus.on:
-            this.userLinksBS.next(this.gs.cloneObject(result as UserLinks[]));
+            this.userLinksBS.next(this.gs.cloneObject(result as Link[]));
             this.refreshUserLinksInCache(this.userLinksBS.value);
 
             // Cache data for endpoints we want to use offline.
@@ -361,11 +361,11 @@ export class AuthService {
             break;
 
           case APIStatus.off:
-            let newUserLinks: UserLinks[] = [];
+            let newUserLinks: Link[] = [];
 
             // get the pages that we are able to use offline from the list of links for the user
-            await this.cs.UserLinks.getAll().then((uls: UserLinks[]) => {
-              uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: UserLinks, ul2: UserLinks) => {
+            await this.cs.UserLinks.getAll().then((uls: Link[]) => {
+              uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: Link, ul2: Link) => {
                 if (ul1.order < ul2.order) return 1;
                 else if (ul1.order > ul2.order) return -1;
                 else return 0;
@@ -388,7 +388,7 @@ export class AuthService {
     });
   }
 
-  refreshUserLinksInCache(uls: UserLinks[]): void {
+  refreshUserLinksInCache(uls: Link[]): void {
     this.cs.UserLinks.RemoveAllAsync().then(() => {
       this.cs.UserLinks.AddOrEditBulkAsync(uls);
     });

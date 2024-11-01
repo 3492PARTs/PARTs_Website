@@ -36,6 +36,8 @@ export class TableComponent implements OnInit, OnChanges {
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
 
+  TableDisplayValue = "";
+
   @Input() TableData: any[] = [];
   @Input() TableCols: any[] = [];
   @Input() TableDataButtons: any[] = [];
