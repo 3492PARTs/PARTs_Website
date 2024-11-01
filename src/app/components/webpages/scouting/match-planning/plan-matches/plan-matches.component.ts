@@ -29,7 +29,8 @@ export class PlanMatchesComponent implements OnInit {
   matches: Match[] = [];
   teams: Team[] = [];
 
-  matchesTableCols: object[] = [
+  matchesTableCols: object[] = [];
+  private matchesTableColsList: object[] = [
     //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
     //{ PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'match_number', ColLabel: 'Match', UnderlineFn: this.underlineTeam },
@@ -61,11 +62,26 @@ export class PlanMatchesComponent implements OnInit {
       }
     });
     this.setTableSize();
+    this.setMatchTable();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.setTableSize();
+    this.setMatchTable();
+  }
+
+  setMatchTable(): void {
+    if (this.gs.getAppSize() >= AppSize.LG) {
+      this.matchesTableCols = [
+        { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+        { PropertyName: 'time', ColLabel: 'Time' },
+        ...this.matchesTableColsList
+      ];
+    }
+    else {
+      this.matchesTableCols = [...this.matchesTableColsList];
+    }
   }
 
   setTableSize(): void {
