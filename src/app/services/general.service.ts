@@ -73,6 +73,10 @@ export class GeneralService {
     this.bannersBS.next(this.bannersBS.value.concat([b]));
   }
 
+  getBanners(): Banner[] {
+    return this.bannersBS.value;
+  }
+
   removeBanner(b: Banner): void {
     let banners = this.bannersBS.value;
     let index = -1;

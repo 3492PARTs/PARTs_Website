@@ -398,10 +398,15 @@ let max = document.documentElement.scrollHeight;
     this.xsShowSearch = !this.xsShowSearch;
   }
 
+  dismissBanners(): void {
+    this.gs.getBanners().forEach(b => this.gs.removeBanner(b));
+  }
+
   showNotificationModal(): void {
     if (this.showNotificationModalVisible) this.showNotificationModalVisible = false;
     else this.showNotificationModalVisible = true;
 
+    this.dismissBanners();
     this.hideMessageModal();
     this.hideUserModal();
   }
@@ -418,6 +423,7 @@ let max = document.documentElement.scrollHeight;
     if (this.showMessageModalVisible) this.showMessageModalVisible = false;
     else this.showMessageModalVisible = true;
 
+    this.dismissBanners();
     this.hideNotificationModal();
     this.hideUserModal();
   }
@@ -431,6 +437,7 @@ let max = document.documentElement.scrollHeight;
     if (this.showUserModalVisible) this.showUserModalVisible = false;
     else this.showUserModalVisible = true;
 
+    this.dismissBanners();
     this.hideNotificationModal();
     this.hideMessageModal();
   }
