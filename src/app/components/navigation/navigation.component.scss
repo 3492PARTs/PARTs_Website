@@ -877,20 +877,16 @@ header {
       background-color: #f8f9fc;
     }
 
-    & div {
-      display: inline-flex;
-      align-content: center;
-      align-items: center;
+    & > div:first-child {
+      padding-right: 0.8rem;
     }
 
     .icon {
       width: 1.5rem;
-      margin-right: 0.8rem;
     }
 
     p,
     a {
-      font-size: 1.36rem;
       color: #3a3b45;
       margin: 0;
       text-decoration: none;
