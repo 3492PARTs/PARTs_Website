@@ -11,6 +11,7 @@ import { TableComponent } from '../../../atoms/table/table.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { BoxComponent } from '../../../atoms/box/box.component';
+import { Link } from '../../../../models/navigation.models';
 
 @Component({
   selector: 'app-security',
@@ -51,6 +52,16 @@ export class SecurityComponent implements OnInit {
     { PropertyName: 'groups', ColLabel: 'Groups', Type: 'function', ColValueFn: this.getGroupTableValue },
   ];
 
+  linksTableCols: object[] = [
+    { PropertyName: 'menu_name', ColLabel: 'Menu Name' },
+    { PropertyName: 'routerlink', ColLabel: 'Router Link' },
+    { PropertyName: 'permission.name', ColLabel: 'Permission' },
+    { PropertyName: 'order', ColLabel: 'Order' },
+  ];
+  linksModalVisible = false;
+  links: Link[] = [];
+  activeLink = new Link();
+
   constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService) {
   }
 
@@ -75,6 +86,13 @@ export class SecurityComponent implements OnInit {
     this.us.getPermissions().then(result => {
       if (result)
         this.permissions = result;
+    });
+  }
+
+  getLinks(): void {
+    this.us.getLinks().then(result => {
+      if (result)
+        this.links = result;
     });
   }
 
@@ -226,6 +244,31 @@ export class SecurityComponent implements OnInit {
       this.gs.successfulResponseBanner(result);
       this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
+    });
+  }
+
+  showLinkModal(link?: Link): void {
+    this.activeLink = link ? this.gs.cloneObject(link) : new Link();
+    this.linksModalVisible = true;
+  }
+
+  resetLink(): void {
+    this.activeLink = new Link();
+    this.linksModalVisible = false;
+    this.getLinks();
+  }
+
+  saveLink(): void {
+    this.us.saveLink(this.activeLink, () => {
+      this.resetLink();
+    });
+  }
+
+  deleteLink(link: Link): void {
+    this.gs.triggerConfirm('Are you sure you would like to delete this link?', () => {
+      this.us.deleteLink(link.link_id, () => {
+        this.resetLink();
+      });
     });
   }
 }

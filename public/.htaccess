@@ -1,0 +1,14 @@
+# Generated with ngx-htaccess-generator v1.2.4
+# Check for updates: https://julianpoemp.github.io/ngx-htaccess-generator/
+FallbackResource /index.html
+ErrorDocument 404 /index.html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  RewriteCond %{REQUEST_FILENAME} -s [OR]
+  RewriteCond %{REQUEST_FILENAME} -l [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^.*$ - [NC,L]
+  # Redirect all non-file routes to index.html
+  RewriteRule ^(?!.*\.).*$ index.html [NC,L]
+</IfModule>

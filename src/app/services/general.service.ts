@@ -91,7 +91,7 @@ export class GeneralService {
   }
 
   async addSiteBanner(b: Banner) {
-    if (b.id !== 0 && ! await this.bannerHasBeenDismissed(b))
+    if (b.id === 0 || (b.id !== 0 && ! await this.bannerHasBeenDismissed(b)))
       this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
   }
 
@@ -582,11 +582,20 @@ export class GeneralService {
 
   getDisplayValue(rec: any, property: string): string {
     if (!property) {
-      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
+
     let ret = '';
-    const comand = 'ret = rec.' + property + ';';
-    eval(comand);
+
+    try {
+      const variable = `rec?.${property.replaceAll(".", "?.")}`;
+      const comand = `ret = ${variable};`;
+      eval(comand);
+    }
+    catch (err) {
+      console.log(err);
+    }
+
     return ret; // do not turn into a string this will bite objects in the butt
   }
 }

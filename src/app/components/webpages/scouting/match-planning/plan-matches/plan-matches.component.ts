@@ -29,16 +29,17 @@ export class PlanMatchesComponent implements OnInit {
   matches: Match[] = [];
   teams: Team[] = [];
 
-  matchesTableCols: object[] = [
-    { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
-    { PropertyName: 'time', ColLabel: 'Time' },
-    { PropertyName: 'match_number', ColLabel: 'Match' },
-    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this) },
+  matchesTableCols: object[] = [];
+  private matchesTableColsList: object[] = [
+    //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+    //{ PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'match_number', ColLabel: 'Match', UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
   ];
 
   scoutCols: any[] = [];
@@ -61,11 +62,26 @@ export class PlanMatchesComponent implements OnInit {
       }
     });
     this.setTableSize();
+    this.setMatchTable();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.setTableSize();
+    this.setMatchTable();
+  }
+
+  setMatchTable(): void {
+    if (this.gs.getAppSize() >= AppSize.LG) {
+      this.matchesTableCols = [
+        { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+        { PropertyName: 'time', ColLabel: 'Time' },
+        ...this.matchesTableColsList
+      ];
+    }
+    else {
+      this.matchesTableCols = [...this.matchesTableColsList];
+    }
   }
 
   setTableSize(): void {
@@ -298,5 +314,26 @@ export class PlanMatchesComponent implements OnInit {
         },
       },
     });
+  }
+
+  strikeThoughMatch(match: Match): boolean {
+    return match.blue_score != -1 && match.red_score != -1
+  }
+
+  underlineTeam(match: Match, property: string): boolean {
+    console.log(property);
+    console.log(match.red_score > match.blue_score);
+    console.log(match.blue_score > match.red_score);
+    switch (property) {
+      case 'red_one':
+      case 'red_two':
+      case 'red_three':
+        return match.red_score > match.blue_score;
+      case 'blue_one':
+      case 'blue_two':
+      case 'blue_three':
+        return match.blue_score > match.red_score;
+    }
+    return false
   }
 }

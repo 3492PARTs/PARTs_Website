@@ -1,6 +1,6 @@
 import { Banner } from "./api.models";
 import { QuestionWithConditions } from "./form.models";
-import { UserLinks } from "./navigation.models";
+import { Link } from "./navigation.models";
 import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType } from "./scouting.models";
 import { AuthPermission, User } from "./user.models";
 
@@ -21,7 +21,7 @@ function generateColumns<T extends Record<string, any>>(instance: T): string {
 
 const userInstance = new User();
 const userPermissionsInstance = new AuthPermission();
-const userLinksInstance = new UserLinks('', '');
+const userLinksInstance = new Link('', '');
 
 const seasonInstance = new Season();
 const eventInstance = new Event();

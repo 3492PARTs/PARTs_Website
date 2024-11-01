@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output } from '@angular/core';
-import { UserLinks } from '../../../models/navigation.models';
+import { Link } from '../../../models/navigation.models';
 import { NavigationService } from '../../../services/navigation.service';
 import { RouterLink } from '@angular/router';
 
@@ -22,7 +22,7 @@ export class SubNavigationComponent {
   @Input() hideNavExpander = false;
 
   page = '';
-  @Input() navItems: UserLinks[] = [];
+  @Input() navItems: Link[] = [];
 
 
   constructor(private ns: NavigationService) {

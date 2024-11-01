@@ -126,7 +126,7 @@ export class APIService {
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
     // This means connection is down error, check
-    if (err.status === 0) {
+    if ([0, 504].includes(err.status)) {
       this.getAPIStatus();
     }
     if (onError) onError(err);

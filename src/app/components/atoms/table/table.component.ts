@@ -36,6 +36,8 @@ export class TableComponent implements OnInit, OnChanges {
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
 
+  TableDisplayValue = "";
+
   @Input() TableData: any[] = [];
   @Input() TableCols: any[] = [];
   @Input() TableDataButtons: any[] = [];
@@ -80,7 +82,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() CursorPointer = false;
 
   @Input() DisableInputs = false;
-  //@Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
+  @Input() StrikeThroughFn: ((rec: any) => boolean) | null = null;
 
   @Input() Width = '';
 
