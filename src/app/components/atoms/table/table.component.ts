@@ -82,7 +82,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() CursorPointer = false;
 
   @Input() DisableInputs = false;
-  @Input() StrikeThroughFn!: (rec: any) => boolean;
+  @Input() StrikeThroughFn: ((rec: any) => boolean) | null = null;
 
   @Input() Width = '';
 

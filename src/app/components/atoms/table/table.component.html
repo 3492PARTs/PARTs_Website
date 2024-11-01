@@ -59,7 +59,7 @@
                 :RemovedFilterProperty
                 :RemovedFilterPropertyValue; let i = index
           "
-        [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer, 'strike-through': StrikeThroughFn(rec) }">
+        [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer, 'strike-through': StrikeThroughFn ? StrikeThroughFn(rec) : null }">
         <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as first column-->
           <div>
