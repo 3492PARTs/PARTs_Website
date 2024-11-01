@@ -30,8 +30,8 @@ export class PlanMatchesComponent implements OnInit {
   teams: Team[] = [];
 
   matchesTableCols: object[] = [
-    { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
-    { PropertyName: 'time', ColLabel: 'Time' },
+    //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+    //{ PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'match_number', ColLabel: 'Match' },
     { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
     { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
@@ -298,5 +298,9 @@ export class PlanMatchesComponent implements OnInit {
         },
       },
     });
+  }
+
+  strikeThoughMatch(match: Match): boolean {
+    return match.blue_score != -1 && match.red_score != -1
   }
 }

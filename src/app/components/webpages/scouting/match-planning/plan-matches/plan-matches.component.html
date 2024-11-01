@@ -27,7 +27,7 @@
 
         <app-table [TableCols]="matchesTableCols" [TableData]="matches" (RecordClickCallBack)="planMatch($event)"
             [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'" [ScrollHeight]="'50rem'"
-            [CursorPointer]="true">
+            [CursorPointer]="true" [StrikeThroughFn]="strikeThoughMatch">
         </app-table>
     </div>
 
