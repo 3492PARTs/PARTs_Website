@@ -68,7 +68,7 @@ node {
             }
             else {
                 sh '''
-                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && TAG=$BRANCH_NAME docker compose up -d"
+                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && TAG=$BRANCH_NAME docker compose up -d --force-recreate"
                 '''
             } 
         }
