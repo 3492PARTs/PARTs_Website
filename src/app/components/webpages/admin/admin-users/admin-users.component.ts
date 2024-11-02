@@ -11,11 +11,12 @@ import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
+import { HeaderComponent } from "../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
+  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss']
 })

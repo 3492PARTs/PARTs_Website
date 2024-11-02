@@ -179,7 +179,7 @@
 
       <!--Environment header-->
       <div *ngIf="frontendEnv.length > 0" id="environment">
-        <p>{{frontendEnv}}:{{backendEnv}}</p>
+        <p>{{frontendEnv}}{{backendEnv.length > 0 ? ':' : ''}}{{backendEnv}}</p>
       </div>
 
       <!--user information/notifications/messages-->

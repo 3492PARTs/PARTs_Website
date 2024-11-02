@@ -11,11 +11,12 @@ import { FormElementComponent } from '../../../../atoms/form-element/form-elemen
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
+import { HeaderComponent } from '../../../../atoms/header/header.component';
 
 @Component({
   selector: 'app-scouting-users',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
   templateUrl: './scouting-users.component.html',
   styleUrls: ['./scouting-users.component.scss']
 })
