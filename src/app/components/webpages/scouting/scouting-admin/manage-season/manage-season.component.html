@@ -12,7 +12,7 @@
 
         <app-form-element *ngIf="currentEvent && currentEvent.event_id" [Type]="'checkbox'" [TrueValue]="'y'"
             [FalseValue]="'n'" [LabelText]="'Competition Page Active'" [(Model)]="currentEvent.competition_page_active"
-            (FunctionCallBack)="toggleCompetitionPage()" [FormGroupInline]="true">
+            [FormGroupInline]="true">
         </app-form-element>
 
         <app-button-ribbon>
@@ -31,7 +31,10 @@
                     <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason"
                         [FormGroupInline]="true" [MinWidth]="'100px'">
                     </app-form-element>
-                    <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+
+                    <div class="padding-bottom-2rem">
+                        <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+                    </div>
                 </div>
 
                 <div class="inline-flex align-items-center padding-right-half-em">
@@ -40,7 +43,11 @@
                         [(Model)]="delSeason" [FormGroupInline]="true" (FunctionCallBack)="getEventsForDeleteEvent()"
                         [MinWidth]="'110px'">
                     </app-form-element>
-                    <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete Season</app-button>
+
+                    <div class="padding-bottom-2rem">
+                        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteSeason()">Delete
+                            Season</app-button>
+                    </div>
                 </div>
 
                 <div class="inline-flex align-items-center padding-right-half-em">
@@ -48,7 +55,10 @@
                         [DisplayEmptyOption]="true" [DisplayProperty]="'event_nm'" [BindingProperty]="'event_id'"
                         [(Model)]="delEvent" [FormGroupInline]="true" [MinWidth]="'100px'">
                     </app-form-element>
-                    <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+
+                    <div class="padding-bottom-2rem">
+                        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteEvent()">Delete Event</app-button>
+                    </div>
                 </div>
             </app-modal>
 
