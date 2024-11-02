@@ -13,7 +13,7 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
 import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
-import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
+import { Chart, ChartDataset, Point, BubbleDataPoint, registerables } from 'chart.js';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 
@@ -56,22 +56,24 @@ export class PlanMatchesComponent implements OnInit {
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    Chart.register(...registerables);
+
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.init();
       }
     });
     this.setTableSize();
-    this.setMatchTable();
+    this.setMatchTableCols();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.setTableSize();
-    this.setMatchTable();
+    this.setMatchTableCols();
   }
 
-  setMatchTable(): void {
+  setMatchTableCols(): void {
     if (this.gs.getAppSize() >= AppSize.LG) {
       this.matchesTableCols = [
         { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
@@ -188,61 +190,50 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   buildGraph(): void {
-    let labels: any[] = [];
+    if (this.graphOptionsSelected.find(gos => gos['checked'])) {
+      // red
+      //let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    // red
-    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+      let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
+      let redData = this.getAllianceDataSets(red);
 
-    let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
-    dataSets = this.getAllianceDataSets(red);
-    let count = 0;
-    dataSets.forEach(ds => {
-      if (count < ds.data.length) count = ds.data.length;
-    });
-    for (let i = 1; i <= count; i++) labels.push(i);
+      let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
+      let blueData = this.getAllianceDataSets(blue);
 
-    // blue
-    let dataSets2: { label: string; data: any[]; borderWidth: number; }[] = [];
+      this.gs.triggerChange(() => {
+        if (this.redChart) this.redChart.destroy();
+        this.redChart = this.createLineChart('red-chart', redData.labels, redData.dataSet);
 
-    let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
-    dataSets2 = this.getAllianceDataSets(blue);
-    labels = [];
-    count = 0;
+        if (this.blueChart) this.blueChart.destroy();
+        this.blueChart = this.createLineChart('blue-chart', blueData.labels, blueData.dataSet);
+      });
 
-    dataSets2.forEach(ds => {
-      if (count < ds.data.length) count = ds.data.length;
-    });
+      this.chosenGraphDataPoints = '';
 
-    for (let i = 1; i <= count; i++) labels.push(i);
+      this.graphOptionsSelected.forEach((gos: any) => {
+        if (gos['checked'])
+          this.chosenGraphDataPoints += `${gos['ColLabel']}, `;
+      });
 
-    window.setTimeout(() => {
-      if (this.redChart) this.redChart.destroy();
-      this.redChart = this.createLineChart('red-chart', labels, dataSets);
-
-      if (this.blueChart) this.blueChart.destroy();
-      this.blueChart = this.createLineChart('blue-chart', labels, dataSets2);
-    }, 0);
-
-    this.chosenGraphDataPoints = '';
-
-    this.graphOptionsSelected.forEach((gos: any) => {
-      if (gos['checked'])
-        this.chosenGraphDataPoints += `${gos['ColLabel']}, `;
-    });
-
-    this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
+      this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
+    }
   }
 
-  getAllianceDataSets(results: MatchPlanning[]): { label: string; data: any[]; borderWidth: number; }[] {
+  getAllianceDataSets(results: MatchPlanning[]): { dataSet: { label: string; data: any[]; borderWidth: number; }[], labels: string[] } {
     let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+    let dateLabels: Date[][] = [];
+    //console.log(results);
 
     results.forEach(mp => {
       let data: any[] = [];
       let dataSet: { label: string; data: any[]; borderWidth: number; };
+      let dataSetLabels: Date[] = []
       //console.log(mp.team);
-      //console.log(mp.fieldAnswers);
+      //console.log(mp.scoutAnswers);
 
       mp.scoutAnswers.forEach((fa: any) => {
+        //console.log(fa['time']);
+        dataSetLabels.push(new Date(fa['time']));
         let sum = 0;
         this.graphOptionsSelected.forEach((gos: any) => {
           if (gos['checked']) {
@@ -260,9 +251,13 @@ export class PlanMatchesComponent implements OnInit {
       };
 
       dataSets.push(dataSet);
+      dateLabels.push(dataSetLabels);
     });
 
-    return dataSets;
+    let labels: string[] = this.averageDates(dateLabels).map(ad => this.gs.formatDateString(ad));
+
+
+    return { dataSet: dataSets, labels: labels };
   }
 
   clearResults(): void {
@@ -321,9 +316,10 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   underlineTeam(match: Match, property: string): boolean {
-    console.log(property);
-    console.log(match.red_score > match.blue_score);
-    console.log(match.blue_score > match.red_score);
+    //TODO Figure out why it runs so much
+    //console.log(property);
+    //console.log(match.red_score > match.blue_score);
+    //console.log(match.blue_score > match.red_score);
     switch (property) {
       case 'red_one':
       case 'red_two':
@@ -335,5 +331,20 @@ export class PlanMatchesComponent implements OnInit {
         return match.blue_score > match.red_score;
     }
     return false
+  }
+
+  averageDates(arr2d: Date[][]) {
+    const maxLength = Math.max(...arr2d.map(arr => arr.length));
+    const result = [];
+
+    for (let i = 0; i < maxLength; i++) {
+      const dateTimes = arr2d.map(arr => arr[i] || new Date(0)); // Handle missing dates
+      const totalMilliseconds = dateTimes.reduce((acc, date) => acc + date.getTime(), 0);
+      const averageMilliseconds = totalMilliseconds / dateTimes.length;
+      const averageDate = new Date(averageMilliseconds);
+      result.push(averageDate);
+    }
+
+    return result;
   }
 }
