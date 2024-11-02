@@ -190,74 +190,75 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   buildGraph(): void {
-    if (this.graphOptionsSelected.find(gos => gos['checked'])) {
-      // red
-      //let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+    // red
+    //let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-      let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
-      let redData = this.getAllianceDataSets(red);
+    let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
+    let redData = this.getAllianceDataSets(red);
 
-      let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
-      let blueData = this.getAllianceDataSets(blue);
+    let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
+    let blueData = this.getAllianceDataSets(blue);
 
-      this.gs.triggerChange(() => {
-        if (this.redChart) this.redChart.destroy();
-        this.redChart = this.createLineChart('red-chart', redData.labels, redData.dataSet);
+    this.gs.triggerChange(() => {
+      if (this.redChart) this.redChart.destroy();
+      this.redChart = this.createLineChart('red-chart', redData.labels, redData.dataSet);
 
-        if (this.blueChart) this.blueChart.destroy();
-        this.blueChart = this.createLineChart('blue-chart', blueData.labels, blueData.dataSet);
-      });
+      if (this.blueChart) this.blueChart.destroy();
+      this.blueChart = this.createLineChart('blue-chart', blueData.labels, blueData.dataSet);
+    });
 
-      this.chosenGraphDataPoints = '';
+    this.chosenGraphDataPoints = '';
 
-      this.graphOptionsSelected.forEach((gos: any) => {
-        if (gos['checked'])
-          this.chosenGraphDataPoints += `${gos['ColLabel']}, `;
-      });
+    this.graphOptionsSelected.forEach((gos: any) => {
+      if (gos['checked'])
+        this.chosenGraphDataPoints += `${gos['ColLabel']}, `;
+    });
 
-      this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
-    }
+    this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
   }
 
   getAllianceDataSets(results: MatchPlanning[]): { dataSet: { label: string; data: any[]; borderWidth: number; }[], labels: string[] } {
-    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
-    let dateLabels: Date[][] = [];
-    //console.log(results);
+    if (this.graphOptionsSelected.find(gos => gos['checked'])) {
+      let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+      let dateLabels: Date[][] = [];
+      //console.log(results);
 
-    results.forEach(mp => {
-      let data: any[] = [];
-      let dataSet: { label: string; data: any[]; borderWidth: number; };
-      let dataSetLabels: Date[] = []
-      //console.log(mp.team);
-      //console.log(mp.scoutAnswers);
+      results.forEach(mp => {
+        let data: any[] = [];
+        let dataSet: { label: string; data: any[]; borderWidth: number; };
+        let dataSetLabels: Date[] = []
+        //console.log(mp.team);
+        //console.log(mp.scoutAnswers);
 
-      mp.scoutAnswers.forEach((fa: any) => {
-        //console.log(fa['time']);
-        dataSetLabels.push(new Date(fa['time']));
-        let sum = 0;
-        this.graphOptionsSelected.forEach((gos: any) => {
-          if (gos['checked']) {
-            sum += parseFloat(fa[gos['PropertyName']]) || 0;
-          }
+        mp.scoutAnswers.forEach((fa: any) => {
+          //console.log(fa['time']);
+          dataSetLabels.push(new Date(fa['time']));
+          let sum = 0;
+          this.graphOptionsSelected.forEach((gos: any) => {
+            if (gos['checked']) {
+              sum += parseFloat(fa[gos['PropertyName']]) || 0;
+            }
+          });
+
+          data.push(sum);
         });
 
-        data.push(sum);
+        dataSet = {
+          label: `${mp.team.team_no} ${mp.team.team_nm}`,
+          data: data,
+          borderWidth: 1
+        };
+
+        dataSets.push(dataSet);
+        dateLabels.push(dataSetLabels);
       });
 
-      dataSet = {
-        label: `${mp.team.team_no} ${mp.team.team_nm}`,
-        data: data,
-        borderWidth: 1
-      };
-
-      dataSets.push(dataSet);
-      dateLabels.push(dataSetLabels);
-    });
-
-    let labels: string[] = this.averageDates(dateLabels).map(ad => this.gs.formatDateString(ad));
+      let labels: string[] = this.averageDates(dateLabels).map(ad => this.gs.formatDateString(ad));
 
 
-    return { dataSet: dataSets, labels: labels };
+      return { dataSet: dataSets, labels: labels };
+    }
+    return { dataSet: [], labels: [] };
   }
 
   clearResults(): void {

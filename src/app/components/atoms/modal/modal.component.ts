@@ -29,7 +29,7 @@ export class ModalComponent implements OnInit {
   set visible(v: boolean) {
     this._visible = v;
     this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
-    this.togglePageScrolling();
+    this.setPageScrolling();
     this.clickOutsideCapture = true;
 
     if (this._visible) {
@@ -86,7 +86,7 @@ export class ModalComponent implements OnInit {
     this._visible = true;
     this.ms.incrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
-    this.togglePageScrolling();
+    this.setPageScrolling();
     this.clickOutsideCapture = true;
 
     window.setTimeout(() => {
@@ -98,6 +98,7 @@ export class ModalComponent implements OnInit {
     this._visible = false;
     this.ms.decrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
+    this.setPageScrolling();
     this.form.forEach(elem => {
       elem.reset();
     });
@@ -110,7 +111,7 @@ export class ModalComponent implements OnInit {
     }
   }
 
-  togglePageScrolling(): void {
+  setPageScrolling(): void {
     const body = document.body;
     const html = document.documentElement;
 
