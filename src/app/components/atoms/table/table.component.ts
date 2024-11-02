@@ -283,33 +283,34 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn() {
+    const buttonWidth = 2.8;
     let colWidth = 0;
 
     if (this.ShowAddButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowEditButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowRemoveButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowViewButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowArchiveButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     this.TableDataButtons.forEach(t => {
       if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
         colWidth += 6;
       else
-        colWidth += 3.4;
+        colWidth += buttonWidth;
     });
 
     if (colWidth > 0) {
