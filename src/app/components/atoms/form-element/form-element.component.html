@@ -218,21 +218,8 @@
           (ngModelChange)="change($event)">
         <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
             [ngClass]="{ 'disabled': Disabled }"></span></span>
-        <owl-date-time #dt [hour12Timer]="true" [panelClass]="'date-picker-panel'"
-          [disabled]="Disabled"></owl-date-time>
-
-        <!--<div >
-          
-          <mat-form-field>
-            <input [ngClass]="{'disabled': Disabled}" matInput [ngxMatDatetimePicker]="picker" [ngModel]="Model"
-              (ngModelChange)="change($event)">
-            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker [showSpinners]="false" [showSeconds]="false" [stepHour]="1"
-              [stepMinute]="30" [stepSecond]="1" [touchUi]="false" [enableMeridian]="true" [disableMinute]="false"
-              [hideTime]="false">
-            </ngx-mat-datetime-picker>
-          </mat-form-field>
-        </div>-->
+        <owl-date-time #dt [hour12Timer]="true" [disabled]="Disabled" [pickerMode]="_PickerMode"
+          [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
       </ng-container>
 
       <ng-container *ngSwitchCase="'date'">
@@ -245,27 +232,9 @@
           (ngModelChange)="change($event)">
         <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
             [ngClass]="{ 'disabled': Disabled }"></span></span>
-        <owl-date-time #dt [pickerType]="'calendar'" [panelClass]="'date-picker-panel'"
-          [disabled]="Disabled"></owl-date-time>
+        <owl-date-time #dt [pickerType]="'calendar'" [disabled]="Disabled" [pickerMode]="_PickerMode"
+          [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
       </ng-container>
-
-      <!--<div *ngSwitchCase="'date'" #input class="date-form-control form-control" [ngClass]="{
-        'disabled': Disabled, 
-        'valid': isFormElementValid(), 
-        'invalid': isFormElementInvalid(),
-        'required': isFormElementRequired()
-      }">
-        <div class="date" [ngClass]="{'disabled': Disabled}">
-          <mat-form-field appearance="fill">
-            <input [ngClass]="{'disabled': Disabled}" matInput [matDatepicker]="picker" [ngModel]="Model"
-              (ngModelChange)="change($event)" (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled">
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="picker" (click)="focusIn()">
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker (closed)="focusOut()"></mat-datepicker>
-          </mat-form-field>
-        </div>
-      </div>-->
 
       <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }">
 

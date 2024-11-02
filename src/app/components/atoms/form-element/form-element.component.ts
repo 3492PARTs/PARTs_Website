@@ -14,13 +14,13 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { GeneralService } from '../../../services/general.service';
+import { AppSize, GeneralService } from '../../../services/general.service';
 import { NavigationService, NavigationState } from '../../../services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { ClickInsideDirective } from '../../../directives/click-inside/click-inside.directive';
 import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielmoncada/angular-datetime-picker';
 
 
 @Component({
@@ -50,6 +50,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() Name = '';
 
   @Input() Type = 'text';
+  @Input() PickerMode: PickerMode | null = null;
+  _PickerMode: PickerMode = 'popup';
 
   @Input()
   set SelectList(sl: any) {
@@ -196,6 +198,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.setElementPositions();
       }, 102);
     });
+
+    this.setDatePanel();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -223,7 +227,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
   }
 
-
   ngDoCheck(): void {
     if (this.Type === 'file') {
       if (this.Model?.size <= 0) {
@@ -244,7 +247,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.setElementPositions()
+    this.setElementPositions();
+    this.setDatePanel();
   }
 
   setElementPositions(): void {
@@ -710,5 +714,17 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.gs.strNoE(this.Model)) this.Model = 0;
     if (this.Model > 0) this.Model--;
     this.change(this.Model);
+  }
+
+  setDatePanel(): void {
+    if (['date', 'datetime'].includes(this.Type))
+      if (this.PickerMode && !this.gs.strNoE(this.PickerMode))
+        this._PickerMode = this.PickerMode;
+      else
+        if (this.gs.getAppSize() <= AppSize.SM)
+          this._PickerMode = 'dialog';
+        else {
+          this._PickerMode = 'popup';
+        }
   }
 }

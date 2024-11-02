@@ -602,6 +602,37 @@ export class GeneralService {
 
     return ret; // do not turn into a string this will bite objects in the butt
   }
+
+  keepElementInView(elementId: string): { x: number, y: number } | undefined {
+    const element = document.getElementById(elementId);
+
+    if (!element) {
+      console.error('Element not found');
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let xOffset = 0;
+    let yOffset = 0;
+    // Horizontal alignment
+    if (rect.right > viewportWidth) {
+      xOffset = rect.right - viewportWidth;
+    } else if (rect.left < 0) {
+      xOffset = rect.left;
+    }
+
+    // Vertical alignment
+    if (rect.bottom > viewportHeight) {
+      yOffset = rect.bottom - viewportHeight;
+    } else if (rect.top < 0) {
+      yOffset = rect.top;
+    }
+
+    return { x: xOffset, y: yOffset };
+  }
 }
 
 export class RetMessage {
