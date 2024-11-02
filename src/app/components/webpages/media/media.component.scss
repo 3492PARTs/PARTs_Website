@@ -102,21 +102,8 @@
   }
 }
 
-/*wallpaper:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-  .wallpaperAccordion {
-    display: inline-block;
-  }
-}
-
-/*wallpaper:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-  .wallpaperAccordion {
-    display: block;
-    margin: auto;
-  }
+.wallpaperAccordion {
+  display: inline-block;
 }
 
 .wallpaperAccordion a {
