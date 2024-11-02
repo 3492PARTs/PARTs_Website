@@ -7,7 +7,7 @@
         </app-modal>
 
         <app-modal [ButtonType]="'main'" [ButtonText]="'Scouting Admin Groups'" [Title]="'Scouting Admin Groups'"
-            [visible]="scoutAuthGroupsModalVisible" (visibleChange)="getScoutAuthGroups($event)">
+            [(visible)]="scoutAuthGroupsModalVisible" (visibleChange)="getScoutAuthGroups($event)">
             <app-form (SubmitFunction)="saveScoutAuthGroups()">
                 <div class="vertical-center">
                     <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
@@ -35,7 +35,7 @@
                 (EditRecordCallBack)="showLinkModal($event)" [Width]="'100%'">
             </app-table>
 
-            <app-modal [Title]="'Link'" [visible]="linksModalVisible">
+            <app-modal [Title]="'Link'" [(visible)]="linksModalVisible">
                 <app-form (SubmitFunction)="saveLink()">
                     <div class="vertical-center">
                         <app-form-element [Type]="'text'" [LabelText]="'Menu Name'"
