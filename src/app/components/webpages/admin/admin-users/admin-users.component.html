@@ -1,10 +1,12 @@
 <app-box [Title]="'Manage Users'">
     <app-form-element-group [InlineElements]="true">
-        <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+        <div class="flex justify-content-space-between">
+            <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
 
-        <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
-            [DisplayProperty]="'property'" [BindingProperty]="'value'"
-            (FunctionCallBack)="getUsers()"></app-form-element>
+            <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
+                [DisplayProperty]="'property'" [BindingProperty]="'value'"
+                (FunctionCallBack)="getUsers()"></app-form-element>
+        </div>
     </app-form-element-group>
 
     <app-table [(FilterText)]="filterText" [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true"
