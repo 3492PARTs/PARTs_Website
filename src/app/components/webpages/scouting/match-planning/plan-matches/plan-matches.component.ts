@@ -255,6 +255,12 @@ export class PlanMatchesComponent implements OnInit {
 
       let labels: string[] = this.averageDates(dateLabels).map(ad => this.gs.formatDateString(ad));
 
+      dataSets.push({
+        label: 'Average',
+        data: this.average2DArray(dataSets.map(ds => ds.data as number[])),
+        borderWidth: 1
+      })
+
 
       return { dataSet: dataSets, labels: labels };
     }
@@ -344,6 +350,20 @@ export class PlanMatchesComponent implements OnInit {
       const averageMilliseconds = totalMilliseconds / dateTimes.length;
       const averageDate = new Date(averageMilliseconds);
       result.push(averageDate);
+    }
+
+    return result;
+  }
+
+  average2DArray(arr2d: number[][]) {
+    const maxLength = Math.max(...arr2d.map(arr => arr.length));
+    const result = [];
+
+    for (let i = 0; i < maxLength; i++) {
+      const values = arr2d.map(arr => arr[i] || 0); // Handle missing values
+      const sum = values.reduce((acc, val) => acc + val, 0);
+      const avg = sum / values.length;
+      result.push(avg);
     }
 
     return result;
