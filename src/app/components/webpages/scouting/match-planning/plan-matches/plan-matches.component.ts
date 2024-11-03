@@ -48,8 +48,6 @@ export class PlanMatchesComponent implements OnInit {
   activeMatch: Match | null = null;
   matchToPlan: MatchPlanning[] = [];
 
-  tableWidth = '200%';
-
   graphOptionsList: any[] = [];
   graphOptionsSelected: any[] = [];
   redChart: Chart | null = null;
@@ -66,13 +64,11 @@ export class PlanMatchesComponent implements OnInit {
         this.init();
       }
     });
-    this.setTableSize();
     this.setMatchTableCols();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.setTableSize();
     this.setMatchTableCols();
   }
 
@@ -87,10 +83,6 @@ export class PlanMatchesComponent implements OnInit {
     else {
       this.matchesTableCols = [...this.matchesTableColsList];
     }
-  }
-
-  setTableSize(): void {
-    if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(): void {
