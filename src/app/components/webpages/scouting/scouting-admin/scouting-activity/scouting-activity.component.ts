@@ -23,10 +23,10 @@ export class ScoutingActivityComponent implements OnInit {
 
   usersScoutingUserInfo: UserInfo[] = [];
   activeUserScoutingUserInfo: UserInfo = new UserInfo();
-  userActivityTableCols = [
-    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserNameForTable.bind(this) },
-    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatusForTable.bind(this) },
-    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutScheduleForTable.bind(this) },
+  userActivityTableCols: TableColType[] = [
+    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFunction: this.getUserNameForTable.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
+    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
   userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
@@ -146,7 +146,7 @@ export class ScoutingActivityComponent implements OnInit {
       else if ((s.blue_three_id as User).id === user.id)
         schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
 
-      schedule += '\n';
+      schedule += '\n\n';
     });
 
     return schedule;

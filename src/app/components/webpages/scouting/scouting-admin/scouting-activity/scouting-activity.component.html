@@ -1,6 +1,6 @@
 <app-box [Title]="'Scouting Activity'">
-    <app-table [TableCols]="userActivityTableCols" [TableData]="usersScoutingUserInfo" [Scrollable]="true"
-        [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)"
+    <app-table [TableCols]="userActivityTableCols" [TableData]="usersScoutingUserInfo" [EnableFilter]="true"
+        [Scrollable]="true" [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)"
         [ScrollHeight]="'calc(100vh - 24rem)'">
     </app-table>
 
