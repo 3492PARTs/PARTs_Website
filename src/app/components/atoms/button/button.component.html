@@ -99,6 +99,11 @@
     (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
     <span class="mdi mdi-cloud-download"></span>
   </button>
+  <button #thisButton *ngSwitchCase="'reset'" class="btn-symbol reset"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
+    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+    <span class="mdi mdi-restore"></span>
+  </button>
   <button #thisButton *ngSwitchDefault="" class="btn-symbol"
     [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
     (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
