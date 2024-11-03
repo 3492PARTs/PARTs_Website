@@ -10,8 +10,10 @@
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
       </div>
 
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="init(true)">Force Responses Pull</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="download()">Download</app-button>
+      <div>
+        <app-button [ButtonType]="'refresh'" (FunctionCallBack)="init(true)">Refresh Responses</app-button>
+        <app-button [ButtonType]="'download'" (FunctionCallBack)="download()">Download</app-button>
+      </div>
     </div>
   </app-form-element-group>
 
