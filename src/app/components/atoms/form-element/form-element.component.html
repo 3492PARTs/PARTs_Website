@@ -109,17 +109,18 @@
             (focusout)="focusOut()">
             <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
-            <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+            <ng-container *ngIf="BindingProperty && DisplayProperty">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
-                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ obj[DisplayProperty2] ?
-                obj[DisplayProperty2] : '' }}
+                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ DisplayProperty2 ?
+                (obj[DisplayProperty2] ?
+                obj[DisplayProperty2] : '') : '' }}
               </option>
             </ng-container>
 
-            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
+            <ng-container *ngIf="!BindingProperty && DisplayProperty">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{
                 obj[DisplayProperty] }} {{
-                obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
+                DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
               </option>
             </ng-container>
           </select>
@@ -135,9 +136,10 @@
             (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
             <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
 
-            <ng-container *ngIf="BindingProperty === '' && DisplayProperty !== ''">
+            <ng-container *ngIf="!BindingProperty && DisplayProperty">
               <option *ngFor="let obj of _SelectList" [ngValue]="obj">
-                {{obj[DisplayProperty] }} {{ obj[DisplayProperty2] ? obj[DisplayProperty2] : '' }}
+                {{obj[DisplayProperty] }} {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') :
+                '' }}
               </option>
             </ng-container>
           </select>
@@ -179,7 +181,7 @@
 
 
       <div *ngSwitchCase="'multiCheckbox'" (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
-        <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+        <ng-container *ngIf="BindingProperty && DisplayProperty">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
             [LabelText]="c[DisplayProperty]" [Model]="Model[i]['checked']" (ModelChange)="change($event, i)"
             [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled" [FieldSize]="FieldSize">
@@ -191,7 +193,7 @@
         <div *ngFor="let obj of _SelectList; let i = index" class="radio"
           [ngClass]="{'form-group-inline': !RadioGroupStacked}">
 
-          <ng-container *ngIf="BindingProperty !== '' && DisplayProperty !== ''">
+          <ng-container *ngIf="BindingProperty && DisplayProperty">
             <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj[BindingProperty]"
               [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model"
               (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled" />
@@ -263,7 +265,7 @@
             <i class="arrow down"></i>
           </div>
         </span>
-        <div *ngIf="DisplayProperty !== ''" id="dropdown" #multiSelectDropdown>
+        <div *ngIf="DisplayProperty" id="dropdown" #multiSelectDropdown>
           <div class="multi-select-buttons">
             <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
             &nbsp;
@@ -272,9 +274,9 @@
           <div *ngFor="let obj of Model; let i = index" class="multi-select-option">
             <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="Model[i]['checked']"
               (ngModelChange)="change($event, i)" [disabled]="Disabled">
-            <label *ngIf="DisplayProperty2 === ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
-            <label *ngIf="DisplayProperty2 !== ''" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
-              {{ obj[DisplayProperty2] }}</label>
+            <label *ngIf="!DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
+            <label *ngIf="DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
+              {{ obj[DisplayProperty2 || ''] }}</label>
           </div>
         </div>
       </div>

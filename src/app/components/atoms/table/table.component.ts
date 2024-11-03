@@ -39,7 +39,7 @@ export class TableComponent implements OnInit, OnChanges {
   TableDisplayValue = "";
 
   @Input() TableData: any[] = [];
-  @Input() TableCols: any[] = [];
+  @Input() TableCols: TableColType[] = [];
   @Input() TableDataButtons: any[] = [];
 
   @Input() TableTitle!: string;
@@ -380,4 +380,26 @@ export class TableComponent implements OnInit, OnChanges {
   previewImage(link: string, id: string): void {
     this.gs.previewImage(link, id);
   }
+}
+
+export class TableColType {
+  PropertyName = '';
+  ColLabel = '';
+  Width?: string;
+  Alignment?: string;
+  SelectList?: [];
+  BindingProperty?: string;
+  DisplayProperty?: string;
+  TrueValue?: any;
+  FalseValue?: any;
+  Type?: string;
+  FieldSize?: number;
+  MinValue?: number;
+  MaxValue?: number;
+  Rows?: number;
+  ColValueFunciton?: (arg: any) => any;
+  FunctionCallBack?: (arg: any) => any;
+  ColorFunction?: (arg: any) => string;
+  FontColorFunction?: (arg: any) => string;
+  UnderlineFn?: (arg0: any, arg1: any) => boolean;
 }

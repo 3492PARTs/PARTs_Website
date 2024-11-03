@@ -41,11 +41,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() MaxWidth = 'auto';
   private originalMinWidth = '';
   @Input() Placeholder = '';
-  @Input() Rows = 0;
+  @Input() Rows: number | null = 0;
   //@Input() SelectDisplayValue = '';
-  @Input() BindingProperty = '';
-  @Input() DisplayProperty = '';
-  @Input() DisplayProperty2 = '';
+  @Input() BindingProperty: string | null = null;
+  @Input() DisplayProperty: string | null = null;
+  @Input() DisplayProperty2: string | null = null;
 
   @Input() Name = '';
 
@@ -65,13 +65,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
           if (this.Model) {
             if (typeof this.Model === 'string') {
-              if (e[this.DisplayProperty] === 'Other') {
+              if (e[this.DisplayProperty || ''] === 'Other') {
                 let other = '';
                 this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
                   let match = false;
                   // TODO: Revisit this logic i dont think this loop is needed
                   tmp.forEach((element: any) => {
-                    if (option === element[this.BindingProperty]) match = true;
+                    if (option === element[this.BindingProperty || '']) match = true;
                   });
 
                   if (!match)
@@ -80,11 +80,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
               }
               else
-                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty]).toString();
+                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
             }
             else
               this.Model.forEach((m: any) => {
-                if (e[this.BindingProperty] === m[this.BindingProperty])
+                if (e[this.BindingProperty || ''] === m[this.BindingProperty || ''])
                   e['checked'] = m['checked'];
               });
 
@@ -102,9 +102,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   //@Input() RadioList: any[] = [];
   //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
-  @Input() FieldSize = 2000;
-  @Input() MinValue!: number;
-  @Input() MaxValue!: number;
+  @Input() FieldSize: number | null = null;
+  @Input() MinValue: number | null = null;
+  @Input() MaxValue: number | null = null;
   //@Input() FormElementInline: boolean = true;
 
   //@Input() Validation = false;
