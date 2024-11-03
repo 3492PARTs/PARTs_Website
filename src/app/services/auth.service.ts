@@ -322,7 +322,7 @@ export class AuthService {
 
         switch (this.apiStatus) {
           case APIStatus.on:
-            this.userLinksBS.next(this.gs.cloneObject(result as Link[]));
+            this.userLinksBS.next(result as Link[]);
             this.refreshUserLinksInCache(this.userLinksBS.value);
 
             // Cache data for endpoints we want to use offline.
@@ -390,6 +390,7 @@ export class AuthService {
 
   refreshUserLinksInCache(uls: Link[]): void {
     this.cs.UserLinks.RemoveAllAsync().then(() => {
+      console.log(uls);
       this.cs.UserLinks.AddOrEditBulkAsync(uls);
     });
   }

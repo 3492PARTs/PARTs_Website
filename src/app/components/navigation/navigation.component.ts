@@ -90,13 +90,13 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.user.subscribe(u => this.user = u);
 
     this.auth.userLinks.subscribe((ul) => {
-      this.userLinks = ul;
+      this.userLinks = this.gs.cloneObject(ul);
 
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
-          mi.menu_items = ul;
-          if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
-          else mi.menu_items.push(new SubLink('Login', 'login'))
+          mi.menu_items = this.userLinks;
+          //if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
+          //else mi.menu_items.push(new SubLink('Login', 'login'))
         }
       });
 

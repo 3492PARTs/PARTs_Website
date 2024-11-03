@@ -6,9 +6,8 @@ export interface ISubLink {
     menu_name_active_item: string;
     menu_header: string;
     order: number;
-    permission: IAuthPermission;
+    permission: IAuthPermission | null;
     routerlink: string;
-    user_links_id: number;
     icon: string;
 }
 
@@ -18,9 +17,8 @@ export class SubLink implements ISubLink {
     menu_name_active_item = '';
     menu_header = '';
     order = -1;
-    permission!: AuthPermission;
+    permission!: AuthPermission | null;
     routerlink = '';
-    user_links_id = -1;
     icon = 'clipboard-text-multiple-outline';
 
     constructor(menu_name: string, routerlink: string, icon?: string, menu_header?: string) {
@@ -37,9 +35,8 @@ export interface ILink {
     menu_name_active_item: string;
     menu_header: string;
     order: number;
-    permission: IAuthPermission;
+    permission: IAuthPermission | null;
     routerlink: string;
-    user_links_id: number;
     icon: string;
     menu_items: ISubLink[];
 
@@ -51,9 +48,8 @@ export class Link implements ILink {
     menu_name_active_item = '';
     menu_header = '';
     order = -1;
-    permission!: AuthPermission;
+    permission!: AuthPermission | null;
     routerlink = '';
-    user_links_id = -1;
     icon = 'clipboard-text-multiple-outline';
     menu_items: SubLink[] = [];
 

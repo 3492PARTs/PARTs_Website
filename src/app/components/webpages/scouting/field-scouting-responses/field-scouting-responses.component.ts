@@ -1,9 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService, AppSize } from '../../../../services/general.service';
+import { GeneralService } from '../../../../services/general.service';
 import { ScoutingService } from '../../../../services/scouting.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
@@ -45,8 +45,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   teamNotes: TeamNote[] = [];
 
-  tableWidth = '200%';
-
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
@@ -54,16 +52,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
-    this.setTableSize();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.setTableSize();
-  }
-
-  setTableSize(): void {
-    if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(forceCall = false): void {

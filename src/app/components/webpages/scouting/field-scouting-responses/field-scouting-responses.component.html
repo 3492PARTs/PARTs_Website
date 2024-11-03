@@ -45,8 +45,8 @@
   </app-form-element-group>
 
   <app-table [TableCols]="scoutTableCols" [TableData]="scoutTableRows" [Scrollable]="true" [(FilterText)]="filterText"
-    [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
-    [ScrollHeight]="'calc(100vh - 20rem)'" [CursorPointer]="true">
+    [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)" [ScrollHeight]="'calc(100vh - 20rem)'"
+    [CursorPointer]="true">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
@@ -59,7 +59,7 @@
     </app-form-element-group>
 
     <app-table [TableCols]="scoutResponses.scoutCols" [TableData]="teamScoutResults" [Scrollable]="true"
-      [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Width]="tableWidth" [Responsive]="true">
+      [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Responsive]="true">
     </app-table>
   </app-modal>
 </app-box>

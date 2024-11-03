@@ -41,12 +41,12 @@ export class DatabaseService extends Dexie {
 
   BannerTable!: Dexie.Table<Banner, number>;
 
-  versionNumber: number = 2;
+  versionNumber: number = 3;
 
   private dbName: string = 'index-db-parts-app';
   constructor() {
     super('index-db-parts-app');
-    //this.clearDB();
+    this.clearDB();
     //this.migrateDB();
     this.setIndexDbTable();
     this.seedData();
@@ -109,7 +109,7 @@ export class DatabaseService extends Dexie {
         .then(this.getCanonicalComparableSchema);
       dynDb.close();
       if (declaredSchema !== installedSchema) {
-        //this.gs.devConsoleLog('app-database.service', 'Db schema is not updated, so deleting the db.');
+        console.log('app-database.service', 'Db schema is not updated, so deleting the db.');
         await this.clearDB();
       }
     }
@@ -135,10 +135,10 @@ export class DatabaseService extends Dexie {
   }
 
   private async clearDB() {
-    //this.gs.devConsoleLog('app-database.service', 'deleting DB...');
+    console.log('app-database.service', 'deleting DB...');
     this.close();
     await this.delete();
     await this.open();
-    //this.gs.devConsoleLog('app-database.service', 'DB deleted.');
+    console.log('app-database.service', 'DB deleted.');
   }
 }
