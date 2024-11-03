@@ -1,9 +1,8 @@
 <app-box>
     <div id="return-wrapper" class="grid">
-        <span [routerLink]="RouterLink" class="mdi icon mdi-keyboard-return"></span>
+        <app-return-link [RouterLink]="RouterLink"></app-return-link>
         <app-header [h]="1" [centered]="true" [underlined]="false" [marginBottom]="false" [marginTop]="false">
             {{ Title }}
         </app-header>
     </div>
-
 </app-box>

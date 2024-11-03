@@ -1,0 +1,9 @@
+@import "../../../../scss/abstracts/variables.scss";
+
+.icon {
+  font-size: 35px;
+  justify-self: center;
+  align-self: center;
+  cursor: pointer;
+  color: $main_color;
+}

@@ -112,7 +112,7 @@ export interface IMatch {
 
     red_score: number;
     blue_score: number;
-    comp_level: string | ICompetitionLevel;
+    comp_level: ICompetitionLevel;
 
     time: Date;
     void_ind: string;
@@ -143,7 +143,7 @@ export class Match implements IMatch {
     blue_three_field_response!: boolean;
     red_score!: number;
     blue_score!: number;
-    comp_level!: string | CompetitionLevel;
+    comp_level!: CompetitionLevel;
     time!: Date;
     void_ind!: string;
 

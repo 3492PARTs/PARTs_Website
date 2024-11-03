@@ -1,0 +1,11 @@
+<ng-template #content>
+    <span class="mdi icon mdi-keyboard-return"></span>
+</ng-template>
+
+<a *ngIf="RouterLink" [routerLink]="RouterLink">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+
+<a *ngIf="!RouterLink" (click)="runFunction()">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>

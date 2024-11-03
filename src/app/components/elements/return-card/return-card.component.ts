@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { BoxComponent } from '../../atoms/box/box.component';
 import { HeaderComponent } from '../../atoms/header/header.component';
-import { RouterLink } from '@angular/router';
+import { ReturnLinkComponent } from "../../atoms/return-link/return-link.component";
 
 @Component({
   selector: 'app-return-card',
   standalone: true,
-  imports: [BoxComponent, HeaderComponent, RouterLink],
+  imports: [BoxComponent, HeaderComponent, ReturnLinkComponent],
   templateUrl: './return-card.component.html',
   styleUrls: ['./return-card.component.scss']
 })

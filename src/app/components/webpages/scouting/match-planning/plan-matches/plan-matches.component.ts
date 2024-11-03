@@ -16,11 +16,13 @@ import { PitResultDisplayComponent } from '../../../../elements/pit-result-displ
 import { Chart, ChartDataset, Point, BubbleDataPoint, registerables } from 'chart.js';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
+import { ReturnCardComponent } from '../../../../elements/return-card/return-card.component';
+import { ReturnLinkComponent } from '../../../../atoms/return-link/return-link.component';
 
 @Component({
   selector: 'app-plan-matches',
   standalone: true,
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })
@@ -43,7 +45,8 @@ export class PlanMatchesComponent implements OnInit {
   ];
 
   scoutCols: any[] = [];
-  matchPlanning: MatchPlanning[] = [];
+  activeMatch: Match | null = null;
+  matchToPlan: MatchPlanning[] = [];
 
   tableWidth = '200%';
 
@@ -76,7 +79,7 @@ export class PlanMatchesComponent implements OnInit {
   setMatchTableCols(): void {
     if (this.gs.getAppSize() >= AppSize.LG) {
       this.matchesTableCols = [
-        { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+        { PropertyName: 'comp_level.comp_lvl_typ_nm.replaceAll(\' Match\', \'\')', ColLabel: 'Type' },
         { PropertyName: 'time', ColLabel: 'Time' },
         ...this.matchesTableColsList
       ];
@@ -127,7 +130,7 @@ export class PlanMatchesComponent implements OnInit {
   async planMatch(match: Match): Promise<void> {
     this.gs.incrementOutstandingCalls();
 
-    this.matchPlanning = [];
+    this.matchToPlan = [];
     let tmp: MatchPlanning[] = [];
 
     const allianceMembers = [
@@ -175,7 +178,8 @@ export class PlanMatchesComponent implements OnInit {
         });
     }
 
-    this.matchPlanning = tmp;
+    this.matchToPlan = tmp;
+    this.activeMatch = match;
 
     this.gs.decrementOutstandingCalls();
   }
@@ -193,10 +197,10 @@ export class PlanMatchesComponent implements OnInit {
     // red
     //let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
+    let red = this.matchToPlan.filter(mp => mp.alliance === 'red');
     let redData = this.getAllianceDataSets(red);
 
-    let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
+    let blue = this.matchToPlan.filter(mp => mp.alliance === 'blue');
     let blueData = this.getAllianceDataSets(blue);
 
     this.gs.triggerChange(() => {
@@ -268,7 +272,8 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   clearResults(): void {
-    this.matchPlanning = [];
+    this.matchToPlan = [];
+    this.activeMatch = null;
   }
 
   rankToColor(team: number): string {
@@ -309,6 +314,7 @@ export class PlanMatchesComponent implements OnInit {
         datasets: datasets,
       },
       options: {
+        maintainAspectRatio: false,
         scales: {
           y: {
             beginAtZero: true,
