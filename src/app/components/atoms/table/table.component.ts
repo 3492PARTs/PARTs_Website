@@ -383,8 +383,8 @@ export class TableComponent implements OnInit, OnChanges {
 }
 
 export class TableColType {
-  PropertyName = '';
   ColLabel = '';
+  PropertyName?: string;
   Width?: string;
   Alignment?: string;
   SelectList?: [];
@@ -397,7 +397,7 @@ export class TableColType {
   MinValue?: number;
   MaxValue?: number;
   Rows?: number;
-  ColValueFunciton?: (arg: any) => any;
+  ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;
   FontColorFunction?: (arg: any) => string;

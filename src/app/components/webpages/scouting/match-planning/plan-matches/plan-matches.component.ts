@@ -6,7 +6,7 @@ import { ScoutingService } from '../../../../../services/scouting.service';
 import { CommonModule } from '@angular/common';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
@@ -31,8 +31,8 @@ export class PlanMatchesComponent implements OnInit {
   matches: Match[] = [];
   teams: Team[] = [];
 
-  matchesTableCols: object[] = [];
-  private matchesTableColsList: object[] = [
+  matchesTableCols: TableColType[] = [];
+  private matchesTableColsList: TableColType[] = [
     //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
     //{ PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'match_number', ColLabel: 'Match', UnderlineFn: this.underlineTeam },
@@ -44,7 +44,7 @@ export class PlanMatchesComponent implements OnInit {
     { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
   ];
 
-  scoutCols: any[] = [];
+  scoutCols: TableColType[] = [];
   activeMatch: Match | null = null;
   matchToPlan: MatchPlanning[] = [];
 

@@ -8,7 +8,7 @@ import { ScoutingService } from '../../../../services/scouting.service';
 import { UserService } from '../../../../services/user.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { CommonModule } from '@angular/common';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 
 @Component({
@@ -35,7 +35,7 @@ export class ScoutingPortalComponent implements OnInit {
     notification3: boolean,
   }[] = [];
 
-  scoutFieldScheduleTableCols: object[] = [
+  scoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
@@ -44,7 +44,7 @@ export class ScoutingPortalComponent implements OnInit {
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
-  expandedScoutFieldScheduleTableCols: object[] = [
+  expandedScoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
@@ -53,7 +53,7 @@ export class ScoutingPortalComponent implements OnInit {
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
-  scheduleTableCols: object[] = [
+  scheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'notified', ColLabel: 'Notified' },

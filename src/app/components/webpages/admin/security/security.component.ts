@@ -7,7 +7,7 @@ import { UserService } from '../../../../services/user.service';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { BoxComponent } from '../../../atoms/box/box.component';
@@ -22,16 +22,16 @@ import { Link } from '../../../../models/navigation.models';
 })
 export class SecurityComponent implements OnInit {
 
-  groupsTableCols: object[] = [
+  groupsTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'Group' },
-    { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFn: this.getPermissionDisplayValue },
+    { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFunction: this.getPermissionDisplayValue },
   ];
   groupModalVisible = false;
   groups: AuthGroup[] = [];
   activeGroup = new AuthGroup();
   availablePermissions: AuthPermission[] = [];
 
-  permissionsTableCols: object[] = [
+  permissionsTableCols: TableColType[] = [
     { PropertyName: 'codename', ColLabel: 'Code' },
     { PropertyName: 'name', ColLabel: 'Permission' },
   ];
@@ -45,14 +45,14 @@ export class SecurityComponent implements OnInit {
   scoutAuthGroupsModalVisible = false;
 
   userAudit: User[] = [];
-  userAuditTableCols = [
+  userAuditTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'User' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'groups', ColLabel: 'Groups', Type: 'function', ColValueFn: this.getGroupTableValue },
+    { PropertyName: 'groups', ColLabel: 'Groups', Type: 'function', ColValueFunction: this.getGroupTableValue },
   ];
 
-  linksTableCols: object[] = [
+  linksTableCols: TableColType[] = [
     { PropertyName: 'menu_name', ColLabel: 'Menu Name' },
     { PropertyName: 'routerlink', ColLabel: 'Router Link' },
     { PropertyName: 'permission.name', ColLabel: 'Permission' },

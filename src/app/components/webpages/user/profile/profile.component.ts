@@ -11,7 +11,7 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { TabComponent } from '../../../atoms/tab/tab.component';
 import { TabContainerComponent } from '../../../atoms/tab-container/tab-container.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit {
 
   input: UserData = new UserData();
 
-  alertTableCols: object[] = [
+  alertTableCols: TableColType[] = [
     { PropertyName: 'alert_subject', ColLabel: 'Subject' },
     { PropertyName: 'alert_body', ColLabel: 'Message' },
     { PropertyName: 'staged_time', ColLabel: 'Sent' },

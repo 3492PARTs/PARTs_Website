@@ -5,7 +5,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
@@ -26,7 +26,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   fieldQuestionAggregates: QuestionAggregate[] = [];
   fieldQuestionAggregateModalVisible = false;
   activeFieldQuestionAggregate = new QuestionAggregate();
-  fieldQuestionAggregatesTableCols: object[] = [
+  fieldQuestionAggregatesTableCols: TableColType[] = [
     { PropertyName: 'field_name', ColLabel: 'Name' },
     { PropertyName: 'question_aggregate_typ.question_aggregate_nm', ColLabel: 'Aggregate Function' },
     { PropertyName: 'active', ColLabel: 'Active' },
@@ -35,7 +35,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   fieldQuestions: QuestionWithConditions[] = [];
   fieldQuestionAggQuestionList: QuestionWithConditions[] = [];
   fieldQuestionToAddToAgg: QuestionWithConditions | null = null;;
-  fieldQuestionAggregateQuestionsTableCols: object[] = [
+  fieldQuestionAggregateQuestionsTableCols: TableColType[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
     { PropertyName: 'active', ColLabel: 'Active' },
   ];

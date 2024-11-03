@@ -9,7 +9,7 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { CommonModule } from '@angular/common';
@@ -28,7 +28,7 @@ export class SponsorShopComponent implements OnInit {
 
   items: Item[] = [];
   cart: Item[] = [];
-  cartTableCols: object[] = [
+  cartTableCols: TableColType[] = [
     { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '125px' },
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'cart_quantity', ColLabel: 'Quantity', Type: 'number', MinValue: 0, Width: '100px', FunctionCallBack: this.removeEmptyCartItem.bind(this) },

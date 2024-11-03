@@ -6,7 +6,7 @@ import { UserService } from '../../../../services/user.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
@@ -26,13 +26,13 @@ export class AdminUsersComponent implements OnInit {
   phoneTypes: PhoneType[] = [];
   groups: AuthGroup[] = [];
 
-  userTableCols = [
+  userTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'User' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
     { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
   ];
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
@@ -45,7 +45,7 @@ export class AdminUsersComponent implements OnInit {
   availableAuthGroups: AuthGroup[] = [];
   newAuthGroup: AuthGroup = new AuthGroup();
 
-  userGroupsTableCols: object[] = [
+  userGroupsTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'Name' }
   ];
 

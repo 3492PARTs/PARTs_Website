@@ -6,7 +6,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
@@ -32,16 +32,16 @@ export class ScoutingActivityComponent implements OnInit {
   userActivityModalVisible = false;
 
   activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
-  userScoutActivityScheduleTableCols: object[] = [
+  userScoutActivityScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScoutsForTable.bind(this) },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFunction: this.getScoutingActivityScoutsForTable.bind(this) },
     { PropertyName: 'notification1', ColLabel: '15 min notification' },
     { PropertyName: 'notification2', ColLabel: '5 min notification' },
     { PropertyName: 'notification3', ColLabel: '0 min notification' },
   ];
 
-  userScoutActivityResultsTableCols: object[] = [
+  userScoutActivityResultsTableCols: TableColType[] = [
     { PropertyName: 'match', ColLabel: 'Match' },
     { PropertyName: 'team_no', ColLabel: 'Team' },
     { PropertyName: 'time', ColLabel: 'Time' },

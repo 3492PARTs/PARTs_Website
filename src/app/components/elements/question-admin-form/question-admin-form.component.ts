@@ -39,9 +39,9 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
-    { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunciton: this.ynToYesNo },
-    { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunciton: this.ynToYesNo },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunciton: this.ynToYesNo },
+    { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
+    { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
   ];
 
   optionsTableCols: TableColType[] = [
