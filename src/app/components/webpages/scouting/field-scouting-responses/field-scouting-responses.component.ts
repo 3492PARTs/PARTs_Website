@@ -60,7 +60,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       if (result) {
         this.scoutResponses = result;
 
-        if (!environment.production)
+        if (environment.environment === 'local')
           this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
 
         this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
