@@ -283,7 +283,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn() {
-    const buttonWidth = 2.8;
+    const buttonWidth = 3.2;
     let colWidth = 0;
 
     if (this.ShowAddButton) {
