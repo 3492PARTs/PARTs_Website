@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
-import { GeneralService } from '../../../services/general.service';
+import { AppSize, GeneralService } from '../../../services/general.service';
 import { ModalComponent } from '../../atoms/modal/modal.component';
 import { FormComponent } from '../../atoms/form/form.component';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
@@ -34,14 +34,12 @@ export class QuestionAdminFormComponent implements OnInit {
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   //editQuestion: Question = new Question();
 
-  questionTableCols: TableColType[] = [
+  questionTableCols: TableColType[] = [];
+  private _questionTableCols: TableColType[] = [
     { PropertyName: 'form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
-    { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
-    { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
   ];
 
   optionsTableCols: TableColType[] = [
@@ -53,6 +51,12 @@ export class QuestionAdminFormComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
+    this.setQuestionTableCols();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setQuestionTableCols();
   }
 
   questionInit(): void {
@@ -63,6 +67,21 @@ export class QuestionAdminFormComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  setQuestionTableCols(): void {
+    if (this.gs.getAppSize() >= AppSize.LG) {
+      this.questionTableCols = [
+        ...this._questionTableCols,
+        { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
+        { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
+        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
+
+      ];
+    }
+    else {
+      this.questionTableCols = [...this._questionTableCols];
+    }
   }
 
   showQuestionModal(q?: QuestionWithConditions): void {
