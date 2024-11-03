@@ -390,7 +390,6 @@ export class AuthService {
 
   refreshUserLinksInCache(uls: Link[]): void {
     this.cs.UserLinks.RemoveAllAsync().then(() => {
-      console.log(uls);
       this.cs.UserLinks.AddOrEditBulkAsync(uls);
     });
   }

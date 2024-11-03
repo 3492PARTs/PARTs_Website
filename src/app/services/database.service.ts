@@ -8,11 +8,13 @@ import { IAuthPermission, IUser, User } from '../models/user.models';
 import { ILink } from '../models/navigation.models';
 import { IQuestionWithConditions } from '../models/form.models';
 import { Banner } from '../models/api.models';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService extends Dexie {
+
   UserTable!: Dexie.Table<User, number>;
   UserPermissionsTable!: Dexie.Table<IAuthPermission, number>;
   UserLinksTable!: Dexie.Table<ILink, number>;
@@ -46,14 +48,14 @@ export class DatabaseService extends Dexie {
   private dbName: string = 'index-db-parts-app';
   constructor() {
     super('index-db-parts-app');
-    this.clearDB();
-    //this.migrateDB();
+    //this.clearDB();
+    this.migrateDB();
     this.setIndexDbTable();
     this.seedData();
-
   }
 
   private seedData() {
+    //console.log('seedData');
     /*
     this.on('populate', async () => {
       await this.LoadedStores.add(new LoadedStores());
@@ -62,8 +64,8 @@ export class DatabaseService extends Dexie {
   }
 
   private setIndexDbTable() {
-    this.version(this.versionNumber).stores(this.setTablesSchema());
     //console.log('database initialized');
+    this.version(this.versionNumber).stores(this.setTablesSchema());
 
     this.UserTable = this.table(DBStores.User.TableName);
     this.UserPermissionsTable = this.table(DBStores.UserPermissions.TableName);
@@ -90,7 +92,7 @@ export class DatabaseService extends Dexie {
 
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
 
-    this.BannerTable = this.table(DBStores.Banner.TableName)
+    this.BannerTable = this.table(DBStores.Banner.TableName);
   }
 
   private setTablesSchema() {
@@ -102,16 +104,20 @@ export class DatabaseService extends Dexie {
 
   private async migrateDB() {
     if (await Dexie.exists(this.dbName)) {
+      console.log('Start', 'migrateDB')
       const declaredSchema = this.getCanonicalComparableSchema(this);
       const dynDb = new Dexie(this.dbName);
       const installedSchema = await dynDb
         .open()
-        .then(this.getCanonicalComparableSchema);
+        .then(this.getCanonicalComparableSchema.bind(this));
       dynDb.close();
       if (declaredSchema !== installedSchema) {
         console.log('app-database.service', 'Db schema is not updated, so deleting the db.');
         await this.clearDB();
+        document.location.reload();
       }
+      console.log('Finish', 'migrateDB');
+
     }
   }
 
@@ -141,4 +147,9 @@ export class DatabaseService extends Dexie {
     await this.open();
     console.log('app-database.service', 'DB deleted.');
   }
+}
+
+export enum DBStatus {
+  not_ready,
+  ready
 }
