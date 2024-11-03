@@ -306,7 +306,7 @@ nav {
           font-size: 1.36rem;
 
           &:hover,
-          .active-link {
+          &.active-link {
             background-color: #eaecf4;
           }
         }
