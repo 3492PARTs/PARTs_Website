@@ -159,9 +159,6 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      let x = JSON.parse(response.errorMessage);
-      console.log(x);
-      console.log(this.objectToString(x));
       this.addBanner(new Banner(0, response.errorMessage ? this.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
       return false;
     }
