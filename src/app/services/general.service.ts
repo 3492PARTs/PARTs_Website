@@ -352,7 +352,7 @@ export class GeneralService {
     }
   }
 
-  arrayObjectIndexOf(arr: any[], searchTerm: any, property: string) {
+  arrayObjectIndexOf(arr: any[], property: string, searchTerm: any) {
     for (let i = 0, len = arr.length; i < len; i++) {
       if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
     }

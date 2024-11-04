@@ -120,7 +120,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   }
 
   removeQuestionFromFieldAggregate(q: QuestionWithConditions): void {
-    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, q.question_id, 'question_id');
+    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, 'question_id', q.question_id);
     this.activeFieldQuestionAggregate.questions.splice(index, 1);
     this.buildFieldQuestionAggQuestionList();
   }

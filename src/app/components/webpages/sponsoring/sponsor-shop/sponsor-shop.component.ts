@@ -82,17 +82,17 @@ export class SponsorShopComponent implements OnInit {
   }
 
   removeCartItem(item: Item): void {
-    this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
+    this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
     this.addItemBack(item, item.cart_quantity);
   }
 
   removeEmptyCartItem(item: Item): void {
-    if (item.cart_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, item.item_id, 'item_id'), 1);
+    if (item.cart_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
     //this.addItemBack(item, 1);
   }
 
   addItemBack(item: Item, quantity: number): void {
-    this.items[this.gs.arrayObjectIndexOf(this.items, item.item_id, 'item_id')].sponsor_quantity -= quantity;
+    this.items[this.gs.arrayObjectIndexOf(this.items, 'item_id', item.item_id)].sponsor_quantity -= quantity;
   }
 
   saveSponsorOrder(): void {
