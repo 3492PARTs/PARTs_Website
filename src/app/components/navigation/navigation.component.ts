@@ -94,7 +94,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       this.appMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
-          mi.menu_items = this.userLinks;
+          let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
+
+          mi.menu_items = index !== -1 ? [...this.userLinks, new Link('Install', '')] : [...this.userLinks];
           //if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
           //else mi.menu_items.push(new SubLink('Login', 'login'))
         }
@@ -121,7 +123,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
               mi.menu_items.push(new Link('Install', ''));
             }
             else if (!e && index !== -1) {
-              //mi.menu_items.splice(index, 1);
+              mi.menu_items.splice(index, 1);
             }
           }
         });
