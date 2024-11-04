@@ -132,6 +132,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
+  @Output() ResetFunction: EventEmitter<any> = new EventEmitter();
 
   @Input() TrueValue: any = true;
   @Input() FalseValue: any = false;
@@ -726,5 +727,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         else {
           this._PickerMode = 'popup';
         }
+  }
+
+  runResetFunction(): void {
+    this.ResetFunction.emit();
   }
 }

@@ -1,14 +1,10 @@
 <app-box [Title]="'Scout Field Results'">
   <app-form-element-group [LabelText]="'Table Display'">
     <div id="table-buttons">
-      <div class="flex align-items-baseline flex-wrap">
-        <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
-          [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
-          (FunctionCallBack)="showHideTableCols()">
-        </app-form-element>
-
-        <app-button [ButtonType]="'reset'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
-      </div>
+      <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
+        [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
+        (FunctionCallBack)="showHideTableCols()" (ResetFunction)="resetTableColumns()">
+      </app-form-element>
 
       <div>
         <app-button-ribbon>

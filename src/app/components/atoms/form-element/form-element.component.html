@@ -252,32 +252,37 @@
         (change)="ImageChangeEvent($event)" placeholder="Upload file" [ngModel]="Model" [disabled]="Disabled"
         (focus)="focusIn()" (focusout)="focusOut()">
 
-      <div *ngSwitchCase="'multiSelect'" class="form-control" id="multiSelect" [ngClass]="{
+      <div *ngSwitchCase="'multiSelect'" class="flex align-items-baseline flex-wrap">
+        <div class="form-control" id="multiSelect" [ngClass]="{
         'disabled': Disabled, 
         'valid': isFormElementValid(), 
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
       }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
-        #multiSelect (appClickOutside)="multiSelectClose()">
-        <span (click)="multiSelectMenu()">
-          <p #multiSelectText>{{ LabelText }}</p>
-          <div class="arrow-wrapper">
-            <i class="arrow down"></i>
+          #multiSelect (appClickOutside)="multiSelectClose()">
+          <span (click)="multiSelectMenu()">
+            <p #multiSelectText>{{ LabelText }}</p>
+            <div class="arrow-wrapper">
+              <i class="arrow down"></i>
+            </div>
+          </span>
+          <div *ngIf="DisplayProperty" id="dropdown" #multiSelectDropdown>
+            <div class="multi-select-buttons">
+              <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
+              &nbsp;
+              <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
+            </div>
+            <div *ngFor="let obj of Model; let i = index" class="multi-select-option">
+              <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="Model[i]['checked']"
+                (ngModelChange)="change($event, i)" [disabled]="Disabled">
+              <label *ngIf="!DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
+              <label *ngIf="DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
+                {{ obj[DisplayProperty2 || ''] }}</label>
+            </div>
           </div>
-        </span>
-        <div *ngIf="DisplayProperty" id="dropdown" #multiSelectDropdown>
-          <div class="multi-select-buttons">
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
-            &nbsp;
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
-          </div>
-          <div *ngFor="let obj of Model; let i = index" class="multi-select-option">
-            <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="Model[i]['checked']"
-              (ngModelChange)="change($event, i)" [disabled]="Disabled">
-            <label *ngIf="!DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
-            <label *ngIf="DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
-              {{ obj[DisplayProperty2 || ''] }}</label>
-          </div>
+        </div>
+        <div class="padding-left-1rem" *ngIf="ResetFunction.observed">
+          <app-button [ButtonType]="'reset'" (FunctionCallBack)="runResetFunction()"></app-button>
         </div>
       </div>
 
