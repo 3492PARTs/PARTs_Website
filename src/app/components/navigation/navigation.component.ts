@@ -177,7 +177,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
     this.appMenu = [
-      new Link('Join PARTs', 'join', 'account-supervisor', [
+      new Link('Join PARTs', '', 'account-supervisor', [
         new Link('Mechanical', 'join/mechanical'),
         new Link('Electrical', 'join/electrical'),
         new Link('Programming', 'join/programming'),
