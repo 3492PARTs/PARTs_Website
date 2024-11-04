@@ -105,8 +105,9 @@
             <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
-                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())" routerLink="{{ mii.routerlink }}"
-                  routerLinkActive="active-link" (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())"
+                  [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
                   {{ mii.menu_name }}
                 </a>
 
