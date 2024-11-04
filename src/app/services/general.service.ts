@@ -159,7 +159,10 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner(new Banner(0, response.retMessage, 5000));
+      let x = JSON.parse(response.errorMessage);
+      console.log(x);
+      console.log(this.objectToString(x));
+      this.addBanner(new Banner(0, response.errorMessage ? this.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
       return false;
     }
     return true;
@@ -341,7 +344,7 @@ export class GeneralService {
     window.setTimeout(() => { tmpFx() }, 0);
   }
 
-  // For one given propery and its value, get the value of another propery in the same object
+  // For one given property and its value, get the value of another property in the same object
   propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
     for (let i = 0; i < arr.length; i++) {
       if (Object.prototype.hasOwnProperty.call(arr[i], queryProperty) && arr[i][queryProperty] === queryValue) {
@@ -634,11 +637,20 @@ export class GeneralService {
 
     return { x: xOffset, y: yOffset };
   }
+
+  objectToString(o: any): string {
+    let s = '';
+    for (const [key, value] of Object.entries(o)) {
+      s += `${key}: ${value}\n`;
+    }
+    return s
+  }
 }
 
 export class RetMessage {
   retMessage!: string;
   error!: boolean;
+  errorMessage!: string;
 }
 
 export class Page {
