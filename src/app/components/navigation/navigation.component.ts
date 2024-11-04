@@ -121,7 +121,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
               mi.menu_items.push(new Link('Install', ''));
             }
             else if (!e && index !== -1) {
-              mi.menu_items.splice(index, 1);
+              //mi.menu_items.splice(index, 1);
             }
           }
         });
