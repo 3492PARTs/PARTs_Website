@@ -594,7 +594,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
       if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
-        const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 44) : this.label.nativeElement.clientWidth) + 32;
+        const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 20) : this.label.nativeElement.clientWidth) + 32;
+
         if (this.originalMinWidth === 'auto') {
           this.MinWidth = width + 'px';
         }

@@ -253,19 +253,26 @@
         (focus)="focusIn()" (focusout)="focusOut()">
 
       <div *ngSwitchCase="'multiSelect'" class="flex align-items-baseline flex-wrap">
+
         <div class="form-control" id="multiSelect" [ngClass]="{
-        'disabled': Disabled, 
-        'valid': isFormElementValid(), 
-        'invalid': isFormElementInvalid(),
-        'required': isFormElementRequired()
-      }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
-          #multiSelect (appClickOutside)="multiSelectClose()">
+            'disabled': Disabled, 
+            'valid': isFormElementValid(), 
+            'invalid': isFormElementInvalid(),
+            'required': isFormElementRequired()
+            }" [ngStyle]="{
+            'width': 'calc(' + Width + ' - 0.64rem)', 
+            'min-width': MinWidth, 
+            'max-width': MaxWidth
+            }" #multiSelect (appClickOutside)="multiSelectClose()">
+
           <span (click)="multiSelectMenu()">
-            <p #multiSelectText>{{ LabelText }}</p>
+            <p #multiSelectText id="multi-select-text">{{ LabelText }}</p>
+
             <div class="arrow-wrapper">
               <i class="arrow down"></i>
             </div>
           </span>
+
           <div *ngIf="DisplayProperty" id="dropdown" #multiSelectDropdown>
             <div class="multi-select-buttons">
               <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>

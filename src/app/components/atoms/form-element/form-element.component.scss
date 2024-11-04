@@ -247,7 +247,11 @@ textarea.form-control {
 #multiSelect {
   display: inline-block;
   position: relative;
-  padding-right: 4.4rem;
+  padding-right: 2.5rem;
+
+  #multi-select-text {
+    display: inline-block;
+  }
 
   p {
     margin: 0;
