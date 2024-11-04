@@ -10,7 +10,7 @@
   "icons": [
     {
       "src": "appIcons/icon-48x48.png",
-      "sizes": "72x72",
+      "sizes": "48x48",
       "type": "image/png",
       "purpose": "maskable any"
     },
