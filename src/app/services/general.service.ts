@@ -80,9 +80,7 @@ export class GeneralService {
   removeBanner(b: Banner): void {
     let banners = this.cloneObject(this.bannersBS.value);
     let index = -1;
-    console.log(b);
     for (let i = 0; i < banners.length; i++) {
-      console.log(banners[i]);
       if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
         index = i;
         break;
