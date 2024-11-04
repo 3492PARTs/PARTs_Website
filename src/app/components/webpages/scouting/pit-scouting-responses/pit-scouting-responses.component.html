@@ -1,14 +1,16 @@
 <app-box [Title]="'Scout Pit Results'">
   <form>
-    <app-form-element [LabelText]="'Team'" [Type]="'multiSelect'" [FormGroup]="true" [SelectList]="teamsSelectList"
-      [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="teams">
-    </app-form-element>
+    <div class="flex align-items-baseline flex-wrap justify-content-space-between">
+      <app-form-element [LabelText]="'Team'" [Type]="'multiSelect'" [FormGroup]="true" [SelectList]="teamsSelectList"
+        [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [(Model)]="teams">
+      </app-form-element>
 
-    <app-button-ribbon>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="filter()">Search</app-button>
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="reset()">Reset</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="download()">Download</app-button>
-    </app-button-ribbon>
+      <app-button-ribbon>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="filter()">Search</app-button>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="reset()">Reset</app-button>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="download()">Download</app-button>
+      </app-button-ribbon>
+    </div>
   </form>
 </app-box>
 
