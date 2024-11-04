@@ -250,7 +250,7 @@ export class ScoutingService {
 
       await this.getCurrentSeason().then((value: Season[]) => {
         //console.log('filter season ');
-        //console.log(value);
+        //console.log(value);/
 
         changed = !value;
 
