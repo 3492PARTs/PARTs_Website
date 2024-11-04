@@ -149,7 +149,7 @@
 
     <!--wide screen nav expander-->
     <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
-      <div (click)="toggleForceNavExpand()">
+      <div (click)="toggleForceNavExpanded()">
         <span id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" class="mdi mdi-menu-right"></span>
       </div>
     </div>
@@ -160,7 +160,7 @@
     [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}"
     [ngStyle]="{ height: siteHeaderHeight + 'rem', 'margin-top': siteBannerHeight + 'rem'}">
     <!--narrow screen nav expander-->
-    <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
+    <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleShowNav()">
       <span class="mdi mdi-menu icon"></span>
     </div>
 

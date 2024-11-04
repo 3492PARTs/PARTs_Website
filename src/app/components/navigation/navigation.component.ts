@@ -141,6 +141,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
+
+
+          if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
+
         }
       });
 
@@ -164,11 +168,11 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.backendEnv = result;
     });
 
-    this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
+    this.setNavExpandedCollapsed(this.gs.getAppSize() >= AppSize.LG);
 
     this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
 
-    if (this.hideNavExpander) this.setShowNav(false);
+    if (this.hideNavExpander) this.setNavCollapsedHidden(false);
 
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
@@ -228,12 +232,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.resizeTimeout = window.setTimeout(() => {
       if (!this.manualNavExpander || this.gs.getAppSize() < AppSize.LG) {
-        this.setNavExpanded(this.gs.getAppSize() >= AppSize.LG);
+        this.setNavExpandedCollapsed(this.gs.getAppSize() >= AppSize.LG);
         this.manualNavExpander = false;
         this.hideNavExpander = this.gs.getAppSize() < AppSize.LG;
 
         if (!this.hideNavExpander) {
-          this.setShowNav(true);
+          this.setNavCollapsedHidden(true);
           this.renderer.setStyle(this.header.nativeElement, 'top', '0');
         }
       }
@@ -375,23 +379,23 @@ let max = document.documentElement.scrollHeight;
     }
   }
 
-  toggleForceNavExpand(): void {
+  toggleForceNavExpanded(): void {
     this.manualNavExpander = true;
-    this.setNavExpanded(!this.navExpanded);
+    this.setNavExpandedCollapsed(!this.navExpanded);
   }
 
-  setNavExpanded(b: boolean): void {
+  setNavExpandedCollapsed(b: boolean): void {
     this.navExpanded = b;
     if (this.navExpanded) this.navigationService.setNavigationState(NavigationState.expanded);
     else this.navigationService.setNavigationState(NavigationState.collapsed);
   }
 
-  toggleNav(): void {
+  toggleShowNav(): void {
     this.setHeaderPosition(0);
-    this.setShowNav(!this.showNav);
+    this.setNavCollapsedHidden(!this.showNav);
   }
 
-  setShowNav(b: boolean): void {
+  setNavCollapsedHidden(b: boolean): void {
     this.showNav = b;
     if (this.showNav) this.navigationService.setNavigationState(NavigationState.collapsed);
     else this.navigationService.setNavigationState(NavigationState.hidden);
@@ -399,7 +403,7 @@ let max = document.documentElement.scrollHeight;
 
   closeNavOnMobile(): void {
     if (this.hideNavExpander) {
-      this.setShowNav(false);
+      this.setNavCollapsedHidden(false);
     }
   }
 
