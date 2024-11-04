@@ -78,17 +78,20 @@ export class GeneralService {
   }
 
   removeBanner(b: Banner): void {
-    let banners = this.bannersBS.value;
+    let banners = this.cloneObject(this.bannersBS.value);
     let index = -1;
-
+    console.log(b);
     for (let i = 0; i < banners.length; i++) {
-      if (banners[i].message === b.message && banners[i].time === b.time) {
+      console.log(banners[i]);
+      if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
         index = i;
         break;
       }
     }
 
     if (index !== -1) {
+      if (banners[index].timeout)
+        window.clearTimeout(banners[index].timeout);
       banners.splice(index, 1);
       this.bannersBS.next(banners);
     }
