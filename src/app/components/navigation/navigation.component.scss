@@ -944,9 +944,9 @@ header {
 }
 
 #environment {
-  padding-right: 1rem;
-
   p {
-    color: #858796;
+    color: rgba(255, 255, 255, 0.3);
+    word-wrap: break-word;
+    padding: 0 1rem;
   }
 }

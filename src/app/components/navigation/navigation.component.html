@@ -145,6 +145,13 @@
           <span class="mdi icon mdi-github"></span>
         </a>
       </div>
+
+      <!--Environment header-->
+      <div *ngIf="frontendEnv.length > 0" id="environment">
+        <hr>
+        <p>update_links:update_links_permissions<!--{{frontendEnv}}{{backendEnv.length > 0 ? ':' : ''}}{{backendEnv}}-->
+        </p>
+      </div>
     </div>
 
     <!--wide screen nav expander-->
@@ -175,11 +182,6 @@
       <div id="search-wrapper" [ngClass]="{ xsShowSearch : xsShowSearch, full_width: !showNav}">
         <app-form-element *ngIf="false" [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
         </app-form-element>
-      </div>
-
-      <!--Environment header-->
-      <div *ngIf="frontendEnv.length > 0" id="environment">
-        <p>{{frontendEnv}}{{backendEnv.length > 0 ? ':' : ''}}{{backendEnv}}</p>
       </div>
 
       <!--user information/notifications/messages-->
