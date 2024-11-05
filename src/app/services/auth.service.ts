@@ -98,7 +98,7 @@ export class AuthService {
     }, (err: any) => {
       console.log(err);
       this.authInFlightBS.next(AuthCallStates.err);
-      this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
+      //this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
     });
   }
 
