@@ -636,11 +636,23 @@ export class GeneralService {
   }
 
   objectToString(o: any): string {
+    //console.log(o);
     let s = '';
-    for (const [key, value] of Object.entries(o)) {
-      s += `${key}: ${value}\n`;
-    }
-    return s
+    if (typeof o === 'object')
+      for (const [key, value] of Object.entries(o)) {
+        if (value instanceof Array) {
+          s += `${key}: `;
+          value.forEach(element => {
+            s += `${this.objectToString(element)}, `;
+          });
+          s = s.substring(0, s.length - 2);
+          //s += '\n';
+        }
+        else s += `${key}: ${value}\n`;
+      }
+    else
+      return o;
+    return s;
   }
 }
 

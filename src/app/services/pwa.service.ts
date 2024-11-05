@@ -18,7 +18,7 @@ export class PwaService {
     this.initPwaPrompt();
 
     if (this.swUpdate.isEnabled) {
-      console.log(`${environment.version} running...`);
+      console.log(`service worker running...`);
       this.swUpdate.checkForUpdate();
       setInterval(() => {
         this.swUpdate.checkForUpdate();
@@ -48,7 +48,7 @@ export class PwaService {
 
   public initPwaPrompt() {
     window.addEventListener('beforeinstallprompt', (event: any) => {
-      console.log('init pwa');
+      //console.log('init pwa');
       event.preventDefault();
       this.promptEvent = event;
       this.setInstallEligible(true);
