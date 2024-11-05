@@ -666,6 +666,10 @@ export class GeneralService {
   decodeYesNoBoolean(b: boolean): string {
     return this.booleanDecode(b, { true: 'Yes', false: 'No' });
   }
+
+  decodeYesNo(s: string): string {
+    return this.booleanDecode(s === 'y', { true: 'Yes', false: 'No' });
+  }
 }
 
 export class RetMessage {

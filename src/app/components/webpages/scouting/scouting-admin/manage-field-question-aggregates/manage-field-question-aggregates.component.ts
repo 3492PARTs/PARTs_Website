@@ -29,7 +29,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   fieldQuestionAggregatesTableCols: TableColType[] = [
     { PropertyName: 'field_name', ColLabel: 'Name' },
     { PropertyName: 'question_aggregate_typ.question_aggregate_nm', ColLabel: 'Aggregate Function' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
   fieldQuestions: QuestionWithConditions[] = [];
@@ -37,7 +37,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   fieldQuestionToAddToAgg: QuestionWithConditions | null = null;;
   fieldQuestionAggregateQuestionsTableCols: TableColType[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
   constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService) { }
@@ -134,5 +134,9 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.gs.decodeYesNo(s);
   }
 }
