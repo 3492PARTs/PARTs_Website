@@ -12,6 +12,10 @@
             <app-button *ngIf="newPhoneType" [ButtonType]="'main'" (FunctionCallBack)="toggleNewPhoneType()">Edit Phone
                 Type
             </app-button>
+            <app-button *ngIf="activePhoneType.phone_type_id" [ButtonType]="'danger'"
+                (FunctionCallBack)="deletePhoneType()">Delete Phone
+                Type
+            </app-button>
         </div>
 
         <app-form-element [Type]="'text'" [LabelText]="'Carrier'" [(Model)]="activePhoneType.carrier" [Required]="true">

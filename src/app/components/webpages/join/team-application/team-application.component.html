@@ -1,4 +1,8 @@
 <app-box [Title]="'Team Application'">
+    <p class="important">Click <a routerLink="/contact">here</a> request information for Middle School robotics
+        form.</p>
+    <br>
+
     <app-form (SubmitFunction)="save()">
         <app-form-element-group *ngFor="let formSubType of questions" [LabelText]="formSubType.form_sub_typ">
             <app-form-element *ngFor="let q of formSubType.questions" [LabelText]="q.question"

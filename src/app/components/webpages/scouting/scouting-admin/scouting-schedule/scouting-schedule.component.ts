@@ -8,7 +8,7 @@ import { ScoutingService } from '../../../../../services/scouting.service';
 import { UserService } from '../../../../../services/user.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
@@ -29,13 +29,13 @@ export class ScoutingScheduleComponent implements OnInit {
   users: User[] = [];
 
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
-  scoutFieldScheduleTableCols: object[] = [
+  scoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
   scoutScheduleModalVisible = false;
@@ -44,12 +44,12 @@ export class ScoutingScheduleComponent implements OnInit {
 
   scheduleTypes: ScheduleType[] = [];
   scheduleByType: ScheduleByType[] = [];
-  scheduleTableCols: object[] = [
+  scheduleTableCols: TableColType[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
 
   currentSchedule = new Schedule();
@@ -220,5 +220,13 @@ export class ScoutingScheduleComponent implements OnInit {
     var dt = new Date(this.currentSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
     this.currentSchedule.end_time = dt;
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.gs.decodeSentBoolean(b);
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.gs.decodeYesNoBoolean(b);
   }
 }

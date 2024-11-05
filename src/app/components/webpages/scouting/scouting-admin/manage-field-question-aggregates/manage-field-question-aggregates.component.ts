@@ -5,7 +5,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
@@ -26,18 +26,18 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   fieldQuestionAggregates: QuestionAggregate[] = [];
   fieldQuestionAggregateModalVisible = false;
   activeFieldQuestionAggregate = new QuestionAggregate();
-  fieldQuestionAggregatesTableCols: object[] = [
+  fieldQuestionAggregatesTableCols: TableColType[] = [
     { PropertyName: 'field_name', ColLabel: 'Name' },
     { PropertyName: 'question_aggregate_typ.question_aggregate_nm', ColLabel: 'Aggregate Function' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
   fieldQuestions: QuestionWithConditions[] = [];
   fieldQuestionAggQuestionList: QuestionWithConditions[] = [];
   fieldQuestionToAddToAgg: QuestionWithConditions | null = null;;
-  fieldQuestionAggregateQuestionsTableCols: object[] = [
+  fieldQuestionAggregateQuestionsTableCols: TableColType[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
   constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService) { }
@@ -120,7 +120,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   }
 
   removeQuestionFromFieldAggregate(q: QuestionWithConditions): void {
-    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, q.question_id, 'question_id');
+    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, 'question_id', q.question_id);
     this.activeFieldQuestionAggregate.questions.splice(index, 1);
     this.buildFieldQuestionAggQuestionList();
   }
@@ -134,5 +134,9 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.gs.decodeYesNo(s);
   }
 }

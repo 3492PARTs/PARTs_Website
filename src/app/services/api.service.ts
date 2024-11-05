@@ -14,7 +14,7 @@ export class APIService {
 
   private persistentSiteBanners: Banner[] = [];
 
-  private outstandingApiStatusCheck = false;
+  private outstandingApiStatusCheck: Promise<string> | null = null;
 
   constructor(private http: HttpClient, private gs: GeneralService) {
     this.gs.siteBanners.subscribe(psb => this.persistentSiteBanners = psb);
@@ -41,26 +41,30 @@ export class APIService {
     });
   }
 
-  private getAPIStatus(): void {
+  getAPIStatus(): Promise<string> {
     if (!this.outstandingApiStatusCheck) {
-      this.outstandingApiStatusCheck = true;
-      this.http.get(
-        'public/api-status/'
-      ).subscribe(
-        {
-          next: (result: any) => {
-            if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
-          },
-          error: (err: any) => {
-            console.log('error', err);
-            if (this.apiStatusBS.value !== APIStatus.off) this.apiStatusBS.next(APIStatus.off);
-            this.outstandingApiStatusCheck = false;
-          }, complete: () => {
-            this.outstandingApiStatusCheck = false;
-          },
-        }
-      );
+      this.outstandingApiStatusCheck = new Promise(resolve => {
+        this.http.get(
+          'public/api-status/'
+        ).subscribe(
+          {
+            next: (result: any) => {
+              if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
+              if (result.hasOwnProperty('branch')) resolve(result['branch']);
+              resolve('');
+            },
+            error: (err: any) => {
+              console.log('error', err);
+              if (this.apiStatusBS.value !== APIStatus.off) this.apiStatusBS.next(APIStatus.off);
+              this.outstandingApiStatusCheck = null;
+            }, complete: () => {
+              this.outstandingApiStatusCheck = null;
+            },
+          }
+        );
+      });
     }
+    return this.outstandingApiStatusCheck;
   }
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },

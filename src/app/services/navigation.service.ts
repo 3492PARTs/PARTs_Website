@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
-import { UserLinks } from '../models/navigation.models';
+import { Link } from '../models/navigation.models';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -15,7 +15,7 @@ export class NavigationService {
   subPage = this.subPageBS.asObservable();
 
   /* Sub Pages */
-  private subPagesBS = new BehaviorSubject<UserLinks[]>([]);
+  private subPagesBS = new BehaviorSubject<Link[]>([]);
   subPages = this.subPagesBS.asObservable();
 
   /* State of navigation expander */
@@ -34,40 +34,40 @@ export class NavigationService {
 
   setSubPages(routerLink: string): void {
     const area = routerLink.split('/');
-    let subPages: UserLinks[] = [];
+    let subPages: Link[] = [];
     switch (area[1]) {
       case 'admin':
         subPages = [
-          new UserLinks('Users', '/admin/admin-users', 'account-group'),
-          new UserLinks('Security', '/admin/security', 'security'),
-          new UserLinks('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
-          new UserLinks('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
-          new UserLinks('Phone Types', '/admin/phone-types', 'phone'),
-          new UserLinks('Error Log', '/admin/error-log', 'alert-circle-outline'),
+          new Link('Users', '/admin/admin-users', 'account-group'),
+          new Link('Security', '/admin/security', 'security'),
+          new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
+          new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
+          new Link('Phone Types', '/admin/phone-types', 'phone'),
+          new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
         ];
-        if (!environment.production) subPages.push(new UserLinks('Requested Items', '/admin/requested-items', 'view-grid-plus'));
+        if (!environment.production) subPages.push(new Link('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
       case 'scouting':
         switch (area[2]) {
           case 'scouting-admin':
             subPages = [
-              new UserLinks('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
-              new UserLinks('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
-              new UserLinks('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
-              new UserLinks('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
-              new UserLinks('Field Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
-              new UserLinks('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
-              new UserLinks('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
-              new UserLinks('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
-              new UserLinks('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
-              new UserLinks('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
-              new UserLinks('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
+              new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
+              new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
+              new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
+              new Link('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
+              new Link('Field Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
+              new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
+              new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
+              new Link('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
+              new Link('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
+              new Link('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
+              new Link('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
             ];
             break;
           case 'match-planning':
             subPages = [
-              new UserLinks('Matches', '/scouting/match-planning/plan-matches', 'soccer-field'),
-              new UserLinks('Team Notes', '/scouting/match-planning/team-notes', 'note-multiple'),
+              new Link('Matches', '/scouting/match-planning/plan-matches', 'soccer-field'),
+              new Link('Team Notes', '/scouting/match-planning/team-notes', 'note-multiple'),
             ];
             break;
         }

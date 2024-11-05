@@ -5,7 +5,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
@@ -22,7 +22,7 @@ import { ScoutPicDisplayComponent } from '../../../../elements/scout-pic-display
 export class ManagePitResponsesComponent implements OnInit {
 
   scoutPitResults: ScoutPitResponse[] = [];
-  scoutPitResultsCols: object[] = [
+  scoutPitResultsCols: TableColType[] = [
     { PropertyName: 'team_no', ColLabel: 'Team' },
     { PropertyName: 'team_nm', ColLabel: 'Name' },
   ];

@@ -1,9 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
 import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService, AppSize } from '../../../../services/general.service';
+import { GeneralService } from '../../../../services/general.service';
 import { ScoutingService } from '../../../../services/scouting.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
@@ -14,11 +14,12 @@ import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { PitResultDisplayComponent } from '../../../elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
+import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-field-scouting-responses',
   standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe],
+  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
   templateUrl: './field-scouting-responses.component.html',
   styleUrls: ['./field-scouting-responses.component.scss']
 })
@@ -44,8 +45,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   teamNotes: TeamNote[] = [];
 
-  tableWidth = '200%';
-
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
@@ -53,16 +52,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
-    this.setTableSize();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.setTableSize();
-  }
-
-  setTableSize(): void {
-    if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
   }
 
   init(forceCall = false): void {
@@ -71,7 +60,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       if (result) {
         this.scoutResponses = result;
 
-        if (!environment.production)
+        if (environment.environment === 'local')
           this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
 
         this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);

@@ -6,7 +6,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
@@ -23,25 +23,25 @@ export class ScoutingActivityComponent implements OnInit {
 
   usersScoutingUserInfo: UserInfo[] = [];
   activeUserScoutingUserInfo: UserInfo = new UserInfo();
-  userActivityTableCols = [
-    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFn: this.getUserNameForTable.bind(this) },
-    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFn: this.getUserReviewStatusForTable.bind(this) },
-    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFn: this.getScoutScheduleForTable.bind(this) },
+  userActivityTableCols: TableColType[] = [
+    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFunction: this.getUserNameForTable.bind(this) },
+    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
+    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
   userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
 
   activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
-  userScoutActivityScheduleTableCols: object[] = [
+  userScoutActivityScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { ColLabel: 'Scouts', Type: 'function', ColValueFn: this.getScoutingActivityScoutsForTable.bind(this) },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { ColLabel: 'Scouts', Type: 'function', ColValueFunction: this.getScoutingActivityScoutsForTable.bind(this) },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
-  userScoutActivityResultsTableCols: object[] = [
+  userScoutActivityResultsTableCols: TableColType[] = [
     { PropertyName: 'match', ColLabel: 'Match' },
     { PropertyName: 'team_no', ColLabel: 'Team' },
     { PropertyName: 'time', ColLabel: 'Time' },
@@ -146,7 +146,7 @@ export class ScoutingActivityComponent implements OnInit {
       else if ((s.blue_three_id as User).id === user.id)
         schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
 
-      schedule += '\n';
+      schedule += '\n\n';
     });
 
     return schedule;
@@ -174,12 +174,12 @@ export class ScoutingActivityComponent implements OnInit {
     let blue_three = new User();
     Object.assign(blue_three, sfs.blue_three_id);
 
-    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n` : '';
-    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n` : '';
-    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n` : '';
-    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n` : '';
-    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n` : '';
-    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}\n` : '';
+    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
+    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
+    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
+    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
+    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
+    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}` : '';
     return str;
   }
 
@@ -280,5 +280,9 @@ export class ScoutingActivityComponent implements OnInit {
         this.gs.triggerError(err);
       });
     });
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.gs.decodeSentBoolean(b);
   }
 }

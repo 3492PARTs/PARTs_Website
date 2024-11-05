@@ -135,32 +135,13 @@ export class ManageSeasonComponent implements OnInit {
     }
     this.api.get(true, 'scouting/admin/set-season-event/', {
       season_id: this.currentSeason.season_id.toString(),
-      event_id: this.currentEvent.event_id.toString()
+      event_id: this.currentEvent.event_id.toString(),
+      competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
       this.gs.triggerError(err);
-    });
-  }
-
-  toggleCompetitionPage(): void | null {
-    if (!this.currentEvent.event_id) {
-      this.gs.triggerError('No event set.');
-      return null;
-    }
-
-    this.gs.triggerConfirm('Are you sure you want to toggle the competition page?', () => {
-      this.api.get(true, 'scouting/admin/toggle-competition-page/', undefined, (result: any) => {
-        this.gs.successfulResponseBanner(result);
-        this.init();
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
-    }, () => {
-      this.gs.triggerChange(() => {
-        this.currentEvent.competition_page_active = this.currentEvent.competition_page_active === 'y' ? 'n' : 'y';
-      });
     });
   }
 

@@ -3,7 +3,7 @@ import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { GeneralService } from '../../../../services/general.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RequestedItemsComponent implements OnInit {
 
-  itemTableCols: object[] = [
+  itemTableCols: TableColType[] = [
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'item_desc', ColLabel: 'Description' },
     { PropertyName: 'quantity', ColLabel: 'Quantity' },

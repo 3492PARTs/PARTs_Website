@@ -33,6 +33,10 @@ export class PhoneTypesComponent implements OnInit {
     });
   }
 
+  resetPhoneType(): void {
+    this.activePhoneType = new PhoneType();
+  }
+
   getPhoneTypes(): void {
     this.us.getPhoneTypes().then(result => {
       if (result)
@@ -42,16 +46,29 @@ export class PhoneTypesComponent implements OnInit {
 
   toggleNewPhoneType(): void {
     this.newPhoneType = !this.newPhoneType;
-    this.activePhoneType = new PhoneType();
+    this.resetPhoneType();
   }
 
   savePhoneType(): void {
     this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.getPhoneTypes();
-      this.activePhoneType = new PhoneType();
+      this.resetPhoneType();
     }, (err: any) => {
       this.gs.triggerError(err);
+    });
+  }
+
+  deletePhoneType(): void {
+    this.gs.triggerConfirm('Are you sure you want to delete this phone type?', () => {
+      this.api.delete(true, 'admin/phone-type/', {
+        phone_type_id: this.activePhoneType.phone_type_id
+      }, (result: any) => {
+        this.resetPhoneType();
+        this.getPhoneTypes();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
     });
   }
 }

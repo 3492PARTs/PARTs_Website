@@ -73,18 +73,23 @@ export class GeneralService {
     this.bannersBS.next(this.bannersBS.value.concat([b]));
   }
 
-  removeBanner(b: Banner): void {
-    let banners = this.bannersBS.value;
-    let index = -1;
+  getBanners(): Banner[] {
+    return this.bannersBS.value;
+  }
 
+  removeBanner(b: Banner): void {
+    let banners = this.cloneObject(this.bannersBS.value);
+    let index = -1;
     for (let i = 0; i < banners.length; i++) {
-      if (banners[i].message === b.message && banners[i].time === b.time) {
+      if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
         index = i;
         break;
       }
     }
 
     if (index !== -1) {
+      if (banners[index].timeout)
+        window.clearTimeout(banners[index].timeout);
       banners.splice(index, 1);
       this.bannersBS.next(banners);
     }
@@ -154,7 +159,7 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner(new Banner(0, response.retMessage, 5000));
+      this.addBanner(new Banner(0, response.errorMessage ? this.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
       return false;
     }
     return true;
@@ -336,7 +341,7 @@ export class GeneralService {
     window.setTimeout(() => { tmpFx() }, 0);
   }
 
-  // For one given propery and its value, get the value of another propery in the same object
+  // For one given property and its value, get the value of another property in the same object
   propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
     for (let i = 0; i < arr.length; i++) {
       if (Object.prototype.hasOwnProperty.call(arr[i], queryProperty) && arr[i][queryProperty] === queryValue) {
@@ -347,7 +352,7 @@ export class GeneralService {
     }
   }
 
-  arrayObjectIndexOf(arr: any[], searchTerm: any, property: string) {
+  arrayObjectIndexOf(arr: any[], property: string, searchTerm: any) {
     for (let i = 0, len = arr.length; i < len; i++) {
       if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
     }
@@ -582,18 +587,95 @@ export class GeneralService {
 
   getDisplayValue(rec: any, property: string): string {
     if (!property) {
-      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPOENT COLUMNS');
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
+
     let ret = '';
-    const comand = 'ret = rec.' + property + ';';
-    eval(comand);
+
+    try {
+      const variable = `rec?.${property.replaceAll(".", "?.")}`;
+      const comand = `ret = ${variable};`;
+      eval(comand);
+    }
+    catch (err) {
+      console.log(err);
+    }
+
     return ret; // do not turn into a string this will bite objects in the butt
+  }
+
+  keepElementInView(elementId: string): { x: number, y: number } | undefined {
+    const element = document.getElementById(elementId);
+
+    if (!element) {
+      console.error('Element not found');
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let xOffset = 0;
+    let yOffset = 0;
+    // Horizontal alignment
+    if (rect.right > viewportWidth) {
+      xOffset = rect.right - viewportWidth;
+    } else if (rect.left < 0) {
+      xOffset = rect.left;
+    }
+
+    // Vertical alignment
+    if (rect.bottom > viewportHeight) {
+      yOffset = rect.bottom - viewportHeight;
+    } else if (rect.top < 0) {
+      yOffset = rect.top;
+    }
+
+    return { x: xOffset, y: yOffset };
+  }
+
+  objectToString(o: any): string {
+    //console.log(o);
+    let s = '';
+    if (typeof o === 'object')
+      for (const [key, value] of Object.entries(o)) {
+        if (value instanceof Array) {
+          s += `${key}: `;
+          value.forEach(element => {
+            s += `${this.objectToString(element)}, `;
+          });
+          s = s.substring(0, s.length - 2);
+          //s += '\n';
+        }
+        else s += `${key}: ${value}\n`;
+      }
+    else
+      return o;
+    return s;
+  }
+
+  booleanDecode(b: boolean, values: { true: string, false: string }): string {
+    return b ? values.true : values.false;
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.booleanDecode(b, { true: 'Sent', false: 'Not Sent' });
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.booleanDecode(b, { true: 'Yes', false: 'No' });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.booleanDecode(s === 'y', { true: 'Yes', false: 'No' });
   }
 }
 
 export class RetMessage {
   retMessage!: string;
   error!: boolean;
+  errorMessage!: string;
 }
 
 export class Page {

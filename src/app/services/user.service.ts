@@ -4,6 +4,7 @@ import { User, AuthGroup, AuthPermission } from '../models/user.models';
 import { APIService } from './api.service';
 import { PhoneType } from './auth.service';
 import { Banner } from '../models/api.models';
+import { Link } from '../models/navigation.models';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +88,6 @@ export class UserService {
     this.api.post(true, 'user/permissions/', permission, (result: any) => {
       this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
-      this.getPermissions();
     });
   }
 
@@ -97,7 +97,6 @@ export class UserService {
     }, (result: any) => {
       this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
       if (fn) fn();
-      this.getPermissions();
     });
   }
 
@@ -112,6 +111,32 @@ export class UserService {
       }, (err => {
         resolve(null);
       }));
+    });
+  }
+
+  getLinks(): Promise<Link[] | null> {
+    return new Promise<Link[] | null>(resolve => {
+      this.api.get(true, 'user/links/', undefined, (result: Link[]) => {
+        resolve(result);
+      }, (err => {
+        resolve(null);
+      }));
+    });
+  }
+
+  saveLink(link: Link, fn?: Function) {
+    this.api.post(true, 'user/links/', link, (result: any) => {
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
+      if (fn) fn();
+    });
+  }
+
+  deleteLink(link_id: number, fn?: Function) {
+    this.api.delete(true, 'user/links/', {
+      link_id: link_id,
+    }, (result: any) => {
+      this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 5000));
+      if (fn) fn();
     });
   }
 }

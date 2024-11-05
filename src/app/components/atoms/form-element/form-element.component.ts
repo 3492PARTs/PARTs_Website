@@ -14,13 +14,13 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { GeneralService } from '../../../services/general.service';
+import { AppSize, GeneralService } from '../../../services/general.service';
 import { NavigationService, NavigationState } from '../../../services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { ClickInsideDirective } from '../../../directives/click-inside/click-inside.directive';
 import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from '@danielmoncada/angular-datetime-picker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielmoncada/angular-datetime-picker';
 
 
 @Component({
@@ -41,15 +41,17 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() MaxWidth = 'auto';
   private originalMinWidth = '';
   @Input() Placeholder = '';
-  @Input() Rows = 0;
+  @Input() Rows: number | null = 0;
   //@Input() SelectDisplayValue = '';
-  @Input() BindingProperty = '';
-  @Input() DisplayProperty = '';
-  @Input() DisplayProperty2 = '';
+  @Input() BindingProperty: string | null = null;
+  @Input() DisplayProperty: string | null = null;
+  @Input() DisplayProperty2: string | null = null;
 
   @Input() Name = '';
 
   @Input() Type = 'text';
+  @Input() PickerMode: PickerMode | null = null;
+  _PickerMode: PickerMode = 'popup';
 
   @Input()
   set SelectList(sl: any) {
@@ -63,13 +65,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
           if (this.Model) {
             if (typeof this.Model === 'string') {
-              if (e[this.DisplayProperty] === 'Other') {
+              if (e[this.DisplayProperty || ''] === 'Other') {
                 let other = '';
                 this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
                   let match = false;
                   // TODO: Revisit this logic i dont think this loop is needed
                   tmp.forEach((element: any) => {
-                    if (option === element[this.BindingProperty]) match = true;
+                    if (option === element[this.BindingProperty || '']) match = true;
                   });
 
                   if (!match)
@@ -78,11 +80,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
               }
               else
-                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty]).toString();
+                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
             }
             else
               this.Model.forEach((m: any) => {
-                if (e[this.BindingProperty] === m[this.BindingProperty])
+                if (e[this.BindingProperty || ''] === m[this.BindingProperty || ''])
                   e['checked'] = m['checked'];
               });
 
@@ -100,9 +102,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   //@Input() RadioList: any[] = [];
   //@Input() CheckboxList: any[] = [];
   @Input() DisplayEmptyOption = false;
-  @Input() FieldSize = 2000;
-  @Input() MinValue!: number;
-  @Input() MaxValue!: number;
+  @Input() FieldSize: number | null = null;
+  @Input() MinValue: number | null = null;
+  @Input() MaxValue: number | null = null;
   //@Input() FormElementInline: boolean = true;
 
   //@Input() Validation = false;
@@ -130,6 +132,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
   @Output() OnFocusOut: EventEmitter<any> = new EventEmitter();
+  @Output() ResetFunction: EventEmitter<any> = new EventEmitter();
 
   @Input() TrueValue: any = true;
   @Input() FalseValue: any = false;
@@ -196,6 +199,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.setElementPositions();
       }, 102);
     });
+
+    this.setDatePanel();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -223,7 +228,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
   }
 
-
   ngDoCheck(): void {
     if (this.Type === 'file') {
       if (this.Model?.size <= 0) {
@@ -244,7 +248,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.setElementPositions()
+    this.setElementPositions();
+    this.setDatePanel();
   }
 
   setElementPositions(): void {
@@ -589,7 +594,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     // This is to make sure the form element is the right width for the label
     window.setTimeout(() => {
       if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
-        const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 44) : this.label.nativeElement.clientWidth) + 32;
+        const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 20) : this.label.nativeElement.clientWidth) + 32;
+
         if (this.originalMinWidth === 'auto') {
           this.MinWidth = width + 'px';
         }
@@ -710,5 +716,21 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.gs.strNoE(this.Model)) this.Model = 0;
     if (this.Model > 0) this.Model--;
     this.change(this.Model);
+  }
+
+  setDatePanel(): void {
+    if (['date', 'datetime'].includes(this.Type))
+      if (this.PickerMode && !this.gs.strNoE(this.PickerMode))
+        this._PickerMode = this.PickerMode;
+      else
+        if (this.gs.getAppSize() <= AppSize.SM)
+          this._PickerMode = 'dialog';
+        else {
+          this._PickerMode = 'popup';
+        }
+  }
+
+  runResetFunction(): void {
+    this.ResetFunction.emit();
   }
 }

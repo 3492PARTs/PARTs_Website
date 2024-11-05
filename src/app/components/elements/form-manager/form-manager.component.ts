@@ -9,11 +9,12 @@ import { TableComponent } from '../../atoms/table/table.component';
 import { QuestionAdminFormComponent } from '../question-admin-form/question-admin-form.component';
 import { Response } from '../../../models/form.models';
 import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
+import { ModalComponent } from '../../atoms/modal/modal.component';
 
 @Component({
   selector: 'app-form-manager',
   standalone: true,
-  imports: [FormElementComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, FormElementGroupComponent],
+  imports: [FormElementComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, FormElementGroupComponent, ModalComponent],
   templateUrl: './form-manager.component.html',
   styleUrls: ['./form-manager.component.scss']
 })
@@ -22,6 +23,7 @@ export class FormManagerComponent implements OnInit {
   @Input() FormTyp = '';
   @Input() ResponsesCols: any[] = [];
   responses: Response[] = [];
+  archiveInd = 'n'
 
   constructor(private authService: AuthService, private api: APIService, private gs: GeneralService) { }
 
@@ -35,7 +37,8 @@ export class FormManagerComponent implements OnInit {
 
   getResponses(): void {
     this.api.get(true, 'form/responses/', {
-      form_typ: this.FormTyp
+      form_typ: this.FormTyp,
+      archive_ind: this.archiveInd
     }, (result: any) => {
       this.responses = result as Response[];
     }, (err: any) => {
@@ -48,6 +51,19 @@ export class FormManagerComponent implements OnInit {
       this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
     else
       this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+  }
+
+  archiveResponse(res: Response): void {
+    this.gs.triggerConfirm('Are you sure you want to archive this response?', () => {
+
+      res.archive_ind = 'y';
+
+      this.api.post(true, 'form/response/', res, (result: any) => {
+        this.getResponses();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
+    });
   }
 
   deleteResponse(res: Response): void {
@@ -73,6 +89,14 @@ export class FormManagerComponent implements OnInit {
         name = 'TeamApplication';
         break;
     }
+
+    name += this.archiveInd === 'y' ? '_Archived' : '';
+
     if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
+  }
+
+  switchArchiveInd(): void {
+    this.archiveInd = this.archiveInd === 'y' ? 'n' : 'y';
+    this.getResponses();
   }
 }

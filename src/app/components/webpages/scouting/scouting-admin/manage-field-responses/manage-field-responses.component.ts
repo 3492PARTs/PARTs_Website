@@ -5,7 +5,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService, AppSize } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
@@ -19,7 +19,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 })
 export class ManageFieldResponsesComponent implements OnInit {
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
-  scoutResultsCols: object[] = [
+  scoutResultsCols: TableColType[] = [
     { PropertyName: 'team_no', ColLabel: 'Team' },
     { PropertyName: 'match', ColLabel: 'Match' },
     { PropertyName: 'time', ColLabel: 'Time' },

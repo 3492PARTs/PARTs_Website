@@ -3,7 +3,7 @@ import { APIService } from '../../../../services/api.service';
 import { ErrorLog, AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { Page } from '../../../../services/general.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { PaginationComponent } from '../../../atoms/pagination/pagination.component';
@@ -17,7 +17,7 @@ import { PaginationComponent } from '../../../atoms/pagination/pagination.compon
 })
 export class ErrorLogComponent implements OnInit {
 
-  errorTableCols: object[] = [
+  errorTableCols: TableColType[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'path', ColLabel: 'Path' },
     { PropertyName: 'message', ColLabel: 'Message' },

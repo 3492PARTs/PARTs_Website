@@ -105,8 +105,9 @@
             <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
-                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())" routerLink="{{ mii.routerlink }}"
-                  routerLinkActive="active-link" (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())"
+                  [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
                   {{ mii.menu_name }}
                 </a>
 
@@ -145,11 +146,18 @@
           <span class="mdi icon mdi-github"></span>
         </a>
       </div>
+
+      <!--Environment header-->
+      <div *ngIf="frontendEnv.length > 0" id="environment">
+        <hr>
+        <p>update_links:update_links_permissions<!--{{frontendEnv}}{{backendEnv.length > 0 ? ':' : ''}}{{backendEnv}}-->
+        </p>
+      </div>
     </div>
 
     <!--wide screen nav expander-->
     <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
-      <div (click)="toggleForceNavExpand()">
+      <div (click)="toggleForceNavExpanded()">
         <span id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" class="mdi mdi-menu-right"></span>
       </div>
     </div>
@@ -160,7 +168,7 @@
     [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}"
     [ngStyle]="{ height: siteHeaderHeight + 'rem', 'margin-top': siteBannerHeight + 'rem'}">
     <!--narrow screen nav expander-->
-    <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleNav()">
+    <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleShowNav()">
       <span class="mdi mdi-menu icon"></span>
     </div>
 
@@ -259,7 +267,7 @@
           <div id="profile-info" (click)="showUserModal()">
             <p>{{ user.first_name }} {{ user.last_name }}</p>
             <div id="profile-picture">
-              <img [src]="user.image ? user.image : '../../../assets/icons/BeanieBot40x40.png'">
+              <img [src]="user.image ? user.image : '../../../assets/appIcons/BeanieBot40x40.png'">
             </div>
           </div>
           <div *ngIf="user && user.id" id="user-modal"

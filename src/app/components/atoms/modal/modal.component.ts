@@ -20,7 +20,8 @@ export class ModalComponent implements OnInit {
   @Input() ButtonText = '';
   @Input() Title = '';
 
-  @Input() Width = '80%';
+  @Input() Width = '';
+  _Width = '80%';
   @Input() MinWidth = 'auto';
   @Input() MaxWidth = 'auto';
 
@@ -28,7 +29,7 @@ export class ModalComponent implements OnInit {
   set visible(v: boolean) {
     this._visible = v;
     this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
-    this.togglePageScrolling();
+    this.setPageScrolling();
     this.clickOutsideCapture = true;
 
     if (this._visible) {
@@ -65,22 +66,27 @@ export class ModalComponent implements OnInit {
   }
 
   setModalSize(): void {
-    if (this.gs.getAppSize() >= AppSize._3XLG) {
-      this.Width = '90%';
+    if (this.gs.strNoE(this.Width)) {
+      if (this.gs.getAppSize() >= AppSize._3XLG) {
+        this._Width = '90%';
+      }
+      else if (this.gs.getAppSize() >= AppSize.LG) {
+        this._Width = '80%';
+      }
+      else {
+        this._Width = '100%';
+      }
     }
-    else if (this.gs.getAppSize() >= AppSize.LG) {
-      this.Width = '80%';
-    }
-    else {
-      this.Width = '100%';
-    }
+    else
+      this._Width = this.Width;
+
   }
 
   open() {
     this._visible = true;
     this.ms.incrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
-    this.togglePageScrolling();
+    this.setPageScrolling();
     this.clickOutsideCapture = true;
 
     window.setTimeout(() => {
@@ -92,6 +98,7 @@ export class ModalComponent implements OnInit {
     this._visible = false;
     this.ms.decrementModalVisibleCount();
     this.visibleChange.emit(this._visible);
+    this.setPageScrolling();
     this.form.forEach(elem => {
       elem.reset();
     });
@@ -104,7 +111,7 @@ export class ModalComponent implements OnInit {
     }
   }
 
-  togglePageScrolling(): void {
+  setPageScrolling(): void {
     const body = document.body;
     const html = document.documentElement;
 

@@ -5,17 +5,18 @@ import { PhoneType, AuthService, AuthCallStates } from '../../../../../services/
 import { GeneralService } from '../../../../../services/general.service';
 import { UserService } from '../../../../../services/user.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
+import { HeaderComponent } from '../../../../atoms/header/header.component';
 
 @Component({
   selector: 'app-scouting-users',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
   templateUrl: './scouting-users.component.html',
   styleUrls: ['./scouting-users.component.scss']
 })
@@ -25,13 +26,13 @@ export class ScoutingUsersComponent implements OnInit {
   users: User[] = [];
   userGroups: AuthGroup[] = [];
 
-  userTableCols = [
+  userTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'User' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
     { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFn: this.getPhoneTypeForTable.bind(this) },
+    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
   ];
 
   manageUserModalVisible = false;
@@ -39,7 +40,7 @@ export class ScoutingUsersComponent implements OnInit {
   availableAuthGroups: AuthGroup[] = [];
   newAuthGroup: AuthGroup = new AuthGroup();
 
-  userGroupsTableCols: object[] = [
+  userGroupsTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'Name' }
   ];
 

@@ -20,7 +20,7 @@
       <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="outstandingTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam()"
-        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team" [MinWidth]="'180px'" [Disabled]="formDisabled">
+        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team" [MinWidth]="'190px'" [Disabled]="formDisabled">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
@@ -46,8 +46,8 @@
     <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
 
     <div *ngIf="scoutPitResponse.robotPics.length > 0">
-      <div *ngFor="let pic of scoutPitResponse.robotPics">
-        {{pic.name}}
+      <div *ngFor="let pic of scoutPitResponse.robotPics; let i = index">
+        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteStagedPic(i)"></app-button>{{pic.name}}
       </div>
     </div>
 

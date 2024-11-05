@@ -1,5 +1,6 @@
 <app-table [TableCols]="questionTableCols" [TableData]="init.questions" [Width]="'100%'" [ShowAddButton]="true"
-  (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)">
+  (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)"
+  [Scrollable]="true" [ScrollHeight]="'72vh'">
 </app-table>
 
 <app-modal [(visible)]="questionModalVisible" [Title]="'Manage Question'">
@@ -22,6 +23,10 @@
       [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="activeQuestion.form_sub_typ"
       [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+    </app-form-element>
+
+    <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
+      [Required]="true" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element *ngIf="['field', 'pit'].includes(activeQuestion.form_typ)" [Type]="'checkbox'"

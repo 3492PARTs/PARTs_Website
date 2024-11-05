@@ -22,21 +22,60 @@
   filter: drop-shadow(0rem 0.7rem 0.7rem rgba(58, 59, 69, 0.15));
 }
 
-/*album image:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
+/*album image*/
+@media screen and (max-width: calc($screen-size-xs - 1px)) {
   .albums img,
   .wallpaperAccordion {
-    width: 20%;
+    width: 50%;
   }
 }
 
-/*album image:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
+@media screen and (min-width: $screen-size-xs) {
   .albums img,
   .wallpaperAccordion {
-    width: 60%;
+    width: 40%;
+  }
+}
+
+@media screen and (min-width: $screen-size-sm) {
+  .albums img,
+  .wallpaperAccordion {
+    width: 40%;
+  }
+}
+
+@media screen and (min-width: $screen-size-lg) {
+  .albums img,
+  .wallpaperAccordion {
+    width: 35%;
+  }
+}
+
+@media screen and (min-width: $screen-size-xlg) {
+  .albums img,
+  .wallpaperAccordion {
+    width: 30%;
+  }
+
+  @media screen and (min-width: $screen-size-xxlg) {
+    .albums img,
+    .wallpaperAccordion {
+      width: 25%;
+    }
+  }
+
+  @media screen and (min-width: $screen-size-xxxlg) {
+    .albums img,
+    .wallpaperAccordion {
+      width: 20%;
+    }
+
+    @media screen and (min-width: $screen-size-xxxxlg) {
+      .albums img,
+      .wallpaperAccordion {
+        width: 15%;
+      }
+    }
   }
 }
 
@@ -63,21 +102,8 @@
   }
 }
 
-/*wallpaper:WIDE SCREEN*/
-
-@media only screen and (min-width: 1001px) {
-  .wallpaperAccordion {
-    display: inline-block;
-  }
-}
-
-/*wallpaper:NARROW SCREEN*/
-
-@media only screen and (max-width: 1000px) {
-  .wallpaperAccordion {
-    display: block;
-    margin: auto;
-  }
+.wallpaperAccordion {
+  display: inline-block;
 }
 
 .wallpaperAccordion a {

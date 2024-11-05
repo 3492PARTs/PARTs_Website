@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { QuestionWithConditions, QuestionCondition } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
-import { TableComponent } from '../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../atoms/table/table.component';
 import { ModalComponent } from '../../atoms/modal/modal.component';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
@@ -23,11 +23,11 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   questionConditions: QuestionCondition[] = [];
   questionConditionModalVisible = false;
   activeQuestionCondition = new QuestionCondition();
-  questionConditionsTableCols: object[] = [
+  questionConditionsTableCols: TableColType[] = [
     { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
     { PropertyName: 'condition', ColLabel: 'Condition' },
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
   questionConditionQuestionFromList: QuestionWithConditions[] = [];
   questionConditionQuestionToList: QuestionWithConditions[] = [];
@@ -137,5 +137,9 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.gs.decodeYesNo(s);
   }
 }

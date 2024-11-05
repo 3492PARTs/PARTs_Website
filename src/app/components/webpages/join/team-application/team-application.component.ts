@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../../models/api.models';
 import { QuestionWithConditions } from '../../../../models/form.models';
 import { APIService } from '../../../../services/api.service';
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-team-application',
   standalone: true,
-  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })

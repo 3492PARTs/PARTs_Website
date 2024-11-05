@@ -6,21 +6,23 @@ import { ScoutingService } from '../../../../../services/scouting.service';
 import { CommonModule } from '@angular/common';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
-import { TableComponent } from '../../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
 import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
-import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
+import { Chart, ChartDataset, Point, BubbleDataPoint, registerables } from 'chart.js';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
+import { ReturnCardComponent } from '../../../../elements/return-card/return-card.component';
+import { ReturnLinkComponent } from '../../../../atoms/return-link/return-link.component';
 
 @Component({
   selector: 'app-plan-matches',
   standalone: true,
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })
@@ -29,22 +31,22 @@ export class PlanMatchesComponent implements OnInit {
   matches: Match[] = [];
   teams: Team[] = [];
 
-  matchesTableCols: object[] = [
-    { PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
-    { PropertyName: 'time', ColLabel: 'Time' },
-    { PropertyName: 'match_number', ColLabel: 'Match' },
-    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this) },
-    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this) },
+  matchesTableCols: TableColType[] = [];
+  private matchesTableColsList: TableColType[] = [
+    //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
+    //{ PropertyName: 'time', ColLabel: 'Time' },
+    { PropertyName: 'match_number', ColLabel: 'Match', UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
   ];
 
-  scoutCols: any[] = [];
-  matchPlanning: MatchPlanning[] = [];
-
-  tableWidth = '200%';
+  scoutCols: TableColType[] = [];
+  activeMatch: Match | null = null;
+  matchToPlan: MatchPlanning[] = [];
 
   graphOptionsList: any[] = [];
   graphOptionsSelected: any[] = [];
@@ -55,21 +57,32 @@ export class PlanMatchesComponent implements OnInit {
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
 
   ngOnInit(): void {
+    Chart.register(...registerables);
+
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.init();
       }
     });
-    this.setTableSize();
+    this.setMatchTableCols();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.setTableSize();
+    this.setMatchTableCols();
   }
 
-  setTableSize(): void {
-    if (this.gs.getAppSize() < AppSize.LG) this.tableWidth = '800%';
+  setMatchTableCols(): void {
+    if (this.gs.getAppSize() >= AppSize.LG) {
+      this.matchesTableCols = [
+        { PropertyName: 'comp_level.comp_lvl_typ_nm.replaceAll(\' Match\', \'\')', ColLabel: 'Type' },
+        { PropertyName: 'time', ColLabel: 'Time' },
+        ...this.matchesTableColsList
+      ];
+    }
+    else {
+      this.matchesTableCols = [...this.matchesTableColsList];
+    }
   }
 
   init(): void {
@@ -109,7 +122,7 @@ export class PlanMatchesComponent implements OnInit {
   async planMatch(match: Match): Promise<void> {
     this.gs.incrementOutstandingCalls();
 
-    this.matchPlanning = [];
+    this.matchToPlan = [];
     let tmp: MatchPlanning[] = [];
 
     const allianceMembers = [
@@ -157,7 +170,8 @@ export class PlanMatchesComponent implements OnInit {
         });
     }
 
-    this.matchPlanning = tmp;
+    this.matchToPlan = tmp;
+    this.activeMatch = match;
 
     this.gs.decrementOutstandingCalls();
   }
@@ -172,40 +186,22 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   buildGraph(): void {
-    let labels: any[] = [];
-
     // red
-    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+    //let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
 
-    let red = this.matchPlanning.filter(mp => mp.alliance === 'red');
-    dataSets = this.getAllianceDataSets(red);
-    let count = 0;
-    dataSets.forEach(ds => {
-      if (count < ds.data.length) count = ds.data.length;
-    });
-    for (let i = 1; i <= count; i++) labels.push(i);
+    let red = this.matchToPlan.filter(mp => mp.alliance === 'red');
+    let redData = this.getAllianceDataSets(red);
 
-    // blue
-    let dataSets2: { label: string; data: any[]; borderWidth: number; }[] = [];
+    let blue = this.matchToPlan.filter(mp => mp.alliance === 'blue');
+    let blueData = this.getAllianceDataSets(blue);
 
-    let blue = this.matchPlanning.filter(mp => mp.alliance === 'blue');
-    dataSets2 = this.getAllianceDataSets(blue);
-    labels = [];
-    count = 0;
-
-    dataSets2.forEach(ds => {
-      if (count < ds.data.length) count = ds.data.length;
-    });
-
-    for (let i = 1; i <= count; i++) labels.push(i);
-
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       if (this.redChart) this.redChart.destroy();
-      this.redChart = this.createLineChart('red-chart', labels, dataSets);
+      this.redChart = this.createLineChart('red-chart', redData.labels, redData.dataSet);
 
       if (this.blueChart) this.blueChart.destroy();
-      this.blueChart = this.createLineChart('blue-chart', labels, dataSets2);
-    }, 0);
+      this.blueChart = this.createLineChart('blue-chart', blueData.labels, blueData.dataSet);
+    });
 
     this.chosenGraphDataPoints = '';
 
@@ -217,40 +213,59 @@ export class PlanMatchesComponent implements OnInit {
     this.chosenGraphDataPoints = this.chosenGraphDataPoints.substring(0, this.chosenGraphDataPoints.length - 2);
   }
 
-  getAllianceDataSets(results: MatchPlanning[]): { label: string; data: any[]; borderWidth: number; }[] {
-    let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+  getAllianceDataSets(results: MatchPlanning[]): { dataSet: { label: string; data: any[]; borderWidth: number; }[], labels: string[] } {
+    if (this.graphOptionsSelected.find(gos => gos['checked'])) {
+      let dataSets: { label: string; data: any[]; borderWidth: number; }[] = [];
+      let dateLabels: Date[][] = [];
+      //console.log(results);
 
-    results.forEach(mp => {
-      let data: any[] = [];
-      let dataSet: { label: string; data: any[]; borderWidth: number; };
-      //console.log(mp.team);
-      //console.log(mp.fieldAnswers);
+      results.forEach(mp => {
+        let data: any[] = [];
+        let dataSet: { label: string; data: any[]; borderWidth: number; };
+        let dataSetLabels: Date[] = []
+        //console.log(mp.team);
+        //console.log(mp.scoutAnswers);
 
-      mp.scoutAnswers.forEach((fa: any) => {
-        let sum = 0;
-        this.graphOptionsSelected.forEach((gos: any) => {
-          if (gos['checked']) {
-            sum += parseFloat(fa[gos['PropertyName']]) || 0;
-          }
+        mp.scoutAnswers.forEach((fa: any) => {
+          //console.log(fa['time']);
+          dataSetLabels.push(new Date(fa['time']));
+          let sum = 0;
+          this.graphOptionsSelected.forEach((gos: any) => {
+            if (gos['checked']) {
+              sum += parseFloat(fa[gos['PropertyName']]) || 0;
+            }
+          });
+
+          data.push(sum);
         });
 
-        data.push(sum);
+        dataSet = {
+          label: `${mp.team.team_no} ${mp.team.team_nm}`,
+          data: data,
+          borderWidth: 1
+        };
+
+        dataSets.push(dataSet);
+        dateLabels.push(dataSetLabels);
       });
 
-      dataSet = {
-        label: `${mp.team.team_no} ${mp.team.team_nm}`,
-        data: data,
+      let labels: string[] = this.averageDates(dateLabels).map(ad => this.gs.formatDateString(ad));
+
+      dataSets.push({
+        label: 'Average',
+        data: this.average2DArray(dataSets.map(ds => ds.data as number[])),
         borderWidth: 1
-      };
+      })
 
-      dataSets.push(dataSet);
-    });
 
-    return dataSets;
+      return { dataSet: dataSets, labels: labels };
+    }
+    return { dataSet: [], labels: [] };
   }
 
   clearResults(): void {
-    this.matchPlanning = [];
+    this.matchToPlan = [];
+    this.activeMatch = null;
   }
 
   rankToColor(team: number): string {
@@ -291,6 +306,7 @@ export class PlanMatchesComponent implements OnInit {
         datasets: datasets,
       },
       options: {
+        maintainAspectRatio: false,
         scales: {
           y: {
             beginAtZero: true,
@@ -298,5 +314,56 @@ export class PlanMatchesComponent implements OnInit {
         },
       },
     });
+  }
+
+  strikeThoughMatch(match: Match): boolean {
+    return match.blue_score != -1 && match.red_score != -1
+  }
+
+  underlineTeam(match: Match, property: string): boolean {
+    //TODO Figure out why it runs so much
+    //console.log(property);
+    //console.log(match.red_score > match.blue_score);
+    //console.log(match.blue_score > match.red_score);
+    switch (property) {
+      case 'red_one':
+      case 'red_two':
+      case 'red_three':
+        return match.red_score > match.blue_score;
+      case 'blue_one':
+      case 'blue_two':
+      case 'blue_three':
+        return match.blue_score > match.red_score;
+    }
+    return false
+  }
+
+  averageDates(arr2d: Date[][]) {
+    const maxLength = Math.max(...arr2d.map(arr => arr.length));
+    const result = [];
+
+    for (let i = 0; i < maxLength; i++) {
+      const dateTimes = arr2d.map(arr => arr[i] || new Date(0)); // Handle missing dates
+      const totalMilliseconds = dateTimes.reduce((acc, date) => acc + date.getTime(), 0);
+      const averageMilliseconds = totalMilliseconds / dateTimes.length;
+      const averageDate = new Date(averageMilliseconds);
+      result.push(averageDate);
+    }
+
+    return result;
+  }
+
+  average2DArray(arr2d: number[][]) {
+    const maxLength = Math.max(...arr2d.map(arr => arr.length));
+    const result = [];
+
+    for (let i = 0; i < maxLength; i++) {
+      const values = arr2d.map(arr => arr[i] || 0); // Handle missing values
+      const sum = values.reduce((acc, val) => acc + val, 0);
+      const avg = sum / values.length;
+      result.push(avg);
+    }
+
+    return result;
   }
 }

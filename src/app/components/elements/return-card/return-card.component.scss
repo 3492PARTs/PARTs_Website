@@ -4,12 +4,4 @@
   width: 100%;
   grid-template-columns: 40px auto 40px;
   grid-template-rows: auto;
-
-  .icon {
-    font-size: 35px;
-    justify-self: center;
-    align-self: center;
-    cursor: pointer;
-    color: $main_color;
-  }
 }

@@ -3,7 +3,8 @@
         [ShowAddButton]="true" (AddRecordCallBack)="showFieldQuestionAggregateModal()" [ShowEditButton]="true"
         (EditRecordCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
 
-    <app-modal [Title]="'Field Question Aggregate'" [(visible)]="fieldQuestionAggregateModalVisible">
+    <app-modal [Title]="'Field Question Aggregate'" [(visible)]="fieldQuestionAggregateModalVisible"
+        [MaxWidth]="'500px'">
         <app-form (SubmitFunction)="saveQuestionAggregate()">
             <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeFieldQuestionAggregate.field_name"
                 [Required]="true"></app-form-element>
@@ -21,10 +22,13 @@
                 <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
             </app-button-ribbon>
 
-            <div class="flex align-items-baseline">
-                <app-form-element [Type]="'select'" [LabelText]="'Question'" [(Model)]="fieldQuestionToAddToAgg"
-                    [SelectList]="fieldQuestionAggQuestionList" [DisplayProperty]="'display_value'">
-                </app-form-element>
+            <div class="flex align-items-baseline justify-content-flex-end">
+                <div class="overflow-hidden">
+                    <app-form-element [Type]="'select'" [LabelText]="'Question'" [(Model)]="fieldQuestionToAddToAgg"
+                        [SelectList]="fieldQuestionAggQuestionList" [DisplayProperty]="'display_value'">
+                    </app-form-element>
+                </div>
+
                 <app-button [ButtonType]="'add'" (FunctionCallBack)="addQuestionToFieldAggregate()"></app-button>
             </div>
 

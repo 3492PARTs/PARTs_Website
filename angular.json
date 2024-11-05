@@ -24,7 +24,6 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/.htaccess",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -58,7 +57,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "3MB"
+                  "maximumError": "4MB"
                 },
                 {
                   "type": "anyComponentStyle",

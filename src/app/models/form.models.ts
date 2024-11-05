@@ -7,6 +7,7 @@ export interface IQuestionWithConditions {
     form_sub_nm: string;
     question_typ: IQuestionType;
     question: string;
+    table_col_width: string;
     order: number;
     required: string;
     active: string;
@@ -29,6 +30,7 @@ export interface IQuestion {
     form_sub_nm: string;
     question_typ: IQuestionType;
     question: string;
+    table_col_width: string;
     order: number;
     required: string;
     active: string;
@@ -50,6 +52,7 @@ export class QuestionWithConditions implements IQuestionWithConditions {
     form_sub_nm = '';
     question_typ!: QuestionType;
     question = '';
+    table_col_width = '100px';
     order = NaN;
     required = 'n';
     active = 'y';
@@ -73,6 +76,7 @@ export class Question implements IQuestion {
     form_sub_nm!: string;
     question_typ!: QuestionType;
     question!: string;
+    table_col_width = '100px'
     order!: number;
     required = 'n';
     active = 'y';
@@ -169,5 +173,6 @@ export class Response {
     response_id!: number;
     form_typ = '';
     time = new Date();
+    archive_ind = "n";
     questionanswer_set: QuestionWithConditions[] = [];
 }

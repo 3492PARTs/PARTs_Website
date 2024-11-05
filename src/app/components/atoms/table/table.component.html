@@ -17,7 +17,7 @@
           <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
         </th>
-        <th (click)="SetOrder(col.PropertyName)" *ngFor="let col of TableCols" [ngClass]="{
+        <th (click)="SetOrder((col.PropertyName || ''))" *ngFor="let col of TableCols" [ngClass]="{
               rightAlign: col.Alignment == 'right',
               centerAlign: col.Alignment == 'center'
             }" [ngStyle]="{ 'width': col.Width ? col.Width : 'auto' }">
@@ -25,7 +25,7 @@
           <span *ngIf="
                 !OrderByReverse &&
                 !DisableSort &&
-                col.PropertyName == OrderByProperty
+                (col.PropertyName || '') == OrderByProperty
               " class="up-arrow">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
@@ -34,7 +34,7 @@
           <span *ngIf="
                 OrderByReverse &&
                 !DisableSort &&
-                col.PropertyName == OrderByProperty
+                (col.PropertyName || '') == OrderByProperty
               " class="down-arrow">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
@@ -58,59 +58,74 @@
                 :EnableRemovedFilter
                 :RemovedFilterProperty
                 :RemovedFilterPropertyValue; let i = index
-          " [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer }">
-        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
-          <!--Table buttons as first column-->
+          "
+        [ngClass]="{ ActiveRow: rec == ActiveRec, CursorPointer: CursorPointer, 'strike-through': StrikeThroughFn ? StrikeThroughFn(rec) : null }">
+
+        <ng-template #tableButtons>
           <div>
-            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true"
+            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]=" true"
               (FunctionCallBack)="View(rec)">
             </app-button>
-            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true"
+            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]=" true"
               (FunctionCallBack)="Edit(rec)">
             </app-button>
-            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
+            <app-button *ngIf="ShowArchiveButton" [ButtonType]="'archive'" [TableButton]="true"
+              (FunctionCallBack)="Archive(rec)">
+            </app-button>
+            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]=" true"
               (FunctionCallBack)="Remove(rec)"></app-button>
+
             <ng-container *ngFor="let btn of TableDataButtons">
               <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
                 [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
-                [Type]="btn.Type">{{ btn.Text }}
+                [Type]="btn.Type">{{
+                btn.Text }}
               </app-button>
             </ng-container>
           </div>
+        </ng-template>
+        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
+          <!--Table buttons as first column-->
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
         <td *ngFor="let col of TableCols" (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{ 
-            'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)),
-            'color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, col.PropertyName)) === 'initial' ? 'initial' : 'white',
-            'width': col.Width ? col.Width : 'auto' 
-          }">
+            'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, (col.PropertyName || ''))),
+            'color': !col.FontColorFunction ? 'initial' : col.FontColorFunction(GetTableDisplayValue(rec, (col.PropertyName || ''))) === 'initial' ? 'initial' : 'white',
+            'width': col.Width ? col.Width : 'auto'
+          }" [ngClass]="{'underline': col.UnderlineFn ? col.UnderlineFn(rec, (col.PropertyName || '')) : null}">
+
           <ng-container *ngIf="!col.Type; else Type">
-            <p class="margin-bottom-0" [innerHTML]="GetTableDisplayValue(rec, col.PropertyName) | dateToStr"></p>
+            <p class="margin-bottom-0" [innerHTML]="GetTableDisplayValue(rec, (col.PropertyName || '')) | dateToStr">
+            </p>
           </ng-container>
+
           <ng-template #Type>
             <ng-container [ngSwitch]="col.Type">
-              <app-form-element *ngSwitchCase="'select'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
-                [Width]="'100%'" [Disabled]="DisableInputs" [SelectList]="col.SelectList"
-                [DisplayProperty]="col.DisplayProperty" [BindingProperty]="col.BindingProperty"
+              <app-form-element *ngSwitchCase="'select'" [Type]="col.Type || ''"
+                [(Model)]="rec[(col.PropertyName || '')]" [Width]="'100%'" [Disabled]="DisableInputs"
+                [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty || null"
+                [BindingProperty]="col.BindingProperty || null"
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
-              <app-form-element *ngSwitchCase="'checkbox'" [Type]="col.Type" [(Model)]="rec[col.PropertyName]"
-                [TrueValue]="col.TrueValue ? col.TrueValue : true"
+              <app-form-element *ngSwitchCase="'checkbox'" [Type]="col.Type || ''"
+                [(Model)]="rec[(col.PropertyName || '')]" [TrueValue]="col.TrueValue ? col.TrueValue : true"
                 [FalseValue]="col.FalseValue ? col.FalseValue : false" [Disabled]="DisableInputs"
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
-              <span *ngSwitchCase="'function'">
-                {{ col.ColValueFn(col.PropertyName ? GetTableDisplayValue(rec, col.PropertyName) : rec)}}
-              </span>
+              <p class="margin-bottom-0" *ngSwitchCase="'function'" [innerHTML]="col.ColValueFunction ? (col.ColValueFunction((col.PropertyName || '') ? GetTableDisplayValue(rec,
+              (col.PropertyName || '')) :
+              rec)) :rec">
+              </p>
 
               <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate
-                (onCreate)="previewImage(rec[col.PropertyName], 'image' + i)">
+                (onCreate)="previewImage(rec[(col.PropertyName || '')], 'image' + i)">
               </span>
 
-              <app-form-element *ngSwitchDefault [Type]="col.Type" [(Model)]="rec[col.PropertyName]" [Width]="'100%'"
-                [Disabled]="DisableInputs" [FieldSize]="col.FieldSize?col.FieldSize:null"
-                [Rows]="col.Rows ? col.Rows : null" [MinValue]="col.MinValue?col.MinValue:null"
+              <app-form-element *ngSwitchDefault [Type]="col.Type || ''" [(Model)]="rec[(col.PropertyName || '')]"
+                [Width]="'100%'" [Disabled]="DisableInputs" [FieldSize]="col.FieldSize ? col.FieldSize : null"
+                [Rows]="col.Rows ? col.Rows : null" [MinValue]="col.MinValue ? col.MinValue : null"
                 [MaxValue]="col.MaxValue?col.MaxValue:null"
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
@@ -120,22 +135,7 @@
         </td>
         <td *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as last column-->
-          <div>
-            <app-button *ngIf="ShowViewButton" [ButtonType]="'view'" [TableButton]="true"
-              (FunctionCallBack)="View(rec)">
-            </app-button>
-            <app-button *ngIf="ShowEditButton" [ButtonType]="'edit'" [TableButton]="true"
-              (FunctionCallBack)="Edit(rec)">
-            </app-button>
-            <app-button *ngIf="ShowRemoveButton" [ButtonType]="'delete'" [TableButton]="true"
-              (FunctionCallBack)="Remove(rec)"></app-button>
-            <ng-container *ngFor="let btn of TableDataButtons">
-              <app-button *ngIf="btn.HideFunction ? !btn.HideFunction(rec) : true" [ButtonType]="btn.ButtonType"
-                [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title"
-                [Type]="btn.Type">{{ btn.Text }}
-              </app-button>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
       </tr>
     </tbody>

@@ -36,8 +36,10 @@ export class TableComponent implements OnInit, OnChanges {
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
 
+  TableDisplayValue = "";
+
   @Input() TableData: any[] = [];
-  @Input() TableCols: any[] = [];
+  @Input() TableCols: TableColType[] = [];
   @Input() TableDataButtons: any[] = [];
 
   @Input() TableTitle!: string;
@@ -56,6 +58,9 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Output() AddRecordCallBack: EventEmitter<any> = new EventEmitter();
   @Input() ShowAddButton = false;
+
+  @Output() ArchiveRecordCallBack: EventEmitter<any> = new EventEmitter();
+  @Input() ShowArchiveButton = false;
 
 
   @Output() RecordClickCallBack: EventEmitter<any> = new EventEmitter();
@@ -80,7 +85,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() CursorPointer = false;
 
   @Input() DisableInputs = false;
-  //@Output() RecordChanged: EventEmitter<any> = new EventEmitter(); // TODO Is this used?
+  @Input() StrikeThroughFn: ((rec: any) => boolean) | null = null;
 
   @Input() Width = '';
 
@@ -278,29 +283,34 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn() {
+    const buttonWidth = 3.2;
     let colWidth = 0;
 
     if (this.ShowAddButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowEditButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowRemoveButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
     }
 
     if (this.ShowViewButton) {
-      colWidth += 3.4;
+      colWidth += buttonWidth;
+    }
+
+    if (this.ShowArchiveButton) {
+      colWidth += buttonWidth;
     }
 
     this.TableDataButtons.forEach(t => {
       if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
         colWidth += 6;
       else
-        colWidth += 3.4;
+        colWidth += buttonWidth;
     });
 
     if (colWidth > 0) {
@@ -312,6 +322,7 @@ export class TableComponent implements OnInit, OnChanges {
       this.ShowRemoveButton ||
       this.ShowEditButton ||
       this.ShowViewButton ||
+      this.ShowArchiveButton ||
       this.TableDataButtons.length > 0
     ) {
       return true;
@@ -334,6 +345,10 @@ export class TableComponent implements OnInit, OnChanges {
 
   Add() {
     this.AddRecordCallBack.emit();
+  }
+
+  Archive(rec: any) {
+    this.ArchiveRecordCallBack.emit(rec);
   }
 
   private getScrollbarWidth() {
@@ -365,4 +380,26 @@ export class TableComponent implements OnInit, OnChanges {
   previewImage(link: string, id: string): void {
     this.gs.previewImage(link, id);
   }
+}
+
+export class TableColType {
+  ColLabel = '';
+  PropertyName?: string;
+  Width?: string;
+  Alignment?: string;
+  SelectList?: [];
+  BindingProperty?: string;
+  DisplayProperty?: string;
+  TrueValue?: any;
+  FalseValue?: any;
+  Type?: string;
+  FieldSize?: number;
+  MinValue?: number;
+  MaxValue?: number;
+  Rows?: number;
+  ColValueFunction?: (arg: any) => any;
+  FunctionCallBack?: (arg: any) => any;
+  ColorFunction?: (arg: any) => string;
+  FontColorFunction?: (arg: any) => string;
+  UnderlineFn?: (arg0: any, arg1: any) => boolean;
 }

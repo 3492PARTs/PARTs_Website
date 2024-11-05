@@ -1,17 +1,17 @@
 <app-box [Title]="'Scout Field Results'">
   <app-form-element-group [LabelText]="'Table Display'">
-    <div id="table-buttons">
-      <div class="flex align-items-baseline flex-wrap">
-        <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
-          [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
-          (FunctionCallBack)="showHideTableCols()">
-        </app-form-element>
+    <div class="flex flex-wrap justify-content-space-between align-items-baseline">
+      <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
+        [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
+        (FunctionCallBack)="showHideTableCols()" (ResetFunction)="resetTableColumns()">
+      </app-form-element>
 
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetTableColumns()">Reset Columns</app-button>
+      <div>
+        <app-button-ribbon>
+          <app-button [ButtonType]="'refresh'" (FunctionCallBack)="init(true)">Refresh Responses</app-button>
+          <app-button [ButtonType]="'download'" (FunctionCallBack)="download()">Download</app-button>
+        </app-button-ribbon>
       </div>
-
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="init(true)">Force Responses Pull</app-button>
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="download()">Download</app-button>
     </div>
   </app-form-element-group>
 
@@ -41,8 +41,8 @@
   </app-form-element-group>
 
   <app-table [TableCols]="scoutTableCols" [TableData]="scoutTableRows" [Scrollable]="true" [(FilterText)]="filterText"
-    [Width]="tableWidth" [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)"
-    [ScrollHeight]="'calc(100vh - 20rem)'" [CursorPointer]="true">
+    [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)" [ScrollHeight]="'calc(100vh - 20rem)'"
+    [CursorPointer]="true">
   </app-table>
 
   <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
@@ -55,7 +55,7 @@
     </app-form-element-group>
 
     <app-table [TableCols]="scoutResponses.scoutCols" [TableData]="teamScoutResults" [Scrollable]="true"
-      [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Width]="tableWidth" [Responsive]="true">
+      [ScrollHeight]="'calc(100vh - 22rem)'" [EnableFilter]="true" [Responsive]="true">
     </app-table>
   </app-modal>
 </app-box>

@@ -23,6 +23,10 @@ node {
                 app = docker.build("bduke97/parts_website")
             }
             else {
+                sh'''
+                sed -i "s/BRANCH/$BRANCH_NAME/g" src/environments/environment.uat.ts
+                '''
+
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile.uat .")
             }
         
@@ -41,8 +45,8 @@ node {
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
+                    app.push("${env.BRANCH_NAME}")
+                    //app.push("latest")
                 }
             }  
         }
@@ -68,7 +72,12 @@ node {
             }
             else {
                 sh '''
-                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website && docker stop parts_website_uat && docker rm parts_website_uat && docker compose up -d"
+                ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website \
+                && git fetch \
+                && git switch $BRANCH_NAME \
+                && git pull \
+                && TAG=$BRANCH_NAME docker compose pull \
+                && TAG=$BRANCH_NAME docker compose up -d --force-recreate"
                 '''
             } 
         }

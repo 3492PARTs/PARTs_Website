@@ -8,7 +8,7 @@ import { ScoutingService } from '../../../../services/scouting.service';
 import { UserService } from '../../../../services/user.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { CommonModule } from '@angular/common';
-import { TableComponent } from '../../../atoms/table/table.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 
 @Component({
@@ -35,28 +35,28 @@ export class ScoutingPortalComponent implements OnInit {
     notification3: boolean,
   }[] = [];
 
-  scoutFieldScheduleTableCols: object[] = [
+  scoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
-  expandedScoutFieldScheduleTableCols: object[] = [
+  expandedScoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
-  scheduleTableCols: object[] = [
+  scheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
 
@@ -114,5 +114,13 @@ export class ScoutingPortalComponent implements OnInit {
       }
       this.gs.decrementOutstandingCalls();
     });
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.gs.decodeSentBoolean(b);
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.gs.decodeYesNoBoolean(b);
   }
 }

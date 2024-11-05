@@ -1,10 +1,12 @@
 <app-box [Title]="'Manage Users'">
     <app-form-element-group [InlineElements]="true">
-        <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+        <div class="flex justify-content-space-between">
+            <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
 
-        <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
-            [DisplayProperty]="'property'" [BindingProperty]="'value'"
-            (FunctionCallBack)="getUsers()"></app-form-element>
+            <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="userOptions" [(Model)]="userOption"
+                [DisplayProperty]="'property'" [BindingProperty]="'value'"
+                (FunctionCallBack)="getUsers()"></app-form-element>
+        </div>
     </app-form-element-group>
 
     <app-table [(FilterText)]="filterText" [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true"
@@ -38,6 +40,10 @@
                         [FormGroupInline]="true">
                     </app-form-element>
                 </div>
+            </div>
+
+            <app-header [h]="3">User Groups</app-header>
+            <div class="flex justify-content-flex-end">
                 <div class="flex align-items-center">
                     <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
                         [(Model)]="newAuthGroup" [SelectList]="availableAuthGroups" [DisplayProperty]="'name'"
@@ -46,10 +52,8 @@
                     <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
                 </div>
             </div>
-
-            <app-table [TableTitle]="'User Groups'" [TableCols]="userGroupsTableCols" [TableData]="activeUser.groups"
-                [Scrollable]="true" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
+            <app-table [TableCols]="userGroupsTableCols" [TableData]="activeUser.groups" [Scrollable]="true"
+                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
 
             <app-button-ribbon>
                 <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
