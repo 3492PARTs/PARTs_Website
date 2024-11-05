@@ -1,6 +1,6 @@
 <app-box [Title]="'Scout Field Results'">
   <app-form-element-group [LabelText]="'Table Display'">
-    <div id="table-buttons">
+    <div class="flex flex-wrap justify-content-space-between align-items-baseline">
       <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
         [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
         (FunctionCallBack)="showHideTableCols()" (ResetFunction)="resetTableColumns()">
