@@ -26,7 +26,7 @@
     </app-form-element>
 
     <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
-      [Required]="true" [FormGroup]="true" [FormGroupInline]="true" [Width]="'300px'">
+      [Required]="true" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element *ngIf="['field', 'pit'].includes(activeQuestion.form_typ)" [Type]="'checkbox'"
