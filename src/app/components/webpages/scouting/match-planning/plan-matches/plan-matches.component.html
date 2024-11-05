@@ -53,6 +53,12 @@
         </app-modal>
     </div>
 
+    <div>
+        <p>Match Time: {{activeMatch.time | dateToStr}}</p>
+        <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">Red Score: {{activeMatch.red_score}}
+            Blue Score: {{activeMatch.blue_score}}</p>
+    </div>
+
     <app-tab-container>
         <app-tab *ngFor="let mpr of matchToPlan" [TabName]="mpr.team.team_no.toString()">
             <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
