@@ -27,7 +27,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
     { PropertyName: 'condition', ColLabel: 'Condition' },
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
-    { PropertyName: 'active', ColLabel: 'Active' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
   questionConditionQuestionFromList: QuestionWithConditions[] = [];
   questionConditionQuestionToList: QuestionWithConditions[] = [];
@@ -137,5 +137,9 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.gs.decodeYesNo(s);
   }
 }

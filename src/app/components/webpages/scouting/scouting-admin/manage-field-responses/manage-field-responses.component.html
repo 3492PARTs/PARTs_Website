@@ -3,7 +3,7 @@
         [ScrollHeight]="'50rem'" [Scrollable]="true" [ShowViewButton]="true"
         (ViewRecordCallBack)="showScoutFieldResultModal($event)"></app-table>
 
-    <app-modal [(visible)]="scoutResultModalVisible" [Title]="'Field Result'">
+    <app-modal [(visible)]="scoutResultModalVisible" [Title]="'Field Response'">
         <div class="overflow-x">
             <app-table [TableCols]="scoutResults.scoutCols" [TableData]="[activeScoutResult || {}]"
                 [Width]="tableWidth"></app-table>
