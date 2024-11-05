@@ -46,8 +46,8 @@
     <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
 
     <div *ngIf="scoutPitResponse.robotPics.length > 0">
-      <div *ngFor="let pic of scoutPitResponse.robotPics">
-        {{pic.name}}
+      <div *ngFor="let pic of scoutPitResponse.robotPics; let i = index">
+        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteStagedPic(i)"></app-button>{{pic.name}}
       </div>
     </div>
 

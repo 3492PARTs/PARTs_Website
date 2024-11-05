@@ -276,6 +276,10 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.formElements = fes;
     });
   }
+
+  deleteStagedPic(index: number): void {
+    this.scoutPitResponse.robotPics.splice(index, 1);
+  }
 }
 
 export class ScoutPitInit {
