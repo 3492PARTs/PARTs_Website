@@ -33,9 +33,9 @@ export class ScoutingScheduleComponent implements OnInit {
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
   ];
 
   scoutScheduleModalVisible = false;
@@ -49,7 +49,7 @@ export class ScoutingScheduleComponent implements OnInit {
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.trueFalseToYesNo },
   ];
 
   currentSchedule = new Schedule();
@@ -220,5 +220,13 @@ export class ScoutingScheduleComponent implements OnInit {
     var dt = new Date(this.currentSchedule.st_time);
     dt.setHours(dt.getHours() + 1);
     this.currentSchedule.end_time = dt;
+  }
+
+  trueFalseToSendNot(b: boolean): string {
+    return `${b ? '' : 'Not'} Sent`;
+  }
+
+  trueFalseToYesNo(b: boolean): string {
+    return b ? 'Yes' : 'No';
   }
 }
