@@ -1,10 +1,10 @@
 <app-button-ribbon>
     <app-modal [Title]="'Responses'" [ButtonType]="'main'" [ButtonText]="'Responses'">
         <app-button-ribbon>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="exportResponses()">Export</app-button>
             <app-button [ButtonType]="archiveInd === 'n' ? 'warning' : 'success'"
                 (FunctionCallBack)="switchArchiveInd()">{{archiveInd === 'n' ?
                 'Archived' : 'Active'}}</app-button>
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="exportResponses()">Export</app-button>
         </app-button-ribbon>
 
         <app-table [TableCols]="ResponsesCols" [TableData]="responses" (RecordClickCallBack)="openResponse($event)"
