@@ -654,6 +654,18 @@ export class GeneralService {
       return o;
     return s;
   }
+
+  booleanDecode(b: boolean, values: { true: string, false: string }): string {
+    return b ? values.true : values.false;
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.booleanDecode(b, { true: 'Sent', false: 'Not Sent' });
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.booleanDecode(b, { true: 'Yes', false: 'No' });
+  }
 }
 
 export class RetMessage {

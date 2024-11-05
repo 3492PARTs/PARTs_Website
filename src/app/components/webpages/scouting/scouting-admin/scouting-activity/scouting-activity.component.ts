@@ -36,9 +36,9 @@ export class ScoutingActivityComponent implements OnInit {
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { ColLabel: 'Scouts', Type: 'function', ColValueFunction: this.getScoutingActivityScoutsForTable.bind(this) },
-    { PropertyName: 'notification1', ColLabel: '15 min notification' },
-    { PropertyName: 'notification2', ColLabel: '5 min notification' },
-    { PropertyName: 'notification3', ColLabel: '0 min notification' },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
   userScoutActivityResultsTableCols: TableColType[] = [
@@ -280,5 +280,9 @@ export class ScoutingActivityComponent implements OnInit {
         this.gs.triggerError(err);
       });
     });
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.gs.decodeSentBoolean(b);
   }
 }

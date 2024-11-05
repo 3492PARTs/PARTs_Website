@@ -39,24 +39,24 @@ export class ScoutingPortalComponent implements OnInit {
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
   expandedScoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.trueFalseToSendNot },
+    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
   ];
 
   scheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified' },
+    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
 
@@ -116,7 +116,11 @@ export class ScoutingPortalComponent implements OnInit {
     });
   }
 
-  trueFalseToSendNot(b: boolean): string {
-    return `${b ? '' : 'Not'} Sent`;
+  decodeSentBoolean(b: boolean): string {
+    return this.gs.decodeSentBoolean(b);
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.gs.decodeYesNoBoolean(b);
   }
 }
