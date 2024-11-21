@@ -61,7 +61,7 @@ node {
                         '''
                             
                         sh '''
-                        python3 /scripts/delete_remote_files.py $ENV_HOST "$USER" "$PASS" /public_html
+                        python3 /scripts/delete_remote_files.py $ENV_HOST "$USER" "$PASS" /public_html --exclude_dirs stats
                         '''
 
                         sh '''
