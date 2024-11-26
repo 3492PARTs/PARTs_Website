@@ -1,15 +1,21 @@
 node {
+    def now = new Date()
+
+    // Format the date in YYYY-MM-DD format
+    def formattedDate = now.format('yyyy.MM.dd')
+
+    // Set the environment variable 
+    env.BUILD_DATE = formattedDate
+
     env.BUILD_NO = env.BUILD_DISPLAY_NAME
+
+    env.ESC_BRANCH_NAME = env.BRANCH_NAME.replaceAll("/", "-")
 
     try {
         def app
         
         stage('Clone repository') {
             checkout scm
-
-            sh '''
-            env
-            '''
         }
 
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
@@ -25,11 +31,15 @@ node {
         stage('Build image') {  
             if (env.BRANCH_NAME == 'main') {
                 app = docker.build("bduke97/parts_website")
+
+                sh'''
+                sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.ts
+                '''
             }
             else {
                 sh'''
-                sed -i "s/BRANCH/$BRANCH_NAME/g" src/environments/environment.uat.ts
-                && sed -i "s/VERSION/$CHANGE_ID/g" src/environments/environment.uat.ts
+                sed -i "s/BRANCH/$ESC_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                && sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.uat.ts
                 '''
 
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile.uat .")
@@ -50,7 +60,7 @@ node {
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    app.push("${env.BRANCH_NAME}")
+                    app.push("${env.ESC_BRANCH_NAME}")
                     //app.push("latest")
                 }
             }  
@@ -81,8 +91,8 @@ node {
                 && git fetch \
                 && git switch $BRANCH_NAME \
                 && git pull \
-                && TAG=$BRANCH_NAME docker compose pull \
-                && TAG=$BRANCH_NAME docker compose up -d --force-recreate"
+                && TAG=$ESC_BRANCH_NAME docker compose pull \
+                && TAG=$ESC_BRANCH_NAME docker compose up -d --force-recreate"
                 '''
             } 
         }
