@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormManagerComponent } from '../../../elements/form-manager/form-manager.component';
+import { TableColType } from '../../../atoms/table/table.component';
 
 @Component({
   selector: 'app-team-contact-form',
@@ -11,10 +12,10 @@ import { FormManagerComponent } from '../../../elements/form-manager/form-manage
 })
 export class TeamContactFormComponent {
 
-  teamContactResponsesCols = [
+  teamContactResponsesCols: TableColType[] = [
     { PropertyName: 'response_id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
-    { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message', Type: 'function', ColValueFn: this.truncateMessage },
+    { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message', Type: 'function', ColValueFunction: this.truncateMessage },
     { PropertyName: 'time', ColLabel: 'Time' },
   ];
 

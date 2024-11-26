@@ -114,9 +114,8 @@
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
-              <p class="margin-bottom-0" *ngSwitchCase="'function'" [innerHTML]="col.ColValueFunction ? (col.ColValueFunction((col.PropertyName || '') ? GetTableDisplayValue(rec,
-              (col.PropertyName || '')) :
-              rec)) :rec">
+              <p class="margin-bottom-0" *ngSwitchCase="'function'"
+                [innerHTML]="col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec">
               </p>
 
               <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate
