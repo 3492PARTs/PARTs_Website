@@ -30,11 +30,11 @@ node {
 
         stage('Build image') {  
             if (env.BRANCH_NAME == 'main') {
-                app = docker.build("bduke97/parts_website")
-
                 sh'''
                 sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.ts
                 '''
+                
+                app = docker.build("bduke97/parts_website")
             }
             else {
                 sh'''
