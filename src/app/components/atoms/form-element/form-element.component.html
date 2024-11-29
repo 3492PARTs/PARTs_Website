@@ -98,54 +98,33 @@
       </div>
 
       <ng-container *ngSwitchCase="'select'">
-        <ng-container *ngIf="!SelectComparatorFunction; else hasFunction">
-          <select #input class="form-control" id="{{ LabelID }}" [ngClass]="{
+        <select #input class="form-control" id="{{ LabelID }}" [ngClass]="{
             'disabled': Disabled, 
             'valid': isFormElementValid(), 
           'invalid': isFormElementInvalid(),
           'required': isFormElementRequired()
           }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
-            [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
-            (focusout)="focusOut()">
-            <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
+          [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+          (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
+          <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
+          <option value="" [disabled]="!DisplayEmptyOption"></option>
 
-            <ng-container *ngIf="BindingProperty && DisplayProperty">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
-                [selected]="obj[BindingProperty] === Model">{{ obj[DisplayProperty] }} {{ DisplayProperty2 ?
-                (obj[DisplayProperty2] ?
-                obj[DisplayProperty2] : '') : '' }}
-              </option>
-            </ng-container>
+          <ng-container *ngIf="BindingProperty && DisplayProperty">
+            <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
+              [selected]="obj[BindingProperty] === Model">
+              {{ obj[DisplayProperty] }}
+              {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
+            </option>
+          </ng-container>
 
-            <ng-container *ngIf="!BindingProperty && DisplayProperty">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">{{
-                obj[DisplayProperty] }} {{
-                DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
-              </option>
-            </ng-container>
-          </select>
-        </ng-container>
-        <ng-template #hasFunction>
-          <select #input *ngSwitchCase="'select'" class="form-control" id="{{ LabelID }}" [ngClass]="{
-            'disabled': Disabled, 
-            'valid': isFormElementValid(), 
-          'invalid': isFormElementInvalid(),
-          'required': isFormElementRequired()
-          }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
-            [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
-            (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
-            <option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>
-
-            <ng-container *ngIf="!BindingProperty && DisplayProperty">
-              <option *ngFor="let obj of _SelectList" [ngValue]="obj">
-                {{obj[DisplayProperty] }} {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') :
-                '' }}
-              </option>
-            </ng-container>
-          </select>
-        </ng-template>
+          <ng-container *ngIf="!BindingProperty && DisplayProperty">
+            <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">
+              {{ obj[DisplayProperty] }}
+              {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
+            </option>
+          </ng-container>
+        </select>
       </ng-container>
-      <!--TODO Fix display property 2 using ternary operator-->
 
       <div *ngSwitchCase="'area'" class="area"
         [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}">
@@ -282,9 +261,9 @@
             <div *ngFor="let obj of Model; let i = index" class="multi-select-option">
               <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="Model[i]['checked']"
                 (ngModelChange)="change($event, i)" [disabled]="Disabled">
-              <label *ngIf="!DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }}</label>
-              <label *ngIf="DisplayProperty2" for="{{ LabelID }}{{ i }}">{{ obj[DisplayProperty] }} -
-                {{ obj[DisplayProperty2 || ''] }}</label>
+              <label for="{{ LabelID }}{{ i }}">
+                {{ obj[DisplayProperty] }}
+                {{ DisplayProperty2 ? (obj[DisplayProperty2] ? ' - ' + obj[DisplayProperty2] : '') : '' }}</label>
             </div>
           </div>
         </div>
