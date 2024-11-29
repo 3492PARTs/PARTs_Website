@@ -1039,7 +1039,7 @@ export class ScoutingService {
   loadTeamNotes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<TeamNote[] | null> {
     if (!this.outstandingLoadTeamNotesPromise) {
       this.outstandingLoadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
-        this.api.get(loadingScreen, 'scouting/match-planning/team-notes/', undefined, async (result: TeamNote[]) => {
+        this.api.get(loadingScreen, 'scouting/strategizing/team-notes/', undefined, async (result: TeamNote[]) => {
           /** 
            * On success load results and store in db 
            **/
