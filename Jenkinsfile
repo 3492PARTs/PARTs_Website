@@ -9,7 +9,7 @@ node {
 
     env.BUILD_NO = env.BUILD_DISPLAY_NAME
 
-    env.ESC_BRANCH_NAME = env.BRANCH_NAME.replaceAll("/", "-")
+    env.FORMATTED_BRANCH_NAME = env.BRANCH_NAME.replaceAll("/", "-")
 
     try {
         def app
@@ -38,7 +38,7 @@ node {
             }
             else {
                 sh'''
-                sed -i "s/BRANCH/$ESC_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
                 && sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.uat.ts
                 '''
 
@@ -60,7 +60,7 @@ node {
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                    app.push("${env.ESC_BRANCH_NAME}")
+                    app.push("${env.FORMATTED_BRANCH_NAME}")
                     //app.push("latest")
                 }
             }  
@@ -91,8 +91,8 @@ node {
                 && git fetch \
                 && git switch $BRANCH_NAME \
                 && git pull \
-                && TAG=$ESC_BRANCH_NAME docker compose pull \
-                && TAG=$ESC_BRANCH_NAME docker compose up -d --force-recreate"
+                && TAG=$FORMATTED_BRANCH_NAME docker compose pull \
+                && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate"
                 '''
             } 
         }

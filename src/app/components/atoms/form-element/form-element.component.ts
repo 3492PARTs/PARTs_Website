@@ -119,7 +119,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() NumberIncDec = false;
 
   @Input() ValidityFunction?: Function;
-  @Input() SelectComparatorFunction!: (o1: any, o2: any) => boolean;
+  @Input() SelectComparatorFunction: (o1: any, o2: any) => boolean = (o1: any, o2: any) => {
+    return JSON.stringify(o1) === JSON.stringify(o2);
+  };
 
   @Input() Model: any;
   @Output() ModelChange = new EventEmitter();
