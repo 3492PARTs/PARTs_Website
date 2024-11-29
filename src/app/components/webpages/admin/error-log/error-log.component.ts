@@ -21,6 +21,7 @@ export class ErrorLogComponent implements OnInit {
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'path', ColLabel: 'Path' },
     { PropertyName: 'message', ColLabel: 'Message' },
+    { PropertyName: 'error_message', ColLabel: 'Error Message' },
     { PropertyName: 'exception', ColLabel: 'Exception' },
     { PropertyName: 'display_time', ColLabel: 'Time' }
   ];

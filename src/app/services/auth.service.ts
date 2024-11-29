@@ -447,6 +447,7 @@ export class ErrorLog {
   user_name!: string;
   path!: string;
   message!: string;
+  error_message!: string;
   exception!: string;
   traceback!: string;
   time!: Date;
