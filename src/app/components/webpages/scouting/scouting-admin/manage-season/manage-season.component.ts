@@ -87,7 +87,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncSeason(): void {
-    this.api.get(true, 'scouting/admin/sync-season/', {
+    this.api.get(true, 'tba/sync-season/', {
       season_id: this.currentSeason.season_id.toString()
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
@@ -98,7 +98,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncEvent(event_cd: string): void {
-    this.api.get(true, 'scouting/admin/sync-event/', {
+    this.api.get(true, 'tba/sync-event/', {
       event_cd: event_cd
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
@@ -111,7 +111,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncMatches(): void {
-    this.api.get(true, 'scouting/admin/sync-matches/', undefined, (result: any) => {
+    this.api.get(true, 'tba/sync-matches/', undefined, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -119,7 +119,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncEventTeamInfo(): void {
-    this.api.get(true, 'scouting/admin/sync-event-team-info/', {
+    this.api.get(true, 'tba/sync-event-team-info/', {
       force: 1
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
