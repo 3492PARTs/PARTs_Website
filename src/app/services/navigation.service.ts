@@ -10,6 +10,27 @@ import { environment } from '../../environments/environment';
 })
 export class NavigationService {
 
+  pagesWithNavigation = ['admin', 'scouting admin', 'strategizing'];
+
+  applicationMenu = [
+    new Link('Join PARTs', '', 'account-supervisor', [
+      new Link('Mechanical', 'join/mechanical'),
+      new Link('Electrical', 'join/electrical'),
+      new Link('Programming', 'join/programming'),
+      new Link('Impact', 'join/impact'),
+      new Link('Application Form', 'join/team-application'),
+    ], 'Our Subteams'),
+    new Link('Contact Us', 'contact', 'card-account-details'),
+    new Link('Sponsoring', 'sponsor', 'account-child-circle'),
+    new Link('About', 'about', 'information'),
+    new Link('Media', 'media', 'image-multiple'),
+    new Link('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
+    new Link('FIRST', 'first', 'first'),
+    new Link('Members', '', 'folder', [
+      new Link('Login', 'login'),
+    ], 'Members Area'),
+  ];
+
   /* Active sub Page */
   private subPageBS = new BehaviorSubject<string>('');
   subPage = this.subPageBS.asObservable();
@@ -64,10 +85,10 @@ export class NavigationService {
               new Link('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
             ];
             break;
-          case 'match-planning':
+          case 'strategizing':
             subPages = [
-              new Link('Matches', '/scouting/match-planning/plan-matches', 'soccer-field'),
-              new Link('Team Notes', '/scouting/match-planning/team-notes', 'note-multiple'),
+              new Link('Matches', '/scouting/strategizing/plan-matches', 'soccer-field'),
+              new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
             ];
             break;
         }

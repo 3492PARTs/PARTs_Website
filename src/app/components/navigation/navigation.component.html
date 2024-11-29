@@ -29,7 +29,7 @@
     <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}"
       appClickOutside (appClickOutside)="closeSubNav()">
       <ul>
-        <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of appMenu"
+        <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of applicationMenu"
           (click)="mi.menu_items.length > 0 ? openSubNav(getNavPageID(mi.menu_name), getNavPageID(mi.menu_name) + '-1') : closeSubNav(true)">
 
           <!--menu item link-->
@@ -105,13 +105,13 @@
             <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
-                <a *ngIf="!pagesWithNavs.includes(mii.menu_name.toLowerCase())"
+                <a *ngIf="!pagesWithNavigation.includes(mii.menu_name.toLowerCase())"
                   [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
                   (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
                   {{ mii.menu_name }}
                 </a>
 
-                <a *ngIf="pagesWithNavs.includes(mii.menu_name.toLowerCase())"
+                <a *ngIf="pagesWithNavigation.includes(mii.menu_name.toLowerCase())"
                   (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
                   {{ mii.menu_name }}
                 </a>
@@ -121,15 +121,15 @@
         </li>
       </ul>
 
-      <hr [ngClass]="{'darker' : pagesWithNavs.includes(getActiveMenuItemName())}">
+      <hr [ngClass]="{'darker' : pagesWithNavigation.includes(getActiveMenuItemName())}">
 
       <div id="page-nav">
-        <app-sub-navigation *ngIf="pagesWithNavs.includes(getActiveMenuItemName())" [setNavExpanded]="navExpanded"
+        <app-sub-navigation *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())" [setNavExpanded]="navExpanded"
           [hideNavExpander]="hideNavExpander">
         </app-sub-navigation>
       </div>
 
-      <hr *ngIf="pagesWithNavs.includes(getActiveMenuItemName())">
+      <hr *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())">
 
       <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
         [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded}">

@@ -26,8 +26,8 @@ import { WallpapersComponent } from './components/webpages/media/wallpapers/wall
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
 import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
 import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
-import { PlanMatchesComponent } from './components/webpages/scouting/match-planning/plan-matches/plan-matches.component';
-import { TeamNotesComponent } from './components/webpages/scouting/match-planning/team-notes/team-notes.component';
+import { PlanMatchesComponent } from './components/webpages/scouting/strategizing/plan-matches/plan-matches.component';
+import { TeamNotesComponent } from './components/webpages/scouting/strategizing/team-notes/team-notes.component';
 import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
 import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
 import { ManageFieldQuestionAggregatesComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component';
@@ -67,8 +67,8 @@ export const routes: Routes = [
     { path: 'scouting/field-responses', title: 'Field Responses', component: FieldScoutingResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/pit-responses', title: 'Pit Responses', component: ScoutPitResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/portal', title: 'Scout Portal', component: ScoutingPortalComponent, canActivate: [authGuard] },
-    { path: 'scouting/match-planning/plan-matches', title: 'Plan Matches', component: PlanMatchesComponent, canActivate: [authGuard] },
-    { path: 'scouting/match-planning/team-notes', title: 'Team Notes', component: TeamNotesComponent, canActivate: [authGuard] },
+    { path: 'scouting/strategizing/plan-matches', title: 'Plan Matches', component: PlanMatchesComponent, canActivate: [authGuard] },
+    { path: 'scouting/strategizing/team-notes', title: 'Team Notes', component: TeamNotesComponent, canActivate: [authGuard] },
     { path: 'contact', title: 'Contact Us', component: ContactComponent },
     { path: 'calendar', title: 'Calendar', component: CalendarComponent },
     { path: 'join', title: 'Join', component: JoinComponent },

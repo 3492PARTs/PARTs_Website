@@ -44,7 +44,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   subNav = '';
   pageIDs: any = {};
-  pagesWithNavs = ['admin', 'scouting admin', 'match planning'];
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;
@@ -60,7 +59,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: Link[] = [];
+  pagesWithNavigation: string[] = [];
+  applicationMenu: Link[] = [];
   userLinks: Link[] = [];
 
   siteHeaderHeight = 7;
@@ -92,7 +92,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.userLinks.subscribe((ul) => {
       this.userLinks = this.gs.cloneObject(ul);
 
-      this.appMenu.forEach(mi => {
+      this.applicationMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
@@ -105,7 +105,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.userLinks.forEach(ul => {
         this.removeHeader = false;
 
-        this.appMenu.forEach(mi => {
+        this.applicationMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
             this.checkActiveMenuItem(this.urlEnd, mi, mii);
           });
@@ -115,7 +115,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.pwa.installEligible.subscribe(e => {
       window.setTimeout(() => {
-        this.appMenu.forEach(mi => {
+        this.applicationMenu.forEach(mi => {
           if (mi.menu_name === 'Members') {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
@@ -138,7 +138,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           this.navigationService.setSubPages(this.urlEnd);
 
           this.resetActiveMenuItem();
-          this.appMenu.forEach(mi => {
+          this.applicationMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
@@ -178,30 +178,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
-    this.appMenu = [
-      new Link('Join PARTs', '', 'account-supervisor', [
-        new Link('Mechanical', 'join/mechanical'),
-        new Link('Electrical', 'join/electrical'),
-        new Link('Programming', 'join/programming'),
-        new Link('Impact', 'join/impact'),
-        new Link('Application Form', 'join/team-application'),
-      ], 'Our Subteams'),
-      new Link('Contact Us', 'contact', 'card-account-details'),
-      new Link('Sponsoring', 'sponsor', 'account-child-circle'),
-      new Link('About', 'about', 'information'),
-      new Link('Media', 'media', 'image-multiple'),
-      new Link('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
-      new Link('FIRST', 'first', 'first'),
-      new Link('Members', '', 'folder', [
-        new Link('Login', 'login'),
-      ], 'Members Area'),
-    ];
+    this.applicationMenu = this.navigationService.applicationMenu;
+
+    this.pagesWithNavigation = this.navigationService.pagesWithNavigation;
 
     // Check if comp page is available
     this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
       if ((result as CompetitionInit).event) {
         this.gs.triggerChange(() => {
-          this.appMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
+          this.applicationMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
         });
       }
     });
@@ -300,40 +285,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       //if (!environment.production) console.log('top + delta: ' + top);
       this.setHeaderPosition(top);
-      //if (!environment.production) console.log('--end--');
-      /*
-      //In chrome and some browser scroll is given to body tag
-let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-let max = document.documentElement.scrollHeight;
-// pos/max will give you the distance between scroll bottom and and bottom of screen in percentage.
- if(pos == max )   {
- //Do your action here
- }
-      
-      if (!this.userScrolling) {
-        this.scrollPosition = window.scrollY;
-        this.userScrolling = true;
-      }
-
-      if (window.scrollY <= 70 && window.scrollY - this.scrollPosition >= 0) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '-' + window.scrollY + 'px');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease');
-      } else if (window.scrollY - this.scrollPosition >= 5) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '-7rem');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease, top 0.15s linear');
-      } else if (window.scrollY - this.scrollPosition < -5) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '0');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease, top 0.15s linear');
-      }
-
-      if (this.scrollResizeTimer != null) {
-        window.clearTimeout(this.scrollResizeTimer);
-      }
-
-      this.scrollResizeTimer = window.setTimeout(() => {
-        this.userScrolling = false;
-        this.scrollPosition = window.scrollY;
-      }, 200);*/
     }
   }
 
@@ -515,18 +466,18 @@ let max = document.documentElement.scrollHeight;
   }
 
   resetActiveMenuItem(): void {
-    this.appMenu.forEach(mi => mi.menu_name_active_item = '');
+    this.applicationMenu.forEach(mi => mi.menu_name_active_item = '');
   }
 
   isActiveMenuItem(): boolean {
     let active = false;
-    this.appMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
+    this.applicationMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
     return active;
   }
 
   getActiveMenuItemName(): string {
     let active = '';
-    this.appMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
+    this.applicationMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
     return active;
   }
 
