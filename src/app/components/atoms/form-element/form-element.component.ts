@@ -176,6 +176,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     if (!this.FieldSize) this.FieldSize = 2000;
 
+    if (this.gs.strNoE(this.Name) && !this.gs.strNoE(this.LabelText))
+      this.Name = this.LabelText;
+
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
     }

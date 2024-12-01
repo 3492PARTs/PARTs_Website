@@ -4,6 +4,7 @@ import { FormElementGroupComponent } from '../form-element-group/form-element-gr
 import { FormElementComponent } from '../form-element/form-element.component';
 import { Banner } from '../../../models/api.models';
 import { GeneralService } from '../../../services/general.service';
+import { TableComponent } from '../table/table.component';
 @Component({
   selector: 'app-form',
   standalone: true,
@@ -18,6 +19,7 @@ export class FormComponent implements OnInit {
 
   @ContentChildren(FormElementComponent, { descendants: true }) formElements = new QueryList<FormElementComponent>();
   //@ContentChildren(FormElementGroupComponent) formElementGroups = new QueryList<FormElementGroupComponent>();
+  @ContentChildren(TableComponent, { descendants: true }) tables = new QueryList<TableComponent>();
 
   constructor(private gs: GeneralService) { }
 
@@ -35,28 +37,28 @@ export class FormComponent implements OnInit {
 
   validateAllFelids(): string {
     let ret = '';
-    // Returns true if all fields ARE valid
-    //let valid = true;
-    this.formElements.forEach(eachObj => {
-      eachObj.touchIt();
-      const v = eachObj.isInvalid();
-      /*if (valid && v) {
-        valid = false;
-      }*/
-      if (v)
-        ret += '&bull;  ' + eachObj.LabelText + ' is invalid\n'
+    this.formElements.forEach(fec => {
+      ret += this.validateFormElement(fec);
     });
 
-    this.FormElements.forEach(eachObj => {
-      eachObj.touchIt();
-      const v = eachObj.isInvalid();
-      /*if (valid && v) {
-        valid = false;
-      }*/
-      if (v)
-        ret += '&bull;  ' + eachObj.LabelText + ' is invalid\n'
+    this.FormElements.forEach(fec => {
+      ret += this.validateFormElement(fec);
+    });
+
+    this.tables.forEach(t => {
+      ret += `${t.TableName}:\n`
+      t.formElements.forEach(fec => {
+        ret += this.validateFormElement(fec);
+      });
     });
     return ret;
+  }
+
+  private validateFormElement(fec: FormElementComponent): string {
+    fec.touchIt();
+    if (fec.isInvalid())
+      return `&bull;  ${fec.Name} is invalid\n`;
+    return '';
   }
 
   onSubmit(f: NgForm) {

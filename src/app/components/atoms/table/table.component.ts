@@ -11,7 +11,10 @@ import {
   DoCheck,
   OnChanges,
   HostListener,
-  RendererStyleFlags2
+  RendererStyleFlags2,
+  ContentChildren,
+  QueryList,
+  ViewChildren
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
@@ -43,6 +46,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() TableDataButtons: any[] = [];
 
   @Input() TableTitle!: string;
+  @Input() TableName!: string;
 
   @Input() EnableFilter = false;
   @Input() DisableSort = false;
@@ -111,9 +115,14 @@ export class TableComponent implements OnInit, OnChanges {
 
   buttonCellWidth = 'auto';
 
+  @ViewChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
+    if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
+      this.TableName = this.TableTitle;
+
     if (this.Width !== '' && this.Table) {
       this.renderer.setStyle(this.Table.nativeElement, 'width', this.Width, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
     }
@@ -397,6 +406,7 @@ export class TableColType {
   MinValue?: number;
   MaxValue?: number;
   Rows?: number;
+  Required? = false;
   ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;

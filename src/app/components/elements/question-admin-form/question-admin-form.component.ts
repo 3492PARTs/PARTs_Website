@@ -44,15 +44,15 @@ export class QuestionAdminFormComponent implements OnInit {
   ];
 
   optionsTableCols: TableColType[] = [
-    { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
+    { PropertyName: 'option', ColLabel: 'Option', Type: 'area', Required: true },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
   scoringValueMapTableCols: TableColType[] = [
-    { PropertyName: 'answer', ColLabel: 'Answer', Type: 'text' },
-    { PropertyName: 'value', ColLabel: 'Value', Type: 'number' },
-    { PropertyName: 'default', ColLabel: 'Default', Type: 'checkbox' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
+    { PropertyName: 'answer', ColLabel: 'Answer', Type: 'text', Required: true },
+    { PropertyName: 'value', ColLabel: 'Value', Type: 'number', Required: true },
+    { PropertyName: 'default', ColLabel: 'Default', Type: 'checkbox', Required: true },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
@@ -100,15 +100,7 @@ export class QuestionAdminFormComponent implements OnInit {
   saveQuestion(): void {
     this.activeQuestion.form_typ = this.questionType;
 
-
     let save = this.activeQuestion;
-
-    for (let i = 0; i < save.questionoption_set.length; i++) {
-      if (this.gs.strNoE(save.questionoption_set[i].question_opt_id) && this.gs.strNoE(save.questionoption_set[i].option)) {
-        save.questionoption_set.splice(i, 1);
-        i--;
-      }
-    }
 
     this.api.post(true, 'form/question/', save, (result: any) => {
       this.gs.successfulResponseBanner(result);

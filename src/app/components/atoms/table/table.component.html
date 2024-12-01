@@ -101,19 +101,6 @@
 
           <ng-template #Type>
             <ng-container [ngSwitch]="col.Type">
-              <app-form-element *ngSwitchCase="'select'" [Type]="col.Type || ''"
-                [(Model)]="rec[(col.PropertyName || '')]" [Width]="'100%'" [Disabled]="DisableInputs"
-                [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty || null"
-                [BindingProperty]="col.BindingProperty || null"
-                (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
-              </app-form-element>
-
-              <app-form-element *ngSwitchCase="'checkbox'" [Type]="col.Type || ''"
-                [(Model)]="rec[(col.PropertyName || '')]" [TrueValue]="col.TrueValue ? col.TrueValue : true"
-                [FalseValue]="col.FalseValue ? col.FalseValue : false" [Disabled]="DisableInputs"
-                (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
-              </app-form-element>
-
               <p class="margin-bottom-0" *ngSwitchCase="'function'"
                 [innerHTML]="col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec">
               </p>
@@ -122,10 +109,14 @@
                 (onCreate)="previewImage(rec[(col.PropertyName || '')], 'image' + i)">
               </span>
 
-              <app-form-element *ngSwitchDefault [Type]="col.Type || ''" [(Model)]="rec[(col.PropertyName || '')]"
-                [Width]="'100%'" [Disabled]="DisableInputs" [FieldSize]="col.FieldSize ? col.FieldSize : null"
+              <app-form-element *ngSwitchDefault [Type]="col.Type || ''" [Name]="col.ColLabel + ' [' + (i + 1) + ']'"
+                [(Model)]="rec[(col.PropertyName || '')]" [Width]="'100%'" [Disabled]="DisableInputs"
+                [Required]="col.Required === true" [FieldSize]="col.FieldSize ? col.FieldSize : null"
                 [Rows]="col.Rows ? col.Rows : null" [MinValue]="col.MinValue ? col.MinValue : null"
-                [MaxValue]="col.MaxValue?col.MaxValue:null"
+                [MaxValue]="col.MaxValue?col.MaxValue:null" [SelectList]="col.SelectList"
+                [DisplayProperty]="col.DisplayProperty || null" [BindingProperty]="col.BindingProperty || null"
+                [TrueValue]="col.TrueValue ? col.TrueValue : true"
+                [FalseValue]="col.FalseValue ? col.FalseValue : false"
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>
 
