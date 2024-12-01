@@ -10,7 +10,6 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
-import { ScoutQuestionValueMap } from '../../../models/scouting.models';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -22,7 +21,7 @@ import { ScoutQuestionValueMap } from '../../../models/scouting.models';
 export class QuestionAdminFormComponent implements OnInit {
 
   @Input()
-  questionType!: string;
+  formType!: string;
   @Input()
   public set runInit(val: boolean) {
     if (val) {
@@ -69,7 +68,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   questionInit(): void {
     this.api.get(true, 'form/form-init/', {
-      form_typ: this.questionType
+      form_typ: this.formType
     }, (result: any) => {
       this.init = result as Init;
     }, (err: any) => {
@@ -98,7 +97,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   saveQuestion(): void {
-    this.activeQuestion.form_typ = this.questionType;
+    this.activeQuestion.form_typ.form_typ = this.formType;
 
     let save = this.activeQuestion;
 
@@ -114,10 +113,6 @@ export class QuestionAdminFormComponent implements OnInit {
 
   addOption(): void {
     this.activeQuestion.questionoption_set.push(new QuestionOption());
-  }
-
-  addQuestionValueMap(): void {
-    this.activeQuestion.scout_question.question_value_map.push(new ScoutQuestionValueMap());
   }
 
   compareQuestionTypeObjects(qt1: QuestionType, qt2: QuestionType): boolean {

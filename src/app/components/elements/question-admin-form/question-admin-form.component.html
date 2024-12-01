@@ -21,8 +21,8 @@
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
       [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'" [BindingProperty]="'form_sub_typ'" [(Model)]="activeQuestion.form_sub_typ"
-      [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+      [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
+      [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
     <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
@@ -36,7 +36,7 @@
     <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"
       [(Model)]="activeQuestion.active" [FormGroup]="true" [FormGroupInline]="true" [Width]="'73px'"></app-form-element>
 
-    <div *ngIf="['field', 'pit'].includes(activeQuestion.form_typ)">
+    <div *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'">
       <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="activeQuestion.scout_question.scorable"
         [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'">
       </app-form-element>
@@ -50,13 +50,6 @@
     <div *ngIf="activeQuestion.question_typ && activeQuestion.question_typ.is_list === 'y'">
       <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="activeQuestion.questionoption_set"
         [ShowAddButton]="true" (AddRecordCallBack)="addOption()" [Scrollable]="true">
-      </app-table>
-    </div>
-
-    <div *ngIf="activeQuestion.scout_question.scorable">
-      <app-table [TableTitle]="'Scoring Value Map'" [TableCols]="scoringValueMapTableCols"
-        [TableData]="activeQuestion.scout_question.question_value_map" [ShowAddButton]="true"
-        (AddRecordCallBack)="addQuestionValueMap()" [Scrollable]="true">
       </app-table>
     </div>
 

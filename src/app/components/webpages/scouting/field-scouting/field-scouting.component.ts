@@ -187,10 +187,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.scoutOtherQuestions = [];
     this.scoutFieldResponse.question_answers.forEach(sq => {
       let sqCopy = JSON.parse(JSON.stringify(sq)) as QuestionWithConditions;
-      if (sqCopy.form_sub_typ === 'auto') {
+      if (sqCopy.form_sub_typ.form_sub_typ === 'auto') {
         this.scoutAutoQuestions.push(sqCopy);
       }
-      else if (sqCopy.form_sub_typ === 'teleop') {
+      else if (sqCopy.form_sub_typ.form_sub_typ === 'teleop') {
         this.scoutTeleopQuestions.push(sqCopy);
       }
       else {

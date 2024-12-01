@@ -58,10 +58,10 @@ export class TeamApplicationComponent implements OnInit {
     }, (result: any) => {
       this.questions = [];
       let qs = result as QuestionWithConditions[];
-      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
-        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
       this.authService.authInFlight.subscribe(r => {
@@ -106,10 +106,10 @@ export class TeamApplicationComponent implements OnInit {
     }, (result: any) => {
       this.questions = [];
       let qs = result as QuestionWithConditions[];
-      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
-        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
       this.gs.devConsoleLog('team app - getResponse', this.questions);

@@ -1,10 +1,9 @@
-import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
+import { IScoutQuestion, ScoutQuestion, ScoutQuestionOption, ScoutQuestionType } from "./scouting.models";
 
 export interface IQuestionWithConditions {
     question_id: number;
-    form_typ: string;
-    form_sub_typ: string;
-    form_sub_nm: string;
+    form_typ: IFormType;
+    form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
     question: string;
     table_col_width: string;
@@ -25,9 +24,8 @@ export interface IQuestionWithConditions {
 
 export interface IQuestion {
     question_id: number;
-    form_typ: string;
-    form_sub_typ: string;
-    form_sub_nm: string;
+    form_typ: IFormType;
+    form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
     question: string;
     table_col_width: string;
@@ -47,9 +45,8 @@ export interface IQuestion {
 
 export class QuestionWithConditions implements IQuestionWithConditions {
     question_id = NaN;
-    form_typ = '';
-    form_sub_typ = '';
-    form_sub_nm = '';
+    form_typ = new FormType();
+    form_sub_typ = new FormSubType();
     question_typ!: QuestionType;
     question = '';
     table_col_width = '100px';
@@ -71,9 +68,8 @@ export class QuestionWithConditions implements IQuestionWithConditions {
 
 export class Question implements IQuestion {
     question_id = NaN;
-    form_typ!: string;
-    form_sub_typ!: string;
-    form_sub_nm!: string;
+    form_typ = new FormType();
+    form_sub_typ = new FormSubType();
     question_typ!: QuestionType;
     question!: string;
     table_col_width = '100px'
@@ -95,6 +91,7 @@ export interface IQuestionOption {
     question_opt_id: number;
     option: string;
     active: string;
+    scout_question_option: ScoutQuestionOption;
     void_ind: string;
 }
 
@@ -102,6 +99,7 @@ export class QuestionOption implements IQuestionOption {
     question_opt_id!: number;
     option!: string;
     active = 'y';
+    scout_question_option!: ScoutQuestionOption;
     void_ind = 'n';
 }
 
@@ -117,6 +115,7 @@ export interface IQuestionType {
     question_typ: string;
     question_typ_nm: string;
     is_list: string;
+    scout_question_type: ScoutQuestionType;
     void_ind: string;
 }
 
@@ -124,10 +123,17 @@ export class QuestionType implements IQuestionType {
     question_typ!: string;
     question_typ_nm!: string;
     is_list = 'n';
+    scout_question_type!: ScoutQuestionType;
     void_ind = 'n';
 }
 
-export class FormSubType {
+export interface IFormSubType {
+    form_sub_typ: string;
+    form_sub_nm: string;
+    form_typ_id: string;
+}
+
+export class FormSubType implements IFormSubType {
     form_sub_typ = ''
     form_sub_nm = ''
     form_typ_id = ''
@@ -164,9 +170,14 @@ export class QuestionCondition implements IQuestionCondition {
     active = 'y';
 }
 
-export class FormType {
-    form_typ!: string;
-    form_nm!: string;
+export interface IFormType {
+    form_typ: string;
+    form_nm: string;
+}
+
+export class FormType implements IFormType {
+    form_typ = '';
+    form_nm = '';
 }
 
 export class Response {

@@ -1092,7 +1092,7 @@ export class ScoutingService {
   // Others ----------------------------------------------------------------------
 
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<QuestionWithConditions[]> {
-    return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
+    return this.cs.QuestionWithConditions.filterAll((q) => q.form_typ.form_typ === form_typ);
   }
 
   private async updateScoutingQuestionsCache(form_typ: string, questions: QuestionWithConditions[]) {
@@ -1101,7 +1101,7 @@ export class ScoutingService {
         await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
       });
     });
-    await this.cs.QuestionWithConditions.AddBulkAsync(questions);
+    await this.cs.QuestionWithConditions.AddOrEditBulkAsync(questions);
   }
 
   private async SeasonEventChangedClearCache(): Promise<void> {

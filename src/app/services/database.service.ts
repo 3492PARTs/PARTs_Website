@@ -43,7 +43,7 @@ export class DatabaseService extends Dexie {
 
   BannerTable!: Dexie.Table<Banner, number>;
 
-  versionNumber: number = 3;
+  versionNumber: number = 4;
 
   private dbName: string = 'index-db-parts-app';
   constructor() {
