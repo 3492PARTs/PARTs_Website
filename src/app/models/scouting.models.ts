@@ -196,11 +196,31 @@ export class ScoutFieldSchedule implements IScoutFieldSchedule {
     scouts = '';
 }
 
+export interface IScoutQuestionValueMap {
+    id: number;
+    scout_question_id: number;
+    answer: string;
+    value: string;
+    default: boolean;
+    active: string;
+}
+
+export class ScoutQuestionValueMap implements IScoutQuestionValueMap {
+    id!: number;
+    scout_question_id!: number;
+    answer = '';
+    value = '';
+    default = false;
+    active = 'y';
+}
+
 export interface IScoutQuestion {
     id: number;
     question_id: number;
     season_id: number;
     scorable: boolean;
+    value_multiplier: number;
+    question_value_map: IScoutQuestionValueMap[];
     void_ind: string;
 }
 
@@ -209,6 +229,8 @@ export class ScoutQuestion implements IScoutQuestion {
     question_id!: number;
     season_id!: number;
     scorable = false;
+    value_multiplier!: number;
+    question_value_map: ScoutQuestionValueMap[] = [];
     void_ind = 'n';
 }
 

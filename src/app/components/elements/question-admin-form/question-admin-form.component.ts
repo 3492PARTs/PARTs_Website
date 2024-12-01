@@ -10,6 +10,7 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
+import { ScoutQuestionValueMap } from '../../../models/scouting.models';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -44,6 +45,13 @@ export class QuestionAdminFormComponent implements OnInit {
 
   optionsTableCols: TableColType[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
+  ];
+
+  scoringValueMapTableCols: TableColType[] = [
+    { PropertyName: 'answer', ColLabel: 'Answer', Type: 'text' },
+    { PropertyName: 'value', ColLabel: 'Value', Type: 'number' },
+    { PropertyName: 'default', ColLabel: 'Default', Type: 'checkbox' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' }
   ];
 
@@ -112,8 +120,12 @@ export class QuestionAdminFormComponent implements OnInit {
     });
   }
 
-  addOption(list: any): void {
-    list.push(new QuestionOption());
+  addOption(): void {
+    this.activeQuestion.questionoption_set.push(new QuestionOption());
+  }
+
+  addQuestionValueMap(): void {
+    this.activeQuestion.scout_question.question_value_map.push(new ScoutQuestionValueMap());
   }
 
   compareQuestionTypeObjects(qt1: QuestionType, qt2: QuestionType): boolean {
