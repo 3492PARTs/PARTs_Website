@@ -12,6 +12,10 @@
 
   & > div {
     max-width: 100%;
+
+    &.checkboxNoLabel {
+      padding-right: 2.2rem;
+    }
   }
 
   &.checkboxElement {
@@ -188,6 +192,10 @@ textarea.form-control {
   &.stopwatch {
     transform: none;
     top: 11px;
+  }
+
+  &.checkboxNoLabel {
+    right: 0;
   }
 
   .icon {

@@ -46,10 +46,13 @@ export class FormComponent implements OnInit {
     });
 
     this.tables.forEach(t => {
-      ret += `${t.TableName}:\n`
+      let tableRet = '';
       t.formElements.forEach(fec => {
-        ret += this.validateFormElement(fec);
+        tableRet += this.validateFormElement(fec);
       });
+
+      if (tableRet.length > 0)
+        ret += `${t.TableName}:\n ${tableRet}`;
     });
     return ret;
   }
