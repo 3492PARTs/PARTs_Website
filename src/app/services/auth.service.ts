@@ -123,7 +123,7 @@ export class AuthService {
       }, (err: HttpErrorResponse) => {
         console.log('error', err);
 
-        if (err.status != 0 || this.isSessionExpired()) {
+        if (!this.api.connectionErrorStatuses.includes(err.status) || this.isSessionExpired()) {
           this.logOut();
           this.authInFlightBS.next(AuthCallStates.err);
         }
