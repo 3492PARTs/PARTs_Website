@@ -585,7 +585,7 @@ export class GeneralService {
     return csv;
   }
 
-  getDisplayValue(rec: any, property: string): string {
+  getDisplayValue(rec: any, property: string): any {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
@@ -602,6 +602,24 @@ export class GeneralService {
     }
 
     return ret; // do not turn into a string this will bite objects in the butt
+  }
+
+  setDisplayValue(rec: any, property: string, value: any): void {
+    if (!property) {
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
+    }
+
+    let ret = '';
+
+    try {
+      const variable = `rec.${property}`;
+      const comand = `${variable} = value;`;
+      eval(comand);
+    }
+    catch (err) {
+      console.log(err);
+    }
+
   }
 
   keepElementInView(elementId: string): { x: number, y: number } | undefined {

@@ -110,12 +110,13 @@
               </span>
 
               <app-form-element *ngSwitchDefault [Type]="col.Type || ''" [Name]="col.ColLabel + ' [' + (i + 1) + ']'"
-                [(Model)]="rec[(col.PropertyName || '')]" [Width]="'100%'" [Disabled]="DisableInputs"
-                [Required]="col.Required === true" [FieldSize]="col.FieldSize ? col.FieldSize : null"
-                [Rows]="col.Rows ? col.Rows : null" [MinValue]="col.MinValue ? col.MinValue : null"
-                [MaxValue]="col.MaxValue?col.MaxValue:null" [SelectList]="col.SelectList"
-                [DisplayProperty]="col.DisplayProperty || null" [BindingProperty]="col.BindingProperty || null"
-                [TrueValue]="col.TrueValue ? col.TrueValue : true"
+                [Model]="GetTableDisplayValue(rec, (col.PropertyName || ''))"
+                (ModelChange)="SetTableDisplayValue(rec, (col.PropertyName || ''), $event)" [Width]="'100%'"
+                [Disabled]="DisableInputs" [Required]="col.Required === true"
+                [FieldSize]="col.FieldSize ? col.FieldSize : null" [Rows]="col.Rows ? col.Rows : null"
+                [MinValue]="col.MinValue ? col.MinValue : null" [MaxValue]="col.MaxValue?col.MaxValue:null"
+                [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty || null"
+                [BindingProperty]="col.BindingProperty || null" [TrueValue]="col.TrueValue ? col.TrueValue : true"
                 [FalseValue]="col.FalseValue ? col.FalseValue : false"
                 (FunctionCallBack)="col.FunctionCallBack ? col.FunctionCallBack(rec) : null">
               </app-form-element>

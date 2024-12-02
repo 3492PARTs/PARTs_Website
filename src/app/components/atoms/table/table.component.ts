@@ -287,6 +287,10 @@ export class TableComponent implements OnInit, OnChanges {
     return this.gs.getDisplayValue(rec, property);
   }
 
+  SetTableDisplayValue(rec: any, property: string, value: any) {
+    this.gs.setDisplayValue(rec, property, value);
+  }
+
   IsPropertyInColumnSettings(PropertyName: any) {
     return true;
   }

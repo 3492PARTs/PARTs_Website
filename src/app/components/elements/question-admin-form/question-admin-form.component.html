@@ -16,11 +16,11 @@
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
       [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
       [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
-      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true">
+      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true" (FunctionCallBack)="changeQuestionType()">
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Question Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
+      [LabelText]="'Form Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
       [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
@@ -38,11 +38,11 @@
 
     <div *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'">
       <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="activeQuestion.scout_question.scorable"
-        [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'">
+        [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'" (FunctionCallBack)="buildOptionsTableCols()">
       </app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Value Multiplier'"
-        [(Model)]="activeQuestion.scout_question.value_multiplier" [Width]="'6em'" [FormGroup]="true"
+        [(Model)]="activeQuestion.scout_question.value_multiplier" [Width]="'8em'" [FormGroup]="true"
         [FormGroupInline]="true">
       </app-form-element>
     </div>
