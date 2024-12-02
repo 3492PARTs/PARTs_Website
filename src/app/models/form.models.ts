@@ -46,7 +46,7 @@ export interface IQuestion {
 export class QuestionWithConditions implements IQuestionWithConditions {
     question_id = NaN;
     form_typ = new FormType();
-    form_sub_typ = new FormSubType();
+    form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
     question = '';
     table_col_width = '100px';
@@ -69,7 +69,7 @@ export class QuestionWithConditions implements IQuestionWithConditions {
 export class Question implements IQuestion {
     question_id = NaN;
     form_typ = new FormType();
-    form_sub_typ = new FormSubType();
+    form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
     question!: string;
     table_col_width = '100px'
