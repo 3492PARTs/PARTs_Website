@@ -92,6 +92,7 @@ nav {
     width: 100%;
     height: calc(100vh - 6.8rem - 1px);
     overflow-y: auto;
+    overflow-x: hidden;
 
     &.size {
       height: calc(100vh - 6.8rem - 1px - 6.8rem);
@@ -228,12 +229,8 @@ nav {
     }
 
     #social-icons {
-      width: 10.4rem;
+      width: 100%;
       padding: 1rem 0;
-
-      &.expanded {
-        width: 22.4rem !important;
-      }
 
       &.collapsed {
         a {
