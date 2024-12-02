@@ -224,18 +224,6 @@ export class ScoutQuestion implements IScoutQuestion {
     void_ind = 'n';
 }
 
-export interface IScoutQuestionOption {
-    id: number;
-    value: string;
-    active: string;
-}
-
-export class ScoutQuestionOption implements IScoutQuestionOption {
-    id!: number;
-    value = '';
-    active = '';
-}
-
 export interface IScoutFieldFormResponse {
     id: number;
     question_answers: IQuestionWithConditions[];

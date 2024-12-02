@@ -38,7 +38,7 @@
 
     <div *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'">
       <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="activeQuestion.scout_question.scorable"
-        [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'" (FunctionCallBack)="buildOptionsTableCols()">
+        [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'">
       </app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Value Multiplier'"

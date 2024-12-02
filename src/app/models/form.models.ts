@@ -1,4 +1,4 @@
-import { IScoutQuestion, ScoutQuestion, ScoutQuestionOption, ScoutQuestionType } from "./scouting.models";
+import { IScoutQuestion, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
 
 export interface IQuestionWithConditions {
     question_id: number;
@@ -91,7 +91,6 @@ export interface IQuestionOption {
     question_opt_id: number;
     option: string;
     active: string;
-    scout_question_option: ScoutQuestionOption;
     void_ind: string;
 }
 
@@ -99,7 +98,6 @@ export class QuestionOption implements IQuestionOption {
     question_opt_id!: number;
     option!: string;
     active = 'y';
-    scout_question_option!: ScoutQuestionOption;
     void_ind = 'n';
 }
 

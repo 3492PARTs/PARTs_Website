@@ -42,8 +42,7 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
   ];
 
-  optionsTableCols: TableColType[] = [];
-  private _optionsTableCols: TableColType[] = [
+  optionsTableCols: TableColType[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area', Required: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
@@ -53,7 +52,6 @@ export class QuestionAdminFormComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
     this.setQuestionTableCols();
-    this.buildOptionsTableCols();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -88,7 +86,6 @@ export class QuestionAdminFormComponent implements OnInit {
 
   showQuestionModal(q?: QuestionWithConditions): void {
     this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
-    this.buildOptionsTableCols();
     this.questionModalVisible = true;
   }
 
@@ -126,18 +123,8 @@ export class QuestionAdminFormComponent implements OnInit {
     if (this.activeQuestion.question_typ?.scout_question_type?.scorable !== 'y') {
       this.activeQuestion.scout_question.scorable = false;
     }
-
-    this.buildOptionsTableCols();
   }
 
-  buildOptionsTableCols(): void {
-    if (this.activeQuestion.scout_question.scorable) {
-      this.optionsTableCols = [...this._optionsTableCols, { PropertyName: 'scout_question_option.value', ColLabel: 'Scoring Value', Type: 'number', Required: true }]
-    }
-    else {
-      this.optionsTableCols = [...this._optionsTableCols];
-    }
-  }
 }
 
 class Init {
