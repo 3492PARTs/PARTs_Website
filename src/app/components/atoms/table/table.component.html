@@ -89,10 +89,10 @@
           <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
         <td *ngFor="let col of TableCols" (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{ 
-            'background-color': !col.ColorFunction ? 'initial' : col.ColorFunction(GetTableDisplayValue(rec, (col.PropertyName || ''))),
-            'color': !col.FontColorFunction ? 'initial' : col.FontColorFunction(GetTableDisplayValue(rec, (col.PropertyName || ''))) === 'initial' ? 'initial' : 'white',
+            'background-color': !rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] ? 'initial' : rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')],
+            'color': !rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] ? 'initial' : rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] === 'initial' ? 'initial' : 'white',
             'width': col.Width ? col.Width : 'auto'
-          }" [ngClass]="{'underline': col.UnderlineFn ? col.UnderlineFn(rec, (col.PropertyName || '')) : null}">
+          }" [ngClass]="{'underline': rec[(col.PropertyName || '') + (col.UnderlineFn?.name || '')] === true}">
 
           <ng-container *ngIf="!col.Type; else Type">
             <p class="margin-bottom-0" [innerHTML]="rec[col.PropertyName || ''] | dateToStr">
@@ -102,7 +102,7 @@
           <ng-template #Type>
             <ng-container [ngSwitch]="col.Type">
               <p class="margin-bottom-0" *ngSwitchCase="'function'"
-                [innerHTML]="col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec">
+                [innerHTML]="rec[(col.PropertyName || '') + (col.ColValueFunction?.name || '')]">
               </p>
 
               <span *ngSwitchCase="'image'" [id]="'image' + i" appOnCreate

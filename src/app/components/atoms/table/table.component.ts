@@ -190,6 +190,7 @@ export class TableComponent implements OnInit, OnChanges {
       if (changes.hasOwnProperty(propName)) {
         switch (propName) {
           case 'TableData':
+          case 'TableCols':
             this.setTableDisplayValues();
             break;
         }
@@ -198,10 +199,25 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   setTableDisplayValues(): void {
-    this.TableData.forEach(td => {
-      this.TableCols.forEach(tc => {
-        if (this.gs.strNoE(tc.Type) && tc.PropertyName?.includes('.')) {
-          td[tc.PropertyName] = this.GetTableDisplayValue(td, tc.PropertyName || '');
+    this.TableData.forEach(rec => {
+      this.TableCols.forEach(col => {
+        if (this.gs.strNoE(col.Type) && col.PropertyName?.includes('.')) {
+          rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
+        }
+        else if (col.Type === 'function') {
+          rec[(col.PropertyName || '') + (col.ColValueFunction?.name || '')] = col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? this.GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec;
+        }
+
+        if (col.ColorFunction) {
+          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+        }
+
+        if (col.FontColorFunction) {
+          rec[(col.PropertyName || '') + (col.FontColorFunction?.name || '')] = col.FontColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+        }
+
+        if (col.UnderlineFn) {
+          rec[(col.PropertyName || '') + (col.UnderlineFn?.name || '')] = col.UnderlineFn(rec, col.PropertyName);
         }
       });
     });
@@ -437,5 +453,5 @@ export class TableColType {
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;
   FontColorFunction?: (arg: any) => string;
-  UnderlineFn?: (arg0: any, arg1: any) => boolean;
+  UnderlineFn?: (rec: any, property?: any) => boolean;
 }
