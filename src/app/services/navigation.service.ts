@@ -72,10 +72,9 @@ export class NavigationService {
         switch (area[2]) {
           case 'scouting-admin':
             subPages = [
-              new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
-              new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
-              new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
               new Link('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
+              new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
+              new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
               new Link('Field Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
               new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
               new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
@@ -83,6 +82,7 @@ export class NavigationService {
               new Link('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
               new Link('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
               new Link('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
+              new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
             ];
             break;
           case 'strategizing':

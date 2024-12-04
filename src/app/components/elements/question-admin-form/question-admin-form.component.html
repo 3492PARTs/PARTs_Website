@@ -47,6 +47,9 @@
       </app-form-element>
     </div>
 
+    <app-form-element *ngIf="activeQuestion?.question_typ?.requires_img === 'y'" [Type]="'file'" [LabelText]="'Image'"
+      [(Model)]="activeQuestion.img"></app-form-element>
+
     <div *ngIf="activeQuestion.question_typ && activeQuestion.question_typ.is_list === 'y'">
       <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="activeQuestion.questionoption_set"
         [ShowAddButton]="true" (AddRecordCallBack)="addOption()" [Scrollable]="true">

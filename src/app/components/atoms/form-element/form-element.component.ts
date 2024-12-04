@@ -597,7 +597,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   resizeFormElement(): void {
     // This is to make sure the form element is the right width for the label
-    window.setTimeout(() => {
+    /*window.setTimeout(() => {
       if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
         const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 20) : this.label.nativeElement.clientWidth) + 32;
 
@@ -607,61 +607,62 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       }
 
       this.positionLabel();
-    }, 0);
+    }, 0);*/
+    this.positionLabel();
   }
 
   positionLabel(): void {
 
-    this.gs.triggerChange(() => {
-      if (this.label && this.Type !== 'checkbox') {
-        if (this.Type === 'number') {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px)`
-          );
-        }
-        else if (this.input) {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px - 16px)`
-          );
-        }
-
-
-        const { lineHeight } = getComputedStyle(this.label.nativeElement);
-        const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
-        const amountOfLinesTilAdjust = 1.0;
-
-        if (this.LabelText.includes('ou to the PARTs program')) {
-          let x = 0;
-        }
-
-        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-' + labelOffset + 'px'
-          );
-          this.renderer.setStyle(
-            this.formElement.nativeElement,
-            'margin-top', labelOffset + 'px'
-          );
-        }
-        else {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-4px'
-          );
-          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
-        }
+    //this.gs.triggerChange(() => {
+    if (this.label && this.Type !== 'checkbox') {
+      if (this.Type === 'number') {
+        const width = this.input.nativeElement.offsetWidth;
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'max-width', `calc(${width}px - 16px - 16px)`
+        );
       }
-    });
+      else if (this.input) {
+        const width = this.input.nativeElement.offsetWidth;
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'max-width', `calc(${width}px - 16px - 16px - 16px)`
+        );
+      }
+
+
+      const { lineHeight } = getComputedStyle(this.label.nativeElement);
+      const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
+      const amountOfLinesTilAdjust = 1.0;
+
+      if (this.LabelText.includes('ou to the PARTs program')) {
+        let x = 0;
+      }
+
+      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+        //if (this.LabelText.includes('Lining up '))
+        //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+        const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'top', '-' + labelOffset + 'px'
+        );
+        this.renderer.setStyle(
+          this.formElement.nativeElement,
+          'margin-top', labelOffset + 'px'
+        );
+      }
+      else {
+        //if (this.LabelText.includes('Lining up '))
+        //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+        this.renderer.setStyle(
+          this.label.nativeElement,
+          'top', '-4px'
+        );
+        this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+      }
+    }
+    //});
   }
 
   strNoE(a: any): boolean {
