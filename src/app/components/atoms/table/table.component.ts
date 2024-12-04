@@ -437,8 +437,8 @@ export class TableColType {
 export class TableButtonType {
   ButtonType = '';
   RecordCallBack: (arg: any) => any = () => { };
-  Title = '';
-  Type = '';
-  Text = '';
+  Title?: string;
+  Type?: string;
+  Text?: string;
   HideFunction?: (arg: any) => boolean;
 }

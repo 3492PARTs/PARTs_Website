@@ -6,7 +6,7 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
+import { TableButtonType, TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
@@ -28,7 +28,7 @@ export class ScoutingActivityComponent implements OnInit {
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
     { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
-  userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
+  userActivityTableButtons: TableButtonType[] = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
 
   activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
