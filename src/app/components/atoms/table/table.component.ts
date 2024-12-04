@@ -42,7 +42,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() TableData: any[] = [];
   @Input() TableCols: TableColType[] = [];
-  @Input() TableDataButtons: any[] = [];
+  @Input() TableDataButtons: TableButtonType[] = [];
 
   @Input() TableTitle!: string;
   @Input() TableName!: string;
@@ -154,6 +154,7 @@ export class TableComponent implements OnInit, OnChanges {
         switch (propName) {
           case 'TableData':
           case 'TableCols':
+          case 'TableDataButtons':
             this.setTableDisplayValues();
             break;
           case 'ShowAddButton':
@@ -190,6 +191,12 @@ export class TableComponent implements OnInit, OnChanges {
         if (col.UnderlineFn) {
           rec[(col.PropertyName || '') + (col.UnderlineFn?.name || '')] = col.UnderlineFn(rec, col.PropertyName);
         }
+
+        this.TableDataButtons.forEach(btn => {
+          if (btn.HideFunction) {
+            rec[btn.ButtonType + (btn.HideFunction?.name || '')] = btn.HideFunction(rec);
+          }
+        });
       });
     });
   }
@@ -425,4 +432,13 @@ export class TableColType {
   ColorFunction?: (arg: any) => string;
   FontColorFunction?: (arg: any) => string;
   UnderlineFn?: (rec: any, property?: any) => boolean;
+}
+
+export class TableButtonType {
+  ButtonType = '';
+  RecordCallBack: (arg: any) => any = () => { };
+  Title = '';
+  Type = '';
+  Text = '';
+  HideFunction?: (arg: any) => boolean;
 }
