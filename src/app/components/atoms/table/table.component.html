@@ -12,7 +12,7 @@
       }">
     <thead class="thead">
       <tr [ngClass]="{ 'resize-lines': Resizable }">
-        <th *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-add-col" [ngStyle]="{ 'width': buttonCellWidth }">
+        <th *ngIf="showButtonColumn && ButtonsFirstCol" class="btn-add-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as first column-->
           <app-button *ngIf="ShowAddButton" [ButtonType]="'addTHead'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
@@ -41,7 +41,7 @@
             </svg>
           </span>
         </th>
-        <th *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-add-col" [ngStyle]="{ 'width': buttonCellWidth }">
+        <th *ngIf="showButtonColumn && !ButtonsFirstCol" class="btn-add-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as last column-->
           <app-button *ngIf="ShowAddButton" [ButtonType]="'add'" [TableButton]="true" (FunctionCallBack)="Add()">
           </app-button>
@@ -84,7 +84,7 @@
             </ng-container>
           </div>
         </ng-template>
-        <td *ngIf="ShowButtonColumn() && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
+        <td *ngIf="showButtonColumn && ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as first column-->
           <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>
@@ -124,7 +124,7 @@
             </ng-container>
           </ng-template>
         </td>
-        <td *ngIf="ShowButtonColumn() && !ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
+        <td *ngIf="showButtonColumn && !ButtonsFirstCol" class="btn-col" [ngStyle]="{ 'width': buttonCellWidth }">
           <!--Table buttons as last column-->
           <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
         </td>

@@ -321,7 +321,6 @@ export class PlanMatchesComponent implements OnInit {
   }
 
   underlineTeam(match: Match, property: string): boolean {
-    //TODO Figure out why it runs so much
     //console.log(property);
     //console.log(match.red_score > match.blue_score);
     //console.log(match.blue_score > match.red_score);

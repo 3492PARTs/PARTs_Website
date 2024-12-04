@@ -116,10 +116,13 @@ export class TableComponent implements OnInit, OnChanges {
 
   @ViewChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
 
+  showButtonColumn = false;
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.setTableDisplayValues();
+    this.ShowButtonColumn();
     if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
@@ -142,48 +145,8 @@ export class TableComponent implements OnInit, OnChanges {
       );
     }
 
-    /*$(function () {
-      var startX,
-        startWidth,
-        $handle,
-        $table,
-        pressed = false;
-
-      $(document)
-        .on({
-          mousemove: function (event) {
-            if (pressed) {
-              $handle.width(startWidth + (event.pageX - startX));
-            }
-          },
-          mouseup: function () {
-            if (pressed) {
-              $table.removeClass('resizing');
-              pressed = false;
-            }
-          }
-        })
-        .on('mousedown', '.table-resizable th', function (event) {
-          $handle = $(this);
-          pressed = true;
-          startX = event.pageX;
-          startWidth = $handle.width();
-
-          $table = $handle.closest('.table-resizable').addClass('resizing');
-        })
-        .on('dblclick', '.table-resizable thead', function () {
-          // Reset column sizes on double click
-          $(this)
-            .find('th[style]')
-            .css('width', '');
-        });
-    });*/
 
   }
-  /*
-    ngOnChanges() {
-      this.toType();
-    }*/
 
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
@@ -192,6 +155,14 @@ export class TableComponent implements OnInit, OnChanges {
           case 'TableData':
           case 'TableCols':
             this.setTableDisplayValues();
+            break;
+          case 'ShowAddButton':
+          case 'ShowEditButton':
+          case 'ShowRemoveButton':
+          case 'ShowViewButton':
+          case 'ShowArchiveButton':
+          case 'TableDataButtons':
+            this.ShowButtonColumn();
             break;
         }
       }
@@ -333,7 +304,7 @@ export class TableComponent implements OnInit, OnChanges {
     return true;
   }
 
-  ShowButtonColumn() {
+  ShowButtonColumn(): void {
     const buttonWidth = 3.2;
     let colWidth = 0;
 
@@ -376,10 +347,10 @@ export class TableComponent implements OnInit, OnChanges {
       this.ShowArchiveButton ||
       this.TableDataButtons.length > 0
     ) {
-      return true;
+      this.showButtonColumn = true;
     }
 
-    return false;
+    this.showButtonColumn = false;
   }
 
   Remove(rec: any) {
