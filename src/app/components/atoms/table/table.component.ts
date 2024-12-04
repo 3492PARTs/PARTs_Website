@@ -118,10 +118,12 @@ export class TableComponent implements OnInit, OnChanges {
 
   showButtonColumn = false;
 
+  @Input() TriggerUpdate!: any;
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
-    this.setTableDisplayValues();
+    this.generateTableDisplayValues();
     this.ShowButtonColumn();
     if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
@@ -155,7 +157,7 @@ export class TableComponent implements OnInit, OnChanges {
           case 'TableData':
           case 'TableCols':
           case 'TableDataButtons':
-            this.setTableDisplayValues();
+            this.generateTableDisplayValues();
             break;
           case 'ShowAddButton':
           case 'ShowEditButton':
@@ -165,12 +167,16 @@ export class TableComponent implements OnInit, OnChanges {
           case 'TableDataButtons':
             this.ShowButtonColumn();
             break;
+          case 'TriggerUpdate':
+            this.generateTableDisplayValues();
+            this.ShowButtonColumn();
+            break;
         }
       }
     }
   }
 
-  setTableDisplayValues(): void {
+  generateTableDisplayValues(): void {
     this.TableData.forEach(rec => {
       this.TableCols.forEach(col => {
         if (this.gs.strNoE(col.Type) && col.PropertyName?.includes('.')) {
@@ -356,8 +362,8 @@ export class TableComponent implements OnInit, OnChanges {
     ) {
       this.showButtonColumn = true;
     }
-
-    this.showButtonColumn = false;
+    else
+      this.showButtonColumn = false;
   }
 
   Remove(rec: any) {

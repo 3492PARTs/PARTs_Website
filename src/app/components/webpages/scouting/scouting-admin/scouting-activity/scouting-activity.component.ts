@@ -30,6 +30,7 @@ export class ScoutingActivityComponent implements OnInit {
   ];
   userActivityTableButtons: TableButtonType[] = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
+  triggerUserActivityTableUpdate = false;
 
   activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
   userScoutActivityScheduleTableCols: TableColType[] = [
@@ -72,7 +73,7 @@ export class ScoutingActivityComponent implements OnInit {
           fs.st_time = new Date(fs.st_time),
             fs.end_time = new Date(fs.end_time)
         });
-
+        this.triggerUserActivityTableUpdate = !this.triggerUserActivityTableUpdate;
       };
 
       this.gs.decrementOutstandingCalls();
