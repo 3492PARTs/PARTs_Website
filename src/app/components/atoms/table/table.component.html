@@ -95,7 +95,7 @@
           }" [ngClass]="{'underline': col.UnderlineFn ? col.UnderlineFn(rec, (col.PropertyName || '')) : null}">
 
           <ng-container *ngIf="!col.Type; else Type">
-            <p class="margin-bottom-0" [innerHTML]="GetTableDisplayValue(rec, (col.PropertyName || '')) | dateToStr">
+            <p class="margin-bottom-0" [innerHTML]="rec[col.PropertyName || ''] | dateToStr">
             </p>
           </ng-container>
 

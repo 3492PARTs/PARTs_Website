@@ -8,13 +8,12 @@ import {
   ElementRef,
   ViewChild,
   Renderer2,
-  DoCheck,
   OnChanges,
   HostListener,
   RendererStyleFlags2,
-  ContentChildren,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  SimpleChanges
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
@@ -120,6 +119,7 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.setTableDisplayValues();
     if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
@@ -180,9 +180,31 @@ export class TableComponent implements OnInit, OnChanges {
     });*/
 
   }
+  /*
+    ngOnChanges() {
+      this.toType();
+    }*/
 
-  ngOnChanges() {
-    this.toType();
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'TableData':
+            this.setTableDisplayValues();
+            break;
+        }
+      }
+    }
+  }
+
+  setTableDisplayValues(): void {
+    this.TableData.forEach(td => {
+      this.TableCols.forEach(tc => {
+        if (this.gs.strNoE(tc.Type) && tc.PropertyName?.includes('.')) {
+          td[tc.PropertyName] = this.GetTableDisplayValue(td, tc.PropertyName || '');
+        }
+      });
+    });
   }
 
   @HostListener('window:resize', ['$event'])
