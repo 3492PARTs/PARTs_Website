@@ -20,6 +20,7 @@
         'multiCheckbox': Type === 'multiCheckbox', 
         'multiSelect': Type === 'multiSelect', 
         'stopwatch': Type === 'stopwatch',
+        'file': Type === 'file',
         'checkboxNoLabel': Type === 'checkbox' && LabelText.length <= 0}">
       <span *ngIf="valid && hasValue; else invalid" class="mdi mdi-check icon icon-valid"></span>
       <ng-template #invalid>
@@ -170,7 +171,6 @@
         </ng-template>
       </ng-container>
 
-
       <div *ngSwitchCase="'multiCheckbox'" (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
         <ng-container *ngIf="BindingProperty && DisplayProperty">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
@@ -229,12 +229,17 @@
           [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
       </ng-container>
 
-      <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }">
+      <div *ngSwitchCase="'file'" class="file-upload form-control" [ngClass]="{'disabled': Disabled }" [ngClass]="{
+        'disabled': Disabled, 
+        'valid': isFormElementValid(), 
+        'invalid': isFormElementInvalid(),
+        'required': isFormElementRequired()
+      }">
 
         <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none;"
           [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
         <div>
-          <p>{{ Model ? (fileName || "No file uploaded yet.") : "No file uploaded yet."}}</p>
+          <p>{{ Model ? (fileName || "No file uploaded.") : "No file uploaded."}}</p>
         </div>
         <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()" [Disabled]="Disabled"></app-button>
       </div>

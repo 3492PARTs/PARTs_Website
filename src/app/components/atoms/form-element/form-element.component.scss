@@ -198,6 +198,10 @@ textarea.form-control {
     right: 0;
   }
 
+  &.file {
+    right: 1rem;
+  }
+
   .icon {
     font-size: 24px;
   }
