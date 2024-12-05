@@ -125,6 +125,10 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
+  async previewImage(): Promise<void> {
+    this.activeQuestion.img_url = await this.gs.imageToURL(this.activeQuestion.img);
+  }
+
 }
 
 class Init {
