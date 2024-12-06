@@ -706,6 +706,43 @@ export class GeneralService {
       };
     });
   }
+
+  objectToFormData(obj: any, form?: FormData, namespace?: string) {
+
+    var fd = form || new FormData();
+    var formKey;
+
+    for (var property in obj) {
+      if (obj.hasOwnProperty(property)) {
+
+        if (namespace) {
+          formKey = `${namespace}[${property}]`;
+        } else {
+          formKey = property;
+        }
+
+        // if the property is an object, but not a File,
+        // use recursivity.
+        if (this.isObject(obj[property]) && !(obj[property] instanceof File)) {
+
+          this.objectToFormData(obj[property], fd, property);
+
+        } else {
+
+          // if it's a string or a File object
+          fd.append(formKey, obj[property]);
+        }
+
+      }
+    }
+
+    return fd;
+
+  }
+
+  isObject(o: any) {
+    return o && typeof o === 'object' && o.constructor === Object;
+  }
 }
 
 export class RetMessage {

@@ -55,22 +55,22 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   saveItem(): void {
-    /*
+
     let formData = new FormData();
     //formData.append('file', this.form.get('profile').value);
     for (const [k, v] of Object.entries(this.activeItem)) {
-      if (moment.isMoment(v)) {
+      /*if (moment.isMoment(v)) {
         formData.append(k, v.format('YYYY-MM-DD'));
       }
-      else
-        formData.append(k, v);
+      else*/
+      formData.append(k, v);
     }
     this.api.post(true, 'sponsoring/save-item/', formData, (result: any) => {
       this.activeItem = new Item();
       this.itemModalVisible = false;
       this.getItems();
     });
-    */
+
   }
 
   previewImage(link: string, id: string): void {

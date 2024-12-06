@@ -50,7 +50,8 @@
     <app-form-element *ngIf="activeQuestion?.question_typ?.requires_img === 'y'" [Type]="'file'" [LabelText]="'Image'"
       [(Model)]="activeQuestion.img" [Required]="!activeQuestion.img_url" (change)="previewImage()"></app-form-element>
 
-    <img *ngIf="activeQuestion.img_url" [src]="activeQuestion.img_url" height="300" />
+    <img *ngIf="imagePreviewUrl || activeQuestion.img_url" [src]="imagePreviewUrl || activeQuestion.img_url"
+      height="300" />
 
     <div *ngIf="activeQuestion.question_typ && activeQuestion.question_typ.is_list === 'y'">
       <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="activeQuestion.questionoption_set"

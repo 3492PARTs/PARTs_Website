@@ -47,6 +47,8 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
+  imagePreviewUrl = '';
+
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit() {
@@ -92,9 +94,9 @@ export class QuestionAdminFormComponent implements OnInit {
   saveQuestion(): void {
     this.activeQuestion.form_typ.form_typ = this.formType;
 
-    let save = this.activeQuestion;
+    let formData = this.gs.objectToFormData(this.activeQuestion);
 
-    this.api.post(true, 'form/question/', save, (result: any) => {
+    this.api.post(true, 'form/question/', formData, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.activeQuestion = new QuestionWithConditions();
       this.questionModalVisible = false;
@@ -126,7 +128,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   async previewImage(): Promise<void> {
-    this.activeQuestion.img_url = await this.gs.imageToURL(this.activeQuestion.img);
+    this.imagePreviewUrl = await this.gs.imageToURL(this.activeQuestion.img);
   }
 
 }
