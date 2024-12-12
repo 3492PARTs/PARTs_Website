@@ -707,37 +707,17 @@ export class GeneralService {
     });
   }
 
-  objectToFormData(obj: any, form?: FormData, namespace?: string) {
+  objectToFormData(o: any): FormData {
+    const formData = new FormData()
 
-    var fd = form || new FormData();
-    var formKey;
-
-    for (var property in obj) {
-      if (obj.hasOwnProperty(property)) {
-
-        if (namespace) {
-          formKey = `${namespace}[${property}]`;
-        } else {
-          formKey = property;
-        }
-
-        // if the property is an object, but not a File,
-        // use recursivity.
-        if (this.isObject(obj[property]) && !(obj[property] instanceof File)) {
-
-          this.objectToFormData(obj[property], fd, property);
-
-        } else {
-
-          // if it's a string or a File object
-          fd.append(formKey, obj[property]);
-        }
-
+    for (const [k, v] of Object.entries(o)) {
+      /*if (moment.isMoment(v)) {
+        formData.append(k, v.format('YYYY-MM-DD'));
       }
+      else*/
+      formData.append(k, v as string | Blob);
     }
-
-    return fd;
-
+    return formData;
   }
 
   isObject(o: any) {

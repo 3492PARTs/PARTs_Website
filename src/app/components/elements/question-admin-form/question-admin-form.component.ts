@@ -94,9 +94,7 @@ export class QuestionAdminFormComponent implements OnInit {
   saveQuestion(): void {
     this.activeQuestion.form_typ.form_typ = this.formType;
 
-    let formData = this.gs.objectToFormData(this.activeQuestion);
-
-    this.api.post(true, 'form/question/', formData, (result: any) => {
+    this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.activeQuestion = new QuestionWithConditions();
       this.questionModalVisible = false;
