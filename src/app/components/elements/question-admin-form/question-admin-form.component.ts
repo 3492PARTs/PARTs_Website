@@ -115,6 +115,8 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   saveQuestionFlow(): void {
+    this.newQuestionFlow.form_typ.form_typ = this.formType;
+    this.newQuestionFlow.form_sub_typ = this.activeQuestion.form_sub_typ;
     this.api.post(true, 'form/question-flow/', this.newQuestionFlow, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.newQuestionFlow = new QuestionFlow();

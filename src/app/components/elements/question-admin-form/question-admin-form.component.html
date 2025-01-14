@@ -33,16 +33,6 @@
       </app-form-element>
 
       <app-button [ButtonType]="'add'" (FunctionCallBack)="showQuestionFlowModal()"></app-button>
-
-      <app-modal [(visible)]="questionFlowModalVisible" [Title]="'Question Flow Definition'">
-        <app-form (SubmitFunction)="saveQuestionFlow()">
-          <app-form-element [Type]="'text'" [(Model)]="newQuestionFlow.name" [Required]="true"></app-form-element>
-
-          <app-button-ribbon>
-            <app-button [Type]="'submit'">Save</app-button>
-          </app-button-ribbon>
-        </app-form>
-      </app-modal>
     </div>
 
 
@@ -73,6 +63,16 @@
 
     <app-button-ribbon>
       <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
+    </app-button-ribbon>
+  </app-form>
+</app-modal>
+
+<app-modal [(visible)]="questionFlowModalVisible" [Title]="'Question Flow Definition'">
+  <app-form (SubmitFunction)="saveQuestionFlow()">
+    <app-form-element [Type]="'text'" [(Model)]="newQuestionFlow.name" [Required]="true"></app-form-element>
+
+    <app-button-ribbon>
+      <app-button [Type]="'submit'">Save</app-button>
     </app-button-ribbon>
   </app-form>
 </app-modal>
