@@ -43,6 +43,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     if (this.fieldForm.img) {
       const formData = new FormData();
       formData.append('img', this.fieldForm.img);
+      formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
         this.gs.successfulResponseBanner(result);
