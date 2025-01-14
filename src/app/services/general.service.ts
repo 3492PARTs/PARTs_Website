@@ -693,24 +693,6 @@ export class GeneralService {
     return this.booleanDecode(s === 'y', { true: 'Yes', false: 'No' });
   }
 
-  imageToURL(file: File): Promise<string> {
-    return new Promise<string>(resolve => {
-      this.incrementOutstandingCalls();
-      // Show preview
-      const mimeType = file.type;
-      if (mimeType.match(/image\/*/) == null) {
-        resolve('');
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (_event) => {
-        this.decrementOutstandingCalls();
-        resolve(reader.result?.toString() || '')
-      };
-    });
-  }
-
   objectToFormData(o: any): FormData {
     const formData = new FormData()
 

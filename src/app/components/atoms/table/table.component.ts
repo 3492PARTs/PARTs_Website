@@ -156,7 +156,6 @@ export class TableComponent implements OnInit, OnChanges {
         switch (propName) {
           case 'TableData':
           case 'TableCols':
-          case 'TableDataButtons':
             this.generateTableDisplayValues();
             break;
           case 'ShowAddButton':
@@ -164,7 +163,10 @@ export class TableComponent implements OnInit, OnChanges {
           case 'ShowRemoveButton':
           case 'ShowViewButton':
           case 'ShowArchiveButton':
+            this.ShowButtonColumn();
+            break;
           case 'TableDataButtons':
+            this.generateTableDisplayValues();
             this.ShowButtonColumn();
             break;
           case 'TriggerUpdate':

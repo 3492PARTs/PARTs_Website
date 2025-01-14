@@ -6,8 +6,6 @@ export interface IQuestionWithConditions {
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
     question: string;
-    img: File;
-    img_url: string;
     table_col_width: string;
     order: number;
     required: string;
@@ -30,8 +28,6 @@ export interface IQuestion {
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
     question: string;
-    img: File;
-    img_url: string;
     table_col_width: string;
     order: number;
     required: string;
@@ -53,8 +49,6 @@ export class QuestionWithConditions implements IQuestionWithConditions {
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
     question = '';
-    img!: File;
-    img_url!: string;
     table_col_width = '100px';
     order = NaN;
     required = 'n';
@@ -78,8 +72,6 @@ export class Question implements IQuestion {
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
     question!: string;
-    img!: File;
-    img_url!: string;
     table_col_width = '100px'
     order!: number;
     required = 'n';
@@ -121,7 +113,6 @@ export interface IQuestionType {
     question_typ: string;
     question_typ_nm: string;
     is_list: string;
-    requires_img: string;
     scout_question_type: ScoutQuestionType;
     void_ind: string;
 }
@@ -130,7 +121,6 @@ export class QuestionType implements IQuestionType {
     question_typ!: string;
     question_typ_nm!: string;
     is_list = 'n';
-    requires_img = 'n';
     scout_question_type!: ScoutQuestionType;
     void_ind = 'n';
 }

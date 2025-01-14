@@ -118,11 +118,6 @@ export class QuestionAdminFormComponent implements OnInit {
   ynToYesNo(s: string): string {
     return s === 'y' ? 'Yes' : 'No';
   }
-
-  async previewImage(): Promise<void> {
-    this.imagePreviewUrl = await this.gs.imageToURL(this.activeQuestion.img);
-  }
-
 }
 
 class Init {
