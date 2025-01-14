@@ -244,19 +244,9 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   preview() {
-    this.gs.incrementOutstandingCalls();
-    // Show preview
-    const mimeType = this.robotPic.type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(this.robotPic);
-    reader.onload = (_event) => {
-      this.previewUrl = reader.result;
-      this.gs.decrementOutstandingCalls();
-    };
+    this.gs.previewImageFile(this.robotPic, (ev: ProgressEvent<FileReader>) => {
+      this.previewUrl = ev.target?.result as string;
+    });
   }
 
   loadTeam(): void {

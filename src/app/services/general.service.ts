@@ -313,7 +313,8 @@ export class GeneralService {
     );
   }
 
-  previewImageFile(image: File, onLoad: any) {
+  previewImageFile(image: File, onLoad: (ev: ProgressEvent<FileReader>) => any) {
+    this.incrementOutstandingCalls();
     // Show preview
     const mimeType = image.type;
     if (mimeType.match(/image\/*/) == null) {
@@ -322,7 +323,10 @@ export class GeneralService {
 
     const reader = new FileReader();
     reader.readAsDataURL(image);
-    reader.onload = onLoad;
+    reader.onload = (ev: ProgressEvent<FileReader>) => {
+      onLoad(ev);
+      this.decrementOutstandingCalls();
+    };
   }
 
   devConsoleLog(location: string, x?: any): void {
