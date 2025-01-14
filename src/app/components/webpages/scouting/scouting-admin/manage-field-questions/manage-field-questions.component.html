@@ -3,7 +3,7 @@
 
         <app-form-element [Type]="'file'" [(Model)]="fieldImage" (FunctionCallBack)="previewImage()"></app-form-element>
 
-        <img *ngIf="fieldImageURL" [src]="fieldImageURL">
+        <img *ngIf="fieldImageURL" [src]="fieldImageURL" class="full-width">
     </app-form-element-group>
 
     <app-question-admin-form [formType]="'field'" [runInit]="manageScoutFieldQuestions">
