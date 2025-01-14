@@ -107,7 +107,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
         if (q.question_id === aq.question_id) match = true;
       });
 
-      if (!match && q.scout_question.scorable) this.fieldQuestionAggQuestionList.push(q);
+      if (!match) this.fieldQuestionAggQuestionList.push(q);
     });
   }
 

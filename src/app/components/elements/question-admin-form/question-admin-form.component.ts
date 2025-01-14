@@ -119,12 +119,6 @@ export class QuestionAdminFormComponent implements OnInit {
     return s === 'y' ? 'Yes' : 'No';
   }
 
-  changeQuestionType(): void {
-    if (this.activeQuestion.question_typ?.scout_question_type?.scorable !== 'y') {
-      this.activeQuestion.scout_question.scorable = false;
-    }
-  }
-
   async previewImage(): Promise<void> {
     this.imagePreviewUrl = await this.gs.imageToURL(this.activeQuestion.img);
   }

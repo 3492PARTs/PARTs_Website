@@ -16,7 +16,7 @@
     <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
       [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
       [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
-      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true" (FunctionCallBack)="changeQuestionType()">
+      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true">
     </app-form-element>
 
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
@@ -37,9 +37,6 @@
       [(Model)]="activeQuestion.active" [FormGroup]="true" [FormGroupInline]="true" [Width]="'73px'"></app-form-element>
 
     <div *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'">
-      <app-form-element [Type]="'checkbox'" [LabelText]="'Scorable'" [(Model)]="activeQuestion.scout_question.scorable"
-        [FormGroup]="true" [FormGroupInline]="true" [Width]="'88px'">
-      </app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Value Multiplier'"
         [(Model)]="activeQuestion.scout_question.value_multiplier" [Width]="'8em'" [FormGroup]="true"
