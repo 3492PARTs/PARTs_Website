@@ -2,6 +2,7 @@ import { IScoutQuestion, ScoutQuestion, ScoutQuestionType } from "./scouting.mod
 
 export interface IQuestionWithConditions {
     question_id: number;
+    question_flow_id: number;
     form_typ: IFormType;
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
@@ -24,6 +25,7 @@ export interface IQuestionWithConditions {
 
 export interface IQuestion {
     question_id: number;
+    question_flow_id: number;
     form_typ: IFormType;
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
@@ -45,6 +47,7 @@ export interface IQuestion {
 
 export class QuestionWithConditions implements IQuestionWithConditions {
     question_id = NaN;
+    question_flow_id = NaN;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
@@ -68,6 +71,7 @@ export class QuestionWithConditions implements IQuestionWithConditions {
 
 export class Question implements IQuestion {
     question_id = NaN;
+    question_flow_id = NaN;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
@@ -184,4 +188,10 @@ export class Response {
     time = new Date();
     archive_ind = "n";
     questionanswer_set: QuestionWithConditions[] = [];
+}
+
+export class QuestionFlow {
+    id = NaN;
+    name = "";
+    questions: Question[] = [];
 }

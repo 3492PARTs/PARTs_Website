@@ -25,6 +25,27 @@
       [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
+    <div>
+      <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
+        [MinWidth]="'200px'" [DisplayProperty]="'name'" [BindingProperty]="'id'"
+        [(Model)]="activeQuestion.question_flow_id" [DisplayEmptyOption]="true" [FormGroup]="true"
+        [FormGroupInline]="true">
+      </app-form-element>
+
+      <app-button [ButtonType]="'add'" (FunctionCallBack)="showQuestionFlowModal()"></app-button>
+
+      <app-modal [(visible)]="questionFlowModalVisible" [Title]="'Question Flow Definition'">
+        <app-form (SubmitFunction)="saveQuestionFlow()">
+          <app-form-element [Type]="'text'" [(Model)]="newQuestionFlow.name" [Required]="true"></app-form-element>
+
+          <app-button-ribbon>
+            <app-button [Type]="'submit'">Save</app-button>
+          </app-button-ribbon>
+        </app-form>
+      </app-modal>
+    </div>
+
+
     <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
       [Required]="true" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>

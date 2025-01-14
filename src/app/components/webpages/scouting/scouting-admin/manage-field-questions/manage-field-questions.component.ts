@@ -60,5 +60,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+
   }
+
+
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType } from '../../../models/form.models';
+import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType, QuestionFlow } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { AppSize, GeneralService } from '../../../services/general.service';
@@ -10,6 +10,7 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
+import { resolve } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -32,7 +33,7 @@ export class QuestionAdminFormComponent implements OnInit {
   init: Init = new Init();
   questionModalVisible = false
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
-  //editQuestion: Question = new Question();
+  availableQuestionFlows: QuestionFlow[] = [];
 
   questionTableCols: TableColType[] = [];
   private _questionTableCols: TableColType[] = [
@@ -47,7 +48,8 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
-  imagePreviewUrl = '';
+  questionFlowModalVisible = false;
+  newQuestionFlow = new QuestionFlow();
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
@@ -88,7 +90,39 @@ export class QuestionAdminFormComponent implements OnInit {
 
   showQuestionModal(q?: QuestionWithConditions): void {
     this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
-    this.questionModalVisible = true;
+
+    this.getQuestionFlows(this.activeQuestion.form_sub_typ.form_sub_typ).then(() => {
+      this.questionModalVisible = true;
+    });
+
+  }
+
+  showQuestionFlowModal(): void {
+    this.questionFlowModalVisible = true;
+  }
+
+  getQuestionFlows(form_sub_typ: string): Promise<null> {
+    return new Promise<null>(resolve => {
+      this.api.get(true, 'form/question-flow/', { form_typ: this.formType, form_sub_typ: form_sub_typ }, (result: QuestionFlow[]) => {
+        console.log(result);
+        this.availableQuestionFlows = result;
+        resolve(null);
+      }, (err: any) => {
+        this.gs.triggerError(err);
+        resolve(null);
+      });
+    });
+  }
+
+  saveQuestionFlow(): void {
+    this.api.post(true, 'form/question-flow/', this.newQuestionFlow, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.newQuestionFlow = new QuestionFlow();
+      this.questionFlowModalVisible = false;
+      this.getQuestionFlows(this.activeQuestion.form_sub_typ.form_sub_typ);
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   saveQuestion(): void {
