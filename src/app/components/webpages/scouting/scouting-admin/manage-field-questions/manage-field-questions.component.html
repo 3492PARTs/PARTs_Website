@@ -1,9 +1,12 @@
 <app-box [Title]="'Manage Field Questions'">
     <app-form-element-group [LabelText]="'Field Image'">
 
-        <app-form-element [Type]="'file'" [(Model)]="fieldImage" (FunctionCallBack)="previewImage()"></app-form-element>
+        <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
+            (FunctionCallBack)="previewImage()"></app-form-element>
 
-        <img *ngIf="fieldImageURL" [src]="fieldImageURL" class="full-width">
+        <img *ngIf="fieldForm.img_url" [src]="fieldForm.img_url" class="full-width">
+
+        <app-button *ngIf="fieldForm.img" (FunctionCallBack)="saveFieldImage()">Save</app-button>
     </app-form-element-group>
 
     <app-question-admin-form [formType]="'field'" [runInit]="manageScoutFieldQuestions">

@@ -459,3 +459,12 @@ export class UserInfo {
     user = new User();
     user_info = new ScoutingUserInfo();
 }
+
+export class FieldForm {
+    id!: number;
+    season_id!: number;
+    img!: File;
+    img_url = '';
+    inv_img!: File;
+    inv_img_url = '';
+}

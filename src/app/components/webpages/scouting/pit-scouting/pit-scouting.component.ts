@@ -55,7 +55,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.populateOutstandingResponses();
     });
 
-    this.api.apiStatus.subscribe(s => this.apiStatus = s)
+    this.api.apiStatus.subscribe(s => this.apiStatus = s);
   }
 
   ngOnInit() {
