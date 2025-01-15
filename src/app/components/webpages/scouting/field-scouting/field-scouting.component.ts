@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { QuestionWithConditions } from '../../../../models/form.models';
-import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel } from '../../../../models/scouting.models';
+import { QuestionFlow, QuestionWithConditions } from '../../../../models/form.models';
+import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
@@ -16,23 +16,28 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { HeaderComponent } from "../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-field-scouting',
   standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })
 export class FieldScoutingComponent implements OnInit, OnDestroy {
+  fieldForm = new FieldForm();
+  activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
+
   scoutFieldResponse = new ScoutFieldFormResponse();
+  @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
+
   teams: Team[] = [];
   matches: Match[] = [];
   noMatch = false;
+
   scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
-  scoutAutoQuestions: QuestionWithConditions[] = [];
-  scoutTeleopQuestions: QuestionWithConditions[] = [];
-  scoutOtherQuestions: QuestionWithConditions[] = [];
+
   private checkScoutTimeout: number | undefined;
   user!: User;
 
@@ -45,7 +50,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
@@ -92,8 +97,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.gs.incrementOutstandingCalls();
     this.ss.loadFieldScoutingForm().then(result => {
       if (result) {
-        //TODO this.scoutFieldResponse.question_answers = result;
-        this.sortQuestions();
+        this.fieldForm = result.field_form;
+        this.scoutFieldResponse.form_sub_types = result.form_sub_types;
+
+        this.activeFormSubTypeForm = this.scoutFieldResponse.form_sub_types.find(fst => fst.form_sub_typ.form_sub_typ === 'teleop');
+        this.gs.triggerChange(() => {
+          this.activeFormSubTypeForm?.question_flows.forEach(qf => {
+            const stage = qf.questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2);
+            this.displayFlowStage(qf, stage);
+          });
+        });
       }
       this.gs.decrementOutstandingCalls();
     });
@@ -130,8 +143,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
         this.buildTeamList(sfr?.team || NaN);
 
-        this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
-        this.sortQuestions();
+        //TODO this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
       }
     });
   }
@@ -178,24 +190,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.gs.addBanner(new Banner(0, 'Multiple active field schedules active.', 5000));
 
       if (sfss.length > 0) this.scoutFieldSchedule = sfss[0];
-    });
-  }
-
-  sortQuestions(): void {
-    this.scoutAutoQuestions = [];
-    this.scoutTeleopQuestions = [];
-    this.scoutOtherQuestions = [];
-    this.scoutFieldResponse.question_answers.forEach(sq => {
-      let sqCopy = JSON.parse(JSON.stringify(sq)) as QuestionWithConditions;
-      if (sqCopy.form_sub_typ?.form_sub_typ === 'auto') {
-        this.scoutAutoQuestions.push(sqCopy);
-      }
-      else if (sqCopy.form_sub_typ?.form_sub_typ === 'teleop') {
-        this.scoutTeleopQuestions.push(sqCopy);
-      }
-      else {
-        this.scoutOtherQuestions.push(sqCopy);
-      }
     });
   }
 
@@ -331,17 +325,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       let response: QuestionWithConditions[] = [];
-      this.scoutAutoQuestions.forEach(sq => {
-        response.push(this.gs.cloneObject(sq));
-      });
-      this.scoutTeleopQuestions.forEach(sq => {
-        response.push(this.gs.cloneObject(sq));
-      });
-      this.scoutOtherQuestions.forEach(sq => {
-        response.push(this.gs.cloneObject(sq));
-      });
 
-      sfr = new ScoutFieldFormResponse(response, this.scoutFieldResponse.team, this.scoutFieldResponse.match);
+
+      //TODO fix []
+      sfr = new ScoutFieldFormResponse([], this.scoutFieldResponse.team, this.scoutFieldResponse.match);
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {
@@ -354,6 +341,40 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.ss.uploadOutstandingResponses();
   }
 
+  displayFlowStage(flow: QuestionFlow, stage: number): void {
+    const questions = flow.questions.filter(q => q.order === stage);
+    questions.forEach(q => {
+      this.boxes.forEach(b => {
+        if (b.nativeElement.id == q.question_id) {
+          this.showBox(b.nativeElement, q.scout_question);
+        }
+      });
+    });
+  }
+
+
+  hideBox(box: HTMLElement): void {
+    this.renderer.setStyle(box, 'display', "none");
+  }
+
+  showBox(box: HTMLElement, scout_question: ScoutQuestion): void {
+    if (!this.gs.strNoE(scout_question.x) &&
+      !this.gs.strNoE(scout_question.y) &&
+      !this.gs.strNoE(scout_question.width) &&
+      !this.gs.strNoE(scout_question.height) &&
+      box) {
+      this.renderer.setStyle(box, 'display', "block");
+      this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
+      this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
+
+      this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
+      this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+    }
+
+  }
+  /////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////
   setAutoFormElements(fes: QueryList<FormElementComponent>): void {
     this.autoFormElements = fes;
     this.setFormElements();

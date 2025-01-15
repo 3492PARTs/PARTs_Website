@@ -234,7 +234,7 @@ export class ScoutQuestion implements IScoutQuestion {
 
 export interface IScoutFieldFormResponse {
     id: number;
-    question_answers: IQuestionWithConditions[];
+    form_sub_types: FormSubTypeForm[];
     team: number;
     match: IMatch | null;
     form_typ: string;
@@ -242,13 +242,13 @@ export interface IScoutFieldFormResponse {
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     id!: number;
-    question_answers: QuestionWithConditions[] = [];
+    form_sub_types: FormSubTypeForm[] = [];
     team!: number;
     match!: Match | null;
     form_typ = 'field';
 
-    constructor(question_answers?: QuestionWithConditions[], team?: number, match?: Match | null) {
-        this.question_answers = question_answers || [];
+    constructor(question_answers?: FormSubTypeForm[], team?: number, match?: Match | null) {
+        this.form_sub_types = question_answers || [];
         this.team = team || NaN;
         this.match = match || null;
     }
@@ -469,7 +469,7 @@ export class FieldForm {
     inv_img_url = '';
 }
 
-export class FormSubTypesForm {
+export class FormSubTypeForm {
     form_sub_typ = new FormSubType()
     questions: QuestionWithConditions[] = [];
     question_flows: QuestionFlow[] = [];
@@ -477,5 +477,5 @@ export class FormSubTypesForm {
 
 export class FormFieldForm {
     field_form = new FieldForm();
-    form_sub_types: FormSubTypesForm[] = [];
+    form_sub_types: FormSubTypeForm[] = [];
 }

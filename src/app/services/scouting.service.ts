@@ -20,7 +20,7 @@ export class ScoutingService {
   private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
   private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
   private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<FormFieldForm[] | null> | null = null;
+  private outstandingInitFieldScoutingPromise: Promise<FormFieldForm | null> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
@@ -508,13 +508,13 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FormFieldForm[] | null> {
+  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FormFieldForm | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<FormFieldForm[] | null>(resolve => {
+      this.outstandingInitFieldScoutingPromise = new Promise<FormFieldForm | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/field/form/', {
           form_typ: 'field',
           active: 'y'
-        }, async (result: FormFieldForm[]) => {
+        }, async (result: FormFieldForm) => {
           /** 
            * On success load results and store in db 
            **/
@@ -557,6 +557,9 @@ export class ScoutingService {
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
+      //TODO
+      resolve(false);
+      /*
       let response = this.gs.cloneObject(sfr.question_answers) as QuestionWithConditions[];
 
       response.forEach(r => {
@@ -592,6 +595,7 @@ export class ScoutingService {
           resolve(false);
         }
       });
+      */
     });
 
   }
