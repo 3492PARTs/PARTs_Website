@@ -7,7 +7,10 @@
         <div>
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
-                <div #box id="box"></div>
+                <div #box id="box">
+                    <span *ngIf="activeQuestion.scout_question.icon"
+                        class="mdi icon mdi-{{activeQuestion.scout_question.icon}}"></span>
+                </div>
             </div>
 
             <app-form (SubmitFunction)="saveQuestionFlow()">

@@ -52,7 +52,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     { PropertyName: 'scout_question.y', ColLabel: 'Y' },
     { PropertyName: 'scout_question.width', ColLabel: 'Width' },
     { PropertyName: 'scout_question.height', ColLabel: 'Height' },
-    { PropertyName: 'scout_question.icon', ColLabel: 'Icon' },
+    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text" },
   ];
   questionFlowTableTriggerUpdate = false;
 
@@ -202,7 +202,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   editQuestion(q: Question): void {
     this.hideBox();
 
-    this.activeQuestion = this.gs.cloneObject(q);
+    this.activeQuestion = q;
 
     if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
       !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
