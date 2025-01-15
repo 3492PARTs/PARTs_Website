@@ -557,22 +557,8 @@ export class ScoutingService {
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      //TODO
-      resolve(false);
-      /*
-      let response = this.gs.cloneObject(sfr.question_answers) as QuestionWithConditions[];
 
-      response.forEach(r => {
-        r.answer = this.gs.formatQuestionAnswer(r.answer);
-
-        r.conditions.forEach((c: QuestionCondition) => {
-          if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
-        });
-      });
-
-      sfr.question_answers = response;
-
-      this.api.post(loadingScreen, 'form/save-answers/', { question_answers: sfr.question_answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
+      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
@@ -595,7 +581,6 @@ export class ScoutingService {
           resolve(false);
         }
       });
-      */
     });
 
   }

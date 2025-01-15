@@ -110,12 +110,15 @@ export class QuestionFlowAnswer {
     //question_answer = new QuestionAnswer();
     question: Question | undefined = undefined;
     answer = '';
-    answer_time = Date.now();
+    answer_time = "";
     void_ind = 'n'
 
     constructor(question: Question, answer: string) {
         this.question = question;
         this.answer = answer;
+        const pieces = new Date(Date.now()).toTimeString().split(' ')[0];
+        this.answer_time = pieces;
+        //hh:mm[:ss[.uuuuuu]]
     }
 }
 
