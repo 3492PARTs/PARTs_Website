@@ -5,8 +5,7 @@
             (FunctionCallBack)="previewImage()"></app-form-element>
 
         <div>
-            <div #imageContainer id="image-container" (mousedown)="mouseDown($event)" (mousedown)="mouseDown($event)"
-                (mousemove)="mouseMove($event)">
+            <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
                 <div #box id="box"></div>
             </div>
