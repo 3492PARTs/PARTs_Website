@@ -119,8 +119,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   mouseClick(e: MouseEvent): void {
     this.isDrawing = !e.shiftKey;
+
     if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
-      console.log(e);
       this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
       this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
 
