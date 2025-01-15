@@ -99,11 +99,6 @@ export class ManageFieldQuestionsComponent implements OnInit {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.formMetadata = result;
-
-      if (!this.gs.strNoE(this.activeQuestionFlow.id)) {
-        this.activeQuestionFlow = this.gs.cloneObject(this.formMetadata.question_flows[this.gs.arrayObjectIndexOf(this.formMetadata.question_flows, 'id', this.activeQuestionFlow.id)]);
-      }
-
       this.buildQuestionFlowOptions();
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -119,7 +114,16 @@ export class ManageFieldQuestionsComponent implements OnInit {
     this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.hideBox();
-      this.formInit();
+      this.getQuestionFlow();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  getQuestionFlow(): void {
+    this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
+      this.activeQuestionFlow = result
+      this.hideBox();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -215,5 +219,13 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   hideBox(): void {
     this.renderer.setStyle(this.box.nativeElement, 'display', "none");
+  }
+
+  subTypeComparatorFunction(o1: FormSubType, o2: FormSubType): boolean {
+    return o1 && o2 && o1.form_sub_typ === o2.form_sub_typ;
+  }
+
+  questionFlowComparatorFunction(o1: QuestionFlow, o2: QuestionFlow): boolean {
+    return o1 && o2 && o1.id === o2.id;
   }
 }

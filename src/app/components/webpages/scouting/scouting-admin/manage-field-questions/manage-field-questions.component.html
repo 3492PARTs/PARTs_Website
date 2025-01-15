@@ -15,16 +15,19 @@
                     [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
                     [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
                     [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                    (FunctionCallBack)="buildQuestionFlowOptions()">
+                    (FunctionCallBack)="buildQuestionFlowOptions()"
+                    [SelectComparatorFunction]="subTypeComparatorFunction">
                 </app-form-element>
 
                 <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
                     [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
-                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
+                    [SelectComparatorFunction]="questionFlowComparatorFunction">
                 </app-form-element>
 
                 <app-button [Type]="'submit'">Save</app-button>
             </app-form>
+
             <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
                 [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
                 [TriggerUpdate]="questionFlowTableTriggerUpdate" [Width]="'100%'" [Scrollable]="true"
