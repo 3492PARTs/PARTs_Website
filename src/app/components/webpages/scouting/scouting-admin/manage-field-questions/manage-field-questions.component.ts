@@ -201,6 +201,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   setQuestionBoxes(): void {
+    this.boxes.forEach(b => this.hideBox(b.nativeElement));
+
     this.gs.triggerChange(() => {
       for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
         if (this.boxes.get(i)) {
@@ -211,12 +213,19 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   setBoxLocation(box: HTMLElement, scout_question: ScoutQuestion): void {
-    this.renderer.setStyle(box, 'display', "block");
-    this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
-    this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
+    if (!this.gs.strNoE(scout_question.x) &&
+      !this.gs.strNoE(scout_question.y) &&
+      !this.gs.strNoE(scout_question.width) &&
+      !this.gs.strNoE(scout_question.height) &&
+      box) {
+      this.renderer.setStyle(box, 'display', "block");
+      this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
+      this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
 
-    this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
-    this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+      this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
+      this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+    }
+
   }
 
   editQuestion(q: Question): void {
@@ -238,11 +247,11 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);
     }
   }
-  /*
-  hideBox(): void {
-    this.renderer.setStyle(this.box.nativeElement, 'display', "none");
+
+  hideBox(box: HTMLElement): void {
+    this.renderer.setStyle(box, 'display', "none");
   }
-  */
+
   subTypeComparatorFunction(o1: FormSubType, o2: FormSubType): boolean {
     return o1 && o2 && o1.form_sub_typ === o2.form_sub_typ;
   }

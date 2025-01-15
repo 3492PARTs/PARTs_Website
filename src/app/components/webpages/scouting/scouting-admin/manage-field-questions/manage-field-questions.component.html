@@ -8,7 +8,10 @@
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
                 <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
-                    <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
+                    <div class="label">
+                        <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
+                        <p>{{q.question}}</p>
+                    </div>
                 </div>
             </div>
 
