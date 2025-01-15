@@ -173,6 +173,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   editQuestion(q: Question): void {
+    this.renderer.setStyle(this.box.nativeElement, 'display', "none");
+
     this.activeQuestion = this.gs.cloneObject(q);
 
     if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
