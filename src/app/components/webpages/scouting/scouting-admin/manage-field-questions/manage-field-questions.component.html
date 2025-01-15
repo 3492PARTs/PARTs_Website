@@ -5,8 +5,11 @@
             (FunctionCallBack)="previewImage()"></app-form-element>
 
         <div>
-            <img *ngIf="fieldForm.img_url" [src]="fieldForm.img_url" class="full-width">
-
+            <div #imageContainer id="image-container" (mousedown)="mouseDown($event)" (mousedown)="mouseDown($event)"
+                (mousemove)="mouseMove($event)">
+                <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
+                <div #box id="box"></div>
+            </div>
             <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
                 [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
                 [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="selectedFormSubType"

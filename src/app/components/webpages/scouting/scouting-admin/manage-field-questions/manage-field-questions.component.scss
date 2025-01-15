@@ -1,0 +1,14 @@
+#image-container {
+  position: relative;
+}
+
+#image {
+  width: 100%;
+  height: auto;
+}
+
+#box {
+  position: absolute;
+  border: 2px solid red;
+  pointer-events: none; /* Allow clicks to pass through */
+}

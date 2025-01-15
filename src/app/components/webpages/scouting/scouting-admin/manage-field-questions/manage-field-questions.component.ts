@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { QuestionAdminFormComponent } from '../../../../elements/question-admin-form/question-admin-form.component';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
@@ -26,7 +26,13 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   manageScoutFieldQuestions = false;
 
+  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef = new ElementRef(null);
+  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
+  @ViewChild('box', { read: ElementRef, static: false }) box: ElementRef = new ElementRef(null);
   fieldForm = new FieldForm();
+  isDrawing = false;
+  startX = NaN;
+  startY = NaN;
 
   availableQuestionFlows: QuestionFlow[] = [];
 
@@ -46,7 +52,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     { PropertyName: 'scout_question.icon', ColLabel: 'Icon' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
@@ -106,5 +112,55 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   log() {
     console.log(this.selectedQuestionFlow);
+  }
+
+  mouseDown(e: MouseEvent): void {
+    this.isDrawing = !e.shiftKey;
+    if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
+      this.startX = e.clientX - this.imageContainer.nativeElement.offsetLeft;
+      this.startY = e.clientY - this.imageContainer.nativeElement.offsetTop;
+
+      this.renderer.setStyle(this.box.nativeElement, 'display', "block");
+      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.startX}px`);
+      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.startY}px`);
+      this.renderer.setStyle(this.box.nativeElement, 'width', "0");
+      this.renderer.setStyle(this.box.nativeElement, 'height', "0");
+    }
+
+    if (!this.isDrawing) {
+      const boxCoords = {
+        x: parseInt(this.box.nativeElement.style.left),
+        y: parseInt(this.box.nativeElement.style.top),
+        width: parseInt(this.box.nativeElement.style.width),
+        height: parseInt(this.box.nativeElement.style.height)
+      };
+      this.startX = NaN;
+      this.startY = NaN;
+      console.log(boxCoords);
+    }
+
+  }
+
+  mouseMove(e: MouseEvent): void {
+    if (!this.isDrawing) return;
+
+    const endX = e.clientX - this.imageContainer.nativeElement.offsetLeft;
+    const endY = e.clientY - this.imageContainer.nativeElement.offsetTop;
+    const width = endX - this.startX;
+    const height = endY - this.startY;
+
+    this.renderer.setStyle(this.box.nativeElement, 'width', `${width}px`);
+    this.renderer.setStyle(this.box.nativeElement, 'height', `${height}px`);
+
+    if (endX < this.startX) {
+      this.renderer.setStyle(this.box.nativeElement, 'left', `${endX}px`);
+    }
+    if (endY < this.startY) {
+      this.renderer.setStyle(this.box.nativeElement, 'top', `${endY}px`);
+    }
+  }
+
+  mouseUp(e: MouseEvent): void {
+
   }
 }
