@@ -38,7 +38,8 @@
             <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
                 [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
                 [TriggerUpdate]="questionFlowTableTriggerUpdate" [Width]="'100%'" [Scrollable]="true"
-                [ScrollHeight]="'40vh'" [ShowEditButton]="true" (EditRecordCallBack)="editQuestion($event)">
+                [ScrollHeight]="'40vh'" [ShowEditButton]="true" (EditRecordCallBack)="editQuestion($event)"
+                [SetActiveRec]="activeQuestion" [AllowActiveRecord]="true">
             </app-table>
         </div>
     </app-form-element-group>

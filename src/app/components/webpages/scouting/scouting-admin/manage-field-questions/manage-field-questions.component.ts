@@ -45,14 +45,14 @@ export class ManageFieldQuestionsComponent implements OnInit {
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   questionFlowTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question' },
-    { PropertyName: 'order', ColLabel: 'Order' },
+    { PropertyName: 'question', ColLabel: 'Question', Type: "text" },
+    { PropertyName: 'order', ColLabel: 'Order', Type: "number" },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this) },
-    { PropertyName: 'scout_question.x', ColLabel: 'X' },
-    { PropertyName: 'scout_question.y', ColLabel: 'Y' },
-    { PropertyName: 'scout_question.width', ColLabel: 'Width' },
-    { PropertyName: 'scout_question.height', ColLabel: 'Height' },
+    { PropertyName: 'scout_question.x', ColLabel: 'X', Type: "number" },
+    { PropertyName: 'scout_question.y', ColLabel: 'Y', Type: "number" },
+    { PropertyName: 'scout_question.width', ColLabel: 'Width', Type: "number" },
+    { PropertyName: 'scout_question.height', ColLabel: 'Height', Type: "number" },
     { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text" },
   ];
   questionFlowTableTriggerUpdate = false;
@@ -150,6 +150,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.startY}px`);
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', "0");
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', "0");
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
       }
 
       if (!this.isDrawing) {
@@ -169,6 +170,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
         this.startX = NaN;
         this.startY = NaN;
         //console.log(boxCoords);
+
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(255, 0, 0, 0.3)");
 
         this.activeQuestion.scout_question.x = boxCoords.x;
         this.activeQuestion.scout_question.y = boxCoords.y;
@@ -239,12 +242,14 @@ export class ManageFieldQuestionsComponent implements OnInit {
       !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
       !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
       this.activeQuestionBox) {
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
+      /*
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
 
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);*/
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
     }
   }
 
