@@ -1,4 +1,4 @@
-import { FormSubType, IQuestionWithConditions, Question, QuestionFlow, QuestionWithConditions } from "./form.models";
+import { FormSubType, IQuestionWithConditions, Question, QuestionAnswer, QuestionFlow, QuestionWithConditions } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -234,23 +234,23 @@ export class ScoutQuestion implements IScoutQuestion {
 
 export interface IScoutFieldFormResponse {
     id: number;
-    form_sub_types: FormSubTypeForm[];
     team: number;
-    match: IMatch | null;
+    match: IMatch | undefined;
     form_typ: string;
+    answers: QuestionAnswer[];
 }
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     id!: number;
-    form_sub_types: FormSubTypeForm[] = [];
     team!: number;
-    match!: Match | null;
+    match: Match | undefined = undefined;
     form_typ = 'field';
+    answers: QuestionAnswer[] = [];
 
-    constructor(question_answers?: FormSubTypeForm[], team?: number, match?: Match | null) {
-        this.form_sub_types = question_answers || [];
+    constructor(team?: number, match?: Match, answers?: QuestionAnswer[]) {
         this.team = team || NaN;
-        this.match = match || null;
+        this.match = match || undefined;
+        this.answers = answers || [];
     }
 }
 

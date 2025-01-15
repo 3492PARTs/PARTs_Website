@@ -105,12 +105,34 @@ export class QuestionOption implements IQuestionOption {
     void_ind = 'n';
 }
 
+export class QuestionFlowAnswer {
+    id!: number;
+    //question_answer = new QuestionAnswer();
+    question: Question | undefined = undefined;
+    answer = '';
+    answer_time = Date.now();
+    void_ind = 'n'
+
+    constructor(question: Question, answer: string) {
+        this.question = question;
+        this.answer = answer;
+    }
+}
+
 export class QuestionAnswer {
     question_answer_id!: number;
-    response!: any;
-    question!: QuestionWithConditions;
+    response = new Response();
+    question: Question | undefined = undefined;
+    question_flow: QuestionFlow | undefined = undefined;
     answer = '';
+    question_flow_answers: QuestionFlowAnswer[] = [];
     void_ind = 'n'
+
+    constructor(answer: string, question?: Question, question_flow?: QuestionFlow) {
+        this.question = question;
+        this.question_flow = question_flow;
+        this.answer = answer;
+    }
 }
 
 export interface IQuestionType {
@@ -196,6 +218,7 @@ export class QuestionFlow {
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     questions: Question[] = [];
+    question_answer: QuestionAnswer | undefined = undefined;
 }
 
 export class FormInitialization {

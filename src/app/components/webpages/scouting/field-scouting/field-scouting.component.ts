@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionFlow, QuestionWithConditions } from '../../../../models/form.models';
+import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer, QuestionWithConditions } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
@@ -27,6 +27,7 @@ import { HeaderComponent } from "../../../atoms/header/header.component";
 })
 export class FieldScoutingComponent implements OnInit, OnDestroy {
   fieldForm = new FieldForm();
+  formSubTypeForms: FormSubTypeForm[] = [];
   activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
 
   scoutFieldResponse = new ScoutFieldFormResponse();
@@ -85,7 +86,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           }
         }
 
-        this.scoutFieldResponse.match = null;
+        this.scoutFieldResponse.match = undefined;
         this.scoutFieldResponse.team = NaN;
         this.amendMatchList();
         this.buildTeamList(NaN, result.teams);
@@ -98,9 +99,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.ss.loadFieldScoutingForm().then(result => {
       if (result) {
         this.fieldForm = result.field_form;
-        this.scoutFieldResponse.form_sub_types = result.form_sub_types;
+        this.formSubTypeForms = result.form_sub_types;
 
-        this.activeFormSubTypeForm = this.scoutFieldResponse.form_sub_types.find(fst => fst.form_sub_typ.form_sub_typ === 'teleop');
+        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.form_sub_typ === 'teleop');
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
             const stage = this.getFirstStage(qf.questions);
@@ -196,7 +197,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   setNoMatch() {
     this.gs.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
-      this.scoutFieldResponse.match = null;
+      this.scoutFieldResponse.match = undefined;
       this.teams = [];
       this.cs.Team.getAll().then((ts: Team[]) => {
         this.teams = this.teams.concat(ts);
@@ -324,11 +325,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let response: QuestionWithConditions[] = [];
+      let answers = this.activeFormSubTypeForm?.questions.map(q => new QuestionAnswer(q.answer, q));
 
 
-      //TODO fix []
-      sfr = new ScoutFieldFormResponse([], this.scoutFieldResponse.team, this.scoutFieldResponse.match);
+      sfr = new ScoutFieldFormResponse(this.scoutFieldResponse.team, this.scoutFieldResponse.match, answers?.concat(this.scoutFieldResponse.answers));
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {
@@ -342,6 +342,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   advanceFlow(flow: QuestionFlow, question: Question): void {
+
+    if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
+    flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, '0,0'));
+
     this.displayFlowStage(flow, question.order, false);
 
     let stage = 0;
@@ -361,7 +365,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!found) this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+    // reset stage
+    if (!found) {
+      this.scoutFieldResponse.answers.push(flow.question_answer);
+      flow.question_answer = undefined;
+      this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+    }
 
     this.displayFlowStage(flow, question.order + 1, true);
   }

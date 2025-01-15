@@ -99,6 +99,10 @@
 
     </div>
 
+    <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
+      (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
+    </app-question-display-form>
+
     <!--
     <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
       (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
