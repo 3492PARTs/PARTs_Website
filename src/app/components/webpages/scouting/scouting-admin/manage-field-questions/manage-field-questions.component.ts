@@ -114,11 +114,15 @@ export class ManageFieldQuestionsComponent implements OnInit {
     console.log(this.selectedQuestionFlow);
   }
 
+  xOffset = 10;
+  yOffset = 85;
+
   mouseDown(e: MouseEvent): void {
     this.isDrawing = !e.shiftKey;
     if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
-      this.startX = e.clientX - this.imageContainer.nativeElement.offsetLeft;
-      this.startY = e.clientY - this.imageContainer.nativeElement.offsetTop;
+      console.log(e);
+      this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
+      this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
 
       this.renderer.setStyle(this.box.nativeElement, 'display', "block");
       this.renderer.setStyle(this.box.nativeElement, 'left', `${this.startX}px`);
@@ -144,10 +148,10 @@ export class ManageFieldQuestionsComponent implements OnInit {
   mouseMove(e: MouseEvent): void {
     if (!this.isDrawing) return;
 
-    const endX = e.clientX - this.imageContainer.nativeElement.offsetLeft;
-    const endY = e.clientY - this.imageContainer.nativeElement.offsetTop;
-    const width = endX - this.startX;
-    const height = endY - this.startY;
+    const endX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
+    const endY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
+    const width = Math.abs(endX - this.startX);
+    const height = Math.abs(endY - this.startY);
 
     this.renderer.setStyle(this.box.nativeElement, 'width', `${width}px`);
     this.renderer.setStyle(this.box.nativeElement, 'height', `${height}px`);
