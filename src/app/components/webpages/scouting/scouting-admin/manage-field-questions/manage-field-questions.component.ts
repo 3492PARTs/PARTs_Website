@@ -11,11 +11,12 @@ import { FieldForm } from '../../../../../models/scouting.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
+import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-manage-field-questions',
   standalone: true,
-  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent],
   templateUrl: './manage-field-questions.component.html',
   styleUrls: ['./manage-field-questions.component.scss']
 })
@@ -98,6 +99,11 @@ export class ManageFieldQuestionsComponent implements OnInit {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.formMetadata = result;
+
+      if (!this.gs.strNoE(this.activeQuestionFlow.id)) {
+        this.activeQuestionFlow = this.gs.cloneObject(this.formMetadata.question_flows[this.gs.arrayObjectIndexOf(this.formMetadata.question_flows, 'id', this.activeQuestionFlow.id)]);
+      }
+
       this.buildQuestionFlowOptions();
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -107,6 +113,15 @@ export class ManageFieldQuestionsComponent implements OnInit {
   buildQuestionFlowOptions(): void {
     this.availableQuestionFlows = this.formMetadata.question_flows.filter(qf =>
       (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
+  }
+
+  saveQuestionFlow(): void {
+    this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.formInit();
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   ynToYesNo(s: string): string {

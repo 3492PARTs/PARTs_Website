@@ -9,18 +9,22 @@
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
                 <div #box id="box"></div>
             </div>
-            <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
-                [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
-                [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
-                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                (FunctionCallBack)="buildQuestionFlowOptions()">
-            </app-form-element>
 
-            <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
-                [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
-                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
-            </app-form-element>
+            <app-form (SubmitFunction)="saveQuestionFlow()">
+                <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
+                    [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
+                    [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
+                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
+                    (FunctionCallBack)="buildQuestionFlowOptions()">
+                </app-form-element>
 
+                <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
+                    [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
+                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+                </app-form-element>
+
+                <app-button [Type]="'submit'">Save</app-button>
+            </app-form>
             <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
                 [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
                 [TriggerUpdate]="questionFlowTableTriggerUpdate" [Width]="'100%'" [Scrollable]="true"
