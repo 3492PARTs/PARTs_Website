@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { QuestionFlow, QuestionWithConditions } from '../../../../models/form.models';
+import { Question, QuestionFlow, QuestionWithConditions } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
@@ -103,7 +103,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.activeFormSubTypeForm = this.scoutFieldResponse.form_sub_types.find(fst => fst.form_sub_typ.form_sub_typ === 'teleop');
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
-            const stage = qf.questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2);
+            const stage = this.getFirstStage(qf.questions);
             this.displayFlowStage(qf, stage);
           });
         });
@@ -341,17 +341,48 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.ss.uploadOutstandingResponses();
   }
 
-  displayFlowStage(flow: QuestionFlow, stage: number): void {
+  advanceFlow(flow: QuestionFlow, question: Question): void {
+    this.displayFlowStage(flow, question.order, false);
+
+    let stage = 0;
+
+    flow.questions.sort((a, b) => {
+      if (a.order > b.order) return 1;
+      else if (a.order < b.order) return -1;
+      else return 0;
+    });
+
+    let found = false;
+    for (let i = 0; i < flow.questions.length; i++) {
+      if (flow.questions[i].order > question.order) {
+        this.displayFlowStage(flow, flow.questions[i].order);
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+
+    this.displayFlowStage(flow, question.order + 1, true);
+  }
+
+  displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     const questions = flow.questions.filter(q => q.order === stage);
     questions.forEach(q => {
       this.boxes.forEach(b => {
         if (b.nativeElement.id == q.question_id) {
-          this.showBox(b.nativeElement, q.scout_question);
+          if (show)
+            this.showBox(b.nativeElement, q.scout_question);
+          else
+            this.hideBox(b.nativeElement);
         }
       });
     });
   }
 
+  getFirstStage(questions: Question[]): number {
+    return questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2);
+  }
 
   hideBox(box: HTMLElement): void {
     this.renderer.setStyle(box, 'display', "none");
