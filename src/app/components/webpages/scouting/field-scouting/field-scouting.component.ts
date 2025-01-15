@@ -92,7 +92,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.gs.incrementOutstandingCalls();
     this.ss.loadFieldScoutingForm().then(result => {
       if (result) {
-        this.scoutFieldResponse.question_answers = result;
+        //TODO this.scoutFieldResponse.question_answers = result;
         this.sortQuestions();
       }
       this.gs.decrementOutstandingCalls();

@@ -64,7 +64,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   questionInit(): void {
-    this.api.get(true, 'form/form-init/', {
+    this.api.get(true, 'form/form-editor/', {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.init = result;

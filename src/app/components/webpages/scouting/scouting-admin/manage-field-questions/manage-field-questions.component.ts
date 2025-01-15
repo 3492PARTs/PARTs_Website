@@ -96,7 +96,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   formInit(): void {
-    this.api.get(true, 'form/form-init/', {
+    this.api.get(true, 'form/form-editor/', {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.formMetadata = result;

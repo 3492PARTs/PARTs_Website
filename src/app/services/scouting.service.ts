@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FormFieldForm } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { GeneralService } from './general.service';
@@ -20,7 +20,7 @@ export class ScoutingService {
   private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
   private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
   private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
+  private outstandingInitFieldScoutingPromise: Promise<FormFieldForm[] | null> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
@@ -508,17 +508,17 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
+  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FormFieldForm[] | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
-        this.api.get(loadingScreen, 'form/question/', {
+      this.outstandingInitFieldScoutingPromise = new Promise<FormFieldForm[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/field/form/', {
           form_typ: 'field',
           active: 'y'
-        }, async (result: QuestionWithConditions[]) => {
+        }, async (result: FormFieldForm[]) => {
           /** 
            * On success load results and store in db 
            **/
-          await this.updateScoutingQuestionsCache('field', result);
+          //await this.updateScoutingQuestionsCache('field', result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -542,7 +542,8 @@ export class ScoutingService {
             resolve(null);
           }
           else
-            resolve(result);
+            //resolve(result);
+            resolve(null);
 
           this.outstandingInitFieldScoutingPromise = null;
         }, () => {

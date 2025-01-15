@@ -90,7 +90,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   getScoutFieldQuestions(): void {
     this.ss.loadFieldScoutingForm().then(result => {
       if (result) {
-        this.fieldQuestions = result;
+        //TODO this.fieldQuestions = result;
         this.buildFieldQuestionAggQuestionList();
       }
     });

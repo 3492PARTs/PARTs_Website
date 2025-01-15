@@ -1,4 +1,4 @@
-import { IQuestionWithConditions, QuestionWithConditions } from "./form.models";
+import { FormSubType, IQuestionWithConditions, Question, QuestionFlow, QuestionWithConditions } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -467,4 +467,15 @@ export class FieldForm {
     img_url = '';
     inv_img!: File;
     inv_img_url = '';
+}
+
+export class FormSubTypesForm {
+    form_sub_typ = new FormSubType()
+    questions: QuestionWithConditions[] = [];
+    question_flows: QuestionFlow[] = [];
+}
+
+export class FormFieldForm {
+    field_form = new FieldForm();
+    form_sub_types: FormSubTypesForm[] = [];
 }
