@@ -35,6 +35,7 @@ export class QuestionAdminFormComponent implements OnInit {
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   availableQuestionFlows: QuestionFlow[] = [];
 
+  questionTableTriggerUpdate = false;
   questionTableCols: TableColType[] = [];
   private _questionTableCols: TableColType[] = [
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
@@ -66,8 +67,9 @@ export class QuestionAdminFormComponent implements OnInit {
   questionInit(): void {
     this.api.get(true, 'form/form-init/', {
       form_typ: this.formType
-    }, (result: any) => {
-      this.init = result as Init;
+    }, (result: Init) => {
+      this.init = result;
+      this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -80,7 +82,7 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
-
+        { PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) },
       ];
     }
     else {
@@ -91,22 +93,23 @@ export class QuestionAdminFormComponent implements OnInit {
   showQuestionModal(q?: QuestionWithConditions): void {
     this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
 
-    console.log(this.activeQuestion);
+    this.buildQuestionFlowOptions();
 
-    this.getQuestionFlows(this.activeQuestion.form_sub_typ.form_sub_typ).then(() => {
-      this.questionModalVisible = true;
-    });
-
+    this.questionModalVisible = true;
   }
 
   showQuestionFlowModal(): void {
     this.questionFlowModalVisible = true;
   }
 
+  buildQuestionFlowOptions(): void {
+    this.availableQuestionFlows = this.init.question_flows.filter(qf => this.gs.strNoE(this.activeQuestion.form_sub_typ.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : true);
+  }
+
+  /*
   getQuestionFlows(form_sub_typ: string): Promise<null> {
     return new Promise<null>(resolve => {
       this.api.get(true, 'form/question-flow/', { form_typ: this.formType, form_sub_typ: form_sub_typ }, (result: QuestionFlow[]) => {
-        console.log(result);
         this.availableQuestionFlows = result;
         resolve(null);
       }, (err: any) => {
@@ -115,6 +118,7 @@ export class QuestionAdminFormComponent implements OnInit {
       });
     });
   }
+  */
 
   saveQuestionFlow(): void {
     this.newQuestionFlow.form_typ.form_typ = this.formType;
@@ -123,7 +127,7 @@ export class QuestionAdminFormComponent implements OnInit {
       this.gs.successfulResponseBanner(result);
       this.newQuestionFlow = new QuestionFlow();
       this.questionFlowModalVisible = false;
-      this.getQuestionFlows(this.activeQuestion.form_sub_typ.form_sub_typ);
+      this.questionInit();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -156,10 +160,15 @@ export class QuestionAdminFormComponent implements OnInit {
   ynToYesNo(s: string): string {
     return s === 'y' ? 'Yes' : 'No';
   }
+
+  getQuestionFlowName(id: number): string {
+    return this.init.question_flows.find(qf => qf.id === id)?.name || '';
+  }
 }
 
 class Init {
   question_types: QuestionType[] = [];
   questions: QuestionWithConditions[] = [];
   form_sub_types: FormSubType[] = [];
+  question_flows: QuestionFlow[] = [];
 }

@@ -1,6 +1,6 @@
 <app-table [TableCols]="questionTableCols" [TableData]="init.questions" [Width]="'100%'" [ShowAddButton]="true"
   (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)"
-  [Scrollable]="true" [ScrollHeight]="'72vh'">
+  [Scrollable]="true" [ScrollHeight]="'72vh'" [TriggerUpdate]="questionTableTriggerUpdate">
 </app-table>
 
 <app-modal [(visible)]="questionModalVisible" [Title]="'Manage Question'">
@@ -22,17 +22,18 @@
     <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
       [LabelText]="'Form Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
-      [FormGroup]="true" [FormGroupInline]="true">
+      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()">
     </app-form-element>
 
-    <div>
+    <div class="flex align-items-center gap-1rem">
       <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
         [MinWidth]="'200px'" [DisplayProperty]="'name'" [BindingProperty]="'id'"
         [(Model)]="activeQuestion.question_flow_id" [DisplayEmptyOption]="true" [FormGroup]="true"
         [FormGroupInline]="true">
       </app-form-element>
 
-      <app-button [ButtonType]="'add'" (FunctionCallBack)="showQuestionFlowModal()"></app-button>
+      <app-button class="padding-bottom-2rem" [ButtonType]="'add'"
+        (FunctionCallBack)="showQuestionFlowModal()"></app-button>
     </div>
 
 

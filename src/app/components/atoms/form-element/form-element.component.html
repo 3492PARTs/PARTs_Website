@@ -120,7 +120,7 @@
           [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
           (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
           <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
-          <option value="" [disabled]="!DisplayEmptyOption"></option>
+          <option [ngValue]="null" [disabled]="!DisplayEmptyOption"></option>
 
           <ng-container *ngIf="BindingProperty && DisplayProperty">
             <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
