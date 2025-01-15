@@ -118,6 +118,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   saveQuestionFlow(): void {
     this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
       this.gs.successfulResponseBanner(result);
+      this.hideBox();
       this.formInit();
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -148,14 +149,21 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
       if (!this.isDrawing) {
         const boxCoords = {
+          x: parseFloat((parseInt(this.box.nativeElement.style.left) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
+          y: parseFloat((parseInt(this.box.nativeElement.style.top) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2)),
+          width: parseFloat((parseInt(this.box.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
+          height: parseFloat((parseInt(this.box.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
+        };
+        /*
+        const boxCoords = {
           x: parseInt(this.box.nativeElement.style.left),
           y: parseInt(this.box.nativeElement.style.top),
           width: parseFloat((parseInt(this.box.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
           height: parseFloat((parseInt(this.box.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
-        };
+        };*/
         this.startX = NaN;
         this.startY = NaN;
-        console.log(boxCoords);
+        //console.log(boxCoords);
 
         this.activeQuestion.scout_question.x = boxCoords.x;
         this.activeQuestion.scout_question.y = boxCoords.y;
@@ -188,7 +196,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   editQuestion(q: Question): void {
-    this.renderer.setStyle(this.box.nativeElement, 'display', "none");
+    this.hideBox();
 
     this.activeQuestion = this.gs.cloneObject(q);
 
@@ -200,8 +208,12 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.renderer.setStyle(this.box.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
       this.renderer.setStyle(this.box.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
 
-      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.activeQuestion.scout_question.x}px`);
-      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.activeQuestion.scout_question.y}px`);
+      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
+      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);
     }
+  }
+
+  hideBox(): void {
+    this.renderer.setStyle(this.box.nativeElement, 'display', "none");
   }
 }
