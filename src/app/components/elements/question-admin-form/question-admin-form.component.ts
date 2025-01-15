@@ -70,6 +70,7 @@ export class QuestionAdminFormComponent implements OnInit {
     }, (result: Init) => {
       this.init = result;
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
+      this.buildQuestionFlowOptions();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
