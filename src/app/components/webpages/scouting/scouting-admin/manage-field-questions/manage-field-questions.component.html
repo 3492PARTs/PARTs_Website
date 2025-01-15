@@ -11,19 +11,20 @@
             </div>
             <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
                 [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
-                [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="selectedFormSubType"
+                [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
                 [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
                 (FunctionCallBack)="buildQuestionFlowOptions()">
             </app-form-element>
 
             <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
-                [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="selectedQuestionFlow"
-                (FunctionCallBack)="log()" [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+                [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
+                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
             </app-form-element>
 
-            <app-table *ngIf="selectedQuestionFlow.questions && selectedQuestionFlow.questions.length > 0"
-                [TableCols]="questionFlowTableCols" [TableData]="selectedQuestionFlow.questions" [Width]="'100%'"
-                [Scrollable]="true" [ScrollHeight]="'40vh'">
+            <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
+                [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
+                [TriggerUpdate]="questionFlowTableTriggerUpdate" [Width]="'100%'" [Scrollable]="true"
+                [ScrollHeight]="'40vh'" [ShowEditButton]="true" (EditRecordCallBack)="editQuestion($event)">
             </app-table>
         </div>
     </app-form-element-group>

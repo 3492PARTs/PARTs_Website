@@ -363,6 +363,11 @@ export class GeneralService {
     return -1;
   }
 
+  updateObjectInArray(arr: any[], property: string, obj: any): void {
+    let i = this.arrayObjectIndexOf(arr, property, obj[property]);
+    arr[i] = obj;
+  }
+
   formatDateString(s: string | Date): string {
     let d = new Date(s);
     let day = d.getDate();
@@ -657,6 +662,22 @@ export class GeneralService {
     return { x: xOffset, y: yOffset };
   }
 
+  decodeBoolean(b: boolean, values: { true: string, false: string }): string {
+    return b ? values.true : values.false;
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.decodeBoolean(b, { true: 'Sent', false: 'Not Sent' });
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.decodeBoolean(b, { true: 'Yes', false: 'No' });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.decodeBoolean(s === 'y', { true: 'Yes', false: 'No' });
+  }
+
   objectToString(o: any): string {
     //console.log(o);
     let s = '';
@@ -675,22 +696,6 @@ export class GeneralService {
     else
       return o;
     return s;
-  }
-
-  booleanDecode(b: boolean, values: { true: string, false: string }): string {
-    return b ? values.true : values.false;
-  }
-
-  decodeSentBoolean(b: boolean): string {
-    return this.booleanDecode(b, { true: 'Sent', false: 'Not Sent' });
-  }
-
-  decodeYesNoBoolean(b: boolean): string {
-    return this.booleanDecode(b, { true: 'Yes', false: 'No' });
-  }
-
-  decodeYesNo(s: string): string {
-    return this.booleanDecode(s === 'y', { true: 'Yes', false: 'No' });
   }
 
   objectToFormData(o: any): FormData {

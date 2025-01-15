@@ -9,7 +9,7 @@ import { APIService } from '../../../../../services/api.service';
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FieldForm } from '../../../../../models/scouting.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
-import { FormInitialization, FormSubType, QuestionFlow } from '../../../../../models/form.models';
+import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 
 @Component({
@@ -36,9 +36,11 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   availableQuestionFlows: QuestionFlow[] = [];
 
-  selectedFormSubType = new FormSubType();
+  activeFormSubType = new FormSubType();
 
-  selectedQuestionFlow = new QuestionFlow();
+  activeQuestionFlow = new QuestionFlow();
+
+  activeQuestion = new Question();
 
   questionFlowTableCols: TableColType[] = [
     { PropertyName: 'question', ColLabel: 'Question' },
@@ -51,6 +53,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     { PropertyName: 'scout_question.height', ColLabel: 'Height' },
     { PropertyName: 'scout_question.icon', ColLabel: 'Icon' },
   ];
+  questionFlowTableTriggerUpdate = false;
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
@@ -103,46 +106,51 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   buildQuestionFlowOptions(): void {
     this.availableQuestionFlows = this.formMetadata.question_flows.filter(qf =>
-      (this.selectedFormSubType && !this.gs.strNoE(this.selectedFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.selectedFormSubType.form_sub_typ : false);
+      (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
   ynToYesNo(s: string): string {
     return this.gs.decodeYesNo(s);
   }
 
-  log() {
-    console.log(this.selectedQuestionFlow);
-  }
-
   xOffset = 10;
   yOffset = 85;
 
   mouseClick(e: MouseEvent): void {
-    this.isDrawing = !e.shiftKey;
+    if (!this.gs.strNoE(this.activeQuestion.question_id)) {
+      this.isDrawing = !e.shiftKey;
 
-    if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
-      this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
-      this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
+      if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
+        this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
+        this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
 
-      this.renderer.setStyle(this.box.nativeElement, 'display', "block");
-      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.startX}px`);
-      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.startY}px`);
-      this.renderer.setStyle(this.box.nativeElement, 'width', "0");
-      this.renderer.setStyle(this.box.nativeElement, 'height', "0");
+        this.renderer.setStyle(this.box.nativeElement, 'display', "block");
+        this.renderer.setStyle(this.box.nativeElement, 'left', `${this.startX}px`);
+        this.renderer.setStyle(this.box.nativeElement, 'top', `${this.startY}px`);
+        this.renderer.setStyle(this.box.nativeElement, 'width', "0");
+        this.renderer.setStyle(this.box.nativeElement, 'height', "0");
+      }
+
+      if (!this.isDrawing) {
+        const boxCoords = {
+          x: parseInt(this.box.nativeElement.style.left),
+          y: parseInt(this.box.nativeElement.style.top),
+          width: parseFloat((parseInt(this.box.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
+          height: parseFloat((parseInt(this.box.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
+        };
+        this.startX = NaN;
+        this.startY = NaN;
+        console.log(boxCoords);
+
+        this.activeQuestion.scout_question.x = boxCoords.x;
+        this.activeQuestion.scout_question.y = boxCoords.y;
+        this.activeQuestion.scout_question.width = boxCoords.width;
+        this.activeQuestion.scout_question.height = boxCoords.height;
+
+        this.gs.updateObjectInArray(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion);
+        this.questionFlowTableTriggerUpdate = !this.questionFlowTableTriggerUpdate;
+      }
     }
-
-    if (!this.isDrawing) {
-      const boxCoords = {
-        x: parseInt(this.box.nativeElement.style.left),
-        y: parseInt(this.box.nativeElement.style.top),
-        width: parseInt(this.box.nativeElement.style.width),
-        height: parseInt(this.box.nativeElement.style.height)
-      };
-      this.startX = NaN;
-      this.startY = NaN;
-      console.log(boxCoords);
-    }
-
   }
 
   mouseMove(e: MouseEvent): void {
@@ -164,7 +172,19 @@ export class ManageFieldQuestionsComponent implements OnInit {
     }
   }
 
-  mouseUp(e: MouseEvent): void {
+  editQuestion(q: Question): void {
+    this.activeQuestion = this.gs.cloneObject(q);
 
+    if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
+      !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
+      !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
+      !this.gs.strNoE(this.activeQuestion.scout_question.height)) {
+      this.renderer.setStyle(this.box.nativeElement, 'display', "block");
+      this.renderer.setStyle(this.box.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
+      this.renderer.setStyle(this.box.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
+
+      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.activeQuestion.scout_question.x}px`);
+      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.activeQuestion.scout_question.y}px`);
+    }
   }
 }
