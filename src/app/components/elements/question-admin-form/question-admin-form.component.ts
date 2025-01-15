@@ -91,6 +91,8 @@ export class QuestionAdminFormComponent implements OnInit {
   showQuestionModal(q?: QuestionWithConditions): void {
     this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
 
+    console.log(this.activeQuestion);
+
     this.getQuestionFlows(this.activeQuestion.form_sub_typ.form_sub_typ).then(() => {
       this.questionModalVisible = true;
     });
