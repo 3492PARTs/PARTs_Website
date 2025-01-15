@@ -197,3 +197,10 @@ export class QuestionFlow {
     form_sub_typ!: FormSubType;
     questions: Question[] = [];
 }
+
+export class FormInitialization {
+    question_types: QuestionType[] = [];
+    questions: QuestionWithConditions[] = [];
+    form_sub_types: FormSubType[] = [];
+    question_flows: QuestionFlow[] = [];
+}

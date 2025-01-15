@@ -4,11 +4,24 @@
         <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
             (FunctionCallBack)="previewImage()"></app-form-element>
 
-        <img *ngIf="fieldForm.img_url" [src]="fieldForm.img_url" class="full-width">
+        <div>
+            <img *ngIf="fieldForm.img_url" [src]="fieldForm.img_url" class="full-width">
 
+            <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
+                [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
+                [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="selectedFormSubType"
+                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
+                (FunctionCallBack)="buildQuestionFlowOptions()">
+            </app-form-element>
+
+            <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
+                [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="selectedQuestionFlow"
+                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+            </app-form-element>
+        </div>
         <app-button *ngIf="fieldForm.img" (FunctionCallBack)="saveFieldImage()">Save</app-button>
     </app-form-element-group>
 
-    <app-question-admin-form [formType]="'field'" [runInit]="manageScoutFieldQuestions">
+    <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions">
     </app-question-admin-form>
 </app-box>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { QuestionWithConditions, QuestionOption, QuestionType, FormSubType, QuestionFlow } from '../../../models/form.models';
+import { QuestionWithConditions, QuestionOption, QuestionType, FormInitialization, QuestionFlow } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { AppSize, GeneralService } from '../../../services/general.service';
@@ -10,7 +10,6 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
-import { resolve } from 'chart.js/helpers';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -30,7 +29,7 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
-  init: Init = new Init();
+  init: FormInitialization = new FormInitialization();
   questionModalVisible = false
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   availableQuestionFlows: QuestionFlow[] = [];
@@ -67,7 +66,7 @@ export class QuestionAdminFormComponent implements OnInit {
   questionInit(): void {
     this.api.get(true, 'form/form-init/', {
       form_typ: this.formType
-    }, (result: Init) => {
+    }, (result: FormInitialization) => {
       this.init = result;
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
       this.buildQuestionFlowOptions();
@@ -104,7 +103,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.init.question_flows.filter(qf => this.gs.strNoE(this.activeQuestion.form_sub_typ.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : true);
+    this.availableQuestionFlows = this.init.question_flows.filter(qf => this.activeQuestion.form_sub_typ && !this.gs.strNoE(this.activeQuestion.form_sub_typ.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : true);
   }
 
   /*
@@ -165,11 +164,4 @@ export class QuestionAdminFormComponent implements OnInit {
   getQuestionFlowName(id: number): string {
     return this.init.question_flows.find(qf => qf.id === id)?.name || '';
   }
-}
-
-class Init {
-  question_types: QuestionType[] = [];
-  questions: QuestionWithConditions[] = [];
-  form_sub_types: FormSubType[] = [];
-  question_flows: QuestionFlow[] = [];
 }
