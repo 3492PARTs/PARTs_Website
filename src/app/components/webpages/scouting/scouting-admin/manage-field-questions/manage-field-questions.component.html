@@ -16,10 +16,14 @@
 
             <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
                 [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="selectedQuestionFlow"
-                [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
+                (FunctionCallBack)="log()" [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true">
             </app-form-element>
+
+            <app-table *ngIf="selectedQuestionFlow.questions && selectedQuestionFlow.questions.length > 0"
+                [TableCols]="questionFlowTableCols" [TableData]="selectedQuestionFlow.questions" [Width]="'100%'"
+                [Scrollable]="true" [ScrollHeight]="'40vh'">
+            </app-table>
         </div>
-        <app-button *ngIf="fieldForm.img" (FunctionCallBack)="saveFieldImage()">Save</app-button>
     </app-form-element-group>
 
     <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions">

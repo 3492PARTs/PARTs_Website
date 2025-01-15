@@ -103,7 +103,8 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.init.question_flows.filter(qf => this.activeQuestion.form_sub_typ && !this.gs.strNoE(this.activeQuestion.form_sub_typ.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : true);
+    this.availableQuestionFlows = this.init.question_flows.filter(qf =>
+      (this.activeQuestion && !this.gs.strNoE(this.activeQuestion.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
   }
 
   /*

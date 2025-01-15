@@ -10,11 +10,12 @@ import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FieldForm } from '../../../../../models/scouting.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { FormInitialization, FormSubType, QuestionFlow } from '../../../../../models/form.models';
+import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 
 @Component({
   selector: 'app-manage-field-questions',
   standalone: true,
-  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent],
   templateUrl: './manage-field-questions.component.html',
   styleUrls: ['./manage-field-questions.component.scss']
 })
@@ -32,6 +33,18 @@ export class ManageFieldQuestionsComponent implements OnInit {
   selectedFormSubType = new FormSubType();
 
   selectedQuestionFlow = new QuestionFlow();
+
+  questionFlowTableCols: TableColType[] = [
+    { PropertyName: 'question', ColLabel: 'Question' },
+    { PropertyName: 'order', ColLabel: 'Order' },
+    { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this) },
+    { PropertyName: 'scout_question.x', ColLabel: 'X' },
+    { PropertyName: 'scout_question.y', ColLabel: 'Y' },
+    { PropertyName: 'scout_question.width', ColLabel: 'Width' },
+    { PropertyName: 'scout_question.height', ColLabel: 'Height' },
+    { PropertyName: 'scout_question.icon', ColLabel: 'Icon' },
+  ];
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
@@ -83,8 +96,15 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   buildQuestionFlowOptions(): void {
-    let c = this.formMetadata.question_flows.filter(qf => !this.gs.strNoE(this.selectedFormSubType.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.selectedFormSubType.form_sub_typ : false);
-    console.log(c);
-    this.availableQuestionFlows = this.formMetadata.question_flows.filter(qf => !this.gs.strNoE(this.selectedFormSubType.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.selectedFormSubType.form_sub_typ : false);
+    this.availableQuestionFlows = this.formMetadata.question_flows.filter(qf =>
+      (this.selectedFormSubType && !this.gs.strNoE(this.selectedFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.selectedFormSubType.form_sub_typ : false);
+  }
+
+  ynToYesNo(s: string): string {
+    return this.gs.decodeYesNo(s);
+  }
+
+  log() {
+    console.log(this.selectedQuestionFlow);
   }
 }
