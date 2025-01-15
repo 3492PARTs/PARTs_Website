@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { QuestionAdminFormComponent } from '../../../../elements/question-admin-form/question-admin-form.component';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
@@ -7,7 +7,7 @@ import { GeneralService } from '../../../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { APIService } from '../../../../../services/api.service';
 import { ButtonComponent } from "../../../../atoms/button/button.component";
-import { FieldForm } from '../../../../../models/scouting.models';
+import { FieldForm, ScoutQuestion } from '../../../../../models/scouting.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
@@ -29,7 +29,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef = new ElementRef(null);
   @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
-  @ViewChild('box', { read: ElementRef, static: false }) box: ElementRef = new ElementRef(null);
+  @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   fieldForm = new FieldForm();
   isDrawing = false;
   startX = NaN;
@@ -42,6 +42,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   activeQuestionFlow = new QuestionFlow();
 
   activeQuestion = new Question();
+  activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   questionFlowTableCols: TableColType[] = [
     { PropertyName: 'question', ColLabel: 'Question' },
@@ -113,7 +114,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   saveQuestionFlow(): void {
     this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.hideBox();
+      //this.hideBox();
       this.getQuestionFlow();
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -123,7 +124,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   getQuestionFlow(): void {
     this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
       this.activeQuestionFlow = result
-      this.hideBox();
+      //this.hideBox();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -137,26 +138,26 @@ export class ManageFieldQuestionsComponent implements OnInit {
   yOffset = 85;
 
   mouseClick(e: MouseEvent): void {
-    if (!this.gs.strNoE(this.activeQuestion.question_id)) {
+    if (!this.gs.strNoE(this.activeQuestion.question_id) && this.activeQuestionBox) {
       this.isDrawing = !e.shiftKey;
 
       if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
         this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
         this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
 
-        this.renderer.setStyle(this.box.nativeElement, 'display', "block");
-        this.renderer.setStyle(this.box.nativeElement, 'left', `${this.startX}px`);
-        this.renderer.setStyle(this.box.nativeElement, 'top', `${this.startY}px`);
-        this.renderer.setStyle(this.box.nativeElement, 'width', "0");
-        this.renderer.setStyle(this.box.nativeElement, 'height', "0");
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.startX}px`);
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.startY}px`);
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', "0");
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', "0");
       }
 
       if (!this.isDrawing) {
         const boxCoords = {
-          x: parseFloat((parseInt(this.box.nativeElement.style.left) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
-          y: parseFloat((parseInt(this.box.nativeElement.style.top) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2)),
-          width: parseFloat((parseInt(this.box.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
-          height: parseFloat((parseInt(this.box.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
+          x: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.left) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
+          y: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.top) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2)),
+          width: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
+          height: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
         };
         /*
         const boxCoords = {
@@ -181,46 +182,67 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   mouseMove(e: MouseEvent): void {
-    if (!this.isDrawing) return;
+    if (!this.isDrawing || !this.activeQuestionBox) return;
 
     const endX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
     const endY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
     const width = Math.abs(endX - this.startX);
     const height = Math.abs(endY - this.startY);
 
-    this.renderer.setStyle(this.box.nativeElement, 'width', `${width}px`);
-    this.renderer.setStyle(this.box.nativeElement, 'height', `${height}px`);
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${width}px`);
+    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${height}px`);
 
     if (endX < this.startX) {
-      this.renderer.setStyle(this.box.nativeElement, 'left', `${endX}px`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${endX}px`);
     }
     if (endY < this.startY) {
-      this.renderer.setStyle(this.box.nativeElement, 'top', `${endY}px`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${endY}px`);
     }
   }
 
+  setQuestionBoxes(): void {
+    this.gs.triggerChange(() => {
+      for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
+        if (this.boxes.get(i)) {
+          this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].scout_question);
+        }
+      }
+    });
+  }
+
+  setBoxLocation(box: HTMLElement, scout_question: ScoutQuestion): void {
+    this.renderer.setStyle(box, 'display', "block");
+    this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
+    this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
+
+    this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
+    this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+  }
+
   editQuestion(q: Question): void {
-    this.hideBox();
+    //this.hideBox();
 
     this.activeQuestion = q;
+    this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion.question_id));
 
     if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
       !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
       !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
-      !this.gs.strNoE(this.activeQuestion.scout_question.height)) {
-      this.renderer.setStyle(this.box.nativeElement, 'display', "block");
-      this.renderer.setStyle(this.box.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
-      this.renderer.setStyle(this.box.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
+      !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
+      this.activeQuestionBox) {
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
 
-      this.renderer.setStyle(this.box.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
-      this.renderer.setStyle(this.box.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);
     }
   }
-
+  /*
   hideBox(): void {
     this.renderer.setStyle(this.box.nativeElement, 'display', "none");
   }
-
+  */
   subTypeComparatorFunction(o1: FormSubType, o2: FormSubType): boolean {
     return o1 && o2 && o1.form_sub_typ === o2.form_sub_typ;
   }

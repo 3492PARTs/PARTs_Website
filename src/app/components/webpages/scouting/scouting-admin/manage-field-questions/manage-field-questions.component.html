@@ -7,9 +7,8 @@
         <div>
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
-                <div #box id="box">
-                    <span *ngIf="activeQuestion.scout_question.icon"
-                        class="mdi icon mdi-{{activeQuestion.scout_question.icon}}"></span>
+                <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
+                    <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
                 </div>
             </div>
 
@@ -25,11 +24,13 @@
                 <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
                     [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
                     [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                    [SelectComparatorFunction]="questionFlowComparatorFunction">
+                    [SelectComparatorFunction]="questionFlowComparatorFunction" (FunctionCallBack)="setQuestionBoxes()">
                 </app-form-element>
 
                 <app-button [Type]="'submit'">Save</app-button>
             </app-form>
+
+            <p><a target="_blank" href="https://pictogrammers.com/library/mdi/">Icons</a></p>
 
             <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
                 [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
