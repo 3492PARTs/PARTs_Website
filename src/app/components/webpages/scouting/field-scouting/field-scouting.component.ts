@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
 import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer, QuestionWithConditions } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
@@ -35,6 +35,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   scoutFieldResponse = new ScoutFieldFormResponse();
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   @ViewChildren(QuestionFormElementComponent) questionFormElements: QueryList<QuestionFormElementComponent> = new QueryList<QuestionFormElementComponent>();
+  @ViewChild(FormComponent) form!: FormComponent;
 
   teams: Team[] = [];
   matches: Match[] = [];
@@ -49,7 +50,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   private stopwatchRun = false;
   stopwatchSecond = 15;
-  stopwatchLoopCount = 100;
+  stopwatchLoopCount = 0;
 
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
@@ -333,6 +334,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   save(sfr?: ScoutFieldFormResponse, id?: number): void | null {
+    if (!this.isQuestionDisplayFormValid()) return;
+
     if (!sfr) {
       if (this.gs.strNoE(this.scoutFieldResponse.team)) {
         this.gs.triggerError('Must select a team to scout!');
@@ -355,6 +358,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   nextFlow(): void {
+    if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
+
     this.gs.scrollTo(0);
     let i = 0;
 
@@ -460,6 +465,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     return undefined;
   }
 
+  isQuestionDisplayFormValid(): boolean {
+    if (this.form) {
+      let ret = this.form.validateAllFelids();
+      if (!this.gs.strNoE(ret)) {
+        this.gs.addBanner(new Banner(0, ret, 3500));
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   getFirstStage(questions: Question[]): number {
     return questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2);
   }
@@ -497,18 +514,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   stopwatchReset(): void {
     this.stopwatchSecond = 15;
-    this.stopwatchLoopCount = 100;
+    this.stopwatchLoopCount = 0;
   }
 
   stopwatchRunFunction(): void {
     if (this.stopwatchRun) {
-      this.stopwatchLoopCount--
-
       if (this.stopwatchLoopCount === 0) {
         this.stopwatchSecond--;
         if (this.stopwatchSecond > 0)
           this.stopwatchLoopCount = 100;
       }
+
+      this.stopwatchLoopCount--
 
       if (this.stopwatchSecond > 0)
         window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
