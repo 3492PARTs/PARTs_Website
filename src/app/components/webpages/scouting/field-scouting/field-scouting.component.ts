@@ -472,7 +472,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.stopwatchSecond = 0;
       }
       */
-      if (this.stopwatchSecond <= 15)
+      if (this.stopwatchSecond < 15)
         window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
       else {
         this.stopwatchRun = false;
