@@ -122,8 +122,9 @@
   -->
     <app-button-ribbon>
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFlow()"
-        *ngIf="activeFormSubTypeForm && activeFormSubTypeForm?.question_flows && activeFormSubTypeForm?.form_sub_typ?.form_sub_typ !== formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Next</app-button>
-      <app-button [Type]="'submit'" [ButtonType]="'main'" [Disabled]="formDisabled">Save</app-button>
+        [Disabled]="activeFormSubTypeForm?.form_sub_typ?.form_sub_typ === 'auto' || activeFormSubTypeForm?.form_sub_typ?.form_sub_typ === formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Next</app-button>
+      <app-button [Type]="'submit'" [ButtonType]="'main'"
+        [Disabled]="formDisabled || activeFormSubTypeForm?.form_sub_typ?.form_sub_typ !== formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Save</app-button>
     </app-button-ribbon>
 
   </app-form>
