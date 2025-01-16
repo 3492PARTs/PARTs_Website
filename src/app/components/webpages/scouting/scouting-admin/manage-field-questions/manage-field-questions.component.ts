@@ -50,15 +50,15 @@ export class ManageFieldQuestionsComponent implements OnInit {
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   questionFlowTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: "text", Required: true },
-    { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true },
+    { PropertyName: 'question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
+    { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this) },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
     { PropertyName: 'scout_question.x', ColLabel: 'X', Type: "number" },
     { PropertyName: 'scout_question.y', ColLabel: 'Y', Type: "number" },
     { PropertyName: 'scout_question.width', ColLabel: 'Width', Type: "number" },
     { PropertyName: 'scout_question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/" },
+    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
   ];
   questionFlowTableTriggerUpdate = false;
 
@@ -111,6 +111,10 @@ export class ManageFieldQuestionsComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+  }
+
+  closeQuestionModal(visible: Boolean): void {
+    if (!visible) this.formInit();
   }
 
   buildQuestionFlowOptions(): void {
