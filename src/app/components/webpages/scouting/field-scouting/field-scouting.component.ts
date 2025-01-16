@@ -18,11 +18,12 @@ import { QuestionDisplayFormComponent } from '../../../elements/question-display
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { HeaderComponent } from "../../../atoms/header/header.component";
 import { BuildSeasonComponent } from "../../media/build-season/build-season.component";
+import { QuestionFormElementComponent } from "../../../elements/question-form-element/question-form-element.component";
 
 @Component({
   selector: 'app-field-scouting',
   standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent, QuestionFormElementComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })
@@ -374,7 +375,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   advanceFlow(flow: QuestionFlow, question: Question): void {
 
     if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
-    flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, '0,0'));
+    question.answer = JSON.stringify(question.answer);
+    flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
 
     this.displayFlowStage(flow, question.order, false);
 

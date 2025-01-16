@@ -94,11 +94,9 @@
       (click)="stopwatchStart()">
       <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm" [src]="fieldForm.img_url">
       <div class="flow" *ngFor="let flow of (activeFormSubTypeForm?.question_flows || [])">
-        <div #box class="box" *ngFor="let q of flow.questions" id="{{q.question_id}}" (click)="advanceFlow(flow, q)">
-          <div class="label">
-            <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
-            <p>{{q.question}}</p>
-          </div>
+        <div #box class="box" *ngFor="let q of flow.questions; let i = index" id="{{q.question_id}}"
+          (click)="advanceFlow(flow, flow.questions[i])">
+          <app-question-form-element [(Question)]="flow.questions[i]"></app-question-form-element>
         </div>
       </div>
     </div>
