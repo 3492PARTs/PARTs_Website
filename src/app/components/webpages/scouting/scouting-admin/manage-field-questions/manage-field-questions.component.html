@@ -2,15 +2,18 @@
     <app-form-element-group [LabelText]="'Field Image'">
 
         <app-form (SubmitFunction)="saveFieldImage()">
-            <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
-                (FunctionCallBack)="previewImage()"></app-form-element>
-            <app-button *ngIf="fieldForm.img" [Type]="'submit'">Save</app-button>
+            <div class="flex align-items-baseline justify-content-flex-start gap-1rem">
+                <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
+                    (FunctionCallBack)="previewImage()"></app-form-element>
+                <app-button *ngIf="fieldForm.img" [Type]="'submit'">Save</app-button>
+            </div>
+
         </app-form>
 
-
+        @if (fieldForm.img_url) {
         <div>
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
-                <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
+                <img #image id="image" [src]="fieldForm.img_url">
                 <ng-container *ngIf="activeQuestionFlow">
                     <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
                         <div class="label">
@@ -65,6 +68,7 @@
                 [SetActiveRec]="activeQuestion" [AllowActiveRecord]="true">
             </app-table>
         </div>
+        }
     </app-form-element-group>
 
     <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions"
