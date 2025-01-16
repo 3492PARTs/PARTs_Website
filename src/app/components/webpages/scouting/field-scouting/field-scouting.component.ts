@@ -373,7 +373,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   advanceFlow(flow: QuestionFlow, question: Question): void {
-
     if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
     question.answer = JSON.stringify(question.answer);
     flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
