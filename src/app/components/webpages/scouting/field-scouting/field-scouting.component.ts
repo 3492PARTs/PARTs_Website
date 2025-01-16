@@ -17,11 +17,12 @@ import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { HeaderComponent } from "../../../atoms/header/header.component";
+import { BuildSeasonComponent } from "../../media/build-season/build-season.component";
 
 @Component({
   selector: 'app-field-scouting',
   standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })
@@ -314,13 +315,19 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
   }
 
-  reset() {
-    this.scoutFieldResponse = new ScoutFieldFormResponse();
-    this.noMatch = false;
-    this.formDisabled = false;
-    this.stopwatchReset();
-    this.gs.scrollTo(0);
-    this.init();
+  reset(confirm = false) {
+    const fn = () => {
+      this.scoutFieldResponse = new ScoutFieldFormResponse();
+      this.noMatch = false;
+      this.formDisabled = false;
+      this.stopwatchStop();
+      this.stopwatchReset();
+      this.gs.scrollTo(0);
+      this.init();
+    };
+
+    if (confirm) this.gs.triggerConfirm('Do you want to reset the form?', fn);
+    else fn();
   }
 
   save(sfr?: ScoutFieldFormResponse, id?: number): void | null {

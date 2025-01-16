@@ -121,6 +121,7 @@
     </app-question-display-form>
   -->
     <app-button-ribbon>
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset(true)">Reset</app-button>
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFlow()"
         [Disabled]="activeFormSubTypeForm?.form_sub_typ?.form_sub_typ === 'auto' || activeFormSubTypeForm?.form_sub_typ?.form_sub_typ === formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Next</app-button>
       <app-button [Type]="'submit'" [ButtonType]="'main'"
