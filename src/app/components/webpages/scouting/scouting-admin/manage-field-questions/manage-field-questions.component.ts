@@ -46,7 +46,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   activeQuestionFlow: QuestionFlow | undefined = undefined;
 
-  activeQuestion = new Question();
+  activeQuestion: Question | undefined = undefined;
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   questionFlowTableCols: TableColType[] = [
@@ -136,7 +136,9 @@ export class ManageFieldQuestionsComponent implements OnInit {
   getQuestionFlow(): void {
     if (this.activeQuestionFlow) {
       this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
-        this.activeQuestionFlow = result
+        this.activeQuestionFlow = result;
+        this.activeQuestion = undefined;
+        this.activeQuestionBox = undefined;
         //this.hideBox();
       }, (err: any) => {
         this.gs.triggerError(err);
@@ -148,16 +150,16 @@ export class ManageFieldQuestionsComponent implements OnInit {
     return this.gs.decodeYesNo(s);
   }
 
-  xOffset = 10;
-  yOffset = 85;
+  xOffset = 0;//10;
+  yOffset = 0;//85;
 
   mouseClick(e: MouseEvent): void {
-    if (!this.gs.strNoE(this.activeQuestion.question_id) && this.activeQuestionBox) {
+    if (this.activeQuestion && this.activeQuestionBox) {
       this.isDrawing = !e.shiftKey;
 
       if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
-        this.startX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
-        this.startY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
+        this.startX = e.offsetX;// - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
+        this.startY = e.offsetY;// - this.imageContainer.nativeElement.offsetTop + this.yOffset;
 
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.startX}px`);
@@ -201,8 +203,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
   mouseMove(e: MouseEvent): void {
     if (!this.isDrawing || !this.activeQuestionBox) return;
 
-    const endX = e.offsetX - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
-    const endY = e.offsetY - this.imageContainer.nativeElement.offsetTop + this.yOffset;
+    const endX = e.offsetX;// - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
+    const endY = e.offsetY;// - this.imageContainer.nativeElement.offsetTop + this.yOffset;
     const width = Math.abs(endX - this.startX);
     const height = Math.abs(endY - this.startY);
 

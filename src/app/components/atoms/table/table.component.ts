@@ -100,7 +100,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() OrderByReverse = false;
   ActiveRec: object | null = null;
   @Input()
-  set SetActiveRec(rec: object) {
+  set SetActiveRec(rec: any) {
     this.ActiveRec = rec;
     this.SetTableContainerWidth();
   }
