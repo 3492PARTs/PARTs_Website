@@ -200,9 +200,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.navigationService.currentNavigationState.subscribe(ns => {
       if (ns === NavigationState.collapsed && this.Type != 'select') this.MinWidth = 'auto';
-      window.setTimeout(() => {
-        this.setElementPositions();
-      }, 102);
+      this.setElementPositions();
+
     });
 
     this.setDatePanel();
@@ -244,11 +243,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   ngAfterViewInit() {
     this.setElementPositions()
 
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       if (this.Width === 'auto' && this.Type === 'number') {
         this.Width = '100px';
       }
-    }, 1);
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -474,7 +473,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.dropdown.nativeElement,
         'height', '0px'
       );
-      window.setTimeout(() => {
+      this.gs.triggerChange(() => {
         this.renderer.setStyle(
           this.dropdown.nativeElement,
           'visibility', 'hidden'
@@ -509,7 +508,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.dropdown.nativeElement,
       'height', '0px'
     );
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
         'visibility', 'hidden'
@@ -585,7 +584,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       */
 
       this.stopwatchSetValue();
-      window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+      this.gs.triggerChange(this.stopwatchRunFunction.bind(this), 10);
     }
   }
 
@@ -612,57 +611,58 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   positionLabel(): void {
+    if (this.label && this.label.nativeElement) {
+      //this.gs.triggerChange(() => {
+      if (this.label && this.Type !== 'checkbox') {
+        if (this.Type === 'number') {
+          const width = this.input.nativeElement.offsetWidth;
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'max-width', `calc(${width}px - 16px - 16px)`
+          );
+        }
+        else if (this.input && this.input.nativeElement) {
+          const width = this.input.nativeElement.offsetWidth;
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'max-width', `calc(${width}px - 16px - 16px - 16px)`
+          );
+        }
 
-    //this.gs.triggerChange(() => {
-    if (this.label && this.Type !== 'checkbox') {
-      if (this.Type === 'number') {
-        const width = this.input.nativeElement.offsetWidth;
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'max-width', `calc(${width}px - 16px - 16px)`
-        );
-      }
-      else if (this.input) {
-        const width = this.input.nativeElement.offsetWidth;
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'max-width', `calc(${width}px - 16px - 16px - 16px)`
-        );
-      }
 
+        const { lineHeight } = getComputedStyle(this.label.nativeElement);
+        const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
+        const amountOfLinesTilAdjust = 1.0;
+        /*
+        if (this.LabelText.includes('ou to the PARTs program')) {
+          let x = 0;
+        }*/
 
-      const { lineHeight } = getComputedStyle(this.label.nativeElement);
-      const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
-      const amountOfLinesTilAdjust = 1.0;
-
-      if (this.LabelText.includes('ou to the PARTs program')) {
-        let x = 0;
+        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+          //if (this.LabelText.includes('Lining up '))
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-' + labelOffset + 'px'
+          );
+          this.renderer.setStyle(
+            this.formElement.nativeElement,
+            'margin-top', labelOffset + 'px'
+          );
+        }
+        else {
+          //if (this.LabelText.includes('Lining up '))
+          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+          this.renderer.setStyle(
+            this.label.nativeElement,
+            'top', '-4px'
+          );
+          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+        }
       }
-
-      if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-        //if (this.LabelText.includes('Lining up '))
-        //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-' + labelOffset + 'px'
-        );
-        this.renderer.setStyle(
-          this.formElement.nativeElement,
-          'margin-top', labelOffset + 'px'
-        );
-      }
-      else {
-        //if (this.LabelText.includes('Lining up '))
-        //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-        this.renderer.setStyle(
-          this.label.nativeElement,
-          'top', '-4px'
-        );
-        this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
-      }
+      //});
     }
-    //});
   }
 
   strNoE(a: any): boolean {
@@ -698,7 +698,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     const prefix = phone.slice(3, 6);
     const suffix = phone.slice(6, 10);*/
 
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       /*this.phoneMaskModel = areaCode.length >= 1 ? '(' : '';
       this.phoneMaskModel += areaCode;
       this.phoneMaskModel += prefix.length > 0 ? ') ' : '';

@@ -1,64 +1,59 @@
-<app-box [Title]="'Manage Field Questions'">
-    <app-form-element-group [LabelText]="'Field Image'">
-
-        <app-form (SubmitFunction)="saveFieldImage()">
-            <div class="flex align-items-baseline justify-content-flex-start gap-1rem">
-                <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
-                    (FunctionCallBack)="previewImage()"></app-form-element>
-                <app-button *ngIf="fieldForm.img" [Type]="'submit'">Save</app-button>
-            </div>
-
-        </app-form>
-
-        @if (fieldForm.img_url) {
-        <div>
-            <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
-                <img #image id="image" [src]="fieldForm.img_url">
-                <ng-container *ngIf="activeQuestionFlow">
-                    <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
-                        <div class="label">
-                            <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
-                            <p>{{q.question}}</p>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-
-            <app-form (SubmitFunction)="saveQuestionFlow()">
-                <div>
-                    <div>
-                        <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
-                            [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
-                            [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
-                            [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                            (FunctionCallBack)="buildQuestionFlowOptions()"
-                            [SelectComparatorFunction]="subTypeComparatorFunction">
-                        </app-form-element>
-
-                        <app-form-element [Type]="'select'" [LabelText]="'Question Flow'"
-                            [SelectList]="availableQuestionFlows" [MinWidth]="'200px'" [DisplayProperty]="'name'"
-                            [(Model)]="activeQuestionFlow" [DisplayEmptyOption]="true" [FormGroup]="true"
-                            [FormGroupInline]="true" [SelectComparatorFunction]="questionFlowComparatorFunction"
-                            (FunctionCallBack)="setQuestionBoxes()">
-                        </app-form-element>
-                    </div>
-                    @if (activeQuestionFlow && activeQuestionFlow.id) {
-                    <div class="flex justify-content-space-between align-items-center">
-                        <div>
-                            <app-form-element [Type]="'text'" [LabelText]="'Flow Name'"
-                                [(Model)]="activeQuestionFlow.name" [FormGroup]="true"
-                                [FormGroupInline]="true"></app-form-element>
-
-                            <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
-                                [(Model)]="activeQuestionFlow.single_run" [FormGroup]="true"
-                                [FormGroupInline]="true"></app-form-element>
-                        </div>
-                        <app-button [Type]="'submit'">Save</app-button>
-                    </div>
-                    }
+<app-box [Title]="'Manage Field Form'">
+    <app-form-element-group>
+        <app-modal [Title]="'Upload Image'" [ButtonText]="'Upload Image'" [(visible)]="uploadImageModalVisible">
+            <app-form (SubmitFunction)="saveFieldImage()">
+                <div class="flex align-items-baseline justify-content-flex-start gap-1rem">
+                    <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
+                        (FunctionCallBack)="previewImage()"></app-form-element>
+                    <app-button [Type]="'submit'">Save</app-button>
                 </div>
+                @if (previewUrl) {
+                <img id="image" [src]="previewUrl">
+                }
 
             </app-form>
+        </app-modal>
+
+        <app-modal [Title]="'Manage Field Questions'" [ButtonText]="'Manage Questions'">
+            <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions"
+                [(FormMetadata)]="formMetadata">
+            </app-question-admin-form>
+        </app-modal>
+    </app-form-element-group>
+
+    @if (fieldForm.img_url) {
+    <app-form-element-group [LabelText]="'Edit Question Flows'">
+        <app-form (SubmitFunction)="saveQuestionFlow()">
+            <div>
+                <div class="flex gap-1rem margin-bottom--1rem">
+                    <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
+                        [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
+                        [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
+                        [DisplayEmptyOption]="true" (FunctionCallBack)="buildQuestionFlowOptions()"
+                        [SelectComparatorFunction]="subTypeComparatorFunction">
+                    </app-form-element>
+
+                    <app-form-element [Type]="'select'" [LabelText]="'Question Flow'"
+                        [SelectList]="availableQuestionFlows" [MinWidth]="'200px'" [DisplayProperty]="'name'"
+                        [(Model)]="activeQuestionFlow" [DisplayEmptyOption]="true"
+                        [SelectComparatorFunction]="questionFlowComparatorFunction"
+                        (FunctionCallBack)="setQuestionBoxes()">
+                    </app-form-element>
+                </div>
+                @if (activeQuestionFlow && activeQuestionFlow.id) {
+                <div class="flex justify-content-space-between align-items-center">
+                    <div class="margin-bottom--1rem">
+                        <app-form-element [Type]="'text'" [LabelText]="'Flow Name'" [(Model)]="activeQuestionFlow.name"
+                            [FormGroup]="true" [FormGroupInline]="true"></app-form-element>
+
+                        <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
+                            [(Model)]="activeQuestionFlow.single_run" [FormGroup]="true"
+                            [FormGroupInline]="true"></app-form-element>
+                    </div>
+                    <app-button [Type]="'submit'">Save</app-button>
+                </div>
+                }
+            </div>
 
             <app-table
                 *ngIf="activeQuestionFlow && activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
@@ -67,11 +62,21 @@
                 [ScrollHeight]="'40vh'" [ShowEditButton]="true" (EditRecordCallBack)="editQuestion($event)"
                 [SetActiveRec]="activeQuestion" [AllowActiveRecord]="true">
             </app-table>
-        </div>
-        }
-    </app-form-element-group>
 
-    <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions"
-        [(FormMetadata)]="formMetadata">
-    </app-question-admin-form>
+        </app-form>
+    </app-form-element-group>
+    <div class="margin-top-1rem">
+        <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
+            <img #image id="image" [src]="fieldForm.img_url">
+            <ng-container *ngIf="activeQuestionFlow">
+                <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
+                    <div class="label">
+                        <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
+                        <p>{{q.question}}</p>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    }
 </app-box>

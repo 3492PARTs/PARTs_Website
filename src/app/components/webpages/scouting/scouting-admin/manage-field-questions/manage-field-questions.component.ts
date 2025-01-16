@@ -12,11 +12,14 @@ import { AuthCallStates, AuthService } from '../../../../../services/auth.servic
 import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
+import { ModalComponent } from "../../../../atoms/modal/modal.component";
+import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
+import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-manage-field-questions',
   standalone: true,
-  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, ButtonRibbonComponent, HeaderComponent],
   templateUrl: './manage-field-questions.component.html',
   styleUrls: ['./manage-field-questions.component.scss']
 })
@@ -31,6 +34,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
   @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   fieldForm = new FieldForm();
+  uploadImageModalVisible = false;
+  previewUrl = '';
   isDrawing = false;
   startX = NaN;
   startY = NaN;
@@ -45,8 +50,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   questionFlowTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: "text" },
-    { PropertyName: 'order', ColLabel: 'Order', Type: "number" },
+    { PropertyName: 'question', ColLabel: 'Question', Type: "text", Required: true },
+    { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this) },
     { PropertyName: 'scout_question.x', ColLabel: 'X', Type: "number" },
@@ -66,7 +71,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   previewImage(): void {
     if (this.fieldForm.img)
       this.gs.previewImageFile(this.fieldForm.img, (ev: ProgressEvent<FileReader>) => {
-        this.fieldForm.img_url = ev.target?.result as string;
+        this.previewUrl = ev.target?.result as string;
       });
   }
 
@@ -79,6 +84,8 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getFieldForm();
+        this.previewUrl = '';
+        this.uploadImageModalVisible = false;
       }, (err: any) => {
         this.gs.triggerError(err);
       });

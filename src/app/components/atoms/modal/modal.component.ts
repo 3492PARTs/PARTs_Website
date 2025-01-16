@@ -52,6 +52,7 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     this.setModalSize();
+    if (!this.gs.strNoE(this.ButtonText) && this.gs.strNoE(this.ButtonType)) this.ButtonType = 'main';
   }
 
   @HostListener('window:resize', ['$event'])

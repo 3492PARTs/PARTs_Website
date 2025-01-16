@@ -38,7 +38,6 @@ export class QuestionAdminFormComponent implements OnInit {
   questionTableTriggerUpdate = false;
   questionTableCols: TableColType[] = [];
   private _questionTableCols: TableColType[] = [
-    { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
@@ -69,6 +68,7 @@ export class QuestionAdminFormComponent implements OnInit {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.FormMetadata = result;
+      this.setQuestionTableCols();
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
       this.buildQuestionFlowOptions();
     }, (err: any) => {
@@ -85,6 +85,9 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) },
       ];
+
+      if (this.FormMetadata.form_sub_types.length > 0)
+        this.questionTableCols = [{ PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' } as TableColType].concat(this.questionTableCols);
     }
     else {
       this.questionTableCols = [...this._questionTableCols];

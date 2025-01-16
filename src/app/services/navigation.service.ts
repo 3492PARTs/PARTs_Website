@@ -75,7 +75,7 @@ export class NavigationService {
               new Link('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
               new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
               new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
-              new Link('Field Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
+              new Link('Field Form', '/scouting/scouting-admin/manage-field-questions', 'form-select'),
               new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
               new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
               new Link('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
