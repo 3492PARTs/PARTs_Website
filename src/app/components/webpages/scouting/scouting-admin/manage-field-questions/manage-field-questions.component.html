@@ -39,8 +39,9 @@
                             (FunctionCallBack)="setQuestionBoxes()" [Required]="true">
                         </app-form-element>
                     </div>
-                    <div>
-                        <ng-container *ngIf="activeQuestionFlow && activeQuestionFlow.id">
+                    @if (activeQuestionFlow && activeQuestionFlow.id) {
+                    <div class="flex justify-content-space-between align-items-center">
+                        <div>
                             <app-form-element [Type]="'text'" [LabelText]="'Flow Name'"
                                 [(Model)]="activeQuestionFlow.name" [FormGroup]="true"
                                 [FormGroupInline]="true"></app-form-element>
@@ -48,10 +49,12 @@
                             <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
                                 [(Model)]="activeQuestionFlow.single_run" [FormGroup]="true"
                                 [FormGroupInline]="true"></app-form-element>
-                        </ng-container>
+                        </div>
+                        <app-button [Type]="'submit'">Save</app-button>
                     </div>
+                    }
                 </div>
-                <app-button [Type]="'submit'">Save</app-button>
+
             </app-form>
 
             <app-table
