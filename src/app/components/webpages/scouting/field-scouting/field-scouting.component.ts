@@ -45,10 +45,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  private stopwatchHour = 0;
-  private stopwatchMinute = 0;
-  stopwatchSecond = 0;
-  stopwatchLoopCount = 0;
+  stopwatchSecond = 15;
+  stopwatchLoopCount = 100;
 
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
@@ -320,6 +318,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.scoutFieldResponse = new ScoutFieldFormResponse();
     this.noMatch = false;
     this.formDisabled = false;
+    this.stopwatchReset();
     this.gs.scrollTo(0);
     this.init();
   }
@@ -333,8 +332,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       let answers = this.activeFormSubTypeForm?.questions.map(q => new QuestionAnswer(q.answer, q));
 
-
-      sfr = new ScoutFieldFormResponse(this.scoutFieldResponse.team, this.scoutFieldResponse.match, answers?.concat(this.scoutFieldResponse.answers));
+      sfr = new ScoutFieldFormResponse(this.scoutFieldResponse.team, this.scoutFieldResponse.match, this.scoutFieldResponse.answers.concat(answers || []));
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {
@@ -347,7 +345,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.ss.uploadOutstandingResponses();
   }
 
-  nextFlow() {
+  nextFlow(): void {
+    this.gs.scrollTo(0);
     let i = 0;
 
     for (; this.formSubTypeForms.length; i++) {
@@ -355,6 +354,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         break;
       }
     }
+
+    let answers = this.activeFormSubTypeForm?.questions.map(q => new QuestionAnswer(q.answer, q));
+    if (answers && answers?.length > 0)
+      this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
+
 
     this.activeFormSubTypeForm = this.formSubTypeForms[i];
     this.gs.triggerChange(() => this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions))));
@@ -445,34 +449,21 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   stopwatchReset(): void {
-    this.stopwatchHour = 0;
-    this.stopwatchMinute = 0;
-    this.stopwatchSecond = 0;
-    this.stopwatchLoopCount = 0;
+    this.stopwatchSecond = 15;
+    this.stopwatchLoopCount = 100;
   }
 
   stopwatchRunFunction(): void {
     if (this.stopwatchRun) {
-      this.stopwatchLoopCount++;
+      this.stopwatchLoopCount--
 
-      if (this.stopwatchLoopCount === 100) {
-        this.stopwatchSecond++;
-        this.stopwatchLoopCount = 0;
+      if (this.stopwatchLoopCount === 0) {
+        this.stopwatchSecond--;
+        if (this.stopwatchSecond > 0)
+          this.stopwatchLoopCount = 100;
       }
 
-      if (this.stopwatchSecond === 60) {
-        this.stopwatchMinute++;
-        this.stopwatchSecond = 0;
-      }
-
-      /*
-      if (this.stopwatchMinute === 60) {
-        this.stopwatchHour++;
-        this.stopwatchMinute = 0;
-        this.stopwatchSecond = 0;
-      }
-      */
-      if (this.stopwatchSecond < 15)
+      if (this.stopwatchSecond > 0)
         window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
       else {
         this.stopwatchRun = false;
