@@ -29,6 +29,7 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
+  @Input() AllowFlows = false;
   @Input() FormMetadata: FormInitialization = new FormInitialization();
   @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
   questionModalVisible = false

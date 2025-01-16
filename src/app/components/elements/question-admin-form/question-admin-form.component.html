@@ -25,6 +25,7 @@
       [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true">
     </app-form-element>
 
+    @if (AllowFlows) {
     <div class="flex align-items-center gap-1rem">
       <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
         [MinWidth]="'200px'" [DisplayProperty]="'name'" [BindingProperty]="'id'"
@@ -35,7 +36,7 @@
       <app-button class="padding-bottom-2rem" [ButtonType]="'add'"
         (FunctionCallBack)="showQuestionFlowModal()"></app-button>
     </div>
-
+    }
 
     <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
       [Required]="true" [FormGroup]="true" [FormGroupInline]="true">

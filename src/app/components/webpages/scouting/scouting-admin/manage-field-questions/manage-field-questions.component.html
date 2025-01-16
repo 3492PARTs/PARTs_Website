@@ -17,7 +17,7 @@
         <app-modal [Title]="'Manage Field Questions'" [ButtonText]="'Manage Questions'"
             (visibleChange)="closeQuestionModal($event)">
             <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions"
-                [(FormMetadata)]="formMetadata">
+                [(FormMetadata)]="formMetadata" [AllowFlows]="true">
             </app-question-admin-form>
         </app-modal>
     </app-form-element-group>
