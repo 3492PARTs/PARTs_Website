@@ -390,9 +390,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
     // reset stage
     if (!found) {
-      this.scoutFieldResponse.answers.push(flow.question_answer);
-      flow.question_answer = undefined;
-      this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+      if (!flow.single_run) {
+        this.scoutFieldResponse.answers.push(flow.question_answer);
+        flow.question_answer = undefined;
+        this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+      }
+      else {
+        flow.questions.forEach(q => {
+          const box = this.getQuestionBox(q);
+          if (box)
+            this.hideBox(box);
+        });
+      }
     }
 
     this.displayFlowStage(flow, question.order + 1, true);
@@ -402,15 +411,25 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     const questions = flow.questions.filter(q => q.order === stage);
     questions.forEach(q => {
-      this.boxes.forEach(b => {
-        if (b.nativeElement.id == q.question_id) {
-          if (show)
-            this.showBox(b.nativeElement, q.scout_question);
-          else
-            this.hideBox(b.nativeElement);
-        }
-      });
+      const box = this.getQuestionBox(q);
+      if (box) {
+        if (show)
+          this.showBox(box, q.scout_question);
+        else
+          this.hideBox(box);
+      }
     });
+  }
+
+  getQuestionBox(question: Question): HTMLElement | undefined {
+    for (let i = 0; i < this.boxes.length; i++) {
+      const box = this.boxes.get(i);
+      if (box && box.nativeElement.id == question.question_id) {
+        return box.nativeElement;
+      }
+    }
+
+    return undefined;
   }
 
   getFirstStage(questions: Question[]): number {

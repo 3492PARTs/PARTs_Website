@@ -220,6 +220,7 @@ export class Response {
 export class QuestionFlow {
     id = NaN;
     name = "";
+    single_run = false;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     questions: Question[] = [];

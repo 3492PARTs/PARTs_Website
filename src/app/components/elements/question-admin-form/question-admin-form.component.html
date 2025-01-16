@@ -72,6 +72,9 @@
   <app-form (SubmitFunction)="saveQuestionFlow()">
     <app-form-element [Type]="'text'" [(Model)]="newQuestionFlow.name" [Required]="true"></app-form-element>
 
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
+      [(Model)]="newQuestionFlow.single_run"></app-form-element>
+
     <app-button-ribbon>
       <app-button [Type]="'submit'">Save</app-button>
     </app-button-ribbon>
