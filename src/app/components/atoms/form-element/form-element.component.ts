@@ -95,7 +95,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         this.change(tmp);
       }
 
-      this.setElementPositions();
+      this.gs.triggerChange(() => {
+        this.setElementPositions();
+      });
     });
   }
   _SelectList: any[] = [];
@@ -241,7 +243,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-    this.setElementPositions()
+    this.setElementPositions();
 
     this.gs.triggerChange(() => {
       if (this.Width === 'auto' && this.Type === 'number') {
@@ -389,33 +391,33 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setIndicatorPosition(): void {
-    this.gs.triggerChange(() => {
-      if (this.validationIndicator) {
-        if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
-          if (this.label) {
-            if (['radio', 'multiCheckbox'].includes(this.Type))
-              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
-            if (['checkbox'].includes(this.Type))
-              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
-          }
-        }
-        else if (this.Type === 'area') {
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
-        }
-        else if (this.input) {
-          let width = this.input.nativeElement.offsetWidth;
-
-          let offset = '0.5rem';
-
-          if (this.Type === 'select')
-            offset = '1.25rem'
-          else if (['date', 'datetime'].includes(this.Type))
-            offset = '2.8rem'
-
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
+    //this.gs.triggerChange(() => {
+    if (this.input && this.input.nativeElement && this.validationIndicator && this.validationIndicator.nativeElement) {
+      if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
+        if (this.label) {
+          if (['radio', 'multiCheckbox'].includes(this.Type))
+            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
+          if (['checkbox'].includes(this.Type))
+            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         }
       }
-    });
+      else if (this.Type === 'area') {
+        this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
+      }
+      else if (this.input) {
+        let width = this.input.nativeElement.offsetWidth;
+
+        let offset = '0.5rem';
+
+        if (this.Type === 'select')
+          offset = '1.25rem'
+        else if (['date', 'datetime'].includes(this.Type))
+          offset = '2.8rem'
+
+        this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
+      }
+    }
+    //});
 
   }
 
@@ -709,7 +711,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel = !this.gs.strNoE(val) ? val : null;
 
       if (!init) this.change(phone);
-    }, 1);
+    });
   };
 
   increment(): void {
