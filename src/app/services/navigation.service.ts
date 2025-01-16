@@ -89,6 +89,7 @@ export class NavigationService {
             subPages = [
               new Link('Matches', '/scouting/strategizing/plan-matches', 'soccer-field'),
               new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
+              new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
             ];
             break;
         }

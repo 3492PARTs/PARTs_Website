@@ -6,9 +6,12 @@
 ---- maybe think about input where they click when piece picked up and another for when scored?
 -- for number inputs
 -- for time inputs
+-- i think everything in a flow can be an average
+
 - percentages
 -- this will be computed across matches
 -- for boolean indicators ?
+
 - fastest
 - min maxes
 
