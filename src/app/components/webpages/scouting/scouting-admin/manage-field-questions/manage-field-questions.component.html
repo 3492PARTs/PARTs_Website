@@ -1,8 +1,12 @@
 <app-box [Title]="'Manage Field Questions'">
     <app-form-element-group [LabelText]="'Field Image'">
 
-        <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
-            (FunctionCallBack)="previewImage()"></app-form-element>
+        <app-form (SubmitFunction)="saveFieldImage()">
+            <app-form-element [Type]="'file'" [(Model)]="fieldForm.img"
+                (FunctionCallBack)="previewImage()"></app-form-element>
+            <app-button *ngIf="fieldForm.img" [Type]="'submit'">Save</app-button>
+        </app-form>
+
 
         <div>
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
