@@ -30,6 +30,8 @@
                     [SelectComparatorFunction]="questionFlowComparatorFunction" (FunctionCallBack)="setQuestionBoxes()">
                 </app-form-element>
 
+                <app-form-element *ngIf="activeQuestionFlow.id" [Type]="'checkbox'" [LabelText]="'Single Run'"
+                    [(Model)]="activeQuestionFlow.single_run"></app-form-element>
                 <app-button [Type]="'submit'">Save</app-button>
             </app-form>
 
