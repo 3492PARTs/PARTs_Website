@@ -37,9 +37,9 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   availableQuestionFlows: QuestionFlow[] = [];
 
-  activeFormSubType = new FormSubType();
+  activeFormSubType: FormSubType | undefined = undefined;
 
-  activeQuestionFlow = new QuestionFlow();
+  activeQuestionFlow: QuestionFlow | undefined = undefined;
 
   activeQuestion = new Question();
   activeQuestionBox: ElementRef<any> | undefined = undefined;
@@ -112,22 +112,25 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   saveQuestionFlow(): void {
-    this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      //this.hideBox();
-      this.getQuestionFlow();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    if (this.activeQuestionFlow)
+      this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        //this.hideBox();
+        this.getQuestionFlow();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
   }
 
   getQuestionFlow(): void {
-    this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
-      this.activeQuestionFlow = result
-      //this.hideBox();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
+    if (this.activeQuestionFlow) {
+      this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
+        this.activeQuestionFlow = result
+        //this.hideBox();
+      }, (err: any) => {
+        this.gs.triggerError(err);
+      });
+    }
   }
 
   ynToYesNo(s: string): string {
@@ -178,7 +181,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
         this.activeQuestion.scout_question.width = boxCoords.width;
         this.activeQuestion.scout_question.height = boxCoords.height;
 
-        this.gs.updateObjectInArray(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion);
+        if (this.activeQuestionFlow) this.gs.updateObjectInArray(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion);
         this.questionFlowTableTriggerUpdate = !this.questionFlowTableTriggerUpdate;
       }
     }
@@ -207,11 +210,12 @@ export class ManageFieldQuestionsComponent implements OnInit {
     this.boxes.forEach(b => this.hideBox(b.nativeElement));
 
     this.gs.triggerChange(() => {
-      for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
-        if (this.boxes.get(i)) {
-          this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].scout_question);
+      if (this.activeQuestionFlow)
+        for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
+          if (this.boxes.get(i)) {
+            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].scout_question);
+          }
         }
-      }
     });
   }
 
@@ -232,24 +236,26 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   editQuestion(q: Question): void {
-    //this.hideBox();
+    if (this.activeQuestionFlow) {
+      //this.hideBox();
 
-    this.activeQuestion = q;
-    this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion.question_id));
+      this.activeQuestion = q;
+      this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion.question_id));
 
-    if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
-      !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
-      !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
-      !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
-      this.activeQuestionBox) {
-      /*
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
-
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);*/
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
+      if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
+        !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
+        !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
+        !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
+        this.activeQuestionBox) {
+        /*
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
+  
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
+      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);*/
+        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
+      }
     }
   }
 

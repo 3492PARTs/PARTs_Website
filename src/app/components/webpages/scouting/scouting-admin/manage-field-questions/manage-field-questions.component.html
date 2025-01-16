@@ -11,37 +11,53 @@
         <div>
             <div #imageContainer id="image-container" (click)="mouseClick($event)" (mousemove)="mouseMove($event)">
                 <img #image id="image" *ngIf="fieldForm.img_url" [src]="fieldForm.img_url">
-                <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
-                    <div class="label">
-                        <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
-                        <p>{{q.question}}</p>
+                <ng-container *ngIf="activeQuestionFlow">
+                    <div #box class="box" *ngFor="let q of activeQuestionFlow.questions" id="{{q.question_id}}">
+                        <div class="label">
+                            <span *ngIf="q.scout_question.icon" class="mdi icon mdi-{{q.scout_question.icon}}"></span>
+                            <p>{{q.question}}</p>
+                        </div>
                     </div>
-                </div>
+                </ng-container>
             </div>
 
             <app-form (SubmitFunction)="saveQuestionFlow()">
-                <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
-                    [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
-                    [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
-                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                    (FunctionCallBack)="buildQuestionFlowOptions()"
-                    [SelectComparatorFunction]="subTypeComparatorFunction">
-                </app-form-element>
+                <div>
+                    <div>
+                        <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
+                            [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
+                            [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
+                            [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
+                            (FunctionCallBack)="buildQuestionFlowOptions()"
+                            [SelectComparatorFunction]="subTypeComparatorFunction" [Required]="true">
+                        </app-form-element>
 
-                <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
-                    [MinWidth]="'200px'" [DisplayProperty]="'name'" [(Model)]="activeQuestionFlow"
-                    [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
-                    [SelectComparatorFunction]="questionFlowComparatorFunction" (FunctionCallBack)="setQuestionBoxes()">
-                </app-form-element>
+                        <app-form-element [Type]="'select'" [LabelText]="'Question Flow'"
+                            [SelectList]="availableQuestionFlows" [MinWidth]="'200px'" [DisplayProperty]="'name'"
+                            [(Model)]="activeQuestionFlow" [DisplayEmptyOption]="true" [FormGroup]="true"
+                            [FormGroupInline]="true" [SelectComparatorFunction]="questionFlowComparatorFunction"
+                            (FunctionCallBack)="setQuestionBoxes()" [Required]="true">
+                        </app-form-element>
+                    </div>
+                    <div>
+                        <ng-container *ngIf="activeQuestionFlow && activeQuestionFlow.id">
+                            <app-form-element [Type]="'text'" [LabelText]="'Flow Name'"
+                                [(Model)]="activeQuestionFlow.name" [FormGroup]="true"
+                                [FormGroupInline]="true"></app-form-element>
 
-                <app-form-element *ngIf="activeQuestionFlow.id" [Type]="'checkbox'" [LabelText]="'Single Run'"
-                    [(Model)]="activeQuestionFlow.single_run"></app-form-element>
+                            <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
+                                [(Model)]="activeQuestionFlow.single_run" [FormGroup]="true"
+                                [FormGroupInline]="true"></app-form-element>
+                        </ng-container>
+                    </div>
+                </div>
                 <app-button [Type]="'submit'">Save</app-button>
             </app-form>
 
             <p><a target="_blank" href="https://pictogrammers.com/library/mdi/">Icons</a></p>
 
-            <app-table *ngIf="activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
+            <app-table
+                *ngIf="activeQuestionFlow && activeQuestionFlow.questions && activeQuestionFlow.questions.length > 0"
                 [TableCols]="questionFlowTableCols" [TableData]="activeQuestionFlow.questions"
                 [TriggerUpdate]="questionFlowTableTriggerUpdate" [Width]="'100%'" [Scrollable]="true"
                 [ScrollHeight]="'40vh'" [ShowEditButton]="true" (EditRecordCallBack)="editQuestion($event)"
