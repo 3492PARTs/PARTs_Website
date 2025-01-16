@@ -29,14 +29,14 @@
                             [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
                             [DisplayEmptyOption]="true" [FormGroup]="true" [FormGroupInline]="true"
                             (FunctionCallBack)="buildQuestionFlowOptions()"
-                            [SelectComparatorFunction]="subTypeComparatorFunction" [Required]="true">
+                            [SelectComparatorFunction]="subTypeComparatorFunction">
                         </app-form-element>
 
                         <app-form-element [Type]="'select'" [LabelText]="'Question Flow'"
                             [SelectList]="availableQuestionFlows" [MinWidth]="'200px'" [DisplayProperty]="'name'"
                             [(Model)]="activeQuestionFlow" [DisplayEmptyOption]="true" [FormGroup]="true"
                             [FormGroupInline]="true" [SelectComparatorFunction]="questionFlowComparatorFunction"
-                            (FunctionCallBack)="setQuestionBoxes()" [Required]="true">
+                            (FunctionCallBack)="setQuestionBoxes()">
                         </app-form-element>
                     </div>
                     @if (activeQuestionFlow && activeQuestionFlow.id) {

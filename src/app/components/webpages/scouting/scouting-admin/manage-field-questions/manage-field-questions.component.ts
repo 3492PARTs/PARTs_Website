@@ -174,7 +174,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
         this.startY = NaN;
         //console.log(boxCoords);
 
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(255, 0, 0, 0.3)");
+        this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
         this.activeQuestion.scout_question.x = boxCoords.x;
         this.activeQuestion.scout_question.y = boxCoords.y;
@@ -237,7 +237,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   editQuestion(q: Question): void {
     if (this.activeQuestionFlow) {
-      //this.hideBox();
+      if (this.activeQuestionBox) this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
       this.activeQuestion = q;
       this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion.question_id));
@@ -247,16 +247,17 @@ export class ManageFieldQuestionsComponent implements OnInit {
         !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
         !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
         this.activeQuestionBox) {
-        /*
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${this.activeQuestion.scout_question.width}%`);
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${this.activeQuestion.scout_question.height}%`);
-  
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.activeQuestion.scout_question.x}%`);
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.activeQuestion.scout_question.y}%`);*/
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
+        this.setBoxActive(this.activeQuestionBox.nativeElement)
       }
     }
+  }
+
+  setBoxActive(box: HTMLElement): void {
+    this.renderer.setStyle(box, 'background', "rgba(0, 255, 0, 0.3)");
+  }
+
+  setBoxInactive(box: HTMLElement): void {
+    this.renderer.setStyle(box, 'background', "rgba(255, 0, 0, 0.3)");
   }
 
   hideBox(box: HTMLElement): void {
