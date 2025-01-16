@@ -26,7 +26,7 @@ export class QuestionFormElementComponent {
   }
 
   click(e: MouseEvent): void {
-    console.log(e);
+    //console.log(e);
     this.change({ x: e.offsetX, y: e.offsetY });
   }
 }

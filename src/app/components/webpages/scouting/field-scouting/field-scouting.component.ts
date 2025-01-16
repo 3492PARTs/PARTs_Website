@@ -34,6 +34,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   scoutFieldResponse = new ScoutFieldFormResponse();
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
+  @ViewChildren(QuestionFormElementComponent) questionFormElements: QueryList<QuestionFormElementComponent> = new QueryList<QuestionFormElementComponent>();
 
   teams: Team[] = [];
   matches: Match[] = [];
@@ -372,47 +373,55 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.gs.triggerChange(() => this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions))));
   }
 
-  advanceFlow(flow: QuestionFlow, question: Question): void {
-    if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
-    question.answer = JSON.stringify(question.answer);
-    flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
-
-    this.displayFlowStage(flow, question.order, false);
-
-    let stage = 0;
-
-    flow.questions.sort((a, b) => {
-      if (a.order > b.order) return 1;
-      else if (a.order < b.order) return -1;
-      else return 0;
-    });
-
-    let found = false;
-    for (let i = 0; i < flow.questions.length; i++) {
-      if (flow.questions[i].order > question.order) {
-        this.displayFlowStage(flow, flow.questions[i].order);
-        found = true;
-        break;
-      }
+  advanceFlow(flow: QuestionFlow, question: Question, override = false): void {
+    if (question.question_typ.question_typ !== 'mnt-psh-btn') {
+      const qfe = this.getQuestionFormElement(question);
+      if (qfe && !qfe.formElement.valid) return;
     }
 
-    // reset stage
-    if (!found) {
-      if (!flow.single_run) {
-        this.scoutFieldResponse.answers.push(flow.question_answer);
-        flow.question_answer = undefined;
-        this.displayFlowStage(flow, this.getFirstStage(flow.questions));
-      }
-      else {
-        flow.questions.forEach(q => {
-          const box = this.getQuestionBox(q);
-          if (box)
-            this.hideBox(box);
-        });
-      }
-    }
+    if (question.question_typ.question_typ === 'mnt-psh-btn' || override) {
+      if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
+      question.answer = JSON.stringify(question.answer);
+      flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
+      question.answer = undefined;
 
-    this.displayFlowStage(flow, question.order + 1, true);
+      this.displayFlowStage(flow, question.order, false);
+
+      let stage = 0;
+
+      flow.questions.sort((a, b) => {
+        if (a.order > b.order) return 1;
+        else if (a.order < b.order) return -1;
+        else return 0;
+      });
+
+      let found = false;
+      for (let i = 0; i < flow.questions.length; i++) {
+        if (flow.questions[i].order > question.order) {
+          this.displayFlowStage(flow, flow.questions[i].order);
+          found = true;
+          break;
+        }
+      }
+
+      // reset stage
+      if (!found) {
+        if (!flow.single_run) {
+          this.scoutFieldResponse.answers.push(flow.question_answer);
+          flow.question_answer = undefined;
+          this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+        }
+        else {
+          flow.questions.forEach(q => {
+            const box = this.getQuestionBox(q);
+            if (box)
+              this.hideBox(box);
+          });
+        }
+      }
+
+      this.displayFlowStage(flow, question.order + 1, true);
+    }
   }
 
 
@@ -434,6 +443,17 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       const box = this.boxes.get(i);
       if (box && box.nativeElement.id == question.question_id) {
         return box.nativeElement;
+      }
+    }
+
+    return undefined;
+  }
+
+  getQuestionFormElement(question: Question): QuestionFormElementComponent | undefined {
+    for (let i = 0; i < this.boxes.length; i++) {
+      const box = this.boxes.get(i);
+      if (box && box.nativeElement.id == question.question_id) {
+        return this.questionFormElements.get(i);
       }
     }
 
