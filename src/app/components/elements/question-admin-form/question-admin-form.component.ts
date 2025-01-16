@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
 import { QuestionWithConditions, QuestionOption, QuestionType, FormInitialization, QuestionFlow } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
@@ -29,7 +29,8 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
-  init: FormInitialization = new FormInitialization();
+  @Input() FormMetadata: FormInitialization = new FormInitialization();
+  @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
   questionModalVisible = false
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   availableQuestionFlows: QuestionFlow[] = [];
@@ -67,7 +68,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/form-editor/', {
       form_typ: this.formType
     }, (result: FormInitialization) => {
-      this.init = result;
+      this.FormMetadata = result;
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
       this.buildQuestionFlowOptions();
     }, (err: any) => {
@@ -103,7 +104,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.init.question_flows.filter(qf =>
+    this.availableQuestionFlows = this.FormMetadata.question_flows.filter(qf =>
       (this.activeQuestion && !this.gs.strNoE(this.activeQuestion.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
   }
 
@@ -163,6 +164,6 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   getQuestionFlowName(id: number): string {
-    return this.init.question_flows.find(qf => qf.id === id)?.name || '';
+    return this.FormMetadata.question_flows.find(qf => qf.id === id)?.name || '';
   }
 }

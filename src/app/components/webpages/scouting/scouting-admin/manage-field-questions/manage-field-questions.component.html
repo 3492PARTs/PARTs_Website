@@ -44,6 +44,7 @@
         </div>
     </app-form-element-group>
 
-    <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions">
+    <app-question-admin-form [formType]="formType" [runInit]="manageScoutFieldQuestions"
+        [(FormMetadata)]="formMetadata">
     </app-question-admin-form>
 </app-box>

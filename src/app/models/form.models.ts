@@ -158,12 +158,14 @@ export interface IFormSubType {
     form_sub_typ: string;
     form_sub_nm: string;
     form_typ_id: string;
+    order: number;
 }
 
 export class FormSubType implements IFormSubType {
     form_sub_typ = ''
     form_sub_nm = ''
     form_typ_id = ''
+    order = NaN;
 }
 
 

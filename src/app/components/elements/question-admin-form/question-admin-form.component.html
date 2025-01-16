@@ -1,4 +1,4 @@
-<app-table [TableCols]="questionTableCols" [TableData]="init.questions" [Width]="'100%'" [ShowAddButton]="true"
+<app-table [TableCols]="questionTableCols" [TableData]="FormMetadata.questions" [Width]="'100%'" [ShowAddButton]="true"
   (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)"
   [Scrollable]="true" [ScrollHeight]="'72vh'" [TriggerUpdate]="questionTableTriggerUpdate">
 </app-table>
@@ -13,16 +13,16 @@
       [Width]="'6em'" [FormGroup]="true" [FormGroupInline]="true">
     </app-form-element>
 
-    <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="init.question_types"
+    <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="FormMetadata.question_types"
       [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
       [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
       [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true">
     </app-form-element>
 
-    <app-form-element *ngIf="init.form_sub_types && init.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Form Sub Type'" [SelectList]="init.form_sub_types" [MinWidth]="'200px'"
+    <app-form-element *ngIf="FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0" [Type]="'select'"
+      [LabelText]="'Form Sub Type'" [SelectList]="FormMetadata.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
-      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()">
+      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true">
     </app-form-element>
 
     <div class="flex align-items-center gap-1rem">

@@ -101,7 +101,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.fieldForm = result.field_form;
         this.formSubTypeForms = result.form_sub_types;
 
-        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.form_sub_typ === 'teleop');
+        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
             const stage = this.getFirstStage(qf.questions);
@@ -339,6 +339,19 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   uploadOutstandingResponses(): void {
     this.ss.uploadOutstandingResponses();
+  }
+
+  nextFlow() {
+    let i = 0;
+
+    for (; this.formSubTypeForms.length; i++) {
+      if (this.activeFormSubTypeForm?.form_sub_typ && this.formSubTypeForms[i].form_sub_typ.order == this.activeFormSubTypeForm?.form_sub_typ.order + 1) {
+        break;
+      }
+    }
+
+    this.activeFormSubTypeForm = this.formSubTypeForms[i];
+    this.gs.triggerChange(() => this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions))));
   }
 
   advanceFlow(flow: QuestionFlow, question: Question): void {
