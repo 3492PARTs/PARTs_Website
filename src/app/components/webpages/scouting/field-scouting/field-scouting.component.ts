@@ -44,6 +44,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   outstandingResponses: { id: number, team: number }[] = [];
 
+  private stopwatchRun = false;
+  private stopwatchHour = 0;
+  private stopwatchMinute = 0;
+  stopwatchSecond = 0;
+  stopwatchLoopCount = 0;
+
   autoFormElements = new QueryList<FormElementComponent>();
   teleopFormElements = new QueryList<FormElementComponent>();
   otherFormElements = new QueryList<FormElementComponent>();
@@ -388,6 +394,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.displayFlowStage(flow, question.order + 1, true);
   }
 
+
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     const questions = flow.questions.filter(q => q.order === stage);
     questions.forEach(q => {
@@ -424,6 +431,54 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
     }
 
+  }
+
+  stopwatchStart(): void {
+    if (this.activeFormSubTypeForm?.form_sub_typ.form_sub_typ === 'auto' && !this.stopwatchRun) {
+      this.stopwatchRun = true;
+      this.stopwatchRunFunction();
+    }
+  }
+
+  stopwatchStop(): void {
+    this.stopwatchRun = false;
+  }
+
+  stopwatchReset(): void {
+    this.stopwatchHour = 0;
+    this.stopwatchMinute = 0;
+    this.stopwatchSecond = 0;
+    this.stopwatchLoopCount = 0;
+  }
+
+  stopwatchRunFunction(): void {
+    if (this.stopwatchRun) {
+      this.stopwatchLoopCount++;
+
+      if (this.stopwatchLoopCount === 100) {
+        this.stopwatchSecond++;
+        this.stopwatchLoopCount = 0;
+      }
+
+      if (this.stopwatchSecond === 60) {
+        this.stopwatchMinute++;
+        this.stopwatchSecond = 0;
+      }
+
+      /*
+      if (this.stopwatchMinute === 60) {
+        this.stopwatchHour++;
+        this.stopwatchMinute = 0;
+        this.stopwatchSecond = 0;
+      }
+      */
+      if (this.stopwatchSecond <= 15)
+        window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+      else {
+        this.stopwatchRun = false;
+        this.nextFlow();
+      }
+    }
   }
   /////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////
