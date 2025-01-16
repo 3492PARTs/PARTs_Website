@@ -435,6 +435,7 @@ export class TableColType {
   MaxValue?: number;
   Rows?: number;
   Required? = false;
+  Href?: string;
   ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;

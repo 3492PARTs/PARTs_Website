@@ -53,7 +53,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     { PropertyName: 'scout_question.y', ColLabel: 'Y', Type: "number" },
     { PropertyName: 'scout_question.width', ColLabel: 'Width', Type: "number" },
     { PropertyName: 'scout_question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text" },
+    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/" },
   ];
   questionFlowTableTriggerUpdate = false;
 

@@ -21,7 +21,12 @@
               rightAlign: col.Alignment == 'right',
               centerAlign: col.Alignment == 'center'
             }" [ngStyle]="{ 'width': col.Width ? col.Width : 'auto' }">
+          @if (col.Href) {
+          <a [href]="col.Href" target="_blank">{{ col.ColLabel }}</a>
+          }
+          @else {
           {{ col.ColLabel }}
+          }
           <span *ngIf="
                 !OrderByReverse &&
                 !DisableSort &&
