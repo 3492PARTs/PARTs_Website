@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { QuestionAdminFormComponent } from '../../../../elements/question-admin-form/question-admin-form.component';
 import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
@@ -30,8 +30,9 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   manageScoutFieldQuestions = false;
 
-  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef = new ElementRef(null);
-  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
+  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined = undefined;
+  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef | undefined = undefined;
+  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef | undefined = undefined;
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   fieldForm = new FieldForm();
   uploadImageModalVisible = false;
@@ -64,11 +65,24 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   isMobile = false;
 
+  private resizeTimer: number | null | undefined;
+
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
     this.isMobile = this.gs.isMobile();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.adjustFieldImage();
+    }, 200);
   }
 
   previewImage(): void {
@@ -98,6 +112,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   getFieldForm(): void {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
       this.fieldForm = result;
+      this.gs.triggerChange(() => this.adjustFieldImage());
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -153,9 +168,6 @@ export class ManageFieldQuestionsComponent implements OnInit {
     return this.gs.decodeYesNo(s);
   }
 
-  xOffset = 0;//10;
-  yOffset = 0;//85;
-
   mouseClick(e: MouseEvent): void {
     if (this.activeQuestion && this.activeQuestionBox) {
       this.isDrawing = !e.shiftKey;
@@ -172,7 +184,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
         this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
       }
 
-      if (!this.isDrawing) {
+      if (!this.isDrawing && this.image) {
         const boxCoords = {
           x: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.left) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
           y: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.top) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2)),
@@ -286,5 +298,18 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   questionFlowComparatorFunction(o1: QuestionFlow, o2: QuestionFlow): boolean {
     return o1 && o2 && o1.id === o2.id;
+  }
+
+  adjustFieldImage(): void {
+    if (this.imageBackground && this.image) {
+      if (window.innerWidth > window.innerHeight) {
+        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
+        this.renderer.setStyle(this.image.nativeElement, 'height', '80vh');
+      }
+      else {
+        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
+      }
+    }
   }
 }

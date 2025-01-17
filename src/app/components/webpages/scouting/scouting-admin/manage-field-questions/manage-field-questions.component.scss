@@ -1,9 +1,14 @@
+#image-background {
+  background-color: black;
+  text-align: center;
+}
 #image-container {
   position: relative;
+  display: flex;
 }
 
 #image {
-  width: 100%;
+  width: auto;
   height: auto;
   pointer-events: none;
 }
