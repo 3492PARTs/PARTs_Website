@@ -392,7 +392,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   setIndicatorPosition(): void {
     //this.gs.triggerChange(() => {
-    if (this.input && this.input.nativeElement && this.validationIndicator && this.validationIndicator.nativeElement) {
+    if (this.validationIndicator && this.validationIndicator.nativeElement) {
       if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
         if (this.label) {
           if (['radio', 'multiCheckbox'].includes(this.Type))
@@ -404,7 +404,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       else if (this.Type === 'area') {
         this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
       }
-      else if (this.input) {
+      else if (this.input && this.input.nativeElement) {
         let width = this.input.nativeElement.offsetWidth;
 
         let offset = '0.5rem';
