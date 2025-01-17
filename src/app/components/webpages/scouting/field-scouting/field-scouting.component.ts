@@ -38,11 +38,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   @ViewChild(FormComponent) form!: FormComponent;
 
   fullScreen = false;
-  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef = new ElementRef(null);
-  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef = new ElementRef(null);
-  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
-  @ViewChild('fullScreenButton', { read: ElementRef, static: false }) fullScreenButton: ElementRef = new ElementRef(null);
-  @ViewChild('formSubTypeHeader', { read: ElementRef, static: false }) formSubTypeHeader: ElementRef = new ElementRef(null);
+  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined = undefined;
+  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef | undefined = undefined;
+  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef | undefined = undefined;
+  @ViewChild('fullScreenButton', { read: ElementRef, static: false }) fullScreenButton: ElementRef | undefined = undefined;
+  @ViewChild('formSubTypeHeader', { read: ElementRef, static: false }) formSubTypeHeader: ElementRef | undefined = undefined;
 
   teams: Team[] = [];
   matches: Match[] = [];
@@ -347,7 +347,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let answers = this.activeFormSubTypeForm?.questions.map(q => new QuestionAnswer(q.answer, q));
+      let answers = this.getActiveFlowFlowlessQuestionAnswers();
 
       sfr = new ScoutFieldFormResponse(this.scoutFieldResponse.team, this.scoutFieldResponse.match, this.scoutFieldResponse.answers.concat(answers || []));
     }
@@ -374,7 +374,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     }
 
-    let answers = this.activeFormSubTypeForm?.questions.map(q => new QuestionAnswer(q.answer, q));
+    let answers = this.getActiveFlowFlowlessQuestionAnswers();
     if (answers && answers?.length > 0)
       this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
 
@@ -392,8 +392,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           return;
         }
       }
+
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
-      question.answer = JSON.stringify(question.answer);
+      question.answer = this.gs.formatQuestionAnswer(question.answer);
+
       flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
       question.answer = undefined;
 
@@ -448,6 +450,17 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.hideBox(box);
       }
     });
+  }
+
+  getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {
+    let answers: QuestionAnswer[] = [];
+    if (this.activeFormSubTypeForm) {
+      answers = this.activeFormSubTypeForm.questions.map(q => {
+        q.answer = this.gs.formatQuestionAnswer(q.answer);
+        return new QuestionAnswer(q.answer, q);
+      });
+    }
+    return answers;
   }
 
   getQuestionBox(question: Question): HTMLElement | undefined {
@@ -548,47 +561,49 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   setFullScreen(fullScreen: boolean): void {
-    this.fullScreen = fullScreen;
-    if (this.fullScreen) {
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '99');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'fixed');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'top', '0');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'left', '0');
+    if (this.imageBackground && this.image && this.fullScreenButton && this.formSubTypeHeader) {
+      this.fullScreen = fullScreen;
+      if (this.fullScreen) {
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '99');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'fixed');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'top', '0');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'left', '0');
 
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100vw');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'height', '100vh');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100vw');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'height', '100vh');
 
-      this.renderer.setStyle(this.image.nativeElement, 'max-width', '100vw');
-      this.renderer.setStyle(this.image.nativeElement, 'max-height', '100vh');
+        this.renderer.setStyle(this.image.nativeElement, 'max-width', '100vw');
+        this.renderer.setStyle(this.image.nativeElement, 'max-height', '100vh');
 
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '100');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'fixed');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '1rem');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '1rem');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '100');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'fixed');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '1rem');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '1rem');
 
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '100');
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'fixed');
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'top', '0');
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'left', '2rem');
-      //box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-    }
-    else {
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '0');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'initial');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '100');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'fixed');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'top', '0');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'left', '2rem');
+        //box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+      }
+      else {
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '0');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'initial');
 
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100%');
-      this.renderer.setStyle(this.imageBackground.nativeElement, 'height', 'auto');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.imageBackground.nativeElement, 'height', 'auto');
 
-      this.renderer.setStyle(this.image.nativeElement, 'max-width', '100%');
-      this.renderer.setStyle(this.image.nativeElement, 'max-height', '84vh');
+        this.renderer.setStyle(this.image.nativeElement, 'max-width', '100%');
+        this.renderer.setStyle(this.image.nativeElement, 'max-height', '84vh');
 
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '0');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'absolute');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '-7px');
-      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '0');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '0');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'absolute');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '-7px');
+        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '0');
 
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '0');
-      this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'initial');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '0');
+        this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'initial');
+      }
     }
   }
 }

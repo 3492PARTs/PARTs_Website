@@ -134,17 +134,17 @@ export class ScoutingActivityComponent implements OnInit {
 
     schedules.forEach(s => {
       schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
-      if ((s.red_one_id as User).id === user.id)
+      if (s.red_one_id && (s.red_one_id as User).id === user.id)
         schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
-      else if ((s.red_two_id as User).id === user.id)
+      else if (s.red_two_id && (s.red_two_id as User).id === user.id)
         schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
-      else if ((s.red_three_id as User).id === user.id)
+      else if (s.red_three_id && (s.red_three_id as User).id === user.id)
         schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
-      else if ((s.blue_one_id as User).id === user.id)
+      else if (s.blue_one_id && (s.blue_one_id as User).id === user.id)
         schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
-      else if ((s.blue_two_id as User).id === user.id)
+      else if (s.blue_two_id && (s.blue_two_id as User).id === user.id)
         schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
-      else if ((s.blue_three_id as User).id === user.id)
+      else if (s.blue_three_id && (s.blue_three_id as User).id === user.id)
         schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
 
       schedule += '\n\n';
@@ -162,18 +162,24 @@ export class ScoutingActivityComponent implements OnInit {
     let str = '';
 
     let red_one = new User();
-    Object.assign(red_one, sfs.red_one_id);
+    if (sfs.red_one_id)
+      Object.assign(red_one, sfs.red_one_id);
     let red_two = new User();
-    Object.assign(red_two, sfs.red_two_id);
+    if (sfs.red_two_id)
+      Object.assign(red_two, sfs.red_two_id);
     let red_three = new User();
-    Object.assign(red_three, sfs.red_three_id);
+    if (sfs.red_three_id)
+      Object.assign(red_three, sfs.red_three_id);
 
     let blue_one = new User();
-    Object.assign(blue_one, sfs.blue_one_id);
+    if (sfs.blue_one_id)
+      Object.assign(blue_one, sfs.blue_one_id);
     let blue_two = new User();
-    Object.assign(blue_two, sfs.blue_two_id);
+    if (sfs.blue_two_id)
+      Object.assign(blue_two, sfs.blue_two_id);
     let blue_three = new User();
-    Object.assign(blue_three, sfs.blue_three_id);
+    if (sfs.blue_three_id)
+      Object.assign(blue_three, sfs.blue_three_id);
 
     str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
     str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';

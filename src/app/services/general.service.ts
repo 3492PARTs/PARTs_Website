@@ -440,7 +440,7 @@ export class GeneralService {
     );
   }
 
-  formatQuestionAnswer(answer: any): String {
+  formatQuestionAnswer(answer: any): string {
     if (Array.isArray(answer)) {
       let str = '';
       answer.forEach(opt => {

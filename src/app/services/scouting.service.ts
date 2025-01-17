@@ -557,7 +557,6 @@ export class ScoutingService {
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 

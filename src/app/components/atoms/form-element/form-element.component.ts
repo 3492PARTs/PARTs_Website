@@ -147,8 +147,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input() ImageChangeEvent: (e: any) => void = () => { };
 
-  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef = new ElementRef(null);
-  @ViewChild('multiSelect', { read: ElementRef, static: false }) multiSelect: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef | undefined = undefined;
+  @ViewChild('multiSelect', { read: ElementRef, static: false }) multiSelect: ElementRef | undefined = undefined;
   private expanded = false;
 
   @ViewChild('fileUpload') fileUpload: { nativeElement: { value: string; }; } = { nativeElement: { value: '' } };
@@ -161,12 +161,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input() IconOnly = false;
 
-  @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
-  @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
-  @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef = new ElementRef(null);
+  @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef | undefined = undefined;
+  @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef | undefined = undefined;
+  @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef | undefined = undefined;
 
-  @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef = new ElementRef(null);
-  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef | undefined = undefined;
+  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef | undefined = undefined;
 
   //private resizeTimeout: number | null | undefined;
 
@@ -308,7 +308,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   private positionMultiSelect(): void {
-    if (this.Type === 'multiSelect' && this.multiSelect) {
+    if (this.Type === 'multiSelect' && this.multiSelect && this.dropdown) {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
       this.renderer.setStyle(
         this.dropdown.nativeElement,
@@ -470,54 +470,61 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   multiSelectMenu(): void {
     this.positionMultiSelect();
-    if (this.expanded) {
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'height', '0px'
-      );
-      this.gs.triggerChange(() => {
+    if (this.dropdown) {
+      if (this.expanded) {
         this.renderer.setStyle(
           this.dropdown.nativeElement,
-          'visibility', 'hidden'
+          'height', '0px'
         );
-      }, 150);
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'overflow-y', 'hidden'
-      );
+        this.gs.triggerChange(() => {
+          if (this.dropdown)
+            this.renderer.setStyle(
+              this.dropdown.nativeElement,
+              'visibility', 'hidden'
+            );
+        }, 150);
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'overflow-y', 'hidden'
+        );
 
-      this.expanded = !this.expanded;
-    } else {
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'height', this.dropdown.nativeElement.scrollHeight + 'px'
-      );
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'visibility', 'visible'
-      );
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'overflow-y', 'auto'
-      );
+        this.expanded = !this.expanded;
+      } else {
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'height', this.dropdown.nativeElement.scrollHeight + 'px'
+        );
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'visibility', 'visible'
+        );
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'overflow-y', 'auto'
+        );
 
-      this.expanded = !this.expanded;
+        this.expanded = !this.expanded;
+      }
     }
   }
 
   multiSelectClose(): void {
-    this.renderer.setStyle(
-      this.dropdown.nativeElement,
-      'height', '0px'
-    );
-    this.gs.triggerChange(() => {
+    if (this.dropdown) {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
-        'visibility', 'hidden'
+        'height', '0px'
       );
-    }, 150);
 
-    this.expanded = false;
+      this.gs.triggerChange(() => {
+        if (this.dropdown)
+          this.renderer.setStyle(
+            this.dropdown.nativeElement,
+            'visibility', 'hidden'
+          );
+      }, 150);
+
+      this.expanded = false;
+    }
   }
 
   formatMAC(value: string): void {
@@ -616,19 +623,21 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.label && this.label.nativeElement) {
       //this.gs.triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
-        if (this.Type === 'number') {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px)`
-          );
-        }
-        else if (this.input && this.input.nativeElement) {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px - 16px)`
-          );
+        if (this.input) {
+          if (this.Type === 'number') {
+            const width = this.input.nativeElement.offsetWidth;
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'max-width', `calc(${width}px - 16px - 16px)`
+            );
+          }
+          else {
+            const width = this.input.nativeElement.offsetWidth;
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'max-width', `calc(${width}px - 16px - 16px - 16px)`
+            );
+          }
         }
 
 
@@ -640,27 +649,29 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           let x = 0;
         }*/
 
-        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-' + labelOffset + 'px'
-          );
-          this.renderer.setStyle(
-            this.formElement.nativeElement,
-            'margin-top', labelOffset + 'px'
-          );
-        }
-        else {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-4px'
-          );
-          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+        if (this.formElement) {
+          if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+            //if (this.LabelText.includes('Lining up '))
+            //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'top', '-' + labelOffset + 'px'
+            );
+            this.renderer.setStyle(
+              this.formElement.nativeElement,
+              'margin-top', labelOffset + 'px'
+            );
+          }
+          else {
+            //if (this.LabelText.includes('Lining up '))
+            //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'top', '-4px'
+            );
+            this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+          }
         }
       }
       //});
