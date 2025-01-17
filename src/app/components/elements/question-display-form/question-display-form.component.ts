@@ -51,4 +51,14 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
     this.FormElements = fes;
     this.FormElementsChange.emit(this.FormElements);
   }
+
+  /*
+  setConditionMet(q: QuestionWithConditions): void {
+    q.active_condition_id = NaN;
+    q.conditions.forEach(c => {
+      if (c.condition.toLowerCase() === (q.answer || '').toString().toLowerCase()) {
+        q.active_condition_id = c.question_condition_id;
+      }
+    });
+  }*/
 }

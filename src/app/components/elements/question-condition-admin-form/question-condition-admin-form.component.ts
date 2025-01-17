@@ -43,8 +43,8 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question/', {
       form_typ: this.FormType,
       active: 'y'
-    }, (result: any) => {
-      this.questions = result as QuestionWithConditions[];
+    }, (result: QuestionWithConditions[]) => {
+      this.questions = result.filter(q => this.gs.strNoE(q.question_flow_id));
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
@@ -115,7 +115,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
         match = false;
       }
 
-      if (!match)
+      if (!match && question.form_sub_typ.form_sub_typ === this.activeQuestionCondition.question_from.form_sub_typ.form_sub_typ)
         this.questionConditionQuestionToList.push(question);
     });
   }

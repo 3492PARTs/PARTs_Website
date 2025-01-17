@@ -25,8 +25,8 @@
       [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true">
     </app-form-element>
 
-    @if (AllowFlows) {
-    <div class="flex align-items-center gap-1rem">
+    @if (AllowFlows && activeQuestion.has_conditions==='n' &&
+    activeQuestion.is_condition==='n' ) { <div class="flex align-items-center gap-1rem">
       <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
         [MinWidth]="'200px'" [DisplayProperty]="'name'" [BindingProperty]="'id'"
         [(Model)]="activeQuestion.question_flow_id" [DisplayEmptyOption]="true" [FormGroup]="true"

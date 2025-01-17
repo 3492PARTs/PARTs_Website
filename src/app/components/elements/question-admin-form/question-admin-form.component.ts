@@ -82,6 +82,7 @@ export class QuestionAdminFormComponent implements OnInit {
       this.questionTableCols = [
         ...this._questionTableCols,
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
+        { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) },

@@ -20,6 +20,7 @@ export interface IQuestionWithConditions {
     scout_question: IScoutQuestion;
     conditions: IQuestionCondition[];
     is_condition: string;
+    has_conditions: string;
 
 }
 
@@ -43,6 +44,7 @@ export interface IQuestion {
     scout_question: IScoutQuestion;
 
     is_condition: string;
+    has_conditions: string;
 }
 
 export class QuestionWithConditions implements IQuestionWithConditions {
@@ -67,6 +69,7 @@ export class QuestionWithConditions implements IQuestionWithConditions {
     conditions: QuestionCondition[] = [];
 
     is_condition = 'n';
+    has_conditions = 'n';
 }
 
 export class Question implements IQuestion {
@@ -89,6 +92,7 @@ export class Question implements IQuestion {
     scout_question = new ScoutQuestion();
 
     is_condition = 'n';
+    has_conditions = 'n';
 }
 
 export interface IQuestionOption {
