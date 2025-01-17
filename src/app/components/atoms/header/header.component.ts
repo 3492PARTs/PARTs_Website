@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   @Input() marginBottom = true;
   @Input() marginTop = true;
   @Input() Width = 'auto';
+  @Input() Color: string | undefined = undefined;
 
   constructor() { }
 

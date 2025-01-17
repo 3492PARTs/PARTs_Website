@@ -5,32 +5,32 @@
 <ng-container [ngSwitch]="h">
   <h1 *ngSwitchCase="1"
     [ngClass]="{'text-align-center': centered, 'underlined': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h1>
   <h2 *ngSwitchCase="2"
     [ngClass]="{'text-align-center': centered, 'underlined-teal': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h2>
   <h3 *ngSwitchCase="3"
     [ngClass]="{'text-align-center': centered, 'underlined-teal': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h3>
   <h4 *ngSwitchCase="4"
     [ngClass]="{'text-align-center': centered, 'underlined-teal': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h4>
   <h5 *ngSwitchCase="5"
     [ngClass]="{'text-align-center': centered, 'underlined-teal': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h5>
   <h6 *ngSwitchCase="6"
     [ngClass]="{'text-align-center': centered, 'underlined-teal': underlined, 'no-margin-bottom': !marginBottom, 'no-margin-top': !marginTop}"
-    [ngStyle]="{'width': Width}">
+    [ngStyle]="{'width': Width, 'color': Color}">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </h6>
 </ng-container>

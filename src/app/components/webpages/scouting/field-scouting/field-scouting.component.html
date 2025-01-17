@@ -92,7 +92,8 @@
           [ButtonType]="!fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'"
           (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
 
-        <app-header [h]="2">{{activeFormSubTypeForm.form_sub_typ.form_sub_nm}}
+        <app-header #formSubTypeHeader [h]="2"
+          [Color]="fullScreen ? 'white' : undefined">{{activeFormSubTypeForm.form_sub_typ.form_sub_nm}}
           {{activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' ? (stopwatchSecond.toString().padStart(2, '0') +
           's:'
           + stopwatchLoopCount.toString().padStart(3, '0') +
