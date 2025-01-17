@@ -62,10 +62,13 @@ export class ManageFieldQuestionsComponent implements OnInit {
   ];
   questionFlowTableTriggerUpdate = false;
 
+  isMobile = false;
+
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
+    this.isMobile = this.gs.isMobile();
   }
 
   previewImage(): void {

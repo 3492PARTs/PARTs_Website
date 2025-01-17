@@ -24,21 +24,24 @@
 
     @if (fieldForm.img_url) {
     <app-form-element-group [LabelText]="'Edit Question Flows'">
+        @if (isMobile) {
+        <p class="important">Cannot edit flows on mobile</p>
+        }
         <app-form (SubmitFunction)="saveQuestionFlow()">
             <div>
-                <div class="flex gap-1rem margin-bottom--1rem">
+                <div class="flex gap-1rem margin-bottom--1rem flex-wrap">
                     <app-form-element *ngIf="formMetadata.form_sub_types && formMetadata.form_sub_types.length > 0"
                         [Type]="'select'" [LabelText]="'Form Sub Type'" [SelectList]="formMetadata.form_sub_types"
                         [MinWidth]="'200px'" [DisplayProperty]="'form_sub_nm'" [(Model)]="activeFormSubType"
                         [DisplayEmptyOption]="true" (FunctionCallBack)="buildQuestionFlowOptions()"
-                        [SelectComparatorFunction]="subTypeComparatorFunction">
+                        [SelectComparatorFunction]="subTypeComparatorFunction" [Disabled]="isMobile">
                     </app-form-element>
 
                     <app-form-element [Type]="'select'" [LabelText]="'Question Flow'"
                         [SelectList]="availableQuestionFlows" [MinWidth]="'200px'" [DisplayProperty]="'name'"
                         [(Model)]="activeQuestionFlow" [DisplayEmptyOption]="true"
                         [SelectComparatorFunction]="questionFlowComparatorFunction"
-                        (FunctionCallBack)="setQuestionBoxes()">
+                        (FunctionCallBack)="setQuestionBoxes()" [Disabled]="isMobile">
                     </app-form-element>
                 </div>
                 @if (activeQuestionFlow && activeQuestionFlow.id) {
