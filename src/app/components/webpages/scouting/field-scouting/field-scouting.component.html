@@ -118,22 +118,9 @@
       </div>
 
       <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
-        (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
+        (FormElementsChange)="setFormElements($event)" [Disabled]="formDisabled">
       </app-question-display-form>
 
-      <!--
-    <app-question-display-form [LabelText]="'Autonomous'" [(Questions)]="scoutAutoQuestions"
-      (FormElementsChange)="setAutoFormElements($event)" [Disabled]="formDisabled">
-    </app-question-display-form>
-
-    <app-question-display-form [LabelText]="'Teleoperated'" [(Questions)]="scoutTeleopQuestions"
-      (FormElementsChange)="setTeleopFormElements($event)" [Disabled]="formDisabled">
-    </app-question-display-form>
-
-    <app-question-display-form *ngIf="scoutOtherQuestions.length > 0" [LabelText]="'Other'"
-      [(Questions)]="scoutOtherQuestions" (FormElementsChange)="setOtherFormElements($event)" [Disabled]="formDisabled">
-    </app-question-display-form>
-  -->
       <app-button-ribbon>
         <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset(true)">Reset</app-button>
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFlow()"

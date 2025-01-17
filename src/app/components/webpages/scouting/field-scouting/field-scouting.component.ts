@@ -52,9 +52,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   stopwatchSecond = 15;
   stopwatchLoopCount = 0;
 
-  autoFormElements = new QueryList<FormElementComponent>();
-  teleopFormElements = new QueryList<FormElementComponent>();
-  otherFormElements = new QueryList<FormElementComponent>();
   formElements = new QueryList<FormElementComponent>();
 
   formDisabled = false;
@@ -379,12 +376,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   advanceFlow(flow: QuestionFlow, question: Question, override = false): void {
-    if (question.question_typ.question_typ !== 'mnt-psh-btn') {
-      const qfe = this.getQuestionFormElement(question);
-      if (qfe && !qfe.formElement.valid) return;
-    }
-
     if (question.question_typ.question_typ === 'mnt-psh-btn' || override) {
+      if (question.question_typ.question_typ !== 'mnt-psh-btn') {
+        const qfe = this.getQuestionFormElement(question);
+        if (qfe && !qfe.formElement.valid) {
+          this.gs.addBanner(new Banner(0, `&bull;  ${qfe.formElement.Name} is invalid\n`, 3500));
+          return;
+        }
+      }
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
       question.answer = JSON.stringify(question.answer);
       flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
@@ -535,25 +534,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     }
   }
-  /////////////////////////////////////////////////////////////////////////
-  ///////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////
-  setAutoFormElements(fes: QueryList<FormElementComponent>): void {
-    this.autoFormElements = fes;
-    this.setFormElements();
-  }
 
-  setTeleopFormElements(fes: QueryList<FormElementComponent>): void {
-    this.teleopFormElements = fes;
-    this.setFormElements();
-  }
-
-  setOtherFormElements(fes: QueryList<FormElementComponent>): void {
-    this.otherFormElements = fes;
-    this.setFormElements();
-  }
-
-  setFormElements(): void {
-    this.formElements.reset([...this.autoFormElements, ...this.teleopFormElements, ...this.otherFormElements]);
+  setFormElements(fes: QueryList<FormElementComponent>): void {
+    this.formElements.reset([...fes]);
   }
 }
