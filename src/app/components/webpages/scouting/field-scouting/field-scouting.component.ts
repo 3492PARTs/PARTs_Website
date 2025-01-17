@@ -459,6 +459,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         q.answer = this.gs.formatQuestionAnswer(q.answer);
         return new QuestionAnswer(q.answer, q);
       });
+
+      answers = answers.concat(this.activeFormSubTypeForm.questions.map(q => q.conditions.map(c => c.question_to)).flat().map(q => {
+        q.answer = this.gs.formatQuestionAnswer(q.answer);
+        return new QuestionAnswer(q.answer, q);
+      }));
     }
     return answers;
   }
