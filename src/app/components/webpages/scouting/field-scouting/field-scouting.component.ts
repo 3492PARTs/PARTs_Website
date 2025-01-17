@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
 import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer, QuestionWithConditions } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
@@ -36,6 +36,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   @ViewChildren(QuestionFormElementComponent) questionFormElements: QueryList<QuestionFormElementComponent> = new QueryList<QuestionFormElementComponent>();
   @ViewChild(FormComponent) form!: FormComponent;
+
+  fullScreen = false;
+  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef = new ElementRef(null);
+  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef = new ElementRef(null);
+  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef = new ElementRef(null);
+  @ViewChild('fullScreenButton', { read: ElementRef, static: false }) fullScreenButton: ElementRef = new ElementRef(null);
 
   teams: Team[] = [];
   matches: Match[] = [];
@@ -112,6 +118,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
             const stage = this.getFirstStage(qf.questions);
             this.displayFlowStage(qf, stage);
           });
+          this.setFullScreen(false);
         });
       }
       this.gs.decrementOutstandingCalls();
@@ -537,5 +544,41 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
     this.formElements.reset([...fes]);
+  }
+
+  setFullScreen(fullScreen: boolean): void {
+    this.fullScreen = fullScreen;
+    if (this.fullScreen) {
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '99');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'fixed');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'top', '0');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'left', '0');
+
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100vw');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'height', '100vh');
+
+      this.renderer.setStyle(this.image.nativeElement, 'max-width', '100vw');
+      this.renderer.setStyle(this.image.nativeElement, 'max-height', '100vh');
+
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '100');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'fixed');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '1rem');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '1rem');
+    }
+    else {
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '0');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'initial');
+
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'width', '100%');
+      this.renderer.setStyle(this.imageBackground.nativeElement, 'height', 'auto');
+
+      this.renderer.setStyle(this.image.nativeElement, 'max-width', '100%');
+      this.renderer.setStyle(this.image.nativeElement, 'max-height', '84vw');
+
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '0');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'absolute');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '-7px');
+      this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '0');
+    }
   }
 }

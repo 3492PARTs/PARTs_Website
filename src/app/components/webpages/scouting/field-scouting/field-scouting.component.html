@@ -86,35 +86,44 @@
         [MinWidth]="'100px'">
       </app-form-element>
 
-      <app-header *ngIf="activeFormSubTypeForm" [h]="2">{{activeFormSubTypeForm.form_sub_typ.form_sub_nm}}
-        {{activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' ? (stopwatchSecond.toString().padStart(2, '0') +
-        's:'
-        + stopwatchLoopCount.toString().padStart(3, '0') +
-        'ms')
-        : ''}}</app-header>
+      @if(activeFormSubTypeForm) {
+      <div id="header-wrapper">
+        <app-button #fullScreenButton id="full-screen-btn"
+          [ButtonType]="!fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'"
+          (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
 
-      <div #imageContainer id="image-container"
-        *ngIf="activeFormSubTypeForm && activeFormSubTypeForm?.question_flows && activeFormSubTypeForm.question_flows.length > 0"
-        (click)="stopwatchStart()">
+        <app-header [h]="2">{{activeFormSubTypeForm.form_sub_typ.form_sub_nm}}
+          {{activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' ? (stopwatchSecond.toString().padStart(2, '0') +
+          's:'
+          + stopwatchLoopCount.toString().padStart(3, '0') +
+          'ms')
+          : ''}}</app-header>
+      </div>
+      }
 
-        <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm" [src]="fieldForm.img_url">
+      <div #imageBackground id="image-background">
+        <div #imageContainer id="image-container"
+          *ngIf="activeFormSubTypeForm && activeFormSubTypeForm?.question_flows && activeFormSubTypeForm.question_flows.length > 0"
+          (click)="stopwatchStart()">
 
-        <div class="flow" *ngFor="let flow of (activeFormSubTypeForm?.question_flows || [])">
-          <div #box class="box" *ngFor="let q of flow.questions; let i = index" id="{{q.question_id}}"
-            (click)="advanceFlow(flow, flow.questions[i])">
+          <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm" [src]="fieldForm.img_url">
 
-            <div
-              [ngClass]="{'full-width': q.question_typ.question_typ === 'mnt-psh-btn', 'full-height': q.question_typ.question_typ === 'mnt-psh-btn', 'flex': q.question_typ.question_typ !== 'mnt-psh-btn', 'align-items-baseline': q.question_typ.question_typ !== 'mnt-psh-btn'}">
-              <app-question-form-element [(Question)]="flow.questions[i]"></app-question-form-element>
+          <div class="flow" *ngFor="let flow of (activeFormSubTypeForm?.question_flows || [])">
+            <div #box class="box" *ngFor="let q of flow.questions; let i = index" id="{{q.question_id}}"
+              (click)="advanceFlow(flow, flow.questions[i])">
 
-              @if (q.question_typ.question_typ !== 'mnt-psh-btn') {
-              <app-button [ButtonType]="'check-bold'"
-                (FunctionCallBack)="advanceFlow(flow, flow.questions[i], true)"></app-button>
-              }
+              <div
+                [ngClass]="{'full-width': q.question_typ.question_typ === 'mnt-psh-btn', 'full-height': q.question_typ.question_typ === 'mnt-psh-btn', 'flex': q.question_typ.question_typ !== 'mnt-psh-btn', 'align-items-baseline': q.question_typ.question_typ !== 'mnt-psh-btn'}">
+                <app-question-form-element [(Question)]="flow.questions[i]"></app-question-form-element>
+
+                @if (q.question_typ.question_typ !== 'mnt-psh-btn') {
+                <app-button [ButtonType]="'check-bold'" (FunctionCallBack)="advanceFlow(flow, flow.questions[i], true)"
+                  [BackgroundColor]="'lightgray'"></app-button>
+                }
+              </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"

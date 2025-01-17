@@ -58,13 +58,31 @@
 ///
 ///
 ///
+#header-wrapper {
+  position: relative;
+
+  #full-screen-btn {
+    position: absolute;
+    top: -7px;
+    right: 0;
+  }
+}
+
+#image-background {
+  background-color: black;
+  text-align: center;
+}
+
 #image-container {
   position: relative;
+  display: inline-block;
 }
 
 #image {
-  width: 100%;
+  width: auto;
   height: auto;
+  //max-width: 100%;
+  //max-height: 84vh;
   //pointer-events: none;
 }
 
