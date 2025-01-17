@@ -60,6 +60,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     { PropertyName: 'scout_question.width', ColLabel: 'Width', Type: "number" },
     { PropertyName: 'scout_question.height', ColLabel: 'Height', Type: "number" },
     { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
+    { PropertyName: 'scout_question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
   ];
   questionFlowTableTriggerUpdate = false;
 

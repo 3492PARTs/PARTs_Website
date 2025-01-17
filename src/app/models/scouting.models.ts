@@ -215,6 +215,7 @@ export interface IScoutQuestion {
     width: number;
     height: number;
     icon: string;
+    icon_only: string;
     value_multiplier: number;
     void_ind: string;
 }
@@ -228,6 +229,7 @@ export class ScoutQuestion implements IScoutQuestion {
     width!: number;
     height!: number;
     icon!: string;
+    icon_only!: string;
     value_multiplier!: number;
     void_ind = 'n';
 }

@@ -16,7 +16,9 @@
         <ng-template #mntPshBtn>
             <button class="mnt-psh-btn" (click)="click($event)" [disabled]="Disabled" type="button">
                 <span *ngIf="Question.scout_question.icon" class="mdi mdi-{{Question.scout_question.icon}}"></span>
+                @if (!Question.scout_question.icon_only) {
                 <p>{{Question.question}}</p>
+                }
             </button>
         </ng-template>
     </div>
