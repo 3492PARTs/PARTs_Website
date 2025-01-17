@@ -88,9 +88,12 @@
 
       @if(activeFormSubTypeForm) {
       <div id="header-wrapper">
+        @if(activeFormSubTypeForm && activeFormSubTypeForm?.question_flows &&
+        activeFormSubTypeForm.question_flows.length > 0) {
         <app-button #fullScreenButton id="full-screen-btn"
           [ButtonType]="!fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'"
           (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
+        }
 
         <app-header #formSubTypeHeader [h]="2"
           [Color]="fullScreen ? 'white' : undefined">{{activeFormSubTypeForm.form_sub_typ.form_sub_nm}}
@@ -102,7 +105,7 @@
       </div>
       }
 
-      <div #imageBackground id="image-background">
+      <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
         <div #imageContainer id="image-container"
           *ngIf="activeFormSubTypeForm && activeFormSubTypeForm?.question_flows && activeFormSubTypeForm.question_flows.length > 0"
           (click)="stopwatchStart()">
