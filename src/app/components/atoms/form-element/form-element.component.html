@@ -83,8 +83,8 @@
         'invalid': isFormElementInvalid(),
         'required': isFormElementRequired()
       }" [ngStyle]="{'width': 'calc(' + Width + ' - 0.64rem)', 'min-width': MinWidth, 'max-width': MaxWidth}"
-        [ngModel]="phoneMaskModel" (ngModelChange)="phoneMaskFn($event)" maxlength="{{ FieldSize }}"
-        [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()">
+        [ngModel]="phoneMaskModel" (ngModelChange)="phoneMaskFn($event)" maxlength="14" [disabled]="Disabled"
+        (focus)="focusIn()" (focusout)="focusOut()">
 
       <input *ngSwitchCase="'mac'" #input type="text" class="form-control" id="{{ LabelID }}"
         placeholder="{{ Placeholder }}" [ngClass]="{
