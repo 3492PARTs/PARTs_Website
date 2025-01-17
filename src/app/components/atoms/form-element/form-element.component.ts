@@ -217,7 +217,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             let modelChanges = changes['Model'];
             if (this.Type === 'phone' && !modelChanges.firstChange) {
               if (this.formatPhone(modelChanges.currentValue) !== this.phoneMaskModel) {
-                console.log(this.Model);
+                //console.log(this.Model);
                 //console.log(this.phoneMaskModel);
                 //console.log(changes);
                 this.phoneMaskFn(modelChanges.currentValue);

@@ -454,7 +454,7 @@ export class GeneralService {
       answer = str;
     }
 
-    return answer;
+    return !this.strNoE(answer) ? (this.isObject(answer) ? JSON.stringify(answer) : answer) : '';
   }
 
   resizeImageToMaxSize(file: File): Promise<File> {
