@@ -260,7 +260,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.api.get(true, 'scouting/pit/team-data/', {
       team_num: this.scoutPitResponse.team
     }, (result: any) => {
-      // TODO this.scoutPitResponse.answers = (result['questions'] as Question[]);
+      this.questions = (result['questions'] as Question[]);
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {
