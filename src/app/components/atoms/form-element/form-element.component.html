@@ -123,15 +123,14 @@
           <option [ngValue]="null" [disabled]="!DisplayEmptyOption"></option>
 
           <ng-container *ngIf="BindingProperty && DisplayProperty">
-            <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]"
-              [selected]="obj[BindingProperty] === Model">
+            <option *ngFor="let obj of _SelectList" [ngValue]="obj[BindingProperty]">
               {{ obj[DisplayProperty] }}
               {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
             </option>
           </ng-container>
 
           <ng-container *ngIf="!BindingProperty && DisplayProperty">
-            <option *ngFor="let obj of _SelectList" [ngValue]="obj" [selected]="obj === Model">
+            <option *ngFor="let obj of _SelectList" [ngValue]="obj">
               {{ obj[DisplayProperty] }}
               {{ DisplayProperty2 ? (obj[DisplayProperty2] ? obj[DisplayProperty2] : '') : '' }}
             </option>

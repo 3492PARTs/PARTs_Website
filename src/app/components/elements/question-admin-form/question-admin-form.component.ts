@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { QuestionWithConditions, QuestionOption, QuestionType, FormInitialization, QuestionFlow } from '../../../models/form.models';
+import { QuestionWithConditions, QuestionOption, QuestionType, FormInitialization, QuestionFlow, FormSubType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { AppSize, GeneralService } from '../../../services/general.service';
@@ -32,7 +32,7 @@ export class QuestionAdminFormComponent implements OnInit {
   @Input() AllowFlows = false;
   @Input() FormMetadata: FormInitialization = new FormInitialization();
   @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
-  questionModalVisible = false
+  questionModalVisible = false;
   activeQuestion: QuestionWithConditions = new QuestionWithConditions();
   availableQuestionFlows: QuestionFlow[] = [];
 
@@ -110,7 +110,9 @@ export class QuestionAdminFormComponent implements OnInit {
 
   buildQuestionFlowOptions(): void {
     this.availableQuestionFlows = this.FormMetadata.question_flows.filter(qf =>
-      (this.activeQuestion && !this.gs.strNoE(this.activeQuestion.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
+      (this.activeQuestion &&
+        !this.gs.strNoE(this.activeQuestion.form_sub_typ) && qf.form_sub_typ) ?
+        qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
   }
 
   /*
@@ -129,7 +131,6 @@ export class QuestionAdminFormComponent implements OnInit {
 
   saveQuestionFlow(): void {
     this.newQuestionFlow.form_typ.form_typ = this.formType;
-    this.newQuestionFlow.form_sub_typ = this.activeQuestion.form_sub_typ;
     this.api.post(true, 'form/question-flow/', this.newQuestionFlow, (result: any) => {
       this.gs.successfulResponseBanner(result);
       this.newQuestionFlow = new QuestionFlow();
@@ -160,6 +161,14 @@ export class QuestionAdminFormComponent implements OnInit {
   compareQuestionTypeObjects(qt1: QuestionType, qt2: QuestionType): boolean {
     if (qt1 && qt2 && qt1.question_typ && qt2.question_typ) {
       return qt1.question_typ === qt2.question_typ;
+    }
+    return false;
+  }
+
+  compareFormSubTypeObjects(qt1: FormSubType, qt2: FormSubType): boolean {
+    if (qt1 && qt2) {
+      console.log(qt1.form_sub_typ === qt2.form_sub_typ);
+      return qt1.form_sub_typ === qt2.form_sub_typ;
     }
     return false;
   }

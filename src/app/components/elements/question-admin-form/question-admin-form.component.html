@@ -22,7 +22,8 @@
     <app-form-element *ngIf="FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0" [Type]="'select'"
       [LabelText]="'Form Sub Type'" [SelectList]="FormMetadata.form_sub_types" [MinWidth]="'200px'"
       [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
-      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true">
+      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true"
+      [SelectComparatorFunction]="compareFormSubTypeObjects">
     </app-form-element>
 
     @if (AllowFlows && activeQuestion.has_conditions==='n' &&
@@ -71,7 +72,14 @@
 
 <app-modal [(visible)]="questionFlowModalVisible" [Title]="'Question Flow Definition'">
   <app-form (SubmitFunction)="saveQuestionFlow()">
-    <app-form-element [Type]="'text'" [(Model)]="newQuestionFlow.name" [Required]="true"></app-form-element>
+    <app-form-element [Type]="'text'" [LabelText]="'Flow Name'" [(Model)]="newQuestionFlow.name"
+      [Required]="true"></app-form-element>
+
+    <app-form-element *ngIf="FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0" [Type]="'select'"
+      [LabelText]="'Form Sub Type'" [SelectList]="FormMetadata.form_sub_types" [MinWidth]="'200px'"
+      [DisplayProperty]="'form_sub_nm'" [(Model)]="newQuestionFlow.form_sub_typ" [DisplayEmptyOption]="true"
+      [FormGroup]="true" [FormGroupInline]="true" [Required]="true">
+    </app-form-element>
 
     <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
       [(Model)]="newQuestionFlow.single_run"></app-form-element>
