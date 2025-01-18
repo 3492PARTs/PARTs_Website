@@ -1,4 +1,4 @@
-import { FormSubType, IQuestion, Question, QuestionAnswer, QuestionFlow } from "./form.models";
+import { FormSubType, Question, QuestionAnswer, QuestionFlow } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -253,12 +253,13 @@ export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
         this.team = team || NaN;
         this.match = match || undefined;
         this.answers = answers || [];
+        this.form_typ = "field";
     }
 }
 
 export interface IScoutPitFormResponse {
     id: number;
-    question_answers: IQuestion[];
+    answers: QuestionAnswer[];
     team: number;
     response_id: number;
     form_typ: string;
@@ -267,14 +268,14 @@ export interface IScoutPitFormResponse {
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id!: number;
-    question_answers: Question[] = [];
+    answers: QuestionAnswer[] = [];
     team!: number;
     response_id = NaN;
     form_typ = 'field';
     robotPics: File[] = [];
 
-    constructor(question_answers?: Question[], team?: number, robotPics?: File[]) {
-        this.question_answers = question_answers || [];
+    constructor(question_answers?: QuestionAnswer[], team?: number, robotPics?: File[]) {
+        this.answers = question_answers || [];
         this.team = team || NaN;
         this.robotPics = robotPics || [];
     }

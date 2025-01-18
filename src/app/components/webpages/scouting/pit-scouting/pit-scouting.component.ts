@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { Question } from '../../../../models/form.models';
+import { Question, QuestionAnswer } from '../../../../models/form.models';
 
 @Component({
   selector: 'app-pit-scouting',
@@ -89,7 +89,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       if (this.gs.strNoE(this.scoutPitResponse.team)) {
 
         if (result) {
-          this.scoutPitResponse.question_answers = result;
+          this.questions = result;
         }
       }
       this.gs.decrementOutstandingCalls();
@@ -159,7 +159,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as Question[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.answers) as Question[];
 
     scoutQuestions.forEach(el => {
       let answer = this.gs.formatQuestionAnswer(el.answer)
@@ -190,7 +190,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.previouslySelectedTeam = this.scoutPitResponse.team;
       this.scoutPitResponse = new ScoutPitFormResponse();
       this.scoutPitResponse.team = this.previouslySelectedTeam;
-      this.scoutPitResponse.question_answers = psqs;
+      //TODO this.scoutPitResponse.answers = psqs;
       this.robotPic = new File([], '');
       this.previewUrl = null;
       this.previewImages = [];
@@ -213,7 +213,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   reset(): void {
     this.previouslySelectedTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
-    this.scoutPitResponse.question_answers = this.gs.cloneObject(this.questions);
+    this.scoutPitResponse.answers = this.gs.cloneObject(this.questions);
     this.formDisabled = false;
     this.previewImages = [];
     this.gs.scrollTo(0);
@@ -232,6 +232,13 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.gs.addBanner(new Banner(0, "Must add or remove staged image.", 3500));
       return null;
     }
+
+    this.questions.forEach(q => {
+      const quest = this.gs.cloneObject(q);
+      quest.answer = this.gs.formatQuestionAnswer(quest.answer);
+      spr.answers.push(new QuestionAnswer(quest.answer, quest));
+    }
+    );
 
     this.ss.savePitScoutingResponse(spr, id).then((success: boolean) => {
       if (success && !id) this.reset();
@@ -253,7 +260,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.api.get(true, 'scouting/pit/team-data/', {
       team_num: this.scoutPitResponse.team
     }, (result: any) => {
-      this.scoutPitResponse.question_answers = (result['questions'] as Question[]);
+      // TODO this.scoutPitResponse.answers = (result['questions'] as Question[]);
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {

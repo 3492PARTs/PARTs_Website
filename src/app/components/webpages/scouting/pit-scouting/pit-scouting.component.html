@@ -31,8 +31,8 @@
       </app-form-element>
     </div>
 
-    <app-question-display-form [(Questions)]="scoutPitResponse.question_answers"
-      (FormElementsChange)="setFormElements($event)" [Disabled]="formDisabled">
+    <app-question-display-form [(Questions)]="questions" (FormElementsChange)="setFormElements($event)"
+      [Disabled]="formDisabled">
     </app-question-display-form>
 
     <div class="flex align-items-baseline">
