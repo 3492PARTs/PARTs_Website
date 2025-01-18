@@ -93,16 +93,19 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   buildQuestionConditionToLists(): void {
     this.questionConditionQuestionToList = [];
 
+    //So the active question shows in the drop down
     if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as Question);
 
     this.questions.forEach(question => {
       let match = false;
+      // If its in another group keep out of this one
       this.questionConditions.forEach(qc => {
         if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) {
           match = true;
         }
       });
 
+      // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
         !this.gs.strNoE(this.activeQuestionCondition.question_from.question_id) &&
         this.activeQuestionCondition.question_from.question_id === question.question_id) {
@@ -115,7 +118,10 @@ export class QuestionConditionAdminFormComponent implements OnInit {
         match = false;
       }
 
-      if (!match && question.form_sub_typ.form_sub_typ === this.activeQuestionCondition.question_from.form_sub_typ.form_sub_typ)
+      if (!match &&
+        question.form_sub_typ &&
+        this.activeQuestionCondition.question_from.form_sub_typ &&
+        question.form_sub_typ.form_sub_typ === this.activeQuestionCondition.question_from.form_sub_typ.form_sub_typ)
         this.questionConditionQuestionToList.push(question);
     });
   }
