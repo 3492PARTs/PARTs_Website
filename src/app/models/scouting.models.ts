@@ -1,4 +1,4 @@
-import { FormSubType, IQuestionWithConditions, Question, QuestionAnswer, QuestionFlow, QuestionWithConditions } from "./form.models";
+import { FormSubType, IQuestion, Question, QuestionAnswer, QuestionFlow } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -258,7 +258,7 @@ export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
 
 export interface IScoutPitFormResponse {
     id: number;
-    question_answers: IQuestionWithConditions[];
+    question_answers: IQuestion[];
     team: number;
     response_id: number;
     form_typ: string;
@@ -267,13 +267,13 @@ export interface IScoutPitFormResponse {
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id!: number;
-    question_answers: QuestionWithConditions[] = [];
+    question_answers: Question[] = [];
     team!: number;
     response_id = NaN;
     form_typ = 'field';
     robotPics: File[] = [];
 
-    constructor(question_answers?: QuestionWithConditions[], team?: number, robotPics?: File[]) {
+    constructor(question_answers?: Question[], team?: number, robotPics?: File[]) {
         this.question_answers = question_answers || [];
         this.team = team || NaN;
         this.robotPics = robotPics || [];
@@ -473,7 +473,7 @@ export class FieldForm {
 
 export class FormSubTypeForm {
     form_sub_typ = new FormSubType()
-    questions: QuestionWithConditions[] = [];
+    questions: Question[] = [];
     question_flows: QuestionFlow[] = [];
 }
 

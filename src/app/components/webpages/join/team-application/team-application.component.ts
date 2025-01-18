@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../../models/api.models';
-import { QuestionWithConditions } from '../../../../models/form.models';
+import { Question } from '../../../../models/form.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../../services/general.service';
@@ -57,7 +57,7 @@ export class TeamApplicationComponent implements OnInit {
       active: 'y'
     }, (result: any) => {
       this.questions = [];
-      let qs = result as QuestionWithConditions[];
+      let qs = result as Question[];
       let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
@@ -105,7 +105,7 @@ export class TeamApplicationComponent implements OnInit {
       response_id: response_id
     }, (result: any) => {
       this.questions = [];
-      let qs = result as QuestionWithConditions[];
+      let qs = result as Question[];
       let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
@@ -120,7 +120,7 @@ export class TeamApplicationComponent implements OnInit {
   }
 
   export(): void {
-    let questions: QuestionWithConditions[] = [];
+    let questions: Question[] = [];
     this.questions.forEach(fsw => fsw.questions.forEach(question => questions.push(question)));
     this.gs.downloadFileAs('TeamApplication.csv', this.gs.questionsToCSV(questions), 'text/csv');
   }
@@ -128,9 +128,9 @@ export class TeamApplicationComponent implements OnInit {
 
 class FormSubTypeWrapper {
   form_sub_typ = '';
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
 
-  constructor(form_sub_typ: string, questions: QuestionWithConditions[] = []) {
+  constructor(form_sub_typ: string, questions: Question[] = []) {
     this.form_sub_typ = form_sub_typ;
     this.questions = questions;
   }

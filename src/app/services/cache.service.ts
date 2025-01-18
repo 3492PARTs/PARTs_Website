@@ -5,8 +5,8 @@ import { DatabaseService } from './database.service';
 import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
 import { ILink, Link } from '../models/navigation.models';
-import { IQuestionWithConditions, QuestionWithConditions } from '../models/form.models';
 import { Banner } from '../models/api.models';
+import { IQuestion, Question } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class CacheService {
   ScoutPitFormResponse!: DexieCrud<ScoutPitFormResponse, number>;
   ScoutPitResponse!: DexieCrud<ScoutPitResponse, number>;
 
-  QuestionWithConditions!: DexieCrud<QuestionWithConditions, number>;
+  Question!: DexieCrud<Question, number>;
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
@@ -60,7 +60,7 @@ export class CacheService {
     this.ScoutPitFormResponse = new DexieCrud<IScoutPitFormResponse, number>(this.dbs.ScoutPitFormResponseTable);
     this.ScoutPitResponse = new DexieCrud<IScoutPitResponse, number>(this.dbs.ScoutPitResponseTable);
 
-    this.QuestionWithConditions = new DexieCrud<IQuestionWithConditions, number>(this.dbs.QuestionWithConditionsTable);
+    this.Question = new DexieCrud<IQuestion, number>(this.dbs.QuestionTable);
 
     this.LoadedStores = new DexieCrud<LoadedStores, number>(this.dbs.LoadedStoresTable);
 

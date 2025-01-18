@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { IAuthPermission, IUser, User } from '../models/user.models';
 import { ILink } from '../models/navigation.models';
-import { IQuestionWithConditions } from '../models/form.models';
+import { IQuestion } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { BehaviorSubject } from 'rxjs';
 
@@ -37,7 +37,7 @@ export class DatabaseService extends Dexie {
   ScoutPitFormResponseTable!: Dexie.Table<IScoutPitFormResponse, number>;
   ScoutPitResponseTable!: Dexie.Table<IScoutPitResponse, number>;
 
-  QuestionWithConditionsTable!: Dexie.Table<IQuestionWithConditions, number>;
+  QuestionTable!: Dexie.Table<IQuestion, number>;
 
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
@@ -88,7 +88,7 @@ export class DatabaseService extends Dexie {
     this.ScoutPitFormResponseTable = this.table(DBStores.ScoutPitFormResponse.TableName);
     this.ScoutPitResponseTable = this.table(DBStores.ScoutPitResponse.TableName);
 
-    this.QuestionWithConditionsTable = this.table(DBStores.QuestionWithConditions.TableName);
+    this.QuestionTable = this.table(DBStores.QuestionWithConditions.TableName);
 
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
 

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer, QuestionWithConditions } from '../../../../models/form.models';
+import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
@@ -374,6 +374,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.activeFormSubTypeForm?.question_flows.forEach(qf => {
+      if (qf.question_answer) {
+        this.scoutFieldResponse.answers.push(qf.question_answer);
+        qf.question_answer = undefined;
+      }
+    })
+
     let answers = this.getActiveFlowFlowlessQuestionAnswers();
     if (answers && answers?.length > 0)
       this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
@@ -393,7 +400,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, flow);
+      if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
       flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
@@ -460,10 +467,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         return new QuestionAnswer(q.answer, q);
       });
 
+      /*TODO
       answers = answers.concat(this.activeFormSubTypeForm.questions.map(q => q.conditions.map(c => c.question_to)).flat().map(q => {
         q.answer = this.gs.formatQuestionAnswer(q.answer);
         return new QuestionAnswer(q.answer, q);
-      }));
+      }));*/
     }
     return answers;
   }
@@ -503,7 +511,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   getFirstStage(questions: Question[]): number {
-    return questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2);
+    return questions.length > 0 ? questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2) : NaN;
   }
 
   hideBox(box: HTMLElement): void {

@@ -1,16 +1,14 @@
 <app-form-element-group [LabelText]="LabelText" [RemoveBorder]="LabelText.length <= 0"
     (FormElementsChange)="setFormElements($event)">
-    <ng-container *ngFor="let sq of Questions; let i = index">
-        <app-question-form-element [(Question)]="Questions[i]" [Disabled]="Disabled"></app-question-form-element>
+    <ng-container *ngFor="let questionWithCondition of questionsWithConditions; let i = index">
+        <app-question-form-element [Question]="questionsWithConditions[i].question" [Disabled]="Disabled"
+            (QuestionChange)="setQuestionAnswer(i, $event)"></app-question-form-element>
 
-        <div *ngIf="sq.conditions && sq.conditions.length > 0" class="sub-question">
-            <!--TODO this if statement below causes to many change detection cycles-->
-            <ng-container *ngFor="let c of sq.conditions; let j = index">
-                <app-question-form-element
-                    *ngIf="c.condition.toLowerCase() === (Questions[i].answer || '').toString().toLowerCase()"
-                    [(Question)]="Questions[i].conditions[j].question_to"
-                    [Disabled]="Disabled"></app-question-form-element>
-            </ng-container>
+        @if (questionsWithConditions[i].activeConditionQuestion.question_id) {
+        <div class="sub-question">
+            <app-question-form-element [(Question)]="questionsWithConditions[i].activeConditionQuestion"
+                [Disabled]="Disabled"></app-question-form-element>
         </div>
+        }
     </ng-container>
 </app-form-element-group>

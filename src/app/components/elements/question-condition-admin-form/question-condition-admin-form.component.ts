@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { QuestionWithConditions, QuestionCondition } from '../../../models/form.models';
+import { Question, QuestionCondition } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
@@ -19,7 +19,7 @@ import { FormComponent } from '../../atoms/form/form.component';
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
 
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
   questionConditions: QuestionCondition[] = [];
   questionConditionModalVisible = false;
   activeQuestionCondition = new QuestionCondition();
@@ -29,8 +29,8 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
-  questionConditionQuestionFromList: QuestionWithConditions[] = [];
-  questionConditionQuestionToList: QuestionWithConditions[] = [];
+  questionConditionQuestionFromList: Question[] = [];
+  questionConditionQuestionToList: Question[] = [];
 
   constructor(private gs: GeneralService, private api: APIService) { }
 
@@ -43,7 +43,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question/', {
       form_typ: this.FormType,
       active: 'y'
-    }, (result: QuestionWithConditions[]) => {
+    }, (result: Question[]) => {
       this.questions = result.filter(q => this.gs.strNoE(q.question_flow_id));
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
@@ -93,7 +93,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   buildQuestionConditionToLists(): void {
     this.questionConditionQuestionToList = [];
 
-    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as QuestionWithConditions);
+    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as Question);
 
     this.questions.forEach(question => {
       let match = false;
@@ -120,7 +120,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     });
   }
 
-  compareQuestions(q1: QuestionWithConditions, q2: QuestionWithConditions): boolean {
+  compareQuestions(q1: Question, q2: Question): boolean {
     if (q1 && q2)
       return q1.question_id === q2.question_id;
     else

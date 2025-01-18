@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { QuestionWithConditions, QuestionOption, QuestionType, FormInitialization, QuestionFlow, FormSubType } from '../../../models/form.models';
+import { Question, QuestionOption, QuestionType, FormInitialization, QuestionFlow, FormSubType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { AppSize, GeneralService } from '../../../services/general.service';
@@ -33,7 +33,7 @@ export class QuestionAdminFormComponent implements OnInit {
   @Input() FormMetadata: FormInitialization = new FormInitialization();
   @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
   questionModalVisible = false;
-  activeQuestion: QuestionWithConditions = new QuestionWithConditions();
+  activeQuestion: Question = new Question();
   availableQuestionFlows: QuestionFlow[] = [];
 
   questionTableTriggerUpdate = false;
@@ -96,8 +96,8 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
-  showQuestionModal(q?: QuestionWithConditions): void {
-    this.activeQuestion = q ? this.gs.cloneObject(q) : new QuestionWithConditions();
+  showQuestionModal(q?: Question): void {
+    this.activeQuestion = q ? this.gs.cloneObject(q) : new Question();
 
     this.buildQuestionFlowOptions();
 
@@ -146,7 +146,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.activeQuestion = new QuestionWithConditions();
+      this.activeQuestion = new Question();
       this.questionModalVisible = false;
       this.questionInit();
     }, (err: any) => {
@@ -167,7 +167,7 @@ export class QuestionAdminFormComponent implements OnInit {
 
   compareFormSubTypeObjects(qt1: FormSubType, qt2: FormSubType): boolean {
     if (qt1 && qt2) {
-      console.log(qt1.form_sub_typ === qt2.form_sub_typ);
+      //console.log(qt1.form_sub_typ === qt2.form_sub_typ);
       return qt1.form_sub_typ === qt2.form_sub_typ;
     }
     return false;

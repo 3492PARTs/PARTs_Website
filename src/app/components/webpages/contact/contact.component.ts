@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../models/api.models';
-import { QuestionWithConditions } from '../../../models/form.models';
+import { Question } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
 export class ContactComponent implements OnInit {
   test = null;
 
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
   disabled = false;
 
   constructor(private gs: GeneralService,
@@ -39,7 +39,7 @@ export class ContactComponent implements OnInit {
       form_typ: 'team-cntct',
       active: 'y'
     }, (result: any) => {
-      this.questions = result as QuestionWithConditions[];
+      this.questions = result as Question[];
 
       this.authService.authInFlight.subscribe(r => {
         if (r === AuthCallStates.comp) {
@@ -74,7 +74,7 @@ export class ContactComponent implements OnInit {
     this.api.get(true, 'form/response/', {
       response_id: response_id
     }, (result: any) => {
-      this.questions = result as QuestionWithConditions[];
+      this.questions = result as Question[];
       this.disabled = true;
     }, (err: any) => {
       this.gs.triggerError(err);

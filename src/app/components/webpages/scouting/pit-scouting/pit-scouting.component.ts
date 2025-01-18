@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { APIStatus, Banner } from '../../../../models/api.models';
-import { QuestionWithConditions } from '../../../../models/form.models';
 import { Team, ScoutPitFormResponse, ScoutPitImage } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
@@ -15,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { Question } from '../../../../models/form.models';
 
 @Component({
   selector: 'app-pit-scouting',
@@ -28,7 +28,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];
 
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
 
   private previouslySelectedTeam!: number;
   robotPic!: File;
@@ -159,7 +159,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as QuestionWithConditions[];
+    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as Question[];
 
     scoutQuestions.forEach(el => {
       let answer = this.gs.formatQuestionAnswer(el.answer)
@@ -253,7 +253,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.api.get(true, 'scouting/pit/team-data/', {
       team_num: this.scoutPitResponse.team
     }, (result: any) => {
-      this.scoutPitResponse.question_answers = (result['questions'] as QuestionWithConditions[]);
+      this.scoutPitResponse.question_answers = (result['questions'] as Question[]);
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {
@@ -273,7 +273,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 }
 
 export class ScoutPitInit {
-  scoutQuestions: QuestionWithConditions[] = [];
+  scoutQuestions: Question[] = [];
   teams: Team[] = [];
   comp_teams: Team[] = [];
 }

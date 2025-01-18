@@ -1,5 +1,5 @@
 import { Banner } from "./api.models";
-import { QuestionWithConditions } from "./form.models";
+import { Question } from "./form.models";
 import { Link } from "./navigation.models";
 import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType } from "./scouting.models";
 import { AuthPermission, User } from "./user.models";
@@ -29,7 +29,7 @@ const teamInstance = new Team();
 const teamNoteInstance = new TeamNote();
 const matchInstance = new Match();
 const scoutFieldScheduleInstance = new ScoutFieldSchedule();
-const questionWithConditionsInstance = new QuestionWithConditions();
+const questionInstance = new Question();
 const scoutPitResponseInstance = new ScoutPitResponse();
 const scheduleTypeInstance = new ScheduleType();
 const scheduleInstance = new Schedule();
@@ -101,7 +101,7 @@ export const DBStores = {
     },
     QuestionWithConditions: {
         TableName: 'QuestionWithConditions',
-        Columns: generateColumns(questionWithConditionsInstance),
+        Columns: generateColumns(questionInstance),
     },
     ScoutPitResponse: {
         TableName: 'ScoutPitResponse',

@@ -1,29 +1,5 @@
 import { IScoutQuestion, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
 
-export interface IQuestionWithConditions {
-    question_id: number;
-    question_flow_id: number;
-    form_typ: IFormType;
-    form_sub_typ: IFormSubType;
-    question_typ: IQuestionType;
-    question: string;
-    table_col_width: string;
-    order: number;
-    required: string;
-    active: string;
-    void_ind: string;
-    answer: any;
-    display_value: string;
-
-    questionoption_set: IQuestionOption[];
-
-    scout_question: IScoutQuestion;
-    conditions: IQuestionCondition[];
-    is_condition: string;
-    has_conditions: string;
-
-}
-
 export interface IQuestion {
     question_id: number;
     question_flow_id: number;
@@ -43,33 +19,9 @@ export interface IQuestion {
 
     scout_question: IScoutQuestion;
 
-    is_condition: string;
+    conditional_on_question: number;
+    condition: string;
     has_conditions: string;
-}
-
-export class QuestionWithConditions implements IQuestionWithConditions {
-    question_id = NaN;
-    question_flow_id = NaN;
-    form_typ = new FormType();
-    form_sub_typ!: FormSubType;
-    question_typ!: QuestionType;
-    question = '';
-    table_col_width = '100px';
-    order = NaN;
-    required = 'n';
-    active = 'y';
-    void_ind = 'n';
-    answer: any = '';
-    display_value = '';
-
-    questionoption_set: QuestionOption[] = [];
-
-    scout_question = new ScoutQuestion();
-
-    conditions: QuestionCondition[] = [];
-
-    is_condition = 'n';
-    has_conditions = 'n';
 }
 
 export class Question implements IQuestion {
@@ -91,7 +43,8 @@ export class Question implements IQuestion {
 
     scout_question = new ScoutQuestion();
 
-    is_condition = 'n';
+    conditional_on_question = NaN;
+    condition = '';
     has_conditions = 'n';
 }
 
@@ -183,7 +136,7 @@ export class QuestionAggregate {
     question_aggregate_id!: number;
     field_name = '';
     question_aggregate_typ?: QuestionAggregateType;
-    questions: QuestionWithConditions[] = [];
+    questions: Question[] = [];
     active = 'y'
 }
 
@@ -218,7 +171,7 @@ export class Response {
     form_typ = '';
     time = new Date();
     archive_ind = "n";
-    questionanswer_set: QuestionWithConditions[] = [];
+    questionanswer_set: Question[] = [];
 }
 
 export class QuestionFlow {
@@ -233,7 +186,7 @@ export class QuestionFlow {
 
 export class FormInitialization {
     question_types: QuestionType[] = [];
-    questions: QuestionWithConditions[] = [];
+    questions: Question[] = [];
     form_sub_types: FormSubType[] = [];
     question_flows: QuestionFlow[] = [];
 }

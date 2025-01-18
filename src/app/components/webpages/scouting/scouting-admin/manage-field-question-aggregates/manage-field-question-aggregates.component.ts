@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { QuestionAggregateType, QuestionAggregate, QuestionWithConditions } from '../../../../../models/form.models';
+import { QuestionAggregateType, QuestionAggregate, Question } from '../../../../../models/form.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService } from '../../../../../services/general.service';
@@ -32,9 +32,9 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
-  fieldQuestions: QuestionWithConditions[] = [];
-  fieldQuestionAggQuestionList: QuestionWithConditions[] = [];
-  fieldQuestionToAddToAgg: QuestionWithConditions | null = null;;
+  fieldQuestions: Question[] = [];
+  fieldQuestionAggQuestionList: Question[] = [];
+  fieldQuestionToAddToAgg: Question | null = null;;
   fieldQuestionAggregateQuestionsTableCols: TableColType[] = [
     { PropertyName: 'display_value', ColLabel: 'Question' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
@@ -119,7 +119,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
     }
   }
 
-  removeQuestionFromFieldAggregate(q: QuestionWithConditions): void {
+  removeQuestionFromFieldAggregate(q: Question): void {
     let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, 'question_id', q.question_id);
     this.activeFieldQuestionAggregate.questions.splice(index, 1);
     this.buildFieldQuestionAggQuestionList();

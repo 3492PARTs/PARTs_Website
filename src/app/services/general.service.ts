@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { QuestionWithConditions, Response } from '../models/form.models';
+import { Question, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
 
@@ -559,14 +559,14 @@ export class GeneralService {
     return csv;
   }
 
-  questionsToCSV(questions: QuestionWithConditions[]): string {
+  questionsToCSV(questions: Question[]): string {
     let header = this.questionsToCSVHeader(questions);
     let body = this.questionsToCSVBody(questions);
 
     return `${header}\n${body}`;
   }
 
-  questionsToCSVHeader(questions: QuestionWithConditions[]): string {
+  questionsToCSVHeader(questions: Question[]): string {
     let header = '';
     questions.forEach(q => {
       header += `"${q.question}",`
@@ -575,7 +575,7 @@ export class GeneralService {
     return header;
   }
 
-  questionsToCSVBody(questions: QuestionWithConditions[]): string {
+  questionsToCSVBody(questions: Question[]): string {
     let body = '';
     questions.forEach(q => {
       body += `"${this.formatQuestionAnswer(q.answer)}",`
