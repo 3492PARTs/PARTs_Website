@@ -19,8 +19,9 @@ export interface IQuestion {
 
     scout_question: IScoutQuestion;
 
-    conditional_on_question: number;
-    condition: string;
+    question_conditional_on: number;
+    question_condition_value: string;
+    question_condition_typ: QuestionConditionType | undefined;
     has_conditions: string;
 }
 
@@ -43,8 +44,9 @@ export class Question implements IQuestion {
 
     scout_question = new ScoutQuestion();
 
-    conditional_on_question = NaN;
-    condition = '';
+    question_conditional_on = NaN;
+    question_condition_value = '';
+    question_condition_typ: QuestionConditionType | undefined = undefined;
     has_conditions = 'n';
 }
 

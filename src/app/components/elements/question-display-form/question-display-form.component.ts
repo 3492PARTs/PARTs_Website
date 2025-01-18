@@ -21,10 +21,10 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   set Questions(questions: Question[]) {
     if (questions) {
       this.allQuestions = questions;
-      this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.conditional_on_question)).map(q => new QuestionWithConditions(q));
+      this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
-      questions.filter(q => !this.gs.strNoE(q.conditional_on_question)).forEach(q => {
-        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.conditional_on_question)?.conditions.push(q);
+      questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
+        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditions.push(q);
       });
     }
   }
@@ -71,7 +71,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
       const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
       if (qwcs)
         for (let i = 0; i < qwcs.conditions.length; i++) {
-          if (qwcs.conditions[i].condition.toLowerCase() === JSON.stringify(question.answer).toLowerCase()) {
+          if (qwcs.conditions[i].question_condition_value.toLowerCase() === JSON.stringify(question.answer).toLowerCase()) {
             qwcs.activeConditionQuestion = qwcs.conditions[i];
           }
         }

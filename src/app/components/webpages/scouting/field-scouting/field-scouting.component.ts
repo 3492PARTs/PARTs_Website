@@ -56,7 +56,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 15;
+  stopwatchSecond = 1;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -369,11 +369,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     let i = 0;
 
     for (; this.formSubTypeForms.length; i++) {
-      if (this.activeFormSubTypeForm?.form_sub_typ && this.formSubTypeForms[i].form_sub_typ.order == this.activeFormSubTypeForm?.form_sub_typ.order + 1) {
-        break;
+      if (this.activeFormSubTypeForm?.form_sub_typ) {
+        if (this.formSubTypeForms[i].form_sub_typ.order > this.activeFormSubTypeForm?.form_sub_typ.order) {
+          break;
+        }
       }
     }
 
+    // Get all unfinished flows and log answers
     this.activeFormSubTypeForm?.question_flows.forEach(qf => {
       if (qf.question_answer) {
         this.scoutFieldResponse.answers.push(qf.question_answer);
@@ -381,17 +384,21 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     })
 
+    // Get answers from form at bottom of screen
     let answers = this.getActiveFlowFlowlessQuestionAnswers();
     if (answers && answers?.length > 0)
       this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
 
-
+    // advance to next form sub type
     this.activeFormSubTypeForm = this.formSubTypeForms[i];
+
+    // Display the first stage of each flow for this sub type
     this.gs.triggerChange(() => this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions))));
   }
 
   advanceFlow(flow: QuestionFlow, question: Question, override = false): void {
     if (question.question_typ.question_typ === 'mnt-psh-btn' || override) {
+      // Check if there are any required/invalid fields
       if (question.question_typ.question_typ !== 'mnt-psh-btn') {
         const qfe = this.getQuestionFormElement(question);
         if (qfe && !qfe.formElement.valid) {
@@ -400,9 +407,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
+      // Create new Question Ansswer to hold the flow answers
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
+      // Add Flows stage answer
       flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
       question.answer = undefined;
 
@@ -416,6 +425,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         else return 0;
       });
 
+      // Display next stage in flow
       let found = false;
       for (let i = 0; i < flow.questions.length; i++) {
         if (flow.questions[i].order > question.order) {
@@ -441,22 +451,52 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.displayFlowStage(flow, question.order + 1, true);
+      //this.displayFlowStage(flow, question.order + 1, true);
     }
   }
 
 
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
-    const questions = flow.questions.filter(q => q.order === stage);
-    questions.forEach(q => {
-      const box = this.getQuestionBox(q);
-      if (box) {
-        if (show)
-          this.showBox(box, q.scout_question);
-        else
-          this.hideBox(box);
+    if (!Number.isNaN(stage)) {
+      if (show) {
+        const questions = flow.questions.filter(q => q.order === stage && this.gs.strNoE(q.question_conditional_on));
+        const conditionalQuestions = flow.questions.filter(q => q.order === stage && !this.gs.strNoE(q.question_conditional_on));
+
+        questions.forEach(q => {
+          const box = this.getQuestionBox(q);
+          if (box)
+            this.showBox(box, q.scout_question);
+        });
+
+        conditionalQuestions.forEach(cq => {
+          this.activeFormSubTypeForm?.question_flows.forEach(qf => {
+            if (qf.question_answer?.question_flow_answers) {
+                qf.question_answer.question_flow_answers.forEach(qfa => {
+                  if (cq.question_condition_typ?.question_condition_typ === 'exist' &&
+                    qfa.question?.question_id === cq.question_conditional_on &&
+                    !this.gs.strNoE(qfa.answer)
+                  ) {
+                    const box = this.getQuestionBox(cq);
+                    if (box)
+                      this.showBox(box, cq.scout_question);
+                  }
+                });
+            }
+          });
+
+          this.scoutFieldResponse.answers.forEach(a => {
+
+          });
+        });
       }
-    });
+      else {
+        flow.questions.filter(q => q.order === stage).forEach(q => {
+          const box = this.getQuestionBox(q);
+          if (box)
+            this.hideBox(box);
+        });
+      }
+    }
   }
 
   getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {
