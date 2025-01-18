@@ -5,7 +5,7 @@
 <app-modal [Title]="'Question Condition'" [(visible)]="questionConditionModalVisible">
     <app-form-element [Type]="'select'" [LabelText]="'Question From'" [(Model)]="activeQuestionCondition.question_from"
         [Required]="true" [SelectList]="questionConditionQuestionFromList" [DisplayProperty]="'display_value'"
-        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionToLists()">
+        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionToLists()" [DisplayEmptyOption]="true">
     </app-form-element>
 
     <app-form (SubmitFunction)="saveQuestionCondition()">
@@ -14,8 +14,10 @@
             [DisplayEmptyOption]="true">
         </app-form-element>
 
-        <app-form-element [Type]="'text'" [LabelText]="'Condition Value'" [(Model)]="activeQuestionCondition.value"
+        @if(!activeQuestionCondition.question_condition_typ || activeQuestionCondition.question_condition_typ.question_condition_typ !== 'exist') {
+            <app-form-element [Type]="'text'" [LabelText]="'Condition Value'" [(Model)]="activeQuestionCondition.value"
             [Required]="true"></app-form-element>
+        }
 
         <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"
             [Required]="true" [SelectList]="questionConditionQuestionToList" [DisplayProperty]="'display_value'"

@@ -147,7 +147,7 @@ export class QuestionConditionType {
 
 export interface IQuestionCondition {
     question_condition_id: number;
-    question_condition_typ: QuestionConditionType;
+    question_condition_typ: QuestionConditionType | undefined;
     value: string;
     question_from: IQuestion;
     question_to: IQuestion;
@@ -156,7 +156,7 @@ export interface IQuestionCondition {
 
 export class QuestionCondition implements IQuestionCondition {
     question_condition_id!: number;
-    question_condition_typ: QuestionConditionType = new QuestionConditionType();
+    question_condition_typ: QuestionConditionType | undefined = undefined;
     value = '';
     question_from!: Question;
     question_to!: Question;
