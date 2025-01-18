@@ -9,7 +9,12 @@
     </app-form-element>
 
     <app-form (SubmitFunction)="saveQuestionCondition()">
-        <app-form-element [Type]="'text'" [LabelText]="'Condition'" [(Model)]="activeQuestionCondition.condition"
+        <app-form-element [Type]="'select'" [LabelText]="'Condition Type'" [(Model)]="activeQuestionCondition.question_condition_typ"
+            [Required]="true" [SelectList]="questionConditionTypes" [DisplayProperty]="'question_condition_nm'"
+            [DisplayEmptyOption]="true">
+        </app-form-element>
+
+        <app-form-element [Type]="'text'" [LabelText]="'Condition Value'" [(Model)]="activeQuestionCondition.value"
             [Required]="true"></app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"

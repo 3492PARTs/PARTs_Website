@@ -140,9 +140,15 @@ export class QuestionAggregate {
     active = 'y'
 }
 
+export class QuestionConditionType {
+    question_condition_typ = ''
+    question_condition_nm = ''
+}
+
 export interface IQuestionCondition {
     question_condition_id: number;
-    condition: string;
+    question_condition_typ: QuestionConditionType;
+    value: string;
     question_from: IQuestion;
     question_to: IQuestion;
     active: string;
@@ -150,7 +156,8 @@ export interface IQuestionCondition {
 
 export class QuestionCondition implements IQuestionCondition {
     question_condition_id!: number;
-    condition = '';
+    question_condition_typ: QuestionConditionType = new QuestionConditionType();
+    value = '';
     question_from!: Question;
     question_to!: Question;
     active = 'y';

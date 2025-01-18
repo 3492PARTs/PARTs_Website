@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question, QuestionCondition } from '../../../models/form.models';
+import { Question, QuestionCondition, QuestionConditionType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
@@ -8,6 +8,7 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { FormComponent } from '../../atoms/form/form.component';
+import { AuthCallStates, AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-question-condition-admin-form',
@@ -20,23 +21,30 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
 
   questions: Question[] = [];
+  questionConditionTypes: QuestionConditionType[] = [];
   questionConditions: QuestionCondition[] = [];
   questionConditionModalVisible = false;
   activeQuestionCondition = new QuestionCondition();
   questionConditionsTableCols: TableColType[] = [
     { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
-    { PropertyName: 'condition', ColLabel: 'Condition' },
+    { PropertyName: 'question_condition_typ.question_condition_nm', ColLabel: 'Condition Type' },
+    { PropertyName: 'value', ColLabel: 'Condition' },
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
   questionConditionQuestionFromList: Question[] = [];
   questionConditionQuestionToList: Question[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.getQuestions();
-    this.getQuestionConditions();
+    this.authService.authInFlight.subscribe((r) => {
+          if (r === AuthCallStates.comp) {
+            this.getQuestions();
+            this.getQuestionConditions();
+            this.getQuestionConditionTypes();
+          }
+        });
   }
 
   getQuestions(): void {
@@ -44,7 +52,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       form_typ: this.FormType,
       active: 'y'
     }, (result: Question[]) => {
-      this.questions = result.filter(q => this.gs.strNoE(q.question_flow_id));
+      this.questions = result;
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
@@ -57,6 +65,14 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       form_typ: this.FormType
     }, (result: any) => {
       this.questionConditions = result as QuestionCondition[];
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  getQuestionConditionTypes(): void {
+    this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
+      this.questionConditionTypes = result;
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -118,10 +134,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
         match = false;
       }
 
-      if (!match &&
-        question.form_sub_typ &&
-        this.activeQuestionCondition.question_from.form_sub_typ &&
-        question.form_sub_typ.form_sub_typ === this.activeQuestionCondition.question_from.form_sub_typ.form_sub_typ)
+      if (!match)
         this.questionConditionQuestionToList.push(question);
     });
   }
