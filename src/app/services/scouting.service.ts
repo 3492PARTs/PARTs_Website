@@ -738,13 +738,12 @@ export class ScoutingService {
 
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
-      let scoutQuestions = this.gs.cloneObject(spr.answers) as Question[];
-
-      scoutQuestions.forEach(r => {
-        r.answer = this.gs.formatQuestionAnswer(r.answer);
-      });
-
-      //TODOspr.answers = scoutQuestions;
+      spr.answers.forEach(a => {
+        if (a.question) {
+          a.question.answer = '';
+          a.answer = this.gs.formatQuestionAnswer(a.answer);
+        }
+      })
       spr.form_typ = 'pit';
 
       const sprPost = this.gs.cloneObject(spr);
