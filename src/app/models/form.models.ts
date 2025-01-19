@@ -199,3 +199,29 @@ export class FormInitialization {
     form_sub_types: FormSubType[] = [];
     question_flows: QuestionFlow[] = [];
 }
+
+export class GraphType {
+    graph_typ = '';
+    graph_nm = '';
+}
+
+export class Graph {
+    id = NaN
+    graph_typ: GraphType | undefined = undefined;
+    name = '';
+    active = 'y';
+}
+
+
+export class GraphQuestionType {
+    graph_question_typ = '';
+    graph_question_nm = '';
+}
+
+export class GraphQuestion {
+    id = NaN
+    graph: Graph | undefined = undefined;
+    question: Question | undefined = undefined;
+    graph_question_typ: GraphQuestionType | undefined = undefined;
+    active = 'y';
+}
