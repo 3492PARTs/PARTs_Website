@@ -84,11 +84,12 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) },
-      ];
+        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },      ];
 
-      if (this.FormMetadata.form_sub_types.length > 0)
+      if (this.AllowFlows)
+        this.questionTableCols = this.questionTableCols.concat([{ PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) } as TableColType]);
+
+      if (this.AllowFlows && this.FormMetadata.form_sub_types.length > 0)
         this.questionTableCols = [{ PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' } as TableColType].concat(this.questionTableCols);
     }
     else {

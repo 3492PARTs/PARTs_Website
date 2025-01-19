@@ -471,7 +471,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
             if (qf.question_answer?.question_flow_answers) {
                 qf.question_answer.question_flow_answers.forEach(qfa => {
-                  if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
+                  if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
                     this.showQuestionBox(cq);
                     sceneFound = true;
                   }
@@ -480,14 +480,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
             this.scoutFieldResponse.answers.forEach(a => {
               if (a.question &&  !this.gs.strNoE(a.question.question_id)) {
-                if (this.isQuestionConditionMet(a.answer, a.question, cq)) {
+                if (this.gs.isQuestionConditionMet(a.answer, a.question, cq)) {
                   this.showQuestionBox(cq);
                   sceneFound = true;
                 }
               }
               else {
                 a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== cq.form_sub_typ.form_sub_typ).forEach(qfa => {
-                  if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
+                  if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
                     this.showQuestionBox(cq);
                     sceneFound = true;
                   }
@@ -507,25 +507,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         });
       }
     }
-  }
-
-  private isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-    if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
-      switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
-        case 'equal':
-          return answer.toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
-        case 'exist':
-          return !this.gs.strNoE(answer)
-        case 'lt':
-          return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
-        case 'lte': 
-        return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
-        case 'gt':
-          return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
-        case 'gte':
-          return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
-      }
-    return false;
   }
 
   getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {

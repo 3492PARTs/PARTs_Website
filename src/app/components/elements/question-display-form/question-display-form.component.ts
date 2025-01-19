@@ -24,15 +24,24 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
       this.allQuestions = questions;
       this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
+      // Push questions into the one they are conditinoal on
       questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
-        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditions.push(q);
+        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditionalQuestions.push(q);
       });
 
+      // find questions who are not a top level question or their direct child conditional queston
+      // these will be passed down on any question with a list of conditions 
+      // to see if there is a depper recursive conditional question
       let qs = this.questionsWithConditions.map(qwc => qwc.question);
-      let ids = [...qs.map(q => q.question_id), ...this.questionsWithConditions.map(qwc => qwc.conditions.map(c => c))]
+      let qsc =  this.questionsWithConditions.map(qwc => qwc.conditionalQuestions.map(c => c)).flatMap(q => q);
+      let ids = [...qs.map(q => q.question_id), ...qsc.map(q => q.question_id)]
 
       let leftOvers = this.allQuestions.filter(q => !ids.includes(q.question_id));
-      let p = 0;
+      this.questionsWithConditions.forEach(qwc => {
+        if (qwc.conditionalQuestions.length > 0) {
+          qwc.deeperConditionalQuestions = leftOvers;
+        }
+      });
     }
   }
   @Output() QuestionsChange: EventEmitter<Question[]> = new EventEmitter();
@@ -61,19 +70,54 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
         switch (propName) {
           case 'Questions':
             this.QuestionsChange.emit(this.allQuestions);
+            this.setQuestionsWithConditions(this.allQuestions);
             break;
           case 'Question':
-            //this.QuestionsChange.emit(this.allQuestions);
+            this.setQuestionsWithConditions(this.allQuestions);
             break;
         }
       }
     }
   }
 
-  setQuestionsWithConditions() {
-    if (this.Question){
-      const q = this.Questions.find(q => q.question_id === this.Question?.question_id)
+  setQuestionsWithConditions(questions: Question[] | undefined) {
+    if (questions) {
+      this.allQuestions = questions;
+      if (this.Question)
+        this.questionsWithConditions = [new QuestionWithConditions(this.Question)];
+      else 
+        this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
+      // Push questions into the one they are conditinoal on
+      questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
+        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditionalQuestions.push(q);
+      });
+
+      // find questions who are not a top level question or their direct child conditional queston
+      // these will be passed down on any question with a list of conditions 
+      // to see if there is a depper recursive conditional question
+      let qs = this.questionsWithConditions.map(qwc => qwc.question);
+      let qsc =  this.questionsWithConditions.map(qwc => qwc.conditionalQuestions.map(c => c)).flatMap(q => q);
+      let ids = [...qs.map(q => q.question_id), ...qsc.map(q => q.question_id)]
+
+      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.question_id));
+      this.questionsWithConditions.forEach(qwc => {
+        if (qwc.conditionalQuestions.length > 0) {
+          qwc.deeperConditionalQuestions = leftOvers;
+        }
+      });
+
+      /*if (this.Question){
+        for (let i = 0; i < this.questionsWithConditions.length; i++) {
+          if (this.questionsWithConditions[i].question.question_id !== this.Question.question_id) {
+            this.questionsWithConditions.splice(i--, 1);
+          }
+          else {
+  
+          }
+        }
+  
+      }*/
     }
   }
 
@@ -85,26 +129,26 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   setQuestionAnswer(i: number, question: Question): void {
     this.allQuestions[i] = question;
 
-    if (question.has_conditions === 'y') {
-      const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
-      if (qwcs)
-        for (let i = 0; i < qwcs.conditions.length; i++) {
-          if (qwcs.conditions[i].question_condition_value.toLowerCase() === JSON.stringify(question.answer).toLowerCase()) {
-            qwcs.activeConditionQuestion = qwcs.conditions[i];
-          }
+    const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
+    if (qwcs)
+      for (let i = 0; i < qwcs.conditionalQuestions.length; i++) {
+        if (this.gs.isQuestionConditionMet(question.answer, question,qwcs.conditionalQuestions[i])) {
+          qwcs.activeConditionQuestion = qwcs.conditionalQuestions[i];
         }
-    }
+      }
   }
 }
 
 class QuestionWithConditions {
   question = new Question();
-  conditions: Question[] = [];
+  conditionalQuestions: Question[] = [];
+  deeperConditionalQuestions: Question[] = [];
   activeConditionQuestion = new Question();
 
   constructor(question: Question) {
     this.question = question;
-    this.conditions = [];
+    this.conditionalQuestions = [];
     this.activeConditionQuestion = new Question();
+    this.deeperConditionalQuestions = []
   }
 }

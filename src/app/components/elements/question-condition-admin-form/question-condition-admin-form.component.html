@@ -1,6 +1,6 @@
-<app-table [TableCols]="questionConditionsTableCols" [TableData]="questionConditions" [Width]="'100%'"
+<app-table [TableCols]="questionConditionsTableCols" [TableData]="questionConditions"
     [ShowAddButton]="true" (AddRecordCallBack)="showQuestionConditionModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showQuestionConditionModal($event)"></app-table>
+    (EditRecordCallBack)="showQuestionConditionModal($event)"  [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'60vh'"></app-table>
 
 <app-modal [Title]="'Question Condition'" [(visible)]="questionConditionModalVisible">
     <app-form-element [Type]="'select'" [LabelText]="'Question From'" [(Model)]="activeQuestionCondition.question_from"
