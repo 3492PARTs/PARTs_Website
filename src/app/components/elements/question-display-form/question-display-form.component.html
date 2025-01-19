@@ -8,8 +8,6 @@
         <div class="sub-question">
             <app-question-display-form [(Questions)]="questionsWithConditions[i].deeperConditionalQuestions" [Question]="questionsWithConditions[i].activeConditionQuestion"
             [Disabled]="Disabled"></app-question-display-form>
-            <!--<app-question-form-element [(Question)]="questionsWithConditions[i].activeConditionQuestion"
-                [Disabled]="Disabled"></app-question-form-element>-->
         </div>
         }
     </ng-container>

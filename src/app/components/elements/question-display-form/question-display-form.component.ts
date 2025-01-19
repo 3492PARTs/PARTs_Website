@@ -106,18 +106,6 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           qwc.deeperConditionalQuestions = leftOvers;
         }
       });
-
-      /*if (this.Question){
-        for (let i = 0; i < this.questionsWithConditions.length; i++) {
-          if (this.questionsWithConditions[i].question.question_id !== this.Question.question_id) {
-            this.questionsWithConditions.splice(i--, 1);
-          }
-          else {
-  
-          }
-        }
-  
-      }*/
     }
   }
 

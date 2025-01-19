@@ -88,23 +88,6 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   buildQuestionConditionFromLists(): void {
     this.questionConditionQuestionFromList = this.gs.cloneObject(this.questions);
-    return;
-
-    this.questions.forEach(q => {
-      let match = false;
-      this.questionConditions.forEach(qc => {
-        if ([qc.question_to.question_id].includes(q.question_id))
-          match = true
-      });
-
-      if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === q.question_id)
-        match = true;
-
-      if (!match)
-        this.questionConditionQuestionFromList.push(q);
-    });
   }
 
   buildQuestionConditionToLists(): void {
