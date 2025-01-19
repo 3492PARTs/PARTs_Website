@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer } from '../../../../models/form.models';
+import { Question, QuestionAnswer, QuestionConditionType, QuestionFlow, QuestionFlowAnswer } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
@@ -56,7 +56,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 1;
+  stopwatchSecond = 2;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -472,10 +472,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
             if (qf.question_answer?.question_flow_answers) {
                 qf.question_answer.question_flow_answers.forEach(qfa => {
-                  if (cq.question_condition_typ?.question_condition_typ === 'exist' &&
-                    qfa.question?.question_id === cq.question_conditional_on &&
-                    !this.gs.strNoE(qfa.answer)
-                  ) {
+                  if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
                     const box = this.getQuestionBox(cq);
                     if (box)
                       this.showBox(box, cq.scout_question);
@@ -497,6 +494,25 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  private isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
+    if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
+      switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
+        case 'equal':
+          return answer.toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
+        case 'exist':
+          return !this.gs.strNoE(answer)
+        case 'lt':
+          return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
+        case 'lte': 
+        return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
+        case 'gt':
+          return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
+        case 'gte':
+          return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
+      }
+    return false;
   }
 
   getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {
