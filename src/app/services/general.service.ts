@@ -466,11 +466,11 @@ export class GeneralService {
             return !this.strNoE(answer)
           case 'lt':
             return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
-          case 'lte': 
+          case 'lt-equal': 
           return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
           case 'gt':
             return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
-          case 'gte':
+          case 'gt-equal':
             return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
         }
       return false;

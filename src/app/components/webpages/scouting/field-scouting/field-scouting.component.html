@@ -130,7 +130,7 @@
         </div>
       </div>
 
-      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
+      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions" [QuestionAnswers]="scoutFieldResponse.answers"
         (FormElementsChange)="setFormElements($event)" [Disabled]="formDisabled">
       </app-question-display-form>
 

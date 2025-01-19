@@ -49,7 +49,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   questionsWithConditions: QuestionWithConditions[] = [];
   
 
-  @Input() QuestionAnsers: QuestionAnswer[] = [];
+  @Input() QuestionAnswers: QuestionAnswer[] = [];
 
   @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
@@ -75,6 +75,9 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           case 'Question':
             this.setQuestionsWithConditions(this.allQuestions);
             break;
+          case 'QuestionAnswers':
+            //this.setQuestionsWithConditions(this.allQuestions);
+            break;
         }
       }
     }
@@ -82,14 +85,20 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
   setQuestionsWithConditions(questions: Question[] | undefined) {
     if (questions) {
-      if (this.Question) console.log(this.Question);
       this.allQuestions = questions;
       if (this.Question)
         this.questionsWithConditions = [new QuestionWithConditions(this.Question)];
       else 
         this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
-      // Push questions into the one they are conditinoal on
+      this.QuestionAnswers.forEach(qa => {
+        questions.filter(q => q.question_conditional_on === qa.question?.question_id).forEach(q => {
+          if (qa.question && this.gs.isQuestionConditionMet(qa.answer, qa.question, q)) 
+            this.questionsWithConditions.push(new QuestionWithConditions(q));
+        });
+      });
+      
+      // Push questions into the one they are conditional on
       questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
         this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditionalQuestions.push(q);
       });
@@ -107,7 +116,6 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           qwc.deeperConditionalQuestions = leftOvers;
         }
 
-        console.log(this.questionsWithConditions);
         this.checkIfConditionsAreMet(qwc.question);
       });
     }
