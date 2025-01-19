@@ -444,9 +444,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
         else {
           flow.questions.forEach(q => {
-            const box = this.getQuestionBox(q);
-            if (box)
-              this.hideBox(box);
+              this.hideQuestionBox(q);
           });
         }
       }
@@ -459,13 +457,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     if (!Number.isNaN(stage)) {
       if (show) {
+        let sceneFound = false;
+
         const questions = flow.questions.filter(q => q.order === stage && this.gs.strNoE(q.question_conditional_on));
         const conditionalQuestions = flow.questions.filter(q => q.order === stage && !this.gs.strNoE(q.question_conditional_on));
 
         questions.forEach(q => {
-          const box = this.getQuestionBox(q);
-          if (box)
-            this.showBox(box, q.scout_question);
+          this.showQuestionBox(q);
+          sceneFound = true;
         });
 
         conditionalQuestions.forEach(cq => {
@@ -473,24 +472,38 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
             if (qf.question_answer?.question_flow_answers) {
                 qf.question_answer.question_flow_answers.forEach(qfa => {
                   if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
-                    const box = this.getQuestionBox(cq);
-                    if (box)
-                      this.showBox(box, cq.scout_question);
+                    this.showQuestionBox(cq);
+                    sceneFound = true;
                   }
                 });
             }
-          });
 
-          this.scoutFieldResponse.answers.forEach(a => {
-
+            this.scoutFieldResponse.answers.forEach(a => {
+              if (a.question &&  !this.gs.strNoE(a.question.question_id)) {
+                if (this.isQuestionConditionMet(a.answer, a.question, cq)) {
+                  this.showQuestionBox(cq);
+                  sceneFound = true;
+                }
+              }
+              else {
+                a.question_flow_answers.forEach(qfa => {
+                  if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
+                    this.showQuestionBox(cq);
+                    sceneFound = true;
+                  }
+                })
+              }
+            });
           });
         });
+
+        if (!sceneFound) {
+          this.displayFlowStage(flow, this.getNextStage(flow.questions, stage));
+        }
       }
       else {
         flow.questions.filter(q => q.order === stage).forEach(q => {
-          const box = this.getQuestionBox(q);
-          if (box)
-            this.hideBox(box);
+          this.hideQuestionBox(q);
         });
       }
     }
@@ -566,26 +579,34 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  getNextStage(questions: Question[], scene: number): number {
+    return questions.length > 0 ? questions.map(q => q.order).find(o => o > scene) || this.getFirstStage(questions) : NaN;
+  }
+
   getFirstStage(questions: Question[]): number {
     return questions.length > 0 ? questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2) : NaN;
   }
 
-  hideBox(box: HTMLElement): void {
-    this.renderer.setStyle(box, 'display', "none");
+  hideQuestionBox(question: Question): void {
+    const box = this.getQuestionBox(question);
+    if (box)
+      this.renderer.setStyle(box, 'display', "none");
   }
 
-  showBox(box: HTMLElement, scout_question: ScoutQuestion): void {
-    if (!this.gs.strNoE(scout_question.x) &&
-      !this.gs.strNoE(scout_question.y) &&
-      !this.gs.strNoE(scout_question.width) &&
-      !this.gs.strNoE(scout_question.height) &&
+  showQuestionBox(question: Question): void {
+    const box = this.getQuestionBox(question);
+    if (box &&
+      !this.gs.strNoE(question.scout_question.x) &&
+      !this.gs.strNoE(question.scout_question.y) &&
+      !this.gs.strNoE(question.scout_question.width) &&
+      !this.gs.strNoE(question.scout_question.height) &&
       box) {
       this.renderer.setStyle(box, 'display', "block");
-      this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
-      this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
+      this.renderer.setStyle(box, 'width', `${question.scout_question.width}%`);
+      this.renderer.setStyle(box, 'height', `${question.scout_question.height}%`);
 
-      this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
-      this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+      this.renderer.setStyle(box, 'left', `${question.scout_question.x}%`);
+      this.renderer.setStyle(box, 'top', `${question.scout_question.y}%`);
     }
 
   }
