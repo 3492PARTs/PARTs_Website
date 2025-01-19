@@ -127,15 +127,13 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   checkIfConditionsAreMet(question: Question): void {
     const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
     if (qwcs){
-      let found = false;
+      let condQuests: Question[] = [];
       for (let i = 0; i < qwcs.conditionalQuestions.length; i++) {
         if (this.gs.isQuestionConditionMet(question.answer, question,qwcs.conditionalQuestions[i])) {
-          qwcs.activeConditionQuestion = qwcs.conditionalQuestions[i];
-          found = true;
-          break;
+          condQuests.push(qwcs.conditionalQuestions[i]);
         }
       }
-      if (!found) qwcs.activeConditionQuestion = new Question();
+      qwcs.activeConditionQuestions = condQuests;
     }
   }
 }
@@ -144,12 +142,12 @@ class QuestionWithConditions {
   question = new Question();
   conditionalQuestions: Question[] = [];
   deeperConditionalQuestions: Question[] = [];
-  activeConditionQuestion = new Question();
+  activeConditionQuestions: Question[] = [];
 
   constructor(question: Question) {
     this.question = question;
     this.conditionalQuestions = [];
-    this.activeConditionQuestion = new Question();
+    this.activeConditionQuestions = [];
     this.deeperConditionalQuestions = []
   }
 }

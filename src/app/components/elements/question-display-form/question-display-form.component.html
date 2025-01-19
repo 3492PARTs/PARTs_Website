@@ -4,9 +4,9 @@
         <app-question-form-element [Question]="questionsWithConditions[i].question" [Disabled]="Disabled"
             (QuestionChange)="setQuestionAnswer(i, $event)"></app-question-form-element>
 
-        @if (questionsWithConditions[i].activeConditionQuestion.question_id) {
+        @for (acq of questionsWithConditions[i].activeConditionQuestions; track acq.question_id; let j = $index) {
         <div class="sub-question">
-            <app-question-display-form [(Questions)]="questionsWithConditions[i].deeperConditionalQuestions" [Question]="questionsWithConditions[i].activeConditionQuestion"
+            <app-question-display-form [(Questions)]="questionsWithConditions[i].deeperConditionalQuestions" [Question]="questionsWithConditions[i].activeConditionQuestions[j]"
             [Disabled]="Disabled"></app-question-display-form>
         </div>
         }
