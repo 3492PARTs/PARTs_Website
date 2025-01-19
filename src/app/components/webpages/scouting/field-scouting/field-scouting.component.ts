@@ -486,7 +486,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
                 }
               }
               else {
-                a.question_flow_answers.forEach(qfa => {
+                a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== cq.form_sub_typ.form_sub_typ).forEach(qfa => {
                   if (qfa.question && this.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
                     this.showQuestionBox(cq);
                     sceneFound = true;
