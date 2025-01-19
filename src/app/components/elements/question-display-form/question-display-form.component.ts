@@ -82,6 +82,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
   setQuestionsWithConditions(questions: Question[] | undefined) {
     if (questions) {
+      if (this.Question) console.log(this.Question);
       this.allQuestions = questions;
       if (this.Question)
         this.questionsWithConditions = [new QuestionWithConditions(this.Question)];
@@ -105,6 +106,9 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
         if (qwc.conditionalQuestions.length > 0) {
           qwc.deeperConditionalQuestions = leftOvers;
         }
+
+        console.log(this.questionsWithConditions);
+        this.checkIfConditionsAreMet(qwc.question);
       });
     }
   }
@@ -115,15 +119,24 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   }
 
   setQuestionAnswer(i: number, question: Question): void {
-    this.allQuestions[i] = question;
+    this.questionsWithConditions[i].question = question;
 
+    this.checkIfConditionsAreMet(question);
+  }
+
+  checkIfConditionsAreMet(question: Question): void {
     const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
-    if (qwcs)
+    if (qwcs){
+      let found = false;
       for (let i = 0; i < qwcs.conditionalQuestions.length; i++) {
         if (this.gs.isQuestionConditionMet(question.answer, question,qwcs.conditionalQuestions[i])) {
           qwcs.activeConditionQuestion = qwcs.conditionalQuestions[i];
+          found = true;
+          break;
         }
       }
+      if (!found) qwcs.activeConditionQuestion = new Question();
+    }
   }
 }
 

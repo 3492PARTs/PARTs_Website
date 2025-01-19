@@ -461,7 +461,7 @@ export class GeneralService {
       if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
         switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
           case 'equal':
-            return answer.toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
+            return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
           case 'exist':
             return !this.strNoE(answer)
           case 'lt':
