@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
-import { Question } from '../../../models/form.models';
+import { Question, QuestionAnswer } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
 import { QuestionFormElementComponent } from '../question-form-element/question-form-element.component';
@@ -17,6 +17,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
   @Input() LabelText = '';
   @Input() Disabled = false;
+  @Input()Question: Question | undefined = undefined;
   @Input()
   set Questions(questions: Question[]) {
     if (questions) {
@@ -26,13 +27,20 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
       questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
         this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditions.push(q);
       });
+
+      let qs = this.questionsWithConditions.map(qwc => qwc.question);
+      let ids = [...qs.map(q => q.question_id), ...this.questionsWithConditions.map(qwc => qwc.conditions.map(c => c))]
+
+      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.question_id));
+      let p = 0;
     }
   }
   @Output() QuestionsChange: EventEmitter<Question[]> = new EventEmitter();
   allQuestions: Question[] = [];
   questionsWithConditions: QuestionWithConditions[] = [];
+  
 
-  //formElements = new QueryList<FormElementComponent>();
+  @Input() QuestionAnsers: QuestionAnswer[] = [];
 
   @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
@@ -54,8 +62,18 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           case 'Questions':
             this.QuestionsChange.emit(this.allQuestions);
             break;
+          case 'Question':
+            //this.QuestionsChange.emit(this.allQuestions);
+            break;
         }
       }
+    }
+  }
+
+  setQuestionsWithConditions() {
+    if (this.Question){
+      const q = this.Questions.find(q => q.question_id === this.Question?.question_id)
+
     }
   }
 
