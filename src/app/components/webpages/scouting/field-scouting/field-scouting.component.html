@@ -91,13 +91,13 @@
         @if(activeFormSubTypeForm && activeFormSubTypeForm.question_flows && activeFormSubTypeForm.question_flows.length
         > 0) {
         <div #flowButtonsWrapper>
-          <app-button id="full-screen-btn" [ButtonType]="!fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'"
-            (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
-
           @if (flowsActionStack.length > 0) {
           <app-button id="undo-btn" [ButtonType]="'arrow-u-left-top'" (FunctionCallBack)="undoFlowAction()"
             [BackgroundColor]="'#808080'"></app-button>
           }
+
+          <app-button id="full-screen-btn" [ButtonType]="!fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'"
+            (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
         </div>
         }
 
