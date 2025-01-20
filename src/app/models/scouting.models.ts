@@ -396,10 +396,10 @@ export class ScheduleByType {
 
 export interface ITeamNote {
     team_note_id: number;
-    event: Event | number;
+    //event: Event | number;
     team_id: number;
     match: Match | undefined;
-    user: User | number;
+    user: User | undefined;
     note: string;
     time: Date;
     void_ind: string;
@@ -407,10 +407,10 @@ export interface ITeamNote {
 
 export class TeamNote implements ITeamNote {
     team_note_id = NaN;
-    event: Event | number = NaN;
+    //event: Event | number = NaN;
     team_id = NaN;
     match: Match | undefined = undefined;
-    user: User | number = NaN;
+    user: User | undefined = undefined;
     note = '';
     time!: Date;
     void_ind = 'n';

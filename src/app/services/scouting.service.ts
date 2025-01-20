@@ -1080,8 +1080,10 @@ export class ScoutingService {
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, (result: any) => {
         this.gs.successfulResponseBanner(result);
+        resolve(true);
       }, (error) => {
         this.gs.triggerError(error);
+        resolve(false);
       });
     });
   }
