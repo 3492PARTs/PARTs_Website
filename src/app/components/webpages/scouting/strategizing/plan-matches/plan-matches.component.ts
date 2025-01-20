@@ -165,6 +165,11 @@ export class PlanMatchesComponent implements OnInit {
           this.activeMatchStrategies = [];
           await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_id === match.match_id).then(mss => {
             this.activeMatchStrategies = mss;
+            this.activeMatchStrategies.sort((ms1, ms2) => {
+              if (ms1.time < ms2.time) return 1;
+              else if (ms1.time > ms2.time) return -1;
+              else return 0;
+            })
           })
         }
       });
@@ -280,7 +285,7 @@ export class PlanMatchesComponent implements OnInit {
 
   addMatchStrategy(): void {
     if (this.activeMatchStrategies.filter(ms => this.gs.strNoE(ms.strategy) && !ms.user && !ms.match).length <= 0) {
-      this.activeMatchStrategies.push(new MatchStrategy());
+      this.activeMatchStrategies.unshift(new MatchStrategy());
     }
   }
 

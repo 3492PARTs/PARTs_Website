@@ -490,6 +490,7 @@ export interface IMatchStrategy {
     match: Match | undefined;
     user: User | undefined;
     strategy: string;
+    time: Date;
 }
 
 export class MatchStrategy implements IMatchStrategy {
@@ -497,4 +498,5 @@ export class MatchStrategy implements IMatchStrategy {
     match: Match | undefined = undefined;
     user: User | undefined = undefined;
     strategy = '';
+    time = new Date()
 }
