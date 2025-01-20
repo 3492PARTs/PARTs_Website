@@ -14,49 +14,49 @@
     <div id="scouts">
       <div class="red">
         <p>{{ scoutFieldSchedule.red_one_id?.first_name }} {{ scoutFieldSchedule.red_one_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.red_one_field_response && scoutFieldResponse.match?.red_one">
+        <div *ngIf="!scoutFieldResponse.match?.red_one_field_response && scoutFieldResponse.match?.red_one_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.red_one}}</p>
+          <p>{{scoutFieldResponse.match?.red_one_id}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_one_id?.first_name }} {{ scoutFieldSchedule.blue_one_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.blue_one_field_response && scoutFieldResponse.match?.blue_one">
+        <div *ngIf="!scoutFieldResponse.match?.blue_one_field_response && scoutFieldResponse.match?.blue_one_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.blue_one}}</p>
+          <p>{{scoutFieldResponse.match?.blue_one_id}}</p>
         </div>
       </div>
 
       <div class="red">
         <p>{{ scoutFieldSchedule.red_two_id?.first_name }} {{ scoutFieldSchedule.red_two_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.red_two_field_response && scoutFieldResponse.match?.red_two">
+        <div *ngIf="!scoutFieldResponse.match?.red_two_field_response && scoutFieldResponse.match?.red_two_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.red_two}}</p>
+          <p>{{scoutFieldResponse.match?.red_two_id}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_two_id?.first_name }} {{ scoutFieldSchedule.blue_two_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.blue_two_field_response && scoutFieldResponse.match?.blue_two">
+        <div *ngIf="!scoutFieldResponse.match?.blue_two_field_response && scoutFieldResponse.match?.blue_two_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.blue_two}}</p>
+          <p>{{scoutFieldResponse.match?.blue_two_id}}</p>
         </div>
       </div>
 
       <div class="red">
         <p>{{ scoutFieldSchedule.red_three_id?.first_name }} {{ scoutFieldSchedule.red_three_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.red_three_field_response && scoutFieldResponse.match?.red_three">
+        <div *ngIf="!scoutFieldResponse.match?.red_three_field_response && scoutFieldResponse.match?.red_three_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.red_three}}</p>
+          <p>{{scoutFieldResponse.match?.red_three_id}}</p>
         </div>
       </div>
 
       <div class="blue">
         <p>{{ scoutFieldSchedule.blue_three_id?.first_name }} {{ scoutFieldSchedule.blue_three_id?.last_name }}</p>
-        <div *ngIf="!scoutFieldResponse.match?.blue_three_field_response && scoutFieldResponse.match?.blue_three">
+        <div *ngIf="!scoutFieldResponse.match?.blue_three_field_response && scoutFieldResponse.match?.blue_three_id">
           <hr>
-          <p>{{scoutFieldResponse.match?.blue_three}}</p>
+          <p>{{scoutFieldResponse.match?.blue_three_id}}</p>
         </div>
       </div>
     </div>
@@ -130,8 +130,9 @@
         </div>
       </div>
 
-      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions" [QuestionAnswers]="scoutFieldResponse.answers"
-        (FormElementsChange)="setFormElements($event)" [Disabled]="formDisabled">
+      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
+        [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
+        [Disabled]="formDisabled">
       </app-question-display-form>
 
       <app-button-ribbon>

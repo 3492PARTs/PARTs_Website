@@ -28,3 +28,13 @@
   width: 100% !important;
   height: 500px !important;
 }
+
+.match-strategy {
+  position: relative;
+
+  p {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

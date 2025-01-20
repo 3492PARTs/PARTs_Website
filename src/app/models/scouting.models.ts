@@ -91,22 +91,22 @@ export interface IMatch {
     match_id: string;
     match_number: number;
     event: IEvent;
-    red_one: ITeam | number;
+    red_one_id: number;
     red_one_rank: number;
     red_one_field_response: boolean;
-    red_two: ITeam | number;
+    red_two_id: number;
     red_two_rank: number;
     red_two_field_response: boolean;
-    red_three: ITeam | number;
+    red_three_id: number;
     red_three_rank: number;
     red_three_field_response: boolean;
-    blue_one: ITeam | number;
+    blue_one_id: number;
     blue_one_rank: number;
     blue_one_field_response: boolean;
-    blue_two: ITeam | number;
+    blue_two_id: number;
     blue_two_rank: number;
     blue_two_field_response: boolean;
-    blue_three: ITeam | number;
+    blue_three_id: number;
     blue_three_rank: number;
     blue_three_field_response: boolean;
 
@@ -123,22 +123,22 @@ export class Match implements IMatch {
     match_id = '';
     match_number = NaN;
     event!: Event;
-    red_one!: ITeam | number;
+    red_one_id = NaN;
     red_one_rank!: number;
     red_one_field_response!: boolean;
-    red_two!: ITeam | number;
+    red_two_id = NaN;
     red_two_rank!: number;
     red_two_field_response!: boolean;
-    red_three!: ITeam | number;
+    red_three_id = NaN;
     red_three_rank!: number;
     red_three_field_response!: boolean;
-    blue_one!: ITeam | number;
+    blue_one_id = NaN;
     blue_one_rank!: number;
     blue_one_field_response!: boolean;
-    blue_two!: ITeam | number;
+    blue_two_id = NaN;
     blue_two_rank!: number;
     blue_two_field_response!: boolean;
-    blue_three!: ITeam | number;
+    blue_three_id = NaN;
     blue_three_rank!: number;
     blue_three_field_response!: boolean;
     red_score!: number;
@@ -397,8 +397,8 @@ export class ScheduleByType {
 export interface ITeamNote {
     team_note_id: number;
     event: Event | number;
-    team_no: Team | number;
-    match_id: Match | string;
+    team_id: number;
+    match: Match | undefined;
     user: User | number;
     note: string;
     time: Date;
@@ -408,8 +408,8 @@ export interface ITeamNote {
 export class TeamNote implements ITeamNote {
     team_note_id = NaN;
     event: Event | number = NaN;
-    team_no: Team | number = NaN;
-    match_id: Match | string = '';
+    team_id = NaN;
+    match: Match | undefined = undefined;
     user: User | number = NaN;
     note = '';
     time!: Date;
@@ -432,6 +432,8 @@ export class AllScoutInfo {
     schedules: Schedule[] = [];
     scout_field_schedules: ScoutFieldSchedule[] = [];
     schedule_types: ScheduleType[] = [];
+    team_notes: TeamNote[] = [];
+    match_strategies: MatchStrategy[] = [];
 }
 
 export class ScoutPitSchedule {
@@ -481,4 +483,18 @@ export class FormSubTypeForm {
 export class FormFieldForm {
     field_form = new FieldForm();
     form_sub_types: FormSubTypeForm[] = [];
+}
+
+export interface IMatchStrategy {
+    id: number;
+    match: Match | undefined;
+    user: User | undefined;
+    strategy: string;
+}
+
+export class MatchStrategy implements IMatchStrategy {
+    id = NaN;
+    match: Match | undefined = undefined;
+    user: User | undefined = undefined;
+    strategy = '';
 }

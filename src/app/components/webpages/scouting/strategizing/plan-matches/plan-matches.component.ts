@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Match, MatchPlanning, ScoutPitResponse, Team, TeamNote } from '../../../../../models/scouting.models';
+import { Match, MatchPlanning, MatchStrategy, ScoutPitResponse, Team, TeamNote } from '../../../../../models/scouting.models';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService, AppSize } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
@@ -18,11 +18,15 @@ import { FormElementComponent } from '../../../../atoms/form-element/form-elemen
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 import { ReturnCardComponent } from '../../../../elements/return-card/return-card.component';
 import { ReturnLinkComponent } from '../../../../atoms/return-link/return-link.component';
+import { BuildSeasonComponent } from "../../../media/build-season/build-season.component";
+import { User } from '../../../../../models/user.models';
+import { FormComponent } from "../../../../atoms/form/form.component";
+import { Banner } from '../../../../../models/api.models';
 
 @Component({
   selector: 'app-plan-matches',
   standalone: true,
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent, BuildSeasonComponent, FormComponent],
   templateUrl: './plan-matches.component.html',
   styleUrls: ['./plan-matches.component.scss']
 })
@@ -36,16 +40,17 @@ export class PlanMatchesComponent implements OnInit {
     //{ PropertyName: 'comp_level.comp_lvl_typ', ColLabel: 'Type' },
     //{ PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'match_number', ColLabel: 'Match', UnderlineFn: this.underlineTeam },
-    { PropertyName: 'red_one', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
-    { PropertyName: 'red_two', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
-    { PropertyName: 'red_three', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
-    { PropertyName: 'blue_one', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
-    { PropertyName: 'blue_two', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
-    { PropertyName: 'blue_three', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_one_id', ColLabel: 'Red One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_two_id', ColLabel: 'Red Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'red_three_id', ColLabel: 'Red Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_one_id', ColLabel: 'Blue One', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_two_id', ColLabel: 'Blue Two', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
+    { PropertyName: 'blue_three_id', ColLabel: 'Blue Three', ColorFunction: this.rankToColor.bind(this), UnderlineFn: this.underlineTeam },
   ];
 
   scoutCols: TableColType[] = [];
-  activeMatch: Match | null = null;
+  activeMatch: Match | undefined = undefined;
+  activeMatchStrategies: MatchStrategy[] = [];
   matchToPlan: MatchPlanning[] = [];
 
   graphOptionsList: any[] = [];
@@ -54,7 +59,11 @@ export class PlanMatchesComponent implements OnInit {
   blueChart: Chart | null = null;
   chosenGraphDataPoints = '';
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
+  user = new User();
+
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
+    this.authService.user.subscribe(u => this.user = u);
+  }
 
   ngOnInit(): void {
     Chart.register(...registerables);
@@ -91,7 +100,7 @@ export class PlanMatchesComponent implements OnInit {
       if (result) {
         this.teams = result.teams;
 
-        const ourMatches = result.matches.filter(m => m.blue_one === 3492 || m.blue_two === 3492 || m.blue_three === 3492 || m.red_one === 3492 || m.red_two === 349 || m.red_three === 3492);
+        const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
         this.matches = ourMatches;
       }
 
@@ -112,11 +121,6 @@ export class PlanMatchesComponent implements OnInit {
     this.ss.loadPitScoutingResponses().then(result => {
       this.gs.decrementOutstandingCalls();
     });
-
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadTeamNotes().then(result => {
-      this.gs.decrementOutstandingCalls();
-    });
   }
 
   async planMatch(match: Match): Promise<void> {
@@ -126,12 +130,12 @@ export class PlanMatchesComponent implements OnInit {
     let tmp: MatchPlanning[] = [];
 
     const allianceMembers = [
-      { team: match.red_one, alliance: 'red' },
-      { team: match.red_two, alliance: 'red' },
-      { team: match.red_three, alliance: 'red' },
-      { team: match.blue_one, alliance: 'blue' },
-      { team: match.blue_two, alliance: 'blue' },
-      { team: match.blue_three, alliance: 'blue' },
+      { team: match.red_one_id, alliance: 'red' },
+      { team: match.red_two_id, alliance: 'red' },
+      { team: match.red_three_id, alliance: 'red' },
+      { team: match.blue_one_id, alliance: 'blue' },
+      { team: match.blue_two_id, alliance: 'blue' },
+      { team: match.blue_three_id, alliance: 'blue' },
 
     ]
 
@@ -154,9 +158,14 @@ export class PlanMatchesComponent implements OnInit {
             scoutAnswers = sprs;
           });
 
-          await this.ss.getTeamNotesFromCache(f => f.where({ 'team_no': t.team_no })).then(tns => {
+          await this.ss.getTeamNotesFromCache(f => f.where({ 'team_id': t.team_no })).then(tns => {
             notes = tns;
           });
+
+          this.activeMatchStrategies = [];
+          await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_id === match.match_id).then(mss => {
+            this.activeMatchStrategies = mss;
+          })
         }
       });
 
@@ -166,7 +175,7 @@ export class PlanMatchesComponent implements OnInit {
           pitData: pitData,
           scoutAnswers: scoutAnswers,
           notes: notes,
-          alliance: allianceMember.alliance
+          alliance: allianceMember.alliance,
         });
     }
 
@@ -265,23 +274,49 @@ export class PlanMatchesComponent implements OnInit {
 
   clearResults(): void {
     this.matchToPlan = [];
-    this.activeMatch = null;
+    this.activeMatch = undefined;
+    this.activeMatchStrategies = [];
+  }
+
+  addMatchStrategy(): void {
+    if (this.activeMatchStrategies.filter(ms => this.gs.strNoE(ms.strategy) && !ms.user && !ms.match).length <= 0) {
+      this.activeMatchStrategies.push(new MatchStrategy());
+    }
+  }
+
+  async saveMatchStrategies(): Promise<void> {
+    const userMatchStrategies = this.activeMatchStrategies.filter(ams => !ams.user || ams.user.id === this.user.id);
+
+    for (let i = 0; i < userMatchStrategies.length; i++) {
+      if (!userMatchStrategies[i].user) userMatchStrategies[i].user = this.user;
+      if (!userMatchStrategies[i].match) userMatchStrategies[i].match = this.activeMatch;
+
+      if (!(await this.ss.saveMatchStrategy(userMatchStrategies[i]))) {
+        this.gs.addBanner(new Banner(undefined, `Error saving match strategy ${i + 1}`, 5000));
+        break;
+      }
+    }
+
+    this.ss.loadMatchStrategies().then(result => {
+      if (result)
+        this.activeMatchStrategies = result.filter(ms => ms.match && this.activeMatch && ms.match.match_id === this.activeMatch.match_id);
+    })
   }
 
   rankToColor(team: number): string {
     for (let m of this.matches) {
-      if (m.blue_one === team)
+      if (m.blue_one_id === team)
         return this.rankToColorConverter(m.blue_one_rank);
-      if (m.blue_two === team)
+      if (m.blue_two_id === team)
         return this.rankToColorConverter(m.blue_two_rank);
-      if (m.blue_three === team)
+      if (m.blue_three_id === team)
         return this.rankToColorConverter(m.blue_three_rank);
 
-      if (m.red_one === team)
+      if (m.red_one_id === team)
         return this.rankToColorConverter(m.red_one_rank);
-      if (m.red_two === team)
+      if (m.red_two_id === team)
         return this.rankToColorConverter(m.red_two_rank);
-      if (m.red_three === team)
+      if (m.red_three_id === team)
         return this.rankToColorConverter(m.red_three_rank);
     }
 

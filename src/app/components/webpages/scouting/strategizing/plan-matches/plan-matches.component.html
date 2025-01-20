@@ -30,11 +30,11 @@
     </app-table>
 </app-box>
 
-<app-box *ngIf="activeMatch" [Title]="activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number">
+<app-box *ngIf="activeMatch" [Title]="activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number"
+    (ReturnFunction)="clearResults()">
     <div class="flex justify-content-space-between">
-        <app-return-link (FunctionCallBack)="clearResults()"></app-return-link>
 
-        <app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
+        <!--<app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
             <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'" [SelectList]="graphOptionsList"
                 [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'" (FunctionCallBack)="buildGraph()">
             </app-form-element>
@@ -50,13 +50,35 @@
 
                 <canvas id="blue-chart" class="chart">{{blueChart}}</canvas>
             </app-form-element-group>
-        </app-modal>
+        </app-modal>-->
     </div>
 
     <div>
         <p>Match Time: {{activeMatch.time | dateToStr}}</p>
         <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">Red Score: {{activeMatch.red_score}}
             Blue Score: {{activeMatch.blue_score}}</p>
+    </div>
+
+    <div class="padding-bottom-1rem">
+        <app-form (SubmitFunction)="saveMatchStrategies()">
+            <app-form-element-group [LabelText]="'Match Strategies'">
+                <app-button-ribbon>
+                    <app-button (FunctionCallBack)="addMatchStrategy()">Add Strategy</app-button>
+                    <app-button [Type]="'submit'">Save</app-button>
+                </app-button-ribbon>
+
+                @for (ms of activeMatchStrategies; track ms.id; let i = $index) {
+                <div class="match-strategy">
+                    <app-form-element [(Model)]="activeMatchStrategies[i].strategy" [LabelText]="'Strategy'"
+                        [Type]="'area'" [Width]="'100%'" [Rows]="6"
+                        [Disabled]="(ms.user && ms.user.id !== user.id) || false"></app-form-element>
+                    @if (ms.user) {
+                    <p class="small-grey-font">{{ ms.user.first_name }} {{ ms.user.last_name }}</p>
+                    }
+                </div>
+                }
+            </app-form-element-group>
+        </app-form>
     </div>
 
     <app-tab-container>

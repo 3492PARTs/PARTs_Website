@@ -340,7 +340,6 @@ export class AuthService {
                     break;
                   case 'Field Responses':
                     offlineCalls.push(this.ss.loadFieldScoutingResponses(false));
-                    offlineCalls.push(this.ss.loadTeamNotes(false));
                     break;
                   case 'Pit Scouting':
                     offlineCalls.push(this.ss.loadPitScoutingForm(false));

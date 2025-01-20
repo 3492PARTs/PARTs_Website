@@ -226,22 +226,22 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         if (index !== -1) {
           let match = this.matches[index];
 
-          if (match.red_one === s.team) {
+          if (match.red_one_id === s.team) {
             match.red_one_field_response = true;
           }
-          else if (match.red_two === s.team) {
+          else if (match.red_two_id === s.team) {
             match.red_two_field_response = true;
           }
-          else if (match.red_three === s.team) {
+          else if (match.red_three_id === s.team) {
             match.red_three_field_response = true;
           }
-          else if (match.blue_one === s.team) {
+          else if (match.blue_one_id === s.team) {
             match.blue_one_field_response = true;
           }
-          else if (match.blue_two === s.team) {
+          else if (match.blue_two_id === s.team) {
             match.blue_two_field_response = true;
           }
-          else if (match.blue_three === s.team) {
+          else if (match.blue_three_id === s.team) {
             match.blue_three_field_response = true;
           }
 
@@ -270,23 +270,23 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       // get the teams for the match from the teams list
       this.teams = [];
       teams.forEach(t => {
-        if (!this.scoutFieldResponse.match?.blue_one_field_response && t.team_no === this.scoutFieldResponse.match?.blue_one) {
+        if (!this.scoutFieldResponse.match?.blue_one_field_response && t.team_no === this.scoutFieldResponse.match?.blue_one_id) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.blue_two_field_response && t.team_no === this.scoutFieldResponse.match?.blue_two) {
+        if (!this.scoutFieldResponse.match?.blue_two_field_response && t.team_no === this.scoutFieldResponse.match?.blue_two_id) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.blue_three_field_response && t.team_no == this.scoutFieldResponse.match?.blue_three) {
+        if (!this.scoutFieldResponse.match?.blue_three_field_response && t.team_no == this.scoutFieldResponse.match?.blue_three_id) {
           this.teams.push(t);
         }
 
-        if (!this.scoutFieldResponse.match?.red_one_field_response && t.team_no === this.scoutFieldResponse.match?.red_one) {
+        if (!this.scoutFieldResponse.match?.red_one_field_response && t.team_no === this.scoutFieldResponse.match?.red_one_id) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.red_two_field_response && t.team_no === this.scoutFieldResponse.match?.red_two) {
+        if (!this.scoutFieldResponse.match?.red_two_field_response && t.team_no === this.scoutFieldResponse.match?.red_two_id) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.red_three_field_response && t.team_no === this.scoutFieldResponse.match?.red_three) {
+        if (!this.scoutFieldResponse.match?.red_three_field_response && t.team_no === this.scoutFieldResponse.match?.red_three_id) {
           this.teams.push(t);
         }
       });
@@ -294,28 +294,28 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
 
       // set the selected team based on which user is assigned to which team
-      if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_one as number;
+      if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_one_id as number;
       }
 
-      if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_two as number;
+      if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two_id && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_two_id as number;
       }
 
-      if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_three as number;
+      if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three_id && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.blue_three_id as number;
       }
 
-      if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_one as number;
+      if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one_id && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_one_id as number;
       }
 
-      if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_two as number;
+      if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two_id && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_two_id as number;
       }
 
-      if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
-        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_three as number;
+      if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three_id && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+        this.scoutFieldResponse.team = this.scoutFieldResponse.match.red_three_id as number;
       }
     }
     else {
@@ -444,7 +444,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
         else {
           flow.questions.forEach(q => {
-              this.hideQuestionBox(q);
+            this.hideQuestionBox(q);
           });
         }
       }
@@ -470,16 +470,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         conditionalQuestions.forEach(cq => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
             if (qf.question_answer?.question_flow_answers) {
-                qf.question_answer.question_flow_answers.forEach(qfa => {
-                  if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
-                    this.showQuestionBox(cq);
-                    sceneFound = true;
-                  }
-                });
+              qf.question_answer.question_flow_answers.forEach(qfa => {
+                if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
+                  this.showQuestionBox(cq);
+                  sceneFound = true;
+                }
+              });
             }
 
             this.scoutFieldResponse.answers.forEach(a => {
-              if (a.question &&  !this.gs.strNoE(a.question.question_id)) {
+              if (a.question && !this.gs.strNoE(a.question.question_id)) {
                 if (this.gs.isQuestionConditionMet(a.answer, a.question, cq)) {
                   this.showQuestionBox(cq);
                   sceneFound = true;

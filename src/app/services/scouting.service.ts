@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FormFieldForm } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FormFieldForm, MatchStrategy, IMatchStrategy } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
@@ -28,6 +28,7 @@ export class ScoutingService {
   private outstandingLoadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
   private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
   private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
+  private outstandingLoadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<number>(0);
@@ -105,6 +106,8 @@ export class ScoutingService {
           await this.updateScheduleTypesCache(result.schedule_types);
           await this.updateSchedulesCache(result.schedules);
           await this.updateScoutFieldSchedulesCache(result.scout_field_schedules);
+          await this.updateTeamNotesCache(result.team_notes);
+          await this.updateMatchStrategiesCache(result.match_strategies);
 
           if (callbackFn) callbackFn(result);
 
@@ -919,6 +922,7 @@ export class ScoutingService {
     else if (r1.st_time > r2.st_time) return 1;
     else return 0;
   }
+
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Schedule[] | null> {
     if (!this.outstandingLoadSchedulesPromise) {
@@ -1071,6 +1075,17 @@ export class ScoutingService {
     return this.outstandingLoadTeamNotesPromise;
   }
 
+  saveTeamNote(teamNote: TeamNote, id?: number, loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+      }, (error) => {
+        this.gs.triggerError(error);
+      });
+    });
+  }
+
   private updateTeamNotesCache(notes: TeamNote[]) {
     this.cs.TeamNote.RemoveAllAsync().then(() => {
       this.cs.TeamNote.AddBulkAsync(notes);
@@ -1081,6 +1096,74 @@ export class ScoutingService {
     return this.cs.TeamNote.getAll(filterDelegate);
   }
 
+  // Match Strategies -----------------------------------------------------------
+  loadMatchStrategies(loadingScreen = true, callbackFn?: (result: any) => void): Promise<MatchStrategy[] | null> {
+    if (!this.outstandingLoadMatchStrategiesPromise) {
+      this.outstandingLoadMatchStrategiesPromise = new Promise<MatchStrategy[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/strategizing/match-strategy/', undefined, async (result: MatchStrategy[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          this.updateMatchStrategiesCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          let result: MatchStrategy[] = [];
+
+          await this.getMatchStrategiesFromCache().then((tns: MatchStrategy[]) => {
+            result = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner(0, 'Error loading match strategies form from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadMatchStrategiesPromise = null;
+        }, () => {
+          this.outstandingLoadMatchStrategiesPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadMatchStrategiesPromise;
+  }
+
+  saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', matchStrategy, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+      }, (error) => {
+        this.gs.triggerError(error);
+      });
+    });
+  }
+
+  private updateMatchStrategiesCache(matchStrategies: MatchStrategy[]) {
+    this.cs.MatchStrategy.RemoveAllAsync().then(() => {
+      this.cs.MatchStrategy.AddBulkAsync(matchStrategies);
+    });
+  }
+
+  getMatchStrategiesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatchStrategy[]> {
+    return this.cs.MatchStrategy.getAll(filterDelegate);
+  }
+
+  filterMatchStrategiesFromCache(fn: (obj: MatchStrategy) => boolean): PromiseExtended<MatchStrategy[]> {
+    return this.cs.MatchStrategy.filterAll(fn);
+  }
   // Others ----------------------------------------------------------------------
 
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<Question[]> {

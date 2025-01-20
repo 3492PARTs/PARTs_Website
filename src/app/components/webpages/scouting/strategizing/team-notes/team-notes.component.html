@@ -4,7 +4,7 @@
         <app-form (SubmitFunction)="saveNote()">
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" [Required]="true">
+                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_id" [Required]="true">
             </app-form-element>
 
             <app-form-element [LabelText]="'Note'" [Type]="'area'" [(Model)]="currentTeamNote.note" [Width]="'100%'"
@@ -21,7 +21,7 @@
         <app-form>
             <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
                 [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_no" (FunctionCallBack)="loadTeamNotes()">
+                [DisplayEmptyOption]="true" [(Model)]="currentTeamNote.team_id" (FunctionCallBack)="loadTeamNotes()">
             </app-form-element>
 
             <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="(note.time | dateToStr) || ''">

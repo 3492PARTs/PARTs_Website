@@ -63,18 +63,17 @@ export class TeamNotesComponent implements OnInit {
   }
 
   saveNote(): void {
-    this.api.post(true, 'scouting/match-planning/team-notes/', this.currentTeamNote, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.currentTeamNote = new TeamNote();
-      this.teamNoteModalVisible = false;
-      this.ss.loadTeamNotes();
-    }, (error) => {
-      this.gs.triggerError(error);
+    this.ss.saveTeamNote(this.currentTeamNote).then(result => {
+      if (result) {
+        this.currentTeamNote = new TeamNote();
+        this.teamNoteModalVisible = false;
+        this.ss.loadTeamNotes();
+      }
     });
   }
 
   loadTeamNotes(): void {
-    this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_no': this.currentTeamNote.team_no })).then(tns => {
+    this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_id': this.currentTeamNote.team_id })).then(tns => {
       this.teamNotes = tns;
     });
   }

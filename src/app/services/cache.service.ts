@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote } from '../models/scouting.models';
+import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote, MatchStrategy, IMatchStrategy } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
 import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
@@ -21,6 +21,7 @@ export class CacheService {
   Team!: DexieCrud<Team, number>;
   TeamNote!: DexieCrud<TeamNote, number>;
   Match!: DexieCrud<Match, string>;
+  MatchStrategy!: DexieCrud<MatchStrategy, number>;
   ScoutFieldSchedule!: DexieCrud<ScoutFieldSchedule, number>;
   ScoutFieldFormResponse!: DexieCrud<ScoutFieldFormResponse, number>;
   // These are used for the responses page
@@ -49,6 +50,7 @@ export class CacheService {
     this.Team = new DexieCrud<ITeam, number>(this.dbs.TeamTable);
     this.TeamNote = new DexieCrud<ITeamNote, number>(this.dbs.TeamNoteTable);
     this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
+    this.MatchStrategy = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.dbs.ScoutFieldScheduleTable);
     this.ScoutFieldFormResponse = new DexieCrud<IScoutFieldFormResponse, number>(this.dbs.ScoutFieldFormResponseTable);
     this.ScoutFieldResponseColumn = new DexieCrud<any, number>(this.dbs.ScoutFieldResponseColumnTable);
