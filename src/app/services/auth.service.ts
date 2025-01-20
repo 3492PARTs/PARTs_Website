@@ -336,7 +336,7 @@ export class AuthService {
               offlineLinks.forEach(ol => {
                 switch (ol.menu_name) {
                   case 'Field Scouting':
-                    offlineCalls.push(this.ss.loadFieldScoutingForm(false));
+                    //offlineCalls.push(this.ss.loadFieldScoutingForm(false));
                     break;
                   case 'Field Responses':
                     offlineCalls.push(this.ss.loadFieldScoutingResponses(false));

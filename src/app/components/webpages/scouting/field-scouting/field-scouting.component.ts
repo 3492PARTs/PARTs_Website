@@ -83,6 +83,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(async result => {
       if (result) {
+        this.fieldForm = result.field_form_form.field_form;
+        this.formSubTypeForms = result.field_form_form.form_sub_types;
+
+        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
+        this.gs.triggerChange(() => {
+          this.activeFormSubTypeForm?.question_flows.forEach(qf => {
+            const stage = this.getFirstStage(qf.questions);
+            this.displayFlowStage(qf, stage);
+          });
+          this.setFullScreen(false);
+        });
+
         this.matches = result.matches.filter(m => {
           const compLvl = (m.comp_level as CompetitionLevel);
 
@@ -107,24 +119,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingForm().then(result => {
-      if (result) {
-        this.fieldForm = result.field_form;
-        this.formSubTypeForms = result.form_sub_types;
-
-        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
-        this.gs.triggerChange(() => {
-          this.activeFormSubTypeForm?.question_flows.forEach(qf => {
-            const stage = this.getFirstStage(qf.questions);
-            this.displayFlowStage(qf, stage);
-          });
-          this.setFullScreen(false);
-        });
-      }
-      this.gs.decrementOutstandingCalls();
-    });
-
     this.populateOutstandingResponses();
     this.setUpdateScoutFieldScheduleTimeout();
   }
@@ -145,8 +139,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.scoutFieldResponse = new ScoutFieldFormResponse();
     this.cs.ScoutFieldFormResponse.getById(id).then(async sfr => {
       if (sfr) {
-        this.scoutFieldResponse.id = sfr.id;
+        this.scoutFieldResponse = sfr;
 
+        /*
         await this.cs.Match.getAll().then((ms: Match[]) => {
           this.matches = ms;
           if (sfr?.match) {
@@ -154,10 +149,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           }
 
         });
+        */
 
         this.buildTeamList(sfr?.team || NaN);
-
-        //TODO this.scoutFieldResponse.question_answers = sfr?.question_answers || this.scoutFieldResponse.question_answers;
       }
     });
   }

@@ -120,6 +120,7 @@ export class ScoutingService {
           await this.updateScoutFieldSchedulesCache(result.scout_field_schedules);
           await this.updateTeamNotesCache(result.team_notes);
           await this.updateMatchStrategiesCache(result.match_strategies);
+          await this.updateFieldFormFormCache(result.field_form_form);
 
           if (callbackFn) callbackFn(result);
 
@@ -182,6 +183,27 @@ export class ScoutingService {
 
           await this.getScoutFieldSchedulesFromCache().then(sfs => {
             result.scout_field_schedules = sfs;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getTeamNotesFromCache().then(tns => {
+            result.team_notes = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getMatchStrategiesFromCache().then(mss => {
+            result.match_strategies = mss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getFieldFormFormFromCache().then(ff => {
+            result.field_form_form = ff;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -689,6 +711,10 @@ export class ScoutingService {
     return new Promise<FieldFormForm>(resolve => {
       this.cs.FieldFormForm.getAll(filterDelegate).then(fff => resolve(fff[0]));
     });
+  }
+
+  private async removeFieldFormFormFromCache(): Promise<void> {
+    await this.cs.FieldFormForm.RemoveAllAsync();
   }
 
   getFieldResponseColumnsFromCache(): PromiseExtended<any[]> {
@@ -1218,6 +1244,7 @@ export class ScoutingService {
     await this.updateScheduleTypesCache([]);
     await this.updateSchedulesCache([]);
     await this.updateScoutFieldSchedulesCache([]);
+    await this.removeFieldFormFormFromCache();
   }
 }
 

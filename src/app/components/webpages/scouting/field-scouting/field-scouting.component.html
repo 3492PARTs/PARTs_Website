@@ -154,6 +154,11 @@
           [Disabled]="formDisabled ||!activeFormSubTypeForm || activeFormSubTypeForm.form_sub_typ.form_sub_typ !== formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Save</app-button>
       </app-button-ribbon>
 
+      @if (formDisabled) {
+      <app-form-element-group [LabelText]="'Response JSON'">
+        {{scoutFieldResponse | json}}
+      </app-form-element-group>
+      }
     </app-form>
   </div>
 </app-box>

@@ -434,6 +434,7 @@ export class AllScoutInfo {
     schedule_types: ScheduleType[] = [];
     team_notes: TeamNote[] = [];
     match_strategies: MatchStrategy[] = [];
+    field_form_form = new FieldFormForm();
 }
 
 export class ScoutPitSchedule {
