@@ -10,6 +10,7 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
+import { Banner } from '../../../models/api.models';
 
 @Component({
   selector: 'app-question-admin-form',
@@ -84,7 +85,7 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },      ];
+        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },];
 
       if (this.AllowFlows)
         this.questionTableCols = this.questionTableCols.concat([{ PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) } as TableColType]);
@@ -116,20 +117,6 @@ export class QuestionAdminFormComponent implements OnInit {
         qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
   }
 
-  /*
-  getQuestionFlows(form_sub_typ: string): Promise<null> {
-    return new Promise<null>(resolve => {
-      this.api.get(true, 'form/question-flow/', { form_typ: this.formType, form_sub_typ: form_sub_typ }, (result: QuestionFlow[]) => {
-        this.availableQuestionFlows = result;
-        resolve(null);
-      }, (err: any) => {
-        this.gs.triggerError(err);
-        resolve(null);
-      });
-    });
-  }
-  */
-
   saveQuestionFlow(): void {
     this.newQuestionFlow.form_typ.form_typ = this.formType;
     this.api.post(true, 'form/question-flow/', this.newQuestionFlow, (result: any) => {
@@ -144,6 +131,11 @@ export class QuestionAdminFormComponent implements OnInit {
 
   saveQuestion(): void {
     this.activeQuestion.form_typ.form_typ = this.formType;
+
+    if (this.activeQuestion.question_typ.is_list === 'y' && this.activeQuestion.questionoption_set.filter(qo => qo.active === 'y').length <= 0) {
+      this.gs.addBanner(new Banner(0, `Must have one active option for list element.\n`, 3500));
+      return;
+    }
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
       this.gs.successfulResponseBanner(result);
