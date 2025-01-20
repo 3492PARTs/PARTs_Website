@@ -362,7 +362,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.ss.uploadOutstandingResponses();
   }
 
-  nextFlow(): void {
+  nextFormSubType(): void {
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
 
     this.gs.scrollTo(0);
@@ -390,10 +390,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
 
     // advance to next form sub type
-    this.activeFormSubTypeForm = this.formSubTypeForms[i];
+    this.gs.triggerChange(() => {
+      this.activeFormSubTypeForm = this.formSubTypeForms[i];
+      // Display the first stage of each flow for this sub type
+      this.gs.triggerChange(() => {
+        this.setFullScreen(false);
+        this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
+      });
+    });
 
-    // Display the first stage of each flow for this sub type
-    this.gs.triggerChange(() => this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions))));
+
   }
 
   advanceFlow(flow: QuestionFlow, question: Question, override = false): void {
@@ -622,7 +628,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
       else {
         this.stopwatchRun = false;
-        this.nextFlow();
+        this.nextFormSubType();
       }
     }
   }

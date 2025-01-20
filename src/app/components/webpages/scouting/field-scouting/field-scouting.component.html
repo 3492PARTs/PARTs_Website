@@ -143,10 +143,10 @@
         0)||
         activeFormSubTypeForm.form_sub_typ.form_sub_typ === formSubTypeForms[formSubTypeForms.length -
         1].form_sub_typ.form_sub_typ) {
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFlow()" [Disabled]="true">Next</app-button>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFormSubType()" [Disabled]="true">Next</app-button>
         }
         @else {
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFlow()"
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFormSubType()"
           [Disabled]="!activeFormSubTypeForm || activeFormSubTypeForm.form_sub_typ.form_sub_typ === formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ">Next</app-button>
         }
 
