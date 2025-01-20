@@ -14,6 +14,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
+import { User } from '../../../../../models/user.models';
 
 @Component({
   selector: 'app-team-notes',
@@ -23,6 +24,8 @@ import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
   styleUrls: ['./team-notes.component.scss']
 })
 export class TeamNotesComponent implements OnInit {
+
+  user = new User();
 
   apiStatus = APIStatus.prcs;
 
@@ -42,6 +45,8 @@ export class TeamNotesComponent implements OnInit {
         this.init();
       }
     });
+
+    this.authService.user.subscribe(u => this.user = u);
   }
 
   init(): void {
@@ -63,6 +68,7 @@ export class TeamNotesComponent implements OnInit {
   }
 
   saveNote(): void {
+    this.currentTeamNote.user = this.user;
     this.ss.saveTeamNote(this.currentTeamNote).then(result => {
       if (result) {
         this.currentTeamNote = new TeamNote();
