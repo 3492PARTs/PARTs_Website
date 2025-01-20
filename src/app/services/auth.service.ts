@@ -318,7 +318,7 @@ export class AuthService {
   getUserLinks(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
-        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Match Planning'];
+        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Strategizing'];
 
         switch (this.apiStatus) {
           case APIStatus.on:
