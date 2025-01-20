@@ -29,6 +29,7 @@ export class ScoutingService {
   private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
   private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
   private outstandingLoadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
+  private outstandingUploadOutstandingResponsesPromise: Promise<void> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<number>(0);
@@ -47,40 +48,51 @@ export class ScoutingService {
 
   }
 
-  async uploadOutstandingResponses(loadingScreen = true) {
-    let fieldUploaded = false;
+  async uploadOutstandingResponses(loadingScreen = true): Promise<void> {
+    if (!this.outstandingUploadOutstandingResponsesPromise)
+      this.outstandingUploadOutstandingResponsesPromise = new Promise<void>(async resolve => {
+        let fieldUploaded = false;
 
-    await this.cs.ScoutFieldFormResponse.getAll().then(sfrs => {
-      sfrs.forEach(async s => {
-        await this.saveFieldScoutingResponse(s, s.id, loadingScreen).then(success => {
-          if (success)
-            fieldUploaded = success;
+        await this.cs.ScoutFieldFormResponse.getAll().then(async sfrs => {
+          for (let i = 0; i < sfrs.length; i++) {
+            let s = sfrs[i];
+            await this.saveFieldScoutingResponse(s, s.id, loadingScreen).then(success => {
+              if (success)
+                fieldUploaded = success;
+            });
+          }
         });
-      });
-    });
 
-    if (fieldUploaded) {
-      this.loadTeams();
-      this.loadFieldScoutingForm();
-    }
+        if (fieldUploaded) {
+          this.loadTeams();
+          this.loadFieldScoutingForm();
+        }
 
-    let pitUploaded = false;
+        let pitUploaded = false;
 
-    await this.cs.ScoutPitFormResponse.getAll().then(sprs => {
-      sprs.forEach(async s => {
-        await this.savePitScoutingResponse(s, s.id, loadingScreen).then(success => {
-          if (success)
-            pitUploaded = success;
+        await this.cs.ScoutPitFormResponse.getAll().then(async sprs => {
+          for (let i = 0; i < sprs.length; i++) {
+            let s = sprs[i];
+            await this.savePitScoutingResponse(s, s.id, loadingScreen).then(success => {
+              if (success)
+                pitUploaded = success;
+            });
+          }
         });
+
+
+        if (pitUploaded) {
+          if (!fieldUploaded) this.loadTeams();
+          this.loadPitScoutingForm();
+        }
+
+        this.triggerResponsesUploaded();
+
+        resolve();
+        this.outstandingUploadOutstandingResponsesPromise = null;
       });
-    });
 
-    if (pitUploaded) {
-      if (!fieldUploaded) this.loadTeams();
-      this.loadPitScoutingForm();
-    }
-
-    this.triggerResponsesUploaded();
+    return this.outstandingUploadOutstandingResponsesPromise;
   }
 
   private triggerResponsesUploaded(): void {
