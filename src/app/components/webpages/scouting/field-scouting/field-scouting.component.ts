@@ -19,6 +19,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { HeaderComponent } from "../../../atoms/header/header.component";
 import { BuildSeasonComponent } from "../../media/build-season/build-season.component";
 import { QuestionFormElementComponent } from "../../../elements/question-form-element/question-form-element.component";
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-field-scouting',
@@ -31,6 +32,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   fieldForm = new FieldForm();
   formSubTypeForms: FormSubTypeForm[] = [];
   activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
+
+  flowsActionStack: FlowAction[] = [];
 
   scoutFieldResponse = new ScoutFieldFormResponse();
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
@@ -394,6 +397,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
         });
       });
+
+      this.flowsActionStack = [];
     }
 
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
@@ -413,7 +418,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
-      // Create new Question Ansswer to hold the flow answers
+      // Create new Question Answer to hold the flow answers
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
@@ -421,9 +426,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
       question.answer = undefined;
 
+      this.flowsActionStack.push(new FlowAction(flow.id, question.question_id));
+
+      // Hides current stage
       this.displayFlowStage(flow, question.order, false);
 
-      let stage = 0;
 
       flow.questions.sort((a, b) => {
         if (a.order > b.order) return 1;
@@ -451,32 +458,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         });
 
         conditionalQuestions.forEach(cq => {
-          const qf = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flow.id).pop();
-          if (qf && qf.question_answer?.question_flow_answers) {
-            qf.question_answer.question_flow_answers.forEach(qfa => {
-              if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
-                this.showQuestionBox(cq);
-                sceneFound = true;
-              }
-            });
+          if (this.isConditionalFlowQuestionMet(flow, cq)) {
+            sceneFound = true;
+            this.showQuestionBox(cq);
           }
-
-          this.scoutFieldResponse.answers.forEach(a => {
-            if (a.question && !this.gs.strNoE(a.question.question_id)) {
-              if (this.gs.isQuestionConditionMet(a.answer, a.question, cq)) {
-                this.showQuestionBox(cq);
-                sceneFound = true;
-              }
-            }
-            else {
-              a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== cq.form_sub_typ.form_sub_typ).forEach(qfa => {
-                if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
-                  this.showQuestionBox(cq);
-                  sceneFound = true;
-                }
-              })
-            }
-          });
         });
 
         if (!sceneFound) {
@@ -500,11 +485,58 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
       else {
         // hide
+        let sceneFound = false;
         flow.questions.filter(q => q.order === stage).forEach(q => {
-          this.hideQuestionBox(q);
+          if (this.gs.strNoE(q.question_conditional_on)) {
+            this.hideQuestionBox(q);
+            sceneFound = true;
+          }
+          else if (this.isConditionalFlowQuestionMet(flow, q)) {
+            this.hideQuestionBox(q);
+            sceneFound = true;
+          }
         });
+
+        if (!sceneFound) {
+          if (stage < flow.questions[flow.questions.length - 1].order) {
+            this.displayFlowStage(flow, stage + 1, false);
+          }
+          else {
+            this.displayFlowStage(flow, this.getFirstStage(flow.questions), false);
+          }
+        }
       }
     }
+  }
+
+  private isConditionalFlowQuestionMet(flow: QuestionFlow, conditionalQuestion: Question): boolean {
+    let sceneFound = false;
+
+    const qf = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flow.id).pop();
+    if (qf && qf.question_answer?.question_flow_answers) {
+      qf.question_answer.question_flow_answers.forEach(qfa => {
+        if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, conditionalQuestion)) {
+          sceneFound = true;
+        }
+      });
+    }
+
+    this.scoutFieldResponse.answers.forEach(a => {
+      if (a.question && !this.gs.strNoE(a.question.question_id)) {
+        if (this.gs.isQuestionConditionMet(a.answer, a.question, conditionalQuestion)) {
+          sceneFound = true;
+        }
+      }
+      else {
+        a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ).forEach(qfa => {
+          if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, conditionalQuestion)) {
+            sceneFound = true;
+          }
+        })
+      }
+    });
+
+    return sceneFound;
   }
 
   getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {
@@ -569,7 +601,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   hideQuestionBox(question: Question): void {
     const box = this.getQuestionBox(question);
     if (box)
-      this.renderer.setStyle(box, 'display', "none");
+      this.renderer.setStyle(box, 'display', 'none');
   }
 
   showQuestionBox(question: Question): void {
@@ -580,7 +612,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       !this.gs.strNoE(question.scout_question.width) &&
       !this.gs.strNoE(question.scout_question.height) &&
       box) {
-      this.renderer.setStyle(box, 'display', "block");
+      this.renderer.setStyle(box, 'display', 'block');
       this.renderer.setStyle(box, 'width', `${question.scout_question.width}%`);
       this.renderer.setStyle(box, 'height', `${question.scout_question.height}%`);
 
@@ -675,4 +707,113 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  undoFlowAction() {
+    let found = false;
+
+    const flowAction = this.flowsActionStack.pop();
+    if (flowAction) {
+      //check answer active in flows
+      const flow = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flowAction.flow_id).pop();
+
+      if (flow && (!flow.question_answer || flow.question_answer.question_flow_answers.length <= 0)) {
+        let index = -1;
+        for (let i = 0; i < this.scoutFieldResponse.answers.length; i++) {
+          if (this.scoutFieldResponse.answers[i].question_flow?.id === flowAction.flow_id)
+            index = i;
+        }
+
+        if (index !== -1) {
+          const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
+          flow.question_answer = questionAnswer;
+          flow.questions.forEach(q => {
+            q.answer = this.gs.formatQuestionAnswer(flow.question_answer?.question_flow_answers.find(qfa => qfa.question?.question_id === q.question_id)?.answer)
+          });
+        }
+      }
+
+      if (flow && flow.question_answer) {
+
+        const index = flow.question_answer.question_flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
+        if (index >= 0) {
+          const question = flow.question_answer.question_flow_answers[index].question;
+          // hide current stage
+          if (question) {
+
+            this.displayFlowStage(flow, this.getNextStage(flow.questions, question.order), false);
+            this.displayFlowStage(flow, question.order);
+
+            found = true
+          }
+
+          // remove answer
+          flow.question_answer.question_flow_answers.splice(index, 1);
+        }
+        else
+          console.log('no question found in flow answers');
+      }
+      else
+        console.log('no flow or question answers');
+
+      //check answers saved to response. load back into active
+      if (!found) {
+        throw new Error('no flow to undo')
+      }
+    }
+  }
 }
+
+class FlowAction {
+  flow_id!: number;
+  question_id!: number;
+
+  constructor(flow_id: number, question_id: number) {
+    this.flow_id = flow_id;
+    this.question_id = question_id;
+  }
+}
+
+/**
+ *  undoFlowAction() {
+    let found = false;
+
+    const flowAction = this.flowsActionStack.pop();
+    if (flowAction) {
+      //check active
+      const flow = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flowAction.flow_id).pop();
+      if (flow && flow.question_answer) {
+
+        const index = flow.question_answer.question_flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
+        if (index >= 0) {
+          const question = flow.question_answer.question_flow_answers[index].question;
+          // hide current stage
+          if (question) {
+
+            this.displayFlowStage(flow, this.getNextStage(flow.questions, question.order), false);
+            this.displayFlowStage(flow, question.order);
+            
+            found = true
+          }
+
+          // remove answer
+          flow.question_answer.question_flow_answers.splice(index, 1);
+        }
+        else {
+          // do something id there is not answers like check next place???
+          const d = 0;
+        }
+      }
+      else {
+        // do something id there is not answers like check next place???
+        const d = 0;
+      }
+      const d = 0;
+
+      //check answers
+      if (!found) {
+        this.scoutFieldResponse.answers
+      }
+    }
+  }
+}
+ */

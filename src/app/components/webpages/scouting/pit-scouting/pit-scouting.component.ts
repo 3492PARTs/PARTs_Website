@@ -162,7 +162,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.answers) as Question[];
 
     scoutQuestions.forEach(el => {
-      let answer = this.gs.formatQuestionAnswer(el.answer)
+      let answer = this.gs.formatQuestionAnswer(el.answer);
       if (!this.gs.strNoE(answer)) {
         dirty = true;
       }
