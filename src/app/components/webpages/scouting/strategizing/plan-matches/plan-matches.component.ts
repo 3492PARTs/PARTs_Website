@@ -365,13 +365,13 @@ export class PlanMatchesComponent implements OnInit {
     //console.log(match.red_score > match.blue_score);
     //console.log(match.blue_score > match.red_score);
     switch (property) {
-      case 'red_one':
-      case 'red_two':
-      case 'red_three':
+      case 'red_one_id':
+      case 'red_two_id':
+      case 'red_three_id':
         return match.red_score > match.blue_score;
-      case 'blue_one':
-      case 'blue_two':
-      case 'blue_three':
+      case 'blue_one_id':
+      case 'blue_two_id':
+      case 'blue_three_id':
         return match.blue_score > match.red_score;
     }
     return false
