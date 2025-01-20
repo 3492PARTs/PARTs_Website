@@ -44,7 +44,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined = undefined;
   @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef | undefined = undefined;
   @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef | undefined = undefined;
-  @ViewChild('fullScreenButton', { read: ElementRef, static: false }) fullScreenButton: ElementRef | undefined = undefined;
+  @ViewChild('flowButtonsWrapper', { read: ElementRef, static: false }) flowButtonsWrapper: ElementRef | undefined = undefined;
   @ViewChild('formSubTypeHeader', { read: ElementRef, static: false }) formSubTypeHeader: ElementRef | undefined = undefined;
 
   teams: Team[] = [];
@@ -662,7 +662,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   setFullScreen(fullScreen: boolean): void {
-    if (this.imageBackground && this.image && this.fullScreenButton && this.formSubTypeHeader) {
+    if (this.imageBackground && this.image && this.flowButtonsWrapper && this.formSubTypeHeader) {
       this.fullScreen = fullScreen;
       if (this.fullScreen) {
         this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '99');
@@ -676,10 +676,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.renderer.setStyle(this.image.nativeElement, 'max-width', '100vw');
         this.renderer.setStyle(this.image.nativeElement, 'max-height', '100vh');
 
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '100');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'fixed');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '1rem');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '1rem');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'z-index', '100');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'position', 'fixed');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'top', '1rem');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'right', '1rem');
 
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '100');
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'fixed');
@@ -697,10 +697,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.renderer.setStyle(this.image.nativeElement, 'max-width', '100%');
         this.renderer.setStyle(this.image.nativeElement, 'max-height', '84vh');
 
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'z-index', '0');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'position', 'absolute');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'top', '-7px');
-        this.renderer.setStyle(this.fullScreenButton.nativeElement, 'right', '0');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'z-index', '0');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'position', 'absolute');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'top', '-7px');
+        this.renderer.setStyle(this.flowButtonsWrapper.nativeElement, 'right', '0');
 
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'z-index', '0');
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'position', 'initial');
