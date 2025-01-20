@@ -363,43 +363,43 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   nextFormSubType(): void {
-    if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
+    if (!this.isQuestionDisplayFormValid()) return;
 
-    this.gs.scrollTo(0);
-    let i = 0;
+    this.gs.triggerConfirm('Please make sure you answers are correct, you cannot go back.', () => {
+      this.gs.scrollTo(0);
 
-    for (; this.formSubTypeForms.length; i++) {
-      if (this.activeFormSubTypeForm?.form_sub_typ) {
-        if (this.formSubTypeForms[i].form_sub_typ.order > this.activeFormSubTypeForm?.form_sub_typ.order) {
-          break;
+      let i = 0;
+      for (; this.formSubTypeForms.length; i++) {
+        if (this.activeFormSubTypeForm?.form_sub_typ) {
+          if (this.formSubTypeForms[i].form_sub_typ.order > this.activeFormSubTypeForm?.form_sub_typ.order) {
+            break;
+          }
         }
       }
-    }
 
-    // Get all unfinished flows and log answers
-    this.activeFormSubTypeForm?.question_flows.forEach(qf => {
-      if (qf.question_answer) {
-        this.scoutFieldResponse.answers.push(qf.question_answer);
-        qf.question_answer = undefined;
-      }
-    })
+      // Get all unfinished flows and log answers
+      this.activeFormSubTypeForm?.question_flows.forEach(qf => {
+        if (qf.question_answer) {
+          this.scoutFieldResponse.answers.push(qf.question_answer);
+          qf.question_answer = undefined;
+        }
+      })
 
-    // Get answers from form at bottom of screen
-    let answers = this.getActiveFlowFlowlessQuestionAnswers();
-    if (answers && answers?.length > 0)
-      this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
+      // Get answers from form at bottom of screen
+      let answers = this.getActiveFlowFlowlessQuestionAnswers();
+      if (answers && answers?.length > 0)
+        this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
 
-    // advance to next form sub type
-    this.gs.triggerChange(() => {
-      this.activeFormSubTypeForm = this.formSubTypeForms[i];
-      // Display the first stage of each flow for this sub type
+      // advance to next form sub type
       this.gs.triggerChange(() => {
-        this.setFullScreen(false);
-        this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
+        this.activeFormSubTypeForm = this.formSubTypeForms[i];
+        // Display the first stage of each flow for this sub type
+        this.gs.triggerChange(() => {
+          this.setFullScreen(false);
+          this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
+        });
       });
     });
-
-
   }
 
   advanceFlow(flow: QuestionFlow, question: Question, override = false): void {
