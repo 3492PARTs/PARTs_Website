@@ -56,7 +56,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 15;
+  stopwatchSecond = 1;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -432,30 +432,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       });
 
       // Display next stage in flow
-      let found = false;
-      for (let i = 0; i < flow.questions.length; i++) {
-        if (flow.questions[i].order > question.order) {
-          this.displayFlowStage(flow, flow.questions[i].order);
-          found = true;
-          break;
-        }
-      }
-
-      // reset stage
-      if (!found) {
-        if (!flow.single_run) {
-          this.scoutFieldResponse.answers.push(flow.question_answer);
-          flow.question_answer = undefined;
-          this.displayFlowStage(flow, this.getFirstStage(flow.questions));
-        }
-        else {
-          flow.questions.forEach(q => {
-            this.hideQuestionBox(q);
-          });
-        }
-      }
-
-      //this.displayFlowStage(flow, question.order + 1, true);
+      this.displayFlowStage(flow, question.order + 1);
     }
   }
 
@@ -474,40 +451,55 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         });
 
         conditionalQuestions.forEach(cq => {
-          this.activeFormSubTypeForm?.question_flows.forEach(qf => {
-            if (qf.question_answer?.question_flow_answers) {
-              qf.question_answer.question_flow_answers.forEach(qfa => {
+          const qf = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flow.id).pop();
+          if (qf && qf.question_answer?.question_flow_answers) {
+            qf.question_answer.question_flow_answers.forEach(qfa => {
+              if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
+                this.showQuestionBox(cq);
+                sceneFound = true;
+              }
+            });
+          }
+
+          this.scoutFieldResponse.answers.forEach(a => {
+            if (a.question && !this.gs.strNoE(a.question.question_id)) {
+              if (this.gs.isQuestionConditionMet(a.answer, a.question, cq)) {
+                this.showQuestionBox(cq);
+                sceneFound = true;
+              }
+            }
+            else {
+              a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== cq.form_sub_typ.form_sub_typ).forEach(qfa => {
                 if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
                   this.showQuestionBox(cq);
                   sceneFound = true;
                 }
-              });
+              })
             }
-
-            this.scoutFieldResponse.answers.forEach(a => {
-              if (a.question && !this.gs.strNoE(a.question.question_id)) {
-                if (this.gs.isQuestionConditionMet(a.answer, a.question, cq)) {
-                  this.showQuestionBox(cq);
-                  sceneFound = true;
-                }
-              }
-              else {
-                a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== cq.form_sub_typ.form_sub_typ).forEach(qfa => {
-                  if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, cq)) {
-                    this.showQuestionBox(cq);
-                    sceneFound = true;
-                  }
-                })
-              }
-            });
           });
         });
 
         if (!sceneFound) {
-          this.displayFlowStage(flow, this.getNextStage(flow.questions, stage));
+          const nextStage = this.getNextStage(flow.questions, stage);
+
+          // reset stage
+          if (nextStage < stage) {
+            if (!flow.single_run && flow.question_answer) {
+              this.scoutFieldResponse.answers.push(flow.question_answer);
+              flow.question_answer = undefined;
+              this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+            }
+            else {
+              flow.questions.forEach(q => {
+                this.hideQuestionBox(q);
+              });
+            }
+          }
+          this.displayFlowStage(flow, nextStage);
         }
       }
       else {
+        // hide
         flow.questions.filter(q => q.order === stage).forEach(q => {
           this.hideQuestionBox(q);
         });
