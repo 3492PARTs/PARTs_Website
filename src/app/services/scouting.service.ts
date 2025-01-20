@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FormFieldForm, MatchStrategy, IMatchStrategy } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
@@ -20,7 +20,7 @@ export class ScoutingService {
   private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
   private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
   private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<FormFieldForm | null> | null = null;
+  private outstandingInitFieldScoutingPromise: Promise<FieldFormForm | null> | null = null;
   private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
   private outstandingInitPitScoutingPromise: Promise<Question[] | null> | null = null;
   private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
@@ -511,17 +511,17 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FormFieldForm | null> {
+  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FieldFormForm | null> {
     if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<FormFieldForm | null>(resolve => {
+      this.outstandingInitFieldScoutingPromise = new Promise<FieldFormForm | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/field/form/', {
           form_typ: 'field',
           active: 'y'
-        }, async (result: FormFieldForm) => {
+        }, async (result: FieldFormForm) => {
           /** 
            * On success load results and store in db 
            **/
-          //await this.updateScoutingQuestionsCache('field', result);
+          await this.updateFieldFormFormCache(result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -530,11 +530,11 @@ export class ScoutingService {
            * On fail load results from db
            **/
           let allLoaded = true;
-          let result: Question[] = [];
+          let result: FieldFormForm | null = null;
 
-          await this.getScoutingQuestionsFromCache('field').then((spqs: Question[]) => {
-            result = spqs;
-            if (spqs.length <= 0) allLoaded = false;
+          await this.getFieldFormFormFromCache().then((fff: FieldFormForm) => {
+            if (!fff) allLoaded = false;
+            else result = fff;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -545,8 +545,7 @@ export class ScoutingService {
             resolve(null);
           }
           else
-            //resolve(result);
-            resolve(null);
+            resolve(result);
 
           this.outstandingInitFieldScoutingPromise = null;
         }, () => {
@@ -665,6 +664,19 @@ export class ScoutingService {
       });
 
     return this.outstandingGetFieldScoutingResponsesPromise;
+  }
+
+  private async updateFieldFormFormCache(fieldForm: FieldFormForm) {
+    await this.cs.FieldFormForm.RemoveAllAsync().then(async () => {
+      fieldForm.id = 1;
+      await this.cs.FieldFormForm.AddAsync(fieldForm);
+    });
+  }
+
+  getFieldFormFormFromCache(filterDelegate: IFilterDelegate | undefined = undefined): Promise<FieldFormForm> {
+    return new Promise<FieldFormForm>(resolve => {
+      this.cs.FieldFormForm.getAll(filterDelegate).then(fff => resolve(fff[0]));
+    });
   }
 
   getFieldResponseColumnsFromCache(): PromiseExtended<any[]> {
@@ -1106,7 +1118,7 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
-          this.updateMatchStrategiesCache(result);
+          await this.updateMatchStrategiesCache(result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -1153,9 +1165,9 @@ export class ScoutingService {
     });
   }
 
-  private updateMatchStrategiesCache(matchStrategies: MatchStrategy[]) {
-    this.cs.MatchStrategy.RemoveAllAsync().then(() => {
-      this.cs.MatchStrategy.AddBulkAsync(matchStrategies);
+  private async updateMatchStrategiesCache(matchStrategies: MatchStrategy[]) {
+    await this.cs.MatchStrategy.RemoveAllAsync().then(async () => {
+      await this.cs.MatchStrategy.AddBulkAsync(matchStrategies);
     });
   }
 

@@ -1,4 +1,4 @@
-import { FormSubType, Question, QuestionAnswer, QuestionFlow } from "./form.models";
+import { FormSubType, IFormSubType, IQuestion, Question, QuestionAnswer, QuestionFlow } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -202,7 +202,7 @@ export interface IScoutQuestionType {
 }
 
 export class ScoutQuestionType implements IScoutQuestionType {
-    id!: number;
+    id = NaN;
     scorable = '';
 }
 
@@ -474,13 +474,27 @@ export class FieldForm {
     inv_img_url = '';
 }
 
-export class FormSubTypeForm {
-    form_sub_typ = new FormSubType()
+export interface IFormSubTypeForm {
+    form_sub_typ: IFormSubType;
+    questions: IQuestion[];
+    question_flows: QuestionFlow[];
+}
+
+export class FormSubTypeForm implements IFormSubTypeForm {
+    form_sub_typ = new FormSubType();
     questions: Question[] = [];
     question_flows: QuestionFlow[] = [];
 }
 
-export class FormFieldForm {
+export interface IFieldFormForm {
+    id: number;
+    field_form: FieldForm;
+    form_sub_types: IFormSubTypeForm[];
+}
+
+
+export class FieldFormForm implements IFieldFormForm {
+    id = NaN;
     field_form = new FieldForm();
     form_sub_types: FormSubTypeForm[] = [];
 }

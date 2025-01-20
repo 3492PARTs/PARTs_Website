@@ -363,9 +363,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   nextFormSubType(): void {
-    if (!this.isQuestionDisplayFormValid()) return;
+    // allow to go past auto with form errors
+    if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
 
-    this.gs.triggerConfirm('Please make sure you answers are correct, you cannot go back.', () => {
+    let fn = () => {
       this.gs.scrollTo(0);
 
       let i = 0;
@@ -399,7 +400,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
         });
       });
-    });
+    }
+
+    if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
+      this.gs.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
+    else
+      fn();
   }
 
   advanceFlow(flow: QuestionFlow, question: Question, override = false): void {

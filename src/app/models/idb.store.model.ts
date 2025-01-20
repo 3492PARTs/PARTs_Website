@@ -1,7 +1,7 @@
 import { Banner } from "./api.models";
 import { Question } from "./form.models";
 import { Link } from "./navigation.models";
-import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType, MatchStrategy } from "./scouting.models";
+import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType, MatchStrategy, FieldFormForm } from "./scouting.models";
 import { AuthPermission, User } from "./user.models";
 
 export class LoadedStores {
@@ -29,6 +29,7 @@ const teamInstance = new Team();
 const teamNoteInstance = new TeamNote();
 const matchInstance = new Match();
 const matchStrategyInstance = new MatchStrategy();
+const fieldFormFormInstance = new FieldFormForm();
 const scoutFieldScheduleInstance = new ScoutFieldSchedule();
 const questionInstance = new Question();
 const scoutPitResponseInstance = new ScoutPitResponse();
@@ -75,6 +76,10 @@ export const DBStores = {
     MatchStrategy: {
         TableName: 'MatchStrategy',
         Columns: generateColumns(matchStrategyInstance),
+    },
+    FieldFormForm: {
+        TableName: 'FieldFormForm',
+        Columns: generateColumns(fieldFormFormInstance),
     },
     ScoutFieldSchedule: {
         TableName: 'ScoutFieldSchedule',

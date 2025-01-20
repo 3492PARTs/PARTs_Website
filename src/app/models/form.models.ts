@@ -1,4 +1,4 @@
-import { IScoutQuestion, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
+import { IScoutQuestion, IScoutQuestionType, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
 
 export interface IQuestion {
     question_id: number;
@@ -64,13 +64,22 @@ export class QuestionOption implements IQuestionOption {
     void_ind = 'n';
 }
 
-export class QuestionFlowAnswer {
-    id!: number;
+export interface IQuestionFlowAnswer {
+    id: number;
+    //question_answer = new QuestionAnswer();
+    question: IQuestion | undefined;
+    answer: string;
+    answer_time: string;
+    void_ind: string;
+}
+
+export class QuestionFlowAnswer implements IQuestionFlowAnswer {
+    id = NaN;
     //question_answer = new QuestionAnswer();
     question: Question | undefined = undefined;
     answer = '';
     answer_time = "";
-    void_ind = 'n'
+    void_ind = 'n';
 
     constructor(question: Question, answer: string) {
         this.question = question;
@@ -81,14 +90,24 @@ export class QuestionFlowAnswer {
     }
 }
 
-export class QuestionAnswer {
+export interface IQuestionAnswer {
+    question_answer_id: number;
+    response: IResponse;
+    question: IQuestion | undefined;
+    question_flow: IQuestionFlow | undefined;
+    answer: string;
+    question_flow_answers: IQuestionFlowAnswer[];
+    void_ind: string
+}
+
+export class QuestionAnswer implements IQuestionAnswer {
     question_answer_id!: number;
     response = new Response();
     question: Question | undefined = undefined;
     question_flow: QuestionFlow | undefined = undefined;
     answer = '';
     question_flow_answers: QuestionFlowAnswer[] = [];
-    void_ind = 'n'
+    void_ind = 'n';
 
     constructor(answer: string, question?: Question, question_flow?: QuestionFlow) {
         this.question = question;
@@ -101,7 +120,7 @@ export interface IQuestionType {
     question_typ: string;
     question_typ_nm: string;
     is_list: string;
-    scout_question_type: ScoutQuestionType;
+    scout_question_type: IScoutQuestionType;
     void_ind: string;
 }
 
@@ -175,12 +194,30 @@ export class FormType implements IFormType {
     form_nm = '';
 }
 
-export class Response {
-    response_id!: number;
+export interface IResponse {
+    response_id: number;
+    form_typ: string;
+    time: Date;
+    archive_ind: string;
+    questionanswer_set: IQuestion[];
+}
+
+export class Response implements IResponse {
+    response_id = NaN;
     form_typ = '';
     time = new Date();
     archive_ind = "n";
     questionanswer_set: Question[] = [];
+}
+
+export interface IQuestionFlow {
+    id: number;
+    name: string;
+    single_run: boolean;
+    form_typ: IFormType;
+    form_sub_typ: IFormSubType | undefined;
+    questions: IQuestion[];
+    question_answer: IQuestionAnswer | undefined;
 }
 
 export class QuestionFlow {
