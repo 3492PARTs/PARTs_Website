@@ -27,8 +27,8 @@ export class AllianceSelectionComponent implements OnInit {
     { PropertyName: 'note', ColLabel: 'Note', Type: 'area' },
   ];
   allianceSelectionsTableButtons: TableButtonType[] = [
-    { ButtonType: 'minus', RecordCallBack: this.populateAllianceSelections, HideFunction: this.hideMinus },
-    { ButtonType: 'add', RecordCallBack: this.populateAllianceSelections, HideFunction: this.hidePlus.bind(this) },
+    { ButtonType: 'minus', RecordCallBack: this.decrementOrder.bind(this), HideFunction: this.hideMinus },
+    { ButtonType: 'add', RecordCallBack: this.incrementOrder.bind(this), HideFunction: this.hidePlus.bind(this) },
   ];
   triggerAllianceSelectionsTable = false;
 
@@ -89,5 +89,39 @@ export class AllianceSelectionComponent implements OnInit {
 
   hidePlus(rec: AllianceSelection): boolean {
     return rec.order === this.allianceSelections.length;
+  }
+
+  incrementOrder(rec: AllianceSelection): void {
+    let i = 0;
+    for (; i < this.allianceSelections.length; i++) {
+      if (this.allianceSelections[i].order === rec.order) {
+        break;
+      }
+    }
+
+    const selection = this.allianceSelections[i];
+    selection.order++;
+    this.allianceSelections[i + 1].order--;
+    this.allianceSelections[i] = this.allianceSelections[i + 1];
+    this.allianceSelections[i + 1] = selection;
+
+    this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+  }
+
+  decrementOrder(rec: AllianceSelection): void {
+    let i = 0;
+    for (; i < this.allianceSelections.length; i++) {
+      if (this.allianceSelections[i].order === rec.order) {
+        break;
+      }
+    }
+
+    const selection = this.allianceSelections[i];
+    selection.order--;
+    this.allianceSelections[i - 1].order++;
+    this.allianceSelections[i] = this.allianceSelections[i - 1];
+    this.allianceSelections[i - 1] = selection;
+
+    this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
   }
 }
