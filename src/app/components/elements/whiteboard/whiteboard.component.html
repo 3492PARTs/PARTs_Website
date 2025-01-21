@@ -1,0 +1,18 @@
+<canvas
+  #canvas
+  (mousedown)="onMouseDown($event)"
+  (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()"
+  [width]="width"
+  [height]="height"
+  style="border: 1px solid black"
+></canvas>
+<div class="color-picker">
+  <button (click)="selectColor('black')">Black</button>
+  <button (click)="selectColor('red')">Red</button>
+  <button (click)="selectColor('blue')">Blue</button>
+  <button (click)="selectColor('green')">Green</button>
+  <button (click)="selectColor('yellow')">Yellow</button>
+  <button (click)="selectColor('white')">Eraser</button>
+</div>
+<button (click)="saveImage()">Save Image</button>

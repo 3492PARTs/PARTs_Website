@@ -7,11 +7,12 @@ import { TableButtonType, TableColType, TableComponent } from '../../../../atoms
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
+import { WhiteboardComponent } from "../../../../elements/whiteboard/whiteboard.component";
 
 @Component({
   selector: 'app-alliance-selection',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
+  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, WhiteboardComponent],
   templateUrl: './alliance-selection.component.html',
   styleUrl: './alliance-selection.component.scss'
 })
@@ -24,9 +25,10 @@ export class AllianceSelectionComponent implements OnInit {
   teamButtonData: { disabled: boolean, team_id: number }[] = [];
 
   allianceSelectionsTableCols: TableColType[] = [
-    { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam, },
+    { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam },
+    { PropertyName: 'team.rank', ColLabel: 'Rank', Width: '50px' },
     { PropertyName: 'order', ColLabel: 'Order', Width: '50px' },
-    { PropertyName: 'note', ColLabel: 'Note', Type: 'area' },
+    { PropertyName: 'note', ColLabel: 'Note', Type: 'area', Rows: 4 },
   ];
   allianceSelectionsTableButtons: TableButtonType[] = [
     { ButtonType: 'minus', RecordCallBack: this.decrementOrder.bind(this), HideFunction: this.hideMinus },

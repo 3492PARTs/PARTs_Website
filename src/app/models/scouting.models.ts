@@ -20,6 +20,7 @@ export interface ITeam {
     void_ind: string;
     checked: boolean;
     pit_result: number;
+    rank: number;
 }
 
 export class Team implements ITeam {
@@ -28,6 +29,7 @@ export class Team implements ITeam {
     void_ind = 'n'
     checked = false;
     pit_result = 0;
+    rank = NaN;
 }
 
 export interface IEvent {
