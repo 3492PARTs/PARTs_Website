@@ -392,7 +392,8 @@ nav {
 }
 
 #site-banner,
-header {
+header,
+footer {
   transition: width 0.15s ease, top 0.15s linear;
   width: calc(100% - 10.4rem);
 
@@ -658,7 +659,7 @@ header {
     background-color: $accent_color;
     padding-top: 7rem;
     box-sizing: content-box;
-
+    /*
     width: calc(100% - 10.4rem);
 
     &.expanded {
@@ -668,7 +669,7 @@ header {
     &.hideNav {
       width: 100%;
     }
-
+*/
     &.full-height {
       height: 100vh;
       padding-top: 0;
