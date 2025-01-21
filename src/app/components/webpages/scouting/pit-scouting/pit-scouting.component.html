@@ -19,14 +19,15 @@
     <div>
       <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="outstandingTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam()"
-        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team" [MinWidth]="'190px'" [Disabled]="formDisabled">
+        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team_id" (FunctionCallBack)="changeTeam()"
+        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team_id" [MinWidth]="'190px'"
+        [Disabled]="formDisabled">
       </app-form-element>
 
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="completedTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team"
+        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team_id" (FunctionCallBack)="changeTeam(true)"
+        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team_id"
         [Disabled]="formDisabled || apiStatus !== 'on'">
       </app-form-element>
     </div>
