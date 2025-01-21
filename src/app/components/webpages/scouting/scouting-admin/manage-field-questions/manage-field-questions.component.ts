@@ -37,6 +37,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   fieldForm = new FieldForm();
   uploadImageModalVisible = false;
   previewUrl = '';
+  invertedImage = false;
   isDrawing = false;
   startX = NaN;
   startY = NaN;
@@ -91,12 +92,19 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.gs.previewImageFile(this.fieldForm.img, (ev: ProgressEvent<FileReader>) => {
         this.previewUrl = ev.target?.result as string;
       });
+    else if (this.fieldForm.inv_img)
+      this.gs.previewImageFile(this.fieldForm.inv_img, (ev: ProgressEvent<FileReader>) => {
+        this.previewUrl = ev.target?.result as string;
+      });
   }
 
   saveFieldImage(): void {
-    if (this.fieldForm.img) {
+    if (this.fieldForm.img || this.fieldForm.inv_img) {
       const formData = new FormData();
-      formData.append('img', this.fieldForm.img);
+      if (this.fieldForm.img)
+        formData.append('img', this.fieldForm.img);
+      if (this.fieldForm.inv_img)
+        formData.append('inv_img', this.fieldForm.inv_img);
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
@@ -179,7 +187,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   mouseClick(e: MouseEvent): void {
-    if (this.activeQuestion && this.activeQuestionBox) {
+    if (this.activeQuestion && this.activeQuestionBox && !this.invertedImage) {
       this.isDrawing = !e.shiftKey;
 
       if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
@@ -263,12 +271,21 @@ export class ManageFieldQuestionsComponent implements OnInit {
       !this.gs.strNoE(scout_question.width) &&
       !this.gs.strNoE(scout_question.height) &&
       box) {
-      this.renderer.setStyle(box, 'display', "block");
-      this.renderer.setStyle(box, 'width', `${scout_question.width}%`);
-      this.renderer.setStyle(box, 'height', `${scout_question.height}%`);
+      let width = scout_question.width;
+      let height = scout_question.height;
+      let x = scout_question.x;
+      let y = scout_question.y;
 
-      this.renderer.setStyle(box, 'left', `${scout_question.x}%`);
-      this.renderer.setStyle(box, 'top', `${scout_question.y}%`);
+      if (this.invertedImage) {
+        x = 50 + (50 - x) - width;
+      }
+
+      this.renderer.setStyle(box, 'display', "block");
+      this.renderer.setStyle(box, 'width', `${width}%`);
+      this.renderer.setStyle(box, 'height', `${height}%`);
+
+      this.renderer.setStyle(box, 'left', `${x}%`);
+      this.renderer.setStyle(box, 'top', `${y}%`);
     }
 
   }
