@@ -1,17 +1,48 @@
 <app-box [Title]="'Match Planning'">
-  <app-form-element-group [LabelText]="'Match'">
+  <app-form-element-group [LabelText]="'Match'" [InlineElements]="true">
     <app-form-element
       [Type]="'select'"
       [LabelText]="'Match'"
       [SelectList]="matches"
       [(Model)]="match"
       [DisplayProperty]="'match_number'"
+      [MinWidth]="'100px'"
+      (FunctionCallBack)="setMatchStrategies()"
     ></app-form-element>
+
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Match Strategy'"
+      [SelectList]="activeMatchStrategies"
+      [(Model)]="activeMatchStrategy"
+      [DisplayProperty]="'display_value'"
+      [MinWidth]="'200px'"
+    ></app-form-element>
+
+    <app-button [ButtonType]="'add'"></app-button>
   </app-form-element-group>
 
-  @if (fieldForm) {
-  <app-form-element-group>
-    <app-whiteboard [ImageUrl]="fieldForm.full_img_url"></app-whiteboard>
-  </app-form-element-group>
-  }
+  <app-form (SubmitFunction)="saveMatchStrategy()">
+    <app-form-element-group>
+      <app-form-element
+        [Type]="'area'"
+        [LabelText]="'Strategy'"
+        [(Model)]="activeMatchStrategy.strategy"
+        [Width]="'100%'"
+        [Rows]="8"
+        [Required]="true"
+      ></app-form-element>
+
+      @if (fieldForm) {
+      <app-whiteboard
+        [ImageUrl]="fieldForm.full_img_url"
+        (Image)="setImage($event)"
+      ></app-whiteboard>
+      }
+
+      <app-button-ribbon>
+        <app-button [Type]="'submit'" [Type]="'success'">Save</app-button>
+      </app-button-ribbon>
+    </app-form-element-group>
+  </app-form>
 </app-box>

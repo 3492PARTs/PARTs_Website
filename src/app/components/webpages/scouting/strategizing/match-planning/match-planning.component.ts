@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Chart, registerables } from 'chart.js';
-import { Banner } from '../../../../../models/api.models';
 import { FieldForm, Match, MatchStrategy, Team } from '../../../../../models/scouting.models';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService } from '../../../../../services/general.service';
@@ -10,11 +8,15 @@ import { BoxComponent } from "../../../../atoms/box/box.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { WhiteboardComponent } from "../../../../elements/whiteboard/whiteboard.component";
+import { ButtonComponent } from "../../../../atoms/button/button.component";
+import { FormComponent } from "../../../../atoms/form/form.component";
+import { Banner } from '../../../../../models/api.models';
+import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-match-planning',
   standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent],
   templateUrl: './match-planning.component.html',
   styleUrl: './match-planning.component.scss'
 })
@@ -29,7 +31,7 @@ export class MatchPlanningComponent implements OnInit {
 
   matchStrategies: MatchStrategy[] = [];
   activeMatchStrategies: MatchStrategy[] = [];
-  activeMatchStrategy: MatchStrategy | undefined = undefined;
+  activeMatchStrategy = new MatchStrategy();
 
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);
@@ -53,6 +55,8 @@ export class MatchPlanningComponent implements OnInit {
         this.matches = ourMatches;
 
         this.fieldForm = result.field_form_form.field_form;
+
+        this.matchStrategies = result.match_strategies;
       }
 
     });
@@ -60,32 +64,37 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategies(): void {
-
+    this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
   }
 
-  /* 
- addMatchStrategy(): void {
-   if (this.activeMatchStrategies.filter(ms => this.gs.strNoE(ms.strategy) && !ms.user && !ms.match).length <= 0) {
-     this.activeMatchStrategies.unshift(new MatchStrategy());
-   }
- }
 
- async saveMatchStrategies(): Promise<void> {
-   const userMatchStrategies = this.activeMatchStrategies.filter(ams => !ams.user || ams.user.id === this.user.id);
+  setMatchStrategy(ms?: MatchStrategy): void {
+    this.activeMatchStrategy = ms ? ms : new MatchStrategy();
+  }
 
-   for (let i = 0; i < userMatchStrategies.length; i++) {
-     if (!userMatchStrategies[i].user) userMatchStrategies[i].user = this.user;
-     if (!userMatchStrategies[i].match) userMatchStrategies[i].match = this.activeMatch;
+  setImage(f: File): void {
+    this.activeMatchStrategy.img = f;
+  }
 
-     if (!(await this.ss.saveMatchStrategy(userMatchStrategies[i]))) {
-       this.gs.addBanner(new Banner(undefined, `Error saving match strategy ${i + 1}`, 5000));
-       break;
-     }
-   }
+  async saveMatchStrategy(): Promise<void> {
+    const fd = new FormData();
+    if (this.activeMatchStrategy.img) {
+      fd.append('img', this.activeMatchStrategy.img);
+    }
+    fd.append('match_id', this.activeMatchStrategy.match?.match_id.toString() || '');
+    fd.append('user_id', this.activeMatchStrategy.user?.id.toString() || '');
+    fd.append('strategy', this.activeMatchStrategy.strategy);
 
-   this.ss.loadMatchStrategies().then(result => {
-     if (result)
-       this.activeMatchStrategies = result.filter(ms => ms.match && this.activeMatch && ms.match.match_id === this.activeMatch.match_id);
-   })
- }*/
+    if (!(await this.ss.saveMatchStrategy(fd))) {
+      this.gs.addBanner(new Banner(undefined, `Error saving match strategy`, 5000));
+      this.activeMatchStrategy = new MatchStrategy();
+      return;
+    }
+
+    this.ss.loadMatchStrategies().then(result => {
+      if (result)
+        this.matchStrategies = result;
+      this.setMatchStrategies();
+    })
+  }
 }

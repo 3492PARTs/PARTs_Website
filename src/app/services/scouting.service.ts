@@ -1195,7 +1195,7 @@ export class ScoutingService {
     return this.outstandingLoadMatchStrategiesPromise;
   }
 
-  saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
+  saveMatchStrategy(matchStrategy: MatchStrategy | FormData, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', matchStrategy, (result: any) => {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-whiteboard',
@@ -29,6 +29,8 @@ export class WhiteboardComponent implements OnInit {
   }
 
   private url = '';
+
+  @Output() Image: EventEmitter<File> = new EventEmitter<File>();
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
@@ -73,6 +75,33 @@ export class WhiteboardComponent implements OnInit {
 
     // This is a simplified example. You'll likely need to handle 
     // image saving and uploading more robustly in a real-world application.
+    const file = this.dataURLtoFile(dataURL);
+    this.Image.emit(file)
+  }
+
+  dataURLtoFile(dataURI: string): File {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new Blob([ab], { type: mimeString });
+    return new File([blob], "whiteboard.png");
+
   }
 
   clearCanvas() {
@@ -85,6 +114,7 @@ export class WhiteboardComponent implements OnInit {
     // Load and draw background image from URL
     const img = new Image();
     img.src = s;
+    img.crossOrigin = 'anonymous';
     this.url = s;
 
     img.onload = () => {
