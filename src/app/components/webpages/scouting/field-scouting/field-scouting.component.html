@@ -70,20 +70,25 @@
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
       </div>
 
-      <div *ngIf="matches.length > 0" class="flex align-items-baseline">
+      <div class="flex align-items-baseline">
+        @if(matches.length > 0) {
         <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
           [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.match"
-          [Required]="matches.length > 0 && !noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled"
-          [MinWidth]="'100px'">
+          [Required]="!noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled" [MinWidth]="'100px'">
         </app-form-element>
 
         <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
-        </app-button>
+        </app-button>}
+        @if (noMatch || matches.length <=0) { <app-button [ButtonType]="!invertedImage ? 'main' : 'danger'"
+          (FunctionCallBack)="setInvertedImage(!invertedImage)">{{
+          !invertedImage ? 'Set Blue' : 'Set Red'
+          }}</app-button>
+          }
       </div>
       <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
         [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-        [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team" [Required]="true" [Disabled]="formDisabled"
-        [MinWidth]="'100px'">
+        [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team_id" [Required]="true" [Disabled]="formDisabled"
+        [MinWidth]="'100px'" (FunctionCallBack)="invertImage()">
       </app-form-element>
 
       @if(activeFormSubTypeForm) {

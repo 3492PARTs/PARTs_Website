@@ -236,7 +236,7 @@ export class ScoutQuestion implements IScoutQuestion {
 
 export interface IScoutFieldFormResponse {
     id: number;
-    team: number;
+    team_id: number;
     match: IMatch | undefined;
     form_typ: string;
     answers: QuestionAnswer[];
@@ -244,13 +244,13 @@ export interface IScoutFieldFormResponse {
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     id!: number;
-    team!: number;
+    team_id!: number;
     match: Match | undefined = undefined;
     form_typ = 'field';
     answers: QuestionAnswer[] = [];
 
     constructor(team?: number, match?: Match, answers?: QuestionAnswer[]) {
-        this.team = team || NaN;
+        this.team_id = team || NaN;
         this.match = match || undefined;
         this.answers = answers || [];
         this.form_typ = "field";
@@ -260,7 +260,7 @@ export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
 export interface IScoutPitFormResponse {
     id: number;
     answers: QuestionAnswer[];
-    team: number;
+    team_id: number;
     response_id: number;
     form_typ: string;
     robotPics: File[];
@@ -269,14 +269,14 @@ export interface IScoutPitFormResponse {
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id!: number;
     answers: QuestionAnswer[] = [];
-    team!: number;
+    team_id!: number;
     response_id = NaN;
     form_typ = 'field';
     robotPics: File[] = [];
 
     constructor(question_answers?: QuestionAnswer[], team?: number, robotPics?: File[]) {
         this.answers = question_answers || [];
-        this.team = team || NaN;
+        this.team_id = team || NaN;
         this.robotPics = robotPics || [];
     }
 }

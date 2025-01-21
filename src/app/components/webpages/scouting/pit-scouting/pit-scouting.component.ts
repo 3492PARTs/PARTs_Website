@@ -86,7 +86,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingForm().then(result => {
-      if (this.gs.strNoE(this.scoutPitResponse.team)) {
+      if (this.gs.strNoE(this.scoutPitResponse.team_id)) {
 
         if (result) {
           this.questions = result;
@@ -120,7 +120,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.cs.ScoutPitFormResponse.getAll().then((sprs: ScoutPitFormResponse[]) => {
       sprs.forEach(spr => {
         for (let i = 0; i < this.outstandingTeams.length; i++) {
-          if (this.outstandingTeams[i].team_no === spr.team) this.outstandingTeams.splice(i, 1);
+          if (this.outstandingTeams[i].team_no === spr.team_id) this.outstandingTeams.splice(i, 1);
         }
       });
     });
@@ -131,7 +131,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.outstandingResults = [];
 
       sprs.forEach(s => {
-        this.outstandingResults.push({ id: s.id, team: s.team });
+        this.outstandingResults.push({ id: s.id, team: s.team_id });
       });
 
     });
@@ -176,7 +176,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         },
         () => {
           this.gs.triggerChange(() => {
-            this.scoutPitResponse.team = this.previouslySelectedTeam;
+            this.scoutPitResponse.team_id = this.previouslySelectedTeam;
           });
         });
     }
@@ -187,9 +187,9 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   private setNewTeam(load: boolean): void {
     this.ss.getScoutingQuestionsFromCache('pit').then(psqs => {
-      this.previouslySelectedTeam = this.scoutPitResponse.team;
+      this.previouslySelectedTeam = this.scoutPitResponse.team_id;
       this.scoutPitResponse = new ScoutPitFormResponse();
-      this.scoutPitResponse.team = this.previouslySelectedTeam;
+      this.scoutPitResponse.team_id = this.previouslySelectedTeam;
       //TODO this.scoutPitResponse.answers = psqs;
       this.robotPic = new File([], '');
       this.previewUrl = null;
@@ -223,7 +223,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   save(spr?: ScoutPitFormResponse, id?: number): void | null {
     if (!spr) spr = this.scoutPitResponse;
 
-    if (this.gs.strNoE(spr.team)) {
+    if (this.gs.strNoE(spr.team_id)) {
       this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
       return null;
     }
@@ -258,7 +258,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   loadTeam(): void {
     this.api.get(true, 'scouting/pit/team-data/', {
-      team_num: this.scoutPitResponse.team
+      team_num: this.scoutPitResponse.team_id
     }, (result: any) => {
       this.questions = (result['questions'] as Question[]);
       this.scoutPitResponse.response_id = result['response_id'] as number;

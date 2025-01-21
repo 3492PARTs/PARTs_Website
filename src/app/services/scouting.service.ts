@@ -597,7 +597,7 @@ export class ScoutingService {
         a.question_flow?.questions.forEach(q => q.answer = '');
       });
 
-      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
+      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
@@ -811,7 +811,7 @@ export class ScoutingService {
 
         spr?.robotPics.forEach(pic => {
           if (pic && pic.size >= 0) {
-            const team_no = spr?.team;
+            const team_no = spr?.team_id;
 
             window.setTimeout(() => {
               this.gs.incrementOutstandingCalls();
