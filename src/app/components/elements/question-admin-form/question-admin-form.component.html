@@ -1,75 +1,184 @@
 <app-form-element-group [InlineElements]="true">
-  <div class="flex justify-content-space-between">
-    <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+  <div class="flex justify-content-space-between flex-wrap">
+    <app-form-element
+      [Type]="'text'"
+      [LabelText]="'Filter'"
+      [(Model)]="filterText"
+    ></app-form-element>
 
-    <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="questionOptions" [(Model)]="questionOption"
-      [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+    <app-form-element
+      [Type]="'radio'"
+      [LabelText]="'Active'"
+      [SelectList]="questionOptions"
+      [(Model)]="questionOption"
+      [DisplayProperty]="'property'"
+      [BindingProperty]="'value'"
+    ></app-form-element>
   </div>
 </app-form-element-group>
 
-<app-table [TableCols]="questionTableCols" [TableData]="FormMetadata.questions" [Width]="'100%'" [ShowAddButton]="true"
-  (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)"
-  [Scrollable]="true" [ScrollHeight]="'72vh'" [TriggerUpdate]="questionTableTriggerUpdate" [(FilterText)]="filterText"
-  [EnableRemovedFilter]="true" [RemovedFilterProperty]="'active'" [RemovedFilterPropertyValue]="questionOption">
+<app-table
+  [TableCols]="questionTableCols"
+  [TableData]="FormMetadata.questions"
+  [Width]="'100%'"
+  [ShowAddButton]="true"
+  (AddRecordCallBack)="showQuestionModal()"
+  [ShowEditButton]="true"
+  (EditRecordCallBack)="showQuestionModal($event)"
+  [Scrollable]="true"
+  [ScrollHeight]="'72vh'"
+  [TriggerUpdate]="questionTableTriggerUpdate"
+  [(FilterText)]="filterText"
+  [EnableRemovedFilter]="true"
+  [RemovedFilterProperty]="'active'"
+  [RemovedFilterPropertyValue]="questionOption"
+>
 </app-table>
 
 <app-modal [(visible)]="questionModalVisible" [Title]="'Manage Question'">
   <app-form (SubmitFunction)="saveQuestion()">
-    <app-form-element [Type]="'area'" [LabelText]="'Question'" [(Model)]="activeQuestion.question" [Required]="true"
-      [FormGroup]="true" [FormGroupInline]="true" [Width]="'300px'" [Rows]="3">
+    <app-form-element
+      [Type]="'area'"
+      [LabelText]="'Question'"
+      [(Model)]="activeQuestion.question"
+      [Required]="true"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      [Width]="'300px'"
+      [Rows]="3"
+    >
     </app-form-element>
 
-    <app-form-element [Type]="'number'" [LabelText]="'Order'" [(Model)]="activeQuestion.order" [Required]="true"
-      [Width]="'6em'" [FormGroup]="true" [FormGroupInline]="true">
+    <app-form-element
+      [Type]="'number'"
+      [LabelText]="'Order'"
+      [(Model)]="activeQuestion.order"
+      [Required]="true"
+      [Width]="'6em'"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+    >
     </app-form-element>
 
-    <app-form-element [Type]="'select'" [LabelText]="'Question Type'" [SelectList]="FormMetadata.question_types"
-      [DisplayProperty]="'question_typ_nm'" [(Model)]="activeQuestion.question_typ"
-      [SelectComparatorFunction]="compareQuestionTypeObjects" [Required]="true" [Width]="'100%'" [MinWidth]="'200px'"
-      [FormGroup]="true" [FormGroupInline]="true" [DisplayEmptyOption]="true">
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Question Type'"
+      [SelectList]="FormMetadata.question_types"
+      [DisplayProperty]="'question_typ_nm'"
+      [(Model)]="activeQuestion.question_typ"
+      [SelectComparatorFunction]="compareQuestionTypeObjects"
+      [Required]="true"
+      [Width]="'100%'"
+      [MinWidth]="'200px'"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      [DisplayEmptyOption]="true"
+    >
     </app-form-element>
 
-    <app-form-element *ngIf="FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Form Sub Type'" [SelectList]="FormMetadata.form_sub_types" [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'" [(Model)]="activeQuestion.form_sub_typ" [DisplayEmptyOption]="true"
-      [FormGroup]="true" [FormGroupInline]="true" (FunctionCallBack)="buildQuestionFlowOptions()" [Required]="true"
-      [SelectComparatorFunction]="compareFormSubTypeObjects">
+    <app-form-element
+      *ngIf="
+        FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0
+      "
+      [Type]="'select'"
+      [LabelText]="'Form Sub Type'"
+      [SelectList]="FormMetadata.form_sub_types"
+      [MinWidth]="'200px'"
+      [DisplayProperty]="'form_sub_nm'"
+      [(Model)]="activeQuestion.form_sub_typ"
+      [DisplayEmptyOption]="true"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      (FunctionCallBack)="buildQuestionFlowOptions()"
+      [Required]="true"
+      [SelectComparatorFunction]="compareFormSubTypeObjects"
+    >
     </app-form-element>
 
-    @if (AllowFlows ) { <div class="flex align-items-center gap-1rem">
-      <app-form-element [Type]="'select'" [LabelText]="'Question Flow'" [SelectList]="availableQuestionFlows"
-        [MinWidth]="'200px'" [DisplayProperty]="'name'" [BindingProperty]="'id'"
-        [(Model)]="activeQuestion.question_flow_id" [DisplayEmptyOption]="true" [FormGroup]="true"
-        [FormGroupInline]="true">
+    @if (AllowFlows ) {
+    <div class="flex align-items-center gap-1rem">
+      <app-form-element
+        [Type]="'select'"
+        [LabelText]="'Question Flow'"
+        [SelectList]="availableQuestionFlows"
+        [MinWidth]="'200px'"
+        [DisplayProperty]="'name'"
+        [BindingProperty]="'id'"
+        [(Model)]="activeQuestion.question_flow_id"
+        [DisplayEmptyOption]="true"
+        [FormGroup]="true"
+        [FormGroupInline]="true"
+      >
       </app-form-element>
 
-      <app-button class="padding-bottom-2rem" [ButtonType]="'add'"
-        (FunctionCallBack)="showQuestionFlowModal()"></app-button>
+      <app-button
+        class="padding-bottom-2rem"
+        [ButtonType]="'add'"
+        (FunctionCallBack)="showQuestionFlowModal()"
+      ></app-button>
     </div>
     }
 
-    <app-form-element [Type]="'text'" [LabelText]="'Table Column Width'" [(Model)]="activeQuestion.table_col_width"
-      [Required]="true" [FormGroup]="true" [FormGroupInline]="true">
+    <app-form-element
+      [Type]="'text'"
+      [LabelText]="'Table Column Width'"
+      [(Model)]="activeQuestion.table_col_width"
+      [Required]="true"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+    >
     </app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Required'"
-      [(Model)]="activeQuestion.required" [FormGroup]="true" [FormGroupInline]="true"
-      [Width]="'90px'"></app-form-element>
+    <app-form-element
+      [Type]="'checkbox'"
+      [TrueValue]="'y'"
+      [FalseValue]="'n'"
+      [LabelText]="'Required'"
+      [(Model)]="activeQuestion.required"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      [Width]="'90px'"
+    ></app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'" [LabelText]="'Active'"
-      [(Model)]="activeQuestion.active" [FormGroup]="true" [FormGroupInline]="true" [Width]="'73px'"></app-form-element>
+    <app-form-element
+      [Type]="'checkbox'"
+      [TrueValue]="'y'"
+      [FalseValue]="'n'"
+      [LabelText]="'Active'"
+      [(Model)]="activeQuestion.active"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      [Width]="'73px'"
+    ></app-form-element>
 
-    <div *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'">
-
-      <app-form-element [Type]="'number'" [LabelText]="'Value Multiplier'"
-        [(Model)]="activeQuestion.scout_question.value_multiplier" [Width]="'8em'" [FormGroup]="true"
-        [FormGroupInline]="true">
+    <div
+      *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'"
+    >
+      <app-form-element
+        [Type]="'number'"
+        [LabelText]="'Value Multiplier'"
+        [(Model)]="activeQuestion.scout_question.value_multiplier"
+        [Width]="'8em'"
+        [FormGroup]="true"
+        [FormGroupInline]="true"
+      >
       </app-form-element>
     </div>
 
-    <div *ngIf="activeQuestion.question_typ && activeQuestion.question_typ.is_list === 'y'">
-      <app-table [TableTitle]="'Options'" [TableCols]="optionsTableCols" [TableData]="activeQuestion.questionoption_set"
-        [ShowAddButton]="true" (AddRecordCallBack)="addOption()" [Scrollable]="true">
+    <div
+      *ngIf="
+        activeQuestion.question_typ &&
+        activeQuestion.question_typ.is_list === 'y'
+      "
+    >
+      <app-table
+        [TableTitle]="'Options'"
+        [TableCols]="optionsTableCols"
+        [TableData]="activeQuestion.questionoption_set"
+        [ShowAddButton]="true"
+        (AddRecordCallBack)="addOption()"
+        [Scrollable]="true"
+      >
       </app-table>
     </div>
 
@@ -79,19 +188,40 @@
   </app-form>
 </app-modal>
 
-<app-modal [(visible)]="questionFlowModalVisible" [Title]="'Question Flow Definition'">
+<app-modal
+  [(visible)]="questionFlowModalVisible"
+  [Title]="'Question Flow Definition'"
+>
   <app-form (SubmitFunction)="saveQuestionFlow()">
-    <app-form-element [Type]="'text'" [LabelText]="'Flow Name'" [(Model)]="newQuestionFlow.name"
-      [Required]="true"></app-form-element>
+    <app-form-element
+      [Type]="'text'"
+      [LabelText]="'Flow Name'"
+      [(Model)]="newQuestionFlow.name"
+      [Required]="true"
+    ></app-form-element>
 
-    <app-form-element *ngIf="FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0" [Type]="'select'"
-      [LabelText]="'Form Sub Type'" [SelectList]="FormMetadata.form_sub_types" [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'" [(Model)]="newQuestionFlow.form_sub_typ" [DisplayEmptyOption]="true"
-      [FormGroup]="true" [FormGroupInline]="true" [Required]="true">
+    <app-form-element
+      *ngIf="
+        FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0
+      "
+      [Type]="'select'"
+      [LabelText]="'Form Sub Type'"
+      [SelectList]="FormMetadata.form_sub_types"
+      [MinWidth]="'200px'"
+      [DisplayProperty]="'form_sub_nm'"
+      [(Model)]="newQuestionFlow.form_sub_typ"
+      [DisplayEmptyOption]="true"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
+      [Required]="true"
+    >
     </app-form-element>
 
-    <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
-      [(Model)]="newQuestionFlow.single_run"></app-form-element>
+    <app-form-element
+      [Type]="'checkbox'"
+      [LabelText]="'Single Run'"
+      [(Model)]="newQuestionFlow.single_run"
+    ></app-form-element>
 
     <app-button-ribbon>
       <app-button [Type]="'submit'">Save</app-button>
