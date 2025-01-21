@@ -38,6 +38,8 @@ export class AllianceSelectionComponent implements OnInit {
 
   selectionsActive = false;
 
+  url = '';
+
   constructor(private gs: GeneralService, private ss: ScoutingService) {
 
   }
@@ -52,6 +54,8 @@ export class AllianceSelectionComponent implements OnInit {
           else if (t1.team_no < t2.team_no) return -1;
           else return 0;
         });
+
+        this.url = result.field_form_form.field_form.full_img_url;
 
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-whiteboard',
@@ -18,6 +18,27 @@ export class WhiteboardComponent implements OnInit {
   height = 300;
   private currentColor = 'black';
 
+  // Calculate canvas dimensions dynamically
+  private canvasWidth = window.innerWidth;
+  private canvasHeight = 0;
+  private scaleX = 1;
+  private scaleY = 1;
+
+  @Input() set ImageUrl(s: string) {
+    // Load and draw background image from URL
+    const img = new Image();
+    img.src = s;
+
+    img.onload = () => {
+      // Calculate canvas height to maintain aspect ratio
+      this.canvasWidth = this.canvas.nativeElement.width;
+      this.canvasHeight = this.canvas.nativeElement.height;
+      this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
+      this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
+      this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
+    };
+  }
+
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
   }
@@ -28,8 +49,8 @@ export class WhiteboardComponent implements OnInit {
 
   onMouseDown(event: MouseEvent) {
     this.isDrawing = true;
-    this.lastX = event.offsetX;
-    this.lastY = event.offsetY;
+    this.lastX = event.offsetX / this.scaleX;
+    this.lastY = event.offsetY / this.scaleY;
   }
 
   onMouseMove(event: MouseEvent) {
@@ -37,13 +58,15 @@ export class WhiteboardComponent implements OnInit {
 
     this.ctx.beginPath();
     this.ctx.moveTo(this.lastX, this.lastY);
-    this.ctx.lineTo(event.offsetX, event.offsetY);
+    const x = event.offsetX / this.scaleX;
+    const y = event.offsetY / this.scaleY;
+    this.ctx.lineTo(x, y);
     this.ctx.strokeStyle = this.currentColor;
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
 
-    this.lastX = event.offsetX;
-    this.lastY = event.offsetY;
+    this.lastX = event.offsetX / this.scaleX;
+    this.lastY = event.offsetY / this.scaleY;
   }
 
   onMouseUp() {
