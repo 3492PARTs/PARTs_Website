@@ -1,6 +1,16 @@
+<app-form-element-group [InlineElements]="true">
+  <div class="flex justify-content-space-between">
+    <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+
+    <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="questionOptions" [(Model)]="questionOption"
+      [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+  </div>
+</app-form-element-group>
+
 <app-table [TableCols]="questionTableCols" [TableData]="FormMetadata.questions" [Width]="'100%'" [ShowAddButton]="true"
   (AddRecordCallBack)="showQuestionModal()" [ShowEditButton]="true" (EditRecordCallBack)="showQuestionModal($event)"
-  [Scrollable]="true" [ScrollHeight]="'72vh'" [TriggerUpdate]="questionTableTriggerUpdate">
+  [Scrollable]="true" [ScrollHeight]="'72vh'" [TriggerUpdate]="questionTableTriggerUpdate" [(FilterText)]="filterText"
+  [EnableRemovedFilter]="true" [RemovedFilterProperty]="'active'" [RemovedFilterPropertyValue]="questionOption">
 </app-table>
 
 <app-modal [(visible)]="questionModalVisible" [Title]="'Manage Question'">

@@ -11,15 +11,19 @@ import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.c
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
 import { CommonModule } from '@angular/common';
 import { Banner } from '../../../models/api.models';
+import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-question-admin-form',
   standalone: true,
-  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, FormElementGroupComponent],
   templateUrl: './question-admin-form.component.html',
   styleUrls: ['./question-admin-form.component.scss']
 })
 export class QuestionAdminFormComponent implements OnInit {
+  questionOptions = [{ property: 'Active', value: 'y' }, { property: 'Inactive', value: 'n' }];
+  questionOption = 'y';
+  filterText = '';
 
   @Input()
   formType!: string;
@@ -84,8 +88,8 @@ export class QuestionAdminFormComponent implements OnInit {
         ...this._questionTableCols,
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'is_condition', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },];
+        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
+      ];
 
       if (this.AllowFlows)
         this.questionTableCols = this.questionTableCols.concat([{ PropertyName: 'question_flow_id', ColLabel: 'Flow', Type: 'function', ColValueFunction: this.getQuestionFlowName.bind(this) } as TableColType]);
@@ -167,7 +171,11 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   ynToYesNo(s: string): string {
-    return s === 'y' ? 'Yes' : 'No';
+    return s === 'y' ? 'Yes' : '';
+  }
+
+  isConditional(n: number): string {
+    return n > 0 ? 'Yes' : '';
   }
 
   getQuestionFlowName(id: number): string {
