@@ -124,15 +124,13 @@ export class FieldScoutingResponsesComponent implements OnInit {
       this.teamScoutResults = sprs;
     });
 
-
-
     await this.ss.getPitResponseFromCache(row['team_no']).then(spr => {
       if (spr) {
         this.teamScoutPitResult = spr;
       }
     });
 
-    await this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_no': row['team_no'] })).then(tns => {
+    await this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_id': row['team_no'] })).then(tns => {
       this.teamNotes = tns;
     });
 
