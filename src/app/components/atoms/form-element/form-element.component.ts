@@ -668,7 +668,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
             this.renderer.setStyle(
               this.label.nativeElement,
-              'top', '-4px'
+              'top', this.Type === 'rating' ? '-12px' : '-4px'
             );
             this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
           }
