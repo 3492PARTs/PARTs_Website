@@ -1,1 +1,17 @@
-<p>match-planning works!</p>
+<app-box [Title]="'Match Planning'">
+  <app-form-element-group [LabelText]="'Match'">
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Match'"
+      [SelectList]="matches"
+      [(Model)]="match"
+      [DisplayProperty]="'match_number'"
+    ></app-form-element>
+  </app-form-element-group>
+
+  @if (fieldForm) {
+  <app-form-element-group>
+    <app-whiteboard [ImageUrl]="fieldForm.full_img_url"></app-whiteboard>
+  </app-form-element-group>
+  }
+</app-box>

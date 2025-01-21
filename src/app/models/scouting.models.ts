@@ -519,6 +519,8 @@ export class MatchStrategy implements IMatchStrategy {
     user: User | undefined = undefined;
     strategy = '';
     time = new Date()
+    img!: File;
+    img_url = '';
 }
 
 export interface IAllianceSelection {

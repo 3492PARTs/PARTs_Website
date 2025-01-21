@@ -25,25 +25,10 @@ export class WhiteboardComponent implements OnInit {
   private scaleY = 1;
 
   @Input() set ImageUrl(s: string) {
-    // Load and draw background image from URL
-    const img = new Image();
-    img.src = s;
-
-    img.onload = () => {
-      // Calculate canvas height to maintain aspect ratio
-      this.canvasWidth = this.canvas.nativeElement.width;
-
-      this.canvasHeight = (img.height / img.width) * this.canvasWidth;
-      this.canvas.nativeElement.height = this.canvasHeight;
-      //this.height = this.canvasHeight
-
-      //this.canvasHeight = this.canvas.nativeElement.height;
-      this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
-      this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
-
-      this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
-    };
+    this.setImage(s);
   }
+
+  private url = '';
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d')!;
@@ -88,5 +73,33 @@ export class WhiteboardComponent implements OnInit {
 
     // This is a simplified example. You'll likely need to handle 
     // image saving and uploading more robustly in a real-world application.
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    // Re-draw the background image
+    this.setImage(this.url);
+  }
+
+  private setImage(s: string): void {
+    // Load and draw background image from URL
+    const img = new Image();
+    img.src = s;
+    this.url = s;
+
+    img.onload = () => {
+      // Calculate canvas height to maintain aspect ratio
+      this.canvasWidth = this.canvas.nativeElement.width;
+
+      this.canvasHeight = (img.height / img.width) * this.canvasWidth;
+      this.canvas.nativeElement.height = this.canvasHeight;
+      //this.height = this.canvasHeight
+
+      //this.canvasHeight = this.canvas.nativeElement.height;
+      this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
+      this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
+
+      this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
+    };
   }
 }

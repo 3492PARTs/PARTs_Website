@@ -66,7 +66,7 @@ export class MatchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    Chart.register(...registerables);
+    //Chart.register(...registerables);
 
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
@@ -281,31 +281,6 @@ export class MatchesComponent implements OnInit {
     this.matchToPlan = [];
     this.activeMatch = undefined;
     this.activeMatchStrategies = [];
-  }
-
-  addMatchStrategy(): void {
-    if (this.activeMatchStrategies.filter(ms => this.gs.strNoE(ms.strategy) && !ms.user && !ms.match).length <= 0) {
-      this.activeMatchStrategies.unshift(new MatchStrategy());
-    }
-  }
-
-  async saveMatchStrategies(): Promise<void> {
-    const userMatchStrategies = this.activeMatchStrategies.filter(ams => !ams.user || ams.user.id === this.user.id);
-
-    for (let i = 0; i < userMatchStrategies.length; i++) {
-      if (!userMatchStrategies[i].user) userMatchStrategies[i].user = this.user;
-      if (!userMatchStrategies[i].match) userMatchStrategies[i].match = this.activeMatch;
-
-      if (!(await this.ss.saveMatchStrategy(userMatchStrategies[i]))) {
-        this.gs.addBanner(new Banner(undefined, `Error saving match strategy ${i + 1}`, 5000));
-        break;
-      }
-    }
-
-    this.ss.loadMatchStrategies().then(result => {
-      if (result)
-        this.activeMatchStrategies = result.filter(ms => ms.match && this.activeMatch && ms.match.match_id === this.activeMatch.match_id);
-    })
   }
 
   rankToColor(team: number): string {
