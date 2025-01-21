@@ -120,8 +120,10 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   getFieldForm(): void {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
-      this.fieldForm = result;
-      this.gs.triggerChange(() => this.adjustFieldImage());
+      this.gs.triggerChange(() => {
+        this.fieldForm = result;
+        this.gs.triggerChange(() => this.adjustFieldImage());
+      });
     }, (err: any) => {
       this.gs.triggerError(err);
     });
