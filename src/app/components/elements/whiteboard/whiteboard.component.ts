@@ -15,7 +15,7 @@ export class WhiteboardComponent implements OnInit {
   private lastX: number = 0;
   private lastY: number = 0;
   width = 500;
-  height = 300;
+  height = 200;
   private currentColor = 'black';
 
   // Calculate canvas dimensions dynamically
@@ -32,9 +32,15 @@ export class WhiteboardComponent implements OnInit {
     img.onload = () => {
       // Calculate canvas height to maintain aspect ratio
       this.canvasWidth = this.canvas.nativeElement.width;
-      this.canvasHeight = this.canvas.nativeElement.height;
+
+      this.canvasHeight = (img.height / img.width) * this.canvasWidth;
+      this.canvas.nativeElement.height = this.canvasHeight;
+      //this.height = this.canvasHeight
+
+      //this.canvasHeight = this.canvas.nativeElement.height;
       this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
       this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
+
       this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
     };
   }
