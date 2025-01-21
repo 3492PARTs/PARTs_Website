@@ -3,7 +3,7 @@ import { BoxComponent } from "../../../../atoms/box/box.component";
 import { AllianceSelection, Event, Team } from '../../../../../models/scouting.models';
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
-import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
+import { TableButtonType, TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 
@@ -24,7 +24,11 @@ export class AllianceSelectionComponent implements OnInit {
   allianceSelectionsTableCols: TableColType[] = [
     { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam },
     { PropertyName: 'order', ColLabel: 'Order' },
-    { PropertyName: 'note', ColLabel: 'Note' },
+    { PropertyName: 'note', ColLabel: 'Note', Type: 'area' },
+  ];
+  allianceSelectionsTableButtons: TableButtonType[] = [
+    { ButtonType: 'add', RecordCallBack: this.populateAllianceSelections },
+    { ButtonType: 'minus', RecordCallBack: this.populateAllianceSelections },
   ];
   triggerAllianceSelectionsTable = false;
 

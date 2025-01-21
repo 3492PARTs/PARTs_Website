@@ -81,7 +81,8 @@
               (FunctionCallBack)="Remove(rec)"></app-button>
 
             <ng-container *ngFor="let btn of TableDataButtons">
-              <app-button *ngIf="rec[btn.ButtonType + (btn.HideFunction?.name || '')] === true"
+              <app-button
+                *ngIf="btn.HideFunction ? (rec[btn.ButtonType + (btn.HideFunction.name || '')] === true) : true"
                 [ButtonType]="btn.ButtonType" [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)"
                 [Title]="btn.Title || ''" [Type]="btn.Type || ''">{{ btn.Text }}
               </app-button>

@@ -3,9 +3,9 @@
         <app-button (FunctionCallBack)="populateAllianceSelections()">Populate</app-button>
         </app-button-ribbon>
         }
-        <app-table [TableCols]="allianceSelectionsTableCols" [TableData]="allianceSelections" [Highlighting]="true"
-            [Stripes]="true" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'70vh'"
-            [TriggerUpdate]="triggerAllianceSelectionsTable">
+        <app-table [TableCols]="allianceSelectionsTableCols" [TableData]="allianceSelections"
+            [TableDataButtons]="allianceSelectionsTableButtons" [Highlighting]="true" [Stripes]="true" [Width]="'100%'"
+            [Scrollable]="true" [ScrollHeight]="'70vh'" [TriggerUpdate]="triggerAllianceSelectionsTable">
         </app-table>
         @if(allianceSelections.length > 0) { <app-button-ribbon>
             <app-button [ButtonType]="'success'" [Type]="'submit'"
