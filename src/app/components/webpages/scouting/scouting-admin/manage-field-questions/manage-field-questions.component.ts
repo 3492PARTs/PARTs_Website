@@ -146,7 +146,12 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
         this.gs.successfulResponseBanner(result);
         //this.hideBox();
-        this.getQuestionFlow();
+        if (this.activeQuestionFlow?.void_ind === 'y') {
+          this.resetQuestionFlow();
+          this.formInit();
+        }
+        else
+          this.getQuestionFlow();
       }, (err: any) => {
         this.gs.triggerError(err);
       });
@@ -155,14 +160,18 @@ export class ManageFieldQuestionsComponent implements OnInit {
   getQuestionFlow(): void {
     if (this.activeQuestionFlow) {
       this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
+        this.resetQuestionFlow();
         this.activeQuestionFlow = result;
-        this.activeQuestion = undefined;
-        this.activeQuestionBox = undefined;
-        //this.hideBox();
       }, (err: any) => {
         this.gs.triggerError(err);
       });
     }
+  }
+
+  resetQuestionFlow(): void {
+    this.activeQuestionFlow = undefined;
+    this.activeQuestion = undefined;
+    this.activeQuestionBox = undefined;
   }
 
   ynToYesNo(s: string): string {

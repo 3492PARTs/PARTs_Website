@@ -218,9 +218,10 @@ export interface IQuestionFlow {
     form_sub_typ: IFormSubType | undefined;
     questions: IQuestion[];
     question_answer: IQuestionAnswer | undefined;
+    void_ind: string;
 }
 
-export class QuestionFlow {
+export class QuestionFlow implements IQuestionFlow {
     id = NaN;
     name = "";
     single_run = false;
@@ -228,6 +229,7 @@ export class QuestionFlow {
     form_sub_typ!: FormSubType;
     questions: Question[] = [];
     question_answer: QuestionAnswer | undefined = undefined;
+    void_ind = 'n';
 }
 
 export class FormInitialization {

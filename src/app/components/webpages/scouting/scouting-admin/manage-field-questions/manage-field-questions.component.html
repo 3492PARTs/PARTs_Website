@@ -53,6 +53,10 @@
                         <app-form-element [Type]="'checkbox'" [LabelText]="'Single Run'"
                             [(Model)]="activeQuestionFlow.single_run" [FormGroup]="true"
                             [FormGroupInline]="true"></app-form-element>
+
+                        <app-form-element [Type]="'checkbox'" [LabelText]="'Delete'"
+                            [(Model)]="activeQuestionFlow.void_ind" [TrueValue]="'y'" [FalseValue]="'n'"
+                            [FormGroup]="true" [FormGroupInline]="true"></app-form-element>
                     </div>
                     <app-button [Type]="'submit'">Save</app-button>
                 </div>
