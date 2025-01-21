@@ -289,34 +289,36 @@
           <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
           <option [ngValue]="null" [disabled]="!DisplayEmptyOption"></option>
 
-          <ng-container *ngIf="BindingProperty && DisplayProperty">
-            <option
-              *ngFor="let obj of _SelectList"
-              [ngValue]="obj[BindingProperty]"
-            >
-              {{ obj[DisplayProperty] }}
-              {{
-                DisplayProperty2
+          @if (BindingProperty && DisplayProperty) {
+          <option
+            *ngFor="let obj of _SelectList"
+            [ngValue]="obj[BindingProperty]"
+          >
+            {{ obj[DisplayProperty] }}
+            {{
+              DisplayProperty2
+                ? obj[DisplayProperty2]
                   ? obj[DisplayProperty2]
-                    ? obj[DisplayProperty2]
-                    : ""
                   : ""
-              }}
-            </option>
-          </ng-container>
-
-          <ng-container *ngIf="!BindingProperty && DisplayProperty">
-            <option *ngFor="let obj of _SelectList" [ngValue]="obj">
-              {{ obj[DisplayProperty] }}
-              {{
-                DisplayProperty2
+                : ""
+            }}
+          </option>
+          } @else if (!BindingProperty && DisplayProperty) {
+          <option *ngFor="let obj of _SelectList" [ngValue]="obj">
+            {{ obj[DisplayProperty] }}
+            {{
+              DisplayProperty2
+                ? obj[DisplayProperty2]
                   ? obj[DisplayProperty2]
-                    ? obj[DisplayProperty2]
-                    : ""
                   : ""
-              }}
-            </option>
-          </ng-container>
+                : ""
+            }}
+          </option>
+          } @else {
+          <option *ngFor="let obj of _SelectList" [ngValue]="obj">
+            {{ obj }}
+          </option>
+          }
         </select>
       </ng-container>
 

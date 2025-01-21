@@ -42,6 +42,9 @@ export class ManageFieldQuestionsComponent implements OnInit {
   startX = NaN;
   startY = NaN;
 
+  fieldImageTypes = ['Original', 'Inverted', 'Full'];
+  fieldImageType = 'Original';
+
   availableQuestionFlows: QuestionFlow[] = [];
 
   activeFormSubType: FormSubType | undefined = undefined;
@@ -96,15 +99,25 @@ export class ManageFieldQuestionsComponent implements OnInit {
       this.gs.previewImageFile(this.fieldForm.inv_img, (ev: ProgressEvent<FileReader>) => {
         this.previewUrl = ev.target?.result as string;
       });
+    else
+      this.gs.previewImageFile(this.fieldForm.full_img, (ev: ProgressEvent<FileReader>) => {
+        this.previewUrl = ev.target?.result as string;
+      });
   }
 
   saveFieldImage(): void {
-    if (this.fieldForm.img || this.fieldForm.inv_img) {
+    if (this.fieldForm.img || this.fieldForm.inv_img || this.fieldForm.full_img) {
       const formData = new FormData();
+
       if (this.fieldForm.img)
         formData.append('img', this.fieldForm.img);
+
       if (this.fieldForm.inv_img)
         formData.append('inv_img', this.fieldForm.inv_img);
+
+      if (this.fieldForm.full_img)
+        formData.append('full_img', this.fieldForm.full_img);
+
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {

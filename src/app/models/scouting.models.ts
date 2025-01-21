@@ -476,6 +476,8 @@ export class FieldForm {
     img_url = '';
     inv_img!: File;
     inv_img_url = '';
+    full_img!: File;
+    full_img_url = '';
 }
 
 export interface IFormSubTypeForm {
