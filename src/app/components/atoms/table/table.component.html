@@ -82,7 +82,7 @@
 
             <ng-container *ngFor="let btn of TableDataButtons">
               <app-button
-                *ngIf="btn.HideFunction ? (rec[btn.ButtonType + (btn.HideFunction.name || '')] === true) : true"
+                *ngIf="btn.HideFunction ? (rec[btn.ButtonType + (btn.HideFunction.name || '')] === false) : true"
                 [ButtonType]="btn.ButtonType" [TableButton]="true" (FunctionCallBack)="btn.RecordCallBack(rec)"
                 [Title]="btn.Title || ''" [Type]="btn.Type || ''">{{ btn.Text }}
               </app-button>

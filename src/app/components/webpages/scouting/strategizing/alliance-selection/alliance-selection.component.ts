@@ -23,12 +23,12 @@ export class AllianceSelectionComponent implements OnInit {
 
   allianceSelectionsTableCols: TableColType[] = [
     { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam },
-    { PropertyName: 'order', ColLabel: 'Order' },
+    { PropertyName: 'order', ColLabel: 'Order', Width: '50px' },
     { PropertyName: 'note', ColLabel: 'Note', Type: 'area' },
   ];
   allianceSelectionsTableButtons: TableButtonType[] = [
-    { ButtonType: 'add', RecordCallBack: this.populateAllianceSelections },
-    { ButtonType: 'minus', RecordCallBack: this.populateAllianceSelections },
+    { ButtonType: 'minus', RecordCallBack: this.populateAllianceSelections, HideFunction: this.hideMinus },
+    { ButtonType: 'add', RecordCallBack: this.populateAllianceSelections, HideFunction: this.hidePlus.bind(this) },
   ];
   triggerAllianceSelectionsTable = false;
 
@@ -40,7 +40,11 @@ export class AllianceSelectionComponent implements OnInit {
     this.ss.loadAllScoutingInfo().then(result => {
       if (result) {
         this.currentEvent = result.events.find(e => e.current === 'y');
-        this.teams = result.teams;
+        this.teams = result.teams.sort((t1, t2) => {
+          if (t1.team_no > t2.team_no) return 1;
+          else if (t1.team_no < t2.team_no) return -1;
+          else return 0;
+        });
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
       }
@@ -79,4 +83,11 @@ export class AllianceSelectionComponent implements OnInit {
     return `${team.team_no} : ${team.team_nm}`;
   }
 
+  hideMinus(rec: AllianceSelection): boolean {
+    return rec.order === 1;
+  }
+
+  hidePlus(rec: AllianceSelection): boolean {
+    return rec.order === this.allianceSelections.length;
+  }
 }

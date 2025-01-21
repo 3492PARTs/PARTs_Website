@@ -178,6 +178,17 @@ export class TableComponent implements OnInit, OnChanges {
     }
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.SetTableContainerWidth();
+    }, 200);
+  }
+
   generateTableDisplayValues(): void {
     this.TableData.forEach(rec => {
       this.TableCols.forEach(col => {
@@ -207,17 +218,6 @@ export class TableComponent implements OnInit, OnChanges {
         });
       });
     });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
-    }
-
-    this.resizeTimer = window.setTimeout(() => {
-      this.SetTableContainerWidth();
-    }, 200);
   }
 
   private toType() {
@@ -320,7 +320,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn(): void {
-    const buttonWidth = 3.2;
+    const buttonWidth = 3.6;
     let colWidth = 0;
 
     if (this.ShowAddButton) {
