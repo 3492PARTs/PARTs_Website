@@ -1,15 +1,47 @@
 <app-box [Title]="'Alliance Selections'">
-    @if(allianceSelections.length <= 0) { <app-button-ribbon>
-        <app-button (FunctionCallBack)="populateAllianceSelections()">Populate</app-button>
-        </app-button-ribbon>
-        }
-        <app-table [TableCols]="allianceSelectionsTableCols" [TableData]="allianceSelections"
-            [TableDataButtons]="allianceSelectionsTableButtons" [Highlighting]="true" [Stripes]="true" [Width]="'100%'"
-            [Scrollable]="true" [ScrollHeight]="'70vh'" [TriggerUpdate]="triggerAllianceSelectionsTable">
-        </app-table>
-        @if(allianceSelections.length > 0) { <app-button-ribbon>
-            <app-button [ButtonType]="'success'" [Type]="'submit'"
-                (FunctionCallBack)="saveAllianceSelections()">Save</app-button>
-        </app-button-ribbon>
-        }
+  <app-button-ribbon
+    >@if(allianceSelections.length <= 0) {
+
+    <app-button (FunctionCallBack)="populateAllianceSelections()"
+      >Populate</app-button
+    >
+
+    } @else {
+    <app-button (FunctionCallBack)="startSelections()"
+      >Start Selections</app-button
+    >
+    }
+  </app-button-ribbon>
+
+  @if (selectionsActive) {
+  <app-form-element-group [LabelText]="'Teams'">
+    @for (team of teams; track $index) {
+    <app-button>{{ team.team_no }}</app-button>
+    }
+  </app-form-element-group>
+  }
+
+  <app-table
+    [TableCols]="allianceSelectionsTableCols"
+    [TableData]="allianceSelections"
+    [TableDataButtons]="allianceSelectionsTableButtons"
+    [Highlighting]="true"
+    [Stripes]="true"
+    [Width]="'100%'"
+    [Scrollable]="true"
+    [ScrollHeight]="'70vh'"
+    [TriggerUpdate]="triggerAllianceSelectionsTable"
+  >
+  </app-table>
+
+  @if(allianceSelections.length > 0) {
+  <app-button-ribbon>
+    <app-button
+      [ButtonType]="'success'"
+      [Type]="'submit'"
+      (FunctionCallBack)="saveAllianceSelections()"
+      >Save</app-button
+    >
+  </app-button-ribbon>
+  }
 </app-box>

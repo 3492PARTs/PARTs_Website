@@ -6,11 +6,12 @@ import { ScoutingService } from '../../../../../services/scouting.service';
 import { TableButtonType, TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
+import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-alliance-selection',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
+  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './alliance-selection.component.html',
   styleUrl: './alliance-selection.component.scss'
 })
@@ -31,6 +32,8 @@ export class AllianceSelectionComponent implements OnInit {
     { ButtonType: 'add', RecordCallBack: this.incrementOrder.bind(this), HideFunction: this.hidePlus.bind(this) },
   ];
   triggerAllianceSelectionsTable = false;
+
+  selectionsActive = false;
 
   constructor(private gs: GeneralService, private ss: ScoutingService) {
 
@@ -125,5 +128,9 @@ export class AllianceSelectionComponent implements OnInit {
 
     if (selection.order == 1 || selection.order == this.allianceSelections.length - 1)
       this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+  }
+
+  startSelections(): void {
+    this.selectionsActive = true;
   }
 }
