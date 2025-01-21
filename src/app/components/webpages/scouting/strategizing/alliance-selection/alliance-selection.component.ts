@@ -105,7 +105,8 @@ export class AllianceSelectionComponent implements OnInit {
     this.allianceSelections[i] = this.allianceSelections[i + 1];
     this.allianceSelections[i + 1] = selection;
 
-    this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+    if (selection.order == this.allianceSelections.length || selection.order == 2)
+      this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
   }
 
   decrementOrder(rec: AllianceSelection): void {
@@ -122,6 +123,7 @@ export class AllianceSelectionComponent implements OnInit {
     this.allianceSelections[i] = this.allianceSelections[i - 1];
     this.allianceSelections[i - 1] = selection;
 
-    this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+    if (selection.order == 1 || selection.order == this.allianceSelections.length - 1)
+      this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
   }
 }
