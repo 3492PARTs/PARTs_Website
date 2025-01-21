@@ -1,4 +1,4 @@
-# bar chart (& box plots? & stacked bars?)
+# bar chart (& box plots? & stacked bars?) line graph
 
 - averages
 -- how often someone makes it

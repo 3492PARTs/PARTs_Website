@@ -59,7 +59,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 1;
+  stopwatchSecond = 15;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
