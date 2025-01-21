@@ -15,8 +15,12 @@
 
   @if (selectionsActive) {
   <app-form-element-group [LabelText]="'Teams'">
-    @for (team of teams; track $index) {
-    <app-button>{{ team.team_no }}</app-button>
+    @for (team of teams; track $index; let i = $index) {
+    <app-button
+      [Opacity]="teamButtonData[i].disabled ? '0.7' : '1'"
+      (FunctionCallBack)="toggleDisableTeam(i)"
+      >{{ team.team_no }}</app-button
+    >
     }
   </app-form-element-group>
   }
@@ -31,6 +35,7 @@
     [Scrollable]="true"
     [ScrollHeight]="'70vh'"
     [TriggerUpdate]="triggerAllianceSelectionsTable"
+    [StrikeThroughFn]="strikeThoughAllianceSelection.bind(this)"
   >
   </app-table>
 

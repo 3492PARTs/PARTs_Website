@@ -24,6 +24,7 @@ export class ButtonComponent implements OnInit {
   @Input() BackgroundColor = '';
   @Input() Title = '';
   @Input() Color = '';
+  @Input() Opacity = '';
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 

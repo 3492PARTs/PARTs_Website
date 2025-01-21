@@ -21,9 +21,10 @@ export class AllianceSelectionComponent implements OnInit {
 
   currentEvent: Event | undefined = undefined;
   teams: Team[] = [];
+  teamButtonData: { disabled: boolean, team_id: number }[] = [];
 
   allianceSelectionsTableCols: TableColType[] = [
-    { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam },
+    { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam, },
     { PropertyName: 'order', ColLabel: 'Order', Width: '50px' },
     { PropertyName: 'note', ColLabel: 'Note', Type: 'area' },
   ];
@@ -50,6 +51,7 @@ export class AllianceSelectionComponent implements OnInit {
         });
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+        this.teamButtonData = this.teams.map<{ disabled: boolean, team_id: number }>(t => { return { disabled: false, team_id: t.team_no } });
       }
     });
   }
@@ -132,5 +134,16 @@ export class AllianceSelectionComponent implements OnInit {
 
   startSelections(): void {
     this.selectionsActive = true;
+  }
+
+  toggleDisableTeam(i: number) {
+    this.teamButtonData[i].disabled = !this.teamButtonData[i].disabled;
+    //this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
+  }
+
+  strikeThoughAllianceSelection(rec: AllianceSelection): boolean {
+    if (this.teamButtonData && this.teamButtonData.length > 0)
+      return this.teamButtonData.find(tbd => tbd.team_id === rec.team?.team_no)?.disabled || false
+    return false;
   }
 }

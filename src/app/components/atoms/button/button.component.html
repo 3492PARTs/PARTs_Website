@@ -3,115 +3,319 @@
 </ng-template>
 
 <ng-container [ngSwitch]="ButtonType">
-  <button *ngSwitchCase="'main'" class="btn btn-main" [ngClass]="{ 'btn-sm' : SmallButton }" (click)="RunFunction()"
-    type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'main'"
+    class="btn btn-main"
+    [ngClass]="{ 'btn-sm': SmallButton }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
-  <button *ngSwitchCase="'success'" class="btn btn-success" [ngClass]="{ 'btn-sm' : SmallButton }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'success'"
+    class="btn btn-success"
+    [ngClass]="{ 'btn-sm': SmallButton }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
-  <button *ngSwitchCase="'danger'" class="btn btn-danger" [ngClass]="{ 'btn-sm' : SmallButton }" (click)="RunFunction()"
-    type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'danger'"
+    class="btn btn-danger"
+    [ngClass]="{ 'btn-sm': SmallButton }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
-  <button *ngSwitchCase="'warning'" class="btn btn-warning" [ngClass]="{ 'btn-sm' : SmallButton }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'warning'"
+    class="btn btn-warning"
+    [ngClass]="{ 'btn-sm': SmallButton }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
-  <button *ngSwitchCase="'close'" class="btn-symbol close" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'close'"
+    class="btn-symbol close"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     &times;
   </button>
-  <button *ngSwitchCase="'add'" class="btn-symbol add" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'add'"
+    class="btn-symbol add"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     +
   </button>
-  <button *ngSwitchCase="'minus'" class="btn-symbol minus" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'minus'"
+    class="btn-symbol minus"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     -
   </button>
-  <button *ngSwitchCase="'edit'" class="btn-symbol edit" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'edit'"
+    class="btn-symbol edit"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
-        d="M14.078 4.232l-12.64 12.639-1.438 7.129 7.127-1.438 12.641-12.64-5.69-5.69zm-10.369 14.893l-.85-.85 11.141-11.125.849.849-11.14 11.126zm2.008 2.008l-.85-.85 11.141-11.125.85.85-11.141 11.125zm18.283-15.444l-2.816 2.818-5.691-5.691 2.816-2.816 5.691 5.689z" />
+        d="M14.078 4.232l-12.64 12.639-1.438 7.129 7.127-1.438 12.641-12.64-5.69-5.69zm-10.369 14.893l-.85-.85 11.141-11.125.849.849-11.14 11.126zm2.008 2.008l-.85-.85 11.141-11.125.85.85-11.141 11.125zm18.283-15.444l-2.816 2.818-5.691-5.691 2.816-2.816 5.691 5.689z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'refresh'" class="btn-symbol refresh" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'refresh'"
+    class="btn-symbol refresh"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <span class="mdi mdi-sync"></span>
   </button>
-  <button *ngSwitchCase="'view'" class="btn-symbol view" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'view'"
+    class="btn-symbol view"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
-        d="M12.015 7c4.751 0 8.063 3.012 9.504 4.636-1.401 1.837-4.713 5.364-9.504 5.364-4.42 0-7.93-3.536-9.478-5.407 1.493-1.647 4.817-4.593 9.478-4.593zm0-2c-7.569 0-12.015 6.551-12.015 6.551s4.835 7.449 12.015 7.449c7.733 0 11.985-7.449 11.985-7.449s-4.291-6.551-11.985-6.551zm-.015 5c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2zm0-2c-2.209 0-4 1.792-4 4 0 2.209 1.791 4 4 4s4-1.791 4-4c0-2.208-1.791-4-4-4z" />
+        d="M12.015 7c4.751 0 8.063 3.012 9.504 4.636-1.401 1.837-4.713 5.364-9.504 5.364-4.42 0-7.93-3.536-9.478-5.407 1.493-1.647 4.817-4.593 9.478-4.593zm0-2c-7.569 0-12.015 6.551-12.015 6.551s4.835 7.449 12.015 7.449c7.733 0 11.985-7.449 11.985-7.449s-4.291-6.551-11.985-6.551zm-.015 5c1.103 0 2 .897 2 2s-.897 2-2 2-2-.897-2-2 .897-2 2-2zm0-2c-2.209 0-4 1.792-4 4 0 2.209 1.791 4 4 4s4-1.791 4-4c0-2.208-1.791-4-4-4z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'delete'" class="btn-symbol delete" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'delete'"
+    class="btn-symbol delete"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
-        d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z" />
+        d="M9 19c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5-17v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712zm-3 4v16h-14v-16h-2v18h18v-18h-2z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'send'" class="btn-symbol send" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <button
+    *ngSwitchCase="'send'"
+    class="btn-symbol send"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
       <path
-        d="M0 12l11 3.1 7-8.1-8.156 5.672-4.312-1.202 15.362-7.68-3.974 14.57-3.75-3.339-2.17 2.925v-.769l-2-.56v7.383l4.473-6.031 4.527 4.031 6-22z" />
+        d="M0 12l11 3.1 7-8.1-8.156 5.672-4.312-1.202 15.362-7.68-3.974 14.57-3.75-3.339-2.17 2.925v-.769l-2-.56v7.383l4.473-6.031 4.527 4.031 6-22z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'save'" class="btn-symbol save" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <button
+    *ngSwitchCase="'save'"
+    class="btn-symbol save"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
       <path
-        d="M13 3h2.996v5h-2.996v-5zm11 1v20h-24v-24h20l4 4zm-17 5h10v-7h-10v7zm15-4.171l-2.828-2.829h-.172v9h-14v-9h-3v20h20v-17.171z" />
+        d="M13 3h2.996v5h-2.996v-5zm11 1v20h-24v-24h20l4 4zm-17 5h10v-7h-10v7zm15-4.171l-2.828-2.829h-.172v9h-14v-9h-3v20h20v-17.171z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'attach'" class="btn-symbol attach" [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <button
+    *ngSwitchCase="'attach'"
+    class="btn-symbol attach"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
       <path
-        d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z" />
+        d="M17 5v12c0 2.757-2.243 5-5 5s-5-2.243-5-5v-12c0-1.654 1.346-3 3-3s3 1.346 3 3v9c0 .551-.449 1-1 1s-1-.449-1-1v-8h-2v8c0 1.657 1.343 3 3 3s3-1.343 3-3v-9c0-2.761-2.239-5-5-5s-5 2.239-5 5v12c0 3.866 3.134 7 7 7s7-3.134 7-7v-12h-2z"
+      />
     </svg>
   </button>
-  <button *ngSwitchCase="'collapse'" class="btn-symbol collapse"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, transform: 'rotate(' + Rotate + ')' }"
-    [ngClass]="{'rotate': Direction}" (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    *ngSwitchCase="'collapse'"
+    class="btn-symbol collapse"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      transform: 'rotate(' + Rotate + ')'
+    }"
+    [ngClass]="{ rotate: Direction }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+      <path
+        d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"
+      />
     </svg>
   </button>
-  <button #thisButton *ngSwitchCase="'dismiss'" class="btn-symbol dismiss"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, color: Color }" (click)="RunFunction()" type="{{ Type }}"
-    [disabled]="Disabled">
+  <button
+    #thisButton
+    *ngSwitchCase="'dismiss'"
+    class="btn-symbol dismiss"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, color: Color }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     &times;
   </button>
-  <button #thisButton *ngSwitchCase="'archive'" class="btn-symbol archive"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    #thisButton
+    *ngSwitchCase="'archive'"
+    class="btn-symbol archive"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      'background-color': BackgroundColor,
+      color: Color,
+      fill: Color
+    }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <span class="mdi mdi-broom"></span>
   </button>
-  <button #thisButton *ngSwitchCase="'download'" class="btn-symbol download"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    #thisButton
+    *ngSwitchCase="'download'"
+    class="btn-symbol download"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      'background-color': BackgroundColor,
+      color: Color,
+      fill: Color
+    }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <span class="mdi mdi-cloud-download"></span>
   </button>
-  <button #thisButton *ngSwitchCase="'reset'" class="btn-symbol reset"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    #thisButton
+    *ngSwitchCase="'reset'"
+    class="btn-symbol reset"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      'background-color': BackgroundColor,
+      color: Color,
+      fill: Color
+    }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <span class="mdi mdi-restore"></span>
   </button>
-  <button #thisButton *ngSwitchCase="'search'" class="btn-symbol search"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
+  <button
+    #thisButton
+    *ngSwitchCase="'search'"
+    class="btn-symbol search"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      'background-color': BackgroundColor,
+      color: Color,
+      fill: Color
+    }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
     <span class="mdi mdi-magnify"></span>
   </button>
-  <button #thisButton *ngSwitchDefault="" class="btn-symbol"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, 'background-color': BackgroundColor, color: Color, fill: Color }"
-    (click)="RunFunction()" type="{{ Type }}" [disabled]="Disabled">
-    <span class="mdi mdi-{{ButtonType}}"></span>
+  <button
+    #thisButton
+    *ngSwitchDefault=""
+    class="btn-symbol"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      'background-color': BackgroundColor,
+      color: Color,
+      fill: Color
+    }"
+    (click)="RunFunction()"
+    type="{{ Type }}"
+    [disabled]="Disabled"
+    [ngStyle]="{ opacity: Opacity }"
+  >
+    <span class="mdi mdi-{{ ButtonType }}"></span>
   </button>
 </ng-container>
