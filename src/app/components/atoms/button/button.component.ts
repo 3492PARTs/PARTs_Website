@@ -15,7 +15,6 @@ export class ButtonComponent implements OnInit {
 
   @Input() Direction = false;
   @Input() Disabled = false;
-  @Input() TableButton = false;
   @Input() InvertColor = false;
   @Input() SymbolSize = '3rem';
   @Input() ElementID = '';

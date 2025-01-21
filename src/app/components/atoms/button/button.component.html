@@ -50,44 +50,40 @@
   <button
     *ngSwitchCase="'close'"
     class="btn-symbol close"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     &times;
   </button>
   <button
     *ngSwitchCase="'add'"
     class="btn-symbol add"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     +
   </button>
   <button
     *ngSwitchCase="'minus'"
     class="btn-symbol minus"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     -
   </button>
   <button
     *ngSwitchCase="'edit'"
     class="btn-symbol edit"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
@@ -98,22 +94,20 @@
   <button
     *ngSwitchCase="'refresh'"
     class="btn-symbol refresh"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-sync"></span>
   </button>
   <button
     *ngSwitchCase="'view'"
     class="btn-symbol view"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
@@ -124,11 +118,10 @@
   <button
     *ngSwitchCase="'delete'"
     class="btn-symbol delete"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
@@ -139,11 +132,10 @@
   <button
     *ngSwitchCase="'send'"
     class="btn-symbol send"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -159,11 +151,10 @@
   <button
     *ngSwitchCase="'save'"
     class="btn-symbol save"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -179,11 +170,10 @@
   <button
     *ngSwitchCase="'attach'"
     class="btn-symbol attach"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize }"
+    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -202,13 +192,13 @@
     [ngStyle]="{
       width: SymbolSize,
       height: SymbolSize,
-      transform: 'rotate(' + Rotate + ')'
+      transform: 'rotate(' + Rotate + ')',
+      opacity: Opacity
     }"
     [ngClass]="{ rotate: Direction }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path
@@ -220,11 +210,15 @@
     #thisButton
     *ngSwitchCase="'dismiss'"
     class="btn-symbol dismiss"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, color: Color }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      color: Color,
+      opacity: Opacity
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     &times;
   </button>
@@ -237,12 +231,12 @@
       height: SymbolSize,
       'background-color': BackgroundColor,
       color: Color,
-      fill: Color
+      fill: Color,
+      opacity: Opacity
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-broom"></span>
   </button>
@@ -255,12 +249,12 @@
       height: SymbolSize,
       'background-color': BackgroundColor,
       color: Color,
-      fill: Color
+      fill: Color,
+      opacity: Opacity
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-cloud-download"></span>
   </button>
@@ -273,12 +267,12 @@
       height: SymbolSize,
       'background-color': BackgroundColor,
       color: Color,
-      fill: Color
+      fill: Color,
+      opacity: Opacity
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-restore"></span>
   </button>
@@ -291,12 +285,12 @@
       height: SymbolSize,
       'background-color': BackgroundColor,
       color: Color,
-      fill: Color
+      fill: Color,
+      opacity: Opacity
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-magnify"></span>
   </button>
@@ -309,12 +303,12 @@
       height: SymbolSize,
       'background-color': BackgroundColor,
       color: Color,
-      fill: Color
+      fill: Color,
+      opacity: Opacity
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
   >
     <span class="mdi mdi-{{ ButtonType }}"></span>
   </button>
