@@ -328,7 +328,12 @@ export class ManageFieldQuestionsComponent implements OnInit {
   }
 
   adjustFieldImage(): void {
+    console.log("hi");
+    console.log(this.image);
+    console.log(window);
     if (this.image) {
+      console.log(window.innerWidth > window.innerHeight && this.image.nativeElement.offsetWidth < this.image.nativeElement.offsetHeight)
+
       if (window.innerWidth > window.innerHeight && this.image.nativeElement.offsetWidth < this.image.nativeElement.offsetHeight) {
         this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
         this.renderer.setStyle(this.image.nativeElement, 'height', '80vh');
