@@ -44,11 +44,13 @@ export class AllianceSelectionComponent implements OnInit {
     this.ss.loadAllScoutingInfo().then(result => {
       if (result) {
         this.currentEvent = result.events.find(e => e.current === 'y');
-        this.teams = result.teams.sort((t1, t2) => {
+
+        this.teams = result.teams.filter(t => t.team_no !== 3492).sort((t1, t2) => {
           if (t1.team_no > t2.team_no) return 1;
           else if (t1.team_no < t2.team_no) return -1;
           else return 0;
         });
+
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
         this.teamButtonData = this.teams.map<{ disabled: boolean, team_id: number }>(t => { return { disabled: false, team_id: t.team_no } });
