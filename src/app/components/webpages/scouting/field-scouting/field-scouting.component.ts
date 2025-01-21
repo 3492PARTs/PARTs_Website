@@ -443,7 +443,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
   }
 
-
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     if (!Number.isNaN(stage)) {
       if (show) {
@@ -468,19 +467,19 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           const nextStage = this.getNextStage(flow.questions, stage);
 
           // reset stage
-          if (nextStage < stage) {
-            if (!flow.single_run && flow.question_answer) {
-              this.scoutFieldResponse.answers.push(flow.question_answer);
-              flow.question_answer = undefined;
-              this.displayFlowStage(flow, this.getFirstStage(flow.questions));
-            }
-            else {
-              flow.questions.forEach(q => {
-                this.hideQuestionBox(q);
-              });
-            }
+          if (nextStage < stage && flow.question_answer) {
+            this.scoutFieldResponse.answers.push(flow.question_answer);
+            flow.question_answer = undefined;
+            //this.displayFlowStage(flow, this.getFirstStage(flow.questions));
           }
-          this.displayFlowStage(flow, nextStage);
+          // stop flow or go to next 
+          if (flow.single_run) {
+            flow.questions.forEach(q => {
+              this.hideQuestionBox(q);
+            });
+          }
+          else
+            this.displayFlowStage(flow, nextStage);
         }
       }
       else {
@@ -772,48 +771,3 @@ class FlowAction {
     this.question_id = question_id;
   }
 }
-
-/**
- *  undoFlowAction() {
-    let found = false;
-
-    const flowAction = this.flowsActionStack.pop();
-    if (flowAction) {
-      //check active
-      const flow = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flowAction.flow_id).pop();
-      if (flow && flow.question_answer) {
-
-        const index = flow.question_answer.question_flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
-        if (index >= 0) {
-          const question = flow.question_answer.question_flow_answers[index].question;
-          // hide current stage
-          if (question) {
-
-            this.displayFlowStage(flow, this.getNextStage(flow.questions, question.order), false);
-            this.displayFlowStage(flow, question.order);
-            
-            found = true
-          }
-
-          // remove answer
-          flow.question_answer.question_flow_answers.splice(index, 1);
-        }
-        else {
-          // do something id there is not answers like check next place???
-          const d = 0;
-        }
-      }
-      else {
-        // do something id there is not answers like check next place???
-        const d = 0;
-      }
-      const d = 0;
-
-      //check answers
-      if (!found) {
-        this.scoutFieldResponse.answers
-      }
-    }
-  }
-}
- */
