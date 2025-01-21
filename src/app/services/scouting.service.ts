@@ -431,14 +431,15 @@ export class ScoutingService {
 
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
     return new Promise<Team[] | null>(resolve => {
-      this.getTeams(true, true).then(async (result: Team[] | null) => {
+      this.getTeams(loadingScreen, true).then(async (result: Team[] | null) => {
         /** 
          * On success load results and store in db 
          **/
         if (result) {
           await this.updateTeamsCache(result);
 
-          this.loadAllScoutingInfo();
+          // TODO I am not sure why this is here.
+          // this.loadAllScoutingInfo();
 
           if (callbackFn) callbackFn(result);
         }

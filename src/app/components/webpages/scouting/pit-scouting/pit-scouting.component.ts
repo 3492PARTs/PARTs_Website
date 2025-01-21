@@ -108,10 +108,18 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         });
       }
 
+      const wasOutstanding = this.outstandingTeams.find(t => t.team_no == this.scoutPitResponse.team_id) ? true : false;
+
+
       this.outstandingTeams = teams?.filter(t => t.pit_result === 0) || [];
       if (amendWithOutstandingResponses) this.amendOutstandTeamsList();
 
       this.completedTeams = teams?.filter(t => t.pit_result === 1) || [];
+
+      if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
+        const fn = () => { window.location.reload(); }
+        this.gs.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
+      }
     }, 200);
 
   }
@@ -200,7 +208,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   addRobotPicture() {
-    if (this.robotPic)
+    if (this.robotPic && this.robotPic.size > 0)
       this.scoutPitResponse.robotPics.push(this.robotPic);
     this.removeRobotPicture();
   }

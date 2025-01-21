@@ -1,54 +1,111 @@
 <app-box [Title]="'Pit Scouting Form'">
-
-  <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResults.length > 0">
+  <app-form-element-group
+    [LabelText]="'Team results to upload'"
+    *ngIf="outstandingResults.length > 0"
+  >
     <div id="outstanding-results" class="flex align-items-center gap-1rem">
-      <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResponses()"></app-button>
-      <app-button [ButtonType]="'main'" *ngFor="let or of outstandingResults"
-        (FunctionCallBack)="viewResponse(or.id)">{{or.team}}</app-button>
+      <app-button
+        [ButtonType]="'refresh'"
+        (FunctionCallBack)="uploadOutstandingResponses()"
+      ></app-button>
+      <app-button
+        [ButtonType]="'main'"
+        *ngFor="let or of outstandingResults"
+        (FunctionCallBack)="viewResponse(or.id)"
+        >{{ or.team }}</app-button
+      >
     </div>
-
   </app-form-element-group>
-  <br *ngIf="outstandingResults.length > 0">
+  <br *ngIf="outstandingResults.length > 0" />
 
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
     <div *ngIf="formDisabled" class="padding-bottom-1rem">
-      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
+      <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()"
+        >Reset</app-button
+      >
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()"
+        >Remove Result</app-button
+      >
     </div>
 
     <div>
-      <app-form-element [LabelText]="'Not Scouted Teams'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
-        [SelectList]="outstandingTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team_id" (FunctionCallBack)="changeTeam()"
-        [DisplayEmptyOption]="true" [Required]="!scoutPitResponse.team_id" [MinWidth]="'190px'"
-        [Disabled]="formDisabled">
+      <app-form-element
+        [LabelText]="'Not Scouted Teams'"
+        [Type]="'select'"
+        [FormGroup]="true"
+        [FormGroupInline]="true"
+        [SelectList]="outstandingTeams"
+        [BindingProperty]="'team_no'"
+        [DisplayProperty]="'team_no'"
+        [DisplayProperty2]="'team_nm'"
+        [(Model)]="scoutPitResponse.team_id"
+        (FunctionCallBack)="changeTeam()"
+        [DisplayEmptyOption]="true"
+        [Required]="!scoutPitResponse.team_id"
+        [MinWidth]="'190px'"
+        [Disabled]="formDisabled"
+      >
       </app-form-element>
 
-      <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
-        [SelectList]="completedTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team_id" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team_id"
-        [Disabled]="formDisabled || apiStatus !== 'on'">
+      <app-form-element
+        [LabelText]="'Edit Scouted Team'"
+        [Type]="'select'"
+        [FormGroup]="true"
+        [FormGroupInline]="true"
+        [SelectList]="completedTeams"
+        [BindingProperty]="'team_no'"
+        [DisplayProperty]="'team_no'"
+        [DisplayProperty2]="'team_nm'"
+        [(Model)]="scoutPitResponse.team_id"
+        (FunctionCallBack)="changeTeam(true)"
+        [DisplayEmptyOption]="true"
+        [MinWidth]="'180px'"
+        [Required]="!scoutPitResponse.team_id"
+        [Disabled]="formDisabled || apiStatus !== 'on'"
+      >
       </app-form-element>
     </div>
 
-    <app-question-display-form [(Questions)]="questions" (FormElementsChange)="setFormElements($event)"
-      [Disabled]="formDisabled">
+    <app-question-display-form
+      [(Questions)]="questions"
+      (FormElementsChange)="setFormElements($event)"
+      [Disabled]="formDisabled"
+    >
     </app-question-display-form>
 
     <div class="flex align-items-baseline">
-      <app-form-element [LabelText]="'Robot Picture'" [Type]="'file'" [FormGroup]="true" [(Model)]="robotPic"
-        (change)="preview()" [Disabled]="formDisabled">
+      <app-form-element
+        [LabelText]="'Robot Picture'"
+        [Type]="'file'"
+        [FormGroup]="true"
+        [(Model)]="robotPic"
+        (change)="preview()"
+        [Disabled]="formDisabled"
+      >
       </app-form-element>
-      <app-button [ButtonType]="'add'" (FunctionCallBack)="addRobotPicture()" [Disabled]="formDisabled"></app-button>
-      <app-button [ButtonType]="'minus'" (FunctionCallBack)="removeRobotPicture()"
-        [Disabled]="formDisabled"></app-button>
+      <app-button
+        [ButtonType]="'add'"
+        (FunctionCallBack)="addRobotPicture()"
+        [Disabled]="formDisabled"
+      ></app-button>
+      <app-button
+        [ButtonType]="'minus'"
+        (FunctionCallBack)="removeRobotPicture()"
+        [Disabled]="formDisabled"
+      ></app-button>
     </div>
-    <p>*Select or take an image with the paperclip, press add before saving to put the picture in the list to save.</p>
+    <p>
+      *Select or take an image with the paperclip, press add before saving to
+      put the picture in the list to save.
+    </p>
 
     <div *ngIf="scoutPitResponse.robotPics.length > 0">
       <div *ngFor="let pic of scoutPitResponse.robotPics; let i = index">
-        <app-button [ButtonType]="'delete'" (FunctionCallBack)="deleteStagedPic(i)"></app-button>{{pic.name}}
+        <app-button
+          [ButtonType]="'delete'"
+          (FunctionCallBack)="deleteStagedPic(i)"
+        ></app-button
+        >{{ pic.name }}
       </div>
     </div>
 
@@ -57,12 +114,17 @@
     <div *ngIf="previewImages.length > 0">
       <p>Existing images</p>
       <div *ngFor="let pic of previewImages">
-        <img [src]="pic.pic" height="300">
+        <img [src]="pic.pic" height="300" />
       </div>
     </div>
 
     <app-button-ribbon>
-      <app-button [ButtonType]="'main'" [Type]="'submit'" [Disabled]="formDisabled">Save</app-button>
+      <app-button
+        [ButtonType]="'main'"
+        [Type]="'submit'"
+        [Disabled]="formDisabled"
+        >Save</app-button
+      >
     </app-button-ribbon>
   </app-form>
 </app-box>
