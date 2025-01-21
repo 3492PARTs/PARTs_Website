@@ -751,4 +751,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   runResetFunction(): void {
     this.ResetFunction.emit();
   }
+
+  setRating(n: number): void {
+    if (!this.Disabled)
+      this.change(n);
+  }
 }
