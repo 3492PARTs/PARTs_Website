@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote, MatchStrategy, IMatchStrategy, FieldFormForm, IFieldFormForm } from '../models/scouting.models';
+import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote, MatchStrategy, IMatchStrategy, FieldFormForm, IFieldFormForm, AllianceSelection, IAllianceSelection } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
 import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
@@ -22,6 +22,7 @@ export class CacheService {
   TeamNote!: DexieCrud<TeamNote, number>;
   Match!: DexieCrud<Match, string>;
   MatchStrategy!: DexieCrud<MatchStrategy, number>;
+  AllianceSelection!: DexieCrud<AllianceSelection, number>;
   FieldFormForm!: DexieCrud<FieldFormForm, number>;
   ScoutFieldSchedule!: DexieCrud<ScoutFieldSchedule, number>;
   ScoutFieldFormResponse!: DexieCrud<ScoutFieldFormResponse, number>;
@@ -52,6 +53,7 @@ export class CacheService {
     this.TeamNote = new DexieCrud<ITeamNote, number>(this.dbs.TeamNoteTable);
     this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
     this.MatchStrategy = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyTable);
+    this.AllianceSelection = new DexieCrud<IAllianceSelection, number>(this.dbs.AllianceSelectionTable);
     this.FieldFormForm = new DexieCrud<IFieldFormForm, number>(this.dbs.FieldFormFormTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.dbs.ScoutFieldScheduleTable);
     this.ScoutFieldFormResponse = new DexieCrud<IScoutFieldFormResponse, number>(this.dbs.ScoutFieldFormResponseTable);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy, AllianceSelection, IAllianceSelection } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
@@ -29,6 +29,7 @@ export class ScoutingService {
   private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
   private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
   private outstandingLoadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
+  private outstandingLoadAllianceSelectionPromise: Promise<AllianceSelection[] | null> | null = null;
   private outstandingUploadOutstandingResponsesPromise: Promise<void> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
@@ -121,6 +122,7 @@ export class ScoutingService {
           await this.updateTeamNotesCache(result.team_notes);
           await this.updateMatchStrategiesCache(result.match_strategies);
           await this.updateFieldFormFormCache(result.field_form_form);
+          await this.updateAllianceSelectionCache(result.alliance_selections);
 
           if (callbackFn) callbackFn(result);
 
@@ -1216,6 +1218,76 @@ export class ScoutingService {
   filterMatchStrategiesFromCache(fn: (obj: MatchStrategy) => boolean): PromiseExtended<MatchStrategy[]> {
     return this.cs.MatchStrategy.filterAll(fn);
   }
+
+  // Alliance Selections -----------------------------------------------------------
+  loadAllianceSelection(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllianceSelection[] | null> {
+    if (!this.outstandingLoadAllianceSelectionPromise) {
+      this.outstandingLoadAllianceSelectionPromise = new Promise<AllianceSelection[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/strategizing/alliance-selection/', undefined, async (result: AllianceSelection[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateAllianceSelectionCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          let result: AllianceSelection[] = [];
+
+          await this.getAllianceSelectionFromCache().then((tns: AllianceSelection[]) => {
+            result = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner(0, 'Error loading alliance selections form from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.outstandingLoadAllianceSelectionPromise = null;
+        }, () => {
+          this.outstandingLoadAllianceSelectionPromise = null;
+        });
+      });
+    }
+
+    return this.outstandingLoadAllianceSelectionPromise;
+  }
+
+  saveAllianceSelections(selections: AllianceSelection[], loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+      }, (error) => {
+        this.gs.triggerError(error);
+      });
+    });
+  }
+
+  private async updateAllianceSelectionCache(selections: AllianceSelection[]) {
+    await this.cs.AllianceSelection.RemoveAllAsync().then(async () => {
+      await this.cs.AllianceSelection.AddBulkAsync(selections);
+    });
+  }
+
+  getAllianceSelectionFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IAllianceSelection[]> {
+    return this.cs.AllianceSelection.getAll(filterDelegate);
+  }
+
+  filterAllianceSelectionFromCache(fn: (obj: AllianceSelection) => boolean): PromiseExtended<AllianceSelection[]> {
+    return this.cs.AllianceSelection.filterAll(fn);
+  }
+
   // Others ----------------------------------------------------------------------
 
   getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<Question[]> {

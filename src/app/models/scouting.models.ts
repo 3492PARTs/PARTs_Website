@@ -435,6 +435,7 @@ export class AllScoutInfo {
     team_notes: TeamNote[] = [];
     match_strategies: MatchStrategy[] = [];
     field_form_form = new FieldFormForm();
+    alliance_selections: AllianceSelection[] = [];
 }
 
 export class ScoutPitSchedule {
@@ -514,4 +515,27 @@ export class MatchStrategy implements IMatchStrategy {
     user: User | undefined = undefined;
     strategy = '';
     time = new Date()
+}
+
+export interface IAllianceSelection {
+    id: number;
+    event: Event | undefined;
+    team: Team | undefined;
+    note: string;
+    order: number;
+}
+
+export class AllianceSelection implements IAllianceSelection {
+    id = NaN;
+    event: Event | undefined = undefined;
+    team: Team | undefined = undefined;
+    note = "";
+    order = NaN;
+
+    constructor(event: Event, team: Team, note: string, order: number) {
+        this.event = event;
+        this.team = team;
+        this.note = note;
+        this.order = order;
+    }
 }
