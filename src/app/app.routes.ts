@@ -48,6 +48,7 @@ import { ProfileComponent } from './components/webpages/user/profile/profile.com
 import { authGuard } from './helpers/auth.guard';
 import { CalendarComponent } from './components/webpages/calendar/calendar.component';
 import { MetricsComponent } from './components/webpages/scouting/strategizing/metrics/metrics.component';
+import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -70,6 +71,7 @@ export const routes: Routes = [
     { path: 'scouting/portal', title: 'Scout Portal', component: ScoutingPortalComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/plan-matches', title: 'Plan Matches', component: PlanMatchesComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/team-notes', title: 'Team Notes', component: TeamNotesComponent, canActivate: [authGuard] },
+    { path: 'scouting/strategizing/alliance-selection', title: 'Alliance Selection', component: AllianceSelectionComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/metrics', title: 'Metrics', component: MetricsComponent, canActivate: [authGuard] },
     { path: 'contact', title: 'Contact Us', component: ContactComponent },
     { path: 'calendar', title: 'Calendar', component: CalendarComponent },
