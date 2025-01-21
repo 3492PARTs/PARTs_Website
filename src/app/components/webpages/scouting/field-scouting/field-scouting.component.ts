@@ -29,6 +29,7 @@ import { throwError } from 'rxjs';
   styleUrls: ['./field-scouting.component.scss']
 })
 export class FieldScoutingComponent implements OnInit, OnDestroy {
+  invertedImage = true;
   fieldForm = new FieldForm();
   formSubTypeForms: FormSubTypeForm[] = [];
   activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
@@ -420,6 +421,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // Create new Question Answer to hold the flow answers
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
+
+      // adjust answer for inverted images
+      if (question.question_typ.question_typ === 'mnt-psh-btn' && this.invertedImage) {
+        question.answer['x'] = 50 - (question.answer['x'] - 50) + question.scout_question.width;
+      }
+
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
       // Add Flows stage answer
@@ -611,12 +618,21 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       !this.gs.strNoE(question.scout_question.width) &&
       !this.gs.strNoE(question.scout_question.height) &&
       box) {
-      this.renderer.setStyle(box, 'display', 'block');
-      this.renderer.setStyle(box, 'width', `${question.scout_question.width}%`);
-      this.renderer.setStyle(box, 'height', `${question.scout_question.height}%`);
+      let width = question.scout_question.width;
+      let height = question.scout_question.height;
+      let x = question.scout_question.x;
+      let y = question.scout_question.y;
 
-      this.renderer.setStyle(box, 'left', `${question.scout_question.x}%`);
-      this.renderer.setStyle(box, 'top', `${question.scout_question.y}%`);
+      if (this.invertedImage) {
+        x = 50 + (50 - x) - width;
+      }
+
+      this.renderer.setStyle(box, 'display', "block");
+      this.renderer.setStyle(box, 'width', `${width}%`);
+      this.renderer.setStyle(box, 'height', `${height}%`);
+
+      this.renderer.setStyle(box, 'left', `${x}%`);
+      this.renderer.setStyle(box, 'top', `${y}%`);
     }
 
   }

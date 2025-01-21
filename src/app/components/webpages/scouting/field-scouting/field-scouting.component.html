@@ -116,7 +116,8 @@
           *ngIf="activeFormSubTypeForm && activeFormSubTypeForm?.question_flows && activeFormSubTypeForm.question_flows.length > 0"
           (click)="stopwatchStart()">
 
-          <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm" [src]="fieldForm.img_url">
+          <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm"
+            [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url">
 
           <div class="flow" *ngFor="let flow of (activeFormSubTypeForm?.question_flows || [])">
             <div #box class="box" *ngFor="let q of flow.questions; let i = index" id="{{q.question_id}}"
