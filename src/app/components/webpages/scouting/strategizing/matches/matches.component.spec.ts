@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PlanMatchesComponent } from './plan-matches.component';
+import { PlanMatchesComponent } from './matches.component';
 
 describe('PlanMatchesComponent', () => {
   let component: PlanMatchesComponent;

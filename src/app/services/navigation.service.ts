@@ -87,7 +87,8 @@ export class NavigationService {
             break;
           case 'strategizing':
             subPages = [
-              new Link('Matches', '/scouting/strategizing/plan-matches', 'soccer-field'),
+              new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
+              new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),
               new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
               new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
               new Link('Alliance Selection', '/scouting/strategizing/alliance-selection', 'account-multiple-plus'),

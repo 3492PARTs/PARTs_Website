@@ -7,12 +7,11 @@ import { TableButtonType, TableColType, TableComponent } from '../../../../atoms
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
-import { WhiteboardComponent } from "../../../../elements/whiteboard/whiteboard.component";
 
 @Component({
   selector: 'app-alliance-selection',
   standalone: true,
-  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, WhiteboardComponent],
+  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './alliance-selection.component.html',
   styleUrl: './alliance-selection.component.scss'
 })
@@ -38,8 +37,6 @@ export class AllianceSelectionComponent implements OnInit {
 
   selectionsActive = false;
 
-  url = '';
-
   constructor(private gs: GeneralService, private ss: ScoutingService) {
 
   }
@@ -54,8 +51,6 @@ export class AllianceSelectionComponent implements OnInit {
           else if (t1.team_no < t2.team_no) return -1;
           else return 0;
         });
-
-        this.url = result.field_form_form.field_form.full_img_url;
 
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;

@@ -27,10 +27,10 @@ import { Banner } from '../../../../../models/api.models';
   selector: 'app-plan-matches',
   standalone: true,
   imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent, BuildSeasonComponent, FormComponent],
-  templateUrl: './plan-matches.component.html',
-  styleUrls: ['./plan-matches.component.scss']
+  templateUrl: './matches.component.html',
+  styleUrls: ['./matches.component.scss']
 })
-export class PlanMatchesComponent implements OnInit {
+export class MatchesComponent implements OnInit {
 
   matches: Match[] = [];
   teams: Team[] = [];

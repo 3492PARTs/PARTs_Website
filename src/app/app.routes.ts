@@ -26,7 +26,7 @@ import { WallpapersComponent } from './components/webpages/media/wallpapers/wall
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
 import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
 import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
-import { PlanMatchesComponent } from './components/webpages/scouting/strategizing/plan-matches/plan-matches.component';
+import { MatchesComponent } from './components/webpages/scouting/strategizing/matches/matches.component';
 import { TeamNotesComponent } from './components/webpages/scouting/strategizing/team-notes/team-notes.component';
 import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
 import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
@@ -49,6 +49,7 @@ import { authGuard } from './helpers/auth.guard';
 import { CalendarComponent } from './components/webpages/calendar/calendar.component';
 import { MetricsComponent } from './components/webpages/scouting/strategizing/metrics/metrics.component';
 import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
+import { MatchPlanningComponent } from './components/webpages/scouting/strategizing/match-planning/match-planning.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -69,10 +70,11 @@ export const routes: Routes = [
     { path: 'scouting/field-responses', title: 'Field Responses', component: FieldScoutingResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/pit-responses', title: 'Pit Responses', component: ScoutPitResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/portal', title: 'Scout Portal', component: ScoutingPortalComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/plan-matches', title: 'Plan Matches', component: PlanMatchesComponent, canActivate: [authGuard] },
+    { path: 'scouting/strategizing/matches', title: 'Matches', component: MatchesComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/team-notes', title: 'Team Notes', component: TeamNotesComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/alliance-selection', title: 'Alliance Selection', component: AllianceSelectionComponent, canActivate: [authGuard] },
     { path: 'scouting/strategizing/metrics', title: 'Metrics', component: MetricsComponent, canActivate: [authGuard] },
+    { path: 'scouting/strategizing/match-planning', title: 'Match Planning', component: MatchPlanningComponent, canActivate: [authGuard] },
     { path: 'contact', title: 'Contact Us', component: ContactComponent },
     { path: 'calendar', title: 'Calendar', component: CalendarComponent },
     { path: 'join', title: 'Join', component: JoinComponent },
