@@ -1,9 +1,4 @@
-<div
-  class="loading"
-  [ngClass]="{ hidden: !loading }"
-  #loadingDiv
-  [ngStyle]="{ width: Width }"
->
+<div *ngIf="loading" class="loading" [ngStyle]="{ width: Width }">
   <div class="lds-ripple">
     <div></div>
     <div></div>

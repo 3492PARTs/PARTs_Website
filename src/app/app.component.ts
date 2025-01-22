@@ -10,13 +10,14 @@ import { GeneralService } from './services/general.service';
 import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from './components/atoms/button/button.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { LoadingComponent } from "./components/elements/loading/loading.component";
 
 declare const gtag: Function;
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
+  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent, LoadingComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

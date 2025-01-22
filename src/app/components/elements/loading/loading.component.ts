@@ -12,7 +12,6 @@ import { GeneralService } from '../../../services/general.service';
 export class LoadingComponent implements OnInit {
   @Input() Width = '';
   loading = false;
-  @ViewChild('loadingDiv', { read: ElementRef, static: true }) loadingDiv: ElementRef | undefined = undefined;
 
 
   constructor(private gs: GeneralService) {

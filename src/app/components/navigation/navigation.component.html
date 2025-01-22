@@ -525,16 +525,6 @@
     }"
     (appClickInside)="closeNavOnMobile()"
   >
-    <app-loading
-      [Width]="
-        hideNavExpander
-          ? 'width: 100%'
-          : navExpanded
-          ? 'calc(100% - 22.4rem)'
-          : 'calc(100% - 10.4rem)'
-      "
-    ></app-loading>
-
     <!--main page content-->
     <main
       #thisMain
