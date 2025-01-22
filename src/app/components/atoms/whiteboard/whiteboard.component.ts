@@ -28,6 +28,8 @@ export class WhiteboardComponent implements OnInit {
   private scaleX = 1;
   private scaleY = 1;
 
+  private stampText = '3492';
+
   @Input() set ImageUrl(s: string) {
     this.setImage(s);
   }
@@ -55,6 +57,35 @@ export class WhiteboardComponent implements OnInit {
 
   selectColor(color: string) {
     this.currentColor = color;
+  }
+
+  onCanvasClick(event: MouseEvent) {
+    const rect = this.canvas.nativeElement.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / this.scaleX;
+    const y = (event.clientY - rect.top) / this.scaleY;
+
+    if (this.stampText) {
+      // Get text dimensions
+      this.ctx.font = '20px Arial';
+      const textMetrics = this.ctx.measureText(this.stampText);
+      const textWidth = textMetrics.width;
+      const textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+
+      // Calculate box coordinates
+      const boxX = x - 5;
+      const boxY = y - 20;
+      const boxWidth = textWidth + 10;
+      const boxHeight = textHeight + 10;
+
+      // Draw the box
+      this.ctx.strokeStyle = 'black';
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+      // Draw the text
+      this.ctx.fillStyle = 'red';
+      this.ctx.fillText(this.stampText, x, y);
+    }
   }
 
   onMouseDown(event: MouseEvent) {
