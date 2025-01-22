@@ -107,19 +107,19 @@ export class MatchesComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingResponses().then(result => {
+    //this.gs.incrementOutstandingCalls();
+    this.ss.loadFieldScoutingResponses(false).then(result => {
       if (result) {
         this.scoutCols = result.scoutCols;
 
         this.buildGraphOptionsList();
       }
-      this.gs.decrementOutstandingCalls();
+      //this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadPitScoutingResponses().then(result => {
-      this.gs.decrementOutstandingCalls();
+    //this.gs.incrementOutstandingCalls();
+    this.ss.loadPitScoutingResponses(false).then(result => {
+      //this.gs.decrementOutstandingCalls();
     });
   }
 
