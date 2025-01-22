@@ -31,6 +31,33 @@ export class NavigationService {
     ], 'Members Area'),
   ];
 
+  readonly allSubPages = [[
+    new Link('Users', '/admin/admin-users', 'account-group'),
+    new Link('Security', '/admin/security', 'security'),
+    new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
+    new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
+    new Link('Phone Types', '/admin/phone-types', 'phone'),
+    new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
+  ], [
+    new Link('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
+    new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
+    new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
+    new Link('Field Form', '/scouting/scouting-admin/manage-field-questions', 'form-select'),
+    new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
+    new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
+    new Link('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
+    new Link('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
+    new Link('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
+    new Link('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
+    new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
+  ], [
+    new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
+    new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),
+    new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
+    new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
+    new Link('Alliance Selection', '/scouting/strategizing/alliance-selection', 'account-multiple-plus'),
+  ]];
+
   /* Active sub Page */
   private subPageBS = new BehaviorSubject<string>('');
   subPage = this.subPageBS.asObservable();
@@ -58,41 +85,16 @@ export class NavigationService {
     let subPages: Link[] = [];
     switch (area[1]) {
       case 'admin':
-        subPages = [
-          new Link('Users', '/admin/admin-users', 'account-group'),
-          new Link('Security', '/admin/security', 'security'),
-          new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
-          new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
-          new Link('Phone Types', '/admin/phone-types', 'phone'),
-          new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
-        ];
+        subPages = this.allSubPages[0];
         if (!environment.production) subPages.push(new Link('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
       case 'scouting':
         switch (area[2]) {
           case 'scouting-admin':
-            subPages = [
-              new Link('Scouting Activity', '/scouting/scouting-admin/activity', 'account-reactivate'),
-              new Link('Schedule', '/scouting/scouting-admin/schedule', 'clipboard-text-clock'),
-              new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
-              new Link('Field Form', '/scouting/scouting-admin/manage-field-questions', 'form-select'),
-              new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
-              new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
-              new Link('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
-              new Link('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
-              new Link('Pit Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
-              new Link('Pit Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
-              new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
-            ];
+            subPages = this.allSubPages[1];
             break;
           case 'strategizing':
-            subPages = [
-              new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
-              new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),
-              new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
-              new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
-              new Link('Alliance Selection', '/scouting/strategizing/alliance-selection', 'account-multiple-plus'),
-            ];
+            subPages = this.allSubPages[2];
             break;
         }
         break;

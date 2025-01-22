@@ -77,10 +77,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   frontendEnv = "";
   backendEnv = "";
 
+  //subPages: Link[] = [];
+  subPage = '';
+
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
     private auth: AuthService,
-    private cs: CacheService,
     private router: Router,
     private api: APIService,
     private pwa: PwaService,
@@ -143,12 +145,36 @@ export class NavigationComponent implements OnInit, AfterViewInit {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
-
-
-          if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
-
         }
       });
+
+    //this.navigationService.subPages.subscribe(s => this.subPages = s);
+
+    this.navigationService.subPage.subscribe(s => {
+      if (this.subPage !== s) {
+        let isFirst = false;
+        this.navigationService.allSubPages.forEach(spg => {
+          if (spg[0] && spg[0].routerlink === s) {
+            isFirst = true;
+          }
+        });
+
+        let urlPieces = this.subPage.split('/');
+        urlPieces.splice(urlPieces.length - 1, 1);
+        const url1 = urlPieces.join('/');
+
+        urlPieces = s.split('/');
+        urlPieces.splice(urlPieces.length - 1, 1);
+        const url2 = urlPieces.join('/');
+
+        const stayOpen = isFirst && this.subPage !== '' && url1 !== url2;
+
+        //true is open, false closed
+        if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(stayOpen);
+
+        this.subPage = s;
+      }
+    });
 
     this.ns.notifications.subscribe(n => this.notifications = n);
     this.ns.messages.subscribe(m => this.messages = m);
