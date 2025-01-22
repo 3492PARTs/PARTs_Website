@@ -36,7 +36,9 @@
           ></app-form-element>
           }
 
-          <app-button [Type]="'submit'">Save</app-button>
+          <app-button [Type]="'submit'" [ButtonType]="'success'"
+            >Save</app-button
+          >
         </div>
         @if (previewUrl) {
         <img id="preview-image" [src]="previewUrl" />
@@ -135,7 +137,9 @@
               [FormGroupInline]="true"
             ></app-form-element>
           </div>
-          <app-button [Type]="'submit'">Save</app-button>
+          <app-button [Type]="'submit'" [ButtonType]="'success'"
+            >Save</app-button
+          >
         </div>
         }
       </div>

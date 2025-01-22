@@ -1,40 +1,74 @@
 <app-box [Title]="'Manage Field Question Aggregates'">
-    <app-table [TableCols]="fieldQuestionAggregatesTableCols" [TableData]="fieldQuestionAggregates" [Width]="'100%'"
-        [ShowAddButton]="true" (AddRecordCallBack)="showFieldQuestionAggregateModal()" [ShowEditButton]="true"
-        (EditRecordCallBack)="showFieldQuestionAggregateModal($event)"></app-table>
+  <app-table
+    [TableCols]="fieldQuestionAggregatesTableCols"
+    [TableData]="fieldQuestionAggregates"
+    [Width]="'100%'"
+    [ShowAddButton]="true"
+    (AddRecordCallBack)="showFieldQuestionAggregateModal()"
+    [ShowEditButton]="true"
+    (EditRecordCallBack)="showFieldQuestionAggregateModal($event)"
+  ></app-table>
 
-    <app-modal [Title]="'Field Question Aggregate'" [(visible)]="fieldQuestionAggregateModalVisible"
-        [MaxWidth]="'500px'">
-        <app-form (SubmitFunction)="saveQuestionAggregate()">
-            <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeFieldQuestionAggregate.field_name"
-                [Required]="true"></app-form-element>
+  <app-modal
+    [Title]="'Field Question Aggregate'"
+    [(visible)]="fieldQuestionAggregateModalVisible"
+    [MaxWidth]="'500px'"
+  >
+    <app-form (SubmitFunction)="saveQuestionAggregate()">
+      <app-form-element
+        [Type]="'text'"
+        [LabelText]="'Name'"
+        [(Model)]="activeFieldQuestionAggregate.field_name"
+        [Required]="true"
+      ></app-form-element>
 
-            <app-form-element [Type]="'select'" [LabelText]="'Aggregate Function'"
-                [(Model)]="activeFieldQuestionAggregate.question_aggregate_typ" [Required]="true"
-                [SelectList]="questionAggregateTypes" [DisplayProperty]="'question_aggregate_nm'"
-                [SelectComparatorFunction]="compareQuestionAggregateTypes"></app-form-element>
+      <app-form-element
+        [Type]="'select'"
+        [LabelText]="'Aggregate Function'"
+        [(Model)]="activeFieldQuestionAggregate.question_aggregate_typ"
+        [Required]="true"
+        [SelectList]="questionAggregateTypes"
+        [DisplayProperty]="'question_aggregate_nm'"
+        [SelectComparatorFunction]="compareQuestionAggregateTypes"
+      ></app-form-element>
 
-            <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeFieldQuestionAggregate.active"
-                [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
+      <app-form-element
+        [Type]="'checkbox'"
+        [LabelText]="'Active'"
+        [(Model)]="activeFieldQuestionAggregate.active"
+        [TrueValue]="'y'"
+        [FalseValue]="'n'"
+      ></app-form-element>
 
+      <app-button-ribbon>
+        <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+      </app-button-ribbon>
 
-            <app-button-ribbon>
-                <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
-            </app-button-ribbon>
+      <div class="flex align-items-baseline justify-content-flex-end">
+        <div class="overflow-hidden">
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Question'"
+            [(Model)]="fieldQuestionToAddToAgg"
+            [SelectList]="fieldQuestionAggQuestionList"
+            [DisplayProperty]="'display_value'"
+          >
+          </app-form-element>
+        </div>
 
-            <div class="flex align-items-baseline justify-content-flex-end">
-                <div class="overflow-hidden">
-                    <app-form-element [Type]="'select'" [LabelText]="'Question'" [(Model)]="fieldQuestionToAddToAgg"
-                        [SelectList]="fieldQuestionAggQuestionList" [DisplayProperty]="'display_value'">
-                    </app-form-element>
-                </div>
+        <app-button
+          [ButtonType]="'add'"
+          (FunctionCallBack)="addQuestionToFieldAggregate()"
+        ></app-button>
+      </div>
 
-                <app-button [ButtonType]="'add'" (FunctionCallBack)="addQuestionToFieldAggregate()"></app-button>
-            </div>
-
-            <app-table [TableCols]="fieldQuestionAggregateQuestionsTableCols"
-                [TableData]="activeFieldQuestionAggregate.questions" [Width]="'100%'" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="removeQuestionFromFieldAggregate($event)"></app-table>
-        </app-form>
-    </app-modal>
+      <app-table
+        [TableCols]="fieldQuestionAggregateQuestionsTableCols"
+        [TableData]="activeFieldQuestionAggregate.questions"
+        [Width]="'100%'"
+        [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeQuestionFromFieldAggregate($event)"
+      ></app-table>
+    </app-form>
+  </app-modal>
 </app-box>

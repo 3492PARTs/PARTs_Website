@@ -1,50 +1,93 @@
 <app-box [Title]="'Manage Users'">
+  <app-table
+    [TableCols]="userTableCols"
+    [TableData]="users"
+    [EnableFilter]="true"
+    [Scrollable]="true"
+    [ShowEditButton]="true"
+    (EditRecordCallBack)="showManageUserModal($event)"
+    [ScrollHeight]="'50rem'"
+  >
+  </app-table>
 
-    <app-table [TableCols]="userTableCols" [TableData]="users" [EnableFilter]="true" [Scrollable]="true"
-        [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ScrollHeight]="'50rem'">
-    </app-table>
+  <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
+    <app-form (SubmitFunction)="saveUser()">
+      <div class="flex flex-wrap">
+        <div>
+          <app-form-element
+            [Type]="'text'"
+            [LabelText]="'First Name'"
+            [(Model)]="activeUser.first_name"
+            [FormGroupInline]="true"
+            [Required]="true"
+          >
+          </app-form-element>
+          <app-form-element
+            [Type]="'text'"
+            [LabelText]="'Last Name'"
+            [(Model)]="activeUser.last_name"
+            [FormGroupInline]="true"
+            [Required]="true"
+          >
+          </app-form-element>
+          <app-form-element
+            [Type]="'text'"
+            [LabelText]="'Discord User ID'"
+            [(Model)]="activeUser.discord_user_id"
+            [FormGroupInline]="true"
+          >
+          </app-form-element>
+          <app-form-element
+            [Type]="'phone'"
+            [LabelText]="'Phone Number'"
+            [(Model)]="activeUser.phone"
+            [FormGroupInline]="true"
+          >
+          </app-form-element>
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Carrier'"
+            [FormGroupInline]="true"
+            [(Model)]="activeUser.phone_type_id"
+            [SelectList]="phoneTypes"
+            [BindingProperty]="'phone_type_id'"
+            [DisplayProperty]="'carrier'"
+            [DisplayEmptyOption]="true"
+          >
+          </app-form-element>
+        </div>
+      </div>
 
-    <app-modal [Title]="'Manage User'" [(visible)]="manageUserModalVisible">
-        <app-form (SubmitFunction)="saveUser()">
-            <div class="flex flex-wrap">
-                <div>
-                    <app-form-element [Type]="'text'" [LabelText]="'First Name'" [(Model)]="activeUser.first_name"
-                        [FormGroupInline]="true" [Required]="true">
-                    </app-form-element>
-                    <app-form-element [Type]="'text'" [LabelText]="'Last Name'" [(Model)]="activeUser.last_name"
-                        [FormGroupInline]="true" [Required]="true">
-                    </app-form-element>
-                    <app-form-element [Type]="'text'" [LabelText]="'Discord User ID'"
-                        [(Model)]="activeUser.discord_user_id" [FormGroupInline]="true">
-                    </app-form-element>
-                    <app-form-element [Type]="'phone'" [LabelText]="'Phone Number'" [(Model)]="activeUser.phone"
-                        [FormGroupInline]="true">
-                    </app-form-element>
-                    <app-form-element [Type]="'select'" [LabelText]="'Carrier'" [FormGroupInline]="true"
-                        [(Model)]="activeUser.phone_type_id" [SelectList]="phoneTypes"
-                        [BindingProperty]="'phone_type_id'" [DisplayProperty]="'carrier'" [DisplayEmptyOption]="true">
-                    </app-form-element>
-                </div>
-            </div>
+      <app-header [h]="3">User Groups</app-header>
+      <div class="flex justify-content-flex-end">
+        <div class="flex align-items-center">
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Group'"
+            [FormGroupInline]="true"
+            [(Model)]="newAuthGroup"
+            [SelectList]="availableAuthGroups"
+            [DisplayProperty]="'name'"
+            [DisplayEmptyOption]="true"
+          >
+          </app-form-element>
+          <app-button
+            [ButtonType]="'add'"
+            (FunctionCallBack)="addUserGroup()"
+          ></app-button>
+        </div>
+      </div>
+      <app-table
+        [TableCols]="userGroupsTableCols"
+        [TableData]="activeUser.groups"
+        [Scrollable]="true"
+        [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeUserGroup($event)"
+      ></app-table>
 
-            <app-header [h]="3">User Groups</app-header>
-            <div class="flex justify-content-flex-end">
-                <div class="flex align-items-center">
-                    <app-form-element [Type]="'select'" [LabelText]="'Group'" [FormGroupInline]="true"
-                        [(Model)]="newAuthGroup" [SelectList]="availableAuthGroups" [DisplayProperty]="'name'"
-                        [DisplayEmptyOption]="true">
-                    </app-form-element>
-                    <app-button [ButtonType]="'add'" (FunctionCallBack)="addUserGroup()"></app-button>
-                </div>
-            </div>
-            <app-table [TableCols]="userGroupsTableCols" [TableData]="activeUser.groups" [Scrollable]="true"
-                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeUserGroup($event)"></app-table>
-
-
-            <app-button-ribbon>
-                <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
-            </app-button-ribbon>
-        </app-form>
-    </app-modal>
-
+      <app-button-ribbon>
+        <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+      </app-button-ribbon>
+    </app-form>
+  </app-modal>
 </app-box>

@@ -1,36 +1,78 @@
-<app-table [TableCols]="questionConditionsTableCols" [TableData]="questionConditions"
-    [ShowAddButton]="true" (AddRecordCallBack)="showQuestionConditionModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showQuestionConditionModal($event)"  [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'60vh'"></app-table>
+<app-table
+  [TableCols]="questionConditionsTableCols"
+  [TableData]="questionConditions"
+  [ShowAddButton]="true"
+  (AddRecordCallBack)="showQuestionConditionModal()"
+  [ShowEditButton]="true"
+  (EditRecordCallBack)="showQuestionConditionModal($event)"
+  [Width]="'100%'"
+  [Scrollable]="true"
+  [ScrollHeight]="'60vh'"
+></app-table>
 
-<app-modal [Title]="'Question Condition'" [(visible)]="questionConditionModalVisible">
-    <app-form-element [Type]="'select'" [LabelText]="'Question From'" [(Model)]="activeQuestionCondition.question_from"
-        [Required]="true" [SelectList]="questionConditionQuestionFromList" [DisplayProperty]="'display_value'"
-        [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionToLists()" [DisplayEmptyOption]="true">
+<app-modal
+  [Title]="'Question Condition'"
+  [(visible)]="questionConditionModalVisible"
+>
+  <app-form-element
+    [Type]="'select'"
+    [LabelText]="'Question From'"
+    [(Model)]="activeQuestionCondition.question_from"
+    [Required]="true"
+    [SelectList]="questionConditionQuestionFromList"
+    [DisplayProperty]="'display_value'"
+    [SelectComparatorFunction]="compareQuestions"
+    (FunctionCallBack)="buildQuestionConditionToLists()"
+    [DisplayEmptyOption]="true"
+  >
+  </app-form-element>
+
+  <app-form (SubmitFunction)="saveQuestionCondition()">
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Condition Type'"
+      [(Model)]="activeQuestionCondition.question_condition_typ"
+      [Required]="true"
+      [SelectList]="questionConditionTypes"
+      [DisplayProperty]="'question_condition_nm'"
+      [DisplayEmptyOption]="true"
+    >
     </app-form-element>
 
-    <app-form (SubmitFunction)="saveQuestionCondition()">
-        <app-form-element [Type]="'select'" [LabelText]="'Condition Type'" [(Model)]="activeQuestionCondition.question_condition_typ"
-            [Required]="true" [SelectList]="questionConditionTypes" [DisplayProperty]="'question_condition_nm'"
-            [DisplayEmptyOption]="true">
-        </app-form-element>
+    @if(!activeQuestionCondition.question_condition_typ ||
+    activeQuestionCondition.question_condition_typ.question_condition_typ !==
+    'exist') {
+    <app-form-element
+      [Type]="'text'"
+      [LabelText]="'Condition Value'"
+      [(Model)]="activeQuestionCondition.value"
+      [Required]="true"
+    ></app-form-element>
+    }
 
-        @if(!activeQuestionCondition.question_condition_typ || activeQuestionCondition.question_condition_typ.question_condition_typ !== 'exist') {
-            <app-form-element [Type]="'text'" [LabelText]="'Condition Value'" [(Model)]="activeQuestionCondition.value"
-            [Required]="true"></app-form-element>
-        }
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Question To'"
+      [(Model)]="activeQuestionCondition.question_to"
+      [Required]="true"
+      [SelectList]="questionConditionQuestionToList"
+      [DisplayProperty]="'display_value'"
+      [SelectComparatorFunction]="compareQuestions"
+      (FunctionCallBack)="buildQuestionConditionFromLists()"
+      [DisplayEmptyOption]="true"
+    >
+    </app-form-element>
 
-        <app-form-element [Type]="'select'" [LabelText]="'Question To'" [(Model)]="activeQuestionCondition.question_to"
-            [Required]="true" [SelectList]="questionConditionQuestionToList" [DisplayProperty]="'display_value'"
-            [SelectComparatorFunction]="compareQuestions" (FunctionCallBack)="buildQuestionConditionFromLists()"
-            [DisplayEmptyOption]="true">
-        </app-form-element>
+    <app-form-element
+      [Type]="'checkbox'"
+      [LabelText]="'Active'"
+      [(Model)]="activeQuestionCondition.active"
+      [TrueValue]="'y'"
+      [FalseValue]="'n'"
+    ></app-form-element>
 
-        <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionCondition.active"
-            [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
-
-
-        <app-button-ribbon>
-            <app-button [ButtonType]="'main'" [Type]="'submit'">Save</app-button>
-        </app-button-ribbon>
-    </app-form>
+    <app-button-ribbon>
+      <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+    </app-button-ribbon>
+  </app-form>
 </app-modal>
