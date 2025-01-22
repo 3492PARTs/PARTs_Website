@@ -81,9 +81,8 @@ export class MatchPlanningComponent implements OnInit {
 
   async saveMatchStrategy(): Promise<void> {
     const fd = new FormData();
-    if (this.activeMatchStrategy.img) {
+    if (this.activeMatchStrategy.img)
       fd.append('img', this.activeMatchStrategy.img);
-    }
     if (!this.gs.strNoE(this.activeMatchStrategy.id))
       fd.append('id', this.activeMatchStrategy.id.toString());
 
@@ -93,9 +92,10 @@ export class MatchPlanningComponent implements OnInit {
 
     if (!(await this.ss.saveMatchStrategy(fd))) {
       this.gs.addBanner(new Banner(undefined, `Error saving match strategy`, 5000));
-      this.activeMatchStrategy = new MatchStrategy();
       return;
     }
+
+    this.activeMatchStrategy = new MatchStrategy();
 
     this.ss.loadMatchStrategies().then(result => {
       if (result)

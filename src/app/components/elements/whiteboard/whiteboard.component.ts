@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { BuildSeasonComponent } from "../../webpages/media/build-season/build-season.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 import { GeneralService } from '../../../services/general.service';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
@@ -7,7 +6,7 @@ import { FormElementGroupComponent } from "../../atoms/form-element-group/form-e
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [BuildSeasonComponent, ButtonComponent, FormElementGroupComponent],
+  imports: [ButtonComponent, FormElementGroupComponent],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
@@ -35,7 +34,13 @@ export class WhiteboardComponent implements OnInit {
 
   private url = '';
 
-  @Output() Image: EventEmitter<File> = new EventEmitter<File>();
+  @Input()
+  set Image(f: File | undefined) {
+    if (!f) {
+      this.clearCanvas(false);
+    }
+  }
+  @Output() ImageChange: EventEmitter<File> = new EventEmitter<File>();
 
   // For undo/redo functionality
   private undoStack: ImageData[] = [];
@@ -83,9 +88,10 @@ export class WhiteboardComponent implements OnInit {
     this.isDrawing = false;
     // Save initial state of the canvas
     this.saveToUndoStack();
+    this.emitImage();
   }
 
-  saveImage() {
+  emitImage() {
     const dataURL = this.canvas.nativeElement.toDataURL('image/png');
     // Download or upload the dataURL to your server
     // Example:
@@ -95,10 +101,10 @@ export class WhiteboardComponent implements OnInit {
     // This is a simplified example. You'll likely need to handle 
     // image saving and uploading more robustly in a real-world application.
     const file = this.dataURLtoFile(dataURL);
-    this.Image.emit(file)
+    this.ImageChange.emit(file)
   }
 
-  dataURLtoFile(dataURI: string): File {
+  private dataURLtoFile(dataURI: string): File {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
     var byteString = atob(dataURI.split(',')[1]);
@@ -123,12 +129,20 @@ export class WhiteboardComponent implements OnInit {
 
   }
 
-  clearCanvas() {
-    this.gs.triggerConfirm('Are you sure you want to clear the canvas?', () => {
-      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-      // Re-draw the background image
-      this.setImage(this.url);
-    });
+  clearCanvas(confirm = true) {
+    const fn = () => {
+      if (this.ctx) {
+        this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+        // Re-draw the background image
+        this.setImage(this.url);
+      }
+
+    };
+
+    if (confirm)
+      this.gs.triggerConfirm('Are you sure you want to clear the canvas?', fn);
+    else
+      fn();
   }
 
   private setImage(s: string): void {

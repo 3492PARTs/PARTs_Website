@@ -38,7 +38,7 @@
       @if (fieldForm && !activeMatchStrategy.img_url) {
       <app-whiteboard
         [ImageUrl]="fieldForm.full_img_url"
-        (Image)="setImage($event)"
+        [(Image)]="activeMatchStrategy.img"
       ></app-whiteboard>
       } @else if (activeMatchStrategy.img_url) {
       <img id="strategy-image" [src]="activeMatchStrategy.img_url" />

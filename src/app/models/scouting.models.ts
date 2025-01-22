@@ -511,7 +511,7 @@ export interface IMatchStrategy {
     user: User | undefined;
     strategy: string;
     time: Date;
-    img: File;
+    img: File | undefined;
     img_url: string;
     display_value: string;
 }
@@ -522,7 +522,7 @@ export class MatchStrategy implements IMatchStrategy {
     user: User | undefined = undefined;
     strategy = '';
     time = new Date()
-    img!: File;
+    img: File | undefined = undefined;
     img_url = '';
     display_value = '';
 }
