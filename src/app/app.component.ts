@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet, RouterState } from '@angular/router';
-import { LoadingComponent } from './components/elements/loading/loading.component';
 import { BannersComponent } from './components/elements/banners/banners.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
 import { DOCUMENT } from '@angular/common';
@@ -17,7 +16,7 @@ declare const gtag: Function;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoadingComponent, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
+  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

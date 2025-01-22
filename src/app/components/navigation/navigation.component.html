@@ -1,49 +1,113 @@
-<div *ngIf="siteBanners.length > 0" id="site-banner" class="flex flex-wrap align-items-center"
-  [ngStyle]="{ height: siteBannerHeight + 'rem'}"
-  [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
-
-  <div class="banner-message flex align-items-center gap-1rem" *ngFor="let sb of siteBanners">
+<div
+  *ngIf="siteBanners.length > 0"
+  id="site-banner"
+  class="flex flex-wrap align-items-center"
+  [ngStyle]="{ height: siteBannerHeight + 'rem' }"
+  [ngClass]="{
+    expanded: navExpanded,
+    hideNav: !showNav,
+    'right-hand-nav': rightHandNav
+  }"
+>
+  <div
+    class="banner-message flex align-items-center gap-1rem"
+    *ngFor="let sb of siteBanners"
+  >
     <span class="icon mdi mdi-alert-outline"></span>
 
     <p [innerHTML]="sb.message"></p>
-    <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end"><app-button [ButtonType]="'dismiss'"
-        [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button></div>
-
+    <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end">
+      <app-button
+        [ButtonType]="'dismiss'"
+        [Color]="'white'"
+        (FunctionCallBack)="dismissSiteBanner(sb)"
+      ></app-button>
+    </div>
   </div>
-
 </div>
 
-<div #thisWrapper id="wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav}">
+<div
+  #thisWrapper
+  id="wrapper"
+  [ngClass]="{ expanded: navExpanded, hideNav: !showNav }"
+>
   <!--navigation-->
-  <nav [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}">
+  <nav
+    [ngClass]="{
+      expanded: navExpanded,
+      hideNav: !showNav,
+      'right-hand-nav': rightHandNav
+    }"
+  >
     <!--site logo-->
     <div class="height" id="logo">
       <a routerLink="">
-        <img src="/appIcons/BeanieBotWhite.svg">
+        <img src="/appIcons/BeanieBotWhite.svg" />
       </a>
     </div>
 
-    <hr>
+    <hr />
 
     <!--sidebar navigation links-->
-    <div id="sidebar" [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded, size : !hideNavExpander}"
-      appClickOutside (appClickOutside)="closeSubNav()">
+    <div
+      id="sidebar"
+      [ngClass]="{
+        expanded: navExpanded,
+        collapsed: !navExpanded,
+        size: !hideNavExpander
+      }"
+      appClickOutside
+      (appClickOutside)="closeSubNav()"
+    >
       <ul>
-        <li id="{{ getNavPageID(mi.menu_name) }}" class="height" *ngFor="let mi of applicationMenu"
-          (click)="mi.menu_items.length > 0 ? openSubNav(getNavPageID(mi.menu_name), getNavPageID(mi.menu_name) + '-1') : closeSubNav(true)">
-
+        <li
+          id="{{ getNavPageID(mi.menu_name) }}"
+          class="height"
+          *ngFor="let mi of applicationMenu"
+          (click)="
+            mi.menu_items.length > 0
+              ? openSubNav(
+                  getNavPageID(mi.menu_name),
+                  getNavPageID(mi.menu_name) + '-1'
+                )
+              : closeSubNav(true)
+          "
+        >
           <!--menu item link-->
-          <a [routerLink]="mi.routerlink && !mi.routerlink.includes('https') ? mi.routerlink : null"
-            routerLinkActive="active" [ngClass]="{'right-hand-nav': rightHandNav}"
-            (click)="mi.routerlink && mi.routerlink.includes('https') ? openURL(mi.routerlink) : null">
+          <a
+            [routerLink]="
+              mi.routerlink && !mi.routerlink.includes('https')
+                ? mi.routerlink
+                : null
+            "
+            routerLinkActive="active"
+            [ngClass]="{ 'right-hand-nav': rightHandNav }"
+            (click)="
+              mi.routerlink && mi.routerlink.includes('https')
+                ? openURL(mi.routerlink)
+                : null
+            "
+          >
+            <span
+              *ngIf="mi.icon !== 'first'"
+              [ngClass]="{ 'right-hand-nav': rightHandNav }"
+              class="mdi icon mdi-{{ mi.icon }}"
+            ></span>
 
-            <span *ngIf="mi.icon !== 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
-              class="mdi icon mdi-{{mi.icon}}"></span>
-
-            <svg class="icon" *ngIf="mi.icon === 'first'" [ngClass]="{'right-hand-nav': rightHandNav}"
-              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
-              <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
-                <path d="M811 3984 c-62 -7 -116 -16 -119 -19 -7 -6 -693 -3748 -688 -3752 1
+            <svg
+              class="icon"
+              *ngIf="mi.icon === 'first'"
+              [ngClass]="{ 'right-hand-nav': rightHandNav }"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 669 401"
+            >
+              <g
+                transform="translate(0,401) scale(0.1,-0.1)"
+                fill="#ffffff"
+                stroke="none"
+              >
+                <path
+                  d="M811 3984 c-62 -7 -116 -16 -119 -19 -7 -6 -693 -3748 -688 -3752 1
               -1 72 -10 158 -19 l155 -16 726 317 725 317 69 -55 c227 -183 526 -321 848
               -392 302 -66 676 -72 986 -14 194 36 415 106 558 179 l62 31 67 -62 c37 -34
               169 -160 293 -280 l226 -219 899 937 899 936 0 162 0 162 -944 902 -944 903
@@ -84,35 +148,64 @@
               -529 c0 -5 -299 -116 -329 -122 -17 -4 -74 98 -102 184 l-21 68 21 58 c12 32
               36 82 52 111 l31 54 174 -174 c96 -96 174 -176 174 -179z m1254 -558 c78 -80
               83 -72 -64 -99 -119 -22 -464 -24 -585 -4 -92 15 -307 69 -317 79 -4 4 144 75
-              330 159 l337 151 115 -108 c63 -60 146 -140 184 -178z" />
+              330 159 l337 151 115 -108 c63 -60 146 -140 184 -178z"
+                />
               </g>
             </svg>
 
             <!--menu item name-->
-            <p routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="menu-link">
-              {{!mi.menu_name_active_item ? mi.menu_name : mi.menu_name_active_item }}
+            <p
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="menu-link"
+            >
+              {{
+                !mi.menu_name_active_item
+                  ? mi.menu_name
+                  : mi.menu_name_active_item
+              }}
             </p>
 
             <!--arrow icon for menu item with submenu items-->
-            <span *ngIf="mi.menu_items.length > 0" [ngStyle]="{'color':'white'}"
+            <span
+              *ngIf="mi.menu_items.length > 0"
+              [ngStyle]="{ color: 'white' }"
               class="mdi icon page-options mdi-menu-right"
-              [ngClass]="{ rotate : subNav === getNavPageID(mi.menu_name) + '-1'}"></span>
+              [ngClass]="{
+                rotate: subNav === getNavPageID(mi.menu_name) + '-1'
+              }"
+            ></span>
           </a>
 
           <!--submenu items-->
-          <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar" *ngIf="mi.menu_items.length > 0"
-            [ngClass]="{ show : subNav === getNavPageID(mi.menu_name) + '-1'}">
-            <span class="header" *ngIf="mi.menu_header">{{ mi.menu_header }}</span>
+          <div
+            id="{{ getNavPageID(mi.menu_name) + '-1' }}"
+            class="side-sidebar"
+            *ngIf="mi.menu_items.length > 0"
+            [ngClass]="{ show: subNav === getNavPageID(mi.menu_name) + '-1' }"
+          >
+            <span class="header" *ngIf="mi.menu_header">{{
+              mi.menu_header
+            }}</span>
             <ul>
               <li *ngFor="let mii of mi.menu_items">
-                <a *ngIf="!pagesWithNavigation.includes(mii.menu_name.toLowerCase())"
-                  [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
-                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                <a
+                  *ngIf="
+                    !pagesWithNavigation.includes(mii.menu_name.toLowerCase())
+                  "
+                  [routerLink]="mii.routerlink ? mii.routerlink : null"
+                  routerLinkActive="active-link"
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)"
+                >
                   {{ mii.menu_name }}
                 </a>
 
-                <a *ngIf="pagesWithNavigation.includes(mii.menu_name.toLowerCase())"
-                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                <a
+                  *ngIf="
+                    pagesWithNavigation.includes(mii.menu_name.toLowerCase())
+                  "
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)"
+                >
                   {{ mii.menu_name }}
                 </a>
               </li>
@@ -121,25 +214,38 @@
         </li>
       </ul>
 
-      <hr [ngClass]="{'darker' : pagesWithNavigation.includes(getActiveMenuItemName())}">
+      <hr
+        [ngClass]="{
+          darker: pagesWithNavigation.includes(getActiveMenuItemName())
+        }"
+      />
 
       <div id="page-nav">
-        <app-sub-navigation *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())" [setNavExpanded]="navExpanded"
-          [hideNavExpander]="hideNavExpander">
+        <app-sub-navigation
+          *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())"
+          [setNavExpanded]="navExpanded"
+          [hideNavExpander]="hideNavExpander"
+        >
         </app-sub-navigation>
       </div>
 
-      <hr *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())">
+      <hr *ngIf="pagesWithNavigation.includes(getActiveMenuItemName())" />
 
-      <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
-        [ngClass]="{ expanded : navExpanded, collapsed : !navExpanded}">
+      <div
+        id="social-icons"
+        class="flex flex-wrap gap-1rem justify-content-space-around"
+        [ngClass]="{ expanded: navExpanded, collapsed: !navExpanded }"
+      >
         <a target="_blank" href="https://www.facebook.com/team3492">
           <span class="mdi icon mdi-facebook"></span>
         </a>
         <a target="_blank" href="https://www.instagram.com/parts3492">
           <span class="mdi icon mdi-instagram"></span>
         </a>
-        <a target="_blank" href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ">
+        <a
+          target="_blank"
+          href="https://www.youtube.com/channel/UCIq35DtgjUsKJB3blFbSXrQ"
+        >
           <span class="mdi icon mdi-youtube"></span>
         </a>
         <a target="_blank" href="https://github.com/3492PARTs">
@@ -149,58 +255,111 @@
 
       <!--Environment header-->
       <div *ngIf="frontendEnv.length > 0" id="environment">
-        <hr>
-        <p>{{frontendEnv}}{{backendEnv.length > 0 ? ':' : ''}}{{backendEnv}}
+        <hr />
+        <p>
+          {{ frontendEnv }}{{ backendEnv.length > 0 ? ":" : ""
+          }}{{ backendEnv }}
         </p>
       </div>
     </div>
 
     <!--wide screen nav expander-->
-    <div id="navExpand" class="height" [ngClass]="{ hide : hideNavExpander, 'right-hand-nav': rightHandNav }">
+    <div
+      id="navExpand"
+      class="height"
+      [ngClass]="{ hide: hideNavExpander, 'right-hand-nav': rightHandNav }"
+    >
       <div (click)="toggleForceNavExpanded()">
-        <span id="navExpand-icon" [ngClass]="{ rotate : navExpanded }" class="mdi mdi-menu-right"></span>
+        <span
+          id="navExpand-icon"
+          [ngClass]="{ rotate: navExpanded }"
+          class="mdi mdi-menu-right"
+        ></span>
       </div>
     </div>
   </nav>
 
   <!--site header-->
-  <header #thisHeader id="site-header"
-    [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav, 'remove-header': removeHeader}"
-    [ngStyle]="{ height: siteHeaderHeight + 'rem', 'margin-top': siteBannerHeight + 'rem'}">
+  <header
+    #thisHeader
+    id="site-header"
+    [ngClass]="{
+      expanded: navExpanded,
+      hideNav: !showNav,
+      'right-hand-nav': rightHandNav,
+      'remove-header': removeHeader
+    }"
+    [ngStyle]="{
+      height: siteHeaderHeight + 'rem',
+      'margin-top': siteBannerHeight + 'rem'
+    }"
+  >
     <!--narrow screen nav expander-->
     <div id="mobile-menu" *ngIf="hideNavExpander" (click)="toggleShowNav()">
       <span class="mdi mdi-menu icon"></span>
     </div>
 
     <!--app menu bar-->
-    <div id="menu-bar" [ngClass]="{ small_search : screenXs}">
+    <div id="menu-bar" [ngClass]="{ small_search: screenXs }">
       <!--search, not in use, disabled-->
       <div id="search-icon-wrapper" *ngIf="screenXs">
-        <span *ngIf="false" class="mdi mdi-magnify icon" id="search-icon" (click)="xsToggleSearch()" appClickOutside
-          (appClickOutside)="xsShowSearch = false"></span>
+        <span
+          *ngIf="false"
+          class="mdi mdi-magnify icon"
+          id="search-icon"
+          (click)="xsToggleSearch()"
+          appClickOutside
+          (appClickOutside)="xsShowSearch = false"
+        ></span>
       </div>
 
-      <div id="search-wrapper" [ngClass]="{ xsShowSearch : xsShowSearch, full_width: !showNav}">
-        <app-form-element *ngIf="false" [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
+      <div
+        id="search-wrapper"
+        [ngClass]="{ xsShowSearch: xsShowSearch, full_width: !showNav }"
+      >
+        <app-form-element
+          *ngIf="false"
+          [Width]="'100%'"
+          id="search"
+          [Type]="'search'"
+          [Placeholder]="'Search for...'"
+        >
         </app-form-element>
       </div>
 
       <!--user information/notifications/messages-->
-      <div id="user-center-wrapper" *ngIf="user && user.id;else login" appClickOutside
-        (appClickOutside)="hideNotificationModal()">
+      <div
+        id="user-center-wrapper"
+        *ngIf="user && user.id; else login"
+        appClickOutside
+        (appClickOutside)="hideNotificationModal()"
+      >
         <!--notifications-->
         <div class="icon-wrapper">
-          <span class="mdi mdi-{{ notifications.length <= 0 ? 'bell' : 'bell-ring' }} icon"
-            [ngClass]="{'active': notifications.length > 0}" (click)="showNotificationModal()"></span>
+          <span
+            class="mdi mdi-{{
+              notifications.length <= 0 ? 'bell' : 'bell-ring'
+            }} icon"
+            [ngClass]="{ active: notifications.length > 0 }"
+            (click)="showNotificationModal()"
+          ></span>
         </div>
 
-        <div id="notification-modal"
-          [ngClass]="{ full_width: !showNav, growInAnimation : showNotificationModalVisible }">
+        <div
+          id="notification-modal"
+          [ngClass]="{
+            full_width: !showNav,
+            growInAnimation: showNotificationModalVisible
+          }"
+        >
           <h6>Notification Center</h6>
           <div id="notification-list">
             <div class="notification" *ngFor="let n of notifications">
               <div class="notification-dismiss">
-                <app-button [ButtonType]="'dismiss'" (click)="dismissNotification(n)"></app-button>
+                <app-button
+                  [ButtonType]="'dismiss'"
+                  (click)="dismissNotification(n)"
+                ></app-button>
               </div>
               <div class="notification-icon-wrapper">
                 <div class="notification-icon">
@@ -210,9 +369,8 @@
 
               <div class="notification-content">
                 <div class="notification-time">
-                  <p>{{ n.staged_time | dateToStr:true:true }}</p>
+                  <p>{{ n.staged_time | dateToStr : true : true }}</p>
                 </div>
-
 
                 <div class="notification-message">
                   <p>{{ n.alert_subject }}</p>
@@ -220,19 +378,38 @@
                 </div>
               </div>
             </div>
-            <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Notifications'}"
-              (click)="hideNotificationModal()">
+            <div
+              id="notifications-view-all"
+              routerLink="user/profile"
+              [queryParams]="{ tab: 'Notifications' }"
+              (click)="hideNotificationModal()"
+            >
               <p>View All Notifications</p>
             </div>
           </div>
         </div>
 
         <!--messages-->
-        <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
-          <span [ngClass]="{'active': messages.length > 0}"
-            class="mdi mdi-{{messages.length <= 0 ? 'email' : 'email-open' }} icon" (click)="showMessageModal()"></span>
+        <div
+          class="icon-wrapper no-padding"
+          appClickOutside
+          (appClickOutside)="hideMessageModal()"
+        >
+          <span
+            [ngClass]="{ active: messages.length > 0 }"
+            class="mdi mdi-{{
+              messages.length <= 0 ? 'email' : 'email-open'
+            }} icon"
+            (click)="showMessageModal()"
+          ></span>
 
-          <div id="message-modal" [ngClass]="{ full_width: !showNav, growInAnimation : showMessageModalVisible }">
+          <div
+            id="message-modal"
+            [ngClass]="{
+              full_width: !showNav,
+              growInAnimation: showMessageModalVisible
+            }"
+          >
             <h6>Message Center</h6>
             <div id="notification-list">
               <div class="notification" *ngFor="let m of messages">
@@ -248,12 +425,19 @@
                     <p [innerHTML]="m.alert_body"></p>
                   </div>
                   <div class="notification-time">
-                    <p>Person &middot; {{ m.staged_time | dateToStr:true:true }}</p>
+                    <p>
+                      Person &middot;
+                      {{ m.staged_time | dateToStr : true : true }}
+                    </p>
                   </div>
                 </div>
               </div>
-              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{'tab': 'Messages'}"
-                (click)="hideMessageModal()">
+              <div
+                id="notifications-view-all"
+                routerLink="user/profile"
+                [queryParams]="{ tab: 'Messages' }"
+                (click)="hideMessageModal()"
+              >
                 <p>View All Messages</p>
               </div>
             </div>
@@ -267,21 +451,39 @@
           <div id="profile-info" (click)="showUserModal()">
             <p>{{ user.first_name }} {{ user.last_name }}</p>
             <div id="profile-picture">
-              <img [src]="user.image ? user.image : '../../../assets/appIcons/BeanieBot40x40.png'">
+              <img
+                [src]="
+                  user.image
+                    ? user.image
+                    : '../../../assets/appIcons/BeanieBot40x40.png'
+                "
+              />
             </div>
           </div>
-          <div *ngIf="user && user.id" id="user-modal"
-            [ngClass]="{ full_width: !showNav, growInAnimation : showUserModalVisible }">
+          <div
+            *ngIf="user && user.id"
+            id="user-modal"
+            [ngClass]="{
+              full_width: !showNav,
+              growInAnimation: showUserModalVisible
+            }"
+          >
             <div class="profile-option">
               <div>
                 <span class="mdi mdi-human-greeting icon"></span>
               </div>
               <div>
-                <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
+                <a routerLink="user/profile" (click)="hideUserModal()"
+                  >Profile</a
+                >
               </div>
             </div>
-            <div class="profile-option" routerLink="user/profile" [queryParams]="{'tab': 'General'}"
-              (click)="hideUserModal()">
+            <div
+              class="profile-option"
+              routerLink="user/profile"
+              [queryParams]="{ tab: 'General' }"
+              (click)="hideUserModal()"
+            >
               <div>
                 <span class="mdi mdi-cogs icon"></span>
               </div>
@@ -290,7 +492,11 @@
               </div>
             </div>
             <div id="user-profile-divider"></div>
-            <div class="profile-option" id="logout" (click)="logOut(); hideUserModal()">
+            <div
+              class="profile-option"
+              id="logout"
+              (click)="logOut(); hideUserModal()"
+            >
               <div>
                 <span class="mdi mdi-logout icon"></span>
               </div>
@@ -310,33 +516,61 @@
     </div>
   </header>
 
-  <div id="content-wrapper" [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'right-hand-nav': rightHandNav}"
-    (appClickInside)="closeNavOnMobile()">
-    <!--main page content-->
-    <main #thisMain
-      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'remove-header': removeHeader, 'full-height': hideNavExpander || removeHeader, 'xsm' : screenXs}"
-      [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem'}">
-      <ng-content>
+  <div
+    id="content-wrapper"
+    [ngClass]="{
+      expanded: navExpanded,
+      hideNav: !showNav,
+      'right-hand-nav': rightHandNav
+    }"
+    (appClickInside)="closeNavOnMobile()"
+  >
+    <app-loading
+      [Width]="
+        hideNavExpander
+          ? 'width: 100%'
+          : navExpanded
+          ? 'calc(100% - 22.4rem)'
+          : 'calc(100% - 10.4rem)'
+      "
+    ></app-loading>
 
-      </ng-content>
+    <!--main page content-->
+    <main
+      #thisMain
+      [ngClass]="{
+        expanded: navExpanded,
+        hideNav: !showNav,
+        'remove-header': removeHeader,
+        'full-height': hideNavExpander || removeHeader,
+        xsm: screenXs
+      }"
+      [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem' }"
+    >
+      <ng-content> </ng-content>
     </main>
 
     <!--site footer-->
-    <footer #thisFooter
-      [ngClass]="{ expanded : navExpanded, hideNav: !showNav, 'full-height': hideNavExpander || removeHeader}">
+    <footer
+      #thisFooter
+      [ngClass]="{
+        expanded: navExpanded,
+        hideNav: !showNav,
+        'full-height': hideNavExpander || removeHeader
+      }"
+    >
       <div class="flex align-items-center">
         <div>
           <h1>OUR PARTners</h1>
-          <img src="/webImages/Sponsors/Toyota.svg">
-          <img src="/webImages/Sponsors/AEP.svg">
-          <img src="/webImages/Sponsors/PutnamCoSchools.svg">
-          <img src="/webImages/Sponsors/Optimum.svg">
-          <img src="/webImages/Sponsors/EncovaFoundation.svg">
-          <img src="/webImages/Sponsors/dow.svg">
-          <img id="nasarap" src="/webImages/Sponsors/NASARAP.svg">
+          <img src="/webImages/Sponsors/Toyota.svg" />
+          <img src="/webImages/Sponsors/AEP.svg" />
+          <img src="/webImages/Sponsors/PutnamCoSchools.svg" />
+          <img src="/webImages/Sponsors/Optimum.svg" />
+          <img src="/webImages/Sponsors/EncovaFoundation.svg" />
+          <img src="/webImages/Sponsors/dow.svg" />
+          <img id="nasarap" src="/webImages/Sponsors/NASARAP.svg" />
         </div>
       </div>
     </footer>
   </div>
-
 </div>

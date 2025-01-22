@@ -19,11 +19,12 @@ import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.c
 import { ClickOutsideDirective } from '../../directives/click-outside/click-outside.directive';
 import { ClickInsideDirective } from '../../directives/click-inside/click-inside.directive';
 import { DateToStrPipe } from '../../pipes/date-to-str.pipe';
+import { LoadingComponent } from "../elements/loading/loading.component";
 
 @Component({
   selector: 'app-navigation',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe],
+  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
