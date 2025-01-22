@@ -642,11 +642,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.invertImage();
   }
 
-  changeMatch(): void {
-    if (this.scoutFieldResponse.match && [this.scoutFieldResponse.match.blue_one_id, this.scoutFieldResponse.match.blue_two_id, this.scoutFieldResponse.match.blue_three_id].includes(this.scoutFieldResponse.team_id)) {
-      this.invertedImage = true;
-    }
-    this.invertImage();
+  changeFieldInversionForTeam(): void {
+    if (this.scoutFieldResponse.match && [this.scoutFieldResponse.match.blue_one_id, this.scoutFieldResponse.match.blue_two_id, this.scoutFieldResponse.match.blue_three_id].includes(this.scoutFieldResponse.team_id))
+      this.setInvertedImage(true);
+    else
+      this.setInvertedImage(false);
   }
 
   invertImage(): void {
@@ -657,7 +657,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         scene = this.getNextStage(qf.questions, qf.question_answer.question_flow_answers[qf.question_answer.question_flow_answers.length - 1].question?.order || 0);
       }
       else
-        scene = this.getFirstStage(qf.questions)
+        scene = this.getFirstStage(qf.questions);
 
       qf.questions.filter(q => q.order === scene).forEach(q => this.showQuestionBox(q));
     })
