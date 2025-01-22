@@ -41,7 +41,7 @@
         (Image)="setImage($event)"
       ></app-whiteboard>
       } @else if (activeMatchStrategy.img_url) {
-      <img [src]="activeMatchStrategy.img_url" />
+      <img id="strategy-image" [src]="activeMatchStrategy.img_url" />
       }
 
       <app-button-ribbon>
