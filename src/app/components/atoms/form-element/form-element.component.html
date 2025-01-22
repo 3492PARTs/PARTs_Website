@@ -287,7 +287,10 @@
           [compareWith]="SelectComparatorFunction"
         >
           <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
-          <option [ngValue]="null" [disabled]="!DisplayEmptyOption"></option>
+          <option
+            [ngValue]="undefined"
+            [disabled]="!DisplayEmptyOption"
+          ></option>
 
           @if (BindingProperty && DisplayProperty) {
           <option

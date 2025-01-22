@@ -10,7 +10,7 @@
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
+    [ngStyle]="{ opacity: Opacity, 'box-shadow': BoxShadow }"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
@@ -21,7 +21,7 @@
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
+    [ngStyle]="{ opacity: Opacity, 'box-shadow': BoxShadow }"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
@@ -32,7 +32,7 @@
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
+    [ngStyle]="{ opacity: Opacity, 'box-shadow': BoxShadow }"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
@@ -43,14 +43,19 @@
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
-    [ngStyle]="{ opacity: Opacity }"
+    [ngStyle]="{ opacity: Opacity, 'box-shadow': BoxShadow }"
   >
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </button>
   <button
     *ngSwitchCase="'close'"
     class="btn-symbol close"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -60,7 +65,12 @@
   <button
     *ngSwitchCase="'add'"
     class="btn-symbol add"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -70,7 +80,12 @@
   <button
     *ngSwitchCase="'minus'"
     class="btn-symbol minus"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -80,7 +95,12 @@
   <button
     *ngSwitchCase="'edit'"
     class="btn-symbol edit"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -94,7 +114,12 @@
   <button
     *ngSwitchCase="'refresh'"
     class="btn-symbol refresh"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -104,7 +129,12 @@
   <button
     *ngSwitchCase="'view'"
     class="btn-symbol view"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -118,7 +148,12 @@
   <button
     *ngSwitchCase="'delete'"
     class="btn-symbol delete"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -132,7 +167,12 @@
   <button
     *ngSwitchCase="'send'"
     class="btn-symbol send"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -151,7 +191,12 @@
   <button
     *ngSwitchCase="'save'"
     class="btn-symbol save"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -170,7 +215,12 @@
   <button
     *ngSwitchCase="'attach'"
     class="btn-symbol attach"
-    [ngStyle]="{ width: SymbolSize, height: SymbolSize, opacity: Opacity }"
+    [ngStyle]="{
+      width: SymbolSize,
+      height: SymbolSize,
+      opacity: Opacity,
+      'box-shadow': BoxShadow
+    }"
     (click)="RunFunction()"
     type="{{ Type }}"
     [disabled]="Disabled"
@@ -193,7 +243,8 @@
       width: SymbolSize,
       height: SymbolSize,
       transform: 'rotate(' + Rotate + ')',
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     [ngClass]="{ rotate: Direction }"
     (click)="RunFunction()"
@@ -214,7 +265,8 @@
       width: SymbolSize,
       height: SymbolSize,
       color: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
@@ -232,7 +284,8 @@
       'background-color': BackgroundColor,
       color: Color,
       fill: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
@@ -250,7 +303,8 @@
       'background-color': BackgroundColor,
       color: Color,
       fill: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
@@ -268,7 +322,8 @@
       'background-color': BackgroundColor,
       color: Color,
       fill: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
@@ -286,7 +341,8 @@
       'background-color': BackgroundColor,
       color: Color,
       fill: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"
@@ -304,7 +360,8 @@
       'background-color': BackgroundColor,
       color: Color,
       fill: Color,
-      opacity: Opacity
+      opacity: Opacity,
+      'box-shadow': BoxShadow
     }"
     (click)="RunFunction()"
     type="{{ Type }}"

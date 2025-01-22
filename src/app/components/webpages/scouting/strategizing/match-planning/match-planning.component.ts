@@ -31,13 +31,15 @@ export class MatchPlanningComponent implements OnInit {
 
   matchStrategies: MatchStrategy[] = [];
   activeMatchStrategies: MatchStrategy[] = [];
-  activeMatchStrategy = new MatchStrategy();
+  activeMatchStrategy: MatchStrategy | undefined = undefined;
+  activeTeams: string[] = [];
 
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);
   }
 
   ngOnInit(): void {
+    this.activeMatchStrategy = new MatchStrategy();
 
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
@@ -62,8 +64,12 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategies(): void {
-    if (!this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
+    if (this.match?.blue_one_id)
+      this.activeTeams = [this.match?.blue_one_id.toString() || '', this.match?.blue_two_id.toString() || '', this.match?.blue_three_id.toString() || '', this.match?.red_one_id.toString() || '', this.match?.red_two_id.toString() || '', this.match?.red_three_id.toString() || ''];
+    else
+      this.activeTeams = [];
   }
 
 
@@ -72,35 +78,39 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setImage(f: File): void {
-    this.activeMatchStrategy.img = f;
+    if (this.activeMatchStrategy)
+      this.activeMatchStrategy.img = f;
   }
 
   clearImageUrl(): void {
-    this.activeMatchStrategy.img_url = '';
+    if (this.activeMatchStrategy)
+      this.activeMatchStrategy.img_url = '';
   }
 
   async saveMatchStrategy(): Promise<void> {
-    const fd = new FormData();
-    if (this.activeMatchStrategy.img)
-      fd.append('img', this.activeMatchStrategy.img);
-    if (!this.gs.strNoE(this.activeMatchStrategy.id))
-      fd.append('id', this.activeMatchStrategy.id.toString());
+    if (this.activeMatchStrategy) {
+      const fd = new FormData();
+      if (this.activeMatchStrategy.img)
+        fd.append('img', this.activeMatchStrategy.img);
+      if (!this.gs.strNoE(this.activeMatchStrategy.id))
+        fd.append('id', this.activeMatchStrategy.id.toString());
 
-    fd.append('match_id', this.match?.match_id.toString() || '');
-    fd.append('user_id', this.user?.id.toString() || '');
-    fd.append('strategy', this.activeMatchStrategy.strategy);
+      fd.append('match_id', this.match?.match_id.toString() || '');
+      fd.append('user_id', this.user?.id.toString() || '');
+      fd.append('strategy', this.activeMatchStrategy.strategy);
 
-    if (!(await this.ss.saveMatchStrategy(fd))) {
-      this.gs.addBanner(new Banner(undefined, `Error saving match strategy`, 5000));
-      return;
+      if (!(await this.ss.saveMatchStrategy(fd))) {
+        this.gs.addBanner(new Banner(undefined, `Error saving match strategy`, 5000));
+        return;
+      }
+
+      this.activeMatchStrategy = new MatchStrategy();
+
+      this.ss.loadMatchStrategies().then(result => {
+        if (result)
+          this.matchStrategies = result;
+        this.setMatchStrategies();
+      });
     }
-
-    this.activeMatchStrategy = new MatchStrategy();
-
-    this.ss.loadMatchStrategies().then(result => {
-      if (result)
-        this.matchStrategies = result;
-      this.setMatchStrategies();
-    })
   }
 }

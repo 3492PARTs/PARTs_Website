@@ -2,11 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { ButtonComponent } from "../button/button.component";
 import { GeneralService } from '../../../services/general.service';
 import { FormElementGroupComponent } from "../form-element-group/form-element-group.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [ButtonComponent, FormElementGroupComponent],
+  imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
@@ -20,7 +21,7 @@ export class WhiteboardComponent implements OnInit {
   private lineWidth = 2;
   width = 500;
   height = 200;
-  private currentColor = 'black';
+  currentColor = '';
 
   // Calculate canvas dimensions dynamically
   private canvasWidth = window.innerWidth;
@@ -28,7 +29,10 @@ export class WhiteboardComponent implements OnInit {
   private scaleX = 1;
   private scaleY = 1;
 
-  private stampText = '3492';
+  @Input() StampOptions: string[] = [];
+
+  stampText = '';
+  boxShadow = '0px 0px 0px 0.2rem rgba(104, 104, 104, 0.5)';
 
   @Input() set ImageUrl(s: string) {
     this.setImage(s);
@@ -56,70 +60,89 @@ export class WhiteboardComponent implements OnInit {
   }
 
   selectColor(color: string) {
-    this.currentColor = color;
+    if (this.currentColor !== color)
+      this.currentColor = color;
+    else
+      this.currentColor = '';
   }
 
   onCanvasClick(event: MouseEvent) {
-    const rect = this.canvas.nativeElement.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / this.scaleX;
-    const y = (event.clientY - rect.top) / this.scaleY;
+    if (this.currentColor.length > 0) {
+      const rect = this.canvas.nativeElement.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / this.scaleX;
+      const y = (event.clientY - rect.top) / this.scaleY;
 
-    if (this.stampText) {
-      // Get text dimensions
-      this.ctx.font = '20px Arial';
-      const textMetrics = this.ctx.measureText(this.stampText);
-      const textWidth = textMetrics.width;
-      const textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+      if (this.stampText.length > 0) {
+        // Get text dimensions
+        this.ctx.font = '20px Arial';
+        const textMetrics = this.ctx.measureText(this.stampText);
+        const textWidth = textMetrics.width;
+        const textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
 
-      // Calculate box coordinates
-      const boxX = x - 5;
-      const boxY = y - 20;
-      const boxWidth = textWidth + 10;
-      const boxHeight = textHeight + 10;
+        // Calculate box coordinates
+        const boxX = x - 5;
+        const boxY = y - 20;
+        const boxWidth = textWidth + 10;
+        const boxHeight = textHeight + 10;
 
-      // Draw the box
-      this.ctx.strokeStyle = 'black';
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+        // Draw the box
+        this.ctx.strokeStyle = this.currentColor;
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
-      // Draw the text
-      this.ctx.fillStyle = 'red';
-      this.ctx.fillText(this.stampText, x, y);
+        // Draw the text with a black border
+        const border = 2;
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(this.stampText, x - border, y - border); // Offset by border pixel for shadow
+        this.ctx.fillText(this.stampText, x + border, y - border);
+        this.ctx.fillText(this.stampText, x - border, y + border);
+        this.ctx.fillText(this.stampText, x + border, y + border);
+
+        // Draw the text
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(this.stampText, x, y);
+      }
     }
   }
 
   onMouseDown(event: MouseEvent) {
-    this.isDrawing = true;
-    this.lastX = event.offsetX / this.scaleX;
-    this.lastY = event.offsetY / this.scaleY;
+    if (this.currentColor.length > 0) {
+      this.isDrawing = true;
+      this.lastX = event.offsetX / this.scaleX;
+      this.lastY = event.offsetY / this.scaleY;
+    }
   }
 
   onMouseMove(event: MouseEvent) {
-    if (!this.isDrawing) return;
+    if (this.currentColor.length > 0) {
+      if (!this.isDrawing) return;
 
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.lastX, this.lastY);
-    const x = event.offsetX / this.scaleX;
-    const y = event.offsetY / this.scaleY;
-    this.ctx.lineTo(x, y);
-
-
-    this.ctx.lineCap = 'round'; // Use round line cap for smoother erasing
-    this.ctx.strokeStyle = this.currentColor;
-    this.ctx.lineWidth = this.lineWidth;
+      this.ctx.beginPath();
+      this.ctx.moveTo(this.lastX, this.lastY);
+      const x = event.offsetX / this.scaleX;
+      const y = event.offsetY / this.scaleY;
+      this.ctx.lineTo(x, y);
 
 
-    this.ctx.stroke();
+      this.ctx.lineCap = 'round'; // Use round line cap for smoother erasing
+      this.ctx.strokeStyle = this.currentColor;
+      this.ctx.lineWidth = this.lineWidth;
 
-    this.lastX = event.offsetX / this.scaleX;
-    this.lastY = event.offsetY / this.scaleY;
+
+      this.ctx.stroke();
+
+      this.lastX = event.offsetX / this.scaleX;
+      this.lastY = event.offsetY / this.scaleY;
+    }
   }
 
   onMouseUp() {
-    this.isDrawing = false;
-    // Save initial state of the canvas
-    this.saveToUndoStack();
-    this.emitImage();
+    if (this.currentColor.length > 0) {
+      this.isDrawing = false;
+      // Save initial state of the canvas
+      this.saveToUndoStack();
+      this.emitImage();
+    }
   }
 
   emitImage() {
@@ -166,6 +189,8 @@ export class WhiteboardComponent implements OnInit {
         this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
         // Re-draw the background image
         this.setImage(this.url);
+        this.currentColor = '';
+        this.stampText = '';
       }
 
     };
@@ -232,5 +257,14 @@ export class WhiteboardComponent implements OnInit {
       this.currentStep++;
       this.ctx.putImageData(this.undoStack[this.currentStep], 0, 0);
     }
+  }
+
+  toggleStampText(s: string): void {
+    if (this.stampText.length <= 0)
+      this.stampText = s;
+    else if (this.stampText !== s)
+      this.stampText = s;
+    else
+      this.stampText = '';
   }
 }
