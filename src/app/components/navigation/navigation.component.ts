@@ -78,7 +78,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   backendEnv = "";
 
   //subPages: Link[] = [];
-  subPage = '';
+  subPage = '-1';
 
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
@@ -167,7 +167,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
         urlPieces.splice(urlPieces.length - 1, 1);
         const url2 = urlPieces.join('/');
 
-        const stayOpen = isFirst && this.subPage !== '' && url1 !== url2;
+        const stayOpen = isFirst && this.subPage !== '-1' && url1 !== url2;
 
         //true is open, false closed
         if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(stayOpen);
