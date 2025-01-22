@@ -1,28 +1,30 @@
 <app-box [Title]="'Match Planning'">
-  <app-form-element-group [LabelText]="'Match'" [InlineElements]="true">
-    <app-form-element
-      [Type]="'select'"
-      [LabelText]="'Match'"
-      [SelectList]="matches"
-      [(Model)]="match"
-      [DisplayProperty]="'match_number'"
-      [MinWidth]="'100px'"
-      (FunctionCallBack)="setMatchStrategies()"
-    ></app-form-element>
-
-    <app-form-element
-      [Type]="'select'"
-      [LabelText]="'Match Strategy'"
-      [SelectList]="activeMatchStrategies"
-      [(Model)]="activeMatchStrategy"
-      [DisplayProperty]="'display_value'"
-      [MinWidth]="'200px'"
-    ></app-form-element>
-
-    <app-button [ButtonType]="'add'"></app-button>
-  </app-form-element-group>
-
   <app-form (SubmitFunction)="saveMatchStrategy()">
+    <app-form-element-group [LabelText]="'Match'" [InlineElements]="true">
+      <app-form-element
+        [Type]="'select'"
+        [LabelText]="'Match'"
+        [SelectList]="matches"
+        [(Model)]="match"
+        [DisplayProperty]="'match_number'"
+        [MinWidth]="'100px'"
+        (FunctionCallBack)="setMatchStrategies()"
+        [Required]="true"
+      ></app-form-element>
+
+      <app-form-element
+        [Type]="'select'"
+        [LabelText]="'Match Strategy'"
+        [SelectList]="activeMatchStrategies"
+        [(Model)]="activeMatchStrategy"
+        [DisplayProperty]="'display_value'"
+        [MinWidth]="'200px'"
+        [DisplayEmptyOption]="true"
+      ></app-form-element>
+
+      <app-button [ButtonType]="'add'"></app-button>
+    </app-form-element-group>
+
     <app-form-element-group>
       <app-form-element
         [Type]="'area'"
@@ -33,11 +35,13 @@
         [Required]="true"
       ></app-form-element>
 
-      @if (fieldForm) {
+      @if (fieldForm && !activeMatchStrategy.img_url) {
       <app-whiteboard
         [ImageUrl]="fieldForm.full_img_url"
         (Image)="setImage($event)"
       ></app-whiteboard>
+      } @else if (activeMatchStrategy.img_url) {
+      <img [src]="activeMatchStrategy.img_url" />
       }
 
       <app-button-ribbon>

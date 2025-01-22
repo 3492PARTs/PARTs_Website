@@ -1,9 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { BuildSeasonComponent } from "../../webpages/media/build-season/build-season.component";
+import { ButtonComponent } from "../../atoms/button/button.component";
+import { GeneralService } from '../../../services/general.service';
+import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-whiteboard',
   standalone: true,
-  imports: [],
+  imports: [BuildSeasonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './whiteboard.component.html',
   styleUrl: './whiteboard.component.scss'
 })
@@ -14,6 +18,7 @@ export class WhiteboardComponent implements OnInit {
   private isDrawing = false;
   private lastX: number = 0;
   private lastY: number = 0;
+  private lineWidth = 2;
   width = 500;
   height = 200;
   private currentColor = 'black';
@@ -32,8 +37,15 @@ export class WhiteboardComponent implements OnInit {
 
   @Output() Image: EventEmitter<File> = new EventEmitter<File>();
 
+  // For undo/redo functionality
+  private undoStack: ImageData[] = [];
+  private redoStack: ImageData[] = [];
+  private currentStep = 0;
+
+  constructor(private gs: GeneralService) { }
+
   ngOnInit() {
-    this.ctx = this.canvas.nativeElement.getContext('2d')!;
+    this.ctx = this.canvas.nativeElement.getContext('2d', { willReadFrequently: true })!;
   }
 
   selectColor(color: string) {
@@ -54,8 +66,13 @@ export class WhiteboardComponent implements OnInit {
     const x = event.offsetX / this.scaleX;
     const y = event.offsetY / this.scaleY;
     this.ctx.lineTo(x, y);
+
+
+    this.ctx.lineCap = 'round'; // Use round line cap for smoother erasing
     this.ctx.strokeStyle = this.currentColor;
-    this.ctx.lineWidth = 2;
+    this.ctx.lineWidth = this.lineWidth;
+
+
     this.ctx.stroke();
 
     this.lastX = event.offsetX / this.scaleX;
@@ -64,6 +81,8 @@ export class WhiteboardComponent implements OnInit {
 
   onMouseUp() {
     this.isDrawing = false;
+    // Save initial state of the canvas
+    this.saveToUndoStack();
   }
 
   saveImage() {
@@ -100,17 +119,23 @@ export class WhiteboardComponent implements OnInit {
 
     // write the ArrayBuffer to a blob, and you're done
     var blob = new Blob([ab], { type: mimeString });
-    return new File([blob], "whiteboard.png");
+    return new File([blob], "whiteboard.png", { type: mimeString, });
 
   }
 
   clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
-    // Re-draw the background image
-    this.setImage(this.url);
+    this.gs.triggerConfirm('Are you sure you want to clear the canvas?', () => {
+      this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+      // Re-draw the background image
+      this.setImage(this.url);
+    });
   }
 
   private setImage(s: string): void {
+    this.undoStack = []; // Clear undo/redo stacks
+    this.redoStack = [];
+    this.currentStep = 0;
+
     // Load and draw background image from URL
     const img = new Image();
     img.src = s;
@@ -130,6 +155,37 @@ export class WhiteboardComponent implements OnInit {
       this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
 
       this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
+
+      // Save initial state of the canvas
+      this.saveToUndoStack();
     };
+  }
+
+  saveToUndoStack() {
+    const canvasData = this.canvas.nativeElement.toDataURL();
+    const image = new Image();
+    image.src = canvasData;
+
+    image.onload = () => {
+      this.undoStack.push(this.ctx.getImageData(0, 0, this.canvasWidth, this.canvasHeight));
+      this.redoStack = []; // Clear redo stack when a new action is performed
+      this.currentStep = this.undoStack.length - 1;
+    };
+  }
+
+  undo() {
+    if (this.currentStep > 0) {
+      this.redoStack.push(this.undoStack.pop()!);
+      this.currentStep--;
+      this.ctx.putImageData(this.undoStack[this.currentStep], 0, 0);
+    }
+  }
+
+  redo() {
+    if (this.redoStack.length > 0) {
+      this.undoStack.push(this.redoStack.pop()!);
+      this.currentStep++;
+      this.ctx.putImageData(this.undoStack[this.currentStep], 0, 0);
+    }
   }
 }

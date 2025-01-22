@@ -1200,8 +1200,10 @@ export class ScoutingService {
 
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', matchStrategy, (result: any) => {
         this.gs.successfulResponseBanner(result);
+        resolve(true);
       }, (error) => {
         this.gs.triggerError(error);
+        resolve(false);
       });
     });
   }

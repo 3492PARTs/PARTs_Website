@@ -299,6 +299,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.ModelChange.emit(this.Model);
     }
     else {
+      if (newValue === null) {
+        newValue = new Object();
+      }
       this.Model = newValue;
       this.ModelChange.emit(newValue);
     }

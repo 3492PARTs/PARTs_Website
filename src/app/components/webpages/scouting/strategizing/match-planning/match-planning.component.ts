@@ -58,12 +58,11 @@ export class MatchPlanningComponent implements OnInit {
 
         this.matchStrategies = result.match_strategies;
       }
-
     });
-
   }
 
   setMatchStrategies(): void {
+    if (!this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
   }
 
@@ -81,8 +80,11 @@ export class MatchPlanningComponent implements OnInit {
     if (this.activeMatchStrategy.img) {
       fd.append('img', this.activeMatchStrategy.img);
     }
-    fd.append('match_id', this.activeMatchStrategy.match?.match_id.toString() || '');
-    fd.append('user_id', this.activeMatchStrategy.user?.id.toString() || '');
+    if (!this.gs.strNoE(this.activeMatchStrategy.id))
+      fd.append('id', this.activeMatchStrategy.id.toString());
+
+    fd.append('match_id', this.match?.match_id.toString() || '');
+    fd.append('user_id', this.user?.id.toString() || '');
     fd.append('strategy', this.activeMatchStrategy.strategy);
 
     if (!(await this.ss.saveMatchStrategy(fd))) {

@@ -8,13 +8,62 @@
   style="border: 1px solid black"
 >
 </canvas>
-<div class="color-picker">
-  <button (click)="selectColor('black')">Black</button>
-  <button (click)="selectColor('red')">Red</button>
-  <button (click)="selectColor('blue')">Blue</button>
-  <button (click)="selectColor('green')">Green</button>
-  <button (click)="selectColor('yellow')">Yellow</button>
-  <button (click)="selectColor('white')">Eraser</button>
-</div>
-<button (click)="saveImage()">Save Image</button>
-<button (click)="clearCanvas()">Clear Canvas</button>
+
+<app-form-element-group [MarginTop]="'0'">
+  <div class="flex flex-wrap justify-content-space-between">
+    <div>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'black'"
+        (FunctionCallBack)="selectColor('black')"
+      >
+      </app-button>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'red'"
+        (FunctionCallBack)="selectColor('red')"
+      >
+      </app-button>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'blue'"
+        (FunctionCallBack)="selectColor('blue')"
+      >
+      </app-button>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'green'"
+        (FunctionCallBack)="selectColor('green')"
+      >
+      </app-button>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'yellow'"
+        (FunctionCallBack)="selectColor('yellow')"
+      >
+      </app-button>
+      <app-button
+        [ButtonType]="''"
+        [BackgroundColor]="'#FAF9F6'"
+        (FunctionCallBack)="selectColor('white')"
+      ></app-button>
+    </div>
+
+    <div>
+      <app-button [ButtonType]="'eraser'" (FunctionCallBack)="clearCanvas()">
+      </app-button>
+      <app-button
+        [ButtonType]="'undo'"
+        (FunctionCallBack)="undo()"
+      ></app-button>
+      <app-button
+        [ButtonType]="'redo'"
+        (FunctionCallBack)="redo()"
+      ></app-button>
+      <app-button
+        [ButtonType]="'download'"
+        (FunctionCallBack)="saveImage()"
+      ></app-button>
+    </div>
+  </div>
+</app-form-element-group>

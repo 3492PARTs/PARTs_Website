@@ -24,6 +24,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
 
   @Input() RemoveBorder = false;
+  @Input() MarginTop = '';
 
   constructor(private gs: GeneralService) {
   }
