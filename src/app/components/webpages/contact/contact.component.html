@@ -1,22 +1,56 @@
 <app-box [Title]="'Contact Us'">
-  <p class="important">Click <a routerLink="../join/team-application">here</a> for our high school team application
-    form.</p>
-  <p class="important">Middle school form coming. Please use the form below regarding that for now.</p>
-  <br>
+  <p class="important">
+    Click <a routerLink="../join/team-application">here</a> for our high school
+    team application form.
+  </p>
+  <p class="important">
+    Middle school form coming. Please use the form below regarding that for now.
+  </p>
+  <br />
 
   <app-form (SubmitFunction)="save()">
-    <app-form-element *ngFor="let q of questions" [LabelText]="q.question" [Type]="q.question_typ.question_typ"
-      [FormGroup]="true" [SelectList]="q.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-      [DisplayEmptyOption]="true" [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'"
+    <app-form-element
+      *ngFor="let q of questions"
+      [LabelText]="q.question"
+      [Type]="q.question_typ.question_typ"
+      [FormGroup]="true"
+      [SelectList]="q.questionoption_set"
+      [BindingProperty]="'option'"
+      [DisplayProperty]="'option'"
+      [DisplayEmptyOption]="true"
+      [(Model)]="q.answer"
+      [TrueValue]="'true'"
+      [FalseValue]="'false'"
       [Required]="q.required === 'y'"
-      [Width]="q.question_typ.question_typ === 'area' ? '100%' : q.question_typ.question_typ === 'checkbox' ? 'auto' : '300px'"
-      [Rows]="5" [Disabled]="disabled"
-      [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 2000">
+      [Width]="
+        q.question_typ.question_typ === 'area'
+          ? '100%'
+          : q.question_typ.question_typ === 'checkbox'
+          ? 'auto'
+          : '300px'
+      "
+      [Rows]="5"
+      [Disabled]="disabled"
+      [FieldSize]="
+        q.question_typ.question_typ === 'multiCheckbox'
+          ? 1000
+          : q.question_typ.question_typ === 'text'
+          ? 255
+          : 2000
+      "
+    >
     </app-form-element>
 
     <app-button-ribbon>
-      <app-button *ngIf="disabled" (FunctionCallBack)="export()">Export</app-button>
-      <app-button [Type]="'submit'" [Disabled]="disabled">Submit</app-button>
+      <app-button *ngIf="disabled" (FunctionCallBack)="export()"
+        >Export</app-button
+      >
+      <app-button
+        [Type]="'submit'"
+        [Disabled]="disabled"
+        [ButtonType]="'success'"
+        >Save</app-button
+      >
     </app-button-ribbon>
   </app-form>
 </app-box>
