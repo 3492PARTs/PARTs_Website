@@ -13,7 +13,7 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
 import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
-import { Chart, ChartDataset, Point, BubbleDataPoint, registerables } from 'chart.js';
+import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 import { ReturnCardComponent } from '../../../../elements/return-card/return-card.component';
@@ -21,7 +21,6 @@ import { ReturnLinkComponent } from '../../../../atoms/return-link/return-link.c
 import { BuildSeasonComponent } from "../../../media/build-season/build-season.component";
 import { User } from '../../../../../models/user.models';
 import { FormComponent } from "../../../../atoms/form/form.component";
-import { Banner } from '../../../../../models/api.models';
 
 @Component({
   selector: 'app-plan-matches',
@@ -51,6 +50,7 @@ export class MatchesComponent implements OnInit {
   scoutCols: TableColType[] = [];
   activeMatch: Match | undefined = undefined;
   activeMatchStrategies: MatchStrategy[] = [];
+  activeMatchStrategiesButtonData: { display: boolean, id: number }[] = [];
   matchToPlan: MatchPlanning[] = [];
 
   graphOptionsList: any[] = [];
@@ -169,8 +169,10 @@ export class MatchesComponent implements OnInit {
               if (ms1.time < ms2.time) return 1;
               else if (ms1.time > ms2.time) return -1;
               else return 0;
-            })
-          })
+            });
+          });
+          this.activeMatchStrategiesButtonData = this.activeMatchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
+
         }
       });
 
@@ -379,5 +381,13 @@ export class MatchesComponent implements OnInit {
     }
 
     return result;
+  }
+
+  openFullscreen(event: MouseEvent) {
+    this.gs.openFullscreen(event);
+  }
+
+  toggleImageDisplay(i: number): void {
+    this.activeMatchStrategiesButtonData[i].display = !this.activeMatchStrategiesButtonData[i].display;
   }
 }

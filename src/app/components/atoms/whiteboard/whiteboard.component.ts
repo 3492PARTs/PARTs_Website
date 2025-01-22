@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ButtonComponent } from "../../atoms/button/button.component";
+import { ButtonComponent } from "../button/button.component";
 import { GeneralService } from '../../../services/general.service';
-import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
+import { FormElementGroupComponent } from "../form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-whiteboard',

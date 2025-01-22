@@ -77,16 +77,31 @@
   <div class="padding-bottom-1rem">
     @for (ms of activeMatchStrategies; track ms.id; let i = $index) { @if
     (ms.user){
-    <app-form-element-group
-      [LabelText]="
-        ms.user.first_name +
-        ' ' +
-        ms.user.last_name +
-        ((ms.time | dateToStr) || '')
-      "
-    >
-      <p>{{ ms.strategy }}</p></app-form-element-group
-    >
+    <div class="match-strategy">
+      @if (ms.img_url) {
+      <app-button
+        class="img-btn"
+        [ButtonType]="'image-outline'"
+        [BackgroundColor]="'#808080'"
+        (FunctionCallBack)="toggleImageDisplay(i)"
+      ></app-button>
+      }
+
+      <app-form-element-group
+        [LabelText]="
+          ms.user.first_name +
+          ' ' +
+          ms.user.last_name +
+          ((ms.time | dateToStr) || '')
+        "
+      >
+        <p>{{ ms.strategy }}</p>
+
+        @if (ms.img_url && activeMatchStrategiesButtonData[i].display) {
+        <img class="img" [src]="ms.img_url" (click)="openFullscreen($event)" />
+        }
+      </app-form-element-group>
+    </div>
     } }
   </div>
 

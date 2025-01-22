@@ -7,7 +7,7 @@ import { User } from '../../../../../models/user.models';
 import { BoxComponent } from "../../../../atoms/box/box.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
-import { WhiteboardComponent } from "../../../../elements/whiteboard/whiteboard.component";
+import { WhiteboardComponent } from "../../../../atoms/whiteboard/whiteboard.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FormComponent } from "../../../../atoms/form/form.component";
 import { Banner } from '../../../../../models/api.models';

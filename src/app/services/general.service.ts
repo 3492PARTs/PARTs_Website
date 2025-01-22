@@ -458,23 +458,23 @@ export class GeneralService {
   }
 
   isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-      if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
-        switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
-          case 'equal':
-            return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
-          case 'exist':
-            return !this.strNoE(answer)
-          case 'lt':
-            return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
-          case 'lt-equal': 
+    if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
+      switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
+        case 'equal':
+          return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
+        case 'exist':
+          return !this.strNoE(answer)
+        case 'lt':
+          return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
+        case 'lt-equal':
           return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
-          case 'gt':
-            return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
-          case 'gt-equal':
-            return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
-        }
-      return false;
-    }
+        case 'gt':
+          return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
+        case 'gt-equal':
+          return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
+      }
+    return false;
+  }
 
   resizeImageToMaxSize(file: File): Promise<File> {
     var options = {
@@ -483,6 +483,21 @@ export class GeneralService {
     }
 
     return imageCompression(file, options);
+  }
+
+  openFullscreen(event: MouseEvent) {
+    const img = event.target as HTMLImageElement;
+
+    if (img) {
+      if (img.requestFullscreen) {
+        img.requestFullscreen();
+      }
+      /*else if (img['webkitRequestFullscreen']) {
+        img['webkitRequestFullscreen']();
+      } else if (img['msRequestFullscreen']) {
+        img['msRequestFullscreen']();
+      }*/
+    }
   }
 
   /*
