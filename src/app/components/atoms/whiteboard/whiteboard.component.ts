@@ -3,6 +3,7 @@ import { ButtonComponent } from "../button/button.component";
 import { GeneralService } from '../../../services/general.service';
 import { FormElementGroupComponent } from "../form-element-group/form-element-group.component";
 import { CommonModule } from '@angular/common';
+import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-whiteboard',
@@ -117,32 +118,74 @@ export class WhiteboardComponent implements OnInit {
     if (this.currentColor.length > 0) {
       if (!this.isDrawing) return;
 
-      this.ctx.beginPath();
-      this.ctx.moveTo(this.lastX, this.lastY);
-      const x = event.offsetX / this.scaleX;
-      const y = event.offsetY / this.scaleY;
-      this.ctx.lineTo(x, y);
+      const [x, y] = this.getCoordinates(event);
+      this.draw(x, y);
 
-
-      this.ctx.lineCap = 'round'; // Use round line cap for smoother erasing
-      this.ctx.strokeStyle = this.currentColor;
-      this.ctx.lineWidth = this.lineWidth;
-
-
-      this.ctx.stroke();
-
-      this.lastX = event.offsetX / this.scaleX;
-      this.lastY = event.offsetY / this.scaleY;
     }
   }
 
   onMouseUp() {
     if (this.currentColor.length > 0) {
       this.isDrawing = false;
-      // Save initial state of the canvas
+
       this.saveToUndoStack();
       this.emitImage();
     }
+  }
+
+  onTouchStart(event: TouchEvent) {
+    if (this.currentColor.length > 0) {
+      event.preventDefault(); // Prevent default browser behavior
+      const [x, y] = this.getCoordinates(event);
+      this.isDrawing = true;
+      this.lastX = x;
+      this.lastY = y;
+    }
+  }
+
+  onTouchMove(event: TouchEvent) {
+    if (this.currentColor.length > 0) {
+      event.preventDefault(); // Prevent default browser behavior
+      const [x, y] = this.getCoordinates(event);
+      this.draw(x, y);
+    }
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (this.currentColor.length > 0) {
+      event.preventDefault(); // Prevent default browser behavior
+      this.isDrawing = false;
+
+      this.saveToUndoStack();
+      this.emitImage();
+    }
+  }
+
+  private getCoordinates(event: MouseEvent | TouchEvent): [number, number] {
+    this.setScale();
+
+    if (event instanceof MouseEvent) {
+      return [event.offsetX / this.scaleX, event.offsetY / this.scaleY];
+    } else {
+      const touch = event.touches[0];
+      const rect = this.canvas.nativeElement.getBoundingClientRect();
+      return [(touch.clientX - rect.left) / this.scaleX, (touch.clientY - rect.top) / this.scaleY];
+    }
+  }
+
+  private draw(x: number, y: number) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.lastX, this.lastY);
+    this.ctx.lineTo(x, y);
+
+    this.ctx.lineCap = 'round';
+    this.ctx.strokeStyle = this.currentColor;
+    this.ctx.lineWidth = this.lineWidth;
+
+    this.ctx.stroke();
+
+    this.lastX = x;
+    this.lastY = y;
   }
 
   emitImage() {
@@ -201,6 +244,12 @@ export class WhiteboardComponent implements OnInit {
       fn();
   }
 
+  private setScale(): void {
+    //this.canvasHeight = this.canvas.nativeElement.height;
+    this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
+    this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
+  }
+
   private setImage(s: string): void {
     this.undoStack = []; // Clear undo/redo stacks
     this.redoStack = [];
@@ -220,14 +269,40 @@ export class WhiteboardComponent implements OnInit {
       this.canvas.nativeElement.height = this.canvasHeight;
       //this.height = this.canvasHeight
 
-      //this.canvasHeight = this.canvas.nativeElement.height;
-      this.scaleX = this.canvas.nativeElement.clientWidth / this.canvasWidth;
-      this.scaleY = this.canvas.nativeElement.clientHeight / this.canvasHeight;
+      this.setScale();
 
       this.ctx.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight);
 
       // Save initial state of the canvas
       this.saveToUndoStack();
+
+      /*
+      // Handle both mouse and touch events
+      const mouseMove$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mousemove');
+      const mouseUp$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mouseup');
+      const mouseDown$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mousedown');
+
+      const touchMove$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchmove');
+      const touchEnd$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchend');
+      const touchStart$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchstart');
+
+      merge(mouseDown$, touchStart$)
+        .pipe(
+          switchMap(() => {
+            this.isDrawing = true;
+            return merge(mouseMove$, touchMove$)
+              .pipe(
+                map((event: MouseEvent | TouchEvent) => {
+                  return this.getCoordinates(event);
+                }),
+                takeUntil(merge(mouseUp$, touchEnd$))
+              );
+          })
+        )
+        .subscribe(([x, y]) => {
+          this.draw(x, y);
+        });
+        */
     };
   }
 
