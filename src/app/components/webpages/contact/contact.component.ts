@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../models/api.models';
-import { Question } from '../../../models/form.models';
+import { Question, QuestionAnswer } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
@@ -11,11 +11,12 @@ import { FormComponent } from '../../atoms/form/form.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
+import { QuestionDisplayFormComponent } from "../../elements/question-display-form/question-display-form.component";
 
 @Component({
   selector: 'app-contact',
   standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink],
+  imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })
@@ -24,6 +25,8 @@ export class ContactComponent implements OnInit {
 
   questions: Question[] = [];
   disabled = false;
+
+  formElements = new QueryList<FormElementComponent>();
 
   constructor(private gs: GeneralService,
     private api: APIService,
@@ -60,7 +63,7 @@ export class ContactComponent implements OnInit {
   save(): void | null {
     this.questions.forEach(q => { q.answer = this.gs.formatQuestionAnswer(q.answer) });
     this.api.post(true, 'form/save-answers/',
-      { question_answers: this.questions, form_typ: 'team-cntct' },
+      { question_answers: this.questions.map(q => new QuestionAnswer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
         this.gs.scrollTo(0);
@@ -83,5 +86,9 @@ export class ContactComponent implements OnInit {
 
   export(): void {
     this.gs.downloadFileAs('TeamContact.csv', this.gs.questionsToCSV(this.questions), 'text/csv');
+  }
+
+  setFormElements(fes: QueryList<FormElementComponent>): void {
+    this.formElements.reset([...fes]);
   }
 }
