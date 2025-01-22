@@ -68,42 +68,7 @@ export class WhiteboardComponent implements OnInit {
   }
 
   onCanvasClick(event: MouseEvent) {
-    if (this.currentColor.length > 0) {
-      const rect = this.canvas.nativeElement.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / this.scaleX;
-      const y = (event.clientY - rect.top) / this.scaleY;
-
-      if (this.stampText.length > 0) {
-        // Get text dimensions
-        this.ctx.font = '20px Arial';
-        const textMetrics = this.ctx.measureText(this.stampText);
-        const textWidth = textMetrics.width;
-        const textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
-
-        // Calculate box coordinates
-        const boxX = x - 5;
-        const boxY = y - 20;
-        const boxWidth = textWidth + 10;
-        const boxHeight = textHeight + 10;
-
-        // Draw the box
-        this.ctx.strokeStyle = this.currentColor;
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
-
-        // Draw the text with a black border
-        const border = 2;
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillText(this.stampText, x - border, y - border); // Offset by border pixel for shadow
-        this.ctx.fillText(this.stampText, x + border, y - border);
-        this.ctx.fillText(this.stampText, x - border, y + border);
-        this.ctx.fillText(this.stampText, x + border, y + border);
-
-        // Draw the text
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText(this.stampText, x, y);
-      }
-    }
+    this.stamp(event);
   }
 
   onMouseDown(event: MouseEvent) {
@@ -140,6 +105,7 @@ export class WhiteboardComponent implements OnInit {
       this.isDrawing = true;
       this.lastX = x;
       this.lastY = y;
+      this.stamp(event);
     }
   }
 
@@ -186,6 +152,47 @@ export class WhiteboardComponent implements OnInit {
 
     this.lastX = x;
     this.lastY = y;
+  }
+
+  private stamp(event: MouseEvent | TouchEvent): void {
+    if (this.currentColor.length > 0 && this.stampText.length > 0) {
+      //const rect = this.canvas.nativeElement.getBoundingClientRect();
+      //const x = (event.clientX - rect.left) / this.scaleX;
+      //const y = (event.clientY - rect.top) / this.scaleY;
+
+      const [x, y] = this.getCoordinates(event)
+
+      if (this.stampText.length > 0) {
+        // Get text dimensions
+        this.ctx.font = '20px Arial';
+        const textMetrics = this.ctx.measureText(this.stampText);
+        const textWidth = textMetrics.width;
+        const textHeight = textMetrics.actualBoundingBoxAscent + textMetrics.actualBoundingBoxDescent;
+
+        // Calculate box coordinates
+        const boxX = x - 5;
+        const boxY = y - 20;
+        const boxWidth = textWidth + 10;
+        const boxHeight = textHeight + 10;
+
+        // Draw the box
+        this.ctx.strokeStyle = this.currentColor;
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
+
+        // Draw the text with a black border
+        const border = 2;
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText(this.stampText, x - border, y - border); // Offset by border pixel for shadow
+        this.ctx.fillText(this.stampText, x + border, y - border);
+        this.ctx.fillText(this.stampText, x - border, y + border);
+        this.ctx.fillText(this.stampText, x + border, y + border);
+
+        // Draw the text
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(this.stampText, x, y);
+      }
+    }
   }
 
   emitImage() {
