@@ -68,11 +68,15 @@ export class MatchPlanningComponent implements OnInit {
 
 
   setMatchStrategy(ms?: MatchStrategy): void {
-    this.activeMatchStrategy = ms ? ms : new MatchStrategy();
+    this.activeMatchStrategy = ms ? this.gs.cloneObject(ms) : new MatchStrategy();
   }
 
   setImage(f: File): void {
     this.activeMatchStrategy.img = f;
+  }
+
+  clearImageUrl(): void {
+    this.activeMatchStrategy.img_url = '';
   }
 
   async saveMatchStrategy(): Promise<void> {

@@ -45,7 +45,12 @@
       }
 
       <app-button-ribbon>
-        <app-button [Type]="'submit'" [Type]="'success'">Save</app-button>
+        @if (activeMatchStrategy.img_url) {
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="clearImageUrl()"
+          >New Image</app-button
+        >
+        }
+        <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
       </app-button-ribbon>
     </app-form-element-group>
   </app-form>
