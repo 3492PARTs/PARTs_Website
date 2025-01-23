@@ -61,6 +61,8 @@ export class MatchesComponent implements OnInit {
 
   user = new User();
 
+  private initPromise: Promise<boolean> | undefined = undefined;
+
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);
   }
@@ -95,101 +97,116 @@ export class MatchesComponent implements OnInit {
   }
 
   init(): void {
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(result => {
-      if (result) {
-        this.teams = result.teams;
+    if (!this.initPromise)
+      this.initPromise = new Promise<boolean>(resolve => {
+        const offlineCalls: any[] = [];
 
-        const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
-        this.matches = ourMatches;
-      }
+        offlineCalls.push(
+          this.ss.loadAllScoutingInfo().then(result => {
+            if (result) {
+              this.teams = result.teams;
 
-      this.gs.decrementOutstandingCalls();
-    });
+              const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
+              this.matches = ourMatches;
+            }
 
-    //this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingResponses(false).then(result => {
-      if (result) {
-        this.scoutCols = result.scoutCols;
+          }));
 
-        this.buildGraphOptionsList();
-      }
-      //this.gs.decrementOutstandingCalls();
-    });
+        //this.gs.incrementOutstandingCalls();
+        offlineCalls.push(
+          this.ss.loadFieldScoutingResponses(false).then(result => {
+            if (result) {
+              this.scoutCols = result.scoutCols;
 
-    //this.gs.incrementOutstandingCalls();
-    this.ss.loadPitScoutingResponses(false).then(result => {
-      //this.gs.decrementOutstandingCalls();
-    });
+              //this.buildGraphOptionsList();
+            }
+            //this.gs.decrementOutstandingCalls();
+          }));
+
+        //this.gs.incrementOutstandingCalls();
+        offlineCalls.push(this.ss.loadPitScoutingResponses(false).then(result => {
+          //this.gs.decrementOutstandingCalls();
+        }));
+
+        Promise.all(offlineCalls).then((results: any[]) => {
+          resolve(true);
+          this.initPromise = undefined;
+        });
+      });
+
   }
 
   async planMatch(match: Match): Promise<void> {
-    this.gs.incrementOutstandingCalls();
+    if (!this.initPromise) {
+      this.gs.incrementOutstandingCalls();
 
-    this.matchToPlan = [];
-    let tmp: MatchPlanning[] = [];
+      this.matchToPlan = [];
+      let tmp: MatchPlanning[] = [];
 
-    const allianceMembers = [
-      { team: match.red_one_id, alliance: 'red' },
-      { team: match.red_two_id, alliance: 'red' },
-      { team: match.red_three_id, alliance: 'red' },
-      { team: match.blue_one_id, alliance: 'blue' },
-      { team: match.blue_two_id, alliance: 'blue' },
-      { team: match.blue_three_id, alliance: 'blue' },
+      const allianceMembers = [
+        { team: match.red_one_id, alliance: 'red' },
+        { team: match.red_two_id, alliance: 'red' },
+        { team: match.red_three_id, alliance: 'red' },
+        { team: match.blue_one_id, alliance: 'blue' },
+        { team: match.blue_two_id, alliance: 'blue' },
+        { team: match.blue_three_id, alliance: 'blue' },
 
-    ]
+      ]
 
-    for (const allianceMember of allianceMembers) {
-      let team = new Team();
-      let pitData = new ScoutPitResponse();
-      let scoutAnswers: any = null;
-      let notes: TeamNote[] = [];
+      for (const allianceMember of allianceMembers) {
+        let team = new Team();
+        let pitData = new ScoutPitResponse();
+        let scoutAnswers: any = null;
+        let notes: TeamNote[] = [];
 
-      await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
-        if (t) {
-          team = t;
-          await this.ss.getPitResponseFromCache(t.team_no).then(spr => {
-            if (spr) {
-              pitData = spr;
-            }
-          });
-
-          await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
-            scoutAnswers = sprs;
-          });
-
-          await this.ss.getTeamNotesFromCache(f => f.where({ 'team_id': t.team_no })).then(tns => {
-            notes = tns;
-          });
-
-          this.activeMatchStrategies = [];
-          await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_id === match.match_id).then(mss => {
-            this.activeMatchStrategies = mss;
-            this.activeMatchStrategies.sort((ms1, ms2) => {
-              if (ms1.time < ms2.time) return 1;
-              else if (ms1.time > ms2.time) return -1;
-              else return 0;
+        await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
+          if (t) {
+            team = t;
+            await this.ss.getPitResponseFromCache(t.team_no).then(spr => {
+              if (spr) {
+                pitData = spr;
+              }
             });
-          });
-          this.activeMatchStrategiesButtonData = this.activeMatchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
 
-        }
-      });
+            await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
+              scoutAnswers = sprs;
+            });
 
-      tmp.push(
-        {
-          team: team,
-          pitData: pitData,
-          scoutAnswers: scoutAnswers,
-          notes: notes,
-          alliance: allianceMember.alliance,
+            await this.ss.getTeamNotesFromCache(f => f.where({ 'team_id': t.team_no })).then(tns => {
+              notes = tns;
+            });
+
+            this.activeMatchStrategies = [];
+            await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_id === match.match_id).then(mss => {
+              this.activeMatchStrategies = mss;
+              this.activeMatchStrategies.sort((ms1, ms2) => {
+                if (ms1.time < ms2.time) return 1;
+                else if (ms1.time > ms2.time) return -1;
+                else return 0;
+              });
+            });
+            this.activeMatchStrategiesButtonData = this.activeMatchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
+
+          }
         });
+
+        tmp.push(
+          {
+            team: team,
+            pitData: pitData,
+            scoutAnswers: scoutAnswers,
+            notes: notes,
+            alliance: allianceMember.alliance,
+          });
+      }
+
+      this.matchToPlan = tmp;
+      this.activeMatch = match;
+
+      this.gs.decrementOutstandingCalls();
     }
-
-    this.matchToPlan = tmp;
-    this.activeMatch = match;
-
-    this.gs.decrementOutstandingCalls();
+    else
+      this.gs.triggerError('Data still loading, try again in a moment.');
   }
 
   buildGraphOptionsList(): void {
