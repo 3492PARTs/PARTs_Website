@@ -1195,15 +1195,39 @@ export class ScoutingService {
     return this.outstandingLoadMatchStrategiesPromise;
   }
 
-  saveMatchStrategy(matchStrategy: MatchStrategy | FormData, id?: number, loadingScreen = true): Promise<boolean> {
+  saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
 
-      this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', matchStrategy, (result: any) => {
+      const fd = new FormData();
+      if (matchStrategy.img)
+        fd.append('img', matchStrategy.img);
+      if (!this.gs.strNoE(matchStrategy.id))
+        fd.append('id', matchStrategy.id.toString());
+
+      fd.append('match_id', matchStrategy.match?.match_id.toString() || '');
+      fd.append('user_id', matchStrategy.user?.id.toString() || '');
+      fd.append('strategy', matchStrategy.strategy);
+
+
+      this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
         this.gs.successfulResponseBanner(result);
+
+        if (id) {
+          await this.cs.MatchStrategyResponse.RemoveAsync(id)
+        }
+
         resolve(true);
       }, (error) => {
-        this.gs.triggerError(error);
-        resolve(false);
+        this.startUploadOutstandingResponsesTimeout();
+        //sfr.id = 1;
+        if (!id) this.cs.MatchStrategyResponse.AddAsync(matchStrategy).then(() => {
+          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          resolve(true);
+        }).catch((reason: any) => {
+          console.log(reason);
+          this.gs.triggerError(reason);
+          resolve(false);
+        });;
       });
     });
   }
@@ -1220,6 +1244,10 @@ export class ScoutingService {
 
   filterMatchStrategiesFromCache(fn: (obj: MatchStrategy) => boolean): PromiseExtended<MatchStrategy[]> {
     return this.cs.MatchStrategy.filterAll(fn);
+  }
+
+  getMatchStrategyResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatchStrategy[]> {
+    return this.cs.MatchStrategyResponse.getAll(filterDelegate);
   }
 
   // Alliance Selections -----------------------------------------------------------

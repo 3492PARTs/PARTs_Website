@@ -78,6 +78,10 @@ export const DBStores = {
         TableName: 'MatchStrategy',
         Columns: generateColumns(matchStrategyInstance),
     },
+    MatchStrategyResponse: {
+        TableName: 'MatchStrategyResponse',
+        Columns: '++id'//generateColumns(matchStrategyInstance),
+    },
     AllianceSelection: {
         TableName: 'AllianceSelection',
         Columns: generateColumns(allianceSelectionInstance),

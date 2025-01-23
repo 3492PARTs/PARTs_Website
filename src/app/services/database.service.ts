@@ -26,6 +26,7 @@ export class DatabaseService extends Dexie {
 
   MatchTable!: Dexie.Table<IMatch, string>;
   MatchStrategyTable!: Dexie.Table<IMatchStrategy, number>;
+  MatchStrategyResponseTable!: Dexie.Table<IMatchStrategy, number>;
   AllianceSelectionTable!: Dexie.Table<IAllianceSelection, number>;
   FieldFormFormTable!: Dexie.Table<IFieldFormForm, number>;
   ScoutFieldScheduleTable!: Dexie.Table<IScoutFieldSchedule, number>;
@@ -81,6 +82,7 @@ export class DatabaseService extends Dexie {
 
     this.MatchTable = this.table(DBStores.Match.TableName);
     this.MatchStrategyTable = this.table(DBStores.MatchStrategy.TableName);
+    this.MatchStrategyResponseTable = this.table(DBStores.MatchStrategyResponse.TableName);
     this.AllianceSelectionTable = this.table(DBStores.AllianceSelection.TableName);
     this.FieldFormFormTable = this.table(DBStores.FieldFormForm.TableName);
     this.ScoutFieldScheduleTable = this.table(DBStores.ScoutFieldSchedule.TableName);

@@ -517,7 +517,7 @@ export interface IMatchStrategy {
 }
 
 export class MatchStrategy implements IMatchStrategy {
-    id = NaN;
+    id!: number;
     match: Match | undefined = undefined;
     user: User | undefined = undefined;
     strategy = '';

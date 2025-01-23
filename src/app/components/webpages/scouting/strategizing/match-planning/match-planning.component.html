@@ -1,4 +1,24 @@
 <app-box [Title]="'Match Planning'">
+  @if (outstandingResponses.length > 0) {
+  <app-form-element-group [LabelText]="'Strategies to upload'">
+    <div
+      id="outstanding-results"
+      class="flex align-items-center gap-1rem flex-wrap"
+    >
+      <app-button
+        [ButtonType]="'refresh'"
+        (FunctionCallBack)="uploadOutstandingResponses()"
+      ></app-button>
+      @for (or of outstandingResponses; track $index) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="viewResult(or.id)"
+        >{{ or.match }}
+      </app-button>
+      }
+    </div>
+  </app-form-element-group>
+  <br />
+  }
+
   <app-form (SubmitFunction)="saveMatchStrategy()">
     <app-form-element-group [LabelText]="'Match'" [InlineElements]="true">
       <div class="flex flex-wrap align-items-baseline">

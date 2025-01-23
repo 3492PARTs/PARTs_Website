@@ -34,8 +34,14 @@ export class MatchPlanningComponent implements OnInit {
   activeMatchStrategy: MatchStrategy | undefined = undefined;
   activeTeams: string[] = [];
 
+  outstandingResponses: { id: number, match: number }[] = [];
+
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);
+
+    this.ss.outstandingResponsesUploaded.subscribe(b => {
+      this.populateOutstandingResponses();
+    });
   }
 
   ngOnInit(): void {
@@ -61,10 +67,22 @@ export class MatchPlanningComponent implements OnInit {
         this.matchStrategies = result.match_strategies;
       }
     });
+    this.populateOutstandingResponses();
+  }
+
+  populateOutstandingResponses(): void {
+    this.ss.getMatchStrategyResponsesFromCache().then(sfrc => {
+      this.outstandingResponses = [];
+
+      sfrc.forEach(s => {
+        this.outstandingResponses.push({ id: s.id, match: s.match?.match_number || NaN });
+      });
+
+    });
   }
 
   setMatchStrategies(): void {
-    if (!this.activeMatchStrategy) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy || !this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
     if (this.match?.blue_one_id)
       this.activeTeams = [this.match?.blue_one_id.toString() || '', this.match?.blue_two_id.toString() || '', this.match?.blue_three_id.toString() || '', this.match?.red_one_id.toString() || '', this.match?.red_two_id.toString() || '', this.match?.red_three_id.toString() || ''];
@@ -87,30 +105,66 @@ export class MatchPlanningComponent implements OnInit {
       this.activeMatchStrategy.img_url = '';
   }
 
-  async saveMatchStrategy(): Promise<void> {
+  saveMatchStrategy(): void {
     if (this.activeMatchStrategy) {
-      const fd = new FormData();
-      if (this.activeMatchStrategy.img)
-        fd.append('img', this.activeMatchStrategy.img);
-      if (!this.gs.strNoE(this.activeMatchStrategy.id))
-        fd.append('id', this.activeMatchStrategy.id.toString());
 
-      fd.append('match_id', this.match?.match_id.toString() || '');
-      fd.append('user_id', this.user?.id.toString() || '');
-      fd.append('strategy', this.activeMatchStrategy.strategy);
+      if (!this.activeMatchStrategy.match)
+        this.activeMatchStrategy.match = this.match;
 
-      if (!(await this.ss.saveMatchStrategy(fd))) {
-        this.gs.addBanner(new Banner(undefined, `Error saving match strategy`, 5000));
-        return;
-      }
+      if (!this.activeMatchStrategy.user)
+        this.activeMatchStrategy.user = this.user;
 
-      this.activeMatchStrategy = new MatchStrategy();
+      this.ss.saveMatchStrategy(this.activeMatchStrategy).then(result => {
+        if (result) {
+          this.activeMatchStrategy = new MatchStrategy();
 
-      this.ss.loadMatchStrategies().then(result => {
-        if (result)
-          this.matchStrategies = result;
-        this.setMatchStrategies();
+          this.ss.loadMatchStrategies().then(result => {
+            if (result)
+              this.matchStrategies = result;
+            this.setMatchStrategies();
+            this.gs.scrollTo(0);
+          });
+        }
+        this.populateOutstandingResponses();
       });
     }
+  }
+
+  uploadOutstandingResponses(): void {
+    this.ss.uploadOutstandingResponses();
+  }
+
+  viewResult(id: number): void {
+    /*
+      this.formDisabled = true;
+      this.scoutFieldResponse = new ScoutFieldFormResponse();
+      this.cs.ScoutFieldFormResponse.getById(id).then(async sfr => {
+        if (sfr) {
+          this.scoutFieldResponse = sfr;
+  
+          /*
+          await this.cs.Match.getAll().then((ms: Match[]) => {
+            this.matches = ms;
+            if (sfr?.match) {
+              this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
+            }
+  
+          });
+          
+  
+          this.buildTeamList(sfr?.team_id || NaN);
+        }
+      });*/
+  }
+
+  removeResult(): void {
+    /*
+    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+      this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
+        this.reset();
+        this.populateOutstandingResponses();
+      });
+    });*/
+
   }
 }

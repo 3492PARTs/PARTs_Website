@@ -3,7 +3,10 @@
     [LabelText]="'Team results to upload'"
     *ngIf="outstandingResponses.length > 0"
   >
-    <div id="outstanding-results" class="flex align-items-center gap-1rem">
+    <div
+      id="outstanding-results"
+      class="flex align-items-center gap-1rem flex-wrap"
+    >
       <app-button
         [ButtonType]="'refresh'"
         (FunctionCallBack)="uploadOutstandingResponses()"

@@ -22,11 +22,12 @@ export class CacheService {
   TeamNote!: DexieCrud<TeamNote, number>;
   Match!: DexieCrud<Match, string>;
   MatchStrategy!: DexieCrud<MatchStrategy, number>;
+  MatchStrategyResponse!: DexieCrud<MatchStrategy, number>;
   AllianceSelection!: DexieCrud<AllianceSelection, number>;
   FieldFormForm!: DexieCrud<FieldFormForm, number>;
   ScoutFieldSchedule!: DexieCrud<ScoutFieldSchedule, number>;
-  ScoutFieldFormResponse!: DexieCrud<ScoutFieldFormResponse, number>;
   // These are used for the responses page
+  ScoutFieldFormResponse!: DexieCrud<ScoutFieldFormResponse, number>;
   ScoutFieldResponseColumn!: DexieCrud<any, number>;
   ScoutFieldResponse!: DexieCrud<any, number>;
 
@@ -53,6 +54,7 @@ export class CacheService {
     this.TeamNote = new DexieCrud<ITeamNote, number>(this.dbs.TeamNoteTable);
     this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
     this.MatchStrategy = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyTable);
+    this.MatchStrategyResponse = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyResponseTable);
     this.AllianceSelection = new DexieCrud<IAllianceSelection, number>(this.dbs.AllianceSelectionTable);
     this.FieldFormForm = new DexieCrud<IFieldFormForm, number>(this.dbs.FieldFormFormTable);
     this.ScoutFieldSchedule = new DexieCrud<IScoutFieldSchedule, number>(this.dbs.ScoutFieldScheduleTable);

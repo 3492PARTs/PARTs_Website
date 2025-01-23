@@ -133,11 +133,11 @@ export class NotificationsService {
 
   dismissAlert(a: Alert): void {
     this.api.get(true, 'alerts/dismiss/', {
-      alert_channel_send_id: a.channel_send_id.toString()
+      channel_send_id: a.channel_send_id.toString()
     }, (result: any) => {
-      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'alert_channel_send_id', a.channel_send_id);
+      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
       if (index >= 0) this.removeNotification(index);
-      index = this.gs.arrayObjectIndexOf(this.messages_, 'alert_channel_send_id', a.channel_send_id)
+      index = this.gs.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
       this.getUserAlerts('notification');
       this.getUserAlerts('message');
