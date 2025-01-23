@@ -90,8 +90,14 @@ export class ScoutingService {
         await this.cs.MatchStrategyResponse.getAll().then(async mrs => {
           for (let i = 0; i < mrs.length; i++) {
             let s = mrs[i];
-            await this.saveMatchStrategy(s, s.id, loadingScreen).then(success => {
-            });
+            await this.saveMatchStrategy(s, s.id, loadingScreen);
+          }
+        });
+
+        await this.cs.TeamNoteResponse.getAll().then(async trs => {
+          for (let i = 0; i < trs.length; i++) {
+            let s = trs[i];
+            await this.saveTeamNote(s, s.team_note_id, loadingScreen);
           }
         });
 
@@ -214,6 +220,13 @@ export class ScoutingService {
 
           await this.getFieldFormFormFromCache().then(ff => {
             result.field_form_form = ff;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getAllianceSelectionFromCache().then(als => {
+            result.alliance_selections = als;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -1139,12 +1152,27 @@ export class ScoutingService {
   saveTeamNote(teamNote: TeamNote, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
 
-      this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, (result: any) => {
+      if (id) teamNote.team_note_id = NaN;
+
+      this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
         this.gs.successfulResponseBanner(result);
+
+        if (id) {
+          await this.removeTeamNoteResponseFromCache(id)
+        }
+
         resolve(true);
       }, (error) => {
-        this.gs.triggerError(error);
-        resolve(false);
+        this.startUploadOutstandingResponsesTimeout();
+
+        if (!id) this.cs.TeamNoteResponse.AddAsync(teamNote).then(() => {
+          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          resolve(true);
+        }).catch((reason: any) => {
+          console.log(reason);
+          this.gs.triggerError(reason);
+          resolve(false);
+        });
       });
     });
   }
@@ -1157,6 +1185,14 @@ export class ScoutingService {
 
   getTeamNotesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
     return this.cs.TeamNote.getAll(filterDelegate);
+  }
+
+  getTeamNoteResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
+    return this.cs.TeamNoteResponse.getAll(filterDelegate);
+  }
+
+  removeTeamNoteResponseFromCache(id: number): Promise<void> {
+    return this.cs.TeamNoteResponse.RemoveAsync(id)
   }
 
   // Match Strategies -----------------------------------------------------------
@@ -1229,7 +1265,7 @@ export class ScoutingService {
         resolve(true);
       }, (error) => {
         this.startUploadOutstandingResponsesTimeout();
-        //sfr.id = 1;
+
         if (!id) this.cs.MatchStrategyResponse.AddAsync(matchStrategy).then(() => {
           this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
           resolve(true);
@@ -1237,7 +1273,7 @@ export class ScoutingService {
           console.log(reason);
           this.gs.triggerError(reason);
           resolve(false);
-        });;
+        });
       });
     });
   }
@@ -1313,8 +1349,10 @@ export class ScoutingService {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
         this.gs.successfulResponseBanner(result);
+        resolve(true);
       }, (error) => {
         this.gs.triggerError(error);
+        resolve(false);
       });
     });
   }

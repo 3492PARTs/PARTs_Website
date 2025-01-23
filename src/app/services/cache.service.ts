@@ -20,6 +20,7 @@ export class CacheService {
   Event!: DexieCrud<Event, number>;
   Team!: DexieCrud<Team, number>;
   TeamNote!: DexieCrud<TeamNote, number>;
+  TeamNoteResponse!: DexieCrud<TeamNote, number>;
   Match!: DexieCrud<Match, string>;
   MatchStrategy!: DexieCrud<MatchStrategy, number>;
   MatchStrategyResponse!: DexieCrud<MatchStrategy, number>;
@@ -52,6 +53,7 @@ export class CacheService {
     this.Event = new DexieCrud<IEvent, number>(this.dbs.EventTable);
     this.Team = new DexieCrud<ITeam, number>(this.dbs.TeamTable);
     this.TeamNote = new DexieCrud<ITeamNote, number>(this.dbs.TeamNoteTable);
+    this.TeamNoteResponse = new DexieCrud<ITeamNote, number>(this.dbs.TeamNoteResponseTable);
     this.Match = new DexieCrud<IMatch, string>(this.dbs.MatchTable);
     this.MatchStrategy = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyTable);
     this.MatchStrategyResponse = new DexieCrud<IMatchStrategy, number>(this.dbs.MatchStrategyResponseTable);

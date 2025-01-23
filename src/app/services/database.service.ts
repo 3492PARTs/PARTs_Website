@@ -23,6 +23,7 @@ export class DatabaseService extends Dexie {
   EventTable!: Dexie.Table<IEvent, number>;
   TeamTable!: Dexie.Table<ITeam, number>;
   TeamNoteTable!: Dexie.Table<ITeamNote, number>;
+  TeamNoteResponseTable!: Dexie.Table<ITeamNote, number>;
 
   MatchTable!: Dexie.Table<IMatch, string>;
   MatchStrategyTable!: Dexie.Table<IMatchStrategy, number>;
@@ -79,6 +80,7 @@ export class DatabaseService extends Dexie {
     this.EventTable = this.table(DBStores.Event.TableName);
     this.TeamTable = this.table(DBStores.Team.TableName);
     this.TeamNoteTable = this.table(DBStores.TeamNote.TableName);
+    this.TeamNoteResponseTable = this.table(DBStores.TeamNoteResponse.TableName);
 
     this.MatchTable = this.table(DBStores.Match.TableName);
     this.MatchStrategyTable = this.table(DBStores.MatchStrategy.TableName);

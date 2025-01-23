@@ -408,7 +408,7 @@ export interface ITeamNote {
 }
 
 export class TeamNote implements ITeamNote {
-    team_note_id = NaN;
+    team_note_id!: number;
     //event: Event | number = NaN;
     team_id = NaN;
     match: Match | undefined = undefined;
