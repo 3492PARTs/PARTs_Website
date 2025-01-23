@@ -41,8 +41,8 @@ export class ProfileComponent implements OnInit {
   input: UserData = new UserData();
 
   alertTableCols: TableColType[] = [
-    { PropertyName: 'alert_subject', ColLabel: 'Subject' },
-    { PropertyName: 'alert_body', ColLabel: 'Message' },
+    { PropertyName: 'subject', ColLabel: 'Subject' },
+    { PropertyName: 'body', ColLabel: 'Message' },
     { PropertyName: 'staged_time', ColLabel: 'Sent' },
 
   ];

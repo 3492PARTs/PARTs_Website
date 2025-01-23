@@ -151,7 +151,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     //this.navigationService.subPages.subscribe(s => this.subPages = s);
 
     this.navigationService.subPage.subscribe(s => {
-      if (this.subPage !== s) {
+      if (this.subPage !== s || this.gs.strNoE(s)) {
         let isFirst = false;
         this.navigationService.allSubPages.forEach(spg => {
           if (spg[0] && spg[0].routerlink === s) {

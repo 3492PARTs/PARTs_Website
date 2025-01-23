@@ -83,7 +83,7 @@ export class NotificationsService {
 
   pushNotification(n: Alert): void {
     this.notifications_.push(n);
-    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.alert_subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.subject}`, 3500));
     this.notificationsBS.next(this.notifications_);
   }
 
@@ -94,7 +94,7 @@ export class NotificationsService {
 
   pushMessage(m: Alert): void {
     this.messages_.push(m);
-    this.gs.addBanner(new Banner(0, `New Message:\n${m.alert_subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Message:\n${m.subject}`, 3500));
     this.messagesBS.next(this.messages_);
   }
 
@@ -111,7 +111,7 @@ export class NotificationsService {
         for (let r of result as Alert[]) {
           let found = false;
           this.notifications_.forEach(n => {
-            if (n.alert_channel_send_id === r.alert_channel_send_id)
+            if (n.channel_send_id === r.channel_send_id)
               found = true;
           });
           if (!found) this.pushNotification(r);
@@ -122,7 +122,7 @@ export class NotificationsService {
         for (let r of result as Alert[]) {
           let found = false;
           this.messages_.forEach(m => {
-            if (m.alert_channel_send_id === r.alert_channel_send_id)
+            if (m.channel_send_id === r.channel_send_id)
               found = true;
           });
           if (!found) this.pushMessage(r);
@@ -133,11 +133,11 @@ export class NotificationsService {
 
   dismissAlert(a: Alert): void {
     this.api.get(true, 'alerts/dismiss/', {
-      alert_channel_send_id: a.alert_channel_send_id.toString()
+      alert_channel_send_id: a.channel_send_id.toString()
     }, (result: any) => {
-      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'alert_channel_send_id', a.alert_channel_send_id);
+      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'alert_channel_send_id', a.channel_send_id);
       if (index >= 0) this.removeNotification(index);
-      index = this.gs.arrayObjectIndexOf(this.messages_, 'alert_channel_send_id', a.alert_channel_send_id)
+      index = this.gs.arrayObjectIndexOf(this.messages_, 'alert_channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
       this.getUserAlerts('notification');
       this.getUserAlerts('message');
@@ -154,9 +154,9 @@ export class UserPushNotificationSubscriptionObject {
 }
 
 export class Alert {
-  alert_id = 0;
-  alert_channel_send_id = 0;
-  alert_body = '';
-  alert_subject = '';
+  id = 0;
+  channel_send_id = 0;
+  body = '';
+  subject = '';
   staged_time = new Date();
 }
