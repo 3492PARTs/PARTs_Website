@@ -16,7 +16,15 @@
       }
     </div>
   </app-form-element-group>
-  <br />
+  } @if (formDisabled) {
+  <div class="padding-bottom-1rem padding-top-1rem">
+    <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()"
+      >Reset</app-button
+    >
+    <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()"
+      >Remove Result</app-button
+    >
+  </div>
   }
 
   <app-form (SubmitFunction)="saveMatchStrategy()">
@@ -32,6 +40,7 @@
           (FunctionCallBack)="setMatchStrategies()"
           [Required]="true"
           [DisplayEmptyOption]="true"
+          [Disabled]="formDisabled"
         ></app-form-element>
 
         <div class="flex align-items-center">
@@ -44,11 +53,13 @@
             [MinWidth]="'200px'"
             [MaxWidth]="'260px'"
             [DisplayEmptyOption]="true"
+            [Disabled]="formDisabled"
           ></app-form-element>
 
           <app-button
             [ButtonType]="'add'"
             (FunctionCallBack)="setMatchStrategy()"
+            [Disabled]="formDisabled"
           ></app-button>
         </div>
       </div>
@@ -63,6 +74,7 @@
         [Width]="'100%'"
         [Rows]="8"
         [Required]="true"
+        [Disabled]="formDisabled"
       ></app-form-element>
 
       @if (fieldForm && !activeMatchStrategy.img_url) {
@@ -76,12 +88,17 @@
       }
 
       <app-button-ribbon>
-        @if (activeMatchStrategy.img_url) {
+        @if (activeMatchStrategy.img_url && !formDisabled) {
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="clearImageUrl()"
           >New Image</app-button
         >
         }
-        <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+        <app-button
+          [Type]="'submit'"
+          [ButtonType]="'success'"
+          [Disabled]="formDisabled"
+          >Save</app-button
+        >
       </app-button-ribbon>
     </app-form-element-group>
     }

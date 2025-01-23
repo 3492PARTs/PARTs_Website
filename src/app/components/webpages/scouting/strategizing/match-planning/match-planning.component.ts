@@ -35,11 +35,13 @@ export class MatchPlanningComponent implements OnInit {
   activeTeams: string[] = [];
 
   outstandingResponses: { id: number, match: number }[] = [];
+  formDisabled = false;
 
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
+      this.init();
       this.populateOutstandingResponses();
     });
   }
@@ -84,12 +86,15 @@ export class MatchPlanningComponent implements OnInit {
   setMatchStrategies(): void {
     if (!this.activeMatchStrategy || !this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
+    this.buildTeamList();
+  }
+
+  buildTeamList(): void {
     if (this.match?.blue_one_id)
       this.activeTeams = [this.match?.blue_one_id.toString() || '', this.match?.blue_two_id.toString() || '', this.match?.blue_three_id.toString() || '', this.match?.red_one_id.toString() || '', this.match?.red_two_id.toString() || '', this.match?.red_three_id.toString() || ''];
     else
       this.activeTeams = [];
   }
-
 
   setMatchStrategy(ms?: MatchStrategy): void {
     this.activeMatchStrategy = ms ? this.gs.cloneObject(ms) : new MatchStrategy();
@@ -135,36 +140,34 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   viewResult(id: number): void {
-    /*
-      this.formDisabled = true;
-      this.scoutFieldResponse = new ScoutFieldFormResponse();
-      this.cs.ScoutFieldFormResponse.getById(id).then(async sfr => {
-        if (sfr) {
-          this.scoutFieldResponse = sfr;
-  
-          /*
-          await this.cs.Match.getAll().then((ms: Match[]) => {
-            this.matches = ms;
-            if (sfr?.match) {
-              this.scoutFieldResponse.match = this.matches.filter(m => m.match_id === (sfr.match as Match).match_id)[0];
-            }
-  
+    this.formDisabled = true;
+    this.ss.getMatchStrategyResponsesFromCache(tn => tn.where({ 'id': id })).then(result => {
+      result.forEach(r => {
+        this.activeMatchStrategy = r;
+        if (this.activeMatchStrategy.img)
+          this.gs.previewImageFile(this.activeMatchStrategy.img, (ev: ProgressEvent<FileReader>) => {
+            if (this.activeMatchStrategy)
+              this.activeMatchStrategy.img_url = ev.target?.result as string;
           });
-          
-  
-          this.buildTeamList(sfr?.team_id || NaN);
-        }
-      });*/
+        this.match = r.match;
+        this.buildTeamList();
+      });
+    });
   }
 
   removeResult(): void {
-    /*
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
-      this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
-        this.reset();
-        this.populateOutstandingResponses();
-      });
-    });*/
+      if (this.activeMatchStrategy)
+        this.ss.removeMatchStrategyResponseFromCache(this.activeMatchStrategy.id || -1).then(() => {
+          this.reset();
+          this.populateOutstandingResponses();
+        });
+    });
+  }
 
+  reset(): void {
+    this.match = undefined;
+    this.activeMatchStrategy = undefined;
+    this.formDisabled = false;
   }
 }

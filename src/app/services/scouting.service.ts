@@ -87,6 +87,14 @@ export class ScoutingService {
           this.loadPitScoutingForm();
         }
 
+        await this.cs.MatchStrategyResponse.getAll().then(async mrs => {
+          for (let i = 0; i < mrs.length; i++) {
+            let s = mrs[i];
+            await this.saveMatchStrategy(s, s.id, loadingScreen).then(success => {
+            });
+          }
+        });
+
         this.triggerResponsesUploaded();
 
         resolve();
@@ -1198,6 +1206,8 @@ export class ScoutingService {
   saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
 
+      if (id) matchStrategy.id = NaN;
+
       const fd = new FormData();
       if (matchStrategy.img)
         fd.append('img', matchStrategy.img);
@@ -1248,6 +1258,10 @@ export class ScoutingService {
 
   getMatchStrategyResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatchStrategy[]> {
     return this.cs.MatchStrategyResponse.getAll(filterDelegate);
+  }
+
+  removeMatchStrategyResponseFromCache(id: number): Promise<void> {
+    return this.cs.MatchStrategyResponse.RemoveAsync(id)
   }
 
   // Alliance Selections -----------------------------------------------------------
