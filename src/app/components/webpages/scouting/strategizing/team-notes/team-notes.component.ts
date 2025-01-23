@@ -28,7 +28,6 @@ export class TeamNotesComponent implements OnInit {
   teamNotes: TeamNote[] = [];
 
   currentTeamNote = new TeamNote();
-  teamNoteModalVisible = false;
 
   outstandingResponses: { id: number, team_id: number }[] = [];
   formDisabled = false;
@@ -61,20 +60,15 @@ export class TeamNotesComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     });
 
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadTeamNotes().then(result => {
-      this.gs.decrementOutstandingCalls();
-    });
+    this.ss.loadTeamNotes();
 
-    this.populateOutstandingResponses();
   }
 
   saveNote(): void {
     this.currentTeamNote.user = this.user;
     this.ss.saveTeamNote(this.currentTeamNote).then(result => {
       if (result) {
-        this.currentTeamNote = new TeamNote();
-        this.teamNoteModalVisible = false;
+        this.reset();
         this.ss.loadTeamNotes();
       }
       this.populateOutstandingResponses();
