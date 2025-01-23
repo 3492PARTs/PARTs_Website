@@ -1184,7 +1184,11 @@ export class ScoutingService {
   }
 
   getTeamNotesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
-    return this.cs.TeamNote.getAll(filterDelegate);
+    return this.cs.TeamNote.getAll(filterDelegate).then(tns => tns.sort((tn1, tn2) => {
+      if (tn1.time < tn2.time) return 1;
+      else if (tn1.time > tn2.time) return -1;
+      else return 0;
+    }));
   }
 
   getTeamNoteResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
