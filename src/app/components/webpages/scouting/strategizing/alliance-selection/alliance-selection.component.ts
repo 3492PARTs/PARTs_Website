@@ -9,11 +9,10 @@ import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 
 @Component({
-  selector: 'app-alliance-selection',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
-  templateUrl: './alliance-selection.component.html',
-  styleUrl: './alliance-selection.component.scss'
+    selector: 'app-alliance-selection',
+    imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
+    templateUrl: './alliance-selection.component.html',
+    styleUrl: './alliance-selection.component.scss'
 })
 export class AllianceSelectionComponent implements OnInit {
 

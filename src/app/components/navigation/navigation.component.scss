@@ -1,15 +1,16 @@
-@import "../../../scss/abstracts/variables.scss";
-@import "../../../scss/abstracts/mixins.scss";
+@use "../../../scss/abstracts/variables.scss";
+@use "../../../scss/abstracts/mixins.scss";
+@use "sass:color";
 
-* {
-  //-webkit-touch-callout: none;
-  //-webkit-user-select: none;
-  //-khtml-user-select: none;
-  //-moz-user-select: none;
-  //-ms-user-select: none;
-  //user-select: none;
-  //-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
+//f* {
+//-webkit-touch-callout: none;
+//-webkit-user-select: none;
+//-khtml-user-select: none;
+//-moz-user-select: none;
+//-ms-user-select: none;
+//user-select: none;
+//-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+//}
 
 #wrapper {
   width: 100%;
@@ -22,7 +23,7 @@ nav {
   z-index: 17;
   top: 0;
   left: 0;
-  background-color: $main_color;
+  background-color: variables.$main_color;
   height: 100vh;
   width: 10.4rem;
   overflow: hidden;
@@ -368,7 +369,7 @@ nav {
   top: 0;
   right: 0;
   width: 100%;
-  background-color: $accent_color;
+  background-color: variables.$accent_color;
   z-index: 17;
   padding-left: 1rem;
 
@@ -451,7 +452,7 @@ header {
     }
 
     & > .icon {
-      fill: $main_color;
+      fill: variables.$main_color;
     }
   }
 
@@ -550,7 +551,7 @@ header {
       margin: 0 0.8rem 0 0;
       display: none;
 
-      @media (min-width: $screen-size-xlg) {
+      @media (min-width: variables.$screen-size-xlg) {
         display: inline !important;
       }
     }
@@ -573,7 +574,7 @@ header {
   a {
     width: 100%;
     height: 100%;
-    color: $background_color !important;
+    color: variables.$background_color !important;
     ///font-size: 80%;
     font-weight: 400;
     padding: 0 0.8rem;
@@ -586,7 +587,7 @@ header {
     align-content: center;
 
     &:hover {
-      background-color: darken(white, 10%);
+      background-color: color.adjust(white, $lightness: -10%);
     }
   }
 }
@@ -656,7 +657,7 @@ header {
     bottom: 0;
     right: 0;
     height: calc(100vh - 7rem);
-    background-color: $accent_color;
+    background-color: variables.$accent_color;
     padding-top: 7rem;
     box-sizing: content-box;
     /*
@@ -675,7 +676,7 @@ header {
       padding-top: 0;
     }
 
-    @include flex-center;
+    @include mixins.flex-center;
 
     div {
       width: 100%;
@@ -684,38 +685,37 @@ header {
       div {
         margin: 0 auto;
         padding: 2em 0;
-
-        /*SCREEN SIZE:NARROW SCREEN*/
-        width: 90%;
-        height: 100%;
-
-        /*SCREEN SIZE:WIDE SCREEN*/
-        @media only screen and (min-width: $screen-size-xlg) {
-          width: 70%;
-          height: 70%;
-          padding: 0;
-        }
-
-        /*SCREEN SIZE:EXTRA WIDE SCREEN*/
-        @media only screen and (min-width: $screen-size-xxlg) {
-          width: 50%;
-          height: 70%;
-          padding: 0;
-        }
-
-        /*SCREEN SIZE:ULTRA WIDE SCREEN*/
-        @media only screen and (min-width: $screen-size-xxxlg) {
-          width: 40%;
-          height: 70%;
-          padding: 0;
-        }
-
         display: grid;
         grid-template-columns: calc(50% - 0.5rem) calc(50% - 0.5rem);
         grid-template-rows: repeat(5, calc(100% / 5)); //25% 25% 25% 25%;
         column-gap: 2rem;
         row-gap: 2rem;
         justify-items: center;
+
+        /*SCREEN SIZE:NARROW SCREEN*/
+        width: 90%;
+        height: 100%;
+
+        /*SCREEN SIZE:WIDE SCREEN*/
+        @media only screen and (min-width: variables.$screen-size-xlg) {
+          width: 70%;
+          height: 70%;
+          padding: 0;
+        }
+
+        /*SCREEN SIZE:EXTRA WIDE SCREEN*/
+        @media only screen and (min-width: variables.$screen-size-xxlg) {
+          width: 50%;
+          height: 70%;
+          padding: 0;
+        }
+
+        /*SCREEN SIZE:ULTRA WIDE SCREEN*/
+        @media only screen and (min-width: variables.$screen-size-xxxlg) {
+          width: 40%;
+          height: 70%;
+          padding: 0;
+        }
 
         h1 {
           color: white;
@@ -729,7 +729,7 @@ header {
           align-self: center;
 
           /*SCREEN SIZE:ULTRA WIDE SCREEN*/
-          @media only screen and (max-width: $screen-size-sm) {
+          @media only screen and (max-width: variables.$screen-size-sm) {
             font-size: 2.7em;
           }
         }
@@ -763,15 +763,15 @@ header {
   width: calc(100% - 12.4rem);
   display: none;
 
-  @media (min-width: $screen-size-sm-lower-range) {
+  @media (min-width: variables.$screen-size-sm-lower-range) {
     width: 32rem !important;
     right: 1rem !important;
     left: unset !important;
   }
 
   & > h6 {
-    background-color: $main_color;
-    border: 1px solid $main_color;
+    background-color: variables.$main_color;
+    border: 1px solid variables.$main_color;
     padding-top: 1.2rem;
     padding-left: 2.4rem;
     padding-bottom: 1.2rem;
@@ -808,7 +808,7 @@ header {
           width: 4rem;
           height: 4rem;
           border-radius: 50%;
-          background-color: $accent_color;
+          background-color: variables.$accent_color;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -866,7 +866,7 @@ header {
   border: 1px solid #e3e6f0;
   padding: 0.8rem 0;
 
-  @media (min-width: $screen-size-xs) {
+  @media (min-width: variables.$screen-size-xs) {
     width: auto !important;
   }
 

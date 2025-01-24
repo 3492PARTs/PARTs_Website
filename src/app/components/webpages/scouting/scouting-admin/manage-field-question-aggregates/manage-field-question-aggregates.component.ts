@@ -13,11 +13,10 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
-  selector: 'app-manage-field-question-aggregates',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
-  templateUrl: './manage-field-question-aggregates.component.html',
-  styleUrls: ['./manage-field-question-aggregates.component.scss']
+    selector: 'app-manage-field-question-aggregates',
+    imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+    templateUrl: './manage-field-question-aggregates.component.html',
+    styleUrls: ['./manage-field-question-aggregates.component.scss']
 })
 export class ManageFieldQuestionAggregatesComponent implements OnInit {
 

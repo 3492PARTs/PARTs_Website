@@ -14,11 +14,10 @@ import { ButtonComponent } from '../../../atoms/button/button.component';
 import { HeaderComponent } from "../../../atoms/header/header.component";
 
 @Component({
-  selector: 'app-admin-users',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
-  templateUrl: './admin-users.component.html',
-  styleUrls: ['./admin-users.component.scss']
+    selector: 'app-admin-users',
+    imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
+    templateUrl: './admin-users.component.html',
+    styleUrls: ['./admin-users.component.scss']
 })
 export class AdminUsersComponent implements OnInit {
 

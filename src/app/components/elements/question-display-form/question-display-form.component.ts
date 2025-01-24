@@ -7,11 +7,10 @@ import { QuestionFormElementComponent } from '../question-form-element/question-
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-question-display-form',
-  standalone: true,
-  imports: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
-  templateUrl: './question-display-form.component.html',
-  styleUrls: ['./question-display-form.component.scss']
+    selector: 'app-question-display-form',
+    imports: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
+    templateUrl: './question-display-form.component.html',
+    styleUrls: ['./question-display-form.component.scss']
 })
 export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 

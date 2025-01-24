@@ -14,11 +14,10 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
-  selector: 'app-manage-season',
-  standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
-  templateUrl: './manage-season.component.html',
-  styleUrls: ['./manage-season.component.scss']
+    selector: 'app-manage-season',
+    imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
+    templateUrl: './manage-season.component.html',
+    styleUrls: ['./manage-season.component.scss']
 })
 export class ManageSeasonComponent implements OnInit {
   currentSeason = new Season();

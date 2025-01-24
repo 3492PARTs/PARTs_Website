@@ -13,11 +13,10 @@ import { ButtonComponent } from '../button/button.component';
 import { ReturnLinkComponent } from "../return-link/return-link.component";
 
 @Component({
-  selector: 'app-box',
-  standalone: true,
-  imports: [CommonModule, ButtonComponent, ReturnLinkComponent],
-  templateUrl: './box.component.html',
-  styleUrls: ['./box.component.scss']
+    selector: 'app-box',
+    imports: [CommonModule, ButtonComponent, ReturnLinkComponent],
+    templateUrl: './box.component.html',
+    styleUrls: ['./box.component.scss']
 })
 export class BoxComponent implements OnInit {
   @Input() Width = '0';

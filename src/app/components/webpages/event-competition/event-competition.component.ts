@@ -8,11 +8,10 @@ import { BoxComponent } from '../../atoms/box/box.component';
 import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 @Component({
-  selector: 'app-event-competition',
-  standalone: true,
-  imports: [CommonModule, BoxComponent, DateToStrPipe],
-  templateUrl: './event-competition.component.html',
-  styleUrls: ['./event-competition.component.scss']
+    selector: 'app-event-competition',
+    imports: [CommonModule, BoxComponent, DateToStrPipe],
+    templateUrl: './event-competition.component.html',
+    styleUrls: ['./event-competition.component.scss']
 })
 export class EventCompetitionComponent implements OnInit {
   competitionInfo: CompetitionInit = new CompetitionInit();

@@ -14,11 +14,10 @@ import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 import { User } from '../../../../../models/user.models';
 
 @Component({
-  selector: 'app-team-notes',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
-  templateUrl: './team-notes.component.html',
-  styleUrls: ['./team-notes.component.scss']
+    selector: 'app-team-notes',
+    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
+    templateUrl: './team-notes.component.html',
+    styleUrls: ['./team-notes.component.scss']
 })
 export class TeamNotesComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 #banner-wrapper {
   position: fixed;
@@ -8,7 +8,7 @@
   width: 40rem;
   max-width: calc(100% - (1.6rem * 2));
 
-  @media only screen and (max-width: $screen-size-xs) {
+  @media only screen and (max-width: variables.$screen-size-xs) {
     max-width: 100%;
   }
 
@@ -44,7 +44,7 @@
   z-index: 1;
 
   /*MOBILE NAV*/
-  @media only screen and (max-width: $screen-size-xlg-lower-range) {
+  @media only screen and (max-width: variables.$screen-size-xlg-lower-range) {
     top: 3em;
   }
 }

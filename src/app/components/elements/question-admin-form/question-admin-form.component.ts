@@ -14,11 +14,10 @@ import { Banner } from '../../../models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({
-  selector: 'app-question-admin-form',
-  standalone: true,
-  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, FormElementGroupComponent],
-  templateUrl: './question-admin-form.component.html',
-  styleUrls: ['./question-admin-form.component.scss']
+    selector: 'app-question-admin-form',
+    imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, FormElementGroupComponent],
+    templateUrl: './question-admin-form.component.html',
+    styleUrls: ['./question-admin-form.component.scss']
 })
 export class QuestionAdminFormComponent implements OnInit {
   questionOptions = [{ property: 'Active', value: 'y' }, { property: 'Inactive', value: 'n' }];

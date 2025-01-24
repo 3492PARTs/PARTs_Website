@@ -6,11 +6,10 @@ import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-whiteboard',
-  standalone: true,
-  imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
-  templateUrl: './whiteboard.component.html',
-  styleUrl: './whiteboard.component.scss'
+    selector: 'app-whiteboard',
+    imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
+    templateUrl: './whiteboard.component.html',
+    styleUrl: './whiteboard.component.scss'
 })
 export class WhiteboardComponent implements OnInit {
 

@@ -12,11 +12,10 @@ import { CommonModule } from '@angular/common';
 import { ScoutPicDisplayComponent } from '../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
-  selector: 'app-pit-scouting-responses',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
-  templateUrl: './pit-scouting-responses.component.html',
-  styleUrls: ['./pit-scouting-responses.component.scss']
+    selector: 'app-pit-scouting-responses',
+    imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
+    templateUrl: './pit-scouting-responses.component.html',
+    styleUrls: ['./pit-scouting-responses.component.scss']
 })
 export class ScoutPitResponsesComponent implements OnInit {
   teamsSelectList: Team[] = [];

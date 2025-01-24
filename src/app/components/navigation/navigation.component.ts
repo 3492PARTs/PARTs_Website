@@ -21,11 +21,10 @@ import { ClickInsideDirective } from '../../directives/click-inside/click-inside
 import { DateToStrPipe } from '../../pipes/date-to-str.pipe';
 
 @Component({
-  selector: 'app-navigation',
-  standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe],
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+    selector: 'app-navigation',
+    imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe],
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
 

@@ -8,24 +8,16 @@ import { BoxComponent } from '../../../../atoms/box/box.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
-import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TabContainerComponent } from '../../../../atoms/tab-container/tab-container.component';
 import { TabComponent } from '../../../../atoms/tab/tab.component';
 import { PitResultDisplayComponent } from '../../../../elements/pit-result-display/pit-result-display.component';
 import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
-import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
-import { ReturnCardComponent } from '../../../../elements/return-card/return-card.component';
-import { ReturnLinkComponent } from '../../../../atoms/return-link/return-link.component';
-import { BuildSeasonComponent } from "../../../media/build-season/build-season.component";
 import { User } from '../../../../../models/user.models';
-import { FormComponent } from "../../../../atoms/form/form.component";
 
 @Component({
   selector: 'app-plan-matches',
-  standalone: true,
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, FormElementComponent, DateToStrPipe, ReturnCardComponent, ReturnLinkComponent, BuildSeasonComponent, FormComponent],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe],
   templateUrl: './matches.component.html',
   styleUrls: ['./matches.component.scss']
 })

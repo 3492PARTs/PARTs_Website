@@ -4,11 +4,10 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
-  selector: 'app-resources',
-  standalone: true,
-  imports: [BoxComponent, ButtonComponent, ButtonRibbonComponent],
-  templateUrl: './resources.component.html',
-  styleUrls: ['./resources.component.scss']
+    selector: 'app-resources',
+    imports: [BoxComponent, ButtonComponent, ButtonRibbonComponent],
+    templateUrl: './resources.component.html',
+    styleUrls: ['./resources.component.scss']
 })
 export class ResourcesComponent implements OnInit {
 

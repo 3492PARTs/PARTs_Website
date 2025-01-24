@@ -15,11 +15,10 @@ import { LoadingComponent } from "./components/elements/loading/loading.componen
 declare const gtag: Function;
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent, LoadingComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent, LoadingComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
 

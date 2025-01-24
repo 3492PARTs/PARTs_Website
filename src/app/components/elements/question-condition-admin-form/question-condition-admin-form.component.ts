@@ -11,11 +11,10 @@ import { FormComponent } from '../../atoms/form/form.component';
 import { AuthCallStates, AuthService } from '../../../services/auth.service';
 
 @Component({
-  selector: 'app-question-condition-admin-form',
-  standalone: true,
-  imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
-  templateUrl: './question-condition-admin-form.component.html',
-  styleUrls: ['./question-condition-admin-form.component.scss']
+    selector: 'app-question-condition-admin-form',
+    imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
+    templateUrl: './question-condition-admin-form.component.html',
+    styleUrls: ['./question-condition-admin-form.component.scss']
 })
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';

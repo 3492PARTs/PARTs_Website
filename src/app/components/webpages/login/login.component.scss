@@ -1,5 +1,5 @@
-@import "../../../../scss/abstracts/variables.scss";
-@import "../../../../scss/abstracts/mixins";
+@use "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/mixins";
 
 #auth-wrapper {
   //background-color: $background;
@@ -11,7 +11,7 @@
   left: 0;
   overflow: auto;
 
-  @include flex-center();
+  @include mixins.flex-center;
 
   #options {
     a {
@@ -124,7 +124,7 @@
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   transition: all 0.2s ease-in-out;
-  background: $main_color;
+  background: variables.$main_color;
 }
 
 #home-btn img {

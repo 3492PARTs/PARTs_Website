@@ -11,11 +11,10 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-phone-types',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
-  templateUrl: './phone-types.component.html',
-  styleUrls: ['./phone-types.component.scss']
+    selector: 'app-phone-types',
+    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+    templateUrl: './phone-types.component.html',
+    styleUrls: ['./phone-types.component.scss']
 })
 export class PhoneTypesComponent implements OnInit {
 

@@ -7,11 +7,10 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 
 @Component({
-  selector: 'app-modal',
-  standalone: true,
-  imports: [CommonModule, ButtonComponent, HeaderComponent],
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+    selector: 'app-modal',
+    imports: [CommonModule, ButtonComponent, HeaderComponent],
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
   private resizeTimer: number | null | undefined;

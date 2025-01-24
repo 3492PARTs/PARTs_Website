@@ -17,11 +17,10 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { Question, QuestionAnswer } from '../../../../models/form.models';
 
 @Component({
-  selector: 'app-pit-scouting',
-  standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
-  templateUrl: './pit-scouting.component.html',
-  styleUrls: ['./pit-scouting.component.scss']
+    selector: 'app-pit-scouting',
+    imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+    templateUrl: './pit-scouting.component.html',
+    styleUrls: ['./pit-scouting.component.scss']
 })
 export class PitScoutingComponent implements OnInit, OnDestroy {
   private buildOutstandingTeamsTimeout: number | undefined;

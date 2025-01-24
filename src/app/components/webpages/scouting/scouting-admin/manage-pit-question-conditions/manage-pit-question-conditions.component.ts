@@ -3,11 +3,10 @@ import { QuestionConditionAdminFormComponent } from '../../../../elements/questi
 import { BoxComponent } from '../../../../atoms/box/box.component';
 
 @Component({
-  selector: 'app-manage-pit-question-conditions',
-  standalone: true,
-  imports: [QuestionConditionAdminFormComponent, BoxComponent],
-  templateUrl: './manage-pit-question-conditions.component.html',
-  styleUrls: ['./manage-pit-question-conditions.component.scss']
+    selector: 'app-manage-pit-question-conditions',
+    imports: [QuestionConditionAdminFormComponent, BoxComponent],
+    templateUrl: './manage-pit-question-conditions.component.html',
+    styleUrls: ['./manage-pit-question-conditions.component.scss']
 })
 export class ManagePitQuestionConditionsComponent {
 

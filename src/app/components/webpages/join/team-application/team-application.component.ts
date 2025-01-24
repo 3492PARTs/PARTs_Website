@@ -16,8 +16,7 @@ import { QuestionDisplayFormComponent } from "../../../elements/question-display
 
 @Component({
   selector: 'app-team-application',
-  standalone: true,
-  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
+  imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })

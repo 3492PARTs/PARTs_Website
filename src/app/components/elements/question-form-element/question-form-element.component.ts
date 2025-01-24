@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
 import { Question } from '../../../models/form.models';
 
 @Component({
-  selector: 'app-question-form-element',
-  standalone: true,
-  imports: [CommonModule, FormElementComponent],
-  templateUrl: './question-form-element.component.html',
-  styleUrls: ['./question-form-element.component.scss']
+    selector: 'app-question-form-element',
+    imports: [CommonModule, FormElementComponent],
+    templateUrl: './question-form-element.component.html',
+    styleUrls: ['./question-form-element.component.scss']
 })
 export class QuestionFormElementComponent {
   @Input() Question!: Question;

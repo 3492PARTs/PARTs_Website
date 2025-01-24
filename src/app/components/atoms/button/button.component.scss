@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 [type="button"]:not(:disabled),
 [type="reset"]:not(:disabled),
@@ -146,7 +146,7 @@ button:disabled {
 
 .send {
   color: #fff;
-  background-color: $main_color;
+  background-color: variables.$main_color;
   border-color: #007bff;
 
   &:hover {
@@ -194,7 +194,7 @@ button:disabled {
 }
 
 .dismiss {
-  color: $gray;
+  color: variables.$gray;
   background-color: transparent;
   font-size: 2.2rem;
 }

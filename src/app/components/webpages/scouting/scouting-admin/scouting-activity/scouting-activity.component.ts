@@ -12,11 +12,10 @@ import { FormElementGroupComponent } from '../../../../atoms/form-element-group/
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 
 @Component({
-  selector: 'app-scouting-activity',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
-  templateUrl: './scouting-activity.component.html',
-  styleUrls: ['./scouting-activity.component.scss']
+    selector: 'app-scouting-activity',
+    imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
+    templateUrl: './scouting-activity.component.html',
+    styleUrls: ['./scouting-activity.component.scss']
 })
 export class ScoutingActivityComponent implements OnInit {
   scoutFieldSchedules: ScoutFieldSchedule[] = [];

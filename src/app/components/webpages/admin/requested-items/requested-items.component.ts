@@ -12,11 +12,10 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-requested-items',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
-  templateUrl: './requested-items.component.html',
-  styleUrls: ['./requested-items.component.scss']
+    selector: 'app-requested-items',
+    imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+    templateUrl: './requested-items.component.html',
+    styleUrls: ['./requested-items.component.scss']
 })
 export class RequestedItemsComponent implements OnInit {
 

@@ -17,11 +17,10 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-scouting-schedule',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
-  templateUrl: './scouting-schedule.component.html',
-  styleUrls: ['./scouting-schedule.component.scss']
+    selector: 'app-scouting-schedule',
+    imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
+    templateUrl: './scouting-schedule.component.html',
+    styleUrls: ['./scouting-schedule.component.scss']
 })
 export class ScoutingScheduleComponent implements OnInit {
   currentEvent = new Event();

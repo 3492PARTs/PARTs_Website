@@ -5,11 +5,10 @@ import { NavigationService } from '../../../services/navigation.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-sub-navigation',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  templateUrl: './sub-navigation.component.html',
-  styleUrls: ['./sub-navigation.component.scss']
+    selector: 'app-sub-navigation',
+    imports: [CommonModule, RouterLink],
+    templateUrl: './sub-navigation.component.html',
+    styleUrls: ['./sub-navigation.component.scss']
 })
 export class SubNavigationComponent {
 

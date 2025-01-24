@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 :host {
   max-width: 100%;
@@ -350,7 +350,7 @@ textarea.form-control {
   & > button {
     border-radius: 0 0.56rem 0.56rem 0;
     margin: 0.32rem 0.32rem 0.32rem 0;
-    background-color: $main_color;
+    background-color: variables.$main_color;
     outline: 0;
     border: 0;
     display: flex;
@@ -482,5 +482,5 @@ textarea.form-control {
 .rating-star {
   font-size: 3.5rem;
   cursor: pointer;
-  color: $gray;
+  color: variables.$gray;
 }

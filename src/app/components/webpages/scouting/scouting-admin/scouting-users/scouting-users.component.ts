@@ -14,11 +14,10 @@ import { FormComponent } from '../../../../atoms/form/form.component';
 import { HeaderComponent } from '../../../../atoms/header/header.component';
 
 @Component({
-  selector: 'app-scouting-users',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
-  templateUrl: './scouting-users.component.html',
-  styleUrls: ['./scouting-users.component.scss']
+    selector: 'app-scouting-users',
+    imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
+    templateUrl: './scouting-users.component.html',
+    styleUrls: ['./scouting-users.component.scss']
 })
 export class ScoutingUsersComponent implements OnInit {
   phoneTypes: PhoneType[] = [];

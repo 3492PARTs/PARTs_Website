@@ -9,11 +9,10 @@ import { FormElementGroupComponent } from '../../../atoms/form-element-group/for
 import { PaginationComponent } from '../../../atoms/pagination/pagination.component';
 
 @Component({
-  selector: 'app-error-log',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
-  templateUrl: './error-log.component.html',
-  styleUrls: ['./error-log.component.scss']
+    selector: 'app-error-log',
+    imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
+    templateUrl: './error-log.component.html',
+    styleUrls: ['./error-log.component.scss']
 })
 export class ErrorLogComponent implements OnInit {
 

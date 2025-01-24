@@ -1,14 +1,14 @@
-@import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
-@import "./scss/vendors/syncfusion.scss";
-@import "./scss/vendors/_cssSliderScss/_cssSlider";
+@use "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
+//@use "./scss/vendors/syncfusion.scss"; // This is for the graphs
+//@use "./scss/vendors/_cssSliderScss/_cssSlider";
 
-@import "./scss/modules/font.scss";
-@import "./scss/abstracts/variables.scss";
-@import "./scss/base/reset.scss";
-@import "./scss/base/typography.scss";
-@import "./scss/base/overrides.scss";
-@import "./scss/abstracts/flex-box.scss";
-@import "./scss/abstracts/grid.scss";
-@import "./scss/abstracts/width.scss";
-@import "./scss/abstracts/height.scss";
-@import "./scss/modules/generics.scss";
+@use "./scss/modules/font.scss";
+//@import "./scss/abstracts/variables.scss";
+@use "./scss/base/reset.scss";
+@use "./scss/base/typography.scss";
+@use "./scss/base/overrides.scss";
+@use "./scss/abstracts/flex-box.scss";
+@use "./scss/abstracts/grid.scss";
+@use "./scss/abstracts/width.scss";
+@use "./scss/abstracts/height.scss";
+@use "./scss/modules/generics.scss";

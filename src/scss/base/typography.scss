@@ -1,10 +1,10 @@
-@import "../abstracts/variables.scss";
+@use "../abstracts/variables.scss";
 
 /*FONT*/
 
 * {
   font-family: "Nunito-Regular";
-  color: $fontColor;
+  color: variables.$fontColor;
 }
 
 .gear-box {
@@ -46,7 +46,7 @@ main ol > li {
 /*LINK COLOR*/
 
 main a:hover {
-  color: $main_color;
+  color: variables.$main_color;
   transition: 0.25s linear;
 }
 
@@ -58,7 +58,7 @@ main a:hover {
 }
 
 .important {
-  color: $accent_color;
+  color: variables.$accent_color;
   font-style: italic;
 }
 

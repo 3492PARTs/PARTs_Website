@@ -14,11 +14,10 @@ import { Banner } from '../../../../../models/api.models';
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
-  selector: 'app-match-planning',
-  standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent],
-  templateUrl: './match-planning.component.html',
-  styleUrl: './match-planning.component.scss'
+    selector: 'app-match-planning',
+    imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent],
+    templateUrl: './match-planning.component.html',
+    styleUrl: './match-planning.component.scss'
 })
 export class MatchPlanningComponent implements OnInit {
 

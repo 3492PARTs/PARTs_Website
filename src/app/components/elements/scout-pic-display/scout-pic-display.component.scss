@@ -1,10 +1,10 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 .team-pic-wrapper {
   position: relative;
   width: calc(100% - 3.4rem);
   min-height: 300px;
-  background-color: #{$gray}80;
+  background-color: #{variables.$gray}80;
   margin: 1em 1.7rem;
   border-radius: 0.35em;
 

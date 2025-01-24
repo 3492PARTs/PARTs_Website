@@ -7,11 +7,10 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-scout-pic-display',
-  standalone: true,
-  imports: [ButtonComponent, CommonModule],
-  templateUrl: './scout-pic-display.component.html',
-  styleUrls: ['./scout-pic-display.component.scss']
+    selector: 'app-scout-pic-display',
+    imports: [ButtonComponent, CommonModule],
+    templateUrl: './scout-pic-display.component.html',
+    styleUrls: ['./scout-pic-display.component.scss']
 })
 export class ScoutPicDisplayComponent {
   @Input()

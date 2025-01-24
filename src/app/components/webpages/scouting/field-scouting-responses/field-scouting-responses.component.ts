@@ -17,11 +17,10 @@ import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
-  selector: 'app-field-scouting-responses',
-  standalone: true,
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
-  templateUrl: './field-scouting-responses.component.html',
-  styleUrls: ['./field-scouting-responses.component.scss']
+    selector: 'app-field-scouting-responses',
+    imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
+    templateUrl: './field-scouting-responses.component.html',
+    styleUrls: ['./field-scouting-responses.component.scss']
 })
 export class FieldScoutingResponsesComponent implements OnInit {
 

@@ -13,11 +13,10 @@ import { CommonModule } from '@angular/common';
 import { ScoutPicDisplayComponent } from '../../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
-  selector: 'app-manage-pit-responses',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
-  templateUrl: './manage-pit-responses.component.html',
-  styleUrls: ['./manage-pit-responses.component.scss']
+    selector: 'app-manage-pit-responses',
+    imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
+    templateUrl: './manage-pit-responses.component.html',
+    styleUrls: ['./manage-pit-responses.component.scss']
 })
 export class ManagePitResponsesComponent implements OnInit {
 

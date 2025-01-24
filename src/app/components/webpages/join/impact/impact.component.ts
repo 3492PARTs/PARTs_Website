@@ -3,11 +3,10 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-impact',
-  standalone: true,
-  imports: [BoxComponent, RouterLink],
-  templateUrl: './impact.component.html',
-  styleUrls: ['./impact.component.scss']
+    selector: 'app-impact',
+    imports: [BoxComponent, RouterLink],
+    templateUrl: './impact.component.html',
+    styleUrls: ['./impact.component.scss']
 })
 export class ImpactComponent implements AfterViewInit {
 

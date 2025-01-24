@@ -1,10 +1,10 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 main {
   margin: 0 auto;
   width: 90%;
   /*MOBILE */
-  @media only screen and (max-width: $screen-size-xlg) {
+  @media only screen and (max-width: variables.$screen-size-xlg) {
     width: 100%;
   }
 }

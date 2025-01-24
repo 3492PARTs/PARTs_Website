@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 .side-nav {
   /*position: fixed;
@@ -19,9 +19,9 @@
 }
 
 #title {
-  background-color: $main_color;
+  background-color: variables.$main_color;
   width: 100%;
-  border-bottom: 3px solid $accent-color;
+  border-bottom: 3px solid variables.$accent-color;
   position: relative;
   height: 3.5rem;
   border-radius: 4px 4px 0 0;
@@ -63,7 +63,7 @@
   z-index: 10;
 
   /*MOBILE NAV*/
-  @media only screen and (max-width: $screen-size-sm) {
+  @media only screen and (max-width: variables.$screen-size-sm) {
     top: 3em;
   }
 

@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionAnswer, QuestionConditionType, QuestionFlow, QuestionFlowAnswer } from '../../../../models/form.models';
-import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm, ScoutQuestion } from '../../../../models/scouting.models';
+import { Question, QuestionAnswer, QuestionFlow, QuestionFlowAnswer } from '../../../../models/form.models';
+import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
@@ -17,16 +17,12 @@ import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { HeaderComponent } from "../../../atoms/header/header.component";
-import { BuildSeasonComponent } from "../../media/build-season/build-season.component";
 import { QuestionFormElementComponent } from "../../../elements/question-form-element/question-form-element.component";
-import { throwError } from 'rxjs';
-import { DateToStrPipe } from "../../../../pipes/date-to-str.pipe";
 import { ModalComponent } from "../../../atoms/modal/modal.component";
 
 @Component({
   selector: 'app-field-scouting',
-  standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent, QuestionFormElementComponent, DateToStrPipe, ModalComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, QuestionFormElementComponent, ModalComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })

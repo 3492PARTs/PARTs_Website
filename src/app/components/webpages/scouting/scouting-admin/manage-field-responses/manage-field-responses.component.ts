@@ -11,11 +11,10 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
-  selector: 'app-manage-field-responses',
-  standalone: true,
-  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
-  templateUrl: './manage-field-responses.component.html',
-  styleUrls: ['./manage-field-responses.component.scss']
+    selector: 'app-manage-field-responses',
+    imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
+    templateUrl: './manage-field-responses.component.html',
+    styleUrls: ['./manage-field-responses.component.scss']
 })
 export class ManageFieldResponsesComponent implements OnInit {
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();

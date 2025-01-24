@@ -9,11 +9,10 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../../../services/general.service';
 
 @Component({
-  selector: 'app-metrics',
-  standalone: true,
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule],
-  templateUrl: './metrics.component.html',
-  styleUrl: './metrics.component.scss'
+    selector: 'app-metrics',
+    imports: [FormElementGroupComponent, FormElementComponent, CommonModule],
+    templateUrl: './metrics.component.html',
+    styleUrl: './metrics.component.scss'
 })
 export class MetricsComponent implements OnInit {
 

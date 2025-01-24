@@ -13,13 +13,10 @@ import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../.
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
-import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
-import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-manage-field-questions',
-  standalone: true,
-  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, ButtonRibbonComponent, HeaderComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent],
   templateUrl: './manage-field-questions.component.html',
   styleUrls: ['./manage-field-questions.component.scss']
 })

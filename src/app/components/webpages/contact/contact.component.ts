@@ -14,11 +14,10 @@ import { CommonModule } from '@angular/common';
 import { QuestionDisplayFormComponent } from "../../elements/question-display-form/question-display-form.component";
 
 @Component({
-  selector: 'app-contact',
-  standalone: true,
-  imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
-  templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+    selector: 'app-contact',
+    imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
+    templateUrl: './contact.component.html',
+    styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
   test = null;

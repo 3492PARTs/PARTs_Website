@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 .box-padding {
   padding: 1rem 0;
@@ -42,14 +42,14 @@
   border-top-left-radius: 0.35em;
   border-top-right-radius: 0.35em;
   h2 {
-    color: $main_color;
+    color: variables.$main_color;
     font-size: 1.8rem;
     margin-bottom: 0;
     margin-top: 0;
   }
 
   span {
-    color: $main_color;
+    color: variables.$main_color;
   }
 }
 
