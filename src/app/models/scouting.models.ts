@@ -549,3 +549,12 @@ export class AllianceSelection implements IAllianceSelection {
         this.order = order;
     }
 }
+
+export class FieldResponse {
+    id = NaN;
+    match: Match | undefined = undefined
+    user = new User();
+    time = new Date()
+    answers: QuestionAnswer[] = [];
+    display_value = '';
+}

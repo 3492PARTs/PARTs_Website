@@ -68,7 +68,7 @@ export interface IQuestionFlowAnswer {
     id: number;
     //question_answer = new QuestionAnswer();
     question: IQuestion | undefined;
-    answer: string;
+    answer: any;
     answer_time: string;
     void_ind: string;
 }
@@ -77,7 +77,7 @@ export class QuestionFlowAnswer implements IQuestionFlowAnswer {
     id = NaN;
     //question_answer = new QuestionAnswer();
     question: Question | undefined = undefined;
-    answer = '';
+    answer: any = '';
     answer_time = "";
     void_ind = 'n';
 

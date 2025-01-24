@@ -342,7 +342,9 @@ export class GeneralService {
   }
 
   triggerChange(tmpFx: () => void, timeoutMs = 0) {
-    window.setTimeout(() => { tmpFx() }, timeoutMs);
+    window.setTimeout(() => {
+      tmpFx();
+    }, timeoutMs);
   }
 
   // For one given property and its value, get the value of another property in the same object

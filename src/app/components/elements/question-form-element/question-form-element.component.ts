@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormElementComponent } from '../../atoms/form-element/form-element.component';
 import { GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,9 @@ export class QuestionFormElementComponent {
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild('mntPhsBtn', { read: ElementRef, static: false }) mntPhsBtn: ElementRef | undefined = undefined;
+  @Input() Inverted = false;
+
   constructor(private gs: GeneralService) { }
 
   change(answer: any): void {
@@ -27,8 +30,18 @@ export class QuestionFormElementComponent {
   }
 
   click(e: MouseEvent): void {
-    //console.log(e);
-    this.change({ x: e.offsetX, y: e.offsetY });
+    if (this.mntPhsBtn) {
+      let coords = {
+        x: parseFloat((e.offsetX / parseInt(this.mntPhsBtn.nativeElement.offsetWidth) * 100).toFixed(2)),
+        y: parseFloat((e.offsetY / parseInt(this.mntPhsBtn.nativeElement.offsetHeight) * 100).toFixed(2)),
+      };
+
+      if (this.Inverted) {
+        coords.x = 50 - (coords.x - 50);
+      }
+
+      this.change(coords);
+    }
   }
 
   runFunction(): void {

@@ -1,1 +1,70 @@
 <p>metrics works!</p>
+
+<app-form-element-group>
+  <app-form-element
+    [Type]="'select'"
+    [LabelText]="'Result'"
+    [SelectList]="fieldResponses"
+    [DisplayProperty]="'display_value'"
+    [Model]="fieldResponse"
+    (ModelChange)="setFieldResponse($event)"
+  ></app-form-element>
+</app-form-element-group>
+
+@if (fieldForm && fieldForm.img_url) {
+<div class="margin-top-1rem">
+  <div
+    #imageBackground
+    id="image-background"
+    class="flex align-items-center justify-content-center"
+  >
+    <div #imageContainer id="image-container">
+      <img
+        #image
+        id="image"
+        [src]="false ? fieldForm.inv_img_url : fieldForm.img_url"
+      />
+      @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index)
+      { @if (answer.question_flow_answers) { @for (qfa of
+      answer.question_flow_answers; track $index) { @if (qfa.question &&
+      qfa.question.scout_question) {
+      <div
+        #box
+        class="box"
+        [ngStyle]="{
+          top: qfa.question.scout_question.y + '%',
+          left: qfa.question.scout_question.x + '%',
+          width: qfa.question.scout_question.width + '%',
+          height: qfa.question.scout_question.height + '%'
+        }"
+      >
+        <div class="touchpoint-wrapper">
+          @if (qfa.answer.x && qfa.answer.y) {
+          <div
+            #box
+            class="box"
+            [ngStyle]="{
+              top: qfa.answer.y + '%',
+              left: qfa.answer.x + '%',
+              width: '10px',
+              height: '10px'
+            }"
+          ></div>
+          } @else {
+          <p>{{ qfa.answer }}</p>
+          }
+          <div class="label">
+            @if ( qfa.question.scout_question.icon) {
+            <span
+              class="mdi icon mdi-{{ qfa.question.scout_question.icon }}"
+            ></span>
+            }
+            <p>{{ qfa.question.question }}</p>
+          </div>
+        </div>
+      </div>
+      } } } }}
+    </div>
+  </div>
+</div>
+}

@@ -424,11 +424,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       // Create new Question Answer to hold the flow answers
       if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
 
-      // adjust answer for inverted images
-      if (question.question_typ.question_typ === 'mnt-psh-btn' && this.invertedImage) {
-        question.answer['x'] = 50 - (question.answer['x'] - 50) + question.scout_question.width;
-      }
-
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
       // Add Flows stage answer

@@ -265,6 +265,7 @@
               >
                 <app-question-form-element
                   [(Question)]="flow.questions[i]"
+                  [Inverted]="invertedImage"
                 ></app-question-form-element>
 
                 @if (q.question_typ.question_typ !== 'mnt-psh-btn') {
