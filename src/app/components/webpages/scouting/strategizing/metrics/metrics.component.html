@@ -40,16 +40,42 @@
       >
         <div class="touchpoint-wrapper">
           @if (qfa.answer.x && qfa.answer.y) {
+          <!--
+          <div
+            #box
+            class="box"
+            [ngStyle]="{
+              top: 'calc(' + qfa.answer.y + '% - 5px)',
+              left: 'calc(' + qfa.answer.x + '% - 5px)',
+              width: '10px',
+              height: '10px'
+            }"
+          ></div>
+          -->
+          <div
+            #box
+            class="box"
+            [ngStyle]="{
+              top: 'calc(' + qfa.answer.y + '% - 4px)',
+              left: 'calc(' + qfa.answer.x + '% - 4px)',
+              width: '8px',
+              height: '8px',
+              border: '4px solid blue'
+            }"
+          ></div>
+          <!--
           <div
             #box
             class="box"
             [ngStyle]="{
               top: qfa.answer.y + '%',
               left: qfa.answer.x + '%',
-              width: '10px',
-              height: '10px'
+              width: '5px',
+              height: '5px',
+              border: '2px solid green'
             }"
           ></div>
+          -->
           } @else {
           <p>{{ qfa.answer }}</p>
           }
