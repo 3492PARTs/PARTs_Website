@@ -535,8 +535,12 @@
         'full-height': hideNavExpander || removeHeader,
         xsm: screenXs
       }"
-      [ngStyle]="{ 'padding-top': siteBannerHeight + siteHeaderHeight + 'rem' }"
     >
+      @if (siteBanners.length > 0) {
+      <div
+        [ngStyle]="{ width: '100%', height: siteBannerHeight + 'rem' }"
+      ></div>
+      }
       <ng-content> </ng-content>
     </main>
 
