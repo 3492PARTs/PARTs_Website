@@ -621,11 +621,11 @@ export class ScoutingService {
         a.question_flow?.questions.forEach(q => q.answer = '');
       });
 
-      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
+      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
-          await this.cs.ScoutFieldFormResponse.RemoveAsync(id)
+          await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
         }
 
         resolve(true);
