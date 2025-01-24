@@ -337,7 +337,7 @@
       </app-button-ribbon>
 
       @if (formDisabled) {
-      <app-form-element-group [LabelText]="'Response JSON'">
+      <app-form-element-group [LabelText]="'Response'">
         @if (scoutFieldResponse.match) {
         <p>Match: {{ scoutFieldResponse.match.match_number }}</p>
         }
@@ -364,6 +364,13 @@
           {{ qfa.answer_time }}
         </p>
         } } }
+        <app-button-ribbon>
+          <app-modal [ButtonText]="'JSON'" [Title]="'JSON'">
+            <app-form-element-group>
+              {{ scoutFieldResponse | json }}
+            </app-form-element-group>
+          </app-modal>
+        </app-button-ribbon>
       </app-form-element-group>
       }
     </app-form>

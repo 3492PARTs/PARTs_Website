@@ -21,11 +21,12 @@ import { BuildSeasonComponent } from "../../media/build-season/build-season.comp
 import { QuestionFormElementComponent } from "../../../elements/question-form-element/question-form-element.component";
 import { throwError } from 'rxjs';
 import { DateToStrPipe } from "../../../../pipes/date-to-str.pipe";
+import { ModalComponent } from "../../../atoms/modal/modal.component";
 
 @Component({
   selector: 'app-field-scouting',
   standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent, QuestionFormElementComponent, DateToStrPipe],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, BuildSeasonComponent, QuestionFormElementComponent, DateToStrPipe, ModalComponent],
   templateUrl: './field-scouting.component.html',
   styleUrls: ['./field-scouting.component.scss']
 })
