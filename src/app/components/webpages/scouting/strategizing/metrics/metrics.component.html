@@ -67,4 +67,8 @@
     </div>
   </div>
 </div>
-}
+} @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index) {
+@if (answer.question) {
+<p>{{ answer.question.form_sub_typ.form_sub_nm }}</p>
+<p>{{ answer.question.question }}: {{ answer.answer }}</p>
+}}}
