@@ -652,25 +652,29 @@ export class ScoutingService {
     if (forceCall || !this.outstandingGetFieldScoutingResponsesPromise)
       this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
         let last = null;
-        await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-          //console.log(sfrr);
-          if (sfrr) last = sfrr['time'];
-        });
+
+        if (!forceCall)
+          await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('scout_field_id')).then(sfrr => {
+            //console.log(sfrr);
+            if (sfrr) last = sfrr['scout_field_id'];
+          });
 
         let params: any = undefined;
 
         if (!forceCall && last)
           params = {
-            after_date_time: last
+            after_scout_field_id: last
           }
 
         this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
 
-          await this.updateScoutFieldResponseColumnsCache(result.scoutCols);
+          this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
+          const ids = result.removed_responses.map(t => t.scout_field_id);
           if (params) {
             // we are only loading the diff
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
+            await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
             await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
 
             await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
@@ -682,11 +686,8 @@ export class ScoutingService {
           else {
             // loading all
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-            await this.updateScoutFieldResponsesCache(result.scoutAnswers);
+            this.updateScoutFieldResponsesCache(result.scoutAnswers);
           }
-
-          const ids = result.removed_responses.map(t => { return t.scout_field_id });
-          await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
 
           resolve(result);
 
