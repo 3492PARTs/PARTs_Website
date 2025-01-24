@@ -13,7 +13,6 @@ export class LoadingComponent implements OnInit {
   @Input() Width = '';
   loading = false;
 
-
   constructor(private gs: GeneralService) {
     this.gs.currentOutstandingCalls.subscribe(o => {
       this.loading = o > 0;

@@ -73,9 +73,10 @@ export class NavigationService {
   constructor(private gs: GeneralService, private router: Router) { }
 
   setSubPage(routerLink: string): void {
-    this.gs.scrollTo(0);
-    this.subPageBS.next(routerLink);
-
+    if (this.subPageBS.value !== routerLink) {
+      this.gs.scrollTo(0);
+      this.subPageBS.next(routerLink);
+    }
     //if (this.router.url !== routerLink && routerLink.includes('/'))
     //this.router.navigate([routerLink]);
   }

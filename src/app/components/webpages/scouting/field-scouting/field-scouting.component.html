@@ -338,7 +338,32 @@
 
       @if (formDisabled) {
       <app-form-element-group [LabelText]="'Response JSON'">
-        {{ scoutFieldResponse | json }}
+        @if (scoutFieldResponse.match) {
+        <p>Match: {{ scoutFieldResponse.match.match_number }}</p>
+        }
+        <p>Team: {{ scoutFieldResponse.team_id }}</p>
+
+        @for (ans of scoutFieldResponse.answers; track $index) { @if
+        (ans.question) {
+        <p class="margin-bottom-0">Question: {{ ans.question.question }}</p>
+        <p class="tab margin-top-0">
+          {{ ans.answer.length > 0 ? ans.answer : "No Answer" }}
+        </p>
+        } @else if (ans.question_flow) {
+        <p class="margin-bottom-0">
+          Question Flow: {{ ans.question_flow.name }}
+        </p>
+        @for (qfa of ans.question_flow_answers; track $index; let i = $index) {
+        <p
+          class="tab-2 margin-bottom-0"
+          [ngClass]="{ 'margin-top-0': i === 0 }"
+        >
+          {{ qfa.question?.question }}: {{ qfa.answer }}
+        </p>
+        <p class="tab-2 margin-top-0">
+          {{ qfa.answer_time }}
+        </p>
+        } } }
       </app-form-element-group>
       }
     </app-form>

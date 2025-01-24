@@ -282,34 +282,6 @@ export class WhiteboardComponent implements OnInit {
 
       // Save initial state of the canvas
       this.saveToUndoStack();
-
-      /*
-      // Handle both mouse and touch events
-      const mouseMove$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mousemove');
-      const mouseUp$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mouseup');
-      const mouseDown$ = fromEvent<MouseEvent>(this.canvas.nativeElement, 'mousedown');
-
-      const touchMove$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchmove');
-      const touchEnd$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchend');
-      const touchStart$ = fromEvent<TouchEvent>(this.canvas.nativeElement, 'touchstart');
-
-      merge(mouseDown$, touchStart$)
-        .pipe(
-          switchMap(() => {
-            this.isDrawing = true;
-            return merge(mouseMove$, touchMove$)
-              .pipe(
-                map((event: MouseEvent | TouchEvent) => {
-                  return this.getCoordinates(event);
-                }),
-                takeUntil(merge(mouseUp$, touchEnd$))
-              );
-          })
-        )
-        .subscribe(([x, y]) => {
-          this.draw(x, y);
-        });
-        */
     };
   }
 
