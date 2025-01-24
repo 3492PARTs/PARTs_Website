@@ -135,6 +135,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
+          if (this.urlEnd !== event.url)
+            this.gs.scrollTo(0);
+
           this.urlEnd = event.url;
 
           this.navigationService.setSubPages(this.urlEnd);

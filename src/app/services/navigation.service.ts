@@ -74,7 +74,7 @@ export class NavigationService {
 
   setSubPage(routerLink: string): void {
     if (this.subPageBS.value !== routerLink) {
-      this.gs.scrollTo(0);
+      //this.gs.scrollTo(0);
       this.subPageBS.next(routerLink);
     }
     //if (this.router.url !== routerLink && routerLink.includes('/'))
