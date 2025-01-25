@@ -1,0 +1,9 @@
+<canvas
+  #myCanvas
+  (mousedown)="handleMouseDown($event)"
+  (mousemove)="handleMouseMove($event)"
+  (mouseup)="handleMouseUp()"
+  width="400"
+  height="300"
+></canvas>
+<button (click)="exportSvg()">Export SVG</button>
