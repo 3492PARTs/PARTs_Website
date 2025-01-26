@@ -1,0 +1,56 @@
+<app-table
+  [TableCols]="questionConditionsTableCols"
+  [TableData]="questionFlowConditions"
+  [ShowAddButton]="true"
+  (AddRecordCallBack)="showQuestionFlowConditionModal()"
+  [ShowEditButton]="true"
+  (EditRecordCallBack)="showQuestionFlowConditionModal($event)"
+  [Width]="'100%'"
+  [Scrollable]="true"
+  [ScrollHeight]="'60vh'"
+></app-table>
+
+<app-modal
+  [Title]="'Question Condition'"
+  [(visible)]="questionFlowConditionModalVisible"
+>
+  <app-form-element
+    [Type]="'select'"
+    [LabelText]="'Question From'"
+    [(Model)]="activeQuestionFlowCondition.question_flow_from"
+    [Required]="true"
+    [SelectList]="questionFlowConditionQuestionFromList"
+    [DisplayProperty]="'name'"
+    [SelectComparatorFunction]="compareQuestionFlows"
+    (FunctionCallBack)="buildQuestionFlowConditionToLists()"
+    [DisplayEmptyOption]="true"
+  >
+  </app-form-element>
+
+  <app-form (SubmitFunction)="saveQuestionFlowCondition()">
+    <app-form-element
+      [Type]="'select'"
+      [LabelText]="'Question Flow To'"
+      [(Model)]="activeQuestionFlowCondition.question_flow_to"
+      [Required]="true"
+      [SelectList]="questionFlowConditionQuestionToList"
+      [DisplayProperty]="'name'"
+      [SelectComparatorFunction]="compareQuestionFlows"
+      (FunctionCallBack)="buildQuestionFlowConditionFromLists()"
+      [DisplayEmptyOption]="true"
+    >
+    </app-form-element>
+
+    <app-form-element
+      [Type]="'checkbox'"
+      [LabelText]="'Active'"
+      [(Model)]="activeQuestionFlowCondition.active"
+      [TrueValue]="'y'"
+      [FalseValue]="'n'"
+    ></app-form-element>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+    </app-button-ribbon>
+  </app-form>
+</app-modal>

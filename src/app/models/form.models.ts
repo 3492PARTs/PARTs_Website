@@ -184,6 +184,20 @@ export class QuestionCondition implements IQuestionCondition {
     active = 'y';
 }
 
+export interface IQuestionFlowCondition {
+    id: number;
+    question_flow_from: QuestionFlow;
+    question_flow_to: QuestionFlow;
+    active: string;
+}
+
+export class QuestionFlowCondition implements IQuestionFlowCondition {
+    id = NaN;
+    question_flow_from = new QuestionFlow();
+    question_flow_to = new QuestionFlow();
+    active = 'y';
+}
+
 export interface IFormType {
     form_typ: string;
     form_nm: string;
