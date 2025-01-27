@@ -7,13 +7,12 @@ import { TableColType, TableComponent } from '../../atoms/table/table.component'
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { FormComponent } from "../../atoms/form/form.component";
-import { BoxComponent } from "../../atoms/box/box.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
 @Component({
   selector: 'app-flow-admin-form',
-  imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, BoxComponent, ButtonRibbonComponent, ButtonComponent],
+  imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './flow-admin-form.component.html',
   styleUrl: './flow-admin-form.component.scss'
 })

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageFieldQuestionFlowConditionsComponent } from './manage-field-question-flow-conditions.component';
+import { ManageFieldQuestionFlowConditionsComponent } from './manage-field-flow-conditions.component';
 
 describe('ManageFieldQuestionFlowConditionsComponent', () => {
   let component: ManageFieldQuestionFlowConditionsComponent;
@@ -10,7 +10,7 @@ describe('ManageFieldQuestionFlowConditionsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ManageFieldQuestionFlowConditionsComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ManageFieldQuestionFlowConditionsComponent);
     component = fixture.componentInstance;

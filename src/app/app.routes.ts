@@ -50,8 +50,9 @@ import { CalendarComponent } from './components/webpages/calendar/calendar.compo
 import { MetricsComponent } from './components/webpages/scouting/strategizing/metrics/metrics.component';
 import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/strategizing/match-planning/match-planning.component';
-import { ManageFieldQuestionFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-flow-conditions/manage-field-question-flow-conditions.component';
+import { ManageFieldQuestionFlowConditionsComponent as ManageFieldFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component';
 import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
+import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -63,10 +64,11 @@ export const routes: Routes = [
     { path: 'scouting/scouting-admin/schedule', title: 'Scout Admin Schedule', component: ScoutingScheduleComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/activity', title: 'Scout Admin Activity', component: ScoutingActivityComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-questions', title: 'Scout Admin Field Questions', component: ManageFieldQuestionsComponent, canActivate: [authGuard] },
+    { path: 'scouting/scouting-admin/manage-field-form', title: 'Scout Admin Field Form', component: ManageFieldFormComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-question-aggregates', title: 'Scout Admin Field Question Aggregates', component: ManageFieldQuestionAggregatesComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-question-conditions', title: 'Scout Admin Field Question Conditions', component: ManageFieldQuestionConditionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-flows', title: 'Scout Admin Field Flows', component: ManageFieldFlowsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-question-flow-conditions', title: 'Scout Admin Field Question Flow Conditions', component: ManageFieldQuestionFlowConditionsComponent, canActivate: [authGuard] },
+    { path: 'scouting/scouting-admin/manage-field-flow-conditions', title: 'Scout Admin Field Flow Conditions', component: ManageFieldFlowConditionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-responses', title: 'Scout Admin Field Responses', component: ManageFieldResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-pit-questions', title: 'Scout Admin Pit Questions', component: ManagePitQuestionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-pit-question-conditions', title: 'Scout Admin Pit Question Conditions', component: ManagePitQuestionConditionsComponent, canActivate: [authGuard] },

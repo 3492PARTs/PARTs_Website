@@ -1,10 +1,10 @@
 <app-table
   [TableCols]="questionConditionsTableCols"
-  [TableData]="questionFlowConditions"
+  [TableData]="flowConditions"
   [ShowAddButton]="true"
-  (AddRecordCallBack)="showQuestionFlowConditionModal()"
+  (AddRecordCallBack)="showFlowConditionModal()"
   [ShowEditButton]="true"
-  (EditRecordCallBack)="showQuestionFlowConditionModal($event)"
+  (EditRecordCallBack)="showFlowConditionModal($event)"
   [Width]="'100%'"
   [Scrollable]="true"
   [ScrollHeight]="'60vh'"
@@ -12,31 +12,31 @@
 
 <app-modal
   [Title]="'Question Condition'"
-  [(visible)]="questionFlowConditionModalVisible"
+  [(visible)]="flowConditionModalVisible"
 >
   <app-form-element
     [Type]="'select'"
-    [LabelText]="'Question From'"
-    [(Model)]="activeQuestionFlowCondition.flow_from"
+    [LabelText]="'Flow From'"
+    [(Model)]="activeFlowCondition.flow_from"
     [Required]="true"
-    [SelectList]="questionFlowConditionQuestionFromList"
+    [SelectList]="flowConditionQuestionFromList"
     [DisplayProperty]="'name'"
     [SelectComparatorFunction]="compareQuestionFlows"
-    (FunctionCallBack)="buildQuestionFlowConditionToLists()"
+    (FunctionCallBack)="buildFlowConditionToLists()"
     [DisplayEmptyOption]="true"
   >
   </app-form-element>
 
-  <app-form (SubmitFunction)="saveQuestionFlowCondition()">
+  <app-form (SubmitFunction)="saveFlowCondition()">
     <app-form-element
       [Type]="'select'"
-      [LabelText]="'Question Flow To'"
-      [(Model)]="activeQuestionFlowCondition.flow_to"
+      [LabelText]="'Flow To'"
+      [(Model)]="activeFlowCondition.flow_to"
       [Required]="true"
-      [SelectList]="questionFlowConditionQuestionToList"
+      [SelectList]="flowConditionQuestionToList"
       [DisplayProperty]="'name'"
       [SelectComparatorFunction]="compareQuestionFlows"
-      (FunctionCallBack)="buildQuestionFlowConditionFromLists()"
+      (FunctionCallBack)="buildFlowConditionFromLists()"
       [DisplayEmptyOption]="true"
     >
     </app-form-element>
@@ -44,7 +44,7 @@
     <app-form-element
       [Type]="'checkbox'"
       [LabelText]="'Active'"
-      [(Model)]="activeQuestionFlowCondition.active"
+      [(Model)]="activeFlowCondition.active"
       [TrueValue]="'y'"
       [FalseValue]="'n'"
     ></app-form-element>
