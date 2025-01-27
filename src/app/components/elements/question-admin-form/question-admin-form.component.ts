@@ -84,10 +84,9 @@ export class QuestionAdminFormComponent implements OnInit {
       this.questionTableCols = [
         ...this._questionTableCols,
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
-        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
-        { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowName.bind(this) },
+        { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowNames.bind(this) },
+        { PropertyName: 'conditional_question_id_set', ColLabel: 'Conditional Questions', Type: 'function', ColValueFunction: this.getQuestionDisplayValues.bind(this) },
+        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
       ];
 
       if (this.FormMetadata.form_sub_types.length > 0)
@@ -149,8 +148,16 @@ export class QuestionAdminFormComponent implements OnInit {
     return n > 0 ? 'Yes' : '';
   }
 
-  getFlowName(ids: number[]): string {
-    return this.FormMetadata.flows.filter(qf => ids.includes(qf.id)).map(f => f.name).join(', ') || '';
+  getFlowNames(ids: number[]): string {
+    return this.FormMetadata.flows.filter(qf => ids.includes(qf.id)).map(f => f.name).join('\n') || '';
+  }
+
+  getQuestionDisplayValues(ids: number[]): string {
+    return this.FormMetadata.questions.filter(q => ids.includes(q.question_id)).map(f => f.display_value).join('\n') || '';
+  }
+
+  getQuestionDisplayValue(id: number): string {
+    return this.FormMetadata.questions.find(q => id == q.question_id)?.display_value || '';
   }
 
 }

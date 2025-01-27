@@ -22,7 +22,7 @@ export interface IQuestion {
     question_conditional_on: number;
     question_condition_value: string;
     question_condition_typ: QuestionConditionType | undefined;
-    has_conditions: string;
+    conditional_question_id_set: number[];
 }
 
 export class Question implements IQuestion {
@@ -47,7 +47,7 @@ export class Question implements IQuestion {
     question_conditional_on = NaN;
     question_condition_value = '';
     question_condition_typ: QuestionConditionType | undefined = undefined;
-    has_conditions = 'n';
+    conditional_question_id_set: number[] = [];
 }
 
 export interface IQuestionOption {
