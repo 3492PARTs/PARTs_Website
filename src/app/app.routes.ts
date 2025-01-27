@@ -51,6 +51,7 @@ import { MetricsComponent } from './components/webpages/scouting/strategizing/me
 import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/strategizing/match-planning/match-planning.component';
 import { ManageFieldQuestionFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-flow-conditions/manage-field-question-flow-conditions.component';
+import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -64,6 +65,7 @@ export const routes: Routes = [
     { path: 'scouting/scouting-admin/manage-field-questions', title: 'Scout Admin Field Questions', component: ManageFieldQuestionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-question-aggregates', title: 'Scout Admin Field Question Aggregates', component: ManageFieldQuestionAggregatesComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-question-conditions', title: 'Scout Admin Field Question Conditions', component: ManageFieldQuestionConditionsComponent, canActivate: [authGuard] },
+    { path: 'scouting/scouting-admin/manage-field-flows', title: 'Scout Admin Field Flows', component: ManageFieldFlowsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-question-flow-conditions', title: 'Scout Admin Field Question Flow Conditions', component: ManageFieldQuestionFlowConditionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-field-responses', title: 'Scout Admin Field Responses', component: ManageFieldResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-pit-questions', title: 'Scout Admin Pit Questions', component: ManagePitQuestionsComponent, canActivate: [authGuard] },

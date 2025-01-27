@@ -55,7 +55,6 @@
         [formType]="formType"
         [runInit]="manageScoutFieldQuestions"
         [(FormMetadata)]="formMetadata"
-        [AllowFlows]="true"
       >
       </app-question-admin-form>
     </app-modal>
@@ -186,12 +185,12 @@
             #box
             class="box"
             *ngFor="let q of activeQuestionFlow.questions"
-            id="{{ q.question_id }}"
+            id="{{ q.question.question_id }}"
           >
             <div class="label">
               <span
-                *ngIf="q.scout_question.icon"
-                class="mdi icon mdi-{{ q.scout_question.icon }}"
+                *ngIf="q.question.scout_question.icon"
+                class="mdi icon mdi-{{ q.question.scout_question.icon }}"
               ></span>
               <p>{{ q.question }}</p>
             </div>

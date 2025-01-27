@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question, QuestionCondition, QuestionConditionType, QuestionFlow, QuestionFlowCondition } from '../../../models/form.models';
+import { Question, QuestionCondition, QuestionConditionType, Flow, FlowCondition } from '../../../models/form.models';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
@@ -19,17 +19,17 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 export class QuestionFlowConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
 
-  questionFlows: QuestionFlow[] = [];
-  questionFlowConditions: QuestionFlowCondition[] = [];
+  questionFlows: Flow[] = [];
+  questionFlowConditions: FlowCondition[] = [];
   questionFlowConditionModalVisible = false;
-  activeQuestionFlowCondition = new QuestionFlowCondition();
+  activeQuestionFlowCondition = new FlowCondition();
   questionConditionsTableCols: TableColType[] = [
     { PropertyName: 'question_flow_from.name', ColLabel: 'Question Flow From' },
     { PropertyName: 'question_flow_to.name', ColLabel: 'Question Flow To' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
-  questionFlowConditionQuestionFromList: QuestionFlow[] = [];
-  questionFlowConditionQuestionToList: QuestionFlow[] = [];
+  questionFlowConditionQuestionFromList: Flow[] = [];
+  questionFlowConditionQuestionToList: Flow[] = [];
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
@@ -46,7 +46,7 @@ export class QuestionFlowConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-flow/', {
       form_typ: this.FormType,
       active: 'y'
-    }, (result: QuestionFlow[]) => {
+    }, (result: Flow[]) => {
       this.questionFlows = result;
       this.buildQuestionFlowConditionFromLists();
       this.buildQuestionFlowConditionToLists();
@@ -59,15 +59,15 @@ export class QuestionFlowConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-flow-condition/', {
       form_typ: this.FormType
     }, (result: any) => {
-      this.questionFlowConditions = result as QuestionFlowCondition[];
+      this.questionFlowConditions = result as FlowCondition[];
     }, (err: any) => {
       this.gs.triggerError(err);
     });
   }
 
-  showQuestionFlowConditionModal(qc?: QuestionFlowCondition) {
+  showQuestionFlowConditionModal(qc?: FlowCondition) {
     this.questionFlowConditionModalVisible = true;
-    this.activeQuestionFlowCondition = qc ? this.gs.cloneObject(qc) : new QuestionFlowCondition();
+    this.activeQuestionFlowCondition = qc ? this.gs.cloneObject(qc) : new FlowCondition();
 
     this.buildQuestionFlowConditionFromLists();
     this.buildQuestionFlowConditionToLists();
@@ -81,27 +81,27 @@ export class QuestionFlowConditionAdminFormComponent implements OnInit {
     this.questionFlowConditionQuestionToList = [];
 
     //So the active question shows in the drop down
-    if (this.activeQuestionFlowCondition.question_flow_to) this.questionFlowConditionQuestionToList.push(this.activeQuestionFlowCondition.question_flow_to);
+    if (this.activeQuestionFlowCondition.flow_to) this.questionFlowConditionQuestionToList.push(this.activeQuestionFlowCondition.flow_to);
 
     this.questionFlows.forEach(questionFlow => {
       let match = false;
       // If its in another group keep out of this one
       this.questionFlowConditions.forEach(qc => {
-        if ([qc.question_flow_from.id, qc.question_flow_to.id].includes(questionFlow.id)) {
+        if ([qc.flow_from.id, qc.flow_to.id].includes(questionFlow.id)) {
           match = true;
         }
       });
 
       // Keep the question just selected as from out of the list
-      if (this.activeQuestionFlowCondition.question_flow_from &&
-        !this.gs.strNoE(this.activeQuestionFlowCondition.question_flow_from.id) &&
-        this.activeQuestionFlowCondition.question_flow_from.id === questionFlow.id) {
+      if (this.activeQuestionFlowCondition.flow_from &&
+        !this.gs.strNoE(this.activeQuestionFlowCondition.flow_from.id) &&
+        this.activeQuestionFlowCondition.flow_from.id === questionFlow.id) {
         match = true;
       }
 
-      if (this.activeQuestionFlowCondition.question_flow_to &&
-        !this.gs.strNoE(this.activeQuestionFlowCondition.question_flow_to.id) &&
-        this.activeQuestionFlowCondition.question_flow_to.id === questionFlow.id) {
+      if (this.activeQuestionFlowCondition.flow_to &&
+        !this.gs.strNoE(this.activeQuestionFlowCondition.flow_to.id) &&
+        this.activeQuestionFlowCondition.flow_to.id === questionFlow.id) {
         match = false;
       }
 
@@ -110,7 +110,7 @@ export class QuestionFlowConditionAdminFormComponent implements OnInit {
     });
   }
 
-  compareQuestionFlows(q1: QuestionFlow, q2: QuestionFlow): boolean {
+  compareQuestionFlows(q1: Flow, q2: Flow): boolean {
     if (q1 && q2)
       return q1.id === q2.id;
     else
@@ -120,7 +120,7 @@ export class QuestionFlowConditionAdminFormComponent implements OnInit {
   saveQuestionFlowCondition(): void {
     this.api.post(true, 'form/question-flow-condition/', this.activeQuestionFlowCondition, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this.activeQuestionFlowCondition = new QuestionFlowCondition();
+      this.activeQuestionFlowCondition = new FlowCondition();
       this.questionFlowConditionModalVisible = false;
       this.getQuestionFlows();
       this.getQuestionFlowConditions();

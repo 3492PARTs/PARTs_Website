@@ -8,7 +8,7 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Question, QuestionFlow, Response } from '../models/form.models';
+import { Question, Flow, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
 

@@ -1,4 +1,4 @@
-import { FormSubType, IFormSubType, IQuestion, Question, QuestionAnswer, QuestionFlow } from "./form.models";
+import { FormSubType, IFormSubType, IQuestion, Question, QuestionAnswer, Flow } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -483,13 +483,13 @@ export class FieldForm {
 export interface IFormSubTypeForm {
     form_sub_typ: IFormSubType;
     questions: IQuestion[];
-    question_flows: QuestionFlow[];
+    question_flows: Flow[];
 }
 
 export class FormSubTypeForm implements IFormSubTypeForm {
     form_sub_typ = new FormSubType();
     questions: Question[] = [];
-    question_flows: QuestionFlow[] = [];
+    question_flows: Flow[] = [];
 }
 
 export interface IFieldFormForm {

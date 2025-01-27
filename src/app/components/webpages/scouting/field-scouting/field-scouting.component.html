@@ -251,24 +251,26 @@
               #box
               class="box"
               *ngFor="let q of flow.questions; let i = index"
-              id="{{ flow.id }}{{ q.question_id }}"
+              id="{{ flow.id }}{{ q.question.question_id }}"
               (click)="advanceFlow(flow, flow.questions[i])"
             >
               <div
                 [ngClass]="{
-                  'full-width': q.question_typ.question_typ === 'mnt-psh-btn',
-                  'full-height': q.question_typ.question_typ === 'mnt-psh-btn',
-                  flex: q.question_typ.question_typ !== 'mnt-psh-btn',
+                  'full-width':
+                    q.question.question_typ.question_typ === 'mnt-psh-btn',
+                  'full-height':
+                    q.question.question_typ.question_typ === 'mnt-psh-btn',
+                  flex: q.question.question_typ.question_typ !== 'mnt-psh-btn',
                   'align-items-baseline':
-                    q.question_typ.question_typ !== 'mnt-psh-btn'
+                    q.question.question_typ.question_typ !== 'mnt-psh-btn'
                 }"
               >
                 <app-question-form-element
-                  [(Question)]="flow.questions[i]"
+                  [(Question)]="flow.questions[i].question"
                   [Inverted]="invertedImage"
                 ></app-question-form-element>
 
-                @if (q.question_typ.question_typ !== 'mnt-psh-btn') {
+                @if (q.question.question_typ.question_typ !== 'mnt-psh-btn') {
                 <app-button
                   [ButtonType]="'check-bold'"
                   (FunctionCallBack)="

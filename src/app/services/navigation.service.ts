@@ -45,6 +45,7 @@ export class NavigationService {
     new Link('Field Form', '/scouting/scouting-admin/manage-field-questions', 'form-select'),
     new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
     new Link('Field Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
+    new Link('Field Flows', '/scouting/scouting-admin/manage-field-flows', 'clipboard-flow-outline'),
     new Link('Field Question Flow Conditions', '/scouting/scouting-admin/manage-field-question-flow-conditions', 'code-equal'),
     new Link('Field Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
     new Link('Pit Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),

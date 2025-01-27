@@ -24,10 +24,10 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielm
 
 
 @Component({
-    selector: 'app-form-element',
-    imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective, OwlDateTimeModule, OwlNativeDateTimeModule],
-    templateUrl: './form-element.component.html',
-    styleUrls: ['./form-element.component.scss']
+  selector: 'app-form-element',
+  imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective, OwlDateTimeModule, OwlNativeDateTimeModule],
+  templateUrl: './form-element.component.html',
+  styleUrls: ['./form-element.component.scss']
 })
 export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnChanges {
   @Input() FormGroup = false;
@@ -196,6 +196,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         });
       }
     }
+    else if (this.Type === 'number' && Number.isNaN(this.Model))
+      this.Model = null;
 
     this.markRequired();
 

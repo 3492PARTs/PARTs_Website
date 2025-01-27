@@ -9,7 +9,7 @@ import { APIService } from '../../../../../services/api.service';
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FieldForm, ScoutQuestion } from '../../../../../models/scouting.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
-import { FormInitialization, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
+import { FormInitialization, FormSubType, Question, Flow } from '../../../../../models/form.models';
 import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
@@ -42,11 +42,11 @@ export class ManageFieldQuestionsComponent implements OnInit {
   fieldImageTypes = ['Original', 'Inverted', 'Full'];
   fieldImageType = 'Original';
 
-  availableQuestionFlows: QuestionFlow[] = [];
+  availableQuestionFlows: Flow[] = [];
 
   activeFormSubType: FormSubType | undefined = undefined;
 
-  activeQuestionFlow: QuestionFlow | undefined = undefined;
+  activeQuestionFlow: Flow | undefined = undefined;
 
   activeQuestion: Question | undefined = undefined;
   activeQuestionBox: ElementRef<any> | undefined = undefined;
@@ -179,7 +179,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
 
   getQuestionFlow(): void {
     if (this.activeQuestionFlow) {
-      this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: QuestionFlow) => {
+      this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: Flow) => {
         this.resetQuestionFlow();
         this.activeQuestionFlow = result;
       }, (err: any) => {
@@ -271,7 +271,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
       if (this.activeQuestionFlow)
         for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
           if (this.boxes.get(i)) {
-            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].scout_question);
+            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].question.scout_question);
           }
         }
     });
@@ -335,7 +335,7 @@ export class ManageFieldQuestionsComponent implements OnInit {
     return o1 && o2 && o1.form_sub_typ === o2.form_sub_typ;
   }
 
-  questionFlowComparatorFunction(o1: QuestionFlow, o2: QuestionFlow): boolean {
+  questionFlowComparatorFunction(o1: Flow, o2: Flow): boolean {
     return o1 && o2 && o1.id === o2.id;
   }
 

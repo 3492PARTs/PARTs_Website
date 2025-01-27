@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { Question, QuestionOption, QuestionType, FormInitialization, QuestionFlow, FormSubType } from '../../../models/form.models';
+import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { AppSize, GeneralService } from '../../../services/general.service';
@@ -33,12 +33,11 @@ export class QuestionAdminFormComponent implements OnInit {
     }
   }
 
-  @Input() AllowFlows = false;
   @Input() FormMetadata: FormInitialization = new FormInitialization();
   @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
   questionModalVisible = false;
   activeQuestion: Question = new Question();
-  availableQuestionFlows: QuestionFlow[] = [];
+  availableQuestionFlows: Flow[] = [];
 
   questionTableTriggerUpdate = false;
   questionTableCols: TableColType[] = [];
@@ -48,19 +47,13 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
   ];
 
-  selectedQuestionFlow: QuestionFlow | undefined = undefined;
-  selectedQuestionFlows: QuestionFlow[] = [];
-  flowTableCols: TableColType[] = [
-    { PropertyName: 'name', ColLabel: 'Flow' },
-  ];
-
   optionsTableCols: TableColType[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area', Required: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
   questionFlowModalVisible = false;
-  newQuestionFlow = new QuestionFlow();
+  newQuestionFlow = new Flow();
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
@@ -81,7 +74,6 @@ export class QuestionAdminFormComponent implements OnInit {
       this.FormMetadata = result;
       this.setQuestionTableCols();
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
-      this.buildQuestionFlowOptions();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -96,10 +88,7 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
       ];
 
-      if (this.AllowFlows)
-        this.questionTableCols = this.questionTableCols.concat([{ PropertyName: 'question_flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.decodeFlowIds.bind(this) } as TableColType]);
-
-      if (this.AllowFlows && this.FormMetadata.form_sub_types.length > 0)
+      if (this.FormMetadata.form_sub_types.length > 0)
         this.questionTableCols = [{ PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' } as TableColType].concat(this.questionTableCols);
     }
     else {
@@ -109,36 +98,8 @@ export class QuestionAdminFormComponent implements OnInit {
 
   showQuestionModal(q?: Question): void {
     this.activeQuestion = q ? this.gs.cloneObject(q) : new Question();
-    this.selectedQuestionFlow = undefined;
-    this.selectedQuestionFlows = [];
-    this.selectedQuestionFlows = this.FormMetadata.question_flows.filter(qf => this.activeQuestion.question_flow_id_set.includes(qf.id));
-
-    this.buildQuestionFlowOptions();
 
     this.questionModalVisible = true;
-  }
-
-  showQuestionFlowModal(): void {
-    this.questionFlowModalVisible = true;
-  }
-
-  buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.FormMetadata.question_flows.filter(qf =>
-      (this.activeQuestion &&
-        !this.gs.strNoE(this.activeQuestion.form_sub_typ) && qf.form_sub_typ) ?
-        qf.form_sub_typ.form_sub_typ === this.activeQuestion.form_sub_typ.form_sub_typ : false);
-  }
-
-  saveQuestionFlow(): void {
-    this.newQuestionFlow.form_typ.form_typ = this.formType;
-    this.api.post(true, 'form/question-flow/', this.newQuestionFlow, (result: any) => {
-      this.gs.successfulResponseBanner(result);
-      this.newQuestionFlow = new QuestionFlow();
-      this.questionFlowModalVisible = false;
-      this.questionInit();
-    }, (err: any) => {
-      this.gs.triggerError(err);
-    });
   }
 
   saveQuestion(): void {
@@ -148,8 +109,6 @@ export class QuestionAdminFormComponent implements OnInit {
       this.gs.addBanner(new Banner(0, `Must have one active option for list element.\n`, 3500));
       return;
     }
-
-    this.selectedQuestionFlows.forEach(qf => this.activeQuestion.question_flow_id_set.push(qf.id));
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
       this.gs.successfulResponseBanner(result);
@@ -192,13 +151,4 @@ export class QuestionAdminFormComponent implements OnInit {
     return this.FormMetadata.question_flows.find(qf => qf.id === id)?.name || '';
   }
 
-  addQuestionFlow(): void {
-    if (this.selectedQuestionFlow)
-      this.selectedQuestionFlows.push(this.selectedQuestionFlow);
-    this.selectedQuestionFlow = undefined;
-  }
-
-  decodeFlowIds(ids: number[]): string {
-    return this.FormMetadata.question_flows.filter(qf => ids.includes(qf.id)).sort((qf1, qf2) => qf1.name.localeCompare(qf2.name)).map(qf => qf.name).join(', ');
-  }
 }

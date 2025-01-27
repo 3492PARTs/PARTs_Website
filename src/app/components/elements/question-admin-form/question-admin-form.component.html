@@ -89,47 +89,10 @@
       [DisplayEmptyOption]="true"
       [FormGroup]="true"
       [FormGroupInline]="true"
-      (FunctionCallBack)="buildQuestionFlowOptions()"
       [Required]="true"
       [SelectComparatorFunction]="compareFormSubTypeObjects"
     >
     </app-form-element>
-
-    @if (AllowFlows ) {
-    <div class="flex align-items-center gap-1rem">
-      <app-form-element
-        [Type]="'select'"
-        [LabelText]="'Question Flow'"
-        [SelectList]="availableQuestionFlows"
-        [MinWidth]="'200px'"
-        [DisplayProperty]="'name'"
-        [(Model)]="selectedQuestionFlow"
-        [DisplayEmptyOption]="true"
-        [FormGroup]="true"
-        [FormGroupInline]="true"
-      >
-      </app-form-element>
-
-      <app-button
-        class="padding-bottom-2rem"
-        [ButtonType]="'add'"
-        (FunctionCallBack)="showQuestionFlowModal()"
-      ></app-button>
-    </div>
-
-    <app-button
-      [ButtonType]="'add'"
-      (FunctionCallBack)="addQuestionFlow()"
-    ></app-button>
-
-    <app-table
-      [TableTitle]="'Flows'"
-      [TableCols]="flowTableCols"
-      [TableData]="selectedQuestionFlows"
-      [Scrollable]="true"
-    >
-    </app-table>
-    }
 
     <app-form-element
       [Type]="'text'"
@@ -196,47 +159,6 @@
 
     <app-button-ribbon>
       <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
-    </app-button-ribbon>
-  </app-form>
-</app-modal>
-
-<app-modal
-  [(visible)]="questionFlowModalVisible"
-  [Title]="'Question Flow Definition'"
->
-  <app-form (SubmitFunction)="saveQuestionFlow()">
-    <app-form-element
-      [Type]="'text'"
-      [LabelText]="'Flow Name'"
-      [(Model)]="newQuestionFlow.name"
-      [Required]="true"
-    ></app-form-element>
-
-    <app-form-element
-      *ngIf="
-        FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0
-      "
-      [Type]="'select'"
-      [LabelText]="'Form Sub Type'"
-      [SelectList]="FormMetadata.form_sub_types"
-      [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'"
-      [(Model)]="newQuestionFlow.form_sub_typ"
-      [DisplayEmptyOption]="true"
-      [FormGroup]="true"
-      [FormGroupInline]="true"
-      [Required]="true"
-    >
-    </app-form-element>
-
-    <app-form-element
-      [Type]="'checkbox'"
-      [LabelText]="'Single Run'"
-      [(Model)]="newQuestionFlow.single_run"
-    ></app-form-element>
-
-    <app-button-ribbon>
-      <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
     </app-button-ribbon>
   </app-form>
 </app-modal>

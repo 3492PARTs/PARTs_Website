@@ -94,7 +94,7 @@ export interface IQuestionAnswer {
     question_answer_id: number;
     response: IResponse;
     question: IQuestion | undefined;
-    question_flow: IQuestionFlow | undefined;
+    question_flow: IFlow | undefined;
     answer: string;
     question_flow_answers: IQuestionFlowAnswer[];
     void_ind: string
@@ -104,12 +104,12 @@ export class QuestionAnswer implements IQuestionAnswer {
     question_answer_id!: number;
     response = new Response();
     question: Question | undefined = undefined;
-    question_flow: QuestionFlow | undefined = undefined;
+    question_flow: Flow | undefined = undefined;
     answer = '';
     question_flow_answers: QuestionFlowAnswer[] = [];
     void_ind = 'n';
 
-    constructor(answer: string, question?: Question, question_flow?: QuestionFlow) {
+    constructor(answer: string, question?: Question, question_flow?: Flow) {
         this.question = question;
         this.question_flow = question_flow;
         this.answer = answer;
@@ -184,17 +184,17 @@ export class QuestionCondition implements IQuestionCondition {
     active = 'y';
 }
 
-export interface IQuestionFlowCondition {
+export interface IFlowCondition {
     id: number;
-    question_flow_from: QuestionFlow;
-    question_flow_to: QuestionFlow;
+    flow_from: Flow;
+    flow_to: Flow;
     active: string;
 }
 
-export class QuestionFlowCondition implements IQuestionFlowCondition {
+export class FlowCondition implements IFlowCondition {
     id = NaN;
-    question_flow_from = new QuestionFlow();
-    question_flow_to = new QuestionFlow();
+    flow_from = new Flow();
+    flow_to = new Flow();
     active = 'y';
 }
 
@@ -226,29 +226,45 @@ export class Response implements IResponse {
 
 export interface IQuestionFlow {
     id: number;
+    flow_id: number;
+    question: Question;
+    order: number;
+    active: string;
+}
+
+export class QuestionFlow implements IQuestionFlow {
+    id = NaN;
+    flow_id = NaN;
+    question = new Question();
+    order = NaN;
+    active = '';
+}
+
+export interface IFlow {
+    id: number;
     name: string;
     single_run: boolean;
     form_typ: IFormType;
     form_sub_typ: IFormSubType | undefined;
-    questions: IQuestion[];
+    questions: IQuestionFlow[];
     question_answer: IQuestionAnswer | undefined;
     void_ind: string;
 
-    question_flow_conditional_on: number;
+    flow_conditional_on: number;
     has_conditions: string;
 }
 
-export class QuestionFlow implements IQuestionFlow {
+export class Flow implements IFlow {
     id = NaN;
     name = "";
     single_run = false;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
-    questions: Question[] = [];
+    questions: QuestionFlow[] = [];
     question_answer: QuestionAnswer | undefined = undefined;
     void_ind = 'n';
 
-    question_flow_conditional_on = NaN;
+    flow_conditional_on = NaN;
     has_conditions = '';
 }
 
@@ -256,7 +272,7 @@ export class FormInitialization {
     question_types: QuestionType[] = [];
     questions: Question[] = [];
     form_sub_types: FormSubType[] = [];
-    question_flows: QuestionFlow[] = [];
+    question_flows: Flow[] = [];
 }
 
 export class GraphType {

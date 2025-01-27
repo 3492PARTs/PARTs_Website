@@ -17,7 +17,7 @@
   <app-form-element
     [Type]="'select'"
     [LabelText]="'Question From'"
-    [(Model)]="activeQuestionFlowCondition.question_flow_from"
+    [(Model)]="activeQuestionFlowCondition.flow_from"
     [Required]="true"
     [SelectList]="questionFlowConditionQuestionFromList"
     [DisplayProperty]="'name'"
@@ -31,7 +31,7 @@
     <app-form-element
       [Type]="'select'"
       [LabelText]="'Question Flow To'"
-      [(Model)]="activeQuestionFlowCondition.question_flow_to"
+      [(Model)]="activeQuestionFlowCondition.flow_to"
       [Required]="true"
       [SelectList]="questionFlowConditionQuestionToList"
       [DisplayProperty]="'name'"
