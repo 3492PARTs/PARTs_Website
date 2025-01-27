@@ -86,6 +86,8 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'has_conditions', ColLabel: 'Has Conditions', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
+        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.isConditional },
+        { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowName.bind(this) },
       ];
 
       if (this.FormMetadata.form_sub_types.length > 0)
@@ -147,8 +149,8 @@ export class QuestionAdminFormComponent implements OnInit {
     return n > 0 ? 'Yes' : '';
   }
 
-  getQuestionFlowName(id: number): string {
-    return this.FormMetadata.question_flows.find(qf => qf.id === id)?.name || '';
+  getFlowName(ids: number[]): string {
+    return this.FormMetadata.flows.filter(qf => ids.includes(qf.id)).map(f => f.name).join(', ') || '';
   }
 
 }

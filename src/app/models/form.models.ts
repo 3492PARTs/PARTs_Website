@@ -272,7 +272,7 @@ export class FormInitialization {
     question_types: QuestionType[] = [];
     questions: Question[] = [];
     form_sub_types: FormSubType[] = [];
-    question_flows: Flow[] = [];
+    flows: Flow[] = [];
 }
 
 export class GraphType {

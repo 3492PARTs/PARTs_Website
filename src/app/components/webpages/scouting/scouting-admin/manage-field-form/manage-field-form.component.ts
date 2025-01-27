@@ -156,7 +156,7 @@ export class ManageFieldFormComponent {
   }
 
   buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.formMetadata.question_flows.filter(qf =>
+    this.availableQuestionFlows = this.formMetadata.flows.filter(qf =>
       (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
