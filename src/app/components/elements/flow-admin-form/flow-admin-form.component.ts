@@ -27,6 +27,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'form_typ.form_nm', ColLabel: 'Form Type' },
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
+    { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
   ];
   flowModalVisible = false;
   activeFlow: Flow | undefined = undefined;
@@ -97,11 +98,29 @@ export class FlowAdminFormComponent implements OnInit {
       qf.question = this.question;
       this.question = new Question();
       this.activeFlow.questions = [...this.activeFlow.questions, qf];
-      this.buildQuestions()
+      this.buildQuestions();
+    }
+  }
+
+  removeQuestionFlow(questionFlow: QuestionFlow): void {
+    if (this.activeFlow) {
+      let i = 0;
+      for (; i < this.activeFlow.questions.length; i++)
+        if (this.activeFlow.questions[i].question.question_id === questionFlow.question.question_id)
+          break;
+
+      this.activeFlow.questions.splice(i, 1);
+      this.buildQuestions();
     }
   }
 
   buildQuestions(): void {
-    this.questions = this.FormMetadata?.questions.filter(q => q.form_sub_typ.form_sub_typ === this.activeFlow?.form_sub_typ.form_sub_typ && !this.activeFlow.questions.map(q => q.question.question_id).includes(q.question_id)) || [];
+    this.questions = [];
+    if (this.FormMetadata)
+      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.questions.map(q => q.question.question_id).includes(q.question_id));
+  }
+
+  decodeBoolean(b: boolean): string {
+    return this.gs.decodeYesNoBoolean(b);
   }
 }

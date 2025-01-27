@@ -32,6 +32,7 @@
         [FormGroup]="true"
         [FormGroupInline]="true"
         [Required]="true"
+        (FunctionCallBack)="buildQuestions()"
       >
       </app-form-element>
       }
@@ -78,6 +79,7 @@
         [TableData]="activeFlow.questions"
         [Width]="'100%'"
         [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeQuestionFlow($event)"
         [Scrollable]="true"
       >
       </app-table>
