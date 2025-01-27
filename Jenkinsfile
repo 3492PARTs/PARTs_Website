@@ -17,7 +17,7 @@ node {
         stage('Clone repository') {
             checkout scm
         }
-
+        /*
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
             env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
             sh '''
@@ -27,7 +27,7 @@ node {
                     -d '{"state":"pending", "description":"Build '\$BUILD_NO' pending", "context":"Jenkins Build"}'
             '''
         }
-
+        */
         stage('Build image') {  
             if (env.BRANCH_NAME == 'main') {
                 sh'''
@@ -105,8 +105,9 @@ node {
         env.RESULT = 'error'
         throw e
     } 
-    finally {
+    /*finally {
         // some common final reporting in all cases (success or failure)
+        
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
                 env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                 sh '''
@@ -116,5 +117,6 @@ node {
                         -d '{"state":"'\$RESULT'", "description":"Build '\$BUILD_NO' '\$RESULT'", "context":"Jenkins Build"}'
                 '''
             }
-    }
+            
+    }*/
 }
