@@ -25,21 +25,21 @@
         [src]="false ? fieldForm.inv_img_url : fieldForm.img_url"
       />
       @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index)
-      { @if (answer.question_flow_answers) { @for (qfa of
-      answer.question_flow_answers; track $index) { @if (qfa.question &&
-      qfa.question.scout_question) {
+      { @if (answer.flow_answers) { @for (flow_answer of answer.flow_answers;
+      track $index) { @if (flow_answer.question &&
+      flow_answer.question.scout_question) {
       <div
         #box
         class="box"
         [ngStyle]="{
-          top: qfa.question.scout_question.y + '%',
-          left: qfa.question.scout_question.x + '%',
-          width: qfa.question.scout_question.width + '%',
-          height: qfa.question.scout_question.height + '%'
+          top: flow_answer.question.scout_question.y + '%',
+          left: flow_answer.question.scout_question.x + '%',
+          width: flow_answer.question.scout_question.width + '%',
+          height: flow_answer.question.scout_question.height + '%'
         }"
       >
         <div class="touchpoint-wrapper">
-          @if (qfa.answer.x && qfa.answer.y) {
+          @if (flow_answer.value.x && flow_answer.value.y) {
           <!--
           <div
             #box
@@ -56,8 +56,8 @@
             #box
             class="box"
             [ngStyle]="{
-              top: 'calc(' + qfa.answer.y + '% - 4px)',
-              left: 'calc(' + qfa.answer.x + '% - 4px)',
+              top: 'calc(' + flow_answer.value.y + '% - 4px)',
+              left: 'calc(' + flow_answer.value.x + '% - 4px)',
               width: '8px',
               height: '8px',
               border: '4px solid orange'
@@ -77,15 +77,17 @@
           ></div>
           -->
           } @else {
-          <p>{{ qfa.answer }}</p>
+          <p>{{ flow_answer.value }}</p>
           }
           <div class="label">
-            @if ( qfa.question.scout_question.icon) {
+            @if ( flow_answer.question.scout_question.icon) {
             <span
-              class="mdi icon mdi-{{ qfa.question.scout_question.icon }}"
+              class="mdi icon mdi-{{
+                flow_answer.question.scout_question.icon
+              }}"
             ></span>
             }
-            <p>{{ qfa.question.question }}</p>
+            <p>{{ flow_answer.question.question }}</p>
           </div>
         </div>
       </div>
@@ -96,5 +98,5 @@
 } @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index) {
 @if (answer.question) {
 <p>{{ answer.question.form_sub_typ.form_sub_nm }}</p>
-<p>{{ answer.question.question }}: {{ answer.answer }}</p>
+<p>{{ answer.question.question }}: {{ answer.value }}</p>
 }}}

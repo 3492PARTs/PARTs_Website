@@ -64,55 +64,55 @@ export class QuestionOption implements IQuestionOption {
     void_ind = 'n';
 }
 
-export interface IQuestionFlowAnswer {
+export interface IFlowAnswer {
     id: number;
     //question_answer = new QuestionAnswer();
     question: IQuestion | undefined;
-    answer: any;
-    answer_time: string;
+    value: any;
+    value_time: string;
     void_ind: string;
 }
 
-export class QuestionFlowAnswer implements IQuestionFlowAnswer {
+export class FlowAnswer implements IFlowAnswer {
     id = NaN;
     //question_answer = new QuestionAnswer();
     question: Question | undefined = undefined;
-    answer: any = '';
-    answer_time = "";
+    value: any = '';
+    value_time = "";
     void_ind = 'n';
 
     constructor(question: Question, answer: string) {
         this.question = question;
-        this.answer = answer;
+        this.value = answer;
         const pieces = new Date(Date.now()).toTimeString().split(' ')[0];
-        this.answer_time = pieces;
+        this.value_time = pieces;
         //hh:mm[:ss[.uuuuuu]]
     }
 }
 
-export interface IQuestionAnswer {
-    question_answer_id: number;
+export interface IAnswer {
+    id: number;
     response: IResponse;
     question: IQuestion | undefined;
-    question_flow: IFlow | undefined;
-    answer: string;
-    question_flow_answers: IQuestionFlowAnswer[];
+    flow: IFlow | undefined;
+    value: string;
+    flow_answers: IFlowAnswer[];
     void_ind: string
 }
 
-export class QuestionAnswer implements IQuestionAnswer {
-    question_answer_id!: number;
+export class Answer implements IAnswer {
+    id!: number;
     response = new Response();
     question: Question | undefined = undefined;
-    question_flow: Flow | undefined = undefined;
-    answer = '';
-    question_flow_answers: QuestionFlowAnswer[] = [];
+    flow: Flow | undefined = undefined;
+    value = '';
+    flow_answers: FlowAnswer[] = [];
     void_ind = 'n';
 
     constructor(answer: string, question?: Question, question_flow?: Flow) {
         this.question = question;
-        this.question_flow = question_flow;
-        this.answer = answer;
+        this.flow = question_flow;
+        this.value = answer;
     }
 }
 
@@ -247,7 +247,7 @@ export interface IFlow {
     form_typ: IFormType;
     form_sub_typ: IFormSubType | undefined;
     questions: IQuestionFlow[];
-    question_answer: IQuestionAnswer | undefined;
+    question_answer: IAnswer | undefined;
     void_ind: string;
 
     flow_conditional_on: number;
@@ -261,7 +261,7 @@ export class Flow implements IFlow {
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     questions: QuestionFlow[] = [];
-    question_answer: QuestionAnswer | undefined = undefined;
+    question_answer: Answer | undefined = undefined;
     void_ind = 'n';
 
     flow_conditional_on = NaN;

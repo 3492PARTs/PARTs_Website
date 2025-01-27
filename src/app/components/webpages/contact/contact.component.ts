@@ -1,7 +1,7 @@
 import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../models/api.models';
-import { Question, QuestionAnswer } from '../../../models/form.models';
+import { Question, Answer } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
@@ -14,10 +14,10 @@ import { CommonModule } from '@angular/common';
 import { QuestionDisplayFormComponent } from "../../elements/question-display-form/question-display-form.component";
 
 @Component({
-    selector: 'app-contact',
-    imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
-    templateUrl: './contact.component.html',
-    styleUrls: ['./contact.component.scss']
+  selector: 'app-contact',
+  imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.scss']
 })
 export class ContactComponent implements OnInit {
   test = null;
@@ -62,7 +62,7 @@ export class ContactComponent implements OnInit {
   save(): void | null {
     this.questions.forEach(q => { q.answer = this.gs.formatQuestionAnswer(q.answer) });
     this.api.post(true, 'form/save-answers/',
-      { question_answers: this.questions.map(q => new QuestionAnswer(q.answer, q)), form_typ: 'team-cntct' },
+      { question_answers: this.questions.map(q => new Answer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
         this.gs.scrollTo(0);

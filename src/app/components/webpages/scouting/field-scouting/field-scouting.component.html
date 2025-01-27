@@ -350,21 +350,19 @@
         (ans.question) {
         <p class="margin-bottom-0">Question: {{ ans.question.question }}</p>
         <p class="tab margin-top-0">
-          {{ ans.answer.length > 0 ? ans.answer : "No Answer" }}
+          {{ ans.value.length > 0 ? ans.value : "No Answer" }}
         </p>
-        } @else if (ans.question_flow) {
-        <p class="margin-bottom-0">
-          Question Flow: {{ ans.question_flow.name }}
-        </p>
-        @for (qfa of ans.question_flow_answers; track $index; let i = $index) {
+        } @else if (ans.flow) {
+        <p class="margin-bottom-0">Question Flow: {{ ans.flow.name }}</p>
+        @for (qfa of ans.flow_answers; track $index; let i = $index) {
         <p
           class="tab-2 margin-bottom-0"
           [ngClass]="{ 'margin-top-0': i === 0 }"
         >
-          {{ qfa.question?.question }}: {{ qfa.answer }}
+          {{ qfa.question?.question }}: {{ qfa.value }}
         </p>
         <p class="tab-2 margin-top-0">
-          {{ qfa.answer_time }}
+          {{ qfa.value_time }}
         </p>
         } } }
         <app-button-ribbon>

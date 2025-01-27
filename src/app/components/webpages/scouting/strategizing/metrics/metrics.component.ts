@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../../../services/general.service';
 
 @Component({
-    selector: 'app-metrics',
-    imports: [FormElementGroupComponent, FormElementComponent, CommonModule],
-    templateUrl: './metrics.component.html',
-    styleUrl: './metrics.component.scss'
+  selector: 'app-metrics',
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule],
+  templateUrl: './metrics.component.html',
+  styleUrl: './metrics.component.scss'
 })
 export class MetricsComponent implements OnInit {
 
@@ -46,9 +46,9 @@ export class MetricsComponent implements OnInit {
   setFieldResponse(r: FieldResponse): void {
     const copy = this.gs.cloneObject(r) as FieldResponse;
     copy.answers.forEach(a => {
-      a.question_flow_answers.forEach(qfa => {
+      a.flow_answers.forEach(qfa => {
         try {
-          qfa.answer = JSON.parse(qfa.answer);
+          qfa.value = JSON.parse(qfa.value);
         }
         catch (e) { }
       });

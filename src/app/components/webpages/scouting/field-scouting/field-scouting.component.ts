@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionAnswer, Flow, QuestionFlowAnswer, QuestionFlow } from '../../../../models/form.models';
+import { Question, Answer, Flow, FlowAnswer, QuestionFlow } from '../../../../models/form.models';
 import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm } from '../../../../models/scouting.models';
 import { User } from '../../../../models/user.models';
 import { APIService } from '../../../../services/api.service';
@@ -420,12 +420,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       // Create new Question Answer to hold the flow answers
-      if (!flow.question_answer) flow.question_answer = new QuestionAnswer("", undefined, this.gs.cloneObject(flow));
+      if (!flow.question_answer) flow.question_answer = new Answer("", undefined, this.gs.cloneObject(flow));
 
       question.answer = this.gs.formatQuestionAnswer(question.answer);
 
       // Add Flows stage answer
-      flow.question_answer.question_flow_answers.push(new QuestionFlowAnswer(question, question.answer));
+      flow.question_answer.flow_answers.push(new FlowAnswer(question, question.answer));
       question.answer = undefined;
 
       this.flowsActionStack.push(new FlowAction(flow.id, question.question_id));
@@ -529,9 +529,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     let sceneFound = false;
 
     const qf = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flow.id).pop();
-    if (qf && qf.question_answer?.question_flow_answers) {
-      qf.question_answer.question_flow_answers.forEach(qfa => {
-        if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, conditionalQuestion)) {
+    if (qf && qf.question_answer?.flow_answers) {
+      qf.question_answer.flow_answers.forEach(qfa => {
+        if (qfa.question && this.gs.isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
           sceneFound = true;
         }
       });
@@ -539,13 +539,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
     this.scoutFieldResponse.answers.forEach(a => {
       if (a.question && !this.gs.strNoE(a.question.question_id)) {
-        if (this.gs.isQuestionConditionMet(a.answer, a.question, conditionalQuestion)) {
+        if (this.gs.isQuestionConditionMet(a.value, a.question, conditionalQuestion)) {
           sceneFound = true;
         }
       }
       else {
-        a.question_flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ).forEach(qfa => {
-          if (qfa.question && this.gs.isQuestionConditionMet(qfa.answer, qfa.question, conditionalQuestion)) {
+        a.flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ).forEach(qfa => {
+          if (qfa.question && this.gs.isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
             sceneFound = true;
           }
         })
@@ -558,17 +558,17 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   private isConditionalQuestionFlowMet(conditionalFlow: Flow): boolean {
     let sceneFound = false;
 
-    sceneFound = this.scoutFieldResponse.answers.filter(a => a.question_flow?.id === conditionalFlow.flow_conditional_on).length > 0;
+    sceneFound = this.scoutFieldResponse.answers.filter(a => a.flow?.id === conditionalFlow.flow_conditional_on).length > 0;
 
     return sceneFound;
   }
 
-  getActiveFlowFlowlessQuestionAnswers(): QuestionAnswer[] {
-    let answers: QuestionAnswer[] = [];
+  getActiveFlowFlowlessQuestionAnswers(): Answer[] {
+    let answers: Answer[] = [];
     if (this.activeFormSubTypeForm) {
       answers = this.activeFormSubTypeForm.questions.map(q => {
         q.answer = this.gs.formatQuestionAnswer(q.answer);
-        return new QuestionAnswer(q.answer, q);
+        return new Answer(q.answer, q);
       });
 
       /*TODO
@@ -666,7 +666,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.activeFormSubTypeForm?.question_flows.forEach(qf => {
       let scene = NaN;
       if (qf.question_answer) {
-        scene = this.getNextStage(qf.questions, qf.question_answer.question_flow_answers[qf.question_answer.question_flow_answers.length - 1].question?.order || 0);
+        scene = this.getNextStage(qf.questions, qf.question_answer.flow_answers[qf.question_answer.flow_answers.length - 1].question?.order || 0);
       }
       else
         scene = this.getFirstStage(qf.questions);
@@ -769,10 +769,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       //check answer active in flows
       const flow = this.activeFormSubTypeForm?.question_flows.filter(qf => qf.id === flowAction.flow_id).pop();
 
-      if (flow && (!flow.question_answer || flow.question_answer.question_flow_answers.length <= 0)) {
+      if (flow && (!flow.question_answer || flow.question_answer.flow_answers.length <= 0)) {
         let index = -1;
         for (let i = 0; i < this.scoutFieldResponse.answers.length; i++) {
-          if (this.scoutFieldResponse.answers[i].question_flow?.id === flowAction.flow_id)
+          if (this.scoutFieldResponse.answers[i].flow?.id === flowAction.flow_id)
             index = i;
         }
 
@@ -780,16 +780,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
           flow.question_answer = questionAnswer;
           flow.questions.forEach(q => {
-            q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.question_flow_answers.find(qfa => qfa.question?.question_id === q.question.question_id)?.answer)
+            q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.question_id === q.question.question_id)?.value)
           });
         }
       }
 
       if (flow && flow.question_answer) {
 
-        const index = flow.question_answer.question_flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
+        const index = flow.question_answer.flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
         if (index >= 0) {
-          const question = flow.question_answer.question_flow_answers[index].question;
+          const question = flow.question_answer.flow_answers[index].question;
           // hide current stage
           if (question) {
 
@@ -800,7 +800,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           }
 
           // remove answer
-          flow.question_answer.question_flow_answers.splice(index, 1);
+          flow.question_answer.flow_answers.splice(index, 1);
         }
         else
           console.log('no question found in flow answers');

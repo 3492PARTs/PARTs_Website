@@ -14,13 +14,13 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { Question, QuestionAnswer } from '../../../../models/form.models';
+import { Question, Answer } from '../../../../models/form.models';
 
 @Component({
-    selector: 'app-pit-scouting',
-    imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
-    templateUrl: './pit-scouting.component.html',
-    styleUrls: ['./pit-scouting.component.scss']
+  selector: 'app-pit-scouting',
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+  templateUrl: './pit-scouting.component.html',
+  styleUrls: ['./pit-scouting.component.scss']
 })
 export class PitScoutingComponent implements OnInit, OnDestroy {
   private buildOutstandingTeamsTimeout: number | undefined;
@@ -243,7 +243,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.questions.forEach(q => {
       const quest = this.gs.cloneObject(q);
       quest.answer = this.gs.formatQuestionAnswer(quest.answer);
-      spr.answers.push(new QuestionAnswer(quest.answer, quest));
+      spr.answers.push(new Answer(quest.answer, quest));
     }
     );
 

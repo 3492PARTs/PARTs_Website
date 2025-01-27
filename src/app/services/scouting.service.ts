@@ -618,7 +618,7 @@ export class ScoutingService {
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       sfr.answers.forEach(a => {
-        a.question_flow?.questions.forEach(q => q.question.answer = '');
+        a.flow?.questions.forEach(q => q.question.answer = '');
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
@@ -819,7 +819,7 @@ export class ScoutingService {
       spr.answers.forEach(a => {
         if (a.question) {
           a.question.answer = '';
-          a.answer = this.gs.formatQuestionAnswer(a.answer);
+          a.value = this.gs.formatQuestionAnswer(a.value);
         }
       })
       spr.form_typ = 'pit';

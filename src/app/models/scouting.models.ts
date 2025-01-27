@@ -1,4 +1,4 @@
-import { FormSubType, IFormSubType, IQuestion, Question, QuestionAnswer, Flow } from "./form.models";
+import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -241,7 +241,7 @@ export interface IScoutFieldFormResponse {
     team_id: number;
     match: IMatch | undefined;
     form_typ: string;
-    answers: QuestionAnswer[];
+    answers: Answer[];
 }
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
@@ -249,9 +249,9 @@ export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     team_id!: number;
     match: Match | undefined = undefined;
     form_typ = 'field';
-    answers: QuestionAnswer[] = [];
+    answers: Answer[] = [];
 
-    constructor(team?: number, match?: Match, answers?: QuestionAnswer[]) {
+    constructor(team?: number, match?: Match, answers?: Answer[]) {
         this.team_id = team || NaN;
         this.match = match || undefined;
         this.answers = answers || [];
@@ -261,7 +261,7 @@ export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
 
 export interface IScoutPitFormResponse {
     id: number;
-    answers: QuestionAnswer[];
+    answers: Answer[];
     team_id: number;
     response_id: number;
     form_typ: string;
@@ -270,13 +270,13 @@ export interface IScoutPitFormResponse {
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id!: number;
-    answers: QuestionAnswer[] = [];
+    answers: Answer[] = [];
     team_id!: number;
     response_id = NaN;
     form_typ = 'field';
     robotPics: File[] = [];
 
-    constructor(question_answers?: QuestionAnswer[], team?: number, robotPics?: File[]) {
+    constructor(question_answers?: Answer[], team?: number, robotPics?: File[]) {
         this.answers = question_answers || [];
         this.team_id = team || NaN;
         this.robotPics = robotPics || [];
@@ -555,6 +555,6 @@ export class FieldResponse {
     match: Match | undefined = undefined
     user = new User();
     time = new Date()
-    answers: QuestionAnswer[] = [];
+    answers: Answer[] = [];
     display_value = '';
 }

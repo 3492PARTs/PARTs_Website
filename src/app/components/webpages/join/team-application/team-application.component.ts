@@ -1,7 +1,7 @@
 import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../../models/api.models';
-import { Question, QuestionAnswer } from '../../../../models/form.models';
+import { Question, Answer } from '../../../../models/form.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../../services/general.service';
@@ -92,7 +92,7 @@ export class TeamApplicationComponent implements OnInit {
             q.answer = this.gs.formatQuestionAnswer(q.answer);
           });
 
-          return subForm.questions.map(q => new QuestionAnswer(q.answer, q));
+          return subForm.questions.map(q => new Answer(q.answer, q));
         }).flat(), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
