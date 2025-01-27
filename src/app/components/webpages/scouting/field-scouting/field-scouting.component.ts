@@ -58,7 +58,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 15;
+  stopwatchSecond = 1;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -87,6 +87,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       if (result) {
         this.fieldForm = result.field_form_form.field_form;
         this.formSubTypeForms = result.field_form_form.form_sub_types;
+
+        console.log(this.formSubTypeForms);
 
         this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
         this.gs.triggerChange(() => {
@@ -446,6 +448,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   displayFlowStage(flow: QuestionFlow, stage: number, show = true): void {
     if (!Number.isNaN(stage)) {
       if (show) {
+        if (!this.gs.strNoE(flow.question_flow_conditional_on) && !this.isConditionalQuestionFlowMet(flow)) {
+          return;
+        }
+
         let sceneFound = false;
 
         const questions = flow.questions.filter(q => q.order === stage && this.gs.strNoE(q.question_conditional_on));
@@ -470,7 +476,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           if (nextStage < stage && flow.question_answer) {
             this.scoutFieldResponse.answers.push(flow.question_answer);
             flow.question_answer = undefined;
-            //this.displayFlowStage(flow, this.getFirstStage(flow.questions));
+
+            // check if any flows in the form sub type that werent met are now met. 
+            const condQF = this.activeFormSubTypeForm?.question_flows.filter(qf => !this.gs.strNoE(qf.question_flow_conditional_on));
+            if (condQF && condQF.length > 0) {
+              condQF.forEach(qf => {
+                if (this.isConditionalQuestionFlowMet(qf)) {
+                  this.displayFlowStage(qf, this.getFirstStage(qf.questions));
+                  qf.question_flow_conditional_on = NaN;
+                }
+              });
+
+            }
           }
           // stop flow or go to next 
           if (flow.single_run) {
@@ -534,6 +551,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         })
       }
     });
+
+    return sceneFound;
+  }
+
+  private isConditionalQuestionFlowMet(conditionalFlow: QuestionFlow): boolean {
+    let sceneFound = false;
+
+    sceneFound = this.scoutFieldResponse.answers.filter(a => a.question_flow?.id === conditionalFlow.question_flow_conditional_on).length > 0;
 
     return sceneFound;
   }

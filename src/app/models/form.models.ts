@@ -233,6 +233,9 @@ export interface IQuestionFlow {
     questions: IQuestion[];
     question_answer: IQuestionAnswer | undefined;
     void_ind: string;
+
+    question_flow_conditional_on: number;
+    has_conditions: string;
 }
 
 export class QuestionFlow implements IQuestionFlow {
@@ -244,6 +247,9 @@ export class QuestionFlow implements IQuestionFlow {
     questions: Question[] = [];
     question_answer: QuestionAnswer | undefined = undefined;
     void_ind = 'n';
+
+    question_flow_conditional_on = NaN;
+    has_conditions = '';
 }
 
 export class FormInitialization {
