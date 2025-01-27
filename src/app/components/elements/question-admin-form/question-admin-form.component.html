@@ -103,8 +103,7 @@
         [SelectList]="availableQuestionFlows"
         [MinWidth]="'200px'"
         [DisplayProperty]="'name'"
-        [BindingProperty]="'id'"
-        [(Model)]="activeQuestion.question_flow_id"
+        [(Model)]="selectedQuestionFlow"
         [DisplayEmptyOption]="true"
         [FormGroup]="true"
         [FormGroupInline]="true"
@@ -117,6 +116,19 @@
         (FunctionCallBack)="showQuestionFlowModal()"
       ></app-button>
     </div>
+
+    <app-button
+      [ButtonType]="'add'"
+      (FunctionCallBack)="addQuestionFlow()"
+    ></app-button>
+
+    <app-table
+      [TableTitle]="'Flows'"
+      [TableCols]="flowTableCols"
+      [TableData]="selectedQuestionFlows"
+      [Scrollable]="true"
+    >
+    </app-table>
     }
 
     <app-form-element

@@ -88,8 +88,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.fieldForm = result.field_form_form.field_form;
         this.formSubTypeForms = result.field_form_form.form_sub_types;
 
-        console.log(this.formSubTypeForms);
-
         this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
@@ -458,14 +456,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         const conditionalQuestions = flow.questions.filter(q => q.order === stage && !this.gs.strNoE(q.question_conditional_on));
 
         questions.forEach(q => {
-          this.showQuestionBox(q);
+          this.showQuestionFlowBox(flow, q);
           sceneFound = true;
         });
 
         conditionalQuestions.forEach(cq => {
           if (this.isConditionalFlowQuestionMet(flow, cq)) {
             sceneFound = true;
-            this.showQuestionBox(cq);
+            this.showQuestionFlowBox(flow, cq);
           }
         });
 
@@ -477,7 +475,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
             this.scoutFieldResponse.answers.push(flow.question_answer);
             flow.question_answer = undefined;
 
-            // check if any flows in the form sub type that werent met are now met. 
+            // check if any flows in the form sub type that weren't met are now met. 
             const condQF = this.activeFormSubTypeForm?.question_flows.filter(qf => !this.gs.strNoE(qf.question_flow_conditional_on));
             if (condQF && condQF.length > 0) {
               condQF.forEach(qf => {
@@ -492,7 +490,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           // stop flow or go to next 
           if (flow.single_run) {
             flow.questions.forEach(q => {
-              this.hideQuestionBox(q);
+              this.hideQuestionFlowBox(flow, q);
             });
           }
           else
@@ -504,11 +502,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         let sceneFound = false;
         flow.questions.filter(q => q.order === stage).forEach(q => {
           if (this.gs.strNoE(q.question_conditional_on)) {
-            this.hideQuestionBox(q);
+            this.hideQuestionFlowBox(flow, q);
             sceneFound = true;
           }
           else if (this.isConditionalFlowQuestionMet(flow, q)) {
-            this.hideQuestionBox(q);
+            this.hideQuestionFlowBox(flow, q);
             sceneFound = true;
           }
         });
@@ -580,15 +578,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     return answers;
   }
 
-  getQuestionBox(question: Question): HTMLElement | undefined {
-    for (let i = 0; i < this.boxes.length; i++) {
-      const box = this.boxes.get(i);
-      if (box && box.nativeElement.id == question.question_id) {
-        return box.nativeElement;
-      }
-    }
-
-    return undefined;
+  getQuestionFlowBox(flow: QuestionFlow, question: Question): HTMLElement | undefined {
+    return this.boxes.find(b => b.nativeElement.id == `${flow.id}${question.question_id}`)?.nativeElement;
   }
 
   getQuestionFormElement(question: Question): QuestionFormElementComponent | undefined {
@@ -622,14 +613,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     return questions.length > 0 ? questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2) : NaN;
   }
 
-  hideQuestionBox(question: Question): void {
-    const box = this.getQuestionBox(question);
+  hideQuestionFlowBox(flow: QuestionFlow, question: Question): void {
+    const box = this.getQuestionFlowBox(flow, question);
     if (box)
       this.renderer.setStyle(box, 'display', 'none');
   }
 
-  showQuestionBox(question: Question): void {
-    const box = this.getQuestionBox(question);
+  showQuestionFlowBox(flow: QuestionFlow, question: Question): void {
+    const box = this.getQuestionFlowBox(flow, question);
     if (box &&
       !this.gs.strNoE(question.scout_question.x) &&
       !this.gs.strNoE(question.scout_question.y) &&
@@ -677,7 +668,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       else
         scene = this.getFirstStage(qf.questions);
 
-      qf.questions.filter(q => q.order === scene).forEach(q => this.showQuestionBox(q));
+      qf.questions.filter(q => q.order === scene).forEach(q => this.showQuestionFlowBox(qf, q));
     })
   }
 

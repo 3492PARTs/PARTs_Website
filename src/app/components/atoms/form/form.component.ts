@@ -6,9 +6,9 @@ import { Banner } from '../../../models/api.models';
 import { GeneralService } from '../../../services/general.service';
 import { TableComponent } from '../table/table.component';
 @Component({
-    selector: 'app-form',
-    imports: [FormsModule],
-    templateUrl: './form.component.html'
+  selector: 'app-form',
+  imports: [FormsModule],
+  templateUrl: './form.component.html'
 })
 
 export class FormComponent implements OnInit {
@@ -57,9 +57,11 @@ export class FormComponent implements OnInit {
   }
 
   private validateFormElement(fec: FormElementComponent): string {
-    fec.touchIt();
-    if (fec.isInvalid())
-      return `&bull;  ${fec.Name} is invalid\n`;
+    if (fec) {
+      fec.touchIt();
+      if (fec.isInvalid())
+        return `&bull;  ${fec.Name} is invalid\n`;
+    }
     return '';
   }
 
