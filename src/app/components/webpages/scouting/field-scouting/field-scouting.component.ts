@@ -431,7 +431,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.flowsActionStack.push(new FlowAction(flow.id, question.question_id));
 
       // Hides current stage
-      this.displayFlowStage(flow, question.order, false);
+      this.displayFlowStage(flow, questionFlow.order, false);
 
 
       flow.questions.sort((a, b) => {
