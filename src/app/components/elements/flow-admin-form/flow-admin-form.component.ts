@@ -27,6 +27,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
+    { PropertyName: 'questions', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeQuestions },
   ];
   flowModalVisible = false;
   activeFlow: Flow | undefined = undefined;
@@ -121,5 +122,9 @@ export class FlowAdminFormComponent implements OnInit {
 
   decodeBoolean(b: boolean): string {
     return this.gs.decodeYesNoBoolean(b);
+  }
+
+  decodeQuestions(questions: QuestionFlow[]): string {
+    return questions.map(q => q.question.display_value).join('\n');
   }
 }

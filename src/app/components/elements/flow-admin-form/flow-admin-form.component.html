@@ -6,6 +6,7 @@
   [ShowEditButton]="true"
   (EditRecordCallBack)="showFlowModal($event)"
   [Scrollable]="true"
+  [ScrollHeight]="'70vh'"
 >
 </app-table>
 
@@ -42,6 +43,7 @@
       [(Model)]="activeFlow.single_run"
     ></app-form-element>
 
+    @if(activeFlow.id) {
     <app-form-element
       [Type]="'checkbox'"
       [LabelText]="'Delete'"
@@ -49,7 +51,7 @@
       [FalseValue]="'n'"
       [(Model)]="activeFlow.void_ind"
     ></app-form-element>
-    @if (FormMetadata) {
+    } @if (FormMetadata) {
     <div class="flex align-items-center gap-1rem">
       <app-form-element
         [Type]="'select'"
