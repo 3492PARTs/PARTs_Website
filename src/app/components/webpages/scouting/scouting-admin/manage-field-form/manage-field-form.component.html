@@ -52,7 +52,7 @@
     @if (isMobile) {
     <p class="important">Cannot edit flows on mobile</p>
     }
-    <app-form (SubmitFunction)="saveQuestionFlow()">
+    <app-form (SubmitFunction)="saveFlow()">
       <div>
         <div class="flex gap-1rem margin-bottom--1rem flex-wrap">
           <app-form-element
@@ -74,7 +74,7 @@
             [DisplayProperty]="'form_sub_nm'"
             [(Model)]="activeFormSubType"
             [DisplayEmptyOption]="true"
-            (FunctionCallBack)="buildQuestionFlowOptions()"
+            (FunctionCallBack)="buildFlowOptions()"
             [SelectComparatorFunction]="subTypeComparatorFunction"
             [Disabled]="isMobile"
           >
@@ -83,24 +83,24 @@
           <app-form-element
             [Type]="'select'"
             [LabelText]="'Question Flow'"
-            [SelectList]="availableQuestionFlows"
+            [SelectList]="availableFlows"
             [MinWidth]="'200px'"
             [DisplayProperty]="'name'"
-            [(Model)]="activeQuestionFlow"
+            [(Model)]="activeFlow"
             [DisplayEmptyOption]="true"
-            [SelectComparatorFunction]="questionFlowComparatorFunction"
+            [SelectComparatorFunction]="flowComparatorFunction"
             (FunctionCallBack)="setQuestionBoxes()"
             [Disabled]="isMobile"
           >
           </app-form-element>
         </div>
-        @if (activeQuestionFlow && activeQuestionFlow.id) {
+        @if (activeFlow && activeFlow.id) {
         <div class="flex justify-content-space-between align-items-center">
           <div class="margin-bottom--1rem">
             <app-form-element
               [Type]="'text'"
               [LabelText]="'Flow Name'"
-              [(Model)]="activeQuestionFlow.name"
+              [(Model)]="activeFlow.name"
               [FormGroup]="true"
               [FormGroupInline]="true"
             ></app-form-element>
@@ -108,7 +108,7 @@
             <app-form-element
               [Type]="'checkbox'"
               [LabelText]="'Single Run'"
-              [(Model)]="activeQuestionFlow.single_run"
+              [(Model)]="activeFlow.single_run"
               [FormGroup]="true"
               [FormGroupInline]="true"
             ></app-form-element>
@@ -116,7 +116,7 @@
             <app-form-element
               [Type]="'checkbox'"
               [LabelText]="'Delete'"
-              [(Model)]="activeQuestionFlow.void_ind"
+              [(Model)]="activeFlow.void_ind"
               [TrueValue]="'y'"
               [FalseValue]="'n'"
               [FormGroup]="true"
@@ -132,13 +132,11 @@
 
       <app-table
         *ngIf="
-          activeQuestionFlow &&
-          activeQuestionFlow.questions &&
-          activeQuestionFlow.questions.length > 0
+          activeFlow && activeFlow.questions && activeFlow.questions.length > 0
         "
-        [TableCols]="questionFlowTableCols"
-        [TableData]="activeQuestionFlow.questions"
-        [TriggerUpdate]="questionFlowTableTriggerUpdate"
+        [TableCols]="flowTableCols"
+        [TableData]="activeFlow.questions"
+        [TriggerUpdate]="flowTableTriggerUpdate"
         [Width]="'100%'"
         [Scrollable]="true"
         [ScrollHeight]="'40vh'"
@@ -167,12 +165,12 @@
           id="image"
           [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
         />
-        <ng-container *ngIf="activeQuestionFlow">
+        <ng-container *ngIf="activeFlow">
           <div
             #box
             class="box"
-            *ngFor="let q of activeQuestionFlow.questions"
-            id="{{ q.question.question_id }}"
+            *ngFor="let q of activeFlow.questions"
+            id="{{ q.question.id }}"
           >
             <div class="label">
               <span

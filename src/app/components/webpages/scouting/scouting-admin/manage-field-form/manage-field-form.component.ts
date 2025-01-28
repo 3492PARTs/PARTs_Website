@@ -41,28 +41,28 @@ export class ManageFieldFormComponent {
   fieldImageTypes = ['Original', 'Inverted', 'Full'];
   fieldImageType = 'Original';
 
-  availableQuestionFlows: Flow[] = [];
+  availableFlows: Flow[] = [];
 
   activeFormSubType: FormSubType | undefined = undefined;
 
-  activeQuestionFlow: Flow | undefined = undefined;
+  activeFlow: Flow | undefined = undefined;
 
   activeQuestion: Question | undefined = undefined;
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
-  questionFlowTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
+  flowTableCols: TableColType[] = [
+    { PropertyName: 'question.question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
     { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
-    { PropertyName: 'scout_question.x', ColLabel: 'X', Type: "number" },
-    { PropertyName: 'scout_question.y', ColLabel: 'Y', Type: "number" },
-    { PropertyName: 'scout_question.width', ColLabel: 'Width', Type: "number" },
-    { PropertyName: 'scout_question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
-    { PropertyName: 'scout_question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
+    { PropertyName: 'question.scout_question.x', ColLabel: 'X', Type: "number" },
+    { PropertyName: 'question.scout_question.y', ColLabel: 'Y', Type: "number" },
+    { PropertyName: 'question.scout_question.width', ColLabel: 'Width', Type: "number" },
+    { PropertyName: 'question.scout_question.height', ColLabel: 'Height', Type: "number" },
+    { PropertyName: 'question.scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
+    { PropertyName: 'question.scout_question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
   ];
-  questionFlowTableTriggerUpdate = false;
+  flowTableTriggerUpdate = false;
 
   isMobile = false;
 
@@ -145,7 +145,7 @@ export class ManageFieldFormComponent {
       form_typ: this.formType
     }, (result: FormInitialization) => {
       this.formMetadata = result;
-      this.buildQuestionFlowOptions();
+      this.buildFlowOptions();
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -155,40 +155,40 @@ export class ManageFieldFormComponent {
     if (!visible) this.formInit();
   }
 
-  buildQuestionFlowOptions(): void {
-    this.availableQuestionFlows = this.formMetadata.flows.filter(qf =>
+  buildFlowOptions(): void {
+    this.availableFlows = this.formMetadata.flows.filter(qf =>
       (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
-  saveQuestionFlow(): void {
-    if (this.activeQuestionFlow)
-      this.api.post(true, 'form/question-flow/', this.activeQuestionFlow, (result: any) => {
+  saveFlow(): void {
+    if (this.activeFlow)
+      this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
         this.gs.successfulResponseBanner(result);
         //this.hideBox();
-        if (this.activeQuestionFlow?.void_ind === 'y') {
-          this.resetQuestionFlow();
+        if (this.activeFlow?.void_ind === 'y') {
+          this.resetFlow();
           this.formInit();
         }
         else
-          this.getQuestionFlow();
+          this.getFlow();
       }, (err: any) => {
         this.gs.triggerError(err);
       });
   }
 
-  getQuestionFlow(): void {
-    if (this.activeQuestionFlow) {
-      this.api.get(true, 'form/question-flow/', { id: this.activeQuestionFlow.id }, (result: Flow) => {
-        this.resetQuestionFlow();
-        this.activeQuestionFlow = result;
+  getFlow(): void {
+    if (this.activeFlow) {
+      this.api.get(true, 'form/flow/', { id: this.activeFlow.id }, (result: Flow) => {
+        this.resetFlow();
+        this.activeFlow = result;
       }, (err: any) => {
         this.gs.triggerError(err);
       });
     }
   }
 
-  resetQuestionFlow(): void {
-    this.activeQuestionFlow = undefined;
+  resetFlow(): void {
+    this.activeFlow = undefined;
     this.activeQuestion = undefined;
     this.activeQuestionBox = undefined;
   }
@@ -238,8 +238,8 @@ export class ManageFieldFormComponent {
         this.activeQuestion.scout_question.width = boxCoords.width;
         this.activeQuestion.scout_question.height = boxCoords.height;
 
-        if (this.activeQuestionFlow) this.gs.updateObjectInArray(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion);
-        this.questionFlowTableTriggerUpdate = !this.questionFlowTableTriggerUpdate;
+        if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.questions, 'question_id', this.activeQuestion);
+        this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
       }
     }
   }
@@ -267,10 +267,10 @@ export class ManageFieldFormComponent {
     this.boxes.forEach(b => this.hideBox(b.nativeElement));
 
     this.gs.triggerChange(() => {
-      if (this.activeQuestionFlow)
-        for (let i = 0; i < this.activeQuestionFlow.questions.length; i++) {
+      if (this.activeFlow)
+        for (let i = 0; i < this.activeFlow.questions.length; i++) {
           if (this.boxes.get(i)) {
-            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeQuestionFlow.questions[i].question.scout_question);
+            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.questions[i].question.scout_question);
           }
         }
     });
@@ -302,11 +302,11 @@ export class ManageFieldFormComponent {
   }
 
   editQuestion(q: Question): void {
-    if (this.activeQuestionFlow) {
+    if (this.activeFlow) {
       if (this.activeQuestionBox) this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
       this.activeQuestion = q;
-      this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeQuestionFlow.questions, 'question_id', this.activeQuestion.question_id));
+      this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeFlow.questions, 'question_id', this.activeQuestion.id));
 
       if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
         !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
@@ -334,7 +334,7 @@ export class ManageFieldFormComponent {
     return o1 && o2 && o1.form_sub_typ === o2.form_sub_typ;
   }
 
-  questionFlowComparatorFunction(o1: Flow, o2: Flow): boolean {
+  flowComparatorFunction(o1: Flow, o2: Flow): boolean {
     return o1 && o2 && o1.id === o2.id;
   }
 

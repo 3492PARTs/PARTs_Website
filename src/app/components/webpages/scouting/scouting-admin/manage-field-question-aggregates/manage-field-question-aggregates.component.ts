@@ -13,10 +13,10 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
-    selector: 'app-manage-field-question-aggregates',
-    imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
-    templateUrl: './manage-field-question-aggregates.component.html',
-    styleUrls: ['./manage-field-question-aggregates.component.scss']
+  selector: 'app-manage-field-question-aggregates',
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  templateUrl: './manage-field-question-aggregates.component.html',
+  styleUrls: ['./manage-field-question-aggregates.component.scss']
 })
 export class ManageFieldQuestionAggregatesComponent implements OnInit {
 
@@ -103,7 +103,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
 
       // keep those already in the list from showing as an option
       this.activeFieldQuestionAggregate.questions.forEach(aq => {
-        if (q.question_id === aq.question_id) match = true;
+        if (q.id === aq.id) match = true;
       });
 
       if (!match) this.fieldQuestionAggQuestionList.push(q);
@@ -111,7 +111,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   }
 
   addQuestionToFieldAggregate(): void {
-    if (this.fieldQuestionToAddToAgg && !this.gs.strNoE(this.fieldQuestionToAddToAgg.question_id)) {
+    if (this.fieldQuestionToAddToAgg && !this.gs.strNoE(this.fieldQuestionToAddToAgg.id)) {
       this.activeFieldQuestionAggregate.questions.push(this.fieldQuestionToAddToAgg);
       this.fieldQuestionToAddToAgg = null;
       this.buildFieldQuestionAggQuestionList();
@@ -119,7 +119,7 @@ export class ManageFieldQuestionAggregatesComponent implements OnInit {
   }
 
   removeQuestionFromFieldAggregate(q: Question): void {
-    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, 'question_id', q.question_id);
+    let index = this.gs.arrayObjectIndexOf(this.activeFieldQuestionAggregate.questions, 'question_id', q.id);
     this.activeFieldQuestionAggregate.questions.splice(index, 1);
     this.buildFieldQuestionAggQuestionList();
   }

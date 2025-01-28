@@ -428,7 +428,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       flow.question_answer.flow_answers.push(new FlowAnswer(question, question.answer));
       question.answer = undefined;
 
-      this.flowsActionStack.push(new FlowAction(flow.id, question.question_id));
+      this.flowsActionStack.push(new FlowAction(flow.id, question.id));
 
       // Hides current stage
       this.displayFlowStage(flow, questionFlow.order, false);
@@ -501,26 +501,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
       else {
         // hide
-        let sceneFound = false;
         flow.questions.filter(q => q.order === stage).forEach(q => {
-          if (this.gs.strNoE(q.question.question_conditional_on)) {
-            this.hideQuestionFlowBox(flow, q);
-            sceneFound = true;
-          }
-          else if (this.isConditionalFlowQuestionMet(flow, q.question)) {
-            this.hideQuestionFlowBox(flow, q);
-            sceneFound = true;
-          }
+          this.hideQuestionFlowBox(flow, q);
         });
-
-        if (!sceneFound) {
-          if (stage < flow.questions[flow.questions.length - 1].order) {
-            this.displayFlowStage(flow, stage + 1, false);
-          }
-          else {
-            this.displayFlowStage(flow, this.getFirstStage(flow.questions), false);
-          }
+        /*
+        if (stage < flow.questions[flow.questions.length - 1].order) {
+          this.displayFlowStage(flow, stage + 1, false);
         }
+        else {
+          this.displayFlowStage(flow, this.getFirstStage(flow.questions, false));
+        }*/
       }
     }
   }
@@ -538,7 +528,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
 
     this.scoutFieldResponse.answers.forEach(a => {
-      if (a.question && !this.gs.strNoE(a.question.question_id)) {
+      if (a.question && !this.gs.strNoE(a.question.id)) {
         if (this.gs.isQuestionConditionMet(a.value, a.question, conditionalQuestion)) {
           sceneFound = true;
         }
@@ -580,14 +570,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     return answers;
   }
 
-  getQuestionFlowBox(flow: Flow, question: QuestionFlow): HTMLElement | undefined {
-    return this.boxes.find(b => b.nativeElement.id == `${flow.id}${question.question.question_id}`)?.nativeElement;
+  getQuestionFlowBox(flow: Flow, questionFlow: QuestionFlow): HTMLElement | undefined {
+    return this.boxes.find(b => b.nativeElement.id == questionFlow.id)?.nativeElement;
   }
 
   getQuestionFormElement(question: Question): QuestionFormElementComponent | undefined {
     for (let i = 0; i < this.boxes.length; i++) {
       const box = this.boxes.get(i);
-      if (box && box.nativeElement.id == question.question_id) {
+      if (box && box.nativeElement.id == question.id) {
         return this.questionFormElements.get(i);
       }
     }
@@ -780,14 +770,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
           flow.question_answer = questionAnswer;
           flow.questions.forEach(q => {
-            q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.question_id === q.question.question_id)?.value)
+            q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value)
           });
         }
       }
 
       if (flow && flow.question_answer) {
 
-        const index = flow.question_answer.flow_answers.findIndex(qfa => qfa.question?.question_id === flowAction.question_id);
+        const index = flow.question_answer.flow_answers.findIndex(qfa => qfa.question?.id === flowAction.question_id);
         if (index >= 0) {
           const question = flow.question_answer.flow_answers[index].question;
           // hide current stage

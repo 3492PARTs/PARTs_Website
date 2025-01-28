@@ -1384,7 +1384,7 @@ export class ScoutingService {
 
   private async updateScoutingQuestionsCache(form_typ: string, questions: Question[]) {
     await this.getScoutingQuestionsFromCache(form_typ).then(async qs => {
-      const ids = qs.map(q => q.question_id);
+      const ids = qs.map(q => q.id);
 
       await this.cs.Question.RemoveBulkAsync(ids);
     });

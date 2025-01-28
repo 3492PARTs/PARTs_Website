@@ -176,6 +176,7 @@
         [Disabled]="formDisabled"
         [MinWidth]="'100px'"
         (FunctionCallBack)="changeFieldInversionForTeam()"
+        [MaxWidth]="'300px'"
       >
       </app-form-element>
 
@@ -251,7 +252,7 @@
               #box
               class="box"
               *ngFor="let q of flow.questions; let i = index"
-              id="{{ flow.id }}{{ q.question.question_id }}"
+              id="{{ q.id }}"
               (click)="advanceFlow(flow, flow.questions[i])"
             >
               <div

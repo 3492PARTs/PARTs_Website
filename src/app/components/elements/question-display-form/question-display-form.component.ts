@@ -25,7 +25,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
       // Push questions into the one they are conditinoal on
       questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
-        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditionalQuestions.push(q);
+        this.questionsWithConditions.find(qwc => qwc.question.id === q.question_conditional_on)?.conditionalQuestions.push(q);
       });
 
       // find questions who are not a top level question or their direct child conditional queston
@@ -33,9 +33,9 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
       // to see if there is a depper recursive conditional question
       let qs = this.questionsWithConditions.map(qwc => qwc.question);
       let qsc = this.questionsWithConditions.map(qwc => qwc.conditionalQuestions.map(c => c)).flatMap(q => q);
-      let ids = [...qs.map(q => q.question_id), ...qsc.map(q => q.question_id)]
+      let ids = [...qs.map(q => q.id), ...qsc.map(q => q.id)]
 
-      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.question_id));
+      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.id));
       this.questionsWithConditions.forEach(qwc => {
         if (qwc.conditionalQuestions.length > 0) {
           qwc.deeperConditionalQuestions = leftOvers;
@@ -91,7 +91,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
         this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
       this.QuestionAnswers.forEach(qa => {
-        questions.filter(q => q.question_conditional_on === qa.question?.question_id).forEach(q => {
+        questions.filter(q => q.question_conditional_on === qa.question?.id).forEach(q => {
           if (qa.question && this.gs.isQuestionConditionMet(qa.value, qa.question, q))
             this.questionsWithConditions.push(new QuestionWithConditions(q));
         });
@@ -99,7 +99,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
 
       // Push questions into the one they are conditional on
       questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
-        this.questionsWithConditions.find(qwc => qwc.question.question_id === q.question_conditional_on)?.conditionalQuestions.push(q);
+        this.questionsWithConditions.find(qwc => qwc.question.id === q.question_conditional_on)?.conditionalQuestions.push(q);
       });
 
       // find questions who are not a top level question or their direct child conditional queston
@@ -107,9 +107,9 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
       // to see if there is a depper recursive conditional question
       let qs = this.questionsWithConditions.map(qwc => qwc.question);
       let qsc = this.questionsWithConditions.map(qwc => qwc.conditionalQuestions.map(c => c)).flatMap(q => q);
-      let ids = [...qs.map(q => q.question_id), ...qsc.map(q => q.question_id)]
+      let ids = [...qs.map(q => q.id), ...qsc.map(q => q.id)]
 
-      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.question_id));
+      let leftOvers = this.allQuestions.filter(q => !ids.includes(q.id));
       this.questionsWithConditions.forEach(qwc => {
         if (qwc.conditionalQuestions.length > 0) {
           qwc.deeperConditionalQuestions = leftOvers;
@@ -132,7 +132,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   }
 
   checkIfConditionsAreMet(question: Question): void {
-    const qwcs = this.questionsWithConditions.find(qwc => qwc.question.question_id === question.question_id);
+    const qwcs = this.questionsWithConditions.find(qwc => qwc.question.id === question.id);
     if (qwcs) {
       let condQuests: Question[] = [];
       for (let i = 0; i < qwcs.conditionalQuestions.length; i++) {

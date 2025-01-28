@@ -11,10 +11,10 @@ import { FormComponent } from '../../atoms/form/form.component';
 import { AuthCallStates, AuthService } from '../../../services/auth.service';
 
 @Component({
-    selector: 'app-question-condition-admin-form',
-    imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
-    templateUrl: './question-condition-admin-form.component.html',
-    styleUrls: ['./question-condition-admin-form.component.scss']
+  selector: 'app-question-condition-admin-form',
+  imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
+  templateUrl: './question-condition-admin-form.component.html',
+  styleUrls: ['./question-condition-admin-form.component.scss']
 })
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
@@ -38,12 +38,12 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
-          if (r === AuthCallStates.comp) {
-            this.getQuestions();
-            this.getQuestionConditions();
-            this.getQuestionConditionTypes();
-          }
-        });
+      if (r === AuthCallStates.comp) {
+        this.getQuestions();
+        this.getQuestionConditions();
+        this.getQuestionConditionTypes();
+      }
+    });
   }
 
   getQuestions(): void {
@@ -99,21 +99,21 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       let match = false;
       // If its in another group keep out of this one
       this.questionConditions.forEach(qc => {
-        if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) {
+        if ([qc.question_from.id, qc.question_to.id].includes(question.id)) {
           match = true;
         }
       });
 
       // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_from.question_id) &&
-        this.activeQuestionCondition.question_from.question_id === question.question_id) {
+        !this.gs.strNoE(this.activeQuestionCondition.question_from.id) &&
+        this.activeQuestionCondition.question_from.id === question.id) {
         match = true;
       }
 
       if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === question.question_id) {
+        !this.gs.strNoE(this.activeQuestionCondition.question_to.id) &&
+        this.activeQuestionCondition.question_to.id === question.id) {
         match = false;
       }
 
@@ -124,7 +124,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   compareQuestions(q1: Question, q2: Question): boolean {
     if (q1 && q2)
-      return q1.question_id === q2.question_id;
+      return q1.id === q2.id;
     else
       return false;
   }

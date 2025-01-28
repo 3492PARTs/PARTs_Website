@@ -1,14 +1,26 @@
-<app-form-element-group [LabelText]="LabelText" [RemoveBorder]="LabelText.length <= 0"
-    (FormElementsChange)="setFormElements($event)">
-    <ng-container *ngFor="let questionWithCondition of questionsWithConditions; let i = index">
-        <app-question-form-element [Question]="questionsWithConditions[i].question" [Disabled]="Disabled"
-            (QuestionChange)="setQuestionAnswer(i, $event)"></app-question-form-element>
+<app-form-element-group
+  [LabelText]="LabelText"
+  [RemoveBorder]="LabelText.length <= 0"
+  (FormElementsChange)="setFormElements($event)"
+>
+  <ng-container
+    *ngFor="let questionWithCondition of questionsWithConditions; let i = index"
+  >
+    <app-question-form-element
+      [Question]="questionsWithConditions[i].question"
+      [Disabled]="Disabled"
+      (QuestionChange)="setQuestionAnswer(i, $event)"
+    ></app-question-form-element>
 
-        @for (acq of questionsWithConditions[i].activeConditionQuestions; track acq.question_id; let j = $index) {
-        <div class="sub-question">
-            <app-question-display-form [(Questions)]="questionsWithConditions[i].deeperConditionalQuestions" [Question]="questionsWithConditions[i].activeConditionQuestions[j]"
-            [Disabled]="Disabled"></app-question-display-form>
-        </div>
-        }
-    </ng-container>
+    @for (acq of questionsWithConditions[i].activeConditionQuestions; track
+    acq.id; let j = $index) {
+    <div class="sub-question">
+      <app-question-display-form
+        [(Questions)]="questionsWithConditions[i].deeperConditionalQuestions"
+        [Question]="questionsWithConditions[i].activeConditionQuestions[j]"
+        [Disabled]="Disabled"
+      ></app-question-display-form>
+    </div>
+    }
+  </ng-container>
 </app-form-element-group>

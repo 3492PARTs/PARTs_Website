@@ -105,7 +105,7 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       let i = 0;
       for (; i < this.activeFlow.questions.length; i++)
-        if (this.activeFlow.questions[i].question.question_id === questionFlow.question.question_id)
+        if (this.activeFlow.questions[i].question.id === questionFlow.question.id)
           break;
 
       this.activeFlow.questions.splice(i, 1);
@@ -116,7 +116,7 @@ export class FlowAdminFormComponent implements OnInit {
   buildQuestions(): void {
     this.questions = [];
     if (this.FormMetadata)
-      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.questions.map(q => q.question.question_id).includes(q.question_id));
+      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.questions.map(q => q.question.id).includes(q.id));
   }
 
   decodeBoolean(b: boolean): string {

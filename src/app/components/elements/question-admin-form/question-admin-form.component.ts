@@ -153,11 +153,11 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   getQuestionDisplayValues(ids: number[]): string {
-    return this.FormMetadata.questions.filter(q => ids.includes(q.question_id)).map(f => f.display_value).join('\n') || '';
+    return this.FormMetadata.questions.filter(q => ids.includes(q.id)).map(f => f.display_value).join('\n') || '';
   }
 
   getQuestionDisplayValue(id: number): string {
-    return this.FormMetadata.questions.find(q => id == q.question_id)?.display_value || '';
+    return this.FormMetadata.questions.find(q => id == q.id)?.display_value || '';
   }
 
 }

@@ -460,7 +460,7 @@ export class GeneralService {
   }
 
   isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-    if (conditionalQuestion.question_condition_typ && question.question_id === conditionalQuestion.question_conditional_on)
+    if (conditionalQuestion.question_condition_typ && question.id === conditionalQuestion.question_conditional_on)
       switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
         case 'equal':
           return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
@@ -717,18 +717,33 @@ export class GeneralService {
   objectToString(o: any): string {
     //console.log(o);
     let s = '';
-    if (typeof o === 'object')
-      for (const [key, value] of Object.entries(o)) {
-        if (value instanceof Array) {
-          s += `${key}: `;
-          value.forEach(element => {
-            s += `${this.objectToString(element)}, `;
-          });
-          s = s.substring(0, s.length - 2);
-          //s += '\n';
+    if (this.isObject(o))
+      if (Object.keys(o).length > 0)
+        for (const [key, value] of Object.entries(o)) {
+          if (value instanceof Array) {
+            s += `${key}: `;
+            value.forEach(element => {
+              if (this.isObject(element))
+                if (Object.keys(element).length > 0)
+                  s += `${this.objectToString(element)}, `;
+                else
+                  s += '';
+              else
+                s += `${element}, `;
+            });
+            s = s.substring(0, s.length - 2);
+          }
+          else if (this.isObject(value)) {
+            if (Object.keys(value as Object).length > 0)
+              s += `${this.objectToString(value)}, `;
+            else
+              s += '';
+            s = s.substring(0, s.length - 2);
+          }
+          else s += `${key}: ${value}\n`;
         }
-        else s += `${key}: ${value}\n`;
-      }
+      else
+        return '';
     else
       return o;
     return s;

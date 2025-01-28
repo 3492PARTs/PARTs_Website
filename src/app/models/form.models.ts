@@ -1,8 +1,8 @@
 import { IScoutQuestion, IScoutQuestionType, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
 
 export interface IQuestion {
-    question_id: number;
-    question_flow_id_set: number[];
+    id: number;
+    flow_id_set: number[];
     form_typ: IFormType;
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
@@ -26,8 +26,8 @@ export interface IQuestion {
 }
 
 export class Question implements IQuestion {
-    question_id = NaN;
-    question_flow_id_set: number[] = [];
+    id = NaN;
+    flow_id_set: number[] = [];
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
