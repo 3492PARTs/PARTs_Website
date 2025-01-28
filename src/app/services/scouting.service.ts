@@ -296,7 +296,7 @@ export class ScoutingService {
     let current = await this.getCurrentSeason();
     let newCurrent = ss.filter(s => s.current === 'y');
 
-    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].season_id !== current[0].season_id) {
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].id !== current[0].id) {
       await this.SeasonEventChangedClearCache();
     }
     await this.cs.Season.RemoveAllAsync();
@@ -315,7 +315,7 @@ export class ScoutingService {
         changed = !value;
 
         value.forEach(async v => {
-          if (s.season_id !== v.season_id) {
+          if (s.id !== v.id) {
             v.current = 'n';
             changed = true;
             await this.cs.Season.AddOrEditAsync(v);
@@ -384,7 +384,7 @@ export class ScoutingService {
     let current = await this.getCurrentEvent();
     let newCurrent = es.filter(e => e.current === 'y');
 
-    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].event_id !== current[0].event_id) {
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].id !== current[0].id) {
       await this.SeasonEventChangedClearCache();
     }
 
@@ -404,7 +404,7 @@ export class ScoutingService {
         changed = !value;
 
         value.forEach(async v => {
-          if (e.event_id !== e.event_id) {
+          if (e.id !== e.id) {
             v.current = 'n';
             changed = true;
             await this.cs.Event.AddOrEditAsync(v);

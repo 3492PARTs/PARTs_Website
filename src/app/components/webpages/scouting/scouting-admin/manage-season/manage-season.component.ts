@@ -96,7 +96,7 @@ export class ManageSeasonComponent implements OnInit {
 
   syncSeason(): void {
     this.api.get(true, 'tba/sync-season/', {
-      season_id: this.currentSeason.season_id.toString()
+      season_id: this.currentSeason.id.toString()
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
       this.init();
@@ -137,13 +137,13 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   setSeasonEvent(): void | null {
-    if (!this.currentSeason.season_id || !this.currentEvent.event_id) {
+    if (!this.currentSeason.id || !this.currentEvent.id) {
       this.gs.triggerError('No season or event selected.');
       return null;
     }
     this.api.get(true, 'scouting/admin/set-season-event/', {
-      season_id: this.currentSeason.season_id.toString(),
-      event_id: this.currentEvent.event_id.toString(),
+      season_id: this.currentSeason.id.toString(),
+      event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
@@ -154,7 +154,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
-    this.eventList = await this.getEventsForSeason(this.currentSeason.season_id);
+    this.eventList = await this.getEventsForSeason(this.currentSeason.id);
 
     let current = this.eventList.filter(e => e.current === 'y');
     if (current.length > 0) this.currentEvent = current[0];
@@ -176,7 +176,7 @@ export class ManageSeasonComponent implements OnInit {
   async getEventsForSeason(season_id: number): Promise<Event[]> {
     let eventsList: Event[] = [];
 
-    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
+    await this.ss.getEventsFromCache(e => e.where({ 'id': season_id })).then(es => {
       eventsList = es;
     });
 
@@ -305,7 +305,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   buildLinkTeamToEventTeamList(): void {
-    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.id || -1;
     this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.teams || []);
   }
 
@@ -372,7 +372,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   async getEventsForNewMatch() {
-    this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.season_id || NaN);
+    this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.id || NaN);
   }
 
   getTeamsForNewMatch() {

@@ -2,14 +2,14 @@ import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow } from "./
 import { User } from "./user.models";
 
 export interface ISeason {
-    season_id: number;
+    id: number;
     season: string;
     current: string;
 }
 
 
 export class Season implements ISeason {
-    season_id = NaN;
+    id = NaN;
     season = '';
     current = 'n';
 }
@@ -33,7 +33,7 @@ export class Team implements ITeam {
 }
 
 export interface IEvent {
-    event_id: number;
+    id: number;
     season_id: number;
     event_nm: string;
     date_st: Date;
@@ -55,7 +55,7 @@ export interface IEvent {
 }
 
 export class Event implements IEvent {
-    event_id = NaN;
+    id = NaN;
     season_id = NaN;
     event_nm = '';
     date_st!: Date;
