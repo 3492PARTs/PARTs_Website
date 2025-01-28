@@ -97,7 +97,7 @@ export class ScoutingService {
         await this.cs.TeamNoteResponse.getAll().then(async trs => {
           for (let i = 0; i < trs.length; i++) {
             let s = trs[i];
-            await this.saveTeamNote(s, s.team_note_id, loadingScreen);
+            await this.saveTeamNote(s, s.id, loadingScreen);
           }
         });
 
@@ -1153,7 +1153,7 @@ export class ScoutingService {
   saveTeamNote(teamNote: TeamNote, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
 
-      if (id) teamNote.team_note_id = NaN;
+      if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
         this.gs.successfulResponseBanner(result);

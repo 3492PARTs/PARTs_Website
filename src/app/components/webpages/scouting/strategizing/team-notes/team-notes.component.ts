@@ -14,10 +14,10 @@ import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 import { User } from '../../../../../models/user.models';
 
 @Component({
-    selector: 'app-team-notes',
-    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
-    templateUrl: './team-notes.component.html',
-    styleUrls: ['./team-notes.component.scss']
+  selector: 'app-team-notes',
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
+  templateUrl: './team-notes.component.html',
+  styleUrls: ['./team-notes.component.scss']
 })
 export class TeamNotesComponent implements OnInit {
 
@@ -86,7 +86,7 @@ export class TeamNotesComponent implements OnInit {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.ss.getTeamNoteResponsesFromCache(tn => tn.where({ 'team_note_id': id })).then(result => {
+    this.ss.getTeamNoteResponsesFromCache(tn => tn.where({ 'id': id })).then(result => {
       result.forEach(r => {
         this.currentTeamNote = r;
       });
@@ -97,7 +97,7 @@ export class TeamNotesComponent implements OnInit {
   removeResult(): void {
     this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
       if (this.currentTeamNote)
-        this.ss.removeTeamNoteResponseFromCache(this.currentTeamNote.team_note_id || -1).then(() => {
+        this.ss.removeTeamNoteResponseFromCache(this.currentTeamNote.id || -1).then(() => {
           this.reset();
           this.populateOutstandingResponses();
         });
@@ -115,7 +115,7 @@ export class TeamNotesComponent implements OnInit {
       this.outstandingResponses = [];
 
       sfrc.forEach(s => {
-        this.outstandingResponses.push({ id: s.team_note_id, team_id: s.team_id || NaN });
+        this.outstandingResponses.push({ id: s.id, team_id: s.team_id || NaN });
       });
 
     });

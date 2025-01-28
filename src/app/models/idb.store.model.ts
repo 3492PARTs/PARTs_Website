@@ -72,7 +72,7 @@ export const DBStores = {
     },
     TeamNoteResponse: {
         TableName: 'TeamNoteResponse',
-        Columns: '++team_note_id'//generateColumns(teamNoteInstance),
+        Columns: '++id'//generateColumns(teamNoteInstance),
     },
     Match: {
         TableName: 'Match',

@@ -157,7 +157,7 @@ export class Match implements IMatch {
 }
 export interface IScoutFieldSchedule {
     scout_field_sch_id: number;
-    event_id: IEvent | number;
+    event_id: number;
     red_one_id: User | number | null | any;
     red_two_id: User | number | null | any;
     red_three_id: User | number | null | any;
@@ -181,7 +181,7 @@ export interface IScoutFieldSchedule {
 
 export class ScoutFieldSchedule implements IScoutFieldSchedule {
     scout_field_sch_id = NaN;
-    event_id: Event | number = new Event();
+    event_id = NaN;
     red_one_id: User | number | null | any = new User();
     red_two_id: User | number | null | any = new User();
     red_three_id: User | number | null | any = new User();
@@ -402,8 +402,7 @@ export class ScheduleByType {
 }
 
 export interface ITeamNote {
-    team_note_id: number;
-    //event: Event | number;
+    id: number;
     team_id: number;
     match: Match | undefined;
     user: User | undefined;
@@ -413,8 +412,7 @@ export interface ITeamNote {
 }
 
 export class TeamNote implements ITeamNote {
-    team_note_id!: number;
-    //event: Event | number = NaN;
+    id = NaN;
     team_id = NaN;
     match: Match | undefined = undefined;
     user: User | undefined = undefined;
