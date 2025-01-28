@@ -160,7 +160,7 @@ export class MatchesComponent implements OnInit {
               }
             });
 
-            await this.ss.getFieldResponseFromCache(f => f.where({ 'team_no': t.team_no })).then(sprs => {
+            await this.ss.getFieldResponseFromCache(f => f.where({ 'team_id': t.team_no })).then(sprs => {
               scoutAnswers = sprs;
             });
 
