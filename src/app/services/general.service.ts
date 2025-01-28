@@ -731,7 +731,7 @@ export class GeneralService {
               else
                 s += `${element}, `;
             });
-            s = s.substring(0, s.length - 2);
+            s = `${s.substring(0, s.length - 2)}\n`;
           }
           else if (this.isObject(value)) {
             if (Object.keys(value as Object).length > 0)

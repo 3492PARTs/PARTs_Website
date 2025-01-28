@@ -132,7 +132,7 @@
 
       <app-table
         [TableCols]="scoutCols"
-        [TableData]="mpr.scoutAnswers"
+        [TableData]="mpr.scoutAnswers || []"
         [EnableFilter]="true"
         [Responsive]="true"
         [Scrollable]="true"

@@ -448,14 +448,33 @@
         [ButtonType]="'main'"
         [ButtonText]="'Add Match'"
         [Title]="'Add Match'"
-        [(visible)]="manageMatchModalVisible"
-        [MaxWidth]="'300px'"
+        [(visible)]="newMatchModalVisible"
+        [MaxWidth]="'500px'"
       >
         <app-form (SubmitFunction)="saveMatch()">
           <app-form-element
             [Type]="'text'"
             [LabelText]="'Number'"
             [(Model)]="newMatch.match_number"
+            [Required]="true"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'datetime'"
+            [LabelText]="'Time'"
+            [(Model)]="newMatch.time"
+            [Required]="true"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Competition Level'"
+            [SelectList]="competitionLevels"
+            [DisplayProperty]="'comp_lvl_typ_nm'"
+            [(Model)]="newMatch.comp_level"
+            [FormGroupInline]="true"
             [Required]="true"
           >
           </app-form-element>
@@ -478,7 +497,7 @@
               [LabelText]="'Event'"
               [SelectList]="newMatchEvents"
               [DisplayProperty]="'event_nm'"
-              [(Model)]="newMatchEvent"
+              [(Model)]="newMatch.event"
               (FunctionCallBack)="getTeamsForNewMatch()"
               [MinWidth]="'100px'"
             >
@@ -491,7 +510,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.red_one_id"
             [Required]="true"
             [MinWidth]="'100px'"
@@ -504,7 +523,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.red_two_id"
             [Required]="true"
             [MinWidth]="'100px'"
@@ -517,7 +536,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.red_three_id"
             [Required]="true"
             [MinWidth]="'100px'"
@@ -530,7 +549,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.blue_one_id"
             [Required]="true"
             [MinWidth]="'100px'"
@@ -543,7 +562,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.blue_two_id"
             [Required]="true"
             [MinWidth]="'100px'"
@@ -556,7 +575,7 @@
             [SelectList]="newMatchTeams"
             [DisplayProperty]="'team_no'"
             [DisplayProperty2]="'team_nm'"
-            [BindingProperty]="'team_mo'"
+            [BindingProperty]="'team_no'"
             [(Model)]="newMatch.blue_three_id"
             [Required]="true"
             [MinWidth]="'100px'"

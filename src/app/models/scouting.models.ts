@@ -88,6 +88,11 @@ export class CompetitionLevel implements ICompetitionLevel {
     comp_lvl_typ_nm = '';
     comp_lvl_order = 0;
     void_ind = '';
+
+    constructor(comp_lvl_typ?: string, comp_lvl_typ_nm?: string) {
+        this.comp_lvl_typ = comp_lvl_typ || '';
+        this.comp_lvl_typ_nm = comp_lvl_typ_nm || '';
+    }
 }
 export interface IMatch {
     match_id: string;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Season, Team, EventToTeams, Event, Match } from '../../../../../models/scouting.models';
+import { Season, Team, EventToTeams, Event, Match, CompetitionLevel } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { RetMessage, GeneralService } from '../../../../../services/general.service';
@@ -54,12 +54,13 @@ export class ManageSeasonComponent implements OnInit {
   removeTeamFromEventModalVisible = false;
 
 
-  manageMatchModalVisible = false;
+  newMatchModalVisible = false;
   newMatch = new Match();
   newMatchSeason: Season | undefined = undefined;
   newMatchEvents: Event[] = [];
-  newMatchEvent: Event | undefined = undefined;
   newMatchTeams: Team[] = [];
+
+  competitionLevels: CompetitionLevel[] = [new CompetitionLevel('qm', 'Qualifying Match'), new CompetitionLevel('qf', 'Quarter Finals'), new CompetitionLevel('sf', 'Semi Finals'), new CompetitionLevel('f', 'Finals')];
 
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService) { }
 
@@ -360,11 +361,9 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   saveMatch(): void {
-    this.api.post(true, 'scouting/admin/team/', this.newTeam, (result: any) => {
+    this.api.post(true, 'scouting/admin/match/', this.newMatch, (result: any) => {
       this.init();
-      this.manageTeamModalVisible = false;
-      this.newTeam = new Team();
-      this.getAllTeams();
+      this.newMatchModalVisible = false;
     }, (err: any) => {
       console.log('error', err);
       this.gs.triggerError(err);
@@ -377,6 +376,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getTeamsForNewMatch() {
-    this.newMatchTeams = this.gs.cloneObject(this.newMatchEvent?.teams || []);
+    console.log(this.newMatch.event);
+    this.newMatchTeams = this.gs.cloneObject(this.newMatch.event.teams);
   }
 }
