@@ -19,6 +19,7 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { HeaderComponent } from "../../../atoms/header/header.component";
 import { QuestionFormElementComponent } from "../../../elements/question-form-element/question-form-element.component";
 import { ModalComponent } from "../../../atoms/modal/modal.component";
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-field-scouting',
@@ -58,7 +59,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 1;
+  stopwatchSecond = 15;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -668,6 +669,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   stopwatchStart(): void {
     if (this.activeFormSubTypeForm?.form_sub_typ.form_sub_typ === 'auto' && !this.stopwatchRun) {
       this.stopwatchRun = true;
+
+      if (!environment.production)
+        this.stopwatchSecond = 5;
+
       this.stopwatchRunFunction();
     }
   }
