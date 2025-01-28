@@ -443,6 +443,138 @@
           </app-button-ribbon>
         </app-form>
       </app-modal>
+
+      <app-modal
+        [ButtonType]="'main'"
+        [ButtonText]="'Add Match'"
+        [Title]="'Add Match'"
+        [(visible)]="manageMatchModalVisible"
+        [MaxWidth]="'300px'"
+      >
+        <app-form (SubmitFunction)="saveMatch()">
+          <app-form-element
+            [Type]="'text'"
+            [LabelText]="'Number'"
+            [(Model)]="newMatch.match_number"
+            [Required]="true"
+          >
+          </app-form-element>
+
+          <app-form-element-group [LabelText]="'Team Filter'">
+            <app-form-element
+              [Type]="'select'"
+              [LabelText]="'Season'"
+              [SelectList]="seasons"
+              [DisplayProperty]="'season'"
+              [(Model)]="newMatchSeason"
+              (FunctionCallBack)="getEventsForNewMatch()"
+              [FormGroupInline]="true"
+              [MinWidth]="'100px'"
+            >
+            </app-form-element>
+
+            <app-form-element
+              [Type]="'select'"
+              [LabelText]="'Event'"
+              [SelectList]="newMatchEvents"
+              [DisplayProperty]="'event_nm'"
+              [(Model)]="newMatchEvent"
+              (FunctionCallBack)="getTeamsForNewMatch()"
+              [MinWidth]="'100px'"
+            >
+            </app-form-element>
+          </app-form-element-group>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Red One'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.red_one_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Red Two'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.red_two_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Red Three'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.red_three_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Blue One'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.blue_one_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Blue Two'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.blue_two_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Blue Three'"
+            [SelectList]="newMatchTeams"
+            [DisplayProperty]="'team_no'"
+            [DisplayProperty2]="'team_nm'"
+            [BindingProperty]="'team_mo'"
+            [(Model)]="newMatch.blue_three_id"
+            [Required]="true"
+            [MinWidth]="'100px'"
+          >
+          </app-form-element>
+
+          <app-button-ribbon>
+            <app-button
+              [ButtonType]="'warning'"
+              (FunctionCallBack)="clearTeam()"
+              >Clear</app-button
+            >
+            <app-button [ButtonType]="'success'" [Type]="'submit'"
+              >Save</app-button
+            >
+          </app-button-ribbon>
+        </app-form>
+      </app-modal>
     </div>
   </app-form-element-group>
 

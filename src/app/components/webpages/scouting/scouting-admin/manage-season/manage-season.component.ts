@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Season, Team, EventToTeams, Event } from '../../../../../models/scouting.models';
+import { Season, Team, EventToTeams, Event, Match } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { RetMessage, GeneralService } from '../../../../../services/general.service';
@@ -14,10 +14,10 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
-    selector: 'app-manage-season',
-    imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
-    templateUrl: './manage-season.component.html',
-    styleUrls: ['./manage-season.component.scss']
+  selector: 'app-manage-season',
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
+  templateUrl: './manage-season.component.html',
+  styleUrls: ['./manage-season.component.scss']
 })
 export class ManageSeasonComponent implements OnInit {
   currentSeason = new Season();
@@ -52,6 +52,14 @@ export class ManageSeasonComponent implements OnInit {
   manageTeamModalVisible = false;
   linkTeamToEventModalVisible = false;
   removeTeamFromEventModalVisible = false;
+
+
+  manageMatchModalVisible = false;
+  newMatch = new Match();
+  newMatchSeason: Season | undefined = undefined;
+  newMatchEvents: Event[] = [];
+  newMatchEvent: Event | undefined = undefined;
+  newMatchTeams: Team[] = [];
 
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService) { }
 
@@ -349,5 +357,26 @@ export class ManageSeasonComponent implements OnInit {
   showRemoveTeamFromEventModal(visible: boolean) {
     this.removeTeamFromEventModalVisible = visible;
     this.clearRemoveEventToTeams();
+  }
+
+  saveMatch(): void {
+    this.api.post(true, 'scouting/admin/team/', this.newTeam, (result: any) => {
+      this.init();
+      this.manageTeamModalVisible = false;
+      this.newTeam = new Team();
+      this.getAllTeams();
+    }, (err: any) => {
+      console.log('error', err);
+      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
+    });
+  }
+
+  async getEventsForNewMatch() {
+    this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.season_id || NaN);
+  }
+
+  getTeamsForNewMatch() {
+    this.newMatchTeams = this.gs.cloneObject(this.newMatchEvent?.teams || []);
   }
 }

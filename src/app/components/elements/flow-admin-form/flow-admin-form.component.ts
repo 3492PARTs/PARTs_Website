@@ -23,7 +23,6 @@ export class FlowAdminFormComponent implements OnInit {
 
   flows: Flow[] = [];
   flowTableCols: TableColType[] = [
-    { PropertyName: 'form_typ.form_nm', ColLabel: 'Form Type' },
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
