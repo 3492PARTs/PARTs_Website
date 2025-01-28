@@ -185,18 +185,18 @@
           (dblclick)="DblClkRecordClick(rec)"
           [ngStyle]="{
             'background-color': !rec[
-              (col.PropertyName || 'x') + (col.ColorFunction?.name || 'x')
+              (col.PropertyName || '~') + (col.ColorFunction?.name || '~')
             ]
               ? 'initial'
               : rec[
-                  (col.PropertyName || 'x') + (col.ColorFunction?.name || 'x')
+                  (col.PropertyName || '~') + (col.ColorFunction?.name || '~')
                 ],
             color: !rec[
-              (col.PropertyName || 'x') + (col.ColorFunction?.name || 'x')
+              (col.PropertyName || '~') + (col.ColorFunction?.name || '~')
             ]
               ? 'initial'
               : rec[
-                  (col.PropertyName || 'x') + (col.ColorFunction?.name || 'x')
+                  (col.PropertyName || '~') + (col.ColorFunction?.name || '~')
                 ] === 'initial'
               ? 'initial'
               : 'white',
@@ -204,8 +204,9 @@
           }"
           [ngClass]="{
             underline:
-              rec[(col.PropertyName || '') + (col.UnderlineFn?.name || '')] ===
-              true
+              rec[
+                (col.PropertyName || '~') + (col.UnderlineFn?.name || '~')
+              ] === true
           }"
         >
           <ng-container *ngIf="!col.Type; else Type">
