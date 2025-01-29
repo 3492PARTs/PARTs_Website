@@ -86,7 +86,7 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowNames.bind(this) },
         { PropertyName: 'conditional_question_id_set', ColLabel: 'Conditional Questions', Type: 'function', ColValueFunction: this.getQuestionDisplayValues.bind(this) },
-        { PropertyName: 'question_conditional_on', ColLabel: 'Is Condition', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
+        { PropertyName: 'question_conditional_on', ColLabel: 'Condition of', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
       ];
 
       if (this.FormMetadata.form_sub_types.length > 0)
