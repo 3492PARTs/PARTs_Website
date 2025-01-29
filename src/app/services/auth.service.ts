@@ -433,7 +433,7 @@ export class UserData {
 }
 
 export class PhoneType {
-  phone_type_id!: number;
+  id!: number;
   carrier!: string;
   phone_type!: string;
 }

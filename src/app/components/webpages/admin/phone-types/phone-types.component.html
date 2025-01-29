@@ -26,7 +26,7 @@
         >Edit Phone Type
       </app-button>
       <app-button
-        *ngIf="activePhoneType.phone_type_id"
+        *ngIf="activePhoneType.id"
         [ButtonType]="'danger'"
         (FunctionCallBack)="deletePhoneType()"
         >Delete Phone Type
