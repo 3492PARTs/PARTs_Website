@@ -335,7 +335,7 @@ export class ScoutPitImage implements IScoutPitImage {
 }
 
 export interface IScoutPitResponse {
-    scout_pit_id: number;
+    id: number;
     team_no: number;
     team_nm: string;
     pics: IScoutPitImage[];
@@ -344,7 +344,7 @@ export interface IScoutPitResponse {
 }
 
 export class ScoutPitResponse implements IScoutPitResponse {
-    scout_pit_id = NaN;
+    id = NaN;
     team_no = NaN;
     team_nm = '';
     pics: ScoutPitImage[] = [];

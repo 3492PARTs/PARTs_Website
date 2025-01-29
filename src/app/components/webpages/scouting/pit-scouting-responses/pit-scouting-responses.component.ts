@@ -12,10 +12,10 @@ import { CommonModule } from '@angular/common';
 import { ScoutPicDisplayComponent } from '../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
-    selector: 'app-pit-scouting-responses',
-    imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
-    templateUrl: './pit-scouting-responses.component.html',
-    styleUrls: ['./pit-scouting-responses.component.scss']
+  selector: 'app-pit-scouting-responses',
+  imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
+  templateUrl: './pit-scouting-responses.component.html',
+  styleUrls: ['./pit-scouting-responses.component.scss']
 })
 export class ScoutPitResponsesComponent implements OnInit {
   teamsSelectList: Team[] = [];
@@ -40,7 +40,7 @@ export class ScoutPitResponsesComponent implements OnInit {
       let tmp: Team[] = [];
 
       result?.teams.forEach(spr => {
-        if (spr.scout_pit_id) {
+        if (spr.id) {
           let team = new Team();
           team.team_no = spr.team_no;
           team.team_nm = spr.team_nm;

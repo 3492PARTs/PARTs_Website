@@ -166,7 +166,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.answers) as Question[];
+    let scoutQuestions = this.gs.cloneObject(this.questions) as Question[];
 
     scoutQuestions.forEach(el => {
       let answer = this.gs.formatQuestionAnswer(el.answer);
@@ -198,6 +198,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.scoutPitResponse = new ScoutPitFormResponse();
       this.scoutPitResponse.team_id = this.previouslySelectedTeam;
       //TODO this.scoutPitResponse.answers = psqs;
+      this.questions = psqs;
       this.robotPic = new File([], '');
       this.previewUrl = null;
       this.previewImages = [];

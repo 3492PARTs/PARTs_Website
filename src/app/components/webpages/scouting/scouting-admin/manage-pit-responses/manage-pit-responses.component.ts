@@ -13,10 +13,10 @@ import { CommonModule } from '@angular/common';
 import { ScoutPicDisplayComponent } from '../../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
-    selector: 'app-manage-pit-responses',
-    imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
-    templateUrl: './manage-pit-responses.component.html',
-    styleUrls: ['./manage-pit-responses.component.scss']
+  selector: 'app-manage-pit-responses',
+  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
+  templateUrl: './manage-pit-responses.component.html',
+  styleUrls: ['./manage-pit-responses.component.scss']
 })
 export class ManagePitResponsesComponent implements OnInit {
 
@@ -42,7 +42,7 @@ export class ManagePitResponsesComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingResponses().then(psrs => {
       if (psrs) {
-        this.scoutPitResults = psrs.teams.filter(t => t.scout_pit_id !== null);
+        this.scoutPitResults = psrs.teams.filter(t => t.id !== null);
       }
       this.gs.decrementOutstandingCalls();
     });
@@ -57,7 +57,7 @@ export class ManagePitResponsesComponent implements OnInit {
   deletePitResult(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-pit-result/', {
-        scout_pit_id: this.activePitScoutResult.scout_pit_id
+        scout_pit_id: this.activePitScoutResult.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getPitResponses();
