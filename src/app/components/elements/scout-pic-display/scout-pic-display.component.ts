@@ -7,10 +7,10 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-scout-pic-display',
-    imports: [ButtonComponent, CommonModule],
-    templateUrl: './scout-pic-display.component.html',
-    styleUrls: ['./scout-pic-display.component.scss']
+  selector: 'app-scout-pic-display',
+  imports: [ButtonComponent, CommonModule],
+  templateUrl: './scout-pic-display.component.html',
+  styleUrls: ['./scout-pic-display.component.scss']
 })
 export class ScoutPicDisplayComponent {
   @Input()
@@ -86,7 +86,7 @@ export class ScoutPicDisplayComponent {
 
   setDefaultPic(spi: ScoutPitImage): void {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
-      scout_pit_img_id: spi.scout_pit_img_id
+      scout_pit_img_id: spi.id
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
       // TODO: need to emit this this.search();

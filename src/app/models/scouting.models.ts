@@ -323,13 +323,13 @@ export class ScoutPitResponseAnswer implements IScoutPitResponseAnswer {
 }
 
 export interface IScoutPitImage {
-    scout_pit_img_id: number;
+    id: number;
     pic: string;
     default: boolean;
 }
 
 export class ScoutPitImage implements IScoutPitImage {
-    scout_pit_img_id = NaN;
+    id = NaN;
     pic = '';
     default = false;
 }
