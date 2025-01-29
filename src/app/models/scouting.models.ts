@@ -298,7 +298,7 @@ export class ScoutFieldResponsesReturn {
     scoutAnswers: any[] = [];
     current_season = new Season();
     current_event = new Event();
-    removed_responses: ScoutField[] = [];
+    removed_responses: number[] = [];
 }
 
 export class ScoutField {

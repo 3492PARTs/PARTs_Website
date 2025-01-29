@@ -670,7 +670,7 @@ export class ScoutingService {
 
           this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
-          const ids = result.removed_responses.map(t => t.id);
+          const ids = result.removed_responses;
           if (params) {
             // we are only loading the diff
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
