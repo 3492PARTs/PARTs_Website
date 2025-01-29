@@ -45,7 +45,7 @@ export class NotificationsService {
 
       this.swPush.messages.subscribe(m => {
         this.gs.devConsoleLog('subscribeToNotifications - message', m);
-        this.getUserAlerts('notification');
+        this.getUserAlerts(false, 'notification');
       });
 
       /*this.swPush.subscription.subscribe(s => {
@@ -103,8 +103,8 @@ export class NotificationsService {
     this.messagesBS.next(this.messages_);
   }
 
-  getUserAlerts(alert_comm_typ_id: string) {
-    this.api.get(true, 'user/alerts/', {
+  getUserAlerts(loading = true, alert_comm_typ_id: string) {
+    this.api.get(loading, 'user/alerts/', {
       alert_comm_typ_id: alert_comm_typ_id
     }, (result: any) => {
       if (alert_comm_typ_id === 'notification') {
@@ -139,8 +139,8 @@ export class NotificationsService {
       if (index >= 0) this.removeNotification(index);
       index = this.gs.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
-      this.getUserAlerts('notification');
-      this.getUserAlerts('message');
+      this.getUserAlerts(true, 'notification');
+      this.getUserAlerts(true, 'message');
     }, (err: any) => {
       this.gs.triggerError(err);
     });

@@ -91,9 +91,10 @@ export class MatchesComponent implements OnInit {
   init(): void {
     if (!this.initPromise)
       this.initPromise = new Promise<boolean>(resolve => {
-        const offlineCalls: any[] = [];
+        const calls: any[] = [];
 
-        offlineCalls.push(
+        this.gs.incrementOutstandingCalls();
+        calls.push(
           this.ss.loadAllScoutingInfo().then(result => {
             if (result) {
               this.teams = result.teams;
@@ -101,11 +102,11 @@ export class MatchesComponent implements OnInit {
               const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
               this.matches = ourMatches;
             }
-
+            this.gs.decrementOutstandingCalls();
           }));
 
-        //this.gs.incrementOutstandingCalls();
-        offlineCalls.push(
+        //
+        calls.push(
           this.ss.loadFieldScoutingResponses(false).then(result => {
             if (result) {
               this.scoutCols = result.scoutCols;
@@ -116,11 +117,11 @@ export class MatchesComponent implements OnInit {
           }));
 
         //this.gs.incrementOutstandingCalls();
-        offlineCalls.push(this.ss.loadPitScoutingResponses(false).then(result => {
+        calls.push(this.ss.loadPitScoutingResponses(false).then(result => {
           //this.gs.decrementOutstandingCalls();
         }));
 
-        Promise.all(offlineCalls).then((results: any[]) => {
+        Promise.all(calls).then((results: any[]) => {
           resolve(true);
           this.initPromise = undefined;
         });

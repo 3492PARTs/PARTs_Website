@@ -29,8 +29,8 @@ export class AuthService {
   private userBS = new BehaviorSubject<User>(new User());
   user = this.userBS.asObservable();
 
-  private userPermissionsBS = new BehaviorSubject<AuthPermission[]>([]);
-  userPermissions = this.userPermissionsBS.asObservable();
+  //private userPermissionsBS = new BehaviorSubject<AuthPermission[]>([]);
+  //userPermissions = this.userPermissionsBS.asObservable();
 
   private userLinksBS = new BehaviorSubject<Link[]>([]);
   userLinks = this.userLinksBS.asObservable();
@@ -273,9 +273,9 @@ export class AuthService {
 
   async getLoggedInUserData(): Promise<void> {
     await this.getUserObject();
-    await this.getUserLinks();
-    this.ns.getUserAlerts('notification');
-    this.ns.getUserAlerts('message');
+    //await this.getUserLinks();
+    this.ns.getUserAlerts(false, 'notification');
+    this.ns.getUserAlerts(false, 'message');
   }
 
   getUserObject(): Promise<boolean> {
@@ -283,24 +283,15 @@ export class AuthService {
       this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
         return u.where({ 'id': this.getTokenLoad(this.tokenBS.value?.refresh || '').user_id })
       }, async (result: User) => {
-        // console.log(Response);
+        // comes from cache as an array, this only happens if app is offline
         if (Array.isArray(result))
           result = result[0];
         result = (result as User);
 
         this.userBS.next(result);
-        await this.cs.User.AddOrEditAsync(result);
+        this.cs.User.AddOrEditAsync(result);
 
-        // api call to get user permissions
-        this.us.getUserPermissions(result.id.toString(), async (result: AuthPermission[]) => {
-          this.userPermissionsBS.next(result);
-          await this.cs.UserPermissions.RemoveAllAsync();
-          this.cs.UserPermissions.AddBulkAsync(result);
-        }, (err: any) => {
-          this.cs.UserPermissions.getAll().then(ups => {
-            this.userPermissionsBS.next(ups);
-          });
-        });
+        this.populateAppLinks(result.links);
 
         resolve(true);
       }, (error => {
@@ -317,72 +308,76 @@ export class AuthService {
 
   getUserLinks(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, async (result: any) => {
-        const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Strategizing'];
-
-        switch (this.apiStatus) {
-          case APIStatus.on:
-            this.userLinksBS.next(result as Link[]);
-            this.refreshUserLinksInCache(this.userLinksBS.value);
-
-            // Cache data for endpoints we want to use offline.
-            const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
-            const offlineCalls: any[] = [];
-
-            //This will need changed if offline menu names ever includes endpoints that don't need teams
-            if (offlineLinks.length > 0) {
-              await this.ss.loadAllScoutingInfo();
-
-              offlineLinks.forEach(ol => {
-                switch (ol.menu_name) {
-                  case 'Field Scouting':
-                    //offlineCalls.push(this.ss.loadFieldScoutingForm(false));
-                    break;
-                  case 'Field Responses':
-                    offlineCalls.push(this.ss.loadFieldScoutingResponses(false));
-                    break;
-                  case 'Pit Scouting':
-                    offlineCalls.push(this.ss.loadPitScoutingForm(false));
-                    break;
-                  case 'Pit Responses':
-                    offlineCalls.push(this.ss.loadPitScoutingResponses(false));
-                    break;
-                  case 'Portal':
-                    break;
-                  case 'Match Planning':
-                    break;
-                }
-              });
-            }
-
-            //await Promise.all(offlineCalls);
-
-            break;
-
-          case APIStatus.off:
-            let newUserLinks: Link[] = [];
-
-            // get the pages that we are able to use offline from the list of links for the user
-            await this.cs.UserLinks.getAll().then((uls: Link[]) => {
-              uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: Link, ul2: Link) => {
-                if (ul1.order < ul2.order) return 1;
-                else if (ul1.order > ul2.order) return -1;
-                else return 0;
-              }).forEach(ul => {
-                newUserLinks.unshift(ul);
-              });
-            });
-
-            this.userLinksBS.next(newUserLinks);
-            break;
-        }
-
-        this.ss.startUploadOutstandingResponsesTimeout();
+      this.ds.get(true, 'user/user-links/', undefined, 'UserLinks', undefined, (result: Link[]) => {
+        this.populateAppLinks(result);
         resolve(true);
       }, (error => {
         resolve(false);
       }));
     });
+  }
+
+  private populateAppLinks(links: Link[]): void {
+    const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Strategizing'];
+
+    switch (this.apiStatus) {
+      case APIStatus.on:
+        this.userLinksBS.next(links);
+        this.refreshUserLinksInCache(this.userLinksBS.value);
+
+        // Cache data for endpoints we want to use offline.
+        const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
+        const offlineCalls: any[] = [];
+
+        //This will need changed if offline menu names ever includes endpoints that don't need teams
+        if (offlineLinks.length > 0) {
+          this.ss.loadAllScoutingInfo(false); // i remove await from this line to speed up
+
+          offlineLinks.forEach(ol => {
+            switch (ol.menu_name) {
+              case 'Field Scouting':
+                //offlineCalls.push(this.ss.loadFieldScoutingForm(false));
+                break;
+              case 'Field Responses':
+                offlineCalls.push(this.ss.loadFieldScoutingResponses(false));
+                break;
+              case 'Pit Scouting':
+                offlineCalls.push(this.ss.loadPitScoutingForm(false));
+                break;
+              case 'Pit Responses':
+                offlineCalls.push(this.ss.loadPitScoutingResponses(false));
+                break;
+              case 'Portal':
+                break;
+              case 'Match Planning':
+                break;
+            }
+          });
+        }
+
+        //await Promise.all(offlineCalls);
+
+        break;
+
+      case APIStatus.off:
+        let newUserLinks: Link[] = [];
+
+        // get the pages that we are able to use offline from the list of links for the user
+        this.cs.UserLinks.getAll().then((uls: Link[]) => {
+          uls.filter(ul => offlineMenuNames.includes(ul.menu_name)).sort((ul1: Link, ul2: Link) => {
+            if (ul1.order < ul2.order) return 1;
+            else if (ul1.order > ul2.order) return -1;
+            else return 0;
+          }).forEach(ul => {
+            newUserLinks.unshift(ul);
+          });
+
+          this.userLinksBS.next(newUserLinks);
+        });
+        break;
+    }
+
+    this.ss.startUploadOutstandingResponsesTimeout();
   }
 
   refreshUserLinksInCache(uls: Link[]): void {

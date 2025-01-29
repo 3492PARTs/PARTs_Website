@@ -13,7 +13,7 @@ import { IQuestion, Question } from '../models/form.models';
 })
 export class CacheService {
   User!: DexieCrud<User, number>;
-  UserPermissions!: DexieCrud<AuthPermission, number>;
+  //UserPermissions!: DexieCrud<AuthPermission, number>;
   UserLinks!: DexieCrud<Link, number>;
 
   Season!: DexieCrud<Season, number>;
@@ -46,7 +46,7 @@ export class CacheService {
 
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<User, number>(this.dbs.UserTable);
-    this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
+    //this.UserPermissions = new DexieCrud<IAuthPermission, number>(this.dbs.UserPermissionsTable);
     this.UserLinks = new DexieCrud<ILink, number>(this.dbs.UserLinksTable);
 
     this.Season = new DexieCrud<ISeason, number>(this.dbs.SeasonTable);

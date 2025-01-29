@@ -1,3 +1,5 @@
+import { ILink, Link } from "./navigation.models";
+
 export interface IAuthPermission {
     id: number;
     codename: string;
@@ -37,7 +39,9 @@ export interface IUser {
     phone_type: string;
     phone_type_id: number | null;
     groups: IAuthGroup[];
+    permissions: IAuthPermission[];
     image: string;
+    links: ILink[];
 }
 
 export class User implements IUser {
@@ -53,7 +57,9 @@ export class User implements IUser {
     phone_type = '';
     phone_type_id!: number | null;
     groups: AuthGroup[] = [];
+    permissions: AuthPermission[] = [];
     image = '';
+    links: Link[] = []
 
     get_full_name(): string {
         return `${this.first_name} ${this.last_name}`;

@@ -12,14 +12,14 @@ import { TableColType, TableComponent } from '../../../atoms/table/table.compone
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 
 @Component({
-    selector: 'app-scouting-portal',
-    imports: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
-    templateUrl: './scouting-portal.component.html',
-    styleUrls: ['./scouting-portal.component.scss']
+  selector: 'app-scouting-portal',
+  imports: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
+  templateUrl: './scouting-portal.component.html',
+  styleUrls: ['./scouting-portal.component.scss']
 })
 export class ScoutingPortalComponent implements OnInit {
   user: User = new User();
-  userPermissions: AuthPermission[] = [];
+  //userPermissions: AuthPermission[] = [];
 
   fullFieldSchedule: ScoutFieldSchedule[] = [];
 
@@ -68,7 +68,7 @@ export class ScoutingPortalComponent implements OnInit {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
     this.authService.user.subscribe(u => this.user = u);
-    this.authService.userPermissions.subscribe(ups => this.userPermissions = ups);
+    //this.authService.userPermissions.subscribe(ups => this.userPermissions = ups);
   }
 
   portalInit(): void {
