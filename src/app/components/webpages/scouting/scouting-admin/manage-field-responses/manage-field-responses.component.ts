@@ -66,7 +66,7 @@ export class ManageFieldResponsesComponent implements OnInit {
   deleteFieldResult(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
-        scout_field_id: this.activeScoutResult.scout_field_id
+        scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getFieldResponses();

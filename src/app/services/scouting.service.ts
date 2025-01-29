@@ -654,9 +654,9 @@ export class ScoutingService {
         let last = null;
 
         if (!forceCall)
-          await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('scout_field_id')).then(sfrr => {
+          await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('id')).then(sfrr => {
             //console.log(sfrr);
-            if (sfrr) last = sfrr['scout_field_id'];
+            if (sfrr) last = sfrr['id'];
           });
 
         let params: any = undefined;
@@ -670,7 +670,7 @@ export class ScoutingService {
 
           this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
-          const ids = result.removed_responses.map(t => t.scout_field_id);
+          const ids = result.removed_responses.map(t => t.id);
           if (params) {
             // we are only loading the diff
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');

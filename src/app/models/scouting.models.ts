@@ -302,7 +302,7 @@ export class ScoutFieldResponsesReturn {
 }
 
 export class ScoutField {
-    scout_field_id = NaN
+    id = NaN
     response = ''
     event = NaN
     team_no = NaN
