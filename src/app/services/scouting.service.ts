@@ -126,6 +126,10 @@ export class ScoutingService {
           /** 
            * On success load results and store in db 
            **/
+
+          if (callbackFn) callbackFn(result);
+
+          resolve(result);
           await this.updateSeasonsCache(result.seasons);
           await this.updateEventsCache(result.events);
           await this.updateTeamsCache(result.teams);
@@ -137,10 +141,6 @@ export class ScoutingService {
           await this.updateMatchStrategiesCache(result.match_strategies);
           await this.updateFieldFormFormCache(result.field_form_form);
           await this.updateAllianceSelectionCache(result.alliance_selections);
-
-          if (callbackFn) callbackFn(result);
-
-          resolve(result);
         }, async (err: any) => {
           /** 
            * On fail load results from db
