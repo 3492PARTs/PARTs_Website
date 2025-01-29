@@ -15,22 +15,22 @@ import { Question } from '../models/form.models';
 export class ScoutingService {
   private outstandingResponsesTimeout: number | undefined;
 
-  private outstandingLoadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
-  private outstandingLoadSeasonsPromise: Promise<Season[] | null> | null = null;
-  private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
-  private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
-  private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<FieldFormForm | null> | null = null;
-  private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
-  private outstandingInitPitScoutingPromise: Promise<Question[] | null> | null = null;
-  private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
-  private outstandingLoadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
-  private outstandingLoadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
-  private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
-  private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
-  private outstandingLoadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
-  private outstandingLoadAllianceSelectionPromise: Promise<AllianceSelection[] | null> | null = null;
-  private outstandingUploadOutstandingResponsesPromise: Promise<void> | null = null;
+  private loadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
+  private loadSeasonsPromise: Promise<Season[] | null> | null = null;
+  private loadEventsPromise: Promise<Event[] | null> | null = null;
+  private loadTeamsPromise: Promise<Team[] | null> | null = null;
+  private loadMatchesPromise: Promise<Match[] | null> | null = null;
+  private initFieldScoutingPromise: Promise<FieldFormForm | null> | null = null;
+  private getFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
+  private initPitScoutingPromise: Promise<Question[] | null> | null = null;
+  private getPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
+  private loadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
+  private loadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
+  private loadSchedulesPromise: Promise<Schedule[] | null> | null = null;
+  private loadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
+  private loadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
+  private loadAllianceSelectionPromise: Promise<AllianceSelection[] | null> | null = null;
+  private uploadOutstandingResponsesPromise: Promise<void> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<number>(0);
@@ -50,8 +50,8 @@ export class ScoutingService {
   }
 
   async uploadOutstandingResponses(loadingScreen = true): Promise<void> {
-    if (!this.outstandingUploadOutstandingResponsesPromise)
-      this.outstandingUploadOutstandingResponsesPromise = new Promise<void>(async resolve => {
+    if (!this.uploadOutstandingResponsesPromise)
+      this.uploadOutstandingResponsesPromise = new Promise<void>(async resolve => {
         let fieldUploaded = false;
 
         await this.cs.ScoutFieldFormResponse.getAll().then(async sfrs => {
@@ -104,10 +104,10 @@ export class ScoutingService {
         this.triggerResponsesUploaded();
 
         resolve();
-        this.outstandingUploadOutstandingResponsesPromise = null;
+        this.uploadOutstandingResponsesPromise = null;
       });
 
-    return this.outstandingUploadOutstandingResponsesPromise;
+    return this.uploadOutstandingResponsesPromise;
   }
 
   private triggerResponsesUploaded(): void {
@@ -119,9 +119,13 @@ export class ScoutingService {
   }
 
   // Load All Scouting Information -----------------------------------------------------------
+  getLoadAllScoutingInfoPromise(): Promise<AllScoutInfo | null> | null {
+    return this.loadAllScoutingInfoPromise;
+  }
+
   loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllScoutInfo | null> {
-    if (!this.outstandingLoadAllScoutingInfoPromise) {
-      this.outstandingLoadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
+    if (!this.loadAllScoutingInfoPromise) {
+      this.loadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: AllScoutInfo) => {
           /** 
            * On success load results and store in db 
@@ -239,20 +243,20 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadAllScoutingInfoPromise = null;
+          this.loadAllScoutingInfoPromise = null;
         }, () => {
-          this.outstandingLoadAllScoutingInfoPromise = null;
+          this.loadAllScoutingInfoPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadAllScoutingInfoPromise;
+    return this.loadAllScoutingInfoPromise;
   }
 
   // Load Seasons -----------------------------------------------------------
   loadSeasons(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Season[] | null> {
-    if (!this.outstandingLoadSeasonsPromise) {
-      this.outstandingLoadSeasonsPromise = new Promise<Season[] | null>(resolve => {
+    if (!this.loadSeasonsPromise) {
+      this.loadSeasonsPromise = new Promise<Season[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/season/', undefined, async (result: Season[]) => {
           /** 
            * On success load results and store in db 
@@ -282,14 +286,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadSeasonsPromise = null;
+          this.loadSeasonsPromise = null;
         }, () => {
-          this.outstandingLoadSeasonsPromise = null;
+          this.loadSeasonsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadSeasonsPromise;
+    return this.loadSeasonsPromise;
   }
 
   private async updateSeasonsCache(ss: Season[]): Promise<void> {
@@ -339,8 +343,8 @@ export class ScoutingService {
 
   // Load Events -----------------------------------------------------------
   loadEvents(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Event[] | null> {
-    if (!this.outstandingLoadEventsPromise) {
-      this.outstandingLoadEventsPromise = new Promise<Event[] | null>(resolve => {
+    if (!this.loadEventsPromise) {
+      this.loadEventsPromise = new Promise<Event[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/event/', undefined, async (result: Event[]) => {
           /** 
            * On success load results and store in db 
@@ -370,14 +374,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadEventsPromise = null;
+          this.loadEventsPromise = null;
         }, () => {
-          this.outstandingLoadEventsPromise = null;
+          this.loadEventsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadEventsPromise;
+    return this.loadEventsPromise;
   }
 
   private async updateEventsCache(es: Event[]): Promise<void> {
@@ -428,8 +432,8 @@ export class ScoutingService {
 
   // Load Teams -----------------------------------------------------------
   getTeams(loadingScreen = true, current: boolean): Promise<Team[] | null> {
-    if (!this.outstandingLoadTeamsPromise) {
-      this.outstandingLoadTeamsPromise = new Promise<Team[] | null>(resolve => {
+    if (!this.loadTeamsPromise) {
+      this.loadTeamsPromise = new Promise<Team[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/team/', { current: current }, async (result: Team[]) => {
           /** 
            * On success load results and store in db 
@@ -440,14 +444,14 @@ export class ScoutingService {
            * On fail load results from db
            **/
           resolve(null);
-          this.outstandingLoadTeamsPromise = null;
+          this.loadTeamsPromise = null;
         }, () => {
-          this.outstandingLoadTeamsPromise = null;
+          this.loadTeamsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadTeamsPromise;
+    return this.loadTeamsPromise;
   }
 
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
@@ -515,8 +519,8 @@ export class ScoutingService {
 
   // Load Matches -----------------------------------------------------------
   loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Match[] | null> {
-    if (!this.outstandingLoadMatchesPromise) {
-      this.outstandingLoadMatchesPromise = new Promise<Match[] | null>(resolve => {
+    if (!this.loadMatchesPromise) {
+      this.loadMatchesPromise = new Promise<Match[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/match/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
@@ -546,13 +550,13 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadMatchesPromise = null;
+          this.loadMatchesPromise = null;
         }, () => {
-          this.outstandingLoadMatchesPromise = null;
+          this.loadMatchesPromise = null;
         });
       });
     }
-    return this.outstandingLoadMatchesPromise;
+    return this.loadMatchesPromise;
   }
 
   private async updateMatchesCache(ms: Match[]): Promise<void> {
@@ -570,8 +574,8 @@ export class ScoutingService {
 
   // Field Scouting -----------------------------------------------------------
   loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FieldFormForm | null> {
-    if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<FieldFormForm | null>(resolve => {
+    if (!this.initFieldScoutingPromise) {
+      this.initFieldScoutingPromise = new Promise<FieldFormForm | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/field/form/', {
           form_typ: 'field',
           active: 'y'
@@ -605,14 +609,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingInitFieldScoutingPromise = null;
+          this.initFieldScoutingPromise = null;
         }, () => {
-          this.outstandingInitFieldScoutingPromise = null;
+          this.initFieldScoutingPromise = null;
         });
       });
     }
 
-    return this.outstandingInitFieldScoutingPromise;
+    return this.initFieldScoutingPromise;
   }
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
@@ -649,8 +653,8 @@ export class ScoutingService {
   }
 
   loadFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
-    if (forceCall || !this.outstandingGetFieldScoutingResponsesPromise)
-      this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
+    if (forceCall || !this.getFieldScoutingResponsesPromise)
+      this.getFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
         let last = null;
 
         if (!forceCall)
@@ -691,7 +695,7 @@ export class ScoutingService {
 
           resolve(result);
 
-          this.outstandingGetFieldScoutingResponsesPromise = null;
+          this.getFieldScoutingResponsesPromise = null;
         }, async (err: any) => {
           const scoutResponses = new ScoutFieldResponsesReturn();
 
@@ -718,11 +722,11 @@ export class ScoutingService {
           else
             resolve(scoutResponses);
 
-          this.outstandingGetFieldScoutingResponsesPromise = null;
+          this.getFieldScoutingResponsesPromise = null;
         });
       });
 
-    return this.outstandingGetFieldScoutingResponsesPromise;
+    return this.getFieldScoutingResponsesPromise;
   }
 
   private async updateFieldFormFormCache(fieldForm: FieldFormForm) {
@@ -768,8 +772,8 @@ export class ScoutingService {
 
   // Pit Scouting --------------------------------------------------------------
   loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Question[] | null> {
-    if (!this.outstandingInitPitScoutingPromise) {
-      this.outstandingInitPitScoutingPromise = new Promise<Question[] | null>(resolve => {
+    if (!this.initPitScoutingPromise) {
+      this.initPitScoutingPromise = new Promise<Question[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/question/', {
           form_typ: 'pit',
           active: 'y'
@@ -804,14 +808,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingInitPitScoutingPromise = null;
+          this.initPitScoutingPromise = null;
         }, () => {
-          this.outstandingInitPitScoutingPromise = null;
+          this.initPitScoutingPromise = null;
         });
       });
     }
 
-    return this.outstandingInitPitScoutingPromise;
+    return this.initPitScoutingPromise;
   }
 
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
@@ -884,14 +888,14 @@ export class ScoutingService {
   }
 
   loadPitScoutingResponses(loadingScreen = true): Promise<ScoutPitResponsesReturn | null> {
-    if (!this.outstandingGetPitScoutingResponsesPromise)
-      this.outstandingGetPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
+    if (!this.getPitScoutingResponsesPromise)
+      this.getPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
         this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: ScoutPitResponsesReturn) => {
 
           await this.updateScoutPitResponsesCache(result.teams);
 
           resolve(result);
-          this.outstandingGetPitScoutingResponsesPromise = null;
+          this.getPitScoutingResponsesPromise = null;
         }, async (err: any) => {
           const result = new ScoutPitResponsesReturn();
 
@@ -912,11 +916,11 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingGetPitScoutingResponsesPromise = null;
+          this.getPitScoutingResponsesPromise = null;
         });
       });
 
-    return this.outstandingGetPitScoutingResponsesPromise;
+    return this.getPitScoutingResponsesPromise;
   }
 
   private async updateScoutPitResponsesCache(sprs: ScoutPitResponse[]): Promise<void> {
@@ -938,8 +942,8 @@ export class ScoutingService {
 
   // Field Schedules -------------------------------------------------------------------------
   loadScoutingFieldSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScoutFieldSchedule[] | null> {
-    if (!this.outstandingLoadScoutFieldSchedulesPromise) {
-      this.outstandingLoadScoutFieldSchedulesPromise = new Promise<ScoutFieldSchedule[] | null>(resolve => {
+    if (!this.loadScoutFieldSchedulesPromise) {
+      this.loadScoutFieldSchedulesPromise = new Promise<ScoutFieldSchedule[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/scout-field-schedule/', undefined, async (result: ScoutFieldSchedule[]) => {
           /** 
            * On success load results and store in db 
@@ -969,14 +973,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadScoutFieldSchedulesPromise = null;
+          this.loadScoutFieldSchedulesPromise = null;
         }, () => {
-          this.outstandingLoadScoutFieldSchedulesPromise = null;
+          this.loadScoutFieldSchedulesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadScoutFieldSchedulesPromise;
+    return this.loadScoutFieldSchedulesPromise;
   }
 
   private async updateScoutFieldSchedulesCache(sfss: ScoutFieldSchedule[]): Promise<void> {
@@ -1000,8 +1004,8 @@ export class ScoutingService {
 
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Schedule[] | null> {
-    if (!this.outstandingLoadSchedulesPromise) {
-      this.outstandingLoadSchedulesPromise = new Promise<Schedule[] | null>(resolve => {
+    if (!this.loadSchedulesPromise) {
+      this.loadSchedulesPromise = new Promise<Schedule[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/schedule/', undefined, async (result: Schedule[]) => {
           /** 
            * On success load results and store in db 
@@ -1031,14 +1035,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadSchedulesPromise = null;
+          this.loadSchedulesPromise = null;
         }, () => {
-          this.outstandingLoadSchedulesPromise = null;
+          this.loadSchedulesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadSchedulesPromise;
+    return this.loadSchedulesPromise;
   }
 
   private async updateSchedulesCache(ss: Schedule[]): Promise<void> {
@@ -1056,8 +1060,8 @@ export class ScoutingService {
 
   // Schedule Types -------------------------------------------------------------------------
   loadScheduleTypes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScheduleType[] | null> {
-    if (!this.outstandingLoadScheduleTypesPromise) {
-      this.outstandingLoadScheduleTypesPromise = new Promise<ScheduleType[] | null>(resolve => {
+    if (!this.loadScheduleTypesPromise) {
+      this.loadScheduleTypesPromise = new Promise<ScheduleType[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/schedule-type/', undefined, async (result: ScheduleType[]) => {
           /** 
            * On success load results and store in db 
@@ -1087,14 +1091,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadScheduleTypesPromise = null;
+          this.loadScheduleTypesPromise = null;
         }, () => {
-          this.outstandingLoadScheduleTypesPromise = null;
+          this.loadScheduleTypesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadScheduleTypesPromise;
+    return this.loadScheduleTypesPromise;
   }
 
   private async updateScheduleTypesCache(sts: ScheduleType[]): Promise<void> {
@@ -1108,8 +1112,8 @@ export class ScoutingService {
 
   // Team Notes -----------------------------------------------------------
   loadTeamNotes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<TeamNote[] | null> {
-    if (!this.outstandingLoadTeamNotesPromise) {
-      this.outstandingLoadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
+    if (!this.loadTeamNotesPromise) {
+      this.loadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/strategizing/team-notes/', undefined, async (result: TeamNote[]) => {
           /** 
            * On success load results and store in db 
@@ -1140,14 +1144,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadTeamNotesPromise = null;
+          this.loadTeamNotesPromise = null;
         }, () => {
-          this.outstandingLoadTeamNotesPromise = null;
+          this.loadTeamNotesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadTeamNotesPromise;
+    return this.loadTeamNotesPromise;
   }
 
   saveTeamNote(teamNote: TeamNote, id?: number, loadingScreen = true): Promise<boolean> {
@@ -1202,8 +1206,8 @@ export class ScoutingService {
 
   // Match Strategies -----------------------------------------------------------
   loadMatchStrategies(loadingScreen = true, callbackFn?: (result: any) => void): Promise<MatchStrategy[] | null> {
-    if (!this.outstandingLoadMatchStrategiesPromise) {
-      this.outstandingLoadMatchStrategiesPromise = new Promise<MatchStrategy[] | null>(resolve => {
+    if (!this.loadMatchStrategiesPromise) {
+      this.loadMatchStrategiesPromise = new Promise<MatchStrategy[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/strategizing/match-strategy/', undefined, async (result: MatchStrategy[]) => {
           /** 
            * On success load results and store in db 
@@ -1234,14 +1238,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadMatchStrategiesPromise = null;
+          this.loadMatchStrategiesPromise = null;
         }, () => {
-          this.outstandingLoadMatchStrategiesPromise = null;
+          this.loadMatchStrategiesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadMatchStrategiesPromise;
+    return this.loadMatchStrategiesPromise;
   }
 
   saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
@@ -1307,8 +1311,8 @@ export class ScoutingService {
 
   // Alliance Selections -----------------------------------------------------------
   loadAllianceSelection(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllianceSelection[] | null> {
-    if (!this.outstandingLoadAllianceSelectionPromise) {
-      this.outstandingLoadAllianceSelectionPromise = new Promise<AllianceSelection[] | null>(resolve => {
+    if (!this.loadAllianceSelectionPromise) {
+      this.loadAllianceSelectionPromise = new Promise<AllianceSelection[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/strategizing/alliance-selection/', undefined, async (result: AllianceSelection[]) => {
           /** 
            * On success load results and store in db 
@@ -1339,14 +1343,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadAllianceSelectionPromise = null;
+          this.loadAllianceSelectionPromise = null;
         }, () => {
-          this.outstandingLoadAllianceSelectionPromise = null;
+          this.loadAllianceSelectionPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadAllianceSelectionPromise;
+    return this.loadAllianceSelectionPromise;
   }
 
   saveAllianceSelections(selections: AllianceSelection[], loadingScreen = true): Promise<boolean> {

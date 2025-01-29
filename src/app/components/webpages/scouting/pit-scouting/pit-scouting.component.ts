@@ -75,9 +75,9 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(result => {
+    this.ss.loadTeams().then(result => {
       if (result) {
-        this.buildTeamLists(result.teams);
+        this.buildTeamLists(result);
       }
 
       this.gs.decrementOutstandingCalls();

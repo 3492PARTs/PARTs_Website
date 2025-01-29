@@ -9,10 +9,10 @@ import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 
 @Component({
-    selector: 'app-alliance-selection',
-    imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
-    templateUrl: './alliance-selection.component.html',
-    styleUrl: './alliance-selection.component.scss'
+  selector: 'app-alliance-selection',
+  imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
+  templateUrl: './alliance-selection.component.html',
+  styleUrl: './alliance-selection.component.scss'
 })
 export class AllianceSelectionComponent implements OnInit {
 
@@ -41,6 +41,7 @@ export class AllianceSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(result => {
       if (result) {
         this.currentEvent = result.events.find(e => e.current === 'y');
@@ -55,6 +56,7 @@ export class AllianceSelectionComponent implements OnInit {
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
         this.teamButtonData = this.teams.map<{ disabled: boolean, team_id: number }>(t => { return { disabled: false, team_id: t.team_no } });
       }
+      this.gs.decrementOutstandingCalls();
     });
   }
 

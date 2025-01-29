@@ -48,16 +48,11 @@ export class TeamNotesComponent implements OnInit {
   }
 
   init(): void {
-    /*this.api.get(true, 'scouting/match-planning/init/', undefined, (result: any) => {
-      this.initData = (result as Init);
-    });*/
-    this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(result => {
-      if (result) {
-        this.teams = result.teams;
-      }
-      this.gs.decrementOutstandingCalls();
-    });
+    // chain outstanding promise if it exists
+    this.ss.loadTeams(true, (result: Team[]) => {
+      this.teams = result;
+    })
+
 
     this.ss.loadTeamNotes();
 
