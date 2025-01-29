@@ -359,7 +359,7 @@ export class ScoutPitResponsesReturn {
 }
 
 export interface ISchedule {
-    sch_id: number;
+    id: number;
     sch_typ: string;
     sch_nm: string;
     event_id: Event | number;
@@ -373,7 +373,7 @@ export interface ISchedule {
 }
 
 export class Schedule implements ISchedule {
-    sch_id = NaN;
+    id = NaN;
     sch_typ = ''
     sch_nm = ''
     event_id: Event | number = new Event();

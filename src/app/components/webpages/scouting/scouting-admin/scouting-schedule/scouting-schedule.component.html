@@ -222,7 +222,7 @@
             </app-form-element>
 
             <app-form-element
-              *ngIf="currentSchedule.sch_id"
+              *ngIf="currentSchedule.id"
               [Type]="'checkbox'"
               [FormGroup]="true"
               [LabelText]="'Delete?'"
@@ -234,14 +234,14 @@
 
             <app-button-ribbon>
               <app-button
-                *ngIf="currentSchedule.sch_id"
+                *ngIf="currentSchedule.id"
                 [ButtonType]="'warning'"
-                (FunctionCallBack)="notifyUser(currentSchedule.sch_id)"
+                (FunctionCallBack)="notifyUser(currentSchedule.id)"
               >
                 Notify</app-button
               >
               <app-button
-                *ngIf="currentSchedule.sch_id"
+                *ngIf="currentSchedule.id"
                 [ButtonType]="'main'"
                 (FunctionCallBack)="copyScheduleEntry()"
                 >Copy</app-button
