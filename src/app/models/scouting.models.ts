@@ -156,7 +156,7 @@ export class Match implements IMatch {
 
 }
 export interface IScoutFieldSchedule {
-    scout_field_sch_id: number;
+    id: number;
     event_id: number;
     red_one_id: User | number | null | any;
     red_two_id: User | number | null | any;
@@ -180,7 +180,7 @@ export interface IScoutFieldSchedule {
 }
 
 export class ScoutFieldSchedule implements IScoutFieldSchedule {
-    scout_field_sch_id = NaN;
+    id = NaN;
     event_id = NaN;
     red_one_id: User | number | null | any = new User();
     red_two_id: User | number | null | any = new User();

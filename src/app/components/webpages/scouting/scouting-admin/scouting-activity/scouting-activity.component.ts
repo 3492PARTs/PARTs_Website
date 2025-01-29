@@ -12,10 +12,10 @@ import { FormElementGroupComponent } from '../../../../atoms/form-element-group/
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 
 @Component({
-    selector: 'app-scouting-activity',
-    imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
-    templateUrl: './scouting-activity.component.html',
-    styleUrls: ['./scouting-activity.component.scss']
+  selector: 'app-scouting-activity',
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
+  templateUrl: './scouting-activity.component.html',
+  styleUrls: ['./scouting-activity.component.scss']
 })
 export class ScoutingActivityComponent implements OnInit {
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
@@ -247,7 +247,7 @@ export class ScoutingActivityComponent implements OnInit {
   markScoutPresent(sfs: ScoutFieldSchedule): void {
     this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
       this.api.get(true, 'scouting/admin/mark-scout-present/', {
-        scout_field_sch_id: sfs.scout_field_sch_id,
+        scout_field_sch_id: sfs.id,
         user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);

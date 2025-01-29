@@ -170,9 +170,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   checkInScout(): void {
-    if (this.scoutFieldSchedule && this.scoutFieldSchedule.scout_field_sch_id)
+    if (this.scoutFieldSchedule && this.scoutFieldSchedule.id)
       this.api.get(false, 'scouting/field/check-in/', {
-        scout_field_sch_id: this.scoutFieldSchedule.scout_field_sch_id
+        scout_field_sch_id: this.scoutFieldSchedule.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
       });
