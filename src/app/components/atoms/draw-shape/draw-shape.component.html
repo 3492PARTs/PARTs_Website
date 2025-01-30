@@ -1,13 +1,15 @@
-<div id="image-wrapper" class="flex">
-  <img id="image" #backgroundImage [src]="ImageUrl" />
-  <svg
-    #mySvg
-    (click)="handleClick($event)"
-    (mousemove)="handleMouseMove($event)"
-    (mousedown)="handleMouseDown($event)"
-    (mouseup)="handleMouseUp()"
-  >
-    <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
-  </svg>
+<div id="container">
+  <div id="image-wrapper">
+    <img id="image" #backgroundImage [src]="url" />
+    <svg
+      #mySvg
+      (click)="handleClick($event)"
+      (mousemove)="handleMouseMove($event)"
+      (mousedown)="handleMouseDown($event)"
+      (mouseup)="handleMouseUp()"
+    >
+      <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
+    </svg>
+  </div>
 </div>
 <button (click)="exportSvg()">Export SVG</button>

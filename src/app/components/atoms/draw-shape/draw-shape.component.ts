@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, Renderer2, ViewChild } from '@angular/core';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'app-draw-shape',
@@ -9,16 +10,38 @@ import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular
 export class DrawShapeComponent implements AfterViewInit {
   @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;
   @ViewChild('myPath', { static: false }) myPath!: ElementRef<SVGPathElement>;
-  @ViewChild('backgroundImage', { static: false }) backgroundImage!: ElementRef<HTMLImageElement>; // For image
+  @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   private isDrawing = false;
   private points: { x: number, y: number }[] = [];
 
-  @Input() ImageUrl = '';
+  @Input() set ImageUrl(s: string) {
+    this.url = s;
+    this.gs.triggerChange(() => this.adjustImage(), 5);
+
+  }
+
+  url = '';
+
+  private resizeTimer: number | null | undefined;
+
+  constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
   ngAfterViewInit() {
     // It's crucial to get the SVG and path elements after the view is initialized.
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.adjustImage();
+    }, 200);
+  }
+
 
   handleMouseDown(event: MouseEvent) {
     this.isDrawing = true;
@@ -89,5 +112,18 @@ export class DrawShapeComponent implements AfterViewInit {
     link.click();
 
     URL.revokeObjectURL(url);
+  }
+
+  adjustImage(): void {
+    if (this.image) {
+      if (window.innerWidth > window.innerHeight) {
+        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
+        this.renderer.setStyle(this.image.nativeElement, 'height', '70vh');
+      }
+      else {
+        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
+      }
+    }
   }
 }

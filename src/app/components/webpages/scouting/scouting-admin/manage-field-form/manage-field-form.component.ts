@@ -67,24 +67,12 @@ export class ManageFieldFormComponent {
 
   isMobile = false;
 
-  private resizeTimer: number | null | undefined;
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
     this.isMobile = this.gs.isMobile();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
-    }
-
-    this.resizeTimer = window.setTimeout(() => {
-      this.adjustFieldImage();
-    }, 200);
   }
 
   previewImage(): void {
@@ -132,7 +120,6 @@ export class ManageFieldFormComponent {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
       this.gs.triggerChange(() => {
         this.fieldForm = result;
-        this.gs.triggerChange(() => this.adjustFieldImage());
       });
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -342,18 +329,5 @@ export class ManageFieldFormComponent {
 
   flowComparatorFunction(o1: Flow, o2: Flow): boolean {
     return o1 && o2 && o1.id === o2.id;
-  }
-
-  adjustFieldImage(): void {
-    if (this.image) {
-      if (window.innerWidth > window.innerHeight && this.image.nativeElement.offsetWidth < this.image.nativeElement.offsetHeight) {
-        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
-        this.renderer.setStyle(this.image.nativeElement, 'height', '80vh');
-      }
-      else {
-        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
-        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
-      }
-    }
   }
 }
