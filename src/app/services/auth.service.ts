@@ -291,7 +291,8 @@ export class AuthService {
         this.userBS.next(result);
         this.cs.User.AddOrEditAsync(result);
 
-        this.populateAppLinks(result.links);
+        if (result.links)
+          this.populateAppLinks(result.links);
 
         resolve(true);
       }, (error => {
