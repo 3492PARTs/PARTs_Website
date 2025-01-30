@@ -13,7 +13,9 @@ export class DrawShapeComponent implements AfterViewInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   private isDrawing = false;
-  private points: { x: number, y: number }[] = [];
+  private isDragging = false;
+  points: { x: number, y: number }[] = [];
+  private draggingPoint: { x: number, y: number } | null = null;
 
   @Input() set ImageUrl(s: string) {
     this.url = s;
@@ -44,20 +46,28 @@ export class DrawShapeComponent implements AfterViewInit {
 
 
   handleMouseDown(event: MouseEvent) {
-    this.isDrawing = true;
-    this.addPoint(event.offsetX, event.offsetY);
+    if (!this.isDragging) {
+      this.isDrawing = true;
+      this.addPoint(event.offsetX, event.offsetY);
+    }
+    else
+      this.isDrawing = false;
+
   }
 
   handleMouseMove(event: MouseEvent) {
-    if (this.isDrawing) {
+    if (this.isDrawing && false) {
       this.addPoint(event.offsetX, event.offsetY);
       this.draw();
     }
   }
 
   handleMouseUp() {
-    this.isDrawing = false;
-    this.closePath();
+    if (!this.isDragging) {
+      this.isDrawing = false;
+      this.closePath();
+      this.draw();
+    }
   }
 
   handleClick(event: MouseEvent) {
@@ -91,6 +101,24 @@ export class DrawShapeComponent implements AfterViewInit {
     }
   }
 
+  startDragging(point: { x: number, y: number }) {
+    this.isDragging = true;
+    this.isDrawing = false;
+    this.draggingPoint = point;
+  }
+
+  dragPoint(event: MouseEvent) {
+    if (this.draggingPoint) {
+      this.draggingPoint.x = event.offsetX;
+      this.draggingPoint.y = event.offsetY;
+      this.draw();
+    }
+  }
+
+  endDragging() {
+    this.draggingPoint = null;
+    this.isDragging = false;
+  }
 
   exportSvg() {
     const width = this.mySvg.nativeElement.clientWidth;
@@ -102,6 +130,9 @@ export class DrawShapeComponent implements AfterViewInit {
         <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="lightblue" stroke="black" />
       </svg>
     `;
+
+
+    console.log(svg.length);
 
     const blob = new Blob([svg], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);

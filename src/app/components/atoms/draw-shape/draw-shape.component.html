@@ -9,6 +9,19 @@
       (mouseup)="handleMouseUp()"
     >
       <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
+      @for (point of points; track $index) {
+      <g>
+        <circle
+          [attr.cx]="point.x"
+          [attr.cy]="point.y"
+          r="5"
+          fill="red"
+          (mousedown)="startDragging(point)"
+          (mousemove)="dragPoint($event)"
+          (mouseup)="endDragging()"
+        ></circle>
+      </g>
+      }
     </svg>
   </div>
 </div>
