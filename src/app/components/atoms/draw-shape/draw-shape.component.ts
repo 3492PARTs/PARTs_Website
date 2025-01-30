@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, Input, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
@@ -26,6 +26,9 @@ export class DrawShapeComponent implements AfterViewInit {
   url = '';
 
   private resizeTimer: number | null | undefined;
+
+  @Input() Svg = '';
+  @Output() SvgChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
@@ -91,6 +94,8 @@ export class DrawShapeComponent implements AfterViewInit {
       }
     }).join(' ');
     this.myPath.nativeElement.setAttribute('d', pathData);
+
+    this.SvgChange.emit(this.createSvg());
   }
 
   closePath() {
@@ -120,17 +125,20 @@ export class DrawShapeComponent implements AfterViewInit {
     this.isDragging = false;
   }
 
-  exportSvg() {
+  private createSvg(): string {
     const width = this.mySvg.nativeElement.clientWidth;
     const height = this.mySvg.nativeElement.clientHeight;
     // const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
 
-    const svg = `
+    return `
       <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
         <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="lightblue" stroke="black" />
       </svg>
     `;
+  }
 
+  exportSvg() {
+    const svg = this.createSvg();
 
     console.log(svg.length);
 

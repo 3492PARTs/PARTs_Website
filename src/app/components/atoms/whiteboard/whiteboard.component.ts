@@ -6,10 +6,10 @@ import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-whiteboard',
-    imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
-    templateUrl: './whiteboard.component.html',
-    styleUrl: './whiteboard.component.scss'
+  selector: 'app-whiteboard',
+  imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
+  templateUrl: './whiteboard.component.html',
+  styleUrl: './whiteboard.component.scss'
 })
 export class WhiteboardComponent implements OnInit {
 
@@ -204,7 +204,7 @@ export class WhiteboardComponent implements OnInit {
     // This is a simplified example. You'll likely need to handle 
     // image saving and uploading more robustly in a real-world application.
     const file = this.dataURLtoFile(dataURL);
-    this.ImageChange.emit(file)
+    this.ImageChange.emit(file);
   }
 
   private dataURLtoFile(dataURI: string): File {

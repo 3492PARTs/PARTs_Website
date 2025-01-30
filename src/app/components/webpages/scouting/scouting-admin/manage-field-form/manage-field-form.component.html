@@ -151,11 +151,13 @@
     </app-form>
   </app-form-element-group>
 
+  @if (activeQuestionFlow) {
   <app-draw-shape
     [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
+    [(Svg)]="activeQuestionFlow.question.svg"
   ></app-draw-shape>
-
-  <!--<div class="margin-top-1rem">
+  }
+  <div class="margin-top-1rem">
     <div
       #imageBackground
       id="image-background"
@@ -172,24 +174,23 @@
           id="image"
           [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
         />
-        <ng-container *ngIf="activeFlow">
-          <div
-            #box
-            class="box"
-            *ngFor="let q of activeFlow.question_flows"
-            id="{{ q.id }}"
-          >
-            <div class="label">
-              <span
-                *ngIf="q.question.scout_question.icon"
-                class="mdi icon mdi-{{ q.question.scout_question.icon }}"
-              ></span>
-              <p>{{ q.question.question }}</p>
-            </div>
-          </div>
-        </ng-container>
+        @if (activeFlow) { @for (questionFlow of activeFlow.question_flows;
+        track $index) {
+
+        <div [innerHTML]="questionFlow.question.svg | safeHtml"></div>
+
+        <div class="label">
+          @if (questionFlow.question.scout_question.icon) {
+          <span
+            class="mdi icon mdi-{{ questionFlow.question.scout_question.icon }}"
+          ></span>
+          }
+
+          <p>{{ questionFlow.question.question }}</p>
+        </div>
+        } }
       </div>
     </div>
-  </div>-->
+  </div>
   }
 </app-box>

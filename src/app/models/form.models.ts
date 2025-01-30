@@ -7,6 +7,7 @@ export interface IQuestion {
     form_sub_typ: IFormSubType;
     question_typ: IQuestionType;
     question: string;
+    svg: string;
     table_col_width: string;
     order: number;
     required: string;
@@ -32,6 +33,7 @@ export class Question implements IQuestion {
     form_sub_typ!: FormSubType;
     question_typ!: QuestionType;
     question!: string;
+    svg!: string;
     table_col_width = '100px'
     order!: number;
     required = 'n';
