@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-draw-shape',
@@ -9,8 +9,12 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 export class DrawShapeComponent implements AfterViewInit {
   @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;
   @ViewChild('myPath', { static: false }) myPath!: ElementRef<SVGPathElement>;
+  @ViewChild('backgroundImage', { static: false }) backgroundImage!: ElementRef<HTMLImageElement>; // For image
+
   private isDrawing = false;
   private points: { x: number, y: number }[] = [];
+
+  @Input() ImageUrl = '';
 
   ngAfterViewInit() {
     // It's crucial to get the SVG and path elements after the view is initialized.
@@ -66,7 +70,16 @@ export class DrawShapeComponent implements AfterViewInit {
 
 
   exportSvg() {
-    const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
+    const width = this.mySvg.nativeElement.clientWidth;
+    const height = this.mySvg.nativeElement.clientHeight;
+    // const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
+
+    const svg = `
+      <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+        <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="lightblue" stroke="black" />
+      </svg>
+    `;
+
     const blob = new Blob([svg], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);
 
