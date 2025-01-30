@@ -218,7 +218,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   amendMatchList(): void {
     this.cs.ScoutFieldFormResponse.getAll().then((sfrc: ScoutFieldFormResponse[]) => {
       sfrc.forEach((s: ScoutFieldFormResponse) => {
-        const index = this.gs.arrayObjectIndexOf(this.matches, 'match_id', s.match?.match_id);
+        const index = this.gs.arrayObjectIndexOf(this.matches, 'match_key', s.match?.match_key);
 
         if (index !== -1) {
           let match = this.matches[index];

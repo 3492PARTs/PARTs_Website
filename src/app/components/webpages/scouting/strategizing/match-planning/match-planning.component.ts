@@ -14,10 +14,10 @@ import { Banner } from '../../../../../models/api.models';
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
-    selector: 'app-match-planning',
-    imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent],
-    templateUrl: './match-planning.component.html',
-    styleUrl: './match-planning.component.scss'
+  selector: 'app-match-planning',
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent],
+  templateUrl: './match-planning.component.html',
+  styleUrl: './match-planning.component.scss'
 })
 export class MatchPlanningComponent implements OnInit {
 
@@ -84,7 +84,7 @@ export class MatchPlanningComponent implements OnInit {
 
   setMatchStrategies(): void {
     if (!this.activeMatchStrategy || !this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
-    this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_id === this.match?.match_id);
+    this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_key === this.match?.match_key);
     this.buildTeamList();
   }
 

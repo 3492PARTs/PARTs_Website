@@ -95,7 +95,7 @@ export class CompetitionLevel implements ICompetitionLevel {
     }
 }
 export interface IMatch {
-    match_id: string;
+    match_key: string;
     match_number: number;
     event: IEvent;
     red_one_id: number;
@@ -127,7 +127,7 @@ export interface IMatch {
 }
 
 export class Match implements IMatch {
-    match_id = '';
+    match_key = '';
     match_number = NaN;
     event!: Event;
     red_one_id = NaN;

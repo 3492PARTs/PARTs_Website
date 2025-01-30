@@ -170,7 +170,7 @@ export class MatchesComponent implements OnInit {
             });
 
             this.activeMatchStrategies = [];
-            await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_id === match.match_id).then(mss => {
+            await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_key === match.match_key).then(mss => {
               this.activeMatchStrategies = mss;
               this.activeMatchStrategies.sort((ms1, ms2) => {
                 if (ms1.time < ms2.time) return 1;

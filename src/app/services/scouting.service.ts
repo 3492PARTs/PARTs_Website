@@ -625,7 +625,7 @@ export class ScoutingService {
         a.flow?.question_flows.forEach(q => q.question.answer = '');
       });
 
-      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
+      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
@@ -1178,6 +1178,8 @@ export class ScoutingService {
           this.gs.triggerError(reason);
           resolve(false);
         });
+        else
+          resolve(false);
       });
     });
   }
@@ -1259,7 +1261,7 @@ export class ScoutingService {
       if (!this.gs.strNoE(matchStrategy.id))
         fd.append('id', matchStrategy.id.toString());
 
-      fd.append('match_id', matchStrategy.match?.match_id.toString() || '');
+      fd.append('match_key', matchStrategy.match?.match_key.toString() || '');
       fd.append('user_id', matchStrategy.user?.id.toString() || '');
       fd.append('strategy', matchStrategy.strategy);
 
@@ -1283,6 +1285,8 @@ export class ScoutingService {
           this.gs.triggerError(reason);
           resolve(false);
         });
+        else
+          resolve(false);
       });
     });
   }
