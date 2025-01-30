@@ -12,10 +12,11 @@ import { FormElementComponent } from '../../../../atoms/form-element/form-elemen
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TableComponent, TableColType } from '../../../../atoms/table/table.component';
+import { DrawShapeComponent } from "../../../../atoms/draw-shape/draw-shape.component";
 
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrl: './manage-field-form.component.scss'
 })
