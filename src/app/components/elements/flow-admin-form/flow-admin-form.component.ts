@@ -26,7 +26,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
-    { PropertyName: 'questions', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeQuestions },
+    { PropertyName: 'question_flows', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeQuestionFlows },
   ];
   flowModalVisible = false;
   activeFlow: Flow | undefined = undefined;
@@ -90,13 +90,13 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   pushQuestion(): void {
-    if (this.activeFlow) {
+    if (this.activeFlow && !this.gs.strNoE(this.question.id)) {
       let qf = new QuestionFlow();
       qf.active = 'y';
       qf.flow_id = this.activeFlow.id;
       qf.question = this.question;
       this.question = new Question();
-      this.activeFlow.questions = [...this.activeFlow.questions, qf];
+      this.activeFlow.question_flows = [...this.activeFlow.question_flows, qf];
       this.buildQuestions();
     }
   }
@@ -104,11 +104,11 @@ export class FlowAdminFormComponent implements OnInit {
   removeQuestionFlow(questionFlow: QuestionFlow): void {
     if (this.activeFlow) {
       let i = 0;
-      for (; i < this.activeFlow.questions.length; i++)
-        if (this.activeFlow.questions[i].question.id === questionFlow.question.id)
+      for (; i < this.activeFlow.question_flows.length; i++)
+        if (this.activeFlow.question_flows[i].question.id === questionFlow.question.id)
           break;
 
-      this.activeFlow.questions.splice(i, 1);
+      this.activeFlow.question_flows.splice(i, 1);
       this.buildQuestions();
     }
   }
@@ -116,14 +116,16 @@ export class FlowAdminFormComponent implements OnInit {
   buildQuestions(): void {
     this.questions = [];
     if (this.FormMetadata)
-      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.questions.map(q => q.question.id).includes(q.id));
+      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.question_flows.map(q => q.question.id).includes(q.id));
   }
 
   decodeBoolean(b: boolean): string {
     return this.gs.decodeYesNoBoolean(b);
   }
 
-  decodeQuestions(questions: QuestionFlow[]): string {
-    return questions.map(q => q.question.display_value).join('\n');
+  decodeQuestionFlows(questionFlows: QuestionFlow[]): string {
+    return questionFlows.map(qf => `Order: ${qf.order}: ${qf.question.question}`).join('\n');
+    //Order: 1: Autonomous: Leave staging area?
+
   }
 }

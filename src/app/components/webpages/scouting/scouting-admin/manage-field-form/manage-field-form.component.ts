@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { FormInitialization, Flow, FormSubType, Question } from '../../../../../models/form.models';
+import { FormInitialization, Flow, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
 import { FieldForm, ScoutQuestion } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
@@ -47,13 +47,13 @@ export class ManageFieldFormComponent {
 
   activeFlow: Flow | undefined = undefined;
 
-  activeQuestion: Question | undefined = undefined;
+  activeQuestionFlow: QuestionFlow | undefined = undefined;
   activeQuestionBox: ElementRef<any> | undefined = undefined;
 
   flowTableCols: TableColType[] = [
     { PropertyName: 'question.question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
     { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
-    { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
+    { PropertyName: 'question.question_typ.question_typ_nm', ColLabel: 'Type' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
     { PropertyName: 'question.scout_question.x', ColLabel: 'X', Type: "number" },
     { PropertyName: 'question.scout_question.y', ColLabel: 'Y', Type: "number" },
@@ -156,6 +156,7 @@ export class ManageFieldFormComponent {
   }
 
   buildFlowOptions(): void {
+    this.activeFlow = undefined;
     this.availableFlows = this.formMetadata.flows.filter(qf =>
       (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
@@ -189,7 +190,7 @@ export class ManageFieldFormComponent {
 
   resetFlow(): void {
     this.activeFlow = undefined;
-    this.activeQuestion = undefined;
+    this.activeQuestionFlow = undefined;
     this.activeQuestionBox = undefined;
   }
 
@@ -198,7 +199,7 @@ export class ManageFieldFormComponent {
   }
 
   mouseClick(e: MouseEvent): void {
-    if (this.activeQuestion && this.activeQuestionBox && !this.invertedImage) {
+    if (this.activeQuestionFlow && this.activeQuestionBox && !this.invertedImage) {
       this.isDrawing = !e.shiftKey;
 
       if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
@@ -233,12 +234,12 @@ export class ManageFieldFormComponent {
 
         this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
-        this.activeQuestion.scout_question.x = boxCoords.x;
-        this.activeQuestion.scout_question.y = boxCoords.y;
-        this.activeQuestion.scout_question.width = boxCoords.width;
-        this.activeQuestion.scout_question.height = boxCoords.height;
+        this.activeQuestionFlow.question.scout_question.x = boxCoords.x;
+        this.activeQuestionFlow.question.scout_question.y = boxCoords.y;
+        this.activeQuestionFlow.question.scout_question.width = boxCoords.width;
+        this.activeQuestionFlow.question.scout_question.height = boxCoords.height;
 
-        if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.questions, 'question_id', this.activeQuestion);
+        if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.question_flows, 'id', this.activeQuestionFlow);
         this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
       }
     }
@@ -268,9 +269,9 @@ export class ManageFieldFormComponent {
 
     this.gs.triggerChange(() => {
       if (this.activeFlow)
-        for (let i = 0; i < this.activeFlow.questions.length; i++) {
+        for (let i = 0; i < this.activeFlow.question_flows.length; i++) {
           if (this.boxes.get(i)) {
-            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.questions[i].question.scout_question);
+            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.question_flows[i].question.scout_question);
           }
         }
     });
@@ -301,21 +302,25 @@ export class ManageFieldFormComponent {
 
   }
 
-  editQuestion(q: Question): void {
+  editQuestionFlow(questionFlow: QuestionFlow): void {
     if (this.activeFlow) {
       if (this.activeQuestionBox) this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
-      this.activeQuestion = q;
-      this.activeQuestionBox = this.boxes.get(this.gs.arrayObjectIndexOf(this.activeFlow.questions, 'question_id', this.activeQuestion.id));
+      this.activeQuestionFlow = questionFlow;
+      this.activeQuestionBox = this.getQuestionFlowBox(questionFlow);
 
-      if (!this.gs.strNoE(this.activeQuestion.scout_question.x) &&
-        !this.gs.strNoE(this.activeQuestion.scout_question.y) &&
-        !this.gs.strNoE(this.activeQuestion.scout_question.width) &&
-        !this.gs.strNoE(this.activeQuestion.scout_question.height) &&
+      if (!this.gs.strNoE(this.activeQuestionFlow.question.scout_question.x) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.y) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.width) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.height) &&
         this.activeQuestionBox) {
         this.setBoxActive(this.activeQuestionBox.nativeElement)
       }
     }
+  }
+
+  getQuestionFlowBox(questionFlow: QuestionFlow): ElementRef | undefined {
+    return this.boxes.find(b => b.nativeElement.id == questionFlow.id);
   }
 
   setBoxActive(box: HTMLElement): void {

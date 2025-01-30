@@ -82,7 +82,7 @@
 
           <app-form-element
             [Type]="'select'"
-            [LabelText]="'Question Flow'"
+            [LabelText]="'Flow'"
             [SelectList]="availableFlows"
             [MinWidth]="'200px'"
             [DisplayProperty]="'name'"
@@ -132,17 +132,19 @@
 
       <app-table
         *ngIf="
-          activeFlow && activeFlow.questions && activeFlow.questions.length > 0
+          activeFlow &&
+          activeFlow.question_flows &&
+          activeFlow.question_flows.length > 0
         "
         [TableCols]="flowTableCols"
-        [TableData]="activeFlow.questions"
+        [TableData]="activeFlow.question_flows"
         [TriggerUpdate]="flowTableTriggerUpdate"
         [Width]="'100%'"
         [Scrollable]="true"
         [ScrollHeight]="'40vh'"
         [ShowEditButton]="true"
-        (EditRecordCallBack)="editQuestion($event)"
-        [SetActiveRec]="activeQuestion"
+        (EditRecordCallBack)="editQuestionFlow($event)"
+        [SetActiveRec]="activeQuestionFlow"
         [AllowActiveRecord]="true"
       >
       </app-table>
@@ -169,15 +171,15 @@
           <div
             #box
             class="box"
-            *ngFor="let q of activeFlow.questions"
-            id="{{ q.question.id }}"
+            *ngFor="let q of activeFlow.question_flows"
+            id="{{ q.id }}"
           >
             <div class="label">
               <span
                 *ngIf="q.question.scout_question.icon"
                 class="mdi icon mdi-{{ q.question.scout_question.icon }}"
               ></span>
-              <p>{{ q.question }}</p>
+              <p>{{ q.question.question }}</p>
             </div>
           </div>
         </ng-container>

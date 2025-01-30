@@ -246,7 +246,7 @@ export interface IFlow {
     single_run: boolean;
     form_typ: IFormType;
     form_sub_typ: IFormSubType | undefined;
-    questions: IQuestionFlow[];
+    question_flows: IQuestionFlow[];
     question_answer: IAnswer | undefined;
     void_ind: string;
 
@@ -260,7 +260,7 @@ export class Flow implements IFlow {
     single_run = false;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
-    questions: QuestionFlow[] = [];
+    question_flows: QuestionFlow[] = [];
     question_answer: Answer | undefined = undefined;
     void_ind = 'n';
 

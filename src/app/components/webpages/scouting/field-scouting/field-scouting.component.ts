@@ -92,7 +92,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.question_flows.forEach(qf => {
-            const stage = this.getFirstStage(qf.questions);
+            const stage = this.getFirstStage(qf.question_flows);
             this.displayFlowStage(qf, stage);
           });
           this.setFullScreen(false);
@@ -394,7 +394,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         // Display the first stage of each flow for this sub type
         this.gs.triggerChange(() => {
           this.setFullScreen(false);
-          this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.questions)));
+          this.activeFormSubTypeForm?.question_flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.question_flows)));
         });
       });
 
@@ -435,7 +435,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.displayFlowStage(flow, questionFlow.order, false);
 
 
-      flow.questions.sort((a, b) => {
+      flow.question_flows.sort((a, b) => {
         if (a.order > b.order) return 1;
         else if (a.order < b.order) return -1;
         else return 0;
@@ -455,8 +455,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
         let sceneFound = false;
 
-        const questions = flow.questions.filter(q => q.order === stage && this.gs.strNoE(q.question.question_conditional_on));
-        const conditionalQuestions = flow.questions.filter(q => q.order === stage && !this.gs.strNoE(q.question.question_conditional_on));
+        const questions = flow.question_flows.filter(q => q.order === stage && this.gs.strNoE(q.question.question_conditional_on));
+        const conditionalQuestions = flow.question_flows.filter(q => q.order === stage && !this.gs.strNoE(q.question.question_conditional_on));
 
         questions.forEach(q => {
           this.showQuestionFlowBox(flow, q);
@@ -471,7 +471,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         });
 
         if (!sceneFound) {
-          const nextStage = this.getNextStage(flow.questions, stage);
+          const nextStage = this.getNextStage(flow.question_flows, stage);
 
           // reset stage
           if (nextStage < stage && flow.question_answer) {
@@ -483,7 +483,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
             if (condQF && condQF.length > 0) {
               condQF.forEach(qf => {
                 if (this.isConditionalFlowMet(qf)) {
-                  this.displayFlowStage(qf, this.getFirstStage(qf.questions));
+                  this.displayFlowStage(qf, this.getFirstStage(qf.question_flows));
                   qf.flow_conditional_on = NaN;
                 }
               });
@@ -492,7 +492,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           }
           // stop flow or go to next 
           if (flow.single_run) {
-            flow.questions.forEach(q => {
+            flow.question_flows.forEach(q => {
               this.hideQuestionFlowBox(flow, q);
             });
           }
@@ -502,7 +502,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
       else {
         // hide
-        flow.questions.filter(q => q.order === stage).forEach(q => {
+        flow.question_flows.filter(q => q.order === stage).forEach(q => {
           this.hideQuestionFlowBox(flow, q);
         });
         /*
@@ -657,12 +657,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.activeFormSubTypeForm?.question_flows.forEach(qf => {
       let scene = NaN;
       if (qf.question_answer) {
-        scene = this.getNextStage(qf.questions, qf.question_answer.flow_answers[qf.question_answer.flow_answers.length - 1].question?.order || 0);
+        scene = this.getNextStage(qf.question_flows, qf.question_answer.flow_answers[qf.question_answer.flow_answers.length - 1].question?.order || 0);
       }
       else
-        scene = this.getFirstStage(qf.questions);
+        scene = this.getFirstStage(qf.question_flows);
 
-      qf.questions.filter(q => q.order === scene).forEach(q => this.showQuestionFlowBox(qf, q));
+      qf.question_flows.filter(q => q.order === scene).forEach(q => this.showQuestionFlowBox(qf, q));
     })
   }
 
@@ -774,7 +774,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         if (index !== -1) {
           const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
           flow.question_answer = questionAnswer;
-          flow.questions.forEach(q => {
+          flow.question_flows.forEach(q => {
             q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value)
           });
         }
@@ -788,7 +788,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           // hide current stage
           if (question) {
 
-            this.displayFlowStage(flow, this.getNextStage(flow.questions, question.order), false);
+            this.displayFlowStage(flow, this.getNextStage(flow.question_flows, question.order), false);
             this.displayFlowStage(flow, question.order);
 
             found = true

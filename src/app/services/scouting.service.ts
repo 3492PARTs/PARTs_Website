@@ -622,7 +622,7 @@ export class ScoutingService {
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       sfr.answers.forEach(a => {
-        a.flow?.questions.forEach(q => q.question.answer = '');
+        a.flow?.question_flows.forEach(q => q.question.answer = '');
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {

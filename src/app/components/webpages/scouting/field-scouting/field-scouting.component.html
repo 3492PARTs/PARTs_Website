@@ -251,9 +251,9 @@
             <div
               #box
               class="box"
-              *ngFor="let q of flow.questions; let i = index"
+              *ngFor="let q of flow.question_flows; let i = index"
               id="{{ q.id }}"
-              (click)="advanceFlow(flow, flow.questions[i])"
+              (click)="advanceFlow(flow, flow.question_flows[i])"
             >
               <div
                 [ngClass]="{
@@ -267,7 +267,7 @@
                 }"
               >
                 <app-question-form-element
-                  [(Question)]="flow.questions[i].question"
+                  [(Question)]="flow.question_flows[i].question"
                   [Inverted]="invertedImage"
                 ></app-question-form-element>
 
@@ -275,7 +275,7 @@
                 <app-button
                   [ButtonType]="'check-bold'"
                   (FunctionCallBack)="
-                    advanceFlow(flow, flow.questions[i], true)
+                    advanceFlow(flow, flow.question_flows[i], true)
                   "
                   [BackgroundColor]="'lightgray'"
                 ></app-button>
