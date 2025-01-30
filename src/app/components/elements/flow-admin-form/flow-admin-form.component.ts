@@ -27,6 +27,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
     { PropertyName: 'question_flows', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeQuestionFlows },
+    { PropertyName: 'flow_conditional_on', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.decodeConditionalFlow.bind(this) },
   ];
   flowModalVisible = false;
   activeFlow: Flow | undefined = undefined;
@@ -63,7 +64,6 @@ export class FlowAdminFormComponent implements OnInit {
     }, (result: Flow[]) => {
       this.flows = result;
       this.question = new Question();
-      console.log(this.flows);
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -127,5 +127,9 @@ export class FlowAdminFormComponent implements OnInit {
     return questionFlows.map(qf => `Order: ${qf.order}: ${qf.question.question}`).join('\n');
     //Order: 1: Autonomous: Leave staging area?
 
+  }
+
+  decodeConditionalFlow(n?: number): string {
+    return this.flows.find(f => f.id === n)?.name || '';
   }
 }
