@@ -1,9 +1,12 @@
-<canvas
-  #myCanvas
-  (mousedown)="handleMouseDown($event)"
-  (mousemove)="handleMouseMove($event)"
-  (mouseup)="handleMouseUp()"
+<svg
+  #mySvg
   width="400"
   height="300"
-></canvas>
+  (click)="handleClick($event)"
+  (mousemove)="handleMouseMove($event)"
+  (mousedown)="handleMouseDown($event)"
+  (mouseup)="handleMouseUp()"
+>
+  <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
+</svg>
 <button (click)="exportSvg()">Export SVG</button>

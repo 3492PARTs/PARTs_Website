@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-draw-shape',
@@ -6,14 +6,14 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   templateUrl: './draw-shape.component.html',
   styleUrl: './draw-shape.component.scss'
 })
-export class DrawShapeComponent {
-  @ViewChild('myCanvas', { static: true }) myCanvas!: ElementRef<HTMLCanvasElement>;
-  private ctx!: CanvasRenderingContext2D;
+export class DrawShapeComponent implements AfterViewInit {
+  @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;
+  @ViewChild('myPath', { static: false }) myPath!: ElementRef<SVGPathElement>;
   private isDrawing = false;
   private points: { x: number, y: number }[] = [];
 
-  ngOnInit() {
-    this.ctx = this.myCanvas.nativeElement.getContext('2d')!;
+  ngAfterViewInit() {
+    // It's crucial to get the SVG and path elements after the view is initialized.
   }
 
   handleMouseDown(event: MouseEvent) {
@@ -33,30 +33,40 @@ export class DrawShapeComponent {
     this.closePath();
   }
 
+  handleClick(event: MouseEvent) {
+    // Check if the click hit the path element.
+    if (event.target === this.myPath.nativeElement) {
+      console.log('Shape Tapped!');
+    }
+  }
+
+
   addPoint(x: number, y: number) {
     this.points.push({ x, y });
   }
 
   draw() {
-    this.ctx.clearRect(0, 0, this.myCanvas.nativeElement.width, this.myCanvas.nativeElement.height);
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.points[0].x, this.points[0].y);
-    for (let i = 1; i < this.points.length; i++) {
-      this.ctx.lineTo(this.points[i].x, this.points[i].y);
-    }
-    this.ctx.stroke();
+    const pathData = this.points.map((p, i) => {
+      if (i === 0) {
+        return `M${p.x},${p.y}`;
+      } else {
+        return `L${p.x},${p.y}`;
+      }
+    }).join(' ');
+    this.myPath.nativeElement.setAttribute('d', pathData);
   }
 
   closePath() {
     if (this.points.length > 2) {
-      this.ctx.lineTo(this.points[0].x, this.points[0].y);
-      this.ctx.closePath();
-      this.ctx.stroke();
+      const firstPoint = this.points[0];
+      const currentPath = this.myPath.nativeElement.getAttribute('d') || '';
+      this.myPath.nativeElement.setAttribute('d', `${currentPath} L${firstPoint.x},${firstPoint.y} Z`);
     }
   }
 
+
   exportSvg() {
-    const svg = this.createSvg();
+    const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
     const blob = new Blob([svg], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(blob);
 
@@ -66,14 +76,5 @@ export class DrawShapeComponent {
     link.click();
 
     URL.revokeObjectURL(url);
-  }
-
-  createSvg(): string {
-    const pointsStr = this.points.map(p => `${p.x},${p.y}`).join(' ');
-    return `
-      <svg width="${this.myCanvas.nativeElement.width}" height="${this.myCanvas.nativeElement.height}" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="${pointsStr}" fill="none" stroke="black" />
-      </svg>
-    `;
   }
 }
