@@ -7,10 +7,11 @@ import { FormElementGroupComponent } from "../../../../atoms/form-element-group/
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../../../services/general.service';
+import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })

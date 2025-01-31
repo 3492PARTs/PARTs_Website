@@ -62,19 +62,10 @@
               border: '4px solid orange'
             }"
           ></div>
-          <!--
           <div
-            #box
-            class="box"
-            [ngStyle]="{
-              top: qfa.answer.y + '%',
-              left: qfa.answer.x + '%',
-              width: '5px',
-              height: '5px',
-              border: '2px solid green'
-            }"
+            class="svg"
+            [innerHTML]="flow_answer.question.svg | safeHtml"
           ></div>
-          -->
           } @else {
           <p>{{ flow_answer.value }}</p>
           }
