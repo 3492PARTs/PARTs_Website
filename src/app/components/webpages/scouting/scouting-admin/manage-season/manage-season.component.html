@@ -630,6 +630,14 @@
       >
         Sync Event-Team Info</app-button
       >
+
+      <app-button
+        *ngIf="currentSeason.id"
+        [ButtonType]="'main'"
+        (FunctionCallBack)="runScoutingReport()"
+      >
+        Run Scouting Report</app-button
+      >
     </div>
   </app-form-element-group>
 

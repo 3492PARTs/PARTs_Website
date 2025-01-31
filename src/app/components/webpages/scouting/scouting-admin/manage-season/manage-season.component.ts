@@ -107,6 +107,7 @@ export class ManageSeasonComponent implements OnInit {
 
   syncEvent(event_cd: string): void {
     this.api.get(true, 'tba/sync-event/', {
+      season_id: this.currentSeason.id.toString(),
       event_cd: event_cd
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
@@ -131,6 +132,15 @@ export class ManageSeasonComponent implements OnInit {
       force: 1
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
+  runScoutingReport(): void {
+    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: any) => {
+
+
     }, (err: any) => {
       this.gs.triggerError(err);
     });
