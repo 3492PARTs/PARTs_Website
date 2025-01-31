@@ -73,7 +73,7 @@ export class DrawShapeComponent implements AfterViewInit {
   handleMouseUp() {
     if (!this.isDragging) {
       this.isDrawing = false;
-      this.closePath();
+      //this.closePath();
       this.draw();
     }
   }
@@ -99,17 +99,6 @@ export class DrawShapeComponent implements AfterViewInit {
       }
     }).join(' ');
     this.myPath.nativeElement.setAttribute('d', pathData);
-
-    const pathBounds = this.myPath.nativeElement.getBBox();
-
-    let svg = new Svg();
-    svg.x = parseFloat((pathBounds.x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
-    svg.y = parseFloat((pathBounds.y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
-    svg.width = parseFloat((pathBounds.width / this.image.nativeElement.offsetWidth * 100).toFixed(2));
-    svg.height = parseFloat((pathBounds.height / this.image.nativeElement.offsetHeight * 100).toFixed(2));
-    svg.svg = this.createSvg();
-
-    this.SvgChange.emit(svg);
   }
 
   closePath() {
@@ -185,6 +174,21 @@ export class DrawShapeComponent implements AfterViewInit {
     this.points = [];
     if (this.myPath)
       this.myPath.nativeElement.setAttribute('d', '');
+  }
+
+  finish(): void {
+    this.closePath();
+
+    const pathBounds = this.myPath.nativeElement.getBBox();
+
+    let svg = new Svg();
+    svg.x = parseFloat((pathBounds.x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
+    svg.y = parseFloat((pathBounds.y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.width = parseFloat((pathBounds.width / this.image.nativeElement.offsetWidth * 100).toFixed(2));
+    svg.height = parseFloat((pathBounds.height / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.svg = this.createSvg();
+
+    this.SvgChange.emit(svg);
   }
 }
 
