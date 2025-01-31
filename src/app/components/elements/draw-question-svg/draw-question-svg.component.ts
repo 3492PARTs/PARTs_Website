@@ -206,6 +206,11 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       this.myPath.nativeElement.setAttribute('d', '');
   }
 
+  exit(): void {
+    this.activeFlowQuestion = undefined;
+    this.reset();
+  }
+
   finish(): void {
     this.closePath();
 
