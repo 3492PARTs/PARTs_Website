@@ -1,0 +1,65 @@
+<app-table
+  [TableCols]="flowTableCols"
+  [TableData]="FlowQuestions"
+  [TriggerUpdate]="flowTableTriggerUpdate"
+  [Width]="'100%'"
+  [Scrollable]="true"
+  [ScrollHeight]="'40vh'"
+  [ShowEditButton]="true"
+  (EditRecordCallBack)="editQuestionFlow($event)"
+  [SetActiveRec]="activeFlowQuestion"
+  [AllowActiveRecord]="true"
+>
+</app-table>
+
+<app-button-ribbon>
+  <app-button (FunctionCallBack)="finish()">Finish</app-button>
+</app-button-ribbon>
+
+<div id="container">
+  <div id="image-wrapper">
+    <img id="image" #backgroundImage [src]="url" />
+    @if (activeFlowQuestion) {
+    <svg
+      #mySvg
+      (click)="handleClick($event)"
+      (mousemove)="handleMouseMove($event)"
+      (mousedown)="handleMouseDown($event)"
+      (mouseup)="handleMouseUp()"
+    >
+      <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
+      @for (point of points; track $index) {
+      <g>
+        <circle
+          [attr.cx]="point.x"
+          [attr.cy]="point.y"
+          r="5"
+          fill="red"
+          (mousedown)="startDragging(point)"
+          (mousemove)="dragPoint($event)"
+          (mouseup)="endDragging()"
+        ></circle>
+      </g>
+      }
+    </svg>
+    } @for (flowQuestion of FlowQuestions; track $index) { @if
+    (!activeFlowQuestion || activeFlowQuestion.id !== flowQuestion.id) {
+    <div
+      class="svg-wrapper"
+      [ngStyle]="{
+        top: flowQuestion.question.y + '%',
+        left: flowQuestion.question.x + '%',
+        width: flowQuestion.question.width + '%',
+        height: flowQuestion.question.height + '%'
+      }"
+    >
+      <app-display-question-svg
+        [Question]="flowQuestion.question"
+      ></app-display-question-svg>
+    </div>
+    } }
+  </div>
+</div>
+<!--<button (click)="exportSvg()">Export SVG</button>-->
+
+<!--<button (click)="finish()">Finish</button>-->

@@ -130,28 +130,16 @@
         }
       </div>
 
-      <app-table
-        *ngIf="
-          activeFlow &&
-          activeFlow.question_flows &&
-          activeFlow.question_flows.length > 0
-        "
-        [TableCols]="flowTableCols"
-        [TableData]="activeFlow.question_flows"
-        [TriggerUpdate]="flowTableTriggerUpdate"
-        [Width]="'100%'"
-        [Scrollable]="true"
-        [ScrollHeight]="'40vh'"
-        [ShowEditButton]="true"
-        (EditRecordCallBack)="editQuestionFlow($event)"
-        [SetActiveRec]="activeQuestionFlow"
-        [AllowActiveRecord]="true"
-      >
-      </app-table>
+      @if (activeFlow) {
+      <app-draw-question-svg
+        [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
+        [(FlowQuestions)]="activeFlow.question_flows"
+      ></app-draw-question-svg
+      >}
     </app-form>
   </app-form-element-group>
-
-  @if (activeQuestionFlow) {
+  <!--
+    @if (activeQuestionFlow) {
   <app-draw-shape
     [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
     [Svg]="svg"
@@ -196,6 +184,6 @@
         } } }
       </div>
     </div>
-  </div>
+  </div>-->
   }
 </app-box>

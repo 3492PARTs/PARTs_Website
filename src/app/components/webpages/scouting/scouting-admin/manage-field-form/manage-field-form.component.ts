@@ -15,10 +15,11 @@ import { TableComponent, TableColType } from '../../../../atoms/table/table.comp
 import { DrawShapeComponent, Svg } from "../../../../atoms/draw-shape/draw-shape.component";
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
+import { DrawQuestionSvgComponent } from "../../../../elements/draw-question-svg/draw-question-svg.component";
 
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent, SafeHTMLPipe, DisplayQuestionSvgComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent, SafeHTMLPipe, DisplayQuestionSvgComponent, DrawQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrl: './manage-field-form.component.scss'
 })
@@ -52,20 +53,6 @@ export class ManageFieldFormComponent {
 
   activeQuestionFlow: QuestionFlow | undefined = undefined;
   activeQuestionBox: ElementRef<any> | undefined = undefined;
-
-  flowTableCols: TableColType[] = [
-    { PropertyName: 'question.question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
-    { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
-    { PropertyName: 'question.question_typ.question_typ_nm', ColLabel: 'Type' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
-    { PropertyName: 'question.x', ColLabel: 'X', Type: "number" },
-    { PropertyName: 'question.y', ColLabel: 'Y', Type: "number" },
-    { PropertyName: 'question.width', ColLabel: 'Width', Type: "number" },
-    { PropertyName: 'question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
-    { PropertyName: 'question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
-  ];
-  flowTableTriggerUpdate = false;
 
   isMobile = false;
 
@@ -245,7 +232,7 @@ export class ManageFieldFormComponent {
         this.activeQuestionFlow.question.height = boxCoords.height;
 
         if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.question_flows, 'id', this.activeQuestionFlow);
-        this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
+        //this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
       }
     }
   }
@@ -307,23 +294,7 @@ export class ManageFieldFormComponent {
 
   }
 
-  editQuestionFlow(questionFlow: QuestionFlow): void {
-    this.svg = undefined;
-    if (this.activeFlow) {
-      if (this.activeQuestionBox) this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
-      this.activeQuestionFlow = questionFlow;
-      this.activeQuestionBox = this.getQuestionFlowBox(questionFlow);
-
-      if (!this.gs.strNoE(this.activeQuestionFlow.question.x) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.y) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.width) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.height) &&
-        this.activeQuestionBox) {
-        this.setBoxActive(this.activeQuestionBox.nativeElement)
-      }
-    }
-  }
 
   getQuestionFlowBox(questionFlow: QuestionFlow): ElementRef | undefined {
     return this.boxes.find(b => b.nativeElement.id == questionFlow.id);

@@ -1,0 +1,24 @@
+#container {
+  text-align: center;
+
+  #image-wrapper {
+    position: relative;
+    display: inline-flex;
+    #image {
+      pointer-events: none;
+    }
+
+    svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 1px solid #ccc;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.svg-wrapper {
+  position: absolute;
+}
