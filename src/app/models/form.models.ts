@@ -16,7 +16,7 @@ export interface IQuestion {
     width: number;
     height: number;
     icon: string;
-    icon_only: string;
+    icon_only: boolean;
     value_multiplier: number;
     active: string;
     void_ind: string;
@@ -49,7 +49,7 @@ export class Question implements IQuestion {
     width = NaN;
     height = NaN;
     icon = '';
-    icon_only = '';
+    icon_only = false;
     value_multiplier!: number;
     active = 'y';
     void_ind = 'n';

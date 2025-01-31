@@ -1,3 +1,4 @@
+@if(Question.svg && Question.svg.length > 0) {
 <div class="svg-wrapper">
   <div class="svg" #svgDiv [innerHTML]="Question.svg | safeHtml"></div>
 
@@ -9,3 +10,4 @@
     <p>{{ Question.question }}</p>
   </div>
 </div>
+}

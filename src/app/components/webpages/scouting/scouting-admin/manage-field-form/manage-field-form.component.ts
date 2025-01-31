@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { FormInitialization, Flow, FormSubType, Question, FlowQuestion } from '../../../../../models/form.models';
-import { FieldForm, ScoutQuestion } from '../../../../../models/scouting.models';
+import { Component, Renderer2 } from '@angular/core';
+import { FormInitialization, Flow, FormSubType } from '../../../../../models/form.models';
+import { FieldForm } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService } from '../../../../../services/general.service';
@@ -11,15 +11,11 @@ import { FormElementGroupComponent } from '../../../../atoms/form-element-group/
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
-import { TableComponent, TableColType } from '../../../../atoms/table/table.component';
-import { DrawShapeComponent, Svg } from "../../../../atoms/draw-shape/draw-shape.component";
-import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
-import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 import { DrawQuestionSvgComponent } from "../../../../elements/draw-question-svg/draw-question-svg.component";
 
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent, SafeHTMLPipe, DisplayQuestionSvgComponent, DrawQuestionSvgComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrl: './manage-field-form.component.scss'
 })
@@ -46,10 +42,6 @@ export class ManageFieldFormComponent {
   activeFlow: Flow | undefined = undefined;
 
   isMobile = false;
-
-  svg: Svg | undefined = undefined;
-
-  private resizeTimer: number | null | undefined;
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
