@@ -3,12 +3,11 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { Question } from '../../../models/form.models';
-import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 
 @Component({
   selector: 'app-question-form-element',
-  imports: [CommonModule, FormElementComponent, SafeHTMLPipe, DisplayQuestionSvgComponent],
+  imports: [CommonModule, FormElementComponent, DisplayQuestionSvgComponent],
   templateUrl: './question-form-element.component.html',
   styleUrls: ['./question-form-element.component.scss']
 })
@@ -30,6 +29,11 @@ export class QuestionFormElementComponent implements AfterViewInit {
 
   change(answer: any): void {
     this.Question.answer = answer;
+    this.QuestionChange.emit(this.Question);
+  }
+
+  questionChange(question: Question): void {
+    this.Question = question;
     this.QuestionChange.emit(this.Question);
   }
 

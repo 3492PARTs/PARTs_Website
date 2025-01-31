@@ -52,7 +52,8 @@
     <ng-template #mntPshBtn>
       <app-display-question-svg
         [Inverted]="Inverted"
-        [(Question)]="Question"
+        [Question]="Question"
+        (QuestionChange)="questionChange($event)"
       ></app-display-question-svg>
     </ng-template>
   </div>
