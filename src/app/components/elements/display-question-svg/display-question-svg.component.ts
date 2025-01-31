@@ -32,8 +32,10 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
 
       if (pathElement) {
         // Set the width of the SVG element
-        this.renderer.setStyle(pathElement, 'fill', 'blue');
-        this.renderer.setStyle(pathElement, 'stroke', 'orange');
+        this.renderer.setStyle(pathElement, 'fill', '#80808087');
+        this.renderer.setStyle(pathElement, 'stroke', '#ffffff');
+        this.renderer.setStyle(pathElement, 'stroke-width', '0.3rem');
+        this.renderer.setStyle(pathElement, 'stroke-linejoin', 'round');
       }
 
       this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
