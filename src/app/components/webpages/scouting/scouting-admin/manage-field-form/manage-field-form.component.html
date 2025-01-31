@@ -188,18 +188,10 @@
             height: questionFlow.question.height + '%'
           }"
         >
-          <div
-            class="svg"
-            [innerHTML]="questionFlow.question.svg | safeHtml"
-          ></div>
-
-          <div class="label">
-            @if (questionFlow.question.icon) {
-            <span class="mdi icon mdi-{{ questionFlow.question.icon }}"></span>
-            }
-
-            <p>{{ questionFlow.question.question }}</p>
-          </div>
+          <app-display-question-svg
+            [Inverted]="invertedImage"
+            [Question]="questionFlow.question"
+          ></app-display-question-svg>
         </div>
         } } }
       </div>

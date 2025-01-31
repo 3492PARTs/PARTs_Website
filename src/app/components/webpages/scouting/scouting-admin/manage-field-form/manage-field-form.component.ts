@@ -14,10 +14,11 @@ import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TableComponent, TableColType } from '../../../../atoms/table/table.component';
 import { DrawShapeComponent, Svg } from "../../../../atoms/draw-shape/draw-shape.component";
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
+import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent, SafeHTMLPipe],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, TableComponent, FormComponent, ModalComponent, DrawShapeComponent, SafeHTMLPipe, DisplayQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrl: './manage-field-form.component.scss'
 })
