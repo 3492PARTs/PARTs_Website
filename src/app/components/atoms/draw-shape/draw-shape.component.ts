@@ -27,7 +27,12 @@ export class DrawShapeComponent implements AfterViewInit {
 
   private resizeTimer: number | null | undefined;
 
-  @Input() Svg = new Svg();
+  @Input() set Svg(s: Svg | undefined) {
+    if (!s) {
+      this.reset();
+    }
+  }
+
   @Output() SvgChange: EventEmitter<Svg> = new EventEmitter<Svg>();
 
   constructor(private renderer: Renderer2, private gs: GeneralService) { }
@@ -98,8 +103,8 @@ export class DrawShapeComponent implements AfterViewInit {
     const pathBounds = this.myPath.nativeElement.getBBox();
 
     let svg = new Svg();
-    svg.x = parseFloat((this.points[0].x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
-    svg.y = parseFloat((this.points[0].y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.x = parseFloat((pathBounds.x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
+    svg.y = parseFloat((pathBounds.y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
     svg.width = parseFloat((pathBounds.width / this.image.nativeElement.offsetWidth * 100).toFixed(2));
     svg.height = parseFloat((pathBounds.height / this.image.nativeElement.offsetHeight * 100).toFixed(2));
     svg.svg = this.createSvg();
@@ -174,6 +179,12 @@ export class DrawShapeComponent implements AfterViewInit {
         this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
       }
     }
+  }
+
+  reset(): void {
+    this.points = [];
+    if (this.myPath)
+      this.myPath.nativeElement.setAttribute('d', '');
   }
 }
 

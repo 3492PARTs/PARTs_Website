@@ -154,6 +154,7 @@
   @if (activeQuestionFlow) {
   <app-draw-shape
     [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
+    [Svg]="svg"
     (SvgChange)="svgChanged($event)"
   ></app-draw-shape>
   }
@@ -176,7 +177,8 @@
           [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
         />
         @if (activeFlow) { @for (questionFlow of activeFlow.question_flows;
-        track $index) { @if (questionFlow.question.svg.length > 0) {
+        track $index) { @if ( questionFlow.question.svg &&
+        questionFlow.question.svg.length > 0) {
         <div
           class="svg-wrapper"
           [ngStyle]="{

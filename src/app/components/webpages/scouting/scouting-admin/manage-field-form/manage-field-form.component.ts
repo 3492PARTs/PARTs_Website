@@ -68,6 +68,8 @@ export class ManageFieldFormComponent {
 
   isMobile = false;
 
+  svg: Svg | undefined = undefined;
+
   private resizeTimer: number | null | undefined;
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
@@ -305,6 +307,7 @@ export class ManageFieldFormComponent {
   }
 
   editQuestionFlow(questionFlow: QuestionFlow): void {
+    this.svg = undefined;
     if (this.activeFlow) {
       if (this.activeQuestionBox) this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
@@ -346,6 +349,7 @@ export class ManageFieldFormComponent {
   }
 
   svgChanged(svg: Svg): void {
+    this.svg = svg;
     if (this.activeQuestionFlow) {
       this.activeQuestionFlow.question.svg = svg.svg;
       this.activeQuestionFlow.question.x = svg.x;

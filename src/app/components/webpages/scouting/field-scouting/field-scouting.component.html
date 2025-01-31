@@ -158,6 +158,11 @@
         <app-button
           [ButtonType]="!invertedImage ? 'main' : 'danger'"
           (FunctionCallBack)="setInvertedImage(!invertedImage)"
+          [Disabled]="
+            activeFormSubTypeForm !== undefined &&
+            activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
+            stopwatchSecond !== 15
+          "
           >{{ !invertedImage ? "Set Blue" : "Set Red" }}</app-button
         >
         }
@@ -173,7 +178,12 @@
         [DisplayEmptyOption]="true"
         [(Model)]="scoutFieldResponse.team_id"
         [Required]="true"
-        [Disabled]="formDisabled"
+        [Disabled]="
+          formDisabled ||
+          (activeFormSubTypeForm !== undefined &&
+            activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
+            stopwatchSecond !== 15)
+        "
         [MinWidth]="'100px'"
         (FunctionCallBack)="changeFieldInversionForTeam()"
         [MaxWidth]="'300px'"
