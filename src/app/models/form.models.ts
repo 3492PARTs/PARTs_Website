@@ -11,6 +11,13 @@ export interface IQuestion {
     table_col_width: string;
     order: number;
     required: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    icon: string;
+    icon_only: string;
+    value_multiplier: number;
     active: string;
     void_ind: string;
     answer: any;
@@ -37,6 +44,13 @@ export class Question implements IQuestion {
     table_col_width = '100px'
     order!: number;
     required = 'n';
+    x = NaN;
+    y = NaN;
+    width = NaN;
+    height = NaN;
+    icon = '';
+    icon_only = '';
+    value_multiplier!: number;
     active = 'y';
     void_ind = 'n';
     answer: any = '';

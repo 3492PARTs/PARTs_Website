@@ -27,8 +27,8 @@ export class DrawShapeComponent implements AfterViewInit {
 
   private resizeTimer: number | null | undefined;
 
-  @Input() Svg = '';
-  @Output() SvgChange: EventEmitter<string> = new EventEmitter<string>();
+  @Input() Svg = new Svg();
+  @Output() SvgChange: EventEmitter<Svg> = new EventEmitter<Svg>();
 
   constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
@@ -95,7 +95,16 @@ export class DrawShapeComponent implements AfterViewInit {
     }).join(' ');
     this.myPath.nativeElement.setAttribute('d', pathData);
 
-    this.SvgChange.emit(this.createSvg());
+    const pathBounds = this.myPath.nativeElement.getBBox();
+
+    let svg = new Svg();
+    svg.x = parseFloat((this.points[0].x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
+    svg.y = parseFloat((this.points[0].y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.width = parseFloat((pathBounds.width / this.image.nativeElement.offsetWidth * 100).toFixed(2));
+    svg.height = parseFloat((pathBounds.height / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.svg = this.createSvg();
+
+    this.SvgChange.emit(svg);
   }
 
   closePath() {
@@ -126,12 +135,13 @@ export class DrawShapeComponent implements AfterViewInit {
   }
 
   private createSvg(): string {
-    const width = this.mySvg.nativeElement.clientWidth;
-    const height = this.mySvg.nativeElement.clientHeight;
+    const pathBounds = this.myPath.nativeElement.getBBox();
+    //const width = this.mySvg.nativeElement.clientWidth;
+    //const height = this.mySvg.nativeElement.clientHeight;
     // const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
 
     return `
-      <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
+      <svg width="${pathBounds.width}" height="${pathBounds.height}" viewBox="${pathBounds.x} ${pathBounds.y} ${pathBounds.width} ${pathBounds.height}" xmlns="http://www.w3.org/2000/svg">
         <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="lightblue" stroke="black" />
       </svg>
     `;
@@ -165,4 +175,12 @@ export class DrawShapeComponent implements AfterViewInit {
       }
     }
   }
+}
+
+export class Svg {
+  svg = '';
+  x = NaN;
+  y = NaN;
+  width = NaN;
+  height = NaN;
 }

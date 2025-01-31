@@ -57,11 +57,8 @@
         [disabled]="Disabled"
         type="button"
       >
-        <span
-          *ngIf="Question.scout_question.icon"
-          class="mdi mdi-{{ Question.scout_question.icon }}"
-        ></span>
-        @if (!Question.scout_question.icon_only) {
+        <span *ngIf="Question.icon" class="mdi mdi-{{ Question.icon }}"></span>
+        @if (!Question.icon_only) {
         <p>{{ Question.question }}</p>
         }
       </button>

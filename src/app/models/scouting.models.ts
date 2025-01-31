@@ -217,13 +217,6 @@ export interface IScoutQuestion {
     id: number;
     question_id: number;
     season_id: number;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    icon: string;
-    icon_only: string;
-    value_multiplier: number;
     void_ind: string;
 }
 
@@ -231,13 +224,6 @@ export class ScoutQuestion implements IScoutQuestion {
     id!: number;
     question_id!: number;
     season_id!: number;
-    x!: number;
-    y!: number;
-    width!: number;
-    height!: number;
-    icon!: string;
-    icon_only!: string;
-    value_multiplier!: number;
     void_ind = 'n';
 }
 

@@ -26,16 +26,15 @@
       />
       @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index)
       { @if (answer.flow_answers) { @for (flow_answer of answer.flow_answers;
-      track $index) { @if (flow_answer.question &&
-      flow_answer.question.scout_question) {
+      track $index) { @if (flow_answer.question) {
       <div
         #box
         class="box"
         [ngStyle]="{
-          top: flow_answer.question.scout_question.y + '%',
-          left: flow_answer.question.scout_question.x + '%',
-          width: flow_answer.question.scout_question.width + '%',
-          height: flow_answer.question.scout_question.height + '%'
+          top: flow_answer.question.y + '%',
+          left: flow_answer.question.x + '%',
+          width: flow_answer.question.width + '%',
+          height: flow_answer.question.height + '%'
         }"
       >
         <div class="touchpoint-wrapper">
@@ -80,12 +79,8 @@
           <p>{{ flow_answer.value }}</p>
           }
           <div class="label">
-            @if ( flow_answer.question.scout_question.icon) {
-            <span
-              class="mdi icon mdi-{{
-                flow_answer.question.scout_question.icon
-              }}"
-            ></span>
+            @if ( flow_answer.question.icon) {
+            <span class="mdi icon mdi-{{ flow_answer.question.icon }}"></span>
             }
             <p>{{ flow_answer.question.question }}</p>
           </div>

@@ -154,9 +154,10 @@
   @if (activeQuestionFlow) {
   <app-draw-shape
     [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
-    [(Svg)]="activeQuestionFlow.question.svg"
+    (SvgChange)="svgChanged($event)"
   ></app-draw-shape>
   }
+
   <div class="margin-top-1rem">
     <div
       #imageBackground
@@ -177,16 +178,27 @@
         @if (activeFlow) { @for (questionFlow of activeFlow.question_flows;
         track $index) {
 
-        <div [innerHTML]="questionFlow.question.svg | safeHtml"></div>
+        <div
+          class="svg-wrapper"
+          [ngStyle]="{
+            top: questionFlow.question.y + '%',
+            left: questionFlow.question.x + '%',
+            width: questionFlow.question.width + '%',
+            height: questionFlow.question.height + '%'
+          }"
+        >
+          <div
+            class="svg"
+            [innerHTML]="questionFlow.question.svg | safeHtml"
+          ></div>
 
-        <div class="label">
-          @if (questionFlow.question.scout_question.icon) {
-          <span
-            class="mdi icon mdi-{{ questionFlow.question.scout_question.icon }}"
-          ></span>
-          }
+          <div class="label">
+            @if (questionFlow.question.icon) {
+            <span class="mdi icon mdi-{{ questionFlow.question.icon }}"></span>
+            }
 
-          <p>{{ questionFlow.question.question }}</p>
+            <p>{{ questionFlow.question.question }}</p>
+          </div>
         </div>
         } }
       </div>

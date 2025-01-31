@@ -616,15 +616,15 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     const question = questionFlow.question;
     const box = this.getQuestionFlowBox(flow, questionFlow);
     if (box &&
-      !this.gs.strNoE(question.scout_question.x) &&
-      !this.gs.strNoE(question.scout_question.y) &&
-      !this.gs.strNoE(question.scout_question.width) &&
-      !this.gs.strNoE(question.scout_question.height) &&
+      !this.gs.strNoE(question.x) &&
+      !this.gs.strNoE(question.y) &&
+      !this.gs.strNoE(question.width) &&
+      !this.gs.strNoE(question.height) &&
       box) {
-      let width = question.scout_question.width;
-      let height = question.scout_question.height;
-      let x = question.scout_question.x;
-      let y = question.scout_question.y;
+      let width = question.width;
+      let height = question.height;
+      let x = question.x;
+      let y = question.y;
 
       if (this.invertedImage) {
         x = 50 + (50 - x) - width;

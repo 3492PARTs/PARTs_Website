@@ -12,7 +12,7 @@ import { FormElementComponent } from '../../../../atoms/form-element/form-elemen
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { TableComponent, TableColType } from '../../../../atoms/table/table.component';
-import { DrawShapeComponent } from "../../../../atoms/draw-shape/draw-shape.component";
+import { DrawShapeComponent, Svg } from "../../../../atoms/draw-shape/draw-shape.component";
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 
 @Component({
@@ -57,23 +57,35 @@ export class ManageFieldFormComponent {
     { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
     { PropertyName: 'question.question_typ.question_typ_nm', ColLabel: 'Type' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
-    { PropertyName: 'question.scout_question.x', ColLabel: 'X', Type: "number" },
-    { PropertyName: 'question.scout_question.y', ColLabel: 'Y', Type: "number" },
-    { PropertyName: 'question.scout_question.width', ColLabel: 'Width', Type: "number" },
-    { PropertyName: 'question.scout_question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'question.scout_question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
-    { PropertyName: 'question.scout_question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
+    { PropertyName: 'question.x', ColLabel: 'X', Type: "number" },
+    { PropertyName: 'question.y', ColLabel: 'Y', Type: "number" },
+    { PropertyName: 'question.width', ColLabel: 'Width', Type: "number" },
+    { PropertyName: 'question.height', ColLabel: 'Height', Type: "number" },
+    { PropertyName: 'question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
+    { PropertyName: 'question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
   ];
   flowTableTriggerUpdate = false;
 
   isMobile = false;
 
+  private resizeTimer: number | null | undefined;
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
     this.isMobile = this.gs.isMobile();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.adjustImage();
+    }, 200);
   }
 
   previewImage(): void {
@@ -121,6 +133,7 @@ export class ManageFieldFormComponent {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
       this.gs.triggerChange(() => {
         this.fieldForm = result;
+        this.gs.triggerChange(() => this.adjustImage(), 5);
       });
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -223,10 +236,10 @@ export class ManageFieldFormComponent {
 
         this.setBoxInactive(this.activeQuestionBox.nativeElement);
 
-        this.activeQuestionFlow.question.scout_question.x = boxCoords.x;
-        this.activeQuestionFlow.question.scout_question.y = boxCoords.y;
-        this.activeQuestionFlow.question.scout_question.width = boxCoords.width;
-        this.activeQuestionFlow.question.scout_question.height = boxCoords.height;
+        this.activeQuestionFlow.question.x = boxCoords.x;
+        this.activeQuestionFlow.question.y = boxCoords.y;
+        this.activeQuestionFlow.question.width = boxCoords.width;
+        this.activeQuestionFlow.question.height = boxCoords.height;
 
         if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.question_flows, 'id', this.activeQuestionFlow);
         this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
@@ -260,22 +273,22 @@ export class ManageFieldFormComponent {
       if (this.activeFlow)
         for (let i = 0; i < this.activeFlow.question_flows.length; i++) {
           if (this.boxes.get(i)) {
-            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.question_flows[i].question.scout_question);
+            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.question_flows[i].question);
           }
         }
     });
   }
 
-  setBoxLocation(box: HTMLElement, scout_question: ScoutQuestion): void {
-    if (!this.gs.strNoE(scout_question.x) &&
-      !this.gs.strNoE(scout_question.y) &&
-      !this.gs.strNoE(scout_question.width) &&
-      !this.gs.strNoE(scout_question.height) &&
+  setBoxLocation(box: HTMLElement, question: Question): void {
+    if (!this.gs.strNoE(question.x) &&
+      !this.gs.strNoE(question.y) &&
+      !this.gs.strNoE(question.width) &&
+      !this.gs.strNoE(question.height) &&
       box) {
-      let width = scout_question.width;
-      let height = scout_question.height;
-      let x = scout_question.x;
-      let y = scout_question.y;
+      let width = question.width;
+      let height = question.height;
+      let x = question.x;
+      let y = question.y;
 
       if (this.invertedImage) {
         x = 50 + (50 - x) - width;
@@ -298,10 +311,10 @@ export class ManageFieldFormComponent {
       this.activeQuestionFlow = questionFlow;
       this.activeQuestionBox = this.getQuestionFlowBox(questionFlow);
 
-      if (!this.gs.strNoE(this.activeQuestionFlow.question.scout_question.x) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.y) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.width) &&
-        !this.gs.strNoE(this.activeQuestionFlow.question.scout_question.height) &&
+      if (!this.gs.strNoE(this.activeQuestionFlow.question.x) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.y) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.width) &&
+        !this.gs.strNoE(this.activeQuestionFlow.question.height) &&
         this.activeQuestionBox) {
         this.setBoxActive(this.activeQuestionBox.nativeElement)
       }
@@ -330,5 +343,28 @@ export class ManageFieldFormComponent {
 
   flowComparatorFunction(o1: Flow, o2: Flow): boolean {
     return o1 && o2 && o1.id === o2.id;
+  }
+
+  svgChanged(svg: Svg): void {
+    if (this.activeQuestionFlow) {
+      this.activeQuestionFlow.question.svg = svg.svg;
+      this.activeQuestionFlow.question.x = svg.x;
+      this.activeQuestionFlow.question.y = svg.y;
+      this.activeQuestionFlow.question.width = svg.width;
+      this.activeQuestionFlow.question.height = svg.height;
+    }
+  }
+
+  adjustImage(): void {
+    if (this.image) {
+      if (window.innerWidth > window.innerHeight) {
+        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
+        this.renderer.setStyle(this.image.nativeElement, 'height', '70vh');
+      }
+      else {
+        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
+      }
+    }
   }
 }
