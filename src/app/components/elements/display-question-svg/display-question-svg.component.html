@@ -1,0 +1,11 @@
+<div class="svg-wrapper">
+  <div class="svg" #svgDiv [innerHTML]="Question.svg | safeHtml"></div>
+
+  <div class="label">
+    @if (Question.icon) {
+    <span class="mdi icon mdi-{{ Question.icon }}"></span>
+    }
+
+    <p>{{ Question.question }}</p>
+  </div>
+</div>

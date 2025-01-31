@@ -4,10 +4,11 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { Question } from '../../../models/form.models';
 import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
+import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 
 @Component({
   selector: 'app-question-form-element',
-  imports: [CommonModule, FormElementComponent, SafeHTMLPipe],
+  imports: [CommonModule, FormElementComponent, SafeHTMLPipe, DisplayQuestionSvgComponent],
   templateUrl: './question-form-element.component.html',
   styleUrls: ['./question-form-element.component.scss']
 })
@@ -19,51 +20,17 @@ export class QuestionFormElementComponent implements AfterViewInit {
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('svgDiv', { read: ElementRef, static: false }) svgDiv: ElementRef | undefined = undefined;
   @Input() Inverted = false;
 
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
-    if (this.svgDiv) {
-      // Get the SVG element within the container
-      const svgElement = this.svgDiv.nativeElement.querySelector('svg');
 
-      if (svgElement) {
-        // Set the width of the SVG element
-        this.renderer.setStyle(svgElement, 'width', '100%');
-        this.renderer.setStyle(svgElement, 'height', '100%');
-      }
-
-      this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
-        const target = event.target as SVGElement;
-        if (target.tagName === 'path') {
-          console.log('Path clicked!');
-          // Add your desired functionality here
-          this.click(event);
-        }
-      });
-    }
   }
 
   change(answer: any): void {
     this.Question.answer = answer;
     this.QuestionChange.emit(this.Question);
-  }
-
-  click(e: MouseEvent): void {
-    if (this.svgDiv) {
-      let coords = {
-        x: parseFloat((e.offsetX / parseInt(this.svgDiv.nativeElement.offsetWidth) * 100).toFixed(2)),
-        y: parseFloat((e.offsetY / parseInt(this.svgDiv.nativeElement.offsetHeight) * 100).toFixed(2)),
-      };
-
-      if (this.Inverted) {
-        coords.x = 50 - (coords.x - 50);
-      }
-
-      this.change(coords);
-    }
   }
 
   runFunction(): void {
