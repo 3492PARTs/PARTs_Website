@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { TableColType, TableComponent } from "../../atoms/table/table.component";
-import { Flow, QuestionFlow } from '../../../models/form.models';
+import { Flow, FlowQuestion } from '../../../models/form.models';
 import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from "../../atoms/button/button.component";
@@ -55,9 +55,9 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   ];
   flowTableTriggerUpdate = false;
 
-  @Input() FlowQuestions: QuestionFlow[] = [];
-  @Output() FlowQuestionsChange: EventEmitter<QuestionFlow[]> = new EventEmitter<QuestionFlow[]>();
-  activeFlowQuestion: QuestionFlow | undefined = undefined;
+  @Input() FlowQuestions: FlowQuestion[] = [];
+  @Output() FlowQuestionsChange: EventEmitter<FlowQuestion[]> = new EventEmitter<FlowQuestion[]>();
+  activeFlowQuestion: FlowQuestion | undefined = undefined;
 
   constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
@@ -237,8 +237,8 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     this.reset();
   }
 
-  editQuestionFlow(questionFlow: QuestionFlow): void {
-    this.activeFlowQuestion = questionFlow;
+  editFlowQuestion(flowQuestion: FlowQuestion): void {
+    this.activeFlowQuestion = flowQuestion;
   }
 
   ynToYesNo(s: string): string {

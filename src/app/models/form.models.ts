@@ -240,7 +240,7 @@ export class Response implements IResponse {
     questionanswer_set: Question[] = [];
 }
 
-export interface IQuestionFlow {
+export interface IFlowQuestion {
     id: number;
     flow_id: number;
     question: Question;
@@ -248,7 +248,7 @@ export interface IQuestionFlow {
     active: string;
 }
 
-export class QuestionFlow implements IQuestionFlow {
+export class FlowQuestion implements IFlowQuestion {
     id = NaN;
     flow_id = NaN;
     question = new Question();
@@ -262,7 +262,7 @@ export interface IFlow {
     single_run: boolean;
     form_typ: IFormType;
     form_sub_typ: IFormSubType | undefined;
-    question_flows: IQuestionFlow[];
+    flow_questions: IFlowQuestion[];
     question_answer: IAnswer | undefined;
     void_ind: string;
 
@@ -276,7 +276,7 @@ export class Flow implements IFlow {
     single_run = false;
     form_typ = new FormType();
     form_sub_typ!: FormSubType;
-    question_flows: QuestionFlow[] = [];
+    flow_questions: FlowQuestion[] = [];
     question_answer: Answer | undefined = undefined;
     void_ind = 'n';
 

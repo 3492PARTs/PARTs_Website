@@ -37,7 +37,7 @@ export class QuestionAdminFormComponent implements OnInit {
   @Output() FormMetadataChange: EventEmitter<FormInitialization> = new EventEmitter();
   questionModalVisible = false;
   activeQuestion: Question = new Question();
-  availableQuestionFlows: Flow[] = [];
+  availableFlowQuestions: Flow[] = [];
 
   questionTableTriggerUpdate = false;
   questionTableCols: TableColType[] = [];
@@ -51,9 +51,6 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area', Required: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
-
-  questionFlowModalVisible = false;
-  newQuestionFlow = new Flow();
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 

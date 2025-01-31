@@ -472,13 +472,13 @@ export class FieldForm {
 export interface IFormSubTypeForm {
     form_sub_typ: IFormSubType;
     questions: IQuestion[];
-    question_flows: Flow[];
+    flows: Flow[];
 }
 
 export class FormSubTypeForm implements IFormSubTypeForm {
     form_sub_typ = new FormSubType();
     questions: Question[] = [];
-    question_flows: Flow[] = [];
+    flows: Flow[] = [];
 }
 
 export interface IFieldFormForm {

@@ -111,7 +111,7 @@ export class
     });
   }
 
-  compareQuestionFlows(q1: Flow, q2: Flow): boolean {
+  compareFlowQuestions(q1: Flow, q2: Flow): boolean {
     if (q1 && q2)
       return q1.id === q2.id;
     else

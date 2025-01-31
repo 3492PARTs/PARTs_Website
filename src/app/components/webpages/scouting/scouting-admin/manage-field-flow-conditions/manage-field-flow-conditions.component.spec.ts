@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageFieldQuestionFlowConditionsComponent } from './manage-field-flow-conditions.component';
+import { ManageFieldFlowConditionsComponent } from './manage-field-flow-conditions.component';
 
-describe('ManageFieldQuestionFlowConditionsComponent', () => {
-  let component: ManageFieldQuestionFlowConditionsComponent;
-  let fixture: ComponentFixture<ManageFieldQuestionFlowConditionsComponent>;
+describe('ManageFieldFlowConditionsComponent', () => {
+  let component: ManageFieldFlowConditionsComponent;
+  let fixture: ComponentFixture<ManageFieldFlowConditionsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManageFieldQuestionFlowConditionsComponent]
+      imports: [ManageFieldFlowConditionsComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(ManageFieldQuestionFlowConditionsComponent);
+    fixture = TestBed.createComponent(ManageFieldFlowConditionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

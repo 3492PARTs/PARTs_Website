@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { APIService } from '../../../services/api.service';
 import { AuthCallStates, AuthService } from '../../../services/auth.service';
-import { Flow, FormInitialization, Question, QuestionFlow } from '../../../models/form.models';
+import { Flow, FormInitialization, Question, FlowQuestion } from '../../../models/form.models';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
@@ -26,7 +26,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
-    { PropertyName: 'question_flows', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeQuestionFlows },
+    { PropertyName: 'flow_questions', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeFlowQuestions },
     { PropertyName: 'flow_conditional_on', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.decodeConditionalFlow.bind(this) },
   ];
   flowModalVisible = false;
@@ -91,24 +91,24 @@ export class FlowAdminFormComponent implements OnInit {
 
   pushQuestion(): void {
     if (this.activeFlow && !this.gs.strNoE(this.question.id)) {
-      let qf = new QuestionFlow();
+      let qf = new FlowQuestion();
       qf.active = 'y';
       qf.flow_id = this.activeFlow.id;
       qf.question = this.question;
       this.question = new Question();
-      this.activeFlow.question_flows = [...this.activeFlow.question_flows, qf];
+      this.activeFlow.flow_questions = [...this.activeFlow.flow_questions, qf];
       this.buildQuestions();
     }
   }
 
-  removeQuestionFlow(questionFlow: QuestionFlow): void {
+  removeFlowQuestion(flowQuestion: FlowQuestion): void {
     if (this.activeFlow) {
       let i = 0;
-      for (; i < this.activeFlow.question_flows.length; i++)
-        if (this.activeFlow.question_flows[i].question.id === questionFlow.question.id)
+      for (; i < this.activeFlow.flow_questions.length; i++)
+        if (this.activeFlow.flow_questions[i].question.id === flowQuestion.question.id)
           break;
 
-      this.activeFlow.question_flows.splice(i, 1);
+      this.activeFlow.flow_questions.splice(i, 1);
       this.buildQuestions();
     }
   }
@@ -116,15 +116,15 @@ export class FlowAdminFormComponent implements OnInit {
   buildQuestions(): void {
     this.questions = [];
     if (this.FormMetadata)
-      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.question_flows.map(q => q.question.id).includes(q.id));
+      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.flow_questions.map(q => q.question.id).includes(q.id));
   }
 
   decodeBoolean(b: boolean): string {
     return this.gs.decodeYesNoBoolean(b);
   }
 
-  decodeQuestionFlows(questionFlows: QuestionFlow[]): string {
-    return questionFlows.map(qf => `Order: ${qf.order}: ${qf.question.question}`).join('\n');
+  decodeFlowQuestions(flowQuestions: FlowQuestion[]): string {
+    return flowQuestions.map(qf => `Order: ${qf.order}: ${qf.question.question}`).join('\n');
     //Order: 1: Autonomous: Leave staging area?
 
   }

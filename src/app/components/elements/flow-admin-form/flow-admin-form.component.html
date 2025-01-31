@@ -77,10 +77,10 @@
     <app-table
       [TableName]="'Questions'"
       [TableCols]="questionTableCols"
-      [TableData]="activeFlow.question_flows"
+      [TableData]="activeFlow.flow_questions"
       [Width]="'100%'"
       [ShowRemoveButton]="true"
-      (RemoveRecordCallBack)="removeQuestionFlow($event)"
+      (RemoveRecordCallBack)="removeFlowQuestion($event)"
       [Scrollable]="true"
       [ScrollHeight]="'50vh'"
     >

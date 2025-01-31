@@ -59,7 +59,6 @@
             [Type]="'checkbox'"
             [LabelText]="'Inverted'"
             [(Model)]="invertedImage"
-            (FunctionCallBack)="setQuestionBoxes()"
           ></app-form-element>
 
           <app-form-element
@@ -89,7 +88,6 @@
             [(Model)]="activeFlow"
             [DisplayEmptyOption]="true"
             [SelectComparatorFunction]="flowComparatorFunction"
-            (FunctionCallBack)="setQuestionBoxes()"
             [Disabled]="isMobile"
           >
           </app-form-element>
@@ -133,57 +131,10 @@
       @if (activeFlow) {
       <app-draw-question-svg
         [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
-        [(FlowQuestions)]="activeFlow.question_flows"
+        [(FlowQuestions)]="activeFlow.flow_questions"
       ></app-draw-question-svg
       >}
     </app-form>
   </app-form-element-group>
-  <!--
-    @if (activeQuestionFlow) {
-  <app-draw-shape
-    [ImageUrl]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
-    [Svg]="svg"
-    (SvgChange)="svgChanged($event)"
-  ></app-draw-shape>
-  }
-
-  <div class="margin-top-1rem">
-    <div
-      #imageBackground
-      id="image-background"
-      class="flex align-items-center justify-content-center"
-    >
-      <div
-        #imageContainer
-        id="image-container"
-        (click)="mouseClick($event)"
-        (mousemove)="mouseMove($event)"
-      >
-        <img
-          #image
-          id="image"
-          [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
-        />
-        @if (activeFlow) { @for (questionFlow of activeFlow.question_flows;
-        track $index) { @if ( questionFlow.question.svg &&
-        questionFlow.question.svg.length > 0) {
-        <div
-          class="svg-wrapper"
-          [ngStyle]="{
-            top: questionFlow.question.y + '%',
-            left: questionFlow.question.x + '%',
-            width: questionFlow.question.width + '%',
-            height: questionFlow.question.height + '%'
-          }"
-        >
-          <app-display-question-svg
-            [Inverted]="invertedImage"
-            [Question]="questionFlow.question"
-          ></app-display-question-svg>
-        </div>
-        } } }
-      </div>
-    </div>
-  </div>-->
   }
 </app-box>

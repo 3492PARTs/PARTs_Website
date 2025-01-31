@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, HostListener, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { FormInitialization, Flow, FormSubType, Question, QuestionFlow } from '../../../../../models/form.models';
+import { FormInitialization, Flow, FormSubType, Question, FlowQuestion } from '../../../../../models/form.models';
 import { FieldForm, ScoutQuestion } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
@@ -28,12 +28,6 @@ export class ManageFieldFormComponent {
 
   formMetadata = new FormInitialization();
 
-  manageScoutFieldQuestions = false;
-
-  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined = undefined;
-  @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef | undefined = undefined;
-  @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef | undefined = undefined;
-  @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
   fieldForm = new FieldForm();
   uploadImageModalVisible = false;
   previewUrl = '';
@@ -51,9 +45,6 @@ export class ManageFieldFormComponent {
 
   activeFlow: Flow | undefined = undefined;
 
-  activeQuestionFlow: QuestionFlow | undefined = undefined;
-  activeQuestionBox: ElementRef<any> | undefined = undefined;
-
   isMobile = false;
 
   svg: Svg | undefined = undefined;
@@ -65,32 +56,6 @@ export class ManageFieldFormComponent {
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
     this.isMobile = this.gs.isMobile();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
-    }
-
-    this.resizeTimer = window.setTimeout(() => {
-      this.adjustImage();
-    }, 200);
-  }
-
-  previewImage(): void {
-    if (this.fieldForm.img)
-      this.gs.previewImageFile(this.fieldForm.img, (ev: ProgressEvent<FileReader>) => {
-        this.previewUrl = ev.target?.result as string;
-      });
-    else if (this.fieldForm.inv_img)
-      this.gs.previewImageFile(this.fieldForm.inv_img, (ev: ProgressEvent<FileReader>) => {
-        this.previewUrl = ev.target?.result as string;
-      });
-    else
-      this.gs.previewImageFile(this.fieldForm.full_img, (ev: ProgressEvent<FileReader>) => {
-        this.previewUrl = ev.target?.result as string;
-      });
   }
 
   saveFieldImage(): void {
@@ -123,7 +88,6 @@ export class ManageFieldFormComponent {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
       this.gs.triggerChange(() => {
         this.fieldForm = result;
-        this.gs.triggerChange(() => this.adjustImage(), 5);
       });
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -141,10 +105,6 @@ export class ManageFieldFormComponent {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
-  }
-
-  closeQuestionModal(visible: Boolean): void {
-    if (!visible) this.formInit();
   }
 
   buildFlowOptions(): void {
@@ -182,134 +142,21 @@ export class ManageFieldFormComponent {
 
   resetFlow(): void {
     this.activeFlow = undefined;
-    this.activeQuestionFlow = undefined;
-    this.activeQuestionBox = undefined;
   }
 
-  ynToYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
-  }
-
-  mouseClick(e: MouseEvent): void {
-    if (this.activeQuestionFlow && this.activeQuestionBox && !this.invertedImage) {
-      this.isDrawing = !e.shiftKey;
-
-      if (Number.isNaN(this.startX) && Number.isNaN(this.startY)) {
-        this.startX = e.offsetX;// - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
-        this.startY = e.offsetY;// - this.imageContainer.nativeElement.offsetTop + this.yOffset;
-
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'display', "block");
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${this.startX}px`);
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${this.startY}px`);
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', "0");
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', "0");
-        this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'background', "rgba(0, 255, 0, 0.3)");
-      }
-
-      if (!this.isDrawing && this.image) {
-        const boxCoords = {
-          x: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.left) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
-          y: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.top) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2)),
-          width: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
-          height: parseFloat((parseInt(this.activeQuestionBox.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
-        };
-        /*
-        const boxCoords = {
-          x: parseInt(this.box.nativeElement.style.left),
-          y: parseInt(this.box.nativeElement.style.top),
-          width: parseFloat((parseInt(this.box.nativeElement.style.width) / parseInt(this.image.nativeElement.offsetWidth) * 100).toFixed(2)),
-          height: parseFloat((parseInt(this.box.nativeElement.style.height) / parseInt(this.image.nativeElement.offsetHeight) * 100).toFixed(2))
-        };*/
-        this.startX = NaN;
-        this.startY = NaN;
-        //console.log(boxCoords);
-
-        this.setBoxInactive(this.activeQuestionBox.nativeElement);
-
-        this.activeQuestionFlow.question.x = boxCoords.x;
-        this.activeQuestionFlow.question.y = boxCoords.y;
-        this.activeQuestionFlow.question.width = boxCoords.width;
-        this.activeQuestionFlow.question.height = boxCoords.height;
-
-        if (this.activeFlow) this.gs.updateObjectInArray(this.activeFlow.question_flows, 'id', this.activeQuestionFlow);
-        //this.flowTableTriggerUpdate = !this.flowTableTriggerUpdate;
-      }
-    }
-  }
-
-  mouseMove(e: MouseEvent): void {
-    if (!this.isDrawing || !this.activeQuestionBox) return;
-
-    const endX = e.offsetX;// - this.imageContainer.nativeElement.offsetLeft + this.xOffset;
-    const endY = e.offsetY;// - this.imageContainer.nativeElement.offsetTop + this.yOffset;
-    const width = Math.abs(endX - this.startX);
-    const height = Math.abs(endY - this.startY);
-
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'width', `${width}px`);
-    this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'height', `${height}px`);
-
-    if (endX < this.startX) {
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'left', `${endX}px`);
-    }
-    if (endY < this.startY) {
-      this.renderer.setStyle(this.activeQuestionBox.nativeElement, 'top', `${endY}px`);
-    }
-  }
-
-  setQuestionBoxes(): void {
-    this.boxes.forEach(b => this.hideBox(b.nativeElement));
-
-    this.gs.triggerChange(() => {
-      if (this.activeFlow)
-        for (let i = 0; i < this.activeFlow.question_flows.length; i++) {
-          if (this.boxes.get(i)) {
-            this.setBoxLocation(this.boxes.get(i)?.nativeElement, this.activeFlow.question_flows[i].question);
-          }
-        }
-    });
-  }
-
-  setBoxLocation(box: HTMLElement, question: Question): void {
-    if (!this.gs.strNoE(question.x) &&
-      !this.gs.strNoE(question.y) &&
-      !this.gs.strNoE(question.width) &&
-      !this.gs.strNoE(question.height) &&
-      box) {
-      let width = question.width;
-      let height = question.height;
-      let x = question.x;
-      let y = question.y;
-
-      if (this.invertedImage) {
-        x = 50 + (50 - x) - width;
-      }
-
-      this.renderer.setStyle(box, 'display', "block");
-      this.renderer.setStyle(box, 'width', `${width}%`);
-      this.renderer.setStyle(box, 'height', `${height}%`);
-
-      this.renderer.setStyle(box, 'left', `${x}%`);
-      this.renderer.setStyle(box, 'top', `${y}%`);
-    }
-
-  }
-
-
-
-  getQuestionFlowBox(questionFlow: QuestionFlow): ElementRef | undefined {
-    return this.boxes.find(b => b.nativeElement.id == questionFlow.id);
-  }
-
-  setBoxActive(box: HTMLElement): void {
-    this.renderer.setStyle(box, 'background', "rgba(0, 255, 0, 0.3)");
-  }
-
-  setBoxInactive(box: HTMLElement): void {
-    this.renderer.setStyle(box, 'background', "rgba(255, 0, 0, 0.3)");
-  }
-
-  hideBox(box: HTMLElement): void {
-    this.renderer.setStyle(box, 'display', "none");
+  previewImage(): void {
+    if (this.fieldForm.img)
+      this.gs.previewImageFile(this.fieldForm.img, (ev: ProgressEvent<FileReader>) => {
+        this.previewUrl = ev.target?.result as string;
+      });
+    else if (this.fieldForm.inv_img)
+      this.gs.previewImageFile(this.fieldForm.inv_img, (ev: ProgressEvent<FileReader>) => {
+        this.previewUrl = ev.target?.result as string;
+      });
+    else
+      this.gs.previewImageFile(this.fieldForm.full_img, (ev: ProgressEvent<FileReader>) => {
+        this.previewUrl = ev.target?.result as string;
+      });
   }
 
   subTypeComparatorFunction(o1: FormSubType, o2: FormSubType): boolean {
@@ -318,29 +165,5 @@ export class ManageFieldFormComponent {
 
   flowComparatorFunction(o1: Flow, o2: Flow): boolean {
     return o1 && o2 && o1.id === o2.id;
-  }
-
-  svgChanged(svg: Svg): void {
-    this.svg = svg;
-    if (this.activeQuestionFlow) {
-      this.activeQuestionFlow.question.svg = svg.svg;
-      this.activeQuestionFlow.question.x = svg.x;
-      this.activeQuestionFlow.question.y = svg.y;
-      this.activeQuestionFlow.question.width = svg.width;
-      this.activeQuestionFlow.question.height = svg.height;
-    }
-  }
-
-  adjustImage(): void {
-    if (this.image) {
-      if (window.innerWidth > window.innerHeight) {
-        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
-        this.renderer.setStyle(this.image.nativeElement, 'height', '70vh');
-      }
-      else {
-        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
-        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
-      }
-    }
   }
 }

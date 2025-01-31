@@ -50,7 +50,7 @@ import { CalendarComponent } from './components/webpages/calendar/calendar.compo
 import { MetricsComponent } from './components/webpages/scouting/strategizing/metrics/metrics.component';
 import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
 import { MatchPlanningComponent } from './components/webpages/scouting/strategizing/match-planning/match-planning.component';
-import { ManageFieldQuestionFlowConditionsComponent as ManageFieldFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component';
+import { ManageFieldFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component';
 import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
 import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
 

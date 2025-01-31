@@ -21,7 +21,7 @@
     [Required]="true"
     [SelectList]="flowConditionQuestionFromList"
     [DisplayProperty]="'name'"
-    [SelectComparatorFunction]="compareQuestionFlows"
+    [SelectComparatorFunction]="compareFlowQuestions"
     (FunctionCallBack)="buildFlowConditionToLists()"
     [DisplayEmptyOption]="true"
   >
@@ -35,7 +35,7 @@
       [Required]="true"
       [SelectList]="flowConditionQuestionToList"
       [DisplayProperty]="'name'"
-      [SelectComparatorFunction]="compareQuestionFlows"
+      [SelectComparatorFunction]="compareFlowQuestions"
       (FunctionCallBack)="buildFlowConditionFromLists()"
       [DisplayEmptyOption]="true"
     >

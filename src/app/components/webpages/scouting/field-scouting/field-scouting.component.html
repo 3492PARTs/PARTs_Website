@@ -192,8 +192,8 @@
 
       @if(activeFormSubTypeForm) {
       <div id="header-wrapper">
-        @if(activeFormSubTypeForm && activeFormSubTypeForm.question_flows &&
-        activeFormSubTypeForm.question_flows.length > 0) {
+        @if(activeFormSubTypeForm && activeFormSubTypeForm.flows &&
+        activeFormSubTypeForm.flows.length > 0) {
         <div #flowButtonsWrapper>
           @if (flowsActionStack.length > 0) {
           <app-button
@@ -242,8 +242,8 @@
           id="image-container"
           *ngIf="
             activeFormSubTypeForm &&
-            activeFormSubTypeForm?.question_flows &&
-            activeFormSubTypeForm.question_flows.length > 0
+            activeFormSubTypeForm?.flows &&
+            activeFormSubTypeForm.flows.length > 0
           "
           (click)="stopwatchStart()"
         >
@@ -256,12 +256,12 @@
 
           <div
             class="flow"
-            *ngFor="let flow of activeFormSubTypeForm?.question_flows || []"
+            *ngFor="let flow of activeFormSubTypeForm?.flows || []"
           >
             <div
               #box
               class="box"
-              *ngFor="let q of flow.question_flows; let i = index"
+              *ngFor="let q of flow.flow_questions; let i = index"
               id="{{ q.id }}"
             >
               <div
@@ -276,9 +276,9 @@
                 }"
               >
                 <app-question-form-element
-                  [Question]="flow.question_flows[i].question"
+                  [Question]="flow.flow_questions[i].question"
                   (QuestionChange)="
-                    advanceFlow(flow, flow.question_flows[i], $event)
+                    advanceFlow(flow, flow.flow_questions[i], $event)
                   "
                   [Inverted]="invertedImage"
                 ></app-question-form-element>
@@ -289,8 +289,8 @@
                   (FunctionCallBack)="
                     advanceFlow(
                       flow,
-                      flow.question_flows[i],
-                      flow.question_flows[i].question,
+                      flow.flow_questions[i],
+                      flow.flow_questions[i].question,
                       true
                     )
                   "
@@ -319,7 +319,7 @@
 
         @if(!activeFormSubTypeForm ||
         (activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
-        activeFormSubTypeForm.question_flows.length > 0)||
+        activeFormSubTypeForm.flows.length > 0)||
         activeFormSubTypeForm.form_sub_typ.form_sub_typ ===
         formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ)
         {

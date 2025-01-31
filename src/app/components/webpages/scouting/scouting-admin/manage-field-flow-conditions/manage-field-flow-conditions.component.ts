@@ -8,6 +8,6 @@ import { FlowConditionAdminFormComponent } from "../../../../elements/flow-condi
   templateUrl: './manage-field-flow-conditions.component.html',
   styleUrl: './manage-field-flow-conditions.component.scss'
 })
-export class ManageFieldQuestionFlowConditionsComponent {
+export class ManageFieldFlowConditionsComponent {
 
 }
