@@ -50,15 +50,7 @@
     </app-form-element>
 
     <ng-template #mntPshBtn>
-      <div
-        class="svg-wrapper"
-        [ngStyle]="{
-          top: Question.y + '%',
-          left: Question.x + '%',
-          width: Question.width + '%',
-          height: Question.height + '%'
-        }"
-      >
+      <div class="svg-wrapper">
         <div class="svg" #svgDiv [innerHTML]="Question.svg | safeHtml"></div>
 
         <div class="label">
