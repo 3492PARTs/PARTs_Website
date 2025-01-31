@@ -10,14 +10,10 @@
 .box {
   position: absolute;
   border: 1px solid red;
+  z-index: 1;
 
   p {
     margin: 0;
-  }
-
-  .svg {
-    width: 100%;
-    height: 100%;
   }
 }
 

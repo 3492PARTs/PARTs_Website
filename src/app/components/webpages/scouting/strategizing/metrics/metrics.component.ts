@@ -8,10 +8,11 @@ import { FormElementComponent } from "../../../../atoms/form-element/form-elemen
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../../../services/general.service';
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
+import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
