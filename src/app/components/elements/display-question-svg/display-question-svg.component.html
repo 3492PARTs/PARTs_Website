@@ -5,9 +5,9 @@
   <div class="label">
     @if (Question.icon) {
     <span class="mdi icon mdi-{{ Question.icon }}"></span>
-    }
-
+    } @if (!Question.icon_only) {
     <p>{{ Question.question }}</p>
+    }
   </div>
 </div>
 }
