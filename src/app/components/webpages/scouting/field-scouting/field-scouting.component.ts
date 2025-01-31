@@ -408,7 +408,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   advanceFlow(flow: Flow, questionFlow: QuestionFlow, override = false): void {
-    const question = questionFlow.question;
+    /*const question = questionFlow.question;
 
     if (question.question_typ.question_typ === 'mnt-psh-btn' || override) {
       // Check if there are any required/invalid fields
@@ -443,7 +443,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // Display next stage in flow
       this.displayFlowStage(flow, questionFlow.order + 1); // do not use next stage function
-    }
+    }*/
   }
 
   displayFlowStage(flow: Flow, stage: number, show = true): void {
@@ -669,9 +669,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   stopwatchStart(): void {
     if (this.activeFormSubTypeForm?.form_sub_typ.form_sub_typ === 'auto' && !this.stopwatchRun) {
       this.stopwatchRun = true;
-
-      if (!environment.production)
-        this.stopwatchSecond = 5;
 
       this.stopwatchRunFunction();
     }

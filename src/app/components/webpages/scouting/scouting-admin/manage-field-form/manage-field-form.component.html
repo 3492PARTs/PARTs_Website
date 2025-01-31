@@ -176,8 +176,7 @@
           [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
         />
         @if (activeFlow) { @for (questionFlow of activeFlow.question_flows;
-        track $index) {
-
+        track $index) { @if (questionFlow.question.svg.length > 0) {
         <div
           class="svg-wrapper"
           [ngStyle]="{
@@ -200,7 +199,7 @@
             <p>{{ questionFlow.question.question }}</p>
           </div>
         </div>
-        } }
+        } } }
       </div>
     </div>
   </div>

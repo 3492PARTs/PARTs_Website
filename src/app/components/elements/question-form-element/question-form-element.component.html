@@ -50,18 +50,25 @@
     </app-form-element>
 
     <ng-template #mntPshBtn>
-      <button
-        #mntPhsBtn
-        class="mnt-psh-btn"
-        (click)="click($event)"
-        [disabled]="Disabled"
-        type="button"
+      <div
+        class="svg-wrapper"
+        [ngStyle]="{
+          top: Question.y + '%',
+          left: Question.x + '%',
+          width: Question.width + '%',
+          height: Question.height + '%'
+        }"
       >
-        <span *ngIf="Question.icon" class="mdi mdi-{{ Question.icon }}"></span>
-        @if (!Question.icon_only) {
-        <p>{{ Question.question }}</p>
-        }
-      </button>
+        <div class="svg" #svgDiv [innerHTML]="Question.svg | safeHtml"></div>
+
+        <div class="label">
+          @if (Question.icon) {
+          <span class="mdi icon mdi-{{ Question.icon }}"></span>
+          }
+
+          <p>{{ Question.question }}</p>
+        </div>
+      </div>
     </ng-template>
   </div>
 </div>
