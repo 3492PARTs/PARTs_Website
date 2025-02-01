@@ -144,7 +144,10 @@
     <div *ngIf="previewImages.length > 0">
       <p>Existing images</p>
       <div *ngFor="let pic of previewImages">
-        <img [src]="pic.img" height="300" />
+        @if (pic.img_title.length > 0) {
+        <p>{{ pic.img_title }}</p>
+        }
+        <img [src]="pic.img_url" height="300" />
       </div>
     </div>
 
