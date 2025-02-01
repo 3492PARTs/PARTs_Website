@@ -838,28 +838,31 @@ export class ScoutingService {
 
         let count = 0;
 
-        spr?.robotPics.forEach(pic => {
-          if (pic && pic.size >= 0) {
+        spr?.pics.forEach(pic => {
+          if (pic.img && pic.img.size >= 0) {
             const team_no = spr?.team_id;
 
             window.setTimeout(() => {
               this.gs.incrementOutstandingCalls();
 
-              this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
-                if (resizedPic) {
-                  const formData = new FormData();
-                  formData.append('file', resizedPic);
-                  formData.append('team_no', team_no?.toString() || '');
+              if (pic.img)
+                this.gs.resizeImageToMaxSize(pic.img).then(resizedPic => {
+                  if (resizedPic) {
+                    const formData = new FormData();
+                    formData.append('file', resizedPic);
+                    formData.append('team_no', team_no?.toString() || '');
+                    formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
+                    formData.append('img_title', pic.img_title);
 
-                  this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                    this.gs.successfulResponseBanner(result);
-                  }, (err: any) => {
-                    this.gs.triggerError(err);
-                  });
-                }
-              }).finally(() => {
-                this.gs.decrementOutstandingCalls();
-              });
+                    this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
+                      this.gs.successfulResponseBanner(result);
+                    }, (err: any) => {
+                      this.gs.triggerError(err);
+                    });
+                  }
+                }).finally(() => {
+                  this.gs.decrementOutstandingCalls();
+                });
             }, 1500 * ++count);
           }
         });

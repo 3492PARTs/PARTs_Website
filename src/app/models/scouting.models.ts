@@ -256,7 +256,7 @@ export interface IScoutPitFormResponse {
     team_id: number;
     response_id: number;
     form_typ: string;
-    robotPics: File[];
+    pics: ScoutPitImage[];
 }
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
@@ -265,12 +265,12 @@ export class ScoutPitFormResponse implements IScoutPitFormResponse {
     team_id!: number;
     response_id = NaN;
     form_typ = 'field';
-    robotPics: File[] = [];
+    pics: ScoutPitImage[] = [];
 
-    constructor(question_answers?: Answer[], team?: number, robotPics?: File[]) {
+    constructor(question_answers?: Answer[], team?: number, pics?: ScoutPitImage[]) {
         this.answers = question_answers || [];
         this.team_id = team || NaN;
-        this.robotPics = robotPics || [];
+        this.pics = pics || [];
     }
 }
 
@@ -308,16 +308,44 @@ export class ScoutPitResponseAnswer implements IScoutPitResponseAnswer {
     answer = '';
 }
 
+export interface IScoutPitImageType {
+    pit_image_typ: string;
+    pit_image_nm: string;
+}
+
+export class ScoutPitImageType {
+    pit_image_typ = '';
+    pit_image_nm = '';
+}
+
+
 export interface IScoutPitImage {
     id: number;
-    pic: string;
+    img: File | undefined;
+    img_url: string;
+    img_title: string;
+    pit_image_typ: IScoutPitImageType;
     default: boolean;
 }
 
 export class ScoutPitImage implements IScoutPitImage {
     id = NaN;
-    pic = '';
+    img: File | undefined = undefined;
+    img_url = '';
+    img_title = '';
+    pit_image_typ = new ScoutPitImageType();
     default = false;
+
+    constructor(img_url = '', img_title = '', pit_image_typ = '', img: File | undefined = undefined, def = false) {
+        this.img_url = img_url;
+        this.img = img;
+        this.img_title = img_title;
+        this.pit_image_typ = {
+            pit_image_typ: pit_image_typ,
+            pit_image_nm: ''
+        },
+            this.default = def;
+    }
 }
 
 export interface IScoutPitResponse {

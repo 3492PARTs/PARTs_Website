@@ -66,46 +66,76 @@
       </app-form-element>
     </div>
 
-    <app-question-display-form
-      [(Questions)]="questions"
-      (FormElementsChange)="setFormElements($event)"
-      [Disabled]="formDisabled"
-    >
-    </app-question-display-form>
-
-    <div class="flex align-items-baseline">
-      <app-form-element
-        [LabelText]="'Robot Picture'"
-        [Type]="'file'"
-        [FormGroup]="true"
-        [(Model)]="robotPic"
-        (change)="preview()"
+    <app-form-element-group [LabelText]="'Questions'">
+      <app-question-display-form
+        [(Questions)]="questions"
+        (FormElementsChange)="setFormElements($event)"
         [Disabled]="formDisabled"
       >
-      </app-form-element>
-      <app-button
-        [ButtonType]="'add'"
-        (FunctionCallBack)="addRobotPicture()"
-        [Disabled]="formDisabled"
-      ></app-button>
-      <app-button
-        [ButtonType]="'minus'"
-        (FunctionCallBack)="removeRobotPicture()"
-        [Disabled]="formDisabled"
-      ></app-button>
-    </div>
-    <p>
-      *Select or take an image with the paperclip, press add before saving to
-      put the picture in the list to save.
-    </p>
+      </app-question-display-form>
+    </app-form-element-group>
 
-    <div *ngIf="scoutPitResponse.robotPics.length > 0">
-      <div *ngFor="let pic of scoutPitResponse.robotPics; let i = index">
+    @if (fieldForm) {
+    <app-form-element-group [LabelText]="'Autonomous Paths'">
+      <app-form-element
+        [LabelText]="'Path Title'"
+        [(Model)]="autoTitle"
+        [Width]="'300px'"
+        [Required]="autoPic !== undefined && autoPic.size > 0"
+      ></app-form-element>
+
+      <app-whiteboard
+        [ImageUrl]="fieldForm.img_url"
+        [(Image)]="autoPic"
+        [StampOptions]="stampOptions"
+      ></app-whiteboard>
+
+      <app-button-ribbon>
+        <app-button
+          (FunctionCallBack)="addAutoPicture()"
+          [Disabled]="formDisabled"
+          >Add</app-button
+        ></app-button-ribbon
+      >
+    </app-form-element-group>
+    }
+
+    <app-form-element-group [LabelText]="'Robot Images'">
+      <div class="flex align-items-baseline">
+        <app-form-element
+          [LabelText]="'Robot Picture'"
+          [Type]="'file'"
+          [FormGroup]="true"
+          [(Model)]="robotPic"
+          (change)="preview()"
+          [Disabled]="formDisabled"
+        >
+        </app-form-element>
+        <app-button
+          [ButtonType]="'add'"
+          (FunctionCallBack)="addRobotPicture()"
+          [Disabled]="formDisabled"
+        ></app-button>
+        <app-button
+          [ButtonType]="'minus'"
+          (FunctionCallBack)="removeRobotPicture()"
+          [Disabled]="formDisabled"
+        ></app-button>
+      </div>
+      <p>
+        *Select or take an image with the paperclip, press add before saving to
+        put the picture in the list to save.
+      </p>
+    </app-form-element-group>
+    <div *ngIf="scoutPitResponse.pics.length > 0">
+      <div *ngFor="let pic of scoutPitResponse.pics; let i = index">
+        @if (pic.img) {
         <app-button
           [ButtonType]="'delete'"
           (FunctionCallBack)="deleteStagedPic(i)"
         ></app-button
-        >{{ pic.name }}
+        >{{ pic.img_title ? pic.img_title + " - " : "" }}{{ pic.img.name }}
+        }
       </div>
     </div>
 
@@ -114,7 +144,7 @@
     <div *ngIf="previewImages.length > 0">
       <p>Existing images</p>
       <div *ngFor="let pic of previewImages">
-        <img [src]="pic.pic" height="300" />
+        <img [src]="pic.img" height="300" />
       </div>
     </div>
 

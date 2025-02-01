@@ -87,7 +87,7 @@ export class ScoutPitResponsesComponent implements OnInit {
       });
 
       element.pics.forEach(p => {
-        csv += p.pic + ',';
+        csv += p.img_url + ',';
       });
 
       csv = csv.substring(0, csv.length - 1);

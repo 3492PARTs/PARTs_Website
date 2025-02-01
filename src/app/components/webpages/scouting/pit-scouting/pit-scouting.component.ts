@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { APIStatus, Banner } from '../../../../models/api.models';
-import { Team, ScoutPitFormResponse, ScoutPitImage } from '../../../../models/scouting.models';
+import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { CacheService } from '../../../../services/cache.service';
@@ -15,10 +15,11 @@ import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { Question, Answer } from '../../../../models/form.models';
+import { WhiteboardComponent } from "../../../atoms/whiteboard/whiteboard.component";
 
 @Component({
   selector: 'app-pit-scouting',
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })
@@ -31,8 +32,12 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   private previouslySelectedTeam!: number;
   robotPic!: File;
+  autoTitle = '';
+  autoPic: File | undefined = undefined;
   previewUrl: any = null;
   scoutPitResponse = new ScoutPitFormResponse();
+
+  stampOptions = ['start', 'end', 'pick-up', 'place', 'coral', 'algae'];
 
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
@@ -44,6 +49,8 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   outstandingResults: { id: number, team: number }[] = [];
 
   apiStatus = APIStatus.prcs;
+
+  fieldForm: FieldForm | undefined = undefined;
 
   constructor(private api: APIService,
     private gs: GeneralService,
@@ -75,11 +82,18 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
+    this.ss.getFieldFormFormFromCache().then(fff => {
+      if (fff) {
+        this.fieldForm = fff.field_form;
+      }
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.gs.incrementOutstandingCalls();
     this.ss.loadTeams().then(result => {
       if (result) {
         this.buildTeamLists(result);
       }
-
       this.gs.decrementOutstandingCalls();
     });
 
@@ -209,13 +223,24 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   addRobotPicture() {
     if (this.robotPic && this.robotPic.size > 0)
-      this.scoutPitResponse.robotPics.push(this.robotPic);
+      this.scoutPitResponse.pics.push(new ScoutPitImage('', '', 'robot-pic', this.robotPic));
     this.removeRobotPicture();
+  }
+
+  addAutoPicture() {
+    if (this.autoPic && this.autoPic.size > 0)
+      this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
+    this.removeAutoPicture();
   }
 
   removeRobotPicture() {
     this.robotPic = new File([], '');
     this.previewUrl = null;
+  }
+
+  removeAutoPicture() {
+    this.autoTitle = '';
+    this.autoPic = undefined;
   }
 
   reset(): void {
@@ -283,7 +308,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   deleteStagedPic(index: number): void {
-    this.scoutPitResponse.robotPics.splice(index, 1);
+    this.scoutPitResponse.pics.splice(index, 1);
   }
 }
 

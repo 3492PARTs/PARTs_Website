@@ -41,20 +41,20 @@ export class ScoutPicDisplayComponent {
       let link = '';
 
       if (index !== undefined) {
-        link = sp.pics[index].pic;
+        link = sp.pics[index].img_url;
         sp.display_pic_index = index;
       }
       else {
         for (let i = 0; i < sp.pics.length; i++) {
           if (sp.pics[i].default) {
             sp.display_pic_index = i;
-            link = sp.pics[i].pic;
+            link = sp.pics[i].img_url;
             break;
           }
         }
 
         if (this.gs.strNoE(link)) {
-          link = sp.pics[0].pic;
+          link = sp.pics[0].img_url;
           sp.display_pic_index = 0;
         }
       }
