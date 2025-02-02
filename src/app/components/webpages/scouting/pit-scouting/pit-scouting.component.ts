@@ -266,6 +266,11 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       return null;
     }
 
+    if (this.autoPic && this.autoPic.size > 0) {
+      this.gs.addBanner(new Banner(0, "Must add or clear drawn path.", 3500));
+      return null;
+    }
+
     this.questions.forEach(q => {
       const quest = this.gs.cloneObject(q);
       quest.answer = this.gs.formatQuestionAnswer(quest.answer);
