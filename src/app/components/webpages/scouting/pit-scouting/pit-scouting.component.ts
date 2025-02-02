@@ -223,14 +223,19 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   addRobotPicture() {
     if (this.robotPic && this.robotPic.size > 0)
-      this.scoutPitResponse.pics.push(new ScoutPitImage('', '', 'robot-pic', this.robotPic));
+      this.scoutPitResponse.pics.push(new ScoutPitImage('', '', 'robot-img', this.robotPic));
     this.removeRobotPicture();
   }
 
   addAutoPicture() {
-    if (this.autoPic && this.autoPic.size > 0)
-      this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
-    this.removeAutoPicture();
+    if (this.autoPic && this.autoPic.size > 0) {
+      if (!this.gs.strNoE(this.autoTitle)) {
+        this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
+        this.removeAutoPicture();
+      }
+      else
+        this.gs.addBanner(new Banner(0, "Must add title to auto path.", 3500));
+    }
   }
 
   removeRobotPicture() {

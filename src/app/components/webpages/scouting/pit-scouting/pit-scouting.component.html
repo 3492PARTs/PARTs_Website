@@ -101,6 +101,10 @@
     }
 
     <app-form-element-group [LabelText]="'Robot Images'">
+      <p>
+        *Select or take an image with the paperclip, press add before saving to
+        put the picture in the list to save.
+      </p>
       <div class="flex align-items-baseline">
         <app-form-element
           [LabelText]="'Robot Picture'"
@@ -122,11 +126,9 @@
           [Disabled]="formDisabled"
         ></app-button>
       </div>
-      <p>
-        *Select or take an image with the paperclip, press add before saving to
-        put the picture in the list to save.
-      </p>
+      <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
     </app-form-element-group>
+
     <div *ngIf="scoutPitResponse.pics.length > 0">
       <div *ngFor="let pic of scoutPitResponse.pics; let i = index">
         @if (pic.img) {
@@ -138,8 +140,6 @@
         }
       </div>
     </div>
-
-    <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
 
     <div *ngIf="previewImages.length > 0">
       <p>Existing images</p>
