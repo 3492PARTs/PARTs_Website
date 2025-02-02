@@ -353,7 +353,6 @@ export interface IScoutPitResponse {
     team_no: number;
     team_nm: string;
     pics: IScoutPitImage[];
-    display_pic_index: number;
     responses: IScoutPitResponseAnswer[];
 }
 
@@ -362,7 +361,6 @@ export class ScoutPitResponse implements IScoutPitResponse {
     team_no = NaN;
     team_nm = '';
     pics: ScoutPitImage[] = [];
-    display_pic_index = 0;
     responses: ScoutPitResponseAnswer[] = [];
 }
 

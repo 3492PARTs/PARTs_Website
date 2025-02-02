@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import LoadImg from 'blueimp-load-image';
 import { ScoutPitResponse, ScoutPitImage } from '../../../models/scouting.models';
 import { APIService } from '../../../services/api.service';
@@ -12,54 +12,68 @@ import { CommonModule } from '@angular/common';
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })
-export class ScoutPicDisplayComponent {
+export class ScoutPicDisplayComponent implements OnInit {
   @Input()
-  set ScoutPitResult(spr: ScoutPitResponse) {
-    this._ScoutPitResult = spr;
-    this.preview(this._ScoutPitResult);
+  set ScoutPitImages(spis: ScoutPitImage[]) {
+    this._ScoutPitImages = spis.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.preview();
   }
-  _ScoutPitResult = new ScoutPitResponse();
+  _ScoutPitImages: ScoutPitImage[] = [];
+
+  @Input() set PitImgTyp(s: string) {
+    this._PitImgTyp = s;
+    this._ScoutPitImages = this._ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+  }
+  _PitImgTyp = '';
+
+  displayPicIndex = 0;
+
+  elementId = '';
 
   constructor(private gs: GeneralService, private api: APIService) { }
 
-  prevImage(sp: ScoutPitResponse): void {
-    if (sp.display_pic_index - 1 < 0) sp.display_pic_index = sp.pics.length - 1;
-    else sp.display_pic_index--;
-
-    this.preview(sp, sp.display_pic_index)
+  ngOnInit(): void {
+    this.elementId = this.gs.getNextGsId();
   }
 
-  nextImage(sp: ScoutPitResponse): void {
-    if (sp.display_pic_index + 1 > sp.pics.length - 1) sp.display_pic_index = 0;
-    else sp.display_pic_index++;
+  prevImage(): void {
+    if (this.displayPicIndex - 1 < 0) this.displayPicIndex = this._ScoutPitImages.length - 1;
+    else this.displayPicIndex--;
 
-    this.preview(sp, sp.display_pic_index)
+    this.preview(this.displayPicIndex);
   }
 
-  preview(sp: ScoutPitResponse, index?: number): void {
-    if (sp && sp.pics.length > 0) {
+  nextImage(): void {
+    if (this.displayPicIndex + 1 > this._ScoutPitImages.length - 1) this.displayPicIndex = 0;
+    else this.displayPicIndex++;
+
+    this.preview(this.displayPicIndex);
+  }
+
+  preview(index?: number): void {
+    if (this._ScoutPitImages.length > 0) {
       let link = '';
 
       if (index !== undefined) {
-        link = sp.pics[index].img_url;
-        sp.display_pic_index = index;
+        link = this._ScoutPitImages[index].img_url;
+        this.displayPicIndex = index;
       }
       else {
-        for (let i = 0; i < sp.pics.length; i++) {
-          if (sp.pics[i].default) {
-            sp.display_pic_index = i;
-            link = sp.pics[i].img_url;
+        for (let i = 0; i < this._ScoutPitImages.length; i++) {
+          if (this._ScoutPitImages[i].default) {
+            this.displayPicIndex = i;
+            link = this._ScoutPitImages[i].img_url;
             break;
           }
         }
 
         if (this.gs.strNoE(link)) {
-          link = sp.pics[0].img_url;
-          sp.display_pic_index = 0;
+          link = this._ScoutPitImages[0].img_url;
+          this.displayPicIndex = 0;
         }
       }
 
-      let el = document.getElementById(sp.team_no.toString());
+      let el = document.getElementById(this.elementId);
 
       if (el) el.replaceChildren();
 
@@ -69,7 +83,7 @@ export class ScoutPicDisplayComponent {
           if (img && img.style) {
             img.style.width = '100%';
             img.style.height = 'auto';
-            document.getElementById(sp.team_no.toString())!.appendChild(img);
+            document.getElementById(this.elementId)!.appendChild(img);
           }
         },
         {
@@ -89,8 +103,7 @@ export class ScoutPicDisplayComponent {
       scout_pit_img_id: spi.id
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      // TODO: need to emit this this.search();
-      this._ScoutPitResult.pics.forEach(p => p.default = false);
+      this._ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {
       this.gs.triggerError(err);
