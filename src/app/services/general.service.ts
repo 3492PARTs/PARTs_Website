@@ -744,6 +744,18 @@ export class GeneralService {
         }
       else
         return '';
+    else if (o instanceof Array) {
+      o.forEach(element => {
+        if (this.isObject(element))
+          if (Object.keys(element).length > 0)
+            s += `${this.objectToString(element)}`;
+          else
+            s += '';
+        else
+          s += `${element}, `;
+      });
+      //s = `${s.substring(0, s.length - 2)}\n`;
+    }
     else
       return o;
     return s;
