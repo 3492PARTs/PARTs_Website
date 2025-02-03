@@ -203,16 +203,6 @@ export class ScoutFieldSchedule implements IScoutFieldSchedule {
     scouts = '';
 }
 
-export interface IScoutQuestionType {
-    id: number;
-    scorable: string;
-}
-
-export class ScoutQuestionType implements IScoutQuestionType {
-    id = NaN;
-    scorable = '';
-}
-
 export interface IScoutQuestion {
     id: number;
     question_id: number;

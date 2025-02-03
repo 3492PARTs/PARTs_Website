@@ -1,4 +1,4 @@
-import { IScoutQuestion, IScoutQuestionType, ScoutQuestion, ScoutQuestionType } from "./scouting.models";
+import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
 
 export interface IQuestion {
     id: number;
@@ -50,7 +50,7 @@ export class Question implements IQuestion {
     height = NaN;
     icon = '';
     icon_only = false;
-    value_multiplier!: number;
+    value_multiplier = 1;
     active = 'y';
     void_ind = 'n';
     answer: any = '';
@@ -136,7 +136,6 @@ export interface IQuestionType {
     question_typ: string;
     question_typ_nm: string;
     is_list: string;
-    scout_question_type: IScoutQuestionType;
     void_ind: string;
 }
 
@@ -144,7 +143,6 @@ export class QuestionType implements IQuestionType {
     question_typ!: string;
     question_typ_nm!: string;
     is_list = 'n';
-    scout_question_type!: ScoutQuestionType;
     void_ind = 'n';
 }
 

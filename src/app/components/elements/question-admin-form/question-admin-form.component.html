@@ -126,19 +126,15 @@
       [Width]="'73px'"
     ></app-form-element>
 
-    <div
-      *ngIf="activeQuestion.question_typ?.scout_question_type?.scorable === 'y'"
+    <app-form-element
+      [Type]="'number'"
+      [LabelText]="'Value Multiplier'"
+      [(Model)]="activeQuestion.value_multiplier"
+      [Width]="'8em'"
+      [FormGroup]="true"
+      [FormGroupInline]="true"
     >
-      <app-form-element
-        [Type]="'number'"
-        [LabelText]="'Value Multiplier'"
-        [(Model)]="activeQuestion.value_multiplier"
-        [Width]="'8em'"
-        [FormGroup]="true"
-        [FormGroupInline]="true"
-      >
-      </app-form-element>
-    </div>
+    </app-form-element>
 
     <div
       *ngIf="
