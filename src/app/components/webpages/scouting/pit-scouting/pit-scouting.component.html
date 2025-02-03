@@ -129,7 +129,10 @@
       <img *ngIf="previewUrl" [src]="previewUrl" height="300" />
     </app-form-element-group>
 
-    <div *ngIf="scoutPitResponse.pics.length > 0">
+    <app-form-element-group
+      *ngIf="scoutPitResponse.pics.length > 0"
+      [LabelText]="'Images to upload'"
+    >
       <div *ngFor="let pic of scoutPitResponse.pics; let i = index">
         @if (pic.img) {
         <app-button
@@ -138,18 +141,20 @@
         ></app-button
         >{{ pic.img_title ? pic.img_title + " - " : "" }}{{ pic.img.name }}
         }
-      </div>
-    </div>
+      </div></app-form-element-group
+    >
 
-    <div *ngIf="previewImages.length > 0">
-      <p>Existing images</p>
+    <app-form-element-group
+      *ngIf="previewImages.length > 0"
+      [LabelText]="'Existing images'"
+    >
       <div *ngFor="let pic of previewImages">
         @if (pic.img_title.length > 0) {
         <p>{{ pic.img_title }}</p>
         }
         <img [src]="pic.img_url" height="300" />
       </div>
-    </div>
+    </app-form-element-group>
 
     <app-button-ribbon>
       <app-button

@@ -1,4 +1,4 @@
-import { Component, input, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import LoadImg from 'blueimp-load-image';
 import { ScoutPitResponse, ScoutPitImage } from '../../../models/scouting.models';
 import { APIService } from '../../../services/api.service';
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })
-export class ScoutPicDisplayComponent implements OnInit {
+export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   @Input() ScoutPitImages: ScoutPitImage[] = [];
 
   @Input() PitImgTyp = '';
@@ -25,6 +25,23 @@ export class ScoutPicDisplayComponent implements OnInit {
 
   ngOnInit(): void {
     this.elementId = this.gs.getNextGsId();
+    this.setImages();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'ScoutPitImages':
+          case 'PitImgTyp':
+            this.setImages();
+            break;
+        }
+      }
+    }
+  }
+
+  setImages(): void {
     this.ScoutPitImages = this.ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
     this.preview();
   }
@@ -66,9 +83,6 @@ export class ScoutPicDisplayComponent implements OnInit {
         }
       }
 
-      let el = document.getElementById(this.elementId);
-
-      if (el) el.replaceChildren();
 
       LoadImg(
         link,
@@ -76,7 +90,12 @@ export class ScoutPicDisplayComponent implements OnInit {
           if (img && img.style) {
             img.style.width = '100%';
             img.style.height = 'auto';
-            document.getElementById(this.elementId)!.appendChild(img);
+            let el = document.getElementById(this.elementId);
+
+            if (el) {
+              el.replaceChildren();
+              el.appendChild(img);
+            }
           }
         },
         {
