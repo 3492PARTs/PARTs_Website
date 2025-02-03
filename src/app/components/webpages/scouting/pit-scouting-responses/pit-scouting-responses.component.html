@@ -34,18 +34,9 @@
     [Title]="res.team_no + ' - ' + res.team_nm"
     [Width]="resultWidth"
   >
-    <app-scout-pic-display
-      [ScoutPitImages]="res.pics"
-      [PitImgTyp]="'robot-img'"
-    ></app-scout-pic-display>
-
-    <div *ngFor="let r of res.responses">
-      <p>{{ r.question }}: {{ r.answer }}</p>
-    </div>
-
-    <app-scout-pic-display
-      [ScoutPitImages]="res.pics"
-      [PitImgTyp]="'auto-path'"
-    ></app-scout-pic-display>
+    <app-pit-result-display
+      [ScoutPitResult]="res"
+      [VerticalOnly]="true"
+    ></app-pit-result-display>
   </app-box>
 </div>

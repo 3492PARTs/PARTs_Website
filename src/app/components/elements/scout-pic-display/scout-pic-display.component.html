@@ -1,18 +1,18 @@
 <div class="team-pic-wrapper">
-  <ng-container *ngIf="_ScoutPitImages && _ScoutPitImages.length > 0">
-    <div class="default-pic-btn" *ngIf="_ScoutPitImages.length > 1">
+  <ng-container *ngIf="ScoutPitImages && ScoutPitImages.length > 0">
+    <div class="default-pic-btn" *ngIf="ScoutPitImages.length > 1">
       <app-button
         [ButtonType]="'check'"
         [BackgroundColor]="
-          _ScoutPitImages[displayPicIndex].default ? 'green' : ''
+          ScoutPitImages[displayPicIndex].default ? 'green' : ''
         "
-        (FunctionCallBack)="setDefaultPic(_ScoutPitImages[displayPicIndex])"
+        (FunctionCallBack)="setDefaultPic(ScoutPitImages[displayPicIndex])"
       ></app-button>
     </div>
 
     <div class="team-pic" [id]="elementId"></div>
 
-    <div class="prev-pic" *ngIf="_ScoutPitImages.length > 1">
+    <div class="prev-pic" *ngIf="ScoutPitImages.length > 1">
       <app-button
         [ButtonType]="'collapse'"
         [Rotate]="'90deg'"
@@ -21,7 +21,7 @@
       </app-button>
     </div>
 
-    <div class="next-pic" *ngIf="_ScoutPitImages.length > 1">
+    <div class="next-pic" *ngIf="ScoutPitImages.length > 1">
       <app-button
         [ButtonType]="'collapse'"
         [Rotate]="'-90deg'"

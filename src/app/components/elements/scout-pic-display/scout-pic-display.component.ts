@@ -13,18 +13,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./scout-pic-display.component.scss']
 })
 export class ScoutPicDisplayComponent implements OnInit {
-  @Input()
-  set ScoutPitImages(spis: ScoutPitImage[]) {
-    this._ScoutPitImages = spis.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
-    this.preview();
-  }
-  _ScoutPitImages: ScoutPitImage[] = [];
+  @Input() ScoutPitImages: ScoutPitImage[] = [];
 
-  @Input() set PitImgTyp(s: string) {
-    this._PitImgTyp = s;
-    this._ScoutPitImages = this._ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
-  }
-  _PitImgTyp = '';
+  @Input() PitImgTyp = '';
 
   displayPicIndex = 0;
 
@@ -34,41 +25,43 @@ export class ScoutPicDisplayComponent implements OnInit {
 
   ngOnInit(): void {
     this.elementId = this.gs.getNextGsId();
+    this.ScoutPitImages = this.ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.preview();
   }
 
   prevImage(): void {
-    if (this.displayPicIndex - 1 < 0) this.displayPicIndex = this._ScoutPitImages.length - 1;
+    if (this.displayPicIndex - 1 < 0) this.displayPicIndex = this.ScoutPitImages.length - 1;
     else this.displayPicIndex--;
 
     this.preview(this.displayPicIndex);
   }
 
   nextImage(): void {
-    if (this.displayPicIndex + 1 > this._ScoutPitImages.length - 1) this.displayPicIndex = 0;
+    if (this.displayPicIndex + 1 > this.ScoutPitImages.length - 1) this.displayPicIndex = 0;
     else this.displayPicIndex++;
 
     this.preview(this.displayPicIndex);
   }
 
   preview(index?: number): void {
-    if (this._ScoutPitImages.length > 0) {
+    if (this.ScoutPitImages.length > 0) {
       let link = '';
 
       if (index !== undefined) {
-        link = this._ScoutPitImages[index].img_url;
+        link = this.ScoutPitImages[index].img_url;
         this.displayPicIndex = index;
       }
       else {
-        for (let i = 0; i < this._ScoutPitImages.length; i++) {
-          if (this._ScoutPitImages[i].default) {
+        for (let i = 0; i < this.ScoutPitImages.length; i++) {
+          if (this.ScoutPitImages[i].default) {
             this.displayPicIndex = i;
-            link = this._ScoutPitImages[i].img_url;
+            link = this.ScoutPitImages[i].img_url;
             break;
           }
         }
 
         if (this.gs.strNoE(link)) {
-          link = this._ScoutPitImages[0].img_url;
+          link = this.ScoutPitImages[0].img_url;
           this.displayPicIndex = 0;
         }
       }
@@ -103,7 +96,7 @@ export class ScoutPicDisplayComponent implements OnInit {
       scout_pit_img_id: spi.id
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      this._ScoutPitImages.forEach(p => p.default = false);
+      this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {
       this.gs.triggerError(err);

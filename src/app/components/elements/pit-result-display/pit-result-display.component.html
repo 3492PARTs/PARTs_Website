@@ -2,7 +2,8 @@
   class="team-results"
   [ngClass]="{
     'flex-wrap-nowrap':
-      appSize >= appSizeXLG || (isMobile() && screenSize > appSizeSM)
+      !VerticalOnly &&
+      (appSize >= appSizeXLG || (isMobile() && screenSize > appSizeSM))
   }"
 >
   <div class="team-header">
@@ -23,6 +24,7 @@
     </ng-container>
   </div>
 
+  <app-header [h]="2">Autonomous Paths</app-header>
   <app-scout-pic-display
     [ScoutPitImages]="ScoutPitResult.pics"
     [PitImgTyp]="'auto-path'"
