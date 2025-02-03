@@ -44,7 +44,7 @@ export class NavigationService {
     new Link('Season', '/scouting/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
     new Link('Field: Questions', '/scouting/scouting-admin/manage-field-questions', 'chat-question-outline'),
     new Link('Field: Question Conditions', '/scouting/scouting-admin/manage-field-question-conditions', 'code-equal'),
-    //new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
+    new Link('Field Question Aggregates', '/scouting/scouting-admin/manage-field-question-aggregates', 'sigma'),
     new Link('Field: Flows', '/scouting/scouting-admin/manage-field-flows', 'clipboard-flow-outline'),
     new Link('Field: Flow Conditions', '/scouting/scouting-admin/manage-field-flow-conditions', 'code-equal'),
     new Link('Field: Form', '/scouting/scouting-admin/manage-field-form', 'form-select'),

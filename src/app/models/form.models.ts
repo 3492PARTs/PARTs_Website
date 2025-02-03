@@ -170,7 +170,7 @@ export class QuestionAggregateType {
 
 
 export class QuestionAggregate {
-    question_aggregate_id!: number;
+    id!: number;
     field_name = '';
     question_aggregate_typ?: QuestionAggregateType;
     questions: Question[] = [];
