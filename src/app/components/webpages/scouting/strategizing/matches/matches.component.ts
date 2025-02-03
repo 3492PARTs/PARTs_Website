@@ -53,7 +53,7 @@ export class MatchesComponent implements OnInit {
 
   user = new User();
 
-  private initPromise: Promise<boolean> | undefined = undefined;
+  initPromise: Promise<boolean> | undefined = undefined;
 
   constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
     this.authService.user.subscribe(u => this.user = u);

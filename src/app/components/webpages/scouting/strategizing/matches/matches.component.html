@@ -24,6 +24,8 @@
     </div>
   </app-form-element-group>
 
+  <p *ngIf="initPromise !== undefined">Loading...</p>
+
   <app-table
     [TableCols]="matchesTableCols"
     [TableData]="matches"

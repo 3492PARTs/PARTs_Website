@@ -5,10 +5,11 @@ import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../../atoms/header/header.component";
 
 @Component({
   selector: 'app-scout-pic-display',
-  imports: [ButtonComponent, CommonModule],
+  imports: [ButtonComponent, CommonModule, HeaderComponent],
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })
@@ -16,6 +17,8 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   @Input() ScoutPitImages: ScoutPitImage[] = [];
 
   @Input() PitImgTyp = '';
+
+  @Input() Title = '';
 
   displayPicIndex = 0;
 
