@@ -9,10 +9,11 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../../../services/general.service';
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
+import { ButtonComponent } from "../../../../atoms/button/button.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -59,4 +60,15 @@ export class MetricsComponent implements OnInit {
     this.fieldResponse = copy;
   }
 
+
+  graphTeam(): void {
+    this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result) => {
+      console.log(result);
+    });
+
+    this.ss.getFieldFormFormFromCache().then(result => {
+      if (result)
+        this.fieldForm = result.field_form;
+    });
+  }
 }
