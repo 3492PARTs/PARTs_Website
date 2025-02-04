@@ -22,7 +22,7 @@
 
     <app-modal
       [Title]="scoutScheduleModalTitle"
-      [(visible)]="scoutScheduleModalVisible"
+      [(Visible)]="scoutScheduleModalVisible"
     >
       <app-form (SubmitFunction)="saveScoutFieldScheduleEntry()">
         <app-form-element-group [LabelText]="'New Entry'">
@@ -171,7 +171,7 @@
     >
     </app-table>
 
-    <app-modal [(visible)]="scheduleModalVisible" [Title]="'Schedule'">
+    <app-modal [(Visible)]="scheduleModalVisible" [Title]="'Schedule'">
       <app-form>
         <app-form-element-group>
           <app-form (SubmitFunction)="saveScheduleEntry()">

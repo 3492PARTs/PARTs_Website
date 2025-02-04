@@ -11,6 +11,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Question, Flow, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
+import { TableColType } from '../components/atoms/table/table.component';
 
 @Injectable({
   providedIn: 'root'
@@ -363,6 +364,12 @@ export class GeneralService {
       if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
     }
     return -1;
+  }
+
+  updateTableSelectList(list: TableColType[], PropertyName: string, selectList: any[]): void {
+    const l = list.find(l => l.PropertyName === PropertyName);
+    if (l)
+      l.SelectList = selectList;
   }
 
   updateObjectInArray(arr: any[], property: string, obj: any): void {
@@ -725,7 +732,7 @@ export class GeneralService {
             value.forEach(element => {
               if (this.isObject(element))
                 if (Object.keys(element).length > 0)
-                  s += `${this.objectToString(element)}, `;
+                  s += `${this.objectToString(element)}`;
                 else
                   s += '';
               else
@@ -735,10 +742,10 @@ export class GeneralService {
           }
           else if (this.isObject(value)) {
             if (Object.keys(value as Object).length > 0)
-              s += `${this.objectToString(value)}, `;
+              s += `${this.objectToString(value)}`;
             else
               s += '';
-            s = s.substring(0, s.length - 2);
+            //s = s.substring(0, s.length - 2);
           }
           else s += `${key}: ${value}\n`;
         }

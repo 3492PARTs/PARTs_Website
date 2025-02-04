@@ -7,10 +7,10 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 
 @Component({
-    selector: 'app-modal',
-    imports: [CommonModule, ButtonComponent, HeaderComponent],
-    templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss']
+  selector: 'app-modal',
+  imports: [CommonModule, ButtonComponent, HeaderComponent],
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
   private resizeTimer: number | null | undefined;
@@ -25,7 +25,7 @@ export class ModalComponent implements OnInit {
   @Input() MaxWidth = 'auto';
 
   @Input()
-  set visible(v: boolean) {
+  set Visible(v: boolean) {
     this._visible = v;
     this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
     this.setPageScrolling();
@@ -37,7 +37,7 @@ export class ModalComponent implements OnInit {
       }, 500);
     }
   }
-  @Output() visibleChange = new EventEmitter();
+  @Output() VisibleChange = new EventEmitter();
   _visible = false;
 
   @Input() zIndex = 17;
@@ -85,7 +85,7 @@ export class ModalComponent implements OnInit {
   open() {
     this._visible = true;
     this.ms.incrementModalVisibleCount();
-    this.visibleChange.emit(this._visible);
+    this.VisibleChange.emit(this._visible);
     this.setPageScrolling();
     this.clickOutsideCapture = true;
 
@@ -97,7 +97,7 @@ export class ModalComponent implements OnInit {
   close() {
     this._visible = false;
     this.ms.decrementModalVisibleCount();
-    this.visibleChange.emit(this._visible);
+    this.VisibleChange.emit(this._visible);
     this.setPageScrolling();
     this.form.forEach(elem => {
       elem.reset();

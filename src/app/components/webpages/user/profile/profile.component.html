@@ -18,7 +18,7 @@
 
       <app-modal
         [Title]="'Edit Profile Image'"
-        [(visible)]="editProfileImageModalVisible"
+        [(Visible)]="editProfileImageModalVisible"
       >
         <app-form-element
           *ngIf="!showCropper"
@@ -80,7 +80,7 @@
 
           <app-modal
             [Title]="activeAlert.subject"
-            [(visible)]="alertModalVisible"
+            [(Visible)]="alertModalVisible"
           >
             <app-form-element
               [Type]="'area'"

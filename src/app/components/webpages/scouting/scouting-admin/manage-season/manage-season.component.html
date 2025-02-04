@@ -58,7 +58,7 @@
         [ButtonType]="'main'"
         [ButtonText]="'Manage Seasons'"
         [Title]="'Manage Seasons'"
-        [(visible)]="manageSeasonModalVisible"
+        [(Visible)]="manageSeasonModalVisible"
       >
         <div class="inline-flex align-items-center padding-right-half-em">
           <app-form-element
@@ -130,7 +130,7 @@
         [ButtonType]="'main'"
         [ButtonText]="'Add Event'"
         [Title]="'Add Event'"
-        [(visible)]="manageEventsModalVisible"
+        [(Visible)]="manageEventsModalVisible"
         [MaxWidth]="'500px'"
       >
         <app-form (SubmitFunction)="saveEvent()">
@@ -277,7 +277,7 @@
         [ButtonType]="'main'"
         [ButtonText]="'Add Team'"
         [Title]="'Add Team'"
-        [(visible)]="manageTeamModalVisible"
+        [(Visible)]="manageTeamModalVisible"
         [MaxWidth]="'300px'"
       >
         <app-form (SubmitFunction)="saveTeam()">
@@ -313,9 +313,9 @@
         [ButtonType]="'main'"
         [ButtonText]="'Link Team to Event'"
         [Title]="'Link Team to Event'"
-        [visible]="linkTeamToEventModalVisible"
+        [Visible]="linkTeamToEventModalVisible"
         [MaxWidth]="'400px'"
-        (visibleChange)="showLinkTeamToEventModal($event)"
+        (VisibleChange)="showLinkTeamToEventModal($event)"
       >
         <app-form (SubmitFunction)="addEventToTeams()">
           <app-form-element
@@ -373,9 +373,9 @@
         [ButtonType]="'main'"
         [ButtonText]="'Remove Team from Event'"
         [Title]="'Remove Team from Event'"
-        [visible]="removeTeamFromEventModalVisible"
+        [Visible]="removeTeamFromEventModalVisible"
         [MaxWidth]="'400px'"
-        (visibleChange)="showRemoveTeamFromEventModal($event)"
+        (VisibleChange)="showRemoveTeamFromEventModal($event)"
       >
         <app-form (SubmitFunction)="removeEventToTeams()">
           <app-form-element
@@ -448,7 +448,7 @@
         [ButtonType]="'main'"
         [ButtonText]="'Add Match'"
         [Title]="'Add Match'"
-        [(visible)]="newMatchModalVisible"
+        [(Visible)]="newMatchModalVisible"
         [MaxWidth]="'500px'"
       >
         <app-form (SubmitFunction)="saveMatch()">

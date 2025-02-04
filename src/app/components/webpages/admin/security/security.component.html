@@ -19,8 +19,8 @@
       [ButtonType]="'main'"
       [ButtonText]="'Scouting Groups'"
       [Title]="'Scouting Groups'"
-      [(visible)]="scoutAuthGroupsModalVisible"
-      (visibleChange)="getScoutAuthGroups($event)"
+      [(Visible)]="scoutAuthGroupsModalVisible"
+      (VisibleChange)="getScoutAuthGroups($event)"
     >
       <app-form (SubmitFunction)="saveScoutAuthGroups()">
         <div class="flex justify-content-flex-end">
@@ -78,7 +78,7 @@
       >
       </app-table>
 
-      <app-modal [Title]="'Link'" [(visible)]="linksModalVisible">
+      <app-modal [Title]="'Link'" [(Visible)]="linksModalVisible">
         <app-form (SubmitFunction)="saveLink()">
           <div class="vertical-center">
             <app-form-element
@@ -135,7 +135,7 @@
   >
   </app-table>
 
-  <app-modal [Title]="'Manage Group'" [(visible)]="groupModalVisible">
+  <app-modal [Title]="'Manage Group'" [(Visible)]="groupModalVisible">
     <app-form>
       <div class="flex flex-wrap justify-content-space-between">
         <app-form-element
@@ -198,7 +198,7 @@
 
   <app-modal
     [Title]="'Manage Permission'"
-    [(visible)]="permissionsModalVisible"
+    [(Visible)]="permissionsModalVisible"
     [Width]="'300px'"
   >
     <app-form>

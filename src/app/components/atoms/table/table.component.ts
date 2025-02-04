@@ -27,10 +27,10 @@ import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 //import * as $ from 'jquery';
 
 @Component({
-    selector: 'app-table',
-    imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
-    templateUrl: './table.component.html',
-    styleUrls: ['./table.component.scss']
+  selector: 'app-table',
+  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit, OnChanges {
 
@@ -423,7 +423,7 @@ export class TableColType {
   PropertyName?: string;
   Width?: string;
   Alignment?: string;
-  SelectList?: [];
+  SelectList?: any[];
   BindingProperty?: string;
   DisplayProperty?: string;
   TrueValue?: any;

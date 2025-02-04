@@ -10,7 +10,7 @@
 >
 </app-table>
 
-<app-modal [(visible)]="flowModalVisible" [Title]="'Manage Flow'">
+<app-modal [(Visible)]="flowModalVisible" [Title]="'Manage Flow'">
   @if(activeFlow) {
   <app-form (SubmitFunction)="saveFlow()">
     <app-form-element

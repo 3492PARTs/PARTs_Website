@@ -292,13 +292,35 @@ export class FormInitialization {
 export class GraphType {
     graph_typ = '';
     graph_nm = '';
+    requires_bins = false;
+    requires_categories = false;
 }
 
-export class Graph {
-    id = NaN
-    graph_typ: GraphType | undefined = undefined;
-    name = '';
+
+export class GraphBin {
+    id = NaN;
+    graph_id = NaN;
+    bin = NaN;
+    active = 'y'
+}
+
+export class GraphCategoryAttribute {
+    id = NaN;
+    graph_category_id = NaN;
+    question: Question | undefined = undefined;
+    question_aggregate: QuestionAggregate | undefined = undefined;
+    question_condition_typ = new QuestionType();
+    value = '';
+    active = '';
+}
+
+
+export class GraphCategory {
+    id = NaN;
+    graph_id = NaN;
+    category = '';
     active = 'y';
+    graphcategoryattribute_set: GraphCategoryAttribute[] = [];
 }
 
 
@@ -308,9 +330,23 @@ export class GraphQuestionType {
 }
 
 export class GraphQuestion {
-    id = NaN
-    graph: Graph | undefined = undefined;
+    id = NaN;
+    graph_id = NaN;
     question: Question | undefined = undefined;
+    question_aggregate: QuestionAggregate | undefined = undefined;
     graph_question_typ: GraphQuestionType | undefined = undefined;
     active = 'y';
+}
+
+
+export class Graph {
+    id = NaN;
+    graph_typ: GraphType | undefined = undefined;
+    name = '';
+    scale_x = 1;
+    scale_y = 1;
+    active = 'y';
+    graphbin_set: GraphBin[] = [];
+    graphcategory_set: GraphCategory[] = [];
+    graphquestion_set: GraphQuestion[] = [];
 }
