@@ -301,6 +301,7 @@ export class GraphBin {
     id = NaN;
     graph_id = NaN;
     bin = NaN;
+    width = NaN;
     active = 'y'
 }
 

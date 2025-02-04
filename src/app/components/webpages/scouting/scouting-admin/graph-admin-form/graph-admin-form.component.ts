@@ -42,6 +42,7 @@ export class GraphAdminFormComponent implements OnInit {
 
   binTableCols: TableColType[] = [
     { PropertyName: 'bin', ColLabel: 'Bin', Type: 'number', Required: true },
+    { PropertyName: 'width', ColLabel: 'Width', Type: 'number', Required: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
