@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '../../../../../services/api.service';
-import { Graph, GraphBin, GraphCategory, GraphQuestion, GraphQuestionType, GraphType, Question, QuestionAggregate, QuestionConditionType } from '../../../../../models/form.models';
+import { Graph, GraphBin, GraphCategory, GraphCategoryAttribute, GraphQuestion, GraphQuestionType, GraphType, Question, QuestionAggregate, QuestionConditionType } from '../../../../../models/form.models';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { BoxComponent } from "../../../../atoms/box/box.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
@@ -159,6 +159,30 @@ export class GraphAdminFormComponent implements OnInit {
             break;
 
         this.activeGraph.graphcategory_set.splice(i, 1);
+      }
+    }
+  }
+
+  addCategoryAttribute(): void {
+    if (this.activeCategory) {
+      if (!this.activeCategory.graphcategoryattribute_set.find(gc => this.gs.strNoE(gc.id) && this.gs.strNoE(gc.question) && this.gs.strNoE(gc.question_condition_typ))) {
+        this.activeCategory.graphcategoryattribute_set.push(new GraphCategoryAttribute());
+      }
+    }
+  }
+
+  removeCategoryAttribute(category: GraphCategoryAttribute): void {
+    if (this.activeCategory) {
+      if (!this.gs.strNoE(category.id)) {
+        this.gs.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
+      }
+      else {
+        let i = 0;
+        for (; i < this.activeCategory.graphcategoryattribute_set.length; i++)
+          if (this.activeCategory.graphcategoryattribute_set[i].id === category.id && this.activeCategory.graphcategoryattribute_set[i].question === category.question && this.activeCategory.graphcategoryattribute_set[i].question_condition_typ === category.question_condition_typ)
+            break;
+
+        this.activeCategory.graphcategoryattribute_set.splice(i, 1);
       }
     }
   }

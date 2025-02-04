@@ -103,6 +103,7 @@ export class TableComponent implements OnInit, OnChanges {
     this.ActiveRec = rec;
     this.SetTableContainerWidth();
   }
+  @Output() SetActiveRecChange = new EventEmitter();
   FixedTableScrollColWidth = '0px';
   @ViewChild('InfoContainer', { read: ElementRef, static: true }) InfoContainer?: ElementRef;
 
@@ -242,6 +243,7 @@ export class TableComponent implements OnInit, OnChanges {
     if (this.AllowActiveRecord) {
       this.ActiveRec = Rec;
       this.SetTableContainerWidth();
+      this.SetActiveRecChange.emit(this.ActiveRec);
     }
   }
 

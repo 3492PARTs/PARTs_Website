@@ -106,7 +106,7 @@
       (RemoveRecordCallBack)="removeCategory($event)"
       [Scrollable]="true"
       [AllowActiveRecord]="true"
-      [SetActiveRec]="activeCategory"
+      [(SetActiveRec)]="activeCategory"
     >
     </app-table>
 
@@ -117,9 +117,9 @@
       [TableData]="activeCategory.graphcategoryattribute_set"
       [Width]="'100%'"
       [ShowAddButton]="true"
-      (AddRecordCallBack)="addBin()"
+      (AddRecordCallBack)="addCategoryAttribute()"
       [ShowRemoveButton]="true"
-      (RemoveRecordCallBack)="removeBin($event)"
+      (RemoveRecordCallBack)="removeCategoryAttribute($event)"
       [Scrollable]="true"
     >
     </app-table>

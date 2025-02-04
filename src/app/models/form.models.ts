@@ -311,7 +311,7 @@ export class GraphCategoryAttribute {
     question_aggregate: QuestionAggregate | undefined = undefined;
     question_condition_typ = new QuestionType();
     value = '';
-    active = '';
+    active = 'y';
 }
 
 
