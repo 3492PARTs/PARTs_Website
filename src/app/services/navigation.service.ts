@@ -53,6 +53,7 @@ export class NavigationService {
     new Link('Pit: Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
     new Link('Pit: Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
     new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
+    new Link('Graph Admin', '/scouting/scouting-admin/graph-admin-form', 'chart-box-outline'),
   ], [
     new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
     new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),

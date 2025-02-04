@@ -53,6 +53,7 @@ import { MatchPlanningComponent } from './components/webpages/scouting/strategiz
 import { ManageFieldFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component';
 import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
 import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
+import { GraphAdminFormComponent } from './components/webpages/scouting/scouting-admin/graph-admin-form/graph-admin-form.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -73,6 +74,7 @@ export const routes: Routes = [
     { path: 'scouting/scouting-admin/manage-pit-questions', title: 'Scout Admin Pit Questions', component: ManagePitQuestionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-pit-question-conditions', title: 'Scout Admin Pit Question Conditions', component: ManagePitQuestionConditionsComponent, canActivate: [authGuard] },
     { path: 'scouting/scouting-admin/manage-pit-responses', title: 'Scout Admin Pit Responses', component: ManagePitResponsesComponent, canActivate: [authGuard] },
+    { path: 'scouting/scouting-admin/graph-admin-form', title: 'Scout Admin Graph Admin', component: GraphAdminFormComponent, canActivate: [authGuard] },
     { path: 'scouting/field-responses', title: 'Field Responses', component: FieldScoutingResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/pit-responses', title: 'Pit Responses', component: ScoutPitResponsesComponent, canActivate: [authGuard] },
     { path: 'scouting/portal', title: 'Scout Portal', component: ScoutingPortalComponent, canActivate: [authGuard] },
