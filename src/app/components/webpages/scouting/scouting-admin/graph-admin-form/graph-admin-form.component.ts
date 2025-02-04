@@ -53,16 +53,16 @@ export class GraphAdminFormComponent implements OnInit {
   activeCategory: GraphCategory | undefined = undefined;
 
   categoryAttributeTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value', Required: true },
-    //{ PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'field_name' },
+    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value' },
+    { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'field_name' },
     { PropertyName: 'question_condition_typ', ColLabel: 'Condition Type', Type: 'select', DisplayProperty: 'question_condition_nm', Required: true },
     { PropertyName: 'value', ColLabel: 'Active', Type: 'text' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
   graphQuestionTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value', Required: true },
-    //{ PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'field_name' },
+    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value' },
+    { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'field_name' },
     { PropertyName: 'graph_question_typ', ColLabel: 'Question Type', Type: 'select', DisplayProperty: 'graph_question_nm' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
@@ -74,7 +74,7 @@ export class GraphAdminFormComponent implements OnInit {
       if (r === AuthCallStates.comp) {
         this.getQuestions();
         this.getGraphFormEditor();
-        //this.getQuestionAggregates();
+        this.getQuestionAggregates();
       }
     });
   }
