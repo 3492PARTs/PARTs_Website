@@ -320,6 +320,7 @@ export class GraphCategory {
     id = NaN;
     graph_id = NaN;
     category = '';
+    order = NaN;
     active = 'y';
     graphcategoryattribute_set: GraphCategoryAttribute[] = [];
 }

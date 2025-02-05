@@ -47,6 +47,7 @@ export class GraphAdminFormComponent implements OnInit {
   ];
 
   categoryTableCols: TableColType[] = [
+    { PropertyName: 'order', ColLabel: 'Order', Type: 'number', Required: true },
     { PropertyName: 'category', ColLabel: 'Category', Type: 'text', Required: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
