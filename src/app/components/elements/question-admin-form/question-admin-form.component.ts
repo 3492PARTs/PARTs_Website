@@ -43,6 +43,7 @@ export class QuestionAdminFormComponent implements OnInit {
   questionTableCols: TableColType[] = [];
   private _questionTableCols: TableColType[] = [
     { PropertyName: 'order', ColLabel: 'Order' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
     { PropertyName: 'question', ColLabel: 'Question' },
     { PropertyName: 'question_typ.question_typ_nm', ColLabel: 'Type' },
   ];
