@@ -165,6 +165,10 @@ export class GraphAdminFormComponent implements OnInit {
     }
   }
 
+  viewCategory(category: GraphCategory): void {
+    this.activeCategory = category;
+  }
+
   addCategoryAttribute(): void {
     if (this.activeCategory) {
       if (!this.activeCategory.graphcategoryattribute_set.find(gc => this.gs.strNoE(gc.id) && this.gs.strNoE(gc.question) && this.gs.strNoE(gc.question_condition_typ))) {

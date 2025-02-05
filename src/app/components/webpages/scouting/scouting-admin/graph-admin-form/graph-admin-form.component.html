@@ -106,6 +106,8 @@
       (RemoveRecordCallBack)="removeCategory($event)"
       [Scrollable]="true"
       [AllowActiveRecord]="true"
+      [ShowViewButton]="true"
+      (ViewRecordCallBack)="viewCategory($event)"
       [(SetActiveRec)]="activeCategory"
     >
     </app-table>
