@@ -1,6 +1,11 @@
 @if(Question.svg && Question.svg.length > 0) {
 <div class="svg-wrapper">
-  <div class="svg" #svgDiv [innerHTML]="Question.svg | safeHtml"></div>
+  <div
+    class="svg"
+    #svgDiv
+    [innerHTML]="Question.svg | safeHtml"
+    [ngStyle]="{ transform: Inverted ? 'scaleX(-1)' : 'scaleX(1)' }"
+  ></div>
 
   <div class="label">
     @if (Question.icon) {

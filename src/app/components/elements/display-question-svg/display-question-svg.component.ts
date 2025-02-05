@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { Question } from '../../../models/form.models';
 import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-display-question-svg',
-  imports: [SafeHTMLPipe],
+  imports: [SafeHTMLPipe, CommonModule],
   templateUrl: './display-question-svg.component.html',
   styleUrl: './display-question-svg.component.scss'
 })

@@ -161,7 +161,7 @@
           [Disabled]="
             activeFormSubTypeForm !== undefined &&
             activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
-            stopwatchSecond !== 15
+            stopwatchSecond !== autoTime
           "
           >{{ !invertedImage ? "Set Blue" : "Set Red" }}</app-button
         >
@@ -182,7 +182,7 @@
           formDisabled ||
           (activeFormSubTypeForm !== undefined &&
             activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
-            stopwatchSecond !== 15)
+            stopwatchSecond !== autoTime)
         "
         [MinWidth]="'100px'"
         (FunctionCallBack)="changeFieldInversionForTeam()"
