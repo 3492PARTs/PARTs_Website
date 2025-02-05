@@ -59,7 +59,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  stopwatchSecond = 15;
+  stopwatchSecond = 1;
   stopwatchLoopCount = 0;
 
   formElements = new QueryList<FormElementComponent>();
@@ -782,11 +782,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         const index = flow.question_answer.flow_answers.findIndex(qfa => qfa.question?.id === flowAction.question_id);
         if (index >= 0) {
           const question = flow.question_answer.flow_answers[index].question;
+          const flowQuestion = flow.flow_questions.find(fq => fq.question.id === question?.id);
           // hide current stage
-          if (question) {
+          if (question && flowQuestion) {
 
-            this.displayFlowStage(flow, this.getNextStage(flow.flow_questions, question.order), false);
-            this.displayFlowStage(flow, question.order);
+            this.displayFlowStage(flow, this.getNextStage(flow.flow_questions, flowQuestion.order), false);
+            this.displayFlowStage(flow, flowQuestion.order);
 
             found = true
           }
