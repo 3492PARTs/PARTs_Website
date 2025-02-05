@@ -294,6 +294,7 @@ export class GraphType {
     graph_nm = '';
     requires_bins = false;
     requires_categories = false;
+    requires_graph_question_typs: GraphQuestionType[] = [];
 }
 
 
