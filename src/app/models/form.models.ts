@@ -169,7 +169,8 @@ export class QuestionAggregateType {
 
 export class QuestionAggregate {
     id!: number;
-    field_name = '';
+    name = '';
+    horizontal = true;
     question_aggregate_typ?: QuestionAggregateType;
     questions: Question[] = [];
     active = 'y'
