@@ -26,8 +26,9 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
   questionAggregateModalVisible = false;
   activeQuestionAggregate = new QuestionAggregate();
   questionAggregatesTableCols: TableColType[] = [
-    { PropertyName: 'field_name', ColLabel: 'Name' },
+    { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'question_aggregate_typ.question_aggregate_nm', ColLabel: 'Aggregate Function' },
+    { PropertyName: 'horizontal', ColLabel: 'Horizontal/Vertical', Type: 'function', ColValueFunction: this.decodeHorizontal },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
@@ -137,5 +138,9 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   decodeYesNo(s: string): string {
     return this.gs.decodeYesNo(s);
+  }
+
+  decodeHorizontal(b: boolean): string {
+    return b ? 'Horizontal' : 'Vertical';
   }
 }
