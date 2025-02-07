@@ -364,3 +364,13 @@ export class Histogram {
     label = '';
     bins: HistogramBin[] = [];
 }
+
+export class PlotPoint {
+    point = NaN;
+    time = new Date();
+}
+
+export class Plot {
+    label = '';
+    points: PlotPoint[] = [];
+}

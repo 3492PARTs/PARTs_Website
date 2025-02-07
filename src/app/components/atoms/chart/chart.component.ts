@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import Chart, { ChartConfiguration, ChartData, ChartType, ChartTypeRegistry } from 'chart.js/auto';
-import { Histogram, HistogramBin } from '../../../models/form.models';
+import { Histogram, HistogramBin, Plot } from '../../../models/form.models';
 
 @Component({
   selector: 'app-chart',
@@ -49,6 +49,11 @@ export class ChartComponent implements OnInit {
         break;
       case 'ctg-histgrm':
         chartConfig = this.createCategoricalHistogramChartConfig(d as HistogramBin[]);
+        break;
+      case 'res-plot':
+        const plots = d as Plot[];
+        if (plots && plots.length > 0)
+          chartConfig = this.createScatterChartConfig(plots);
         break;
     }
 
@@ -117,4 +122,53 @@ export class ChartComponent implements OnInit {
 
     return chartConfig;
   }
+
+  private createScatterChartConfig(plots: Plot[]): ChartConfiguration {
+    let counter = 1; // Initialize a counter for linear mapping
+
+    const chartData: ChartData = {
+      datasets: plots.map(plot => ({
+        label: plot.label,
+        data: plot.points.map(point => ({
+          x: counter++, // Increment counter for each point
+          y: point.point,
+        })),
+        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        pointRadius: 5,
+        showLine: false,
+      })),
+    };
+
+    const chartConfig: ChartConfiguration = {
+      type: 'scatter',
+      data: chartData,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            type: 'linear',  // Use a linear scale
+            title: { display: true, text: 'Point Count' }, // Label appropriately
+            beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
+          },
+          y: {
+            title: { display: true, text: 'Distance' },
+            beginAtZero: true,
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const dataPoint = context.dataset.data[context.dataIndex] as { x: number; y: number };
+                return `${context.dataset.label}: ${context.formattedValue} (Point ${dataPoint.x})`; // Show point number in tooltip
+              },
+            },
+          },
+        },
+      },
+    };
+
+    return chartConfig;
+  }
+
 }
