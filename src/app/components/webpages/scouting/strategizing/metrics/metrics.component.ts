@@ -67,28 +67,6 @@ export class MetricsComponent implements OnInit {
 
   graphTeam(): void {
     this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result: Histogram[]) => {
-      //console.log(result);
-      const labels: (string)[] = [];
-
-      const data: any = {};
-
-      data['datasets'] = [];
-      result.forEach(histogram => {
-        labels.push(histogram.label);
-
-        const dataset: { label: number; data: number[]; }[] = [];
-        histogram.bins.forEach(bin => {
-          dataset.push({
-            label: bin.bin,
-            data: [bin.count]
-          });
-        });
-
-        data['datasets'].push(dataset);
-      });
-
-
-      data['labels'] = labels;
 
       this.data = result;
     });

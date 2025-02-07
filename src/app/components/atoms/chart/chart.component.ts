@@ -85,8 +85,8 @@ export class ChartComponent implements OnInit {
     }));
   }
 
-  private getUniqueBinLabels(histograms: Histogram[]): number[] {
-    const allLabels = new Set<number>();
+  private getUniqueBinLabels(histograms: Histogram[]): string[] {
+    const allLabels = new Set<string>();
     histograms.forEach(histogram => {
       histogram.bins.forEach(bin => allLabels.add(bin.bin));
     });

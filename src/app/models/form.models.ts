@@ -357,8 +357,7 @@ export class Graph {
 
 
 export class HistogramBin {
-    bin = NaN;
-    width = NaN;
+    bin = '';
     count = NaN;
 }
 export class Histogram {
