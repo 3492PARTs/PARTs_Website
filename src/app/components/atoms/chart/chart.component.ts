@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import Chart, { ChartConfiguration, ChartData, ChartType, ChartTypeRegistry } from 'chart.js/auto';
-import { Histogram } from '../../../models/form.models';
+import { Histogram, HistogramBin } from '../../../models/form.models';
 
 @Component({
   selector: 'app-chart',
@@ -47,6 +47,9 @@ export class ChartComponent implements OnInit {
           };
         }
         break;
+      case 'ctg-histgrm':
+        chartConfig = this.createCategoricalHistogramChartConfig(d as HistogramBin[]);
+        break;
     }
 
 
@@ -56,27 +59,7 @@ export class ChartComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {/*
-    this.chart = new Chart('canvas', {
-      type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [
-          {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });*/
+  ngOnInit() {
   }
 
   private createDatasets(histograms: Histogram[]): any[] { // any[] because of dynamic dataset structure
@@ -98,4 +81,40 @@ export class ChartComponent implements OnInit {
     return Array.from(allLabels);
   }
 
+  private createCategoricalHistogramChartConfig(bins: HistogramBin[]): ChartConfiguration {
+    const chartData: ChartData = {
+      labels: bins.map(bin => bin.bin), // Bin values as labels
+      datasets: [
+        {
+          label: 'Frequency', // Or a dynamic label if needed
+          data: bins.map(bin => bin.count),
+          backgroundColor: 'rgba(54, 162, 235, 0.5)', // Customize colors
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1,
+          barPercentage: 1.0,  // Makes bars touch each other
+          categoryPercentage: 1.0, // Makes bars take up full category width
+        },
+      ],
+    };
+
+    const chartConfig: ChartConfiguration = {
+      type: 'bar',
+      data: chartData,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: 'Bin Value' },
+            type: 'category', // Use 'category' for string labels
+          },
+          y: {
+            title: { display: true, text: 'Frequency' },
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+
+    return chartConfig;
+  }
 }

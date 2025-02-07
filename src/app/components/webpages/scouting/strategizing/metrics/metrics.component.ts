@@ -66,7 +66,7 @@ export class MetricsComponent implements OnInit {
 
 
   graphTeam(): void {
-    this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result: Histogram[]) => {
+    this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result) => {
 
       this.data = result;
     });
