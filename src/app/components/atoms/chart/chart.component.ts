@@ -11,42 +11,47 @@ import { Histogram } from '../../../models/form.models';
 export class ChartComponent implements OnInit {
   title = 'ng-chart';
   chart: Chart<any> | undefined = undefined;
+  @Input() GraphType = '';
 
   @Input() set Data(d: any) {
     let chartStatus = Chart.getChart('canvas'); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
     }
+    let chartConfig: ChartConfiguration | undefined = undefined;
 
-    console.log(d);
-    console.log(JSON.stringify(d));
+    switch (this.GraphType) {
+      case 'histogram':
+        const histograms = d as Histogram[];
+        if (histograms && histograms.length > 0) {
+          const chartData: ChartData = {
+            labels: histograms.map(h => h.label), // Labels for the x-axis (e.g., 'Jan', 'Feb')
+            datasets: this.createDatasets(histograms), // Create datasets dynamically
+          };
 
-    const histograms = d as Histogram[];
-
-    const chartData: ChartData = {
-      labels: histograms.map(h => h.label), // Labels for the x-axis (e.g., 'Jan', 'Feb')
-      datasets: this.createDatasets(histograms), // Create datasets dynamically
-    };
-
-    const chartConfig: ChartConfiguration = {
-      type: 'bar',
-      data: chartData,
-      options: {
-        responsive: true,
-        scales: {
-          x: {
-            title: { display: true, text: 'Month' }, // Your x-axis label
-          },
-          y: {
-            title: { display: true, text: 'Value' }, // Your y-axis label
-            beginAtZero: true,
-          },
-        },
-      },
-    };
+          chartConfig = {
+            type: 'bar',
+            data: chartData,
+            options: {
+              responsive: true,
+              scales: {
+                x: {
+                  title: { display: true, text: 'Question' }, // Your x-axis label
+                },
+                y: {
+                  title: { display: true, text: 'Occurances' }, // Your y-axis label
+                  beginAtZero: true,
+                },
+              },
+            },
+          };
+        }
+        break;
+    }
 
 
-    this.chart = new Chart('canvas', chartConfig);
+    if (chartConfig)
+      this.chart = new Chart('canvas', chartConfig);
   }
 
   constructor() { }

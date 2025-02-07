@@ -2,7 +2,7 @@
 
 <app-button (FunctionCallBack)="graphTeam()">Graph Team</app-button>
 
-<app-chart [Data]="data"></app-chart>
+<app-chart [GraphType]="'histogram'" [Data]="data"></app-chart>
 
 <app-form-element-group>
   <app-form-element [Type]="'select'" [LabelText]="'Result'" [SelectList]="fieldResponses"
