@@ -428,6 +428,7 @@ export class TableColType {
   SelectList?: any[];
   BindingProperty?: string;
   DisplayProperty?: string;
+  DisplayEmptyOption?: boolean;
   TrueValue?: any;
   FalseValue?: any;
   Type?: string;

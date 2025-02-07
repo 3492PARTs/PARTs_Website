@@ -224,7 +224,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
-            this.markRequired();
+            this.gs.triggerChange(() => this.markRequired());
             break;
           case 'Disabled':
           case 'Required':
