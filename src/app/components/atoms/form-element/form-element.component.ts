@@ -183,6 +183,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
     }
+    else if (this.Width === 'auto' && this.Type === 'number') {
+      this.Width = '100px';
+    }
     //else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
     //window.setTimeout(() => { this.change(this.MinValue); }, 1);
     //}
@@ -244,9 +247,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-    if (this.Width === 'auto' && this.Type === 'number') {
-      this.Width = '100px';
-    }
 
     this.setElementPositions();
   }
