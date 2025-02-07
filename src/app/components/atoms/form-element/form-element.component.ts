@@ -224,7 +224,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
-            this.gs.triggerChange(() => this.markRequired());
+            this.markRequired();
             break;
           case 'Disabled':
           case 'Required':
@@ -244,13 +244,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-    this.setElementPositions();
+    if (this.Width === 'auto' && this.Type === 'number') {
+      this.Width = '100px';
+    }
 
-    this.gs.triggerChange(() => {
-      if (this.Width === 'auto' && this.Type === 'number') {
-        this.Width = '100px';
-      }
-    });
+    this.setElementPositions();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -264,7 +262,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    this.setIndicatorPosition();
+    this.gs.triggerChange(() => this.setIndicatorPosition());
   }
 
   @HostListener('window:scroll', ['$event'])
