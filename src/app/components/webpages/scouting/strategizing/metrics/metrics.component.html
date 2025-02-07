@@ -2,43 +2,28 @@
 
 <app-button (FunctionCallBack)="graphTeam()">Graph Team</app-button>
 
+<app-chart [Data]="data"></app-chart>
+
 <app-form-element-group>
-  <app-form-element
-    [Type]="'select'"
-    [LabelText]="'Result'"
-    [SelectList]="fieldResponses"
-    [DisplayProperty]="'display_value'"
-    [Model]="fieldResponse"
-    (ModelChange)="setFieldResponse($event)"
-  ></app-form-element>
+  <app-form-element [Type]="'select'" [LabelText]="'Result'" [SelectList]="fieldResponses"
+    [DisplayProperty]="'display_value'" [Model]="fieldResponse"
+    (ModelChange)="setFieldResponse($event)"></app-form-element>
 </app-form-element-group>
 
 @if (fieldForm && fieldForm.img_url) {
 <div class="margin-top-1rem">
-  <div
-    #imageBackground
-    id="image-background"
-    class="flex align-items-center justify-content-center"
-  >
+  <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
     <div #imageContainer id="image-container">
-      <img
-        #image
-        id="image"
-        [src]="false ? fieldForm.inv_img_url : fieldForm.img_url"
-      />
+      <img #image id="image" [src]="false ? fieldForm.inv_img_url : fieldForm.img_url" />
       @if (fieldResponse) { @for (answer of fieldResponse.answers; track $index)
       { @if (answer.flow_answers) { @for (flow_answer of answer.flow_answers;
       track $index) { @if (flow_answer.question) {
-      <div
-        #box
-        class="box"
-        [ngStyle]="{
+      <div #box class="box" [ngStyle]="{
           top: flow_answer.question.y + '%',
           left: flow_answer.question.x + '%',
           width: flow_answer.question.width + '%',
           height: flow_answer.question.height + '%'
-        }"
-      >
+        }">
         <div class="touchpoint-wrapper">
           @if (flow_answer.value.x && flow_answer.value.y) {
           <!--
@@ -53,17 +38,13 @@
             }"
           ></div>
           -->
-          <div
-            #box
-            class="box"
-            [ngStyle]="{
+          <div #box class="box" [ngStyle]="{
               top: 'calc(' + flow_answer.value.y + '% - 4px)',
               left: 'calc(' + flow_answer.value.x + '% - 4px)',
               width: '8px',
               height: '8px',
               border: '4px solid orange'
-            }"
-          ></div>
+            }"></div>
           <!--<app-display-question-svg
             [Inverted]="false"
             [Question]="flow_answer.question"

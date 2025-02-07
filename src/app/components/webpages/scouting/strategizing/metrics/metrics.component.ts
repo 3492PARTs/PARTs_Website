@@ -10,10 +10,12 @@ import { GeneralService } from '../../../../../services/general.service';
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
+import { ChartComponent } from "../../../../atoms/chart/chart.component";
+import { Histogram } from '../../../../../models/form.models';
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent, ChartComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -23,10 +25,12 @@ export class MetricsComponent implements OnInit {
   fieldResponses: FieldResponse[] = [];
   fieldResponse!: FieldResponse;
 
+  data: any = {};
+
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
-        this.init();
+        //this.init();
       }
     });
   }
@@ -62,8 +66,31 @@ export class MetricsComponent implements OnInit {
 
 
   graphTeam(): void {
-    this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result) => {
-      console.log(result);
+    this.api.get(true, 'scouting/strategizing/graph-team/', undefined, (result: Histogram[]) => {
+      //console.log(result);
+      const labels: (string)[] = [];
+
+      const data: any = {};
+
+      data['datasets'] = [];
+      result.forEach(histogram => {
+        labels.push(histogram.label);
+
+        const dataset: { label: number; data: number[]; }[] = [];
+        histogram.bins.forEach(bin => {
+          dataset.push({
+            label: bin.bin,
+            data: [bin.count]
+          });
+        });
+
+        data['datasets'].push(dataset);
+      });
+
+
+      data['labels'] = labels;
+
+      this.data = result;
     });
 
     this.ss.getFieldFormFormFromCache().then(result => {

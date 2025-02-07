@@ -354,3 +354,14 @@ export class Graph {
     graphcategory_set: GraphCategory[] = [];
     graphquestion_set: GraphQuestion[] = [];
 }
+
+
+export class HistogramBin {
+    bin = NaN;
+    width = NaN;
+    count = NaN;
+}
+export class Histogram {
+    label = '';
+    bins: HistogramBin[] = [];
+}
