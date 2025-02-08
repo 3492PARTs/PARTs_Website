@@ -374,3 +374,13 @@ export class Plot {
     label = '';
     points: PlotPoint[] = [];
 }
+
+export class BoxAndWhiskerPlot {
+    label = '';
+    q1 = NaN;
+    q2 = NaN;
+    q3 = NaN;
+    min = NaN;
+    max = NaN;
+    outliers: number[] = [];
+}

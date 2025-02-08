@@ -30,7 +30,7 @@ export class MetricsComponent implements OnInit {
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
-        this.init();
+        //this.init();
       }
     });
   }

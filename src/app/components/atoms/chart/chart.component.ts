@@ -1,7 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import Chart, { ChartConfiguration, ChartData, ChartType, ChartTypeRegistry } from 'chart.js/auto';
-import { Histogram, HistogramBin, Plot } from '../../../models/form.models';
-
+import { Chart, ChartConfiguration, ChartData } from 'chart.js';
+import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
+import { LinearScale, CategoryScale } from 'chart.js'; // Import scales
+import { BoxAndWhiskerPlot, Histogram, HistogramBin, Plot } from '../../../models/form.models';
+Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 @Component({
   selector: 'app-chart',
   imports: [],
@@ -60,6 +62,62 @@ export class ChartComponent implements OnInit {
         if (diffPlots && diffPlots.length > 0)
           chartConfig = this.createLineChartConfig(diffPlots);
         break;
+      case 'box-wskr':
+        const boxWhiskerPlots = d as BoxAndWhiskerPlot[];
+        if (boxWhiskerPlots && boxWhiskerPlots.length > 0)
+          chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
+
+        const randomValues = (count: number, min: number, max: number, extra: number[] = []): number[] => {
+          const delta = max - min;
+          return [...Array.from({ length: count }).map(() => Math.random() * delta + min), ...extra];
+        }
+
+        const data: ChartConfiguration<'boxplot'>['data'] = {
+          labels: ['array', '{boxplot values}', 'with items', 'as outliers'],
+          datasets: [
+            {
+              label: 'Dataset 1',
+              borderWidth: 1,
+              itemRadius: 2,
+              itemStyle: 'circle',
+              itemBackgroundColor: '#000',
+              outlierBackgroundColor: '#000',
+              data: [
+                [1, 2, 3, 4, 5, 11],
+                {
+                  min: 1,
+                  q1: 2,
+                  median: 3,
+                  q3: 4,
+                  max: 5,
+                },
+                {
+                  min: 1,
+                  q1: 2,
+                  median: 3,
+                  q3: 4,
+                  max: 5,
+                  items: [1, 2, 3, 4, 5],
+                },
+                {
+                  min: 1,
+                  q1: 2,
+                  median: 3,
+                  q3: 4,
+                  max: 5,
+                  outliers: [11],
+                },
+              ],
+            },
+          ],
+        };
+
+        const cfg: ChartConfiguration<'boxplot'> = {
+          type: 'boxplot',
+          data,
+        };
+        chartConfig = cfg;
+        break;
     }
 
 
@@ -67,9 +125,12 @@ export class ChartComponent implements OnInit {
       this.chart = new Chart('canvas', chartConfig);
   }
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit() {
+    //TODO: registe onlt what is needed
   }
 
   private createDatasets(histograms: Histogram[]): any[] { // any[] because of dynamic dataset structure
@@ -219,6 +280,93 @@ export class ChartComponent implements OnInit {
           },
         },
       },
+    };
+
+    return chartConfig;
+  }
+
+  private createBoxAndWhiskerChartConfig(plots: BoxAndWhiskerPlot[]): ChartConfiguration<'boxplot'> {
+    const data = [ // Example Data. Replace with your data
+      new BoxAndWhiskerPlot(),
+      new BoxAndWhiskerPlot()
+    ];
+
+    // ... (Populate your data as in the previous example) ...
+    data[0].label = "Sample 1";
+    data[0].min = 20;
+    data[0].q1 = 30;
+    data[0].q2 = 40;
+    data[0].q3 = 50;
+    data[0].max = 60;
+    data[0].outliers = [15, 70];
+
+    data[1].label = "Sample 2";
+    data[1].min = 25;
+    data[1].q1 = 35;
+    data[1].q2 = 45;
+    data[1].q3 = 55;
+    data[1].max = 65;
+    data[1].outliers = [22, 68];
+
+    const chartData = data.map(item => ({
+      label: item.label,
+      data: {
+        min: item.min,
+        q1: item.q1,
+        median: item.q2, // Chart.js uses 'median'
+        q3: item.q3,
+        max: item.max,
+        outliers: item.outliers || [] // Store outliers for later use
+      }
+    }));
+
+    console.log(chartData);
+
+    const chartConfig: ChartConfiguration<'boxplot'> = {
+      type: 'boxplot', // Important: Use 'boxplot' chart type
+      data: {
+        datasets: chartData.map(dataset => ({ // Map over the prepared data
+          label: dataset.label,
+          data: [dataset.data], // Boxplot expects an array of data points (even if just one box)
+          borderColor: 'black',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)', // Customize colors
+          borderWidth: 1,
+          outlierBackgroundColor: 'red', // Style for outliers
+          outlierBorderColor: 'red',
+          // ... other styling options
+        })),
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Set to false to allow resizing
+        scales: {
+          y: {
+            beginAtZero: false, // Adjust as needed
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const datasetIndex = context.datasetIndex;
+                const dataPoint = chartData[datasetIndex].data;
+                const label = chartData[datasetIndex].label;
+                const value = context.parsed.y;
+
+                // Find if it's an outlier:
+                const isOutlier = chartData[datasetIndex].data.outliers.includes(value);
+
+                if (isOutlier) {
+                  return `${label}: Outlier ${value}`;
+                } else {
+                  return `${label}: ${value}`;
+                }
+
+              }
+            }
+          }
+        }
+      }
     };
 
     return chartConfig;
