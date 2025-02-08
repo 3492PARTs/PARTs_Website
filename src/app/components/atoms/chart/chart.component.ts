@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Chart, ChartConfiguration, ChartData } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-import { LinearScale, CategoryScale } from 'chart.js'; // Import scales
 import { BoxAndWhiskerPlot, Histogram, HistogramBin, Plot } from '../../../models/form.models';
-Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
+
+Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement);
+
 @Component({
   selector: 'app-chart',
   imports: [],
