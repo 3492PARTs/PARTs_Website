@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 import { BoxAndWhiskerPlot, Histogram, HistogramBin, Plot } from '../../../models/form.models';
+import { GeneralService } from '../../../services/general.service';
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement);
 
@@ -12,12 +13,13 @@ Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, Lin
   styleUrl: './chart.component.scss'
 })
 export class ChartComponent implements OnInit {
+  id = '';
   title = 'ng-chart';
   chart: Chart<any> | undefined = undefined;
   @Input() GraphType = '';
 
   @Input() set Data(d: any) {
-    let chartStatus = Chart.getChart('canvas'); // <canvas> id
+    let chartStatus = Chart.getChart(this.id); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
     }
@@ -51,7 +53,9 @@ export class ChartComponent implements OnInit {
         }
         break;
       case 'ctg-histgrm':
-        chartConfig = this.createCategoricalHistogramChartConfig(d as HistogramBin[]);
+        const ctgHist = d as HistogramBin[];
+        if (ctgHist && ctgHist.length > 0)
+          chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
         break;
       case 'res-plot':
         const plots = d as Plot[];
@@ -72,11 +76,11 @@ export class ChartComponent implements OnInit {
 
 
     if (chartConfig)
-      this.chart = new Chart('canvas', chartConfig);
+      this.chart = new Chart(this.id, chartConfig);
   }
 
-  constructor() {
-
+  constructor(private gs: GeneralService) {
+    this.id = this.gs.getNextGsId();
   }
 
   ngOnInit() {

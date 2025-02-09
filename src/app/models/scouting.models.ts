@@ -1,4 +1,4 @@
-import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow } from "./form.models";
+import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow, Graph } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
@@ -569,8 +569,12 @@ export class DashboardGraph {
     graph_id = NaN;
     graph_name = '';
     graph_nm = '';
+    graph_typ = '';
     order = NaN;
     active = 'y';
+
+    //front end only
+    data: any | undefined = undefined;
 
     constructor(graph_id = NaN, order = NaN) {
         this.graph_id = graph_id;
