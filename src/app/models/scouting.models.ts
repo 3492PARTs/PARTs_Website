@@ -563,3 +563,30 @@ export class FieldResponse {
     answers: Answer[] = [];
     display_value = '';
 }
+
+export class DashboardGraph {
+    id = NaN;
+    graph_id = NaN;
+    graph_name = '';
+    graph_nm = '';
+    order = NaN;
+    active = 'y';
+
+    constructor(graph_id = NaN, order = NaN) {
+        this.graph_id = graph_id;
+        this.order = order;
+    }
+}
+
+export class DashboardActiveTeam {
+    id = NaN;
+    team_id = NaN;
+    reference_team_id = NaN;
+}
+
+export class Dashboard {
+    id = NaN;
+    active = 'y';
+    dashboard_graphs: DashboardGraph[] = [];
+    active_team = new DashboardActiveTeam();
+}

@@ -1,3 +1,26 @@
+<app-box [Title]="'Metrics'">
+  <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.active_team.team_id"
+    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+    [BindingProperty]="'team_no'"></app-form-element>
+
+  <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.active_team.reference_team_id"
+    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+    [BindingProperty]="'team_no'"></app-form-element>
+
+  <app-form-element [Type]="'select'" [LabelText]="'Graph'" [(Model)]="graphToAdd" [SelectList]="graphs"
+    [DisplayProperty]="'name'"></app-form-element>
+  <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
+
+  @for (dashboard_graph of dashboard.dashboard_graphs; track $index) {
+  <div>{{dashboard_graph.graph_name}}</div>
+  }
+</app-box>
+
+
+
+
+
+
 <p>metrics works!</p>
 
 <app-button (FunctionCallBack)="graphTeam()">Graph Team</app-button>
