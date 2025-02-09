@@ -1,11 +1,11 @@
 <app-box [Title]="'Metrics'">
   <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.active_team.team_id"
-    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-    [BindingProperty]="'team_no'"></app-form-element>
+    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
+    [DisplayEmptyOption]="true"></app-form-element>
 
   <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.active_team.reference_team_id"
-    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-    [BindingProperty]="'team_no'"></app-form-element>
+    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
+    [DisplayEmptyOption]="true"></app-form-element>
 
   <app-form-element [Type]="'select'" [LabelText]="'Graph'" [(Model)]="graphToAdd" [SelectList]="graphs"
     [DisplayProperty]="'name'" [DisplayEmptyOption]="true"></app-form-element>
