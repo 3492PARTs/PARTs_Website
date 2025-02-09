@@ -11,6 +11,10 @@
     [DisplayProperty]="'name'"></app-form-element>
   <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
 
+  <app-button-ribbon>
+    <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
+  </app-button-ribbon>
+
   @for (dashboard_graph of dashboard.dashboard_graphs; track $index) {
   <div>{{dashboard_graph.graph_name}}</div>
   }

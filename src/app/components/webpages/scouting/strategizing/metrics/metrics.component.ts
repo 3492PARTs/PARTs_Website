@@ -14,10 +14,11 @@ import { ChartComponent } from "../../../../atoms/chart/chart.component";
 import { Graph, Histogram } from '../../../../../models/form.models';
 import { BoxComponent } from "../../../../atoms/box/box.component";
 import { BuildSeasonComponent } from "../../../media/build-season/build-season.component";
+import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent, ChartComponent, BoxComponent, BuildSeasonComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent, ChartComponent, BoxComponent, BuildSeasonComponent, ButtonRibbonComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -103,7 +104,7 @@ export class MetricsComponent implements OnInit {
     });
   }
 
-  private saveDashboard(): void {
+  saveDashboard(): void {
     this.api.post(true, 'scouting/strategizing/dashboard/', this.dashboard, (result) => {
       this.getDashboard();
     });
