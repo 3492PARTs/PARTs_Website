@@ -17,6 +17,9 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
 
   @Input() Inverted = false;
 
+  @Input() Stroke = '#ffffff';
+  @Input() Fill = '#80808087';
+
   constructor(private renderer: Renderer2) { }
 
   ngAfterViewInit(): void {
@@ -33,8 +36,8 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
 
       if (pathElement) {
         // Set the width of the SVG element
-        this.renderer.setStyle(pathElement, 'fill', '#80808087');
-        this.renderer.setStyle(pathElement, 'stroke', '#ffffff');
+        this.renderer.setStyle(pathElement, 'fill', this.Fill);
+        this.renderer.setStyle(pathElement, 'stroke', this.Stroke);
         this.renderer.setStyle(pathElement, 'stroke-width', '0.3rem');
         this.renderer.setStyle(pathElement, 'stroke-linejoin', 'round');
       }

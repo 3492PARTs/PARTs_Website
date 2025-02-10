@@ -37,7 +37,7 @@ export class ChartComponent implements OnInit {
     'rgba(0, 0, 128, 0.5)',   // Navy
     'rgba(192, 192, 192, 0.5)' // Silver
   ];
-  private datasetColors: { [label: string]: string } = {}; // Store assigned colors
+  datasetColors: { [label: string]: { backgroundColor: string, borderColor: string } } = {}; // Store assigned colors
 
   url = '';
 
@@ -82,6 +82,7 @@ export class ChartComponent implements OnInit {
         break;
       case 'ht-map':
         this.heatmaps = d as Heatmap[];
+        this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
         break;
     }
 
@@ -144,8 +145,8 @@ export class ChartComponent implements OnInit {
         const bin = histogram.bins.find(b => b.bin === label);
         return bin ? bin.count : 0; // Return count or 0 if bin is missing
       }),
-      backgroundColor: this.getDatasetColor(label), // Assign color from palette
-      borderColor: this.getDatasetColor(label).replace('0.5', '1'), // Slightly darker border
+      backgroundColor: this.getDatasetColor(label).backgroundColor, // Assign color from palette
+      borderColor: this.getDatasetColor(label).borderColor, // Slightly darker border
       borderWidth: 1,
     }));
   }
@@ -165,8 +166,8 @@ export class ChartComponent implements OnInit {
         {
           label: 'Frequency', // Or a dynamic label if needed
           data: bins.map(bin => bin.count),
-          backgroundColor: this.getDatasetColor('Frequency'), // Customize colors
-          borderColor: this.getDatasetColor('Frequency').replace('0.5', '1'),
+          backgroundColor: this.getDatasetColor('Frequency').backgroundColor, // Customize colors
+          borderColor: this.getDatasetColor('Frequency').borderColor,
           borderWidth: 1,
           barPercentage: 1.0,  // Makes bars touch each other
           categoryPercentage: 1.0, // Makes bars take up full category width
@@ -205,8 +206,8 @@ export class ChartComponent implements OnInit {
             x: counter++, // Increment counter for each point
             y: point.point,
           })),
-          pointBackgroundColor: this.getDatasetColor(plot.label), // Use getDatasetColor
-          pointBorderColor: this.getDatasetColor(plot.label).replace('0.5', '1'),
+          pointBackgroundColor: this.getDatasetColor(plot.label).backgroundColor, // Use getDatasetColor
+          pointBorderColor: this.getDatasetColor(plot.label).borderColor,
           pointRadius: 5,
           showLine: false,
         }
@@ -252,12 +253,12 @@ export class ChartComponent implements OnInit {
       datasets: plots.map(plot => {
         let counter = 0; // Initialize a counter for linear mapping
         const color = this.getDatasetColor(plot.label); // Get color *once* per dataset
-        const borderColor = color.replace('0.5', '1');
+        const borderColor = color.borderColor;
 
         return {
           label: plot.label,
           data: plot.points.map(point => ({ x: counter++, y: point.point })),
-          pointBackgroundColor: color, // Use the same color for points
+          pointBackgroundColor: color.backgroundColor, // Use the same color for points
           pointBorderColor: borderColor,
           pointRadius: 5,
           showLine: true,
@@ -320,8 +321,8 @@ export class ChartComponent implements OnInit {
               max: p.max,
             }
           }),
-          borderColor: this.getDatasetColor('Dataset 1').replace('0.5', '1'), // Example
-          backgroundColor: this.getDatasetColor('Dataset 1'),
+          borderColor: this.getDatasetColor('Dataset 1').borderColor,
+          backgroundColor: this.getDatasetColor('Dataset 1').backgroundColor,
         },
       ],
     };
@@ -347,15 +348,15 @@ export class ChartComponent implements OnInit {
     }
   }
 
-  private getDatasetColor(label: string): string {
+  private getDatasetColor(label: string): { backgroundColor: string, borderColor: string } {
     if (!this.datasetColors[label]) {
-      const availableColors = this.colorPalette.filter(color => !Object.values(this.datasetColors).includes(color));
+      const availableColors = this.colorPalette.filter(color => !Object.values(this.datasetColors).map(c => c.backgroundColor).includes(color));
       if (availableColors.length > 0) {
-        this.datasetColors[label] = availableColors[0];
+        this.datasetColors[label] = { backgroundColor: availableColors[0], borderColor: availableColors[0].replace('0.5', '1') };
       } else {
         // If all colors are used, reset and start over
         this.datasetColors = {};
-        this.datasetColors[label] = this.colorPalette[0]; // Start from the first color
+        this.datasetColors[label] = { backgroundColor: this.colorPalette[0], borderColor: this.colorPalette[0].replace('0.5', '1') }; // Start from the first color
       }
     }
     return this.datasetColors[label];
