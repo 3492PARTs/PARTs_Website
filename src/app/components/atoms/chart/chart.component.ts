@@ -25,6 +25,20 @@ export class ChartComponent implements OnInit {
     this.gs.triggerChange(() => this.adjustImage());
   }
 
+  private colorPalette: string[] = [ // Define a color palette
+    'rgba(54, 162, 235, 0.5)', // Blue
+    'rgba(255, 99, 132, 0.5)', // Red
+    'rgba(255, 206, 86, 0.5)', // Yellow
+    'rgba(75, 192, 192, 0.5)', // Teal
+    'rgba(153, 102, 255, 0.5)', // Purple
+    'rgba(255, 159, 64, 0.5)', // Orange
+    'rgba(128, 0, 128, 0.5)', // Maroon
+    'rgba(0, 128, 0, 0.5)',   // Green
+    'rgba(0, 0, 128, 0.5)',   // Navy
+    'rgba(192, 192, 192, 0.5)' // Silver
+  ];
+  private datasetColors: { [label: string]: string } = {}; // Store assigned colors
+
   url = '';
 
   heatmaps: Heatmap[] = [];
@@ -130,6 +144,9 @@ export class ChartComponent implements OnInit {
         const bin = histogram.bins.find(b => b.bin === label);
         return bin ? bin.count : 0; // Return count or 0 if bin is missing
       }),
+      backgroundColor: this.getDatasetColor(label), // Assign color from palette
+      borderColor: this.getDatasetColor(label).replace('0.5', '1'), // Slightly darker border
+      borderWidth: 1,
     }));
   }
 
@@ -148,8 +165,8 @@ export class ChartComponent implements OnInit {
         {
           label: 'Frequency', // Or a dynamic label if needed
           data: bins.map(bin => bin.count),
-          backgroundColor: 'rgba(54, 162, 235, 0.5)', // Customize colors
-          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: this.getDatasetColor('Frequency'), // Customize colors
+          borderColor: this.getDatasetColor('Frequency').replace('0.5', '1'),
           borderWidth: 1,
           barPercentage: 1.0,  // Makes bars touch each other
           categoryPercentage: 1.0, // Makes bars take up full category width
@@ -188,7 +205,8 @@ export class ChartComponent implements OnInit {
           x: counter++, // Increment counter for each point
           y: point.point,
         })),
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+        pointBackgroundColor: this.getDatasetColor(plot.label), // Use getDatasetColor
+        pointBorderColor: this.getDatasetColor(plot.label).replace('0.5', '1'),
         pointRadius: 5,
         showLine: false,
       })),
@@ -227,19 +245,26 @@ export class ChartComponent implements OnInit {
   }
 
   private createLineChartConfig(plots: Plot[]): ChartConfiguration {
-    let counter = 1; // Initialize a counter for linear mapping
+
 
     const chartData: ChartData = {
-      datasets: plots.map(plot => ({
-        label: plot.label,
-        data: plot.points.map(point => ({
-          x: counter++, // Increment counter for each point
-          y: point.point,
-        })),
-        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-        pointRadius: 5,
-        showLine: true,
-      })),
+      datasets: plots.map(plot => {
+        let counter = 1; // Initialize a counter for linear mapping
+        const color = this.getDatasetColor(plot.label); // Get color *once* per dataset
+        const borderColor = color.replace('0.5', '1');
+
+        return {
+          label: plot.label,
+          data: plot.points.map(point => ({ x: counter++, y: point.point })),
+          pointBackgroundColor: color, // Use the same color for points
+          pointBorderColor: borderColor,
+          pointRadius: 5,
+          showLine: true,
+          borderColor: borderColor, // And for the line
+          //tension: 0.4, // Add some curve if you like
+          fill: false // To prevent area fill under the line if you don't want it.
+        };
+      }),
     };
 
     const chartConfig: ChartConfiguration = {
@@ -294,6 +319,8 @@ export class ChartComponent implements OnInit {
               max: p.max,
             }
           }),
+          borderColor: this.getDatasetColor('Dataset 1').replace('0.5', '1'), // Example
+          backgroundColor: this.getDatasetColor('Dataset 1'),
         },
       ],
     };
@@ -317,5 +344,19 @@ export class ChartComponent implements OnInit {
         this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
       }
     }
+  }
+
+  private getDatasetColor(label: string): string {
+    if (!this.datasetColors[label]) {
+      const availableColors = this.colorPalette.filter(color => !Object.values(this.datasetColors).includes(color));
+      if (availableColors.length > 0) {
+        this.datasetColors[label] = availableColors[0];
+      } else {
+        // If all colors are used, reset and start over
+        this.datasetColors = {};
+        this.datasetColors[label] = this.colorPalette[0]; // Start from the first color
+      }
+    }
+    return this.datasetColors[label];
   }
 }
