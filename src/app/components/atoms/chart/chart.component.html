@@ -20,7 +20,8 @@
                       height: heatmap.question.height + '%'
                     }">
                     <app-display-question-svg [Question]="heatmap.question"></app-display-question-svg>
-                    <div class="touchpoint-wrapper">@for (point of heatmap.points; track $index) {
+                    <div class="touchpoint-wrapper">
+                        @for (point of heatmap.points; track $index) {
                         <div #box class="box" [ngStyle]="{
                           top: 'calc(' + point.y + '% - 4px)',
                           left: 'calc(' + point.x + '% - 4px)',
