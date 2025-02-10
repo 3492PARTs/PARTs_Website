@@ -1,18 +1,17 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement } from 'chart.js';
+import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 import { BoxAndWhiskerPlot, Heatmap, Histogram, HistogramBin, Plot } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { HeaderComponent } from "../header/header.component";
-import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
 
-Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement);
+Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-chart',
-  imports: [HeaderComponent, SafeHTMLPipe, CommonModule, DisplayQuestionSvgComponent],
+  imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
