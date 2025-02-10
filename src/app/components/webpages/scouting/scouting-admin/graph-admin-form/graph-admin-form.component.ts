@@ -156,10 +156,11 @@ export class GraphAdminFormComponent implements OnInit {
       }
       else {
         let i = 0;
-        for (; i < this.activeGraph.graphcategory_set.length; i++)
-          if (this.activeGraph.graphcategory_set[i].id === category.id && this.activeGraph.graphcategory_set[i].category === category.category)
+        for (; i < this.activeGraph.graphcategory_set.length; i++) {
+          const check = this.activeGraph.graphcategory_set[i];
+          if (check.category == category.category)
             break;
-
+        }
         this.activeGraph.graphcategory_set.splice(i, 1);
       }
     }
@@ -185,7 +186,7 @@ export class GraphAdminFormComponent implements OnInit {
       else {
         let i = 0;
         for (; i < this.activeCategory.graphcategoryattribute_set.length; i++)
-          if (this.activeCategory.graphcategoryattribute_set[i].id === category.id && this.activeCategory.graphcategoryattribute_set[i].question === category.question && this.activeCategory.graphcategoryattribute_set[i].question_condition_typ === category.question_condition_typ)
+          if (this.activeCategory.graphcategoryattribute_set[i].question === category.question && this.activeCategory.graphcategoryattribute_set[i].question_condition_typ === category.question_condition_typ)
             break;
 
         this.activeCategory.graphcategoryattribute_set.splice(i, 1);

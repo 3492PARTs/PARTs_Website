@@ -48,12 +48,12 @@ export class NavigationService {
     new Link('Field: Flows', '/scouting/scouting-admin/manage-field-flows', 'clipboard-flow-outline'),
     new Link('Field: Flow Conditions', '/scouting/scouting-admin/manage-field-flow-conditions', 'code-equal'),
     new Link('Field: Form', '/scouting/scouting-admin/manage-field-form', 'form-select'),
+    new Link('Field: Graphs', '/scouting/scouting-admin/graph-admin-form', 'chart-box-outline'),
     new Link('Field: Responses', '/scouting/scouting-admin/manage-field-responses', 'table-edit'),
     new Link('Pit: Questions', '/scouting/scouting-admin/manage-pit-questions', 'chat-question-outline'),
     new Link('Pit: Question Conditions', '/scouting/scouting-admin/manage-pit-question-conditions', 'code-equal'),
     new Link('Pit: Responses', '/scouting/scouting-admin/manage-pit-responses', 'table-edit'),
     new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
-    new Link('Graph Admin', '/scouting/scouting-admin/graph-admin-form', 'chart-box-outline'),
   ], [
     new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
     new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),

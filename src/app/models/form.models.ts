@@ -312,7 +312,7 @@ export class GraphCategoryAttribute {
     graph_category_id = NaN;
     question: Question | undefined = undefined;
     question_aggregate: QuestionAggregate | undefined = undefined;
-    question_condition_typ = new QuestionType();
+    question_condition_typ: QuestionType | undefined = undefined;
     value = '';
     active = 'y';
 }

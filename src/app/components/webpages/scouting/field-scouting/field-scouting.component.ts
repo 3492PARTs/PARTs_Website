@@ -59,7 +59,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   outstandingResponses: { id: number, team: number }[] = [];
 
   private stopwatchRun = false;
-  autoTime = 1;
+  autoTime = 15;
   stopwatchSecond = this.autoTime;
   stopwatchLoopCount = 0;
 
@@ -93,8 +93,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
         this.gs.triggerChange(() => {
           this.activeFormSubTypeForm?.flows.forEach(qf => {
-            const stage = this.getFirstStage(qf.flow_questions);
-            this.displayFlowStage(qf, stage);
+            if (!this.gs.strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
+              this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
+              qf.flow_conditional_on = NaN;
+            }
+            else
+              this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
           });
           this.setFullScreen(false);
         });
@@ -445,7 +449,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       // Display next stage in flow
       const nextStage = this.getNextStage(flow, flowQuestion.order);
       // reset stage
-      if (nextStage < flowQuestion.order && flow.question_answer) {
+      if (nextStage <= flowQuestion.order && flow.question_answer) {
         this.scoutFieldResponse.answers.push(flow.question_answer);
         flow.question_answer = undefined;
 
