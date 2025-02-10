@@ -55,7 +55,11 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   ];
   flowTableTriggerUpdate = false;
 
-  @Input() FlowQuestions: FlowQuestion[] = [];
+  @Input() set FlowQuestions(flowQuestions: FlowQuestion[]) {
+    this.flowQuestions = flowQuestions;
+    this.activeFlowQuestion = undefined;
+  }
+  flowQuestions: FlowQuestion[] = [];
   @Output() FlowQuestionsChange: EventEmitter<FlowQuestion[]> = new EventEmitter<FlowQuestion[]>();
   activeFlowQuestion: FlowQuestion | undefined = undefined;
 
@@ -231,7 +235,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       this.activeFlowQuestion.question.svg = svg.svg;
     }
 
-    this.FlowQuestionsChange.emit(this.FlowQuestions);
+    this.FlowQuestionsChange.emit(this.flowQuestions);
     this.activeFlowQuestion = undefined;
 
     this.reset();

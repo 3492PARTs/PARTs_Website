@@ -1,17 +1,13 @@
-@if(Question.svg && Question.svg.length > 0) {
+@if(question.svg && question.svg.length > 0) {
 <div class="svg-wrapper">
-  <div
-    class="svg"
-    #svgDiv
-    [innerHTML]="Question.svg | safeHtml"
-    [ngStyle]="{ transform: Inverted ? 'scaleX(-1)' : 'scaleX(1)' }"
-  ></div>
+  <div class="svg" #svgDiv [innerHTML]="question.svg | safeHtml"
+    [ngStyle]="{ transform: Inverted ? 'scaleX(-1)' : 'scaleX(1)' }"></div>
 
   <div class="label">
-    @if (Question.icon) {
-    <span class="mdi icon mdi-{{ Question.icon }}"></span>
-    } @if (!Question.icon_only) {
-    <p>{{ Question.question }}</p>
+    @if (question.icon) {
+    <span class="mdi icon mdi-{{ question.icon }}"></span>
+    } @if (!question.icon_only) {
+    <p>{{ question.question }}</p>
     }
   </div>
 </div>

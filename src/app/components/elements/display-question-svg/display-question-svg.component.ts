@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Rend
 import { Question } from '../../../models/form.models';
 import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
   selector: 'app-display-question-svg',
@@ -11,8 +12,14 @@ import { CommonModule } from '@angular/common';
 })
 export class DisplayQuestionSvgComponent implements AfterViewInit {
 
-  @Input() Question = new Question();
+  @Input() set Question(q: Question) {
+    this.question = q;
+    this.gs.triggerChange(() => this.setSvgAttributes());
+  }
   @Output() QuestionChange = new EventEmitter<any>();
+
+  question = new Question();
+
   @ViewChild('svgDiv', { read: ElementRef, static: false }) svgDiv: ElementRef | undefined = undefined;
 
   @Input() Inverted = false;
@@ -20,9 +27,13 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
   @Input() Stroke = '#ffffff';
   @Input() Fill = '#80808087';
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
   ngAfterViewInit(): void {
+    this.setSvgAttributes();
+  }
+
+  private setSvgAttributes(): void {
     if (this.svgDiv) {
       // Get the SVG element within the container
       const svgElement = this.svgDiv.nativeElement.querySelector('svg');
@@ -69,7 +80,7 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
   }
 
   change(answer: any): void {
-    this.Question.answer = answer;
-    this.QuestionChange.emit(this.Question);
+    this.question.answer = answer;
+    this.QuestionChange.emit(this.question);
   }
 }
