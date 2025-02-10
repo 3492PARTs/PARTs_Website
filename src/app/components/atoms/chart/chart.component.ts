@@ -196,20 +196,21 @@ export class ChartComponent implements OnInit {
   }
 
   private createScatterChartConfig(plots: Plot[]): ChartConfiguration {
-    let counter = 1; // Initialize a counter for linear mapping
-
     const chartData: ChartData = {
-      datasets: plots.map(plot => ({
-        label: plot.label,
-        data: plot.points.map(point => ({
-          x: counter++, // Increment counter for each point
-          y: point.point,
-        })),
-        pointBackgroundColor: this.getDatasetColor(plot.label), // Use getDatasetColor
-        pointBorderColor: this.getDatasetColor(plot.label).replace('0.5', '1'),
-        pointRadius: 5,
-        showLine: false,
-      })),
+      datasets: plots.map(plot => {
+        let counter = 0; // Initialize a counter for linear mapping
+        return {
+          label: plot.label,
+          data: plot.points.map(point => ({
+            x: counter++, // Increment counter for each point
+            y: point.point,
+          })),
+          pointBackgroundColor: this.getDatasetColor(plot.label), // Use getDatasetColor
+          pointBorderColor: this.getDatasetColor(plot.label).replace('0.5', '1'),
+          pointRadius: 5,
+          showLine: false,
+        }
+      }),
     };
 
     const chartConfig: ChartConfiguration = {
@@ -249,7 +250,7 @@ export class ChartComponent implements OnInit {
 
     const chartData: ChartData = {
       datasets: plots.map(plot => {
-        let counter = 1; // Initialize a counter for linear mapping
+        let counter = 0; // Initialize a counter for linear mapping
         const color = this.getDatasetColor(plot.label); // Get color *once* per dataset
         const borderColor = color.replace('0.5', '1');
 

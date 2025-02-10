@@ -582,15 +582,11 @@ export class DashboardGraph {
     }
 }
 
-export class DashboardActiveTeam {
-    id = NaN;
-    team_id = NaN;
-    reference_team_id = NaN;
-}
 
 export class Dashboard {
     id = NaN;
     active = 'y';
     dashboard_graphs: DashboardGraph[] = [];
-    active_team = new DashboardActiveTeam();
+    team_id = NaN;
+    reference_team_id = NaN;
 }

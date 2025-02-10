@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { APIService } from '../../../../../services/api.service';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
-import { Dashboard, DashboardActiveTeam, DashboardGraph, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
+import { Dashboard, DashboardGraph, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
@@ -121,16 +121,15 @@ export class MetricsComponent implements OnInit {
     this.api.get(true, 'scouting/strategizing/dashboard/', undefined, (result: Dashboard) => {
       this.dashboard = result;
       this.filterGraphs();
-      if (!this.dashboard.active_team)
-        this.dashboard.active_team = new DashboardActiveTeam();
 
       let i = 0;
-      this.dashboard.dashboard_graphs.forEach(dg => {
-        this.gs.triggerChange(() => {
-          this.graphTeam(dg.graph_id);
-        }, i * 500);
-        i++;
-      });
+      if (!this.gs.strNoE(this.dashboard.team_id))
+        this.dashboard.dashboard_graphs.forEach(dg => {
+          this.gs.triggerChange(() => {
+            this.graphTeam(dg.graph_id);
+          }, i * 500);
+          i++;
+        });
     });
   }
 
@@ -162,8 +161,8 @@ export class MetricsComponent implements OnInit {
   private graphTeam(graphId: number): void {
     this.api.get(true, 'scouting/strategizing/graph-team/', {
       graph_id: graphId,
-      team_id: this.dashboard.active_team.team_id,
-      reference_team_id: this.dashboard.active_team.reference_team_id
+      team_id: this.dashboard.team_id,
+      reference_team_id: this.dashboard.reference_team_id
     }, (result) => {
       this.dashboard.dashboard_graphs[this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId)].data = result;
     });
