@@ -23,6 +23,9 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   points: { x: number, y: number }[] = [];
   private draggingPoint: { x: number, y: number } | null = null;
 
+  @Input() Stroke = '#ffffff';
+  @Input() Fill = '#80808087';
+
   @Input() set ImageUrl(s: string) {
     this.url = s;
     this.gs.triggerChange(() => this.adjustImage(), 5);
@@ -164,7 +167,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     // const svg = this.mySvg.nativeElement.outerHTML; // Get the entire SVG content
     const svg = `
       <svg width="${pathBounds.width}" height="${pathBounds.height}" viewBox="${pathBounds.x} ${pathBounds.y} ${pathBounds.width} ${pathBounds.height}" xmlns="http://www.w3.org/2000/svg">
-        <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="lightblue" stroke="black" />
+        <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="${this.Fill}" stroke="${this.Stroke}" />
       </svg>
     `
     if (svg.length > 2000) {

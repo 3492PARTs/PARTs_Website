@@ -56,7 +56,7 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
       this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
         const target = event.target as SVGElement;
         if (target.tagName === 'path') {
-          console.log('Path clicked!');
+          //console.log('Path clicked!');
           // Add your desired functionality here
           this.click(event);
         }

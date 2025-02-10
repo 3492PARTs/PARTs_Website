@@ -14,7 +14,7 @@
     @if (activeFlowQuestion) {
     <svg #mySvg (click)="handleClick($event)" (mousemove)="handleMouseMove($event)"
       (mousedown)="handleMouseDown($event)" (mouseup)="handleMouseUp()">
-      <path #myPath d="" fill="lightblue" stroke="black" pointer-events="all" />
+      <path #myPath d="" [attr.fill]="Fill" [attr.stroke]="Stroke" pointer-events="all" />
       @for (point of points; track $index) {
       <g>
         <circle [attr.cx]="point.x" [attr.cy]="point.y" r="5" fill="red" (mousedown)="startDragging(point)"
