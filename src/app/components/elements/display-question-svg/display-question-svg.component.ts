@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2, ViewChild } from '@angular/core';
 import { Question } from '../../../models/form.models';
 import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { GeneralService } from '../../../services/general.service';
   templateUrl: './display-question-svg.component.html',
   styleUrl: './display-question-svg.component.scss'
 })
-export class DisplayQuestionSvgComponent implements AfterViewInit {
+export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 
   @Input() set Question(q: Question) {
     this.question = q;
@@ -27,10 +27,19 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
   @Input() Stroke = '#ffffff';
   @Input() Fill = '#80808087';
 
+  private clickListener: (() => void) | null = null; // Store the listener function
+
   constructor(private renderer: Renderer2, private gs: GeneralService) { }
 
   ngAfterViewInit(): void {
     this.setSvgAttributes();
+  }
+
+  ngOnDestroy(): void {
+    if (this.clickListener) {
+      this.clickListener(); // Call the listener function to remove it
+      this.clickListener = null; // Reset the listener reference
+    }
   }
 
   private setSvgAttributes(): void {
@@ -53,14 +62,14 @@ export class DisplayQuestionSvgComponent implements AfterViewInit {
         this.renderer.setStyle(pathElement, 'stroke-linejoin', 'round');
       }
 
-      this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
-        const target = event.target as SVGElement;
-        if (target.tagName === 'path') {
-          //console.log('Path clicked!');
-          // Add your desired functionality here
-          this.click(event);
-        }
-      });
+      if (!this.clickListener) { // Check if listener already exists
+        this.clickListener = this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
+          const target = event.target as SVGElement;
+          if (target.tagName === 'path') {
+            this.click(event);
+          }
+        });
+      }
     }
   }
 
