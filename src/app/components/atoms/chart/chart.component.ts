@@ -3,20 +3,21 @@ import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineC
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 import { BoxAndWhiskerPlot, Histogram, HistogramBin, Plot } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
+import { HeaderComponent } from "../header/header.component";
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement);
 
 @Component({
   selector: 'app-chart',
-  imports: [],
+  imports: [HeaderComponent],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
 export class ChartComponent implements OnInit {
   id = '';
-  title = 'ng-chart';
+  @Input() ChartTitle = '';
   chart: Chart<any> | undefined = undefined;
-  @Input() GraphType = '';
+  @Input() ChartType = '';
 
   @Input() set Data(d: any) {
     let chartStatus = Chart.getChart(this.id); // <canvas> id
@@ -25,7 +26,7 @@ export class ChartComponent implements OnInit {
     }
     let chartConfig: ChartConfiguration | undefined = undefined;
 
-    switch (this.GraphType) {
+    switch (this.ChartType) {
       case 'histogram':
         const histograms = d as Histogram[];
         if (histograms && histograms.length > 0) {

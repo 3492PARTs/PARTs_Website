@@ -1,3 +1,6 @@
 <div>
+    @if (ChartTitle.length > 0) {
+    <app-header [h]="1">{{ChartTitle}}</app-header>
+    }
     <canvas [id]="id">{{chart}}</canvas>
 </div>

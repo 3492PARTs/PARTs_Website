@@ -1,37 +1,31 @@
 <app-box [Title]="'Metrics'">
-  <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.active_team.team_id"
-    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-    [DisplayEmptyOption]="true"></app-form-element>
+  <app-form-element-group [LabelText]="'Dashboard Configuration'">
+    <div class="flex align-items-baseline gap-1rem">
+      <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd" [SelectList]="graphs"
+        [DisplayProperty]="'name'" [DisplayEmptyOption]="true" [MinWidth]="'200px'"></app-form-element>
+      <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
+    </div>
+    <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.active_team.team_id"
+      [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
+      [DisplayEmptyOption]="true"></app-form-element>
 
-  <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.active_team.reference_team_id"
-    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-    [DisplayEmptyOption]="true"></app-form-element>
+    <app-form-element [Type]="'select'" [LabelText]="'Reference Team'"
+      [(Model)]="dashboard.active_team.reference_team_id" [SelectList]="teams" [DisplayProperty]="'team_no'"
+      [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'" [DisplayEmptyOption]="true"></app-form-element>
 
-  <app-form-element [Type]="'select'" [LabelText]="'Graph'" [(Model)]="graphToAdd" [SelectList]="graphs"
-    [DisplayProperty]="'name'" [DisplayEmptyOption]="true"></app-form-element>
-  <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
-
-  <app-button-ribbon>
-    <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
-  </app-button-ribbon>
+    <app-button-ribbon>
+      <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
+    </app-button-ribbon>
+  </app-form-element-group>
 
   @for (dashboard_graph of dashboard.dashboard_graphs; track $index) {
-  <div>{{dashboard_graph.graph_name}}
-    <app-chart [GraphType]="dashboard_graph.graph_typ" [Data]="dashboard_graph.data"></app-chart>
+  <div>
+    <app-chart [ChartTitle]="dashboard_graph.graph_name" [ChartType]="dashboard_graph.graph_typ"
+      [Data]="dashboard_graph.data"></app-chart>
   </div>
   }
 </app-box>
 
-
-
-
-
-
-<p>metrics works!</p>
-
-<!--<app-button (FunctionCallBack)="graphTeam(2)">Graph Team</app-button>-->
-
-<app-chart [GraphType]="'histogram'" [Data]="data"></app-chart>
 
 <app-form-element-group>
   <app-form-element [Type]="'select'" [LabelText]="'Result'" [SelectList]="fieldResponses"
