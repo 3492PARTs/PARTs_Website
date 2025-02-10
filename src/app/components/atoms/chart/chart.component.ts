@@ -60,7 +60,7 @@ export class ChartComponent implements OnInit {
           chartConfig = this.createHistogramChartConfig(histograms);
         }
         break;
-      case 'ctg-histgrm':
+      case 'ctg-hstgrm':
         const ctgHist = d as HistogramBin[];
         if (ctgHist && ctgHist.length > 0)
           chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
