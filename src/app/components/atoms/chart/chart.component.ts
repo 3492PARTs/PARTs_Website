@@ -1,15 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-import { BoxAndWhiskerPlot, Histogram, HistogramBin, Plot } from '../../../models/form.models';
+import { BoxAndWhiskerPlot, Heatmap, Histogram, HistogramBin, Plot } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { HeaderComponent } from "../header/header.component";
+import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
+import { CommonModule } from '@angular/common';
+import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement);
 
 @Component({
   selector: 'app-chart',
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, SafeHTMLPipe, CommonModule, DisplayQuestionSvgComponent],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
@@ -18,6 +21,17 @@ export class ChartComponent implements OnInit {
   @Input() ChartTitle = '';
   chart: Chart<any> | undefined = undefined;
   @Input() ChartType = '';
+  @Input() set ChartImgUrl(s: string) {
+    this.url = s;
+    this.gs.triggerChange(() => this.adjustImage());
+  }
+
+  url = '';
+
+  heatmaps: Heatmap[] = [];
+
+  private resizeTimer: number | null | undefined;
+  @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
     let chartStatus = Chart.getChart(this.id); // <canvas> id
@@ -30,27 +44,7 @@ export class ChartComponent implements OnInit {
       case 'histogram':
         const histograms = d as Histogram[];
         if (histograms && histograms.length > 0) {
-          const chartData: ChartData = {
-            labels: histograms.map(h => h.label), // Labels for the x-axis (e.g., 'Jan', 'Feb')
-            datasets: this.createDatasets(histograms), // Create datasets dynamically
-          };
-
-          chartConfig = {
-            type: 'bar',
-            data: chartData,
-            options: {
-              responsive: true,
-              scales: {
-                x: {
-                  title: { display: true, text: 'Question' }, // Your x-axis label
-                },
-                y: {
-                  title: { display: true, text: 'Occurances' }, // Your y-axis label
-                  beginAtZero: true,
-                },
-              },
-            },
-          };
+          chartConfig = this.createHistogramChartConfig(histograms);
         }
         break;
       case 'ctg-histgrm':
@@ -73,6 +67,9 @@ export class ChartComponent implements OnInit {
         if (boxWhiskerPlots && boxWhiskerPlots.length > 0)
           chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
         break;
+      case 'ht-map':
+        this.heatmaps = d as Heatmap[];
+        break;
     }
 
 
@@ -80,12 +77,50 @@ export class ChartComponent implements OnInit {
       this.chart = new Chart(this.id, chartConfig);
   }
 
-  constructor(private gs: GeneralService) {
+  constructor(private gs: GeneralService, private renderer: Renderer2) {
     this.id = this.gs.getNextGsId();
   }
 
   ngOnInit() {
     //TODO: registe onlt what is needed
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.adjustImage();
+    }, 200);
+  }
+
+
+  private createHistogramChartConfig(histograms: Histogram[]): ChartConfiguration {
+    const chartData: ChartData = {
+      labels: histograms.map(h => h.label), // Labels for the x-axis (e.g., 'Jan', 'Feb')
+      datasets: this.createDatasets(histograms), // Create datasets dynamically
+    };
+
+    const chartConfig: ChartConfiguration = {
+      type: 'bar',
+      data: chartData,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            title: { display: true, text: 'Question' }, // Your x-axis label
+          },
+          y: {
+            title: { display: true, text: 'Occurances' }, // Your y-axis label
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+
+    return chartConfig;
   }
 
   private createDatasets(histograms: Histogram[]): any[] { // any[] because of dynamic dataset structure
@@ -272,4 +307,16 @@ export class ChartComponent implements OnInit {
     return cfg;
   }
 
+  private adjustImage(): void {
+    if (this.image) {
+      if (window.innerWidth > window.innerHeight) {
+        this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
+        this.renderer.setStyle(this.image.nativeElement, 'height', '70vh');
+      }
+      else {
+        this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
+      }
+    }
+  }
 }

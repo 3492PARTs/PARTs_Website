@@ -34,6 +34,7 @@ export class MetricsComponent implements OnInit {
   teams: Team[] = [];
   graphs: Graph[] = [];
   graphToAdd: Graph | undefined = undefined;
+  chartImageUrl = '';
 
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
     this.authService.authInFlight.subscribe(r => {
@@ -48,6 +49,15 @@ export class MetricsComponent implements OnInit {
   }
 
   private init(): void {
+
+    this.ss.getFieldFormFormFromCache().then(result => {
+      if (result) {
+        this.fieldForm = result.field_form;
+        this.chartImageUrl = this.fieldForm.img_url;
+      }
+      this.gs.decrementOutstandingCalls();
+    });
+
     this.gs.incrementOutstandingCalls();
     this.ss.getTeamsFromCache().then(result => {
       this.teams = result;
@@ -63,8 +73,10 @@ export class MetricsComponent implements OnInit {
     });
 
     this.ss.getFieldFormFormFromCache().then(result => {
-      if (result)
+      if (result) {
         this.fieldForm = result.field_form;
+        this.chartImageUrl = this.fieldForm.img_url;
+      }
     });
   }
 
@@ -131,5 +143,13 @@ export class MetricsComponent implements OnInit {
     }, (result) => {
       this.dashboard.dashboard_graphs[this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId)].data = result;
     });
+  }
+
+  increment(): void {
+
+  }
+
+  decrement(): void {
+
   }
 }

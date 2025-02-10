@@ -384,3 +384,13 @@ export class BoxAndWhiskerPlot {
     max = NaN;
     outliers: number[] = [];
 }
+
+export class HeatMapPoint {
+    x = NaN;
+    y = NaN;
+}
+
+export class Heatmap {
+    question = new Question();
+    points: HeatMapPoint[] = [];
+}
