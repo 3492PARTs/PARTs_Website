@@ -106,6 +106,7 @@ export class MetricsComponent implements OnInit {
         this.gs.triggerChange(() => {
           this.graphTeam(dg.graph_id);
         }, i * 500);
+        i++;
       });
     });
   }
