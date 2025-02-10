@@ -146,11 +146,41 @@ export class MetricsComponent implements OnInit {
     });
   }
 
-  increment(): void {
-
+  hideMinus(rec: DashboardGraph): boolean {
+    return rec.order === 1;
   }
 
-  decrement(): void {
+  hidePlus(rec: DashboardGraph): boolean {
+    return rec.order === this.dashboard.dashboard_graphs.length;
+  }
 
+  incrementOrder(rec: DashboardGraph): void {
+    let i = 0;
+    for (; i < this.dashboard.dashboard_graphs.length; i++) {
+      if (this.dashboard.dashboard_graphs[i].order === rec.order) {
+        break;
+      }
+    }
+
+    const selection = this.dashboard.dashboard_graphs[i];
+    selection.order++;
+    this.dashboard.dashboard_graphs[i + 1].order--;
+    this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i + 1];
+    this.dashboard.dashboard_graphs[i + 1] = selection;
+  }
+
+  decrementOrder(rec: DashboardGraph): void {
+    let i = 0;
+    for (; i < this.dashboard.dashboard_graphs.length; i++) {
+      if (this.dashboard.dashboard_graphs[i].order === rec.order) {
+        break;
+      }
+    }
+
+    const selection = this.dashboard.dashboard_graphs[i];
+    selection.order--;
+    this.dashboard.dashboard_graphs[i - 1].order++;
+    this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i - 1];
+    this.dashboard.dashboard_graphs[i - 1] = selection;
   }
 }
