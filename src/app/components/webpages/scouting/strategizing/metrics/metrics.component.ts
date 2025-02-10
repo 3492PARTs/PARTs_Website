@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { APIService } from '../../../../../services/api.service';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { Dashboard, DashboardActiveTeam, DashboardGraph, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
@@ -6,7 +6,7 @@ import { ScoutingService } from '../../../../../services/scouting.service';
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { CommonModule } from '@angular/common';
-import { GeneralService } from '../../../../../services/general.service';
+import { AppSize, GeneralService } from '../../../../../services/general.service';
 import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
 import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
@@ -36,6 +36,14 @@ export class MetricsComponent implements OnInit {
   graphToAdd: Graph | undefined = undefined;
   chartImageUrl = '';
 
+  appSize = AppSize.XS;
+  appSizeSM = AppSize.SM;
+  appSizeXLG = AppSize.XLG;
+  appSize_3XLG = AppSize._3XLG;
+  appSize_5XLG = AppSize._5XLG;
+  appSize_7XLG = AppSize._7XLG;
+  private resizeTimer: number | null | undefined;
+
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
@@ -45,7 +53,22 @@ export class MetricsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateAppSize();
+  }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.resizeTimer != null) {
+      window.clearTimeout(this.resizeTimer);
+    }
+
+    this.resizeTimer = window.setTimeout(() => {
+      this.updateAppSize();
+    }, 200);
+  }
+
+  private updateAppSize(): void {
+    this.appSize = this.gs.getAppSize();
   }
 
   private init(): void {
