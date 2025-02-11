@@ -25,10 +25,9 @@
     }">
     @for (dashboard_graph of dashboard.dashboard_graphs; track $index) {
     <ng-template #graph>
-      <app-chart [ChartTitle]="dashboard_graph.graph_name" [ChartType]="dashboard_graph.graph_typ"
-        [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl" [XScaleMin]="dashboard_graph.x_scale_min"
-        [XScaleMax]="dashboard_graph.x_scale_max" [YScaleMin]="dashboard_graph.y_scale_min"
-        [YScaleMax]="dashboard_graph.y_scale_max"></app-chart>
+      <app-chart [ChartType]="dashboard_graph.graph_typ" [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl"
+        [XScaleMin]="dashboard_graph.x_scale_min" [XScaleMax]="dashboard_graph.x_scale_max"
+        [YScaleMin]="dashboard_graph.y_scale_min" [YScaleMax]="dashboard_graph.y_scale_max"></app-chart>
     </ng-template>
 
     <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
@@ -36,6 +35,7 @@
         @if (!dashboard_graph.data) {
         <app-loading [Loading]="true" [Height]="'250px'"></app-loading>
         }
+        <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
         <ng-container *ngTemplateOutlet="graph"></ng-container>
       </div>
 

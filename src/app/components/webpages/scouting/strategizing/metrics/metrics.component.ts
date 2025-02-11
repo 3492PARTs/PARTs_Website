@@ -15,10 +15,11 @@ import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ri
 import { FullScreenDirective } from '../../../../../directives/full-screen/full-screen.directive';
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
 import { LoadingComponent } from "../../../../atoms/loading/loading.component";
+import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
