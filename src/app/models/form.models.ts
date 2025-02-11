@@ -21,6 +21,7 @@ export interface IQuestion {
     active: string;
     void_ind: string;
     answer: any;
+    short_display_value: string;
     display_value: string;
 
     questionoption_set: IQuestionOption[];
@@ -54,6 +55,7 @@ export class Question implements IQuestion {
     active = 'y';
     void_ind = 'n';
     answer: any = '';
+    short_display_value = '';
     display_value = '';
 
     questionoption_set: QuestionOption[] = [];

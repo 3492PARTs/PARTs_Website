@@ -58,7 +58,7 @@ export class GraphAdminFormComponent implements OnInit {
   activeCategory: GraphCategory | undefined = undefined;
 
   categoryAttributeTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value', DisplayEmptyOption: true },
+    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', DisplayEmptyOption: true },
     { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'name', DisplayEmptyOption: true },
     { PropertyName: 'question_condition_typ', ColLabel: 'Condition Type', Type: 'select', DisplayProperty: 'question_condition_nm', Required: true },
     { PropertyName: 'value', ColLabel: 'Condition Value', Type: 'text' },
@@ -66,7 +66,7 @@ export class GraphAdminFormComponent implements OnInit {
   ];
 
   graphQuestionTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'display_value', DisplayEmptyOption: true },
+    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', DisplayEmptyOption: true },
     { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'name', DisplayEmptyOption: true },
     { PropertyName: 'graph_question_typ', ColLabel: 'Question Type', Type: 'select', DisplayProperty: 'graph_question_nm', DisplayEmptyOption: true },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },

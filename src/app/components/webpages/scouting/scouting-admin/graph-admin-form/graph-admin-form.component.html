@@ -35,19 +35,19 @@
     <br>
 
     <app-form-element [LabelText]="'X Scale Min'" [(Model)]="activeGraph.x_scale_min" [Required]="true"
-      [Type]="'number'" [FormGroupInline]="true" [MinWidth]="'145px'">
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
     </app-form-element>
 
     <app-form-element [LabelText]="'X Scale Max'" [(Model)]="activeGraph.x_scale_max" [Required]="true"
-      [Type]="'number'" [FormGroupInline]="true" [MinWidth]="'145px'">
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
     </app-form-element>
 
     <app-form-element [LabelText]="'Y Scale Min'" [(Model)]="activeGraph.y_scale_min" [Required]="true"
-      [Type]="'number'" [FormGroupInline]="true" [MinWidth]="'145px'">
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
     </app-form-element>
 
     <app-form-element [LabelText]="'Y Scale Max'" [(Model)]="activeGraph.y_scale_max" [Required]="true"
-      [Type]="'number'" [FormGroupInline]="true" [MinWidth]="'145px'">
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
     </app-form-element>
 
     @if (activeGraph.graph_typ && activeGraph.graph_typ.requires_bins) {
