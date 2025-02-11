@@ -5,7 +5,7 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
-import { QuestionAggregateType, QuestionAggregate, Question } from '../../../models/form.models';
+import { QuestionAggregateType, QuestionAggregate, Question, QuestionAggregateQuestion, QuestionCondition, QuestionConditionType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService } from '../../../services/general.service';
@@ -23,6 +23,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
   // question aggregates sub page
   questionAggregateTypes: QuestionAggregateType[] = [];
   questionAggregates: QuestionAggregate[] = [];
+  //questionConditionTypes: QuestionConditionType[] = [];
   questionAggregateModalVisible = false;
   activeQuestionAggregate = new QuestionAggregate();
   questionAggregatesTableCols: TableColType[] = [
@@ -32,15 +33,14 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
 
-  questions: Question[] = [];
-  questionAggQuestionList: Question[] = [];
-  questionToAddToAgg: Question | undefined = undefined;;
   questionAggregateQuestionsTableCols: TableColType[] = [
-    { PropertyName: 'display_value', ColLabel: 'Question' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
+    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', Required: true },
+    { PropertyName: 'question_condition_typ', ColLabel: 'Condition Type', Type: 'select', DisplayProperty: 'question_condition_nm' },
+    { PropertyName: 'condition_value', ColLabel: 'Condition Value', Type: 'text' },
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -48,6 +48,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
         this.getQuestions();
         this.getQuestionAggregateTypes();
         this.getQuestionAggregates();
+        this.getQuestionConditionTypes();
       }
     });
   }
@@ -77,10 +78,22 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     });
   }
 
+  getQuestionConditionTypes(): void {
+    this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
+      if (this.gs.checkResponse(result)) {
+        //console.log(result);
+        //this.questionConditionTypes = result;
+        this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
+      }
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
   showQuestionAggregateModal(qa?: QuestionAggregate) {
     this.questionAggregateModalVisible = true;
     this.activeQuestionAggregate = this.gs.cloneObject(qa ? qa : new QuestionAggregate());
-    this.buildQuestionAggQuestionList();
+    //this.buildQuestionAggQuestionList();
   }
 
   compareQuestionAggregateTypes(qat1: QuestionAggregateType, qat2: QuestionAggregateType): boolean {
@@ -92,37 +105,39 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
       form_typ: this.FormTyp,
       active: 'y'
     }, (result: Question[]) => {
-      this.questions = result
+      this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
     });
   }
-
-  buildQuestionAggQuestionList(): void {
-    this.questionAggQuestionList = [];
-
-    this.questions.forEach(q => {
-      let match = false;
-
-      // keep those already in the list from showing as an option
-      this.activeQuestionAggregate.questions.forEach(aq => {
-        if (q.id === aq.id) match = true;
+  /*
+    buildQuestionAggQuestionList(): void {
+      this.questionAggQuestionList = [];
+  
+      this.questions.forEach(q => {
+        let match = false;
+  
+        // keep those already in the list from showing as an option
+        this.activeQuestionAggregate.questions.forEach(aq => {
+          if (q.id === aq.id) match = true;
+        });
+  
+        if (!match) this.questionAggQuestionList.push(q);
       });
-
-      if (!match) this.questionAggQuestionList.push(q);
-    });
-  }
-
-  addQuestionToAggregate(): void {
-    if (this.questionToAddToAgg && !this.gs.strNoE(this.questionToAddToAgg.id)) {
-      this.activeQuestionAggregate.questions.push(this.questionToAddToAgg);
-      this.questionToAddToAgg = undefined;
-      this.buildQuestionAggQuestionList();
     }
+  */
+  addQuestionToAggregate(): void {
+    this.activeQuestionAggregate.aggregate_questions.push(new QuestionAggregateQuestion());
   }
 
-  removeQuestionFromAggregate(q: Question): void {
-    let index = this.gs.arrayObjectIndexOf(this.activeQuestionAggregate.questions, 'question_id', q.id);
-    this.activeQuestionAggregate.questions.splice(index, 1);
-    this.buildQuestionAggQuestionList();
+  removeQuestionFromAggregate(q: QuestionAggregateQuestion): void {
+    let i = 0;
+    for (; i < this.activeQuestionAggregate.aggregate_questions.length; i++) {
+      const qaq = this.activeQuestionAggregate.aggregate_questions[i];
+      if (q.question && qaq.question && qaq.question.id === q.question.id) {
+        break;
+      }
+    }
+    this.activeQuestionAggregate.aggregate_questions.splice(i, 1);
+    //this.buildQuestionAggQuestionList();
   }
 
   saveQuestionAggregate(): void {

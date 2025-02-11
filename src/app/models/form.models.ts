@@ -169,12 +169,19 @@ export class QuestionAggregateType {
 }
 
 
+export class QuestionAggregateQuestion {
+    id = NaN;
+    question_condition_typ: QuestionConditionType | undefined = undefined;
+    question: Question | undefined = undefined;
+    active = 'y';
+}
+
 export class QuestionAggregate {
     id!: number;
     name = '';
     horizontal = true;
     question_aggregate_typ?: QuestionAggregateType;
-    questions: Question[] = [];
+    aggregate_questions: QuestionAggregateQuestion[] = [];
     active = 'y'
 }
 
