@@ -7,18 +7,18 @@ import { FormElementGroupComponent } from "../../../../atoms/form-element-group/
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { CommonModule } from '@angular/common';
 import { AppSize, GeneralService } from '../../../../../services/general.service';
-import { SafeHTMLPipe } from "../../../../../pipes/safe-html.pipe";
-import { DisplayQuestionSvgComponent } from "../../../../elements/display-question-svg/display-question-svg.component";
 import { ButtonComponent } from "../../../../atoms/button/button.component";
 import { ChartComponent } from "../../../../atoms/chart/chart.component";
-import { Graph, Histogram } from '../../../../../models/form.models';
+import { Graph } from '../../../../../models/form.models';
 import { BoxComponent } from "../../../../atoms/box/box.component";
-import { BuildSeasonComponent } from "../../../media/build-season/build-season.component";
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
+import { FullScreenDirective } from '../../../../../directives/full-screen/full-screen.directive';
+import { ModalComponent } from "../../../../atoms/modal/modal.component";
+import { LoadingComponent } from "../../../../atoms/loading/loading.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, SafeHTMLPipe, DisplayQuestionSvgComponent, ButtonComponent, ChartComponent, BoxComponent, BuildSeasonComponent, ButtonRibbonComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -101,20 +101,6 @@ export class MetricsComponent implements OnInit {
         this.chartImageUrl = this.fieldForm.img_url;
       }
     });
-  }
-
-  setFieldResponse(r: FieldResponse): void {
-    const copy = this.gs.cloneObject(r) as FieldResponse;
-    copy.answers.forEach(a => {
-      a.flow_answers.forEach(qfa => {
-        try {
-          qfa.value = JSON.parse(qfa.value);
-        }
-        catch (e) { }
-      });
-    });
-
-    this.fieldResponse = copy;
   }
 
   private getDashboard(): void {

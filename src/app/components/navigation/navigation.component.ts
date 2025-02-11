@@ -19,14 +19,16 @@ import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.c
 import { ClickOutsideDirective } from '../../directives/click-outside/click-outside.directive';
 import { ClickInsideDirective } from '../../directives/click-inside/click-inside.directive';
 import { DateToStrPipe } from '../../pipes/date-to-str.pipe';
+import { LoadingComponent } from "../atoms/loading/loading.component";
 
 @Component({
-    selector: 'app-navigation',
-    imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe],
-    templateUrl: './navigation.component.html',
-    styleUrls: ['./navigation.component.scss']
+  selector: 'app-navigation',
+  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
+  loading = false;
 
   private resizeTimeout: any;
   private scrollResizeTimer: any;
@@ -87,6 +89,21 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     private pwa: PwaService,
     private ns: NotificationsService,
     private navigationService: NavigationService) {
+    this.gs.currentOutstandingCalls.subscribe(o => {
+      this.loading = o > 0;
+
+      const body = document.body;
+      const html = document.documentElement;
+
+      if (this.loading) {
+        html.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+      }
+      else {
+        html.style.overflow = 'initial';
+        body.style.overflow = 'initial';
+      }
+    });
 
     this.auth.user.subscribe(u => this.user = u);
 

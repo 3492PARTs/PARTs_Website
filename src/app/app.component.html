@@ -1,5 +1,3 @@
-<app-loading></app-loading>
-
 <app-banners></app-banners>
 
 <app-modal [(Visible)]="gs.showErrorModal" [Title]="'Error'" [zIndex]="103">
@@ -10,7 +8,7 @@
   <app-button-ribbon>
     <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.acceptError()">{{
       gs.errorButtonText
-    }}</app-button>
+      }}</app-button>
   </app-button-ribbon>
 </app-modal>
 
@@ -20,13 +18,8 @@
   </p>
 
   <app-button-ribbon>
-    <app-button
-      [ButtonType]="'danger'"
-      (FunctionCallBack)="gs.acceptConfirm()"
-      >{{ gs.confirmButtonText }}</app-button
-    >
-    <app-button [ButtonType]="'warning'" (FunctionCallBack)="gs.rejectConfirm()"
-      >{{ gs.confirmButtonCancelText }}
+    <app-button [ButtonType]="'danger'" (FunctionCallBack)="gs.acceptConfirm()">{{ gs.confirmButtonText }}</app-button>
+    <app-button [ButtonType]="'warning'" (FunctionCallBack)="gs.rejectConfirm()">{{ gs.confirmButtonCancelText }}
     </app-button>
   </app-button-ribbon>
 </app-modal>
@@ -34,3 +27,5 @@
 <app-navigation>
   <router-outlet />
 </app-navigation>
+
+<app-modal></app-modal>
