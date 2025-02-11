@@ -1,23 +1,23 @@
-<app-box [Title]="'Metrics'">
-  <app-form-element-group [LabelText]="'Dashboard Configuration'">
-    <div class="flex align-items-baseline gap-1rem">
-      <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd" [SelectList]="graphs"
-        [DisplayProperty]="'name'" [DisplayEmptyOption]="true" [MinWidth]="'200px'"></app-form-element>
-      <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
-    </div>
-    <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.team_id" [SelectList]="teams"
-      [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-      [DisplayEmptyOption]="true"></app-form-element>
+<app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="true">
+  <div class="flex align-items-baseline gap-1rem">
+    <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd" [SelectList]="graphs"
+      [DisplayProperty]="'name'" [DisplayEmptyOption]="true" [MinWidth]="'200px'"></app-form-element>
+    <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
+  </div>
+  <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.team_id" [SelectList]="teams"
+    [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
+    [DisplayEmptyOption]="true"></app-form-element>
 
-    <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.reference_team_id"
-      [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-      [DisplayEmptyOption]="true"></app-form-element>
+  <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.reference_team_id"
+    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
+    [DisplayEmptyOption]="true"></app-form-element>
 
-    <app-button-ribbon>
-      <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
-    </app-button-ribbon>
-  </app-form-element-group>
+  <app-button-ribbon>
+    <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
+  </app-button-ribbon>
+</app-box>
 
+<app-box [Title]="'Graphs'">
   <div class="grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
     'two-column-grid': appSize >= appSizeXLG, 
     'three-column-grid': appSize >= appSize_3XLG,
