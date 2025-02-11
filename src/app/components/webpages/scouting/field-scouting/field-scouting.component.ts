@@ -466,7 +466,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       // stop flow or go to next 
-      if (flow.single_run) {
+      if (flow.single_run && nextStage <= flowQuestion.order) {
         flow.flow_questions.forEach(q => {
           this.hideFlowQuestionBox(flow, q);
         });
