@@ -262,8 +262,6 @@ export class ChartComponent implements OnInit {
   }
 
   private createLineChartConfig(plots: Plot[]): ChartConfiguration {
-
-
     const chartData: ChartData = {
       datasets: plots.map(plot => {
         let counter = 0; // Initialize a counter for linear mapping
@@ -295,7 +293,7 @@ export class ChartComponent implements OnInit {
             title: { display: true, text: 'Point Count' }, // Label appropriately
             beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
             min: this.XScaleMin,
-            max: this.XScaleMax
+            max: this.XScaleMax,
           },
           y: {
             title: { display: true, text: 'Distance' },
