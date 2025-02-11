@@ -138,9 +138,9 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   runScoutingReport(): void {
-    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: any) => {
-
-
+    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
+      //console.log(result);
+      this.gs.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
       this.gs.triggerError(err);
     });
