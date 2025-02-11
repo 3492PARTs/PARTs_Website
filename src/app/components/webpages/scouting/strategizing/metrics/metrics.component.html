@@ -33,7 +33,7 @@
     <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
       <div class="full-width flex-grow-2 relative">
         @if (!dashboard_graph.data) {
-        <app-loading [Loading]="true" [Height]="'250px'"></app-loading>
+        <app-loading [Loading]="true" [Height]="'100%'"></app-loading>
         }
         <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
         <ng-container *ngTemplateOutlet="graph"></ng-container>
