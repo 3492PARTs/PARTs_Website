@@ -147,16 +147,19 @@ export class ChartComponent implements OnInit {
 
   private createDatasets(histograms: Histogram[]): any[] { // any[] because of dynamic dataset structure
     const datasetLabels = this.getUniqueBinLabels(histograms); // Get all unique bin labels (e.g., 'Net Sales', 'COGS', 'GM')
-    return datasetLabels.map(label => ({
-      label: label,
-      data: histograms.map(histogram => {
-        const bin = histogram.bins.find(b => b.bin === label);
-        return bin ? bin.count : 0; // Return count or 0 if bin is missing
-      }),
-      backgroundColor: this.getDatasetColor(label).backgroundColor, // Assign color from palette
-      borderColor: this.getDatasetColor(label).borderColor, // Slightly darker border
-      borderWidth: 1,
-    }));
+    return datasetLabels.map(label => {
+      const color = this.getDatasetColor(label); // Get color *once* per dataset
+      return {
+        label: label,
+        data: histograms.map(histogram => {
+          const bin = histogram.bins.find(b => b.bin === label);
+          return bin ? bin.count : 0; // Return count or 0 if bin is missing
+        }),
+        backgroundColor: color.backgroundColor, // Assign color from palette
+        borderColor: color.borderColor, // Slightly darker border
+        borderWidth: 1,
+      }
+    });
   }
 
   private getUniqueBinLabels(histograms: Histogram[]): string[] {
@@ -168,14 +171,15 @@ export class ChartComponent implements OnInit {
   }
 
   private createCategoricalHistogramChartConfig(bins: HistogramBin[]): ChartConfiguration {
+    const color = this.getDatasetColor('Frequency'); // Get color *once* per dataset
     const chartData: ChartData = {
       labels: bins.map(bin => bin.bin), // Bin values as labels
       datasets: [
         {
           label: 'Frequency', // Or a dynamic label if needed
           data: bins.map(bin => bin.count),
-          backgroundColor: this.getDatasetColor('Frequency').backgroundColor, // Customize colors
-          borderColor: this.getDatasetColor('Frequency').borderColor,
+          backgroundColor: color.backgroundColor, // Customize colors
+          borderColor: color.borderColor,
           borderWidth: 1,
           barPercentage: 1.0,  // Makes bars touch each other
           categoryPercentage: 1.0, // Makes bars take up full category width
@@ -212,14 +216,15 @@ export class ChartComponent implements OnInit {
     const chartData: ChartData = {
       datasets: plots.map(plot => {
         let counter = 0; // Initialize a counter for linear mapping
+        const color = this.getDatasetColor(plot.label); // Get color *once* per dataset
         return {
           label: plot.label,
           data: plot.points.map(point => ({
             x: counter++, // Increment counter for each point
             y: point.point,
           })),
-          pointBackgroundColor: this.getDatasetColor(plot.label).backgroundColor, // Use getDatasetColor
-          pointBorderColor: this.getDatasetColor(plot.label).borderColor,
+          pointBackgroundColor: color.backgroundColor, // Use getDatasetColor
+          pointBorderColor: color.borderColor,
           pointRadius: 5,
           showLine: false,
         }
@@ -267,16 +272,17 @@ export class ChartComponent implements OnInit {
       datasets: plots.map(plot => {
         let counter = 0; // Initialize a counter for linear mapping
         const color = this.getDatasetColor(plot.label); // Get color *once* per dataset
-        const borderColor = color.borderColor;
 
         return {
           label: plot.label,
           data: plot.points.map(point => ({ x: counter++, y: point.point })),
           pointBackgroundColor: color.backgroundColor, // Use the same color for points
-          pointBorderColor: borderColor,
+          pointBorderColor: color.borderColor,
           pointRadius: 5,
           showLine: true,
-          borderColor: borderColor, // And for the line
+          borderWidth: 1,
+          backgroundColor: color.backgroundColor,
+          borderColor: color.borderColor, // And for the line
           //tension: 0.4, // Add some curve if you like
           fill: false // To prevent area fill under the line if you don't want it.
         };
@@ -320,6 +326,7 @@ export class ChartComponent implements OnInit {
   }
 
   private createBoxAndWhiskerChartConfig(plots: BoxAndWhiskerPlot[]): ChartConfiguration<'boxplot'> {
+    const color = this.getDatasetColor('Dataset 1'); // Get color *once* per dataset
     const data: ChartConfiguration<'boxplot'>['data'] = {
       labels: plots.map(p => p.label),
       datasets: [
@@ -339,8 +346,8 @@ export class ChartComponent implements OnInit {
               max: p.max,
             }
           }),
-          borderColor: this.getDatasetColor('Dataset 1').borderColor,
-          backgroundColor: this.getDatasetColor('Dataset 1').backgroundColor,
+          borderColor: color.borderColor,
+          backgroundColor: color.backgroundColor,
         },
       ],
     };

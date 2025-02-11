@@ -41,10 +41,11 @@
 
       <div class="full-width flex align-items-flex-end justify-content-space-between">
         <div class="flex gap-p5rem padding-left-1rem">
-          <app-button [ButtonType]="'refresh'" (FunctionCallBack)="graphTeam(dashboard_graph.graph_id)"></app-button>
           <app-modal [ButtonType]="'arrow-expand-all'" [Title]="dashboard_graph.graph_name">
             <ng-container *ngTemplateOutlet="graph"></ng-container>
           </app-modal>
+
+          <app-button [ButtonType]="'refresh'" (FunctionCallBack)="graphTeam(dashboard_graph.graph_id)"></app-button>
         </div>
 
         <div class="flex gap-p5rem padding-right-1rem">
