@@ -27,15 +27,21 @@
     <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
       <div class="full-width flex-grow-2">
         <app-chart [ChartTitle]="dashboard_graph.graph_name" [ChartType]="dashboard_graph.graph_typ"
-          [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl"></app-chart>
+          [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl" [XScaleMin]="dashboard_graph.x_scale_min"
+          [XScaleMax]="dashboard_graph.x_scale_max" [YScaleMin]="dashboard_graph.y_scale_min"
+          [YScaleMax]="dashboard_graph.y_scale_max"></app-chart>
       </div>
-      <div class="full-width flex align-items-flex-end justify-content-flex-end">
-        <app-button-ribbon>
+
+      <div class="full-width flex align-items-flex-end justify-content-space-between">
+        <div>
+          <app-button [ButtonType]="'refresh'" (FunctionCallBack)="graphTeam(dashboard_graph.graph_id)"></app-button>
+        </div>
+        <div>
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrementOrder(dashboard_graph)"
             [Disabled]="hideMinus(dashboard_graph)"></app-button>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="incrementOrder(dashboard_graph)"
             [Disabled]="hidePlus(dashboard_graph)"></app-button>
-        </app-button-ribbon>
+        </div>
       </div>
     </div>
     }

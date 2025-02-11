@@ -35,6 +35,10 @@ export class GraphAdminFormComponent implements OnInit {
   graphTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'graph_typ.graph_nm', ColLabel: 'Type' },
+    { PropertyName: 'x_scale_min', ColLabel: 'X Scale Min' },
+    { PropertyName: 'x_scale_max', ColLabel: 'X Scale Max' },
+    { PropertyName: 'y_scale_min', ColLabel: 'Y Scale Min' },
+    { PropertyName: 'y_scale_max', ColLabel: 'Y Scale Max' },
   ];
   graphModalVisible = false;
   activeGraph: Graph | undefined = undefined;

@@ -570,6 +570,10 @@ export class DashboardGraph {
     graph_name = '';
     graph_nm = '';
     graph_typ = '';
+    x_scale_min = 1;
+    x_scale_max = 1;
+    y_scale_min = 1;
+    y_scale_max = 1;
     order = NaN;
     active = 'y';
 

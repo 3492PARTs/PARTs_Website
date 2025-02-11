@@ -24,6 +24,10 @@ export class ChartComponent implements OnInit {
     this.url = s;
     this.gs.triggerChange(() => this.adjustImage());
   }
+  @Input() XScaleMin: number | undefined = undefined;
+  @Input() XScaleMax: number | undefined = undefined;
+  @Input() YScaleMin: number | undefined = undefined;
+  @Input() YScaleMax: number | undefined = undefined;
 
   private colorPalette: string[] = [ // Define a color palette
     'rgba(54, 162, 235, 0.5)', // Blue
@@ -96,7 +100,6 @@ export class ChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    //TODO: registe onlt what is needed
   }
 
   @HostListener('window:resize', ['$event'])
@@ -125,10 +128,14 @@ export class ChartComponent implements OnInit {
         scales: {
           x: {
             title: { display: true, text: 'Question' }, // Your x-axis label
+            min: this.XScaleMin,
+            max: this.XScaleMax
           },
           y: {
             title: { display: true, text: 'Occurances' }, // Your y-axis label
             beginAtZero: true,
+            min: this.YScaleMin,
+            max: this.YScaleMax
           },
         },
       },
@@ -184,10 +191,14 @@ export class ChartComponent implements OnInit {
           x: {
             title: { display: true, text: 'Bin Value' },
             type: 'category', // Use 'category' for string labels
+            min: this.XScaleMin,
+            max: this.XScaleMax
           },
           y: {
             title: { display: true, text: 'Frequency' },
             beginAtZero: true,
+            min: this.XScaleMin,
+            max: this.XScaleMax
           },
         },
       },
@@ -224,10 +235,14 @@ export class ChartComponent implements OnInit {
             type: 'linear',  // Use a linear scale
             title: { display: true, text: 'Point Count' }, // Label appropriately
             beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
+            min: this.XScaleMin,
+            max: this.XScaleMax
           },
           y: {
             title: { display: true, text: 'Distance' },
             beginAtZero: true,
+            min: this.YScaleMin,
+            max: this.YScaleMax
           },
         },
         plugins: {
@@ -279,10 +294,14 @@ export class ChartComponent implements OnInit {
             type: 'linear',  // Use a linear scale
             title: { display: true, text: 'Point Count' }, // Label appropriately
             beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
+            min: this.XScaleMin,
+            max: this.XScaleMax
           },
           y: {
             title: { display: true, text: 'Distance' },
             beginAtZero: true,
+            min: this.YScaleMin,
+            max: this.YScaleMax
           },
         },
         plugins: {
@@ -329,7 +348,22 @@ export class ChartComponent implements OnInit {
 
     const cfg: ChartConfiguration<'boxplot'> = {
       type: 'boxplot',
-      data,
+      data: data,
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
+            min: this.XScaleMin,
+            max: this.XScaleMax
+          },
+          y: {
+            beginAtZero: true,
+            min: this.YScaleMin,
+            max: this.YScaleMax
+          },
+        },
+      },
     };
 
     return cfg;

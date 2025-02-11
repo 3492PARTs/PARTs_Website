@@ -347,8 +347,10 @@ export class Graph {
     id = NaN;
     graph_typ: GraphType | undefined = undefined;
     name = '';
-    scale_x = 1;
-    scale_y = 1;
+    x_scale_min = NaN;
+    x_scale_max = NaN;
+    y_scale_min = NaN;
+    y_scale_max = NaN;
     active = 'y';
     graphbin_set: GraphBin[] = [];
     graphcategory_set: GraphCategory[] = [];

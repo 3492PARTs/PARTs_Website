@@ -158,7 +158,7 @@ export class MetricsComponent implements OnInit {
     }
   }
 
-  private graphTeam(graphId: number): void {
+  graphTeam(graphId: number): void {
     this.api.get(true, 'scouting/strategizing/graph-team/', {
       graph_id: graphId,
       team_id: this.dashboard.team_id,
