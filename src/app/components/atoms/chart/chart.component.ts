@@ -51,6 +51,7 @@ export class ChartComponent implements OnInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
+    this.datasetColors = {};
     let chartStatus = Chart.getChart(this.id); // <canvas> id
     if (chartStatus != undefined) {
       chartStatus.destroy();
