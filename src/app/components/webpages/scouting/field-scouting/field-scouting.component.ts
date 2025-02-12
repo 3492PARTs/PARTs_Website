@@ -666,13 +666,25 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
     this.activeFormSubTypeForm?.flows.forEach(flow => {
       let scene = NaN;
-      if (flow.question_answer) {
-        scene = this.getNextStage(flow, flow.question_answer.flow_answers[flow.question_answer.flow_answers.length - 1].question?.order || 0);
+      let showFlow = false;
+      if (!this.gs.strNoE(flow.flow_conditional_on) && this.isConditionalFlowMet(flow)) {
+        showFlow = true;
+        flow.flow_conditional_on = NaN;
       }
       else
+        showFlow = true;
+
+      // if there is an answer
+      if (flow.question_answer) {
+        if (showFlow)
+          scene = this.getNextStage(flow, flow.question_answer.flow_answers[flow.question_answer.flow_answers.length - 1].question?.order || 0);
+      }
+      else if (showFlow)
         scene = this.getFirstStage(flow.flow_questions);
 
-      flow.flow_questions.filter(q => q.order === scene).forEach(q => this.showFlowQuestionBox(flow, q));
+
+      if (!Number.isNaN(scene))
+        this.displayFlowStage(flow, scene, true);
     })
   }
 
