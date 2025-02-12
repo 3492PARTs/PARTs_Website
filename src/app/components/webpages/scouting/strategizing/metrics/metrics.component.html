@@ -49,6 +49,7 @@
         </div>
 
         <div class="flex gap-p5rem padding-right-1rem">
+          <app-button [ButtonType]="'delete'" (FunctionCallBack)="removeGraph(dashboard_graph)"></app-button>
           <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrementOrder(dashboard_graph)"
             [Disabled]="hideMinus(dashboard_graph)"></app-button>
           <app-button [ButtonType]="'add'" (FunctionCallBack)="incrementOrder(dashboard_graph)"

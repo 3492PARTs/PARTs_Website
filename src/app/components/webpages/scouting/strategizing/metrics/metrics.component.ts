@@ -138,7 +138,7 @@ export class MetricsComponent implements OnInit {
 
   addGraphToDashboard(): void {
     if (this.graphToAdd) {
-      this.dashboard.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, this.dashboard.dashboard_graphs.length + 1));
+      this.dashboard.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, this.dashboard.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1));
       this.saveDashboard();
     }
   }
@@ -191,5 +191,13 @@ export class MetricsComponent implements OnInit {
     this.dashboard.dashboard_graphs[i - 1].order++;
     this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i - 1];
     this.dashboard.dashboard_graphs[i - 1] = selection;
+  }
+
+  removeGraph(rec: DashboardGraph): void {
+    this.gs.triggerConfirm('Do you want to remove this chart?', () => {
+      rec.active = 'n';
+      this.saveDashboard();
+      this.getGraphs();
+    });
   }
 }
