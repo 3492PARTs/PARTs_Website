@@ -51,52 +51,54 @@ export class ChartComponent implements OnInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
-    this.datasetColors = {};
-    let chartStatus = Chart.getChart(this.id); // <canvas> id
-    if (chartStatus != undefined) {
-      chartStatus.destroy();
-    }
-    let chartConfig: ChartConfiguration | undefined = undefined;
+    this.gs.triggerChange(() => {
+      this.datasetColors = {};
+      let chartStatus = Chart.getChart(this.id); // <canvas> id
+      if (chartStatus != undefined) {
+        chartStatus.destroy();
+      }
+      let chartConfig: ChartConfiguration | undefined = undefined;
 
-    switch (this.ChartType) {
-      case 'histogram':
-        const histograms = d as Histogram[];
-        if (histograms && histograms.length > 0) {
-          chartConfig = this.createHistogramChartConfig(histograms);
-        }
-        break;
-      case 'ctg-hstgrm':
-        const ctgHist = d as Histogram[];
-        //const ctgHist = d as HistogramBin[];
-        if (ctgHist && ctgHist.length > 0)
-          chartConfig = this.createHistogramChartConfig(ctgHist);
-        //chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
-        break;
-      case 'res-plot':
-        const plots = d as Plot[];
-        if (plots && plots.length > 0)
-          chartConfig = this.createScatterChartConfig(plots);
-        break;
-      case 'diff-plot':
-        const diffPlots = d as Plot[];
-        if (diffPlots && diffPlots.length > 0)
-          chartConfig = this.createLineChartConfig(diffPlots);
-        break;
-      case 'box-wskr':
-        const boxWhiskerPlots = d as BoxAndWhiskerPlot[];
-        if (boxWhiskerPlots && boxWhiskerPlots.length > 0)
-          chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
-        break;
-      case 'ht-map':
-        this.heatmaps = d as Heatmap[];
-        if (this.heatmaps)
-          this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
-        break;
-    }
+      switch (this.ChartType) {
+        case 'histogram':
+          const histograms = d as Histogram[];
+          if (histograms && histograms.length > 0) {
+            chartConfig = this.createHistogramChartConfig(histograms);
+          }
+          break;
+        case 'ctg-hstgrm':
+          const ctgHist = d as Histogram[];
+          //const ctgHist = d as HistogramBin[];
+          if (ctgHist && ctgHist.length > 0)
+            chartConfig = this.createHistogramChartConfig(ctgHist);
+          //chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
+          break;
+        case 'res-plot':
+          const plots = d as Plot[];
+          if (plots && plots.length > 0)
+            chartConfig = this.createScatterChartConfig(plots);
+          break;
+        case 'diff-plot':
+          const diffPlots = d as Plot[];
+          if (diffPlots && diffPlots.length > 0)
+            chartConfig = this.createLineChartConfig(diffPlots);
+          break;
+        case 'box-wskr':
+          const boxWhiskerPlots = d as BoxAndWhiskerPlot[];
+          if (boxWhiskerPlots && boxWhiskerPlots.length > 0)
+            chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
+          break;
+        case 'ht-map':
+          this.heatmaps = d as Heatmap[];
+          if (this.heatmaps)
+            this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
+          break;
+      }
 
 
-    if (chartConfig)
-      this.chart = new Chart(this.id, chartConfig);
+      if (chartConfig)
+        this.chart = new Chart(this.id, chartConfig);
+    });
   }
 
   constructor(private gs: GeneralService, private renderer: Renderer2) {
