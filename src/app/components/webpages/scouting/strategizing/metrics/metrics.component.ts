@@ -17,7 +17,7 @@ import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
+  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent, CommonModule],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -144,13 +144,22 @@ export class MetricsComponent implements OnInit {
   }
 
   graphTeam(graphId: number): void {
-    this.api.get(true, 'scouting/strategizing/graph-team/', {
-      graph_id: graphId,
-      team_id: this.dashboard.teams[0].team_no,
-      reference_team_id: this.dashboard.reference_team_id
-    }, (result) => {
-      this.dashboard.dashboard_graphs[this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId)].data = result;
+    const index = this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId);
+    if (!this.dashboard.dashboard_graphs[index].data)
+      this.dashboard.dashboard_graphs[index].data = [];
+
+    this.dashboard.teams.forEach(t => {
+      if (t.checked)
+        this.api.get(false, 'scouting/strategizing/graph-team/', {
+          graph_id: graphId,
+          team_id: t.team_no,
+          reference_team_id: this.dashboard.reference_team_id
+        }, (result) => {
+
+          this.dashboard.dashboard_graphs[index].data = [...this.dashboard.dashboard_graphs[index].data, result];
+        });
     });
+
   }
 
   hideMinus(rec: DashboardGraph): boolean {

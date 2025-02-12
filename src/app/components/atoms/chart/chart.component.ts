@@ -59,22 +59,25 @@ export class ChartComponent implements OnInit {
 
     switch (this.ChartType) {
       case 'histogram':
-        const histograms = d as Histogram[];
+        const histograms = d as Histogram[][];
         if (histograms && histograms.length > 0) {
-          chartConfig = this.createHistogramChartConfig(histograms);
+          chartConfig = this.createHistogramChartConfig(histograms[0]);
         }
         break;
       case 'ctg-hstgrm':
+        break;
         const ctgHist = d as HistogramBin[];
         if (ctgHist && ctgHist.length > 0)
           chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
         break;
       case 'res-plot':
+        break;
         const plots = d as Plot[];
         if (plots && plots.length > 0)
           chartConfig = this.createScatterChartConfig(plots);
         break;
       case 'diff-plot':
+        break;
         const diffPlots = d as Plot[];
         if (diffPlots && diffPlots.length > 0)
           chartConfig = this.createLineChartConfig(diffPlots);
@@ -85,6 +88,7 @@ export class ChartComponent implements OnInit {
           chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
         break;
       case 'ht-map':
+        break;
         this.heatmaps = d as Heatmap[];
         if (this.heatmaps)
           this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));

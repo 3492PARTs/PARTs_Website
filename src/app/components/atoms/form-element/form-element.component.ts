@@ -231,10 +231,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setSelectList(sl: any): void {
-    this._SelectList = sl;
+    this._SelectList = this.gs.cloneObject(sl);
 
     if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList && this._SelectList.length > 0) {
-      let tmp = JSON.parse(JSON.stringify(this._SelectList));
+      let tmp = this.gs.cloneObject(this._SelectList);
       //this.gs.devConsoleLog(tmp);
       tmp.forEach((e: any) => {
         e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
@@ -264,7 +264,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       this.gs.triggerChange(() => {
         this.change(tmp);
-      }, 500);
+      });
     }
 
     this.gs.triggerChange(() => {
