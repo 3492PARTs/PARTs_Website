@@ -164,31 +164,23 @@ export class MetricsComponent implements OnInit {
   }
 
   incrementOrder(rec: DashboardGraph): void {
-    let i = 0;
-    for (; i < this.dashboard.dashboard_graphs.length; i++) {
-      if (this.dashboard.dashboard_graphs[i].order === rec.order) {
-        break;
-      }
-    }
+    let i = this.dashboard.dashboard_graphs.findIndex(dg => dg.id === rec.id);
 
     const selection = this.dashboard.dashboard_graphs[i];
-    selection.order++;
-    this.dashboard.dashboard_graphs[i + 1].order--;
+    const selOrder = selection.order;
+    selection.order = this.dashboard.dashboard_graphs[i + 1].order;
+    this.dashboard.dashboard_graphs[i + 1].order = selOrder;
     this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i + 1];
     this.dashboard.dashboard_graphs[i + 1] = selection;
   }
 
   decrementOrder(rec: DashboardGraph): void {
-    let i = 0;
-    for (; i < this.dashboard.dashboard_graphs.length; i++) {
-      if (this.dashboard.dashboard_graphs[i].order === rec.order) {
-        break;
-      }
-    }
+    let i = this.dashboard.dashboard_graphs.findIndex(dg => dg.id === rec.id);
 
     const selection = this.dashboard.dashboard_graphs[i];
-    selection.order--;
-    this.dashboard.dashboard_graphs[i - 1].order++;
+    const selOrder = selection.order;
+    selection.order = this.dashboard.dashboard_graphs[i - 1].order;
+    this.dashboard.dashboard_graphs[i - 1].order = selOrder;
     this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i - 1];
     this.dashboard.dashboard_graphs[i - 1] = selection;
   }
