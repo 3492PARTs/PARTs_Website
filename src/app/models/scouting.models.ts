@@ -591,6 +591,6 @@ export class Dashboard {
     id = NaN;
     active = 'y';
     dashboard_graphs: DashboardGraph[] = [];
-    team_id = NaN;
+    teams: Team[] = [];
     reference_team_id = NaN;
 }

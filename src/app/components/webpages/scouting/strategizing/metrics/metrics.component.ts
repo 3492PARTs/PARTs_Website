@@ -3,7 +3,6 @@ import { APIService } from '../../../../../services/api.service';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
 import { Dashboard, DashboardGraph, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
 import { ScoutingService } from '../../../../../services/scouting.service';
-import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { CommonModule } from '@angular/common';
 import { AppSize, GeneralService } from '../../../../../services/general.service';
@@ -12,14 +11,13 @@ import { ChartComponent } from "../../../../atoms/chart/chart.component";
 import { Graph } from '../../../../../models/form.models';
 import { BoxComponent } from "../../../../atoms/box/box.component";
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
-import { FullScreenDirective } from '../../../../../directives/full-screen/full-screen.directive';
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
 import { LoadingComponent } from "../../../../atoms/loading/loading.component";
 import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
+  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -110,7 +108,7 @@ export class MetricsComponent implements OnInit {
       this.filterGraphs();
 
       let i = 0;
-      if (!this.gs.strNoE(this.dashboard.team_id))
+      if (!this.gs.strNoE(this.dashboard.teams[0] && this.dashboard.teams[0].team_no))
         this.dashboard.dashboard_graphs.forEach(dg => {
           this.gs.triggerChange(() => {
             this.graphTeam(dg.graph_id);
@@ -148,7 +146,7 @@ export class MetricsComponent implements OnInit {
   graphTeam(graphId: number): void {
     this.api.get(true, 'scouting/strategizing/graph-team/', {
       graph_id: graphId,
-      team_id: this.dashboard.team_id,
+      team_id: this.dashboard.teams[0].team_no,
       reference_team_id: this.dashboard.reference_team_id
     }, (result) => {
       this.dashboard.dashboard_graphs[this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId)].data = result;

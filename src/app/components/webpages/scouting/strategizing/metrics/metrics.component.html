@@ -4,7 +4,7 @@
       [DisplayProperty]="'name'" [DisplayEmptyOption]="true" [MinWidth]="'200px'"></app-form-element>
     <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
   </div>
-  <app-form-element [Type]="'select'" [LabelText]="'Team'" [(Model)]="dashboard.team_id" [SelectList]="teams"
+  <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [(Model)]="dashboard.teams" [SelectList]="teams"
     [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
     [DisplayEmptyOption]="true"></app-form-element>
 

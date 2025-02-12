@@ -54,50 +54,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input()
   set SelectList(sl: any) {
-    this.gs.triggerChange(() => {
-      this._SelectList = sl;
-
-      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
-        let tmp = JSON.parse(JSON.stringify(this._SelectList));
-        //this.gs.devConsoleLog(tmp);
-        tmp.forEach((e: any) => {
-          e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
-          if (this.Model) {
-            if (typeof this.Model === 'string') {
-              if (e[this.DisplayProperty || ''] === 'Other') {
-                let other = '';
-                this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
-                  let match = false;
-                  // TODO: Revisit this logic i dont think this loop is needed
-                  tmp.forEach((element: any) => {
-                    if (option === element[this.BindingProperty || '']) match = true;
-                  });
-
-                  if (!match)
-                    e['checked'] = option;
-                });
-
-              }
-              else
-                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
-            }
-            else
-              this.Model.forEach((m: any) => {
-                if (e[this.BindingProperty || ''] === m[this.BindingProperty || ''])
-                  e['checked'] = m['checked'];
-              });
-
-
-          }
-        });
-
-        this.change(tmp);
-      }
-
-      this.gs.triggerChange(() => {
-        this.setElementPositions();
-      });
-    });
+    this.setSelectList(sl);
   }
   _SelectList: any[] = [];
   //@Input() RadioList: any[] = [];
@@ -227,6 +184,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
+            else if (this.Type === 'multiSelect' && JSON.stringify(modelChanges.currentValue) !== JSON.stringify(modelChanges.previousValue)) {
+              this.setSelectList(this._SelectList);
+            }
             this.markRequired();
             break;
           case 'Disabled':
@@ -257,6 +217,11 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.setDatePanel();
   }
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any) {
+    this.positionMultiSelect();
+  }
+
   setElementPositions(): void {
     this.positionMultiSelect();
 
@@ -265,10 +230,48 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.gs.triggerChange(() => this.setIndicatorPosition());
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: any) {
-    this.positionMultiSelect();
+  setSelectList(sl: any): void {
+    this._SelectList = sl;
+
+    if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList && this._SelectList.length > 0) {
+      let tmp = JSON.parse(JSON.stringify(this._SelectList));
+      //this.gs.devConsoleLog(tmp);
+      tmp.forEach((e: any) => {
+        e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
+        if (this.Model) {
+          if (typeof this.Model === 'string') {
+            if (e[this.DisplayProperty || ''] === 'Other') {
+              let other = '';
+              this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
+                let match = false;
+                // TODO: Revisit this logic i dont think this loop is needed
+                tmp.forEach((element: any) => {
+                  if (option === element[this.BindingProperty || '']) match = true;
+                });
+
+                if (!match)
+                  e['checked'] = option;
+              });
+
+            }
+            else
+              e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
+          }
+          else
+            e['checked'] = this.Model.find((m: any) => e[this.BindingProperty || ''] === m[this.BindingProperty || ''])?.['checked'] || false;
+        }
+      });
+
+      this.gs.triggerChange(() => {
+        this.change(tmp);
+      }, 500);
+    }
+
+    this.gs.triggerChange(() => {
+      this.setElementPositions();
+    });
   }
+
 
   change(newValue: any, index = -1) {
     if (this.Type === 'checkbox' && this.LabelText.toLowerCase() !== 'other') {
@@ -299,6 +302,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else {
       this.Model = newValue;
+
       this.ModelChange.emit(newValue);
     }
 
