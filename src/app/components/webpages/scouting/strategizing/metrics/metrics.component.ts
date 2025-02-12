@@ -156,11 +156,11 @@ export class MetricsComponent implements OnInit {
   }
 
   hideMinus(rec: DashboardGraph): boolean {
-    return rec.order === 1;
+    return rec.order === this.dashboard.dashboard_graphs[0].order;
   }
 
   hidePlus(rec: DashboardGraph): boolean {
-    return rec.order === this.dashboard.dashboard_graphs.length;
+    return rec.order === this.dashboard.dashboard_graphs[this.dashboard.dashboard_graphs.length - 1].order;
   }
 
   incrementOrder(rec: DashboardGraph): void {
