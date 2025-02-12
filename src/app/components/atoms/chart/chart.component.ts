@@ -42,7 +42,7 @@ export class ChartComponent implements OnInit {
     'rgba(192, 192, 192, 0.5)' // Silver
   ];
   datasetColors: { [label: string]: { backgroundColor: string, borderColor: string } } = {}; // Store assigned colors
-
+  private colorCounter = 0;
   url = '';
 
   heatmaps: Heatmap[] = [];
@@ -91,7 +91,12 @@ export class ChartComponent implements OnInit {
         case 'ht-map':
           this.heatmaps = d as Heatmap[];
           if (this.heatmaps)
-            this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
+            this.heatmaps.forEach(h => {
+              const c = this.getDatasetColor(h.question.question);
+              console.log(h.question.question);
+              console.log(c);
+            });
+          console.log(this.datasetColors);
           break;
       }
 
@@ -395,14 +400,12 @@ export class ChartComponent implements OnInit {
 
   private getDatasetColor(label: string): { backgroundColor: string, borderColor: string } {
     if (!this.datasetColors[label]) {
-      const availableColors = this.colorPalette.filter(color => !Object.values(this.datasetColors).map(c => c.backgroundColor).includes(color));
-      if (availableColors.length > 0) {
-        this.datasetColors[label] = { backgroundColor: availableColors[0], borderColor: availableColors[0].replace('0.5', '1') };
-      } else {
-        // If all colors are used, reset and start over
-        this.datasetColors = {};
-        this.datasetColors[label] = { backgroundColor: this.colorPalette[0], borderColor: this.colorPalette[0].replace('0.5', '1') }; // Start from the first color
+      //const availableColors = this.colorPalette.filter(color => !Object.values(this.datasetColors).map(c => c.backgroundColor).includes(color));
+      if (this.colorCounter > this.colorPalette.length - 1) {
+        this.colorCounter = 0;
       }
+      this.datasetColors[label] = { backgroundColor: this.colorPalette[this.colorCounter], borderColor: this.colorPalette[this.colorCounter].replace('0.5', '1') };
+      this.colorCounter++;
     }
     return this.datasetColors[label];
   }
