@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 export class LoadingComponent implements OnInit {
   @Input() Width = '';
   @Input() Height = '';
+  @Input() MinHeight = '';
   @Input() Loading = false;
 
   constructor() {
