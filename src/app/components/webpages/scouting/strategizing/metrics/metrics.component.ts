@@ -17,7 +17,7 @@ import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent, CommonModule],
+  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })

@@ -14,6 +14,7 @@
                 @if (heatmaps && heatmaps.length > 0) {
                 <img #image id="image" [src]="url" />
                 @for (heatmap of heatmaps; track $index) {
+                @if (datasetColors[heatmap.question.question]) {
                 <div #box class="box" [ngStyle]="{
                       top: heatmap.question.y + '%',
                       left: heatmap.question.x + '%',
@@ -21,7 +22,7 @@
                       height: heatmap.question.height + '%'
                     }">
                     <app-display-question-svg [Question]="heatmap.question"
-                        [Stroke]="datasetColors[heatmap.question.question].borderColor"></app-display-question-svg>
+                        [Stroke]="datasetColors[heatmap.question.question].borderColor || ''"></app-display-question-svg>
 
                     <div class="touchpoint-wrapper">
                         @for (point of heatmap.points; track $index) {
@@ -30,11 +31,12 @@
                           left: 'calc(' + point.x + '% - 4px)',
                           width: '8px',
                           height: '8px',
-                          border: '4px solid ' + datasetColors[heatmap.question.question].backgroundColor
+                          border: '4px solid ' + datasetColors[heatmap.question.question].backgroundColor || ''
                         }"></div>
                         }
                     </div>
                 </div>
+                }
                 }
                 }
             </div>
