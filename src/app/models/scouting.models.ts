@@ -578,7 +578,7 @@ export class DashboardGraph {
     active = 'y';
 
     //front end only
-    data: any[] = [];
+    data: any[] | undefined = undefined;
 
     constructor(graph_id = NaN, order = NaN) {
         this.graph_id = graph_id;

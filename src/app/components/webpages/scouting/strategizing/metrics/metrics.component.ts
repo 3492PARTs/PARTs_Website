@@ -145,12 +145,14 @@ export class MetricsComponent implements OnInit {
 
   graphTeam(graphId: number): void {
     const ids = this.dashboard.teams.filter(t => t.checked).map(t => t.team_no);
+    const index = this.dashboard.dashboard_graphs.findIndex(qg => qg.graph_id === graphId);
+    this.dashboard.dashboard_graphs[index].data = undefined;
+
     this.api.get(false, 'scouting/strategizing/graph-team/', {
       graph_id: graphId,
       team_ids: ids,
       reference_team_id: this.dashboard.reference_team_id
     }, (result) => {
-      const index = this.gs.arrayObjectIndexOf(this.dashboard.dashboard_graphs, 'graph_id', graphId);
       this.dashboard.dashboard_graphs[index].data = result;
     });
   }
