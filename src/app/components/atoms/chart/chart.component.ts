@@ -65,9 +65,11 @@ export class ChartComponent implements OnInit {
         }
         break;
       case 'ctg-hstgrm':
-        const ctgHist = d as HistogramBin[];
+        const ctgHist = d as Histogram[];
+        //const ctgHist = d as HistogramBin[];
         if (ctgHist && ctgHist.length > 0)
-          chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
+          chartConfig = this.createHistogramChartConfig(ctgHist);
+        //chartConfig = this.createCategoricalHistogramChartConfig(ctgHist);
         break;
       case 'res-plot':
         const plots = d as Plot[];
