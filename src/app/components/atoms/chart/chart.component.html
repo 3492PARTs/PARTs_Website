@@ -11,6 +11,7 @@
     <div class="margin-top-1rem">
         <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
             <div #imageContainer id="image-container">
+                @if (heatmaps && heatmaps.length > 0) {
                 <img #image id="image" [src]="url" />
                 @for (heatmap of heatmaps; track $index) {
                 <div #box class="box" [ngStyle]="{
@@ -34,6 +35,7 @@
                         }
                     </div>
                 </div>
+                }
                 }
             </div>
         </div>
