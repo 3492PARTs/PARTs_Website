@@ -91,12 +91,7 @@ export class ChartComponent implements OnInit {
         case 'ht-map':
           this.heatmaps = d as Heatmap[];
           if (this.heatmaps)
-            this.heatmaps.forEach(h => {
-              const c = this.getDatasetColor(h.question.question);
-              console.log(h.question.question);
-              console.log(c);
-            });
-          console.log(this.datasetColors);
+            this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
           break;
       }
 
