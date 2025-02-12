@@ -35,7 +35,9 @@
         @if (!dashboard_graph.data) {
         <app-loading [Loading]="true" [Height]="'100%'"></app-loading>
         }
+        @if (dashboard_graph.graph_typ === 'box-wskr') {
         {{dashboard_graph.data | json}}
+        }
         <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
         <ng-container *ngTemplateOutlet="graph"></ng-container>
       </div>
