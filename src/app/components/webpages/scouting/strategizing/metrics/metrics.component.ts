@@ -31,6 +31,7 @@ export class MetricsComponent implements OnInit {
   data: any = {};
 
   dashboard = new Dashboard();
+  activeDashboardView: DashboardView | undefined = undefined;
 
   teams: Team[] = [];
   graphs: Graph[] = [];
