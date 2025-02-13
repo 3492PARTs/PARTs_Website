@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { APIService } from '../../../../../services/api.service';
 import { AuthCallStates, AuthService } from '../../../../../services/auth.service';
-import { Dashboard, DashboardGraph, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
+import { Dashboard, DashboardGraph, DashboardView, DashboardViewType, FieldForm, FieldResponse, Team } from '../../../../../models/scouting.models';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { CommonModule } from '@angular/common';
@@ -14,10 +14,11 @@ import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ri
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
 import { LoadingComponent } from "../../../../atoms/loading/loading.component";
 import { HeaderComponent } from "../../../../atoms/header/header.component";
+import { FormComponent } from "../../../../atoms/form/form.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent],
+  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent, FormComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -30,8 +31,12 @@ export class MetricsComponent implements OnInit {
   data: any = {};
 
   dashboard = new Dashboard();
+
   teams: Team[] = [];
   graphs: Graph[] = [];
+  dashboardViewTypes: DashboardViewType[] = [];
+  dashboardViewType: DashboardViewType | undefined = undefined;
+
   graphToAdd: Graph | undefined = undefined;
   chartImageUrl = '';
 
@@ -87,6 +92,7 @@ export class MetricsComponent implements OnInit {
     });
     this.getDashboard();
     this.getGraphs();
+    this.getDashboardViewTypes();
   }
 
   getScoutingResponses(): void {
@@ -102,16 +108,29 @@ export class MetricsComponent implements OnInit {
     });
   }
 
+  private getDashboardViewTypes(): void {
+    this.api.get(true, 'scouting/strategizing/dashboard-view-types/', undefined, (result: DashboardViewType[]) => {
+      this.dashboardViewTypes = result;
+    });
+  }
+
   private getDashboard(): void {
     this.api.get(true, 'scouting/strategizing/dashboard/', undefined, (result: Dashboard) => {
       this.dashboard = result;
-      this.filterGraphs();
+      this.dashboard.dashboard_views.forEach(dv => this.filterGraphs(dv));
 
-      let i = 0;
-      if (!this.gs.strNoE(this.dashboard.teams[0] && this.dashboard.teams[0].team_no))
-        this.dashboard.dashboard_graphs.forEach(dg => {
+      this.getDashboardGraphs();
+    });
+  }
+
+  private getDashboardGraphs(): void {
+    let i = 0;
+
+    this.dashboard.dashboard_views.forEach(dv => {
+      if (dv.dash_view_typ.dash_view_typ == this.dashboard.default_dash_view_typ?.dash_view_typ && dv.active == 'y' && dv.teams.length > 0)
+        dv.dashboard_graphs.forEach(dg => {
           this.gs.triggerChange(() => {
-            this.graphTeam(dg.graph_id);
+            this.graphTeam(dv, dg.graph_id);
           }, i * 500);
           i++;
         });
@@ -128,63 +147,71 @@ export class MetricsComponent implements OnInit {
     this.api.get(true, 'form/graph/', undefined, (result: Graph[]) => {
       this.graphs = result;
 
-      this.filterGraphs();
+      this.dashboard.dashboard_views.forEach(dv => this.filterGraphs(dv));
+
     });
   }
 
-  private filterGraphs(): void {
-    this.graphs = this.graphs.filter(g => !this.dashboard.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
+  private filterGraphs(dashboard_view: DashboardView): void {
+    dashboard_view.availableGraphs = this.graphs.filter(g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
   }
 
-  addGraphToDashboard(): void {
+  addViewToDashboard(): void {
+    this.dashboard.dashboard_views.push(new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1))
+    this.dashboardViewType = undefined;
+  }
+
+  addGraphToDashboardView(dashboard_view: DashboardView): void {
     if (this.graphToAdd) {
-      this.dashboard.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, this.dashboard.dashboard_graphs.length > 0 ? (this.dashboard.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
-      this.saveDashboard();
+      dashboard_view.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, dashboard_view.dashboard_graphs.length > 0 ? (dashboard_view.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
+      this.graphToAdd = undefined;
+      //this.saveDashboard();
+      this.getDashboardGraphs();
     }
   }
 
-  graphTeam(graphId: number): void {
-    const ids = this.dashboard.teams.filter(t => t.checked).map(t => t.team_no);
-    const index = this.dashboard.dashboard_graphs.findIndex(qg => qg.graph_id === graphId);
-    this.dashboard.dashboard_graphs[index].data = undefined;
+  graphTeam(dashboard_view: DashboardView, graphId: number): void {
+    const ids = dashboard_view.teams.filter(t => t.checked).map(t => t.team_no);
+    const index = dashboard_view.dashboard_graphs.findIndex(qg => qg.graph_id === graphId);
+    dashboard_view.dashboard_graphs[index].data = undefined;
 
     this.api.get(false, 'scouting/strategizing/graph-team/', {
       graph_id: graphId,
       team_ids: ids,
-      reference_team_id: this.dashboard.reference_team_id
+      reference_team_id: dashboard_view.reference_team_id
     }, (result) => {
-      this.dashboard.dashboard_graphs[index].data = result;
+      dashboard_view.dashboard_graphs[index].data = result;
     });
   }
 
-  hideMinus(rec: DashboardGraph): boolean {
-    return rec.order === this.dashboard.dashboard_graphs[0].order;
+  hideMinus(dashboard_view: DashboardView, rec: DashboardGraph): boolean {
+    return rec.order === dashboard_view.dashboard_graphs[0].order;
   }
 
-  hidePlus(rec: DashboardGraph): boolean {
-    return rec.order === this.dashboard.dashboard_graphs[this.dashboard.dashboard_graphs.length - 1].order;
+  hidePlus(dashboard_view: DashboardView, rec: DashboardGraph): boolean {
+    return rec.order === dashboard_view.dashboard_graphs[dashboard_view.dashboard_graphs.length - 1].order;
   }
 
-  incrementOrder(rec: DashboardGraph): void {
-    let i = this.dashboard.dashboard_graphs.findIndex(dg => dg.id === rec.id);
+  incrementOrder(dashboard_view: DashboardView, rec: DashboardGraph): void {
+    let i = dashboard_view.dashboard_graphs.findIndex(dg => dg.id === rec.id);
 
-    const selection = this.dashboard.dashboard_graphs[i];
+    const selection = dashboard_view.dashboard_graphs[i];
     const selOrder = selection.order;
-    selection.order = this.dashboard.dashboard_graphs[i + 1].order;
-    this.dashboard.dashboard_graphs[i + 1].order = selOrder;
-    this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i + 1];
-    this.dashboard.dashboard_graphs[i + 1] = selection;
+    selection.order = dashboard_view.dashboard_graphs[i + 1].order;
+    dashboard_view.dashboard_graphs[i + 1].order = selOrder;
+    dashboard_view.dashboard_graphs[i] = dashboard_view.dashboard_graphs[i + 1];
+    dashboard_view.dashboard_graphs[i + 1] = selection;
   }
 
-  decrementOrder(rec: DashboardGraph): void {
-    let i = this.dashboard.dashboard_graphs.findIndex(dg => dg.id === rec.id);
+  decrementOrder(dashboard_view: DashboardView, rec: DashboardGraph): void {
+    let i = dashboard_view.dashboard_graphs.findIndex(dg => dg.id === rec.id);
 
-    const selection = this.dashboard.dashboard_graphs[i];
+    const selection = dashboard_view.dashboard_graphs[i];
     const selOrder = selection.order;
-    selection.order = this.dashboard.dashboard_graphs[i - 1].order;
-    this.dashboard.dashboard_graphs[i - 1].order = selOrder;
-    this.dashboard.dashboard_graphs[i] = this.dashboard.dashboard_graphs[i - 1];
-    this.dashboard.dashboard_graphs[i - 1] = selection;
+    selection.order = dashboard_view.dashboard_graphs[i - 1].order;
+    dashboard_view.dashboard_graphs[i - 1].order = selOrder;
+    dashboard_view.dashboard_graphs[i] = dashboard_view.dashboard_graphs[i - 1];
+    dashboard_view.dashboard_graphs[i - 1] = selection;
   }
 
   removeGraph(rec: DashboardGraph): void {

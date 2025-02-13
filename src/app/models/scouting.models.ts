@@ -597,12 +597,23 @@ export class DashboardView {
     dashboard_graphs: DashboardGraph[] = [];
     teams: Team[] = [];
     reference_team_id = NaN;
+    name = '';
     order = NaN;
-    active = '';
+    active = 'y';
+
+    //front end only
+    availableGraphs: Graph[] = [];
+
+    constructor(dash_view_typ?: DashboardViewType, order = NaN) {
+        this.order = order;
+        if (dash_view_typ)
+            this.dash_view_typ = dash_view_typ;
+    }
 }
 
 export class Dashboard {
     id = NaN;
     active = 'y';
-    dashboard_views: DashboardView[] = []
+    dashboard_views: DashboardView[] = [];
+    default_dash_view_typ: DashboardViewType | undefined = undefined;
 }
