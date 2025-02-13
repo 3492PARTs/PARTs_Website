@@ -138,7 +138,7 @@ export class MetricsComponent implements OnInit {
 
   addGraphToDashboard(): void {
     if (this.graphToAdd) {
-      this.dashboard.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, this.dashboard.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1));
+      this.dashboard.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, this.dashboard.dashboard_graphs.length > 0 ? (this.dashboard.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
       this.saveDashboard();
     }
   }
