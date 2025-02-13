@@ -1,5 +1,6 @@
 <div class="border">
-  <label class="tabs" [ngClass]="{'activeTab': t.active}" *ngFor="let t of tabs" (click)="showTab(t)">
+  <label class="tabs" [ngClass]="{'activeTab': t.active}" *ngFor="let t of tabs" (click)="showTab(t)"
+    [ngStyle]="{color: t.element?.TabTextColor || null}">
     {{ t.name }}
   </label>
 </div>
