@@ -45,6 +45,7 @@
                     <ng-container *ngTemplateOutlet="graph"></ng-container>
                 </div>
 
+                @if (!DashViewType) {
                 <div class="full-width flex align-items-flex-end justify-content-space-between">
                     <div class="flex gap-p5rem padding-left-1rem">
                         <app-modal [ButtonType]="'arrow-expand-all'" [Title]="dashboard_graph.graph_name">
@@ -66,6 +67,7 @@
                             [Disabled]="hidePlus(dashboard_view, dashboard_graph)"></app-button>
                     </div>
                 </div>
+                }
             </div>
             }
         </ng-template>
