@@ -1,7 +1,7 @@
 <app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="false">
   <app-form-element [Type]="'select'" [LabelText]="'Viewing View Type'" [(Model)]="dashboard.default_dash_view_typ"
     [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"
-    [MinWidth]="'200px'" [FormGroupInline]="true"></app-form-element>
+    [MinWidth]="'200px'" [FormGroupInline]="true" (FunctionCallBack)="saveDashboard()"></app-form-element>
 
   <div class="inline-flex align-items-baseline gap-1rem">
     <app-form-element [Type]="'select'" [LabelText]="'Inactive Dashboard Views'" [(Model)]="InactiveDashboardView"
