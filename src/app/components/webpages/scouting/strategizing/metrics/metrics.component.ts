@@ -31,7 +31,7 @@ export class MetricsComponent implements OnInit {
   data: any = {};
 
   dashboard = new Dashboard();
-  activeDashboardView: DashboardView | undefined = undefined;
+  InactiveDashboardView: DashboardView | undefined = undefined;
 
   teams: Team[] = [];
   graphs: Graph[] = [];
@@ -47,6 +47,8 @@ export class MetricsComponent implements OnInit {
   appSize_3XLG = AppSize._3XLG;
   appSize_5XLG = AppSize._5XLG;
   appSize_7XLG = AppSize._7XLG;
+  inactiveViews: DashboardView[] = [];
+  activeViewCount = 0;
   private resizeTimer: number | null | undefined;
 
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
@@ -119,6 +121,8 @@ export class MetricsComponent implements OnInit {
     this.api.get(true, 'scouting/strategizing/dashboard/', undefined, (result: Dashboard) => {
       this.dashboard = result;
       this.dashboard.dashboard_views.forEach(dv => this.filterGraphs(dv));
+      this.activeViewCount = this.dashboard.dashboard_views.filter(dv => dv.active === 'y').length;
+      this.inactiveViews = this.dashboard.dashboard_views.filter(dv => dv.active === 'n');
 
       this.getDashboardGraphs();
     });
@@ -157,9 +161,14 @@ export class MetricsComponent implements OnInit {
     dashboard_view.availableGraphs = this.graphs.filter(g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
   }
 
-  addViewToDashboard(): void {
-    this.dashboard.dashboard_views.push(new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1))
+  addViewToDashboard(dashboard_view?: DashboardView): void {
+    if (dashboard_view) dashboard_view.active = 'y';
+    this.dashboard.dashboard_views.push(dashboard_view ? dashboard_view : new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1))
     this.dashboardViewType = undefined;
+    if (dashboard_view) {
+      dashboard_view = undefined;
+      this.saveDashboard();
+    }
   }
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
@@ -173,6 +182,10 @@ export class MetricsComponent implements OnInit {
         this.saveDashboard();
         //this.getDashboardGraphs();
       }
+  }
+
+  graphViewTeam(dashboard_view: DashboardView): void {
+    dashboard_view.dashboard_graphs.forEach(dg => this.graphTeam(dashboard_view, dg.graph_id));
   }
 
   graphTeam(dashboard_view: DashboardView, graphId: number): void {
@@ -221,6 +234,44 @@ export class MetricsComponent implements OnInit {
 
   removeGraph(rec: DashboardGraph): void {
     this.gs.triggerConfirm('Do you want to remove this chart?', () => {
+      rec.active = 'n';
+      this.saveDashboard();
+      this.getGraphs();
+    });
+  }
+
+  hideViewMinus(dashboard_view: DashboardView): boolean {
+    return dashboard_view.order === this.dashboard.dashboard_views[0].order;
+  }
+
+  hideViewPlus(dashboard_view: DashboardView): boolean {
+    return dashboard_view.order === this.dashboard.dashboard_views[this.dashboard.dashboard_views.length - 1].order;
+  }
+
+  incrementViewOrder(dashboard_view: DashboardView): void {
+    let i = this.dashboard.dashboard_views.findIndex(dv => dv.id === dashboard_view.id);
+
+    const selection = this.dashboard.dashboard_views[i];
+    const selOrder = selection.order;
+    selection.order = this.dashboard.dashboard_views[i + 1].order;
+    this.dashboard.dashboard_views[i + 1].order = selOrder;
+    this.dashboard.dashboard_views[i] = this.dashboard.dashboard_views[i + 1];
+    this.dashboard.dashboard_views[i + 1] = selection;
+  }
+
+  decrementViewOrder(dashboard_view: DashboardView): void {
+    let i = this.dashboard.dashboard_views.findIndex(dg => dg.id === dashboard_view.id);
+
+    const selection = this.dashboard.dashboard_views[i];
+    const selOrder = selection.order;
+    selection.order = this.dashboard.dashboard_views[i - 1].order;
+    this.dashboard.dashboard_views[i - 1].order = selOrder;
+    this.dashboard.dashboard_views[i] = this.dashboard.dashboard_views[i - 1];
+    this.dashboard.dashboard_views[i - 1] = selection;
+  }
+
+  removeView(rec: DashboardView): void {
+    this.gs.triggerConfirm('Do you want to remove this view?', () => {
       rec.active = 'n';
       this.saveDashboard();
       this.getGraphs();
