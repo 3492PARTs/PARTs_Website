@@ -15,10 +15,11 @@ import { ModalComponent } from "../../../../atoms/modal/modal.component";
 import { LoadingComponent } from "../../../../atoms/loading/loading.component";
 import { HeaderComponent } from "../../../../atoms/header/header.component";
 import { FormComponent } from "../../../../atoms/form/form.component";
+import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-metrics',
-  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent, FormComponent],
+  imports: [FormElementComponent, CommonModule, ButtonComponent, ChartComponent, BoxComponent, ButtonRibbonComponent, ModalComponent, LoadingComponent, HeaderComponent, FormComponent, FormElementGroupComponent],
   templateUrl: './metrics.component.html',
   styleUrl: './metrics.component.scss'
 })
@@ -36,7 +37,6 @@ export class MetricsComponent implements OnInit {
   teams: Team[] = [];
   graphs: Graph[] = [];
   dashboardViewTypes: DashboardViewType[] = [];
-  dashboardViewType: DashboardViewType | undefined = undefined;
 
   graphToAdd: Graph | undefined = undefined;
   chartImageUrl = '';
@@ -162,16 +162,13 @@ export class MetricsComponent implements OnInit {
   }
 
   addViewToDashboard(dashboard_view?: DashboardView): void {
-    if (this.dashboardViewType) {
-      dashboard_view = dashboard_view ? dashboard_view : new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1);
-      dashboard_view.active = 'y';
-      this.dashboard.dashboard_views.push(dashboard_view)
-      this.dashboardViewType = undefined;
-      this.filterAvailableGraphs(dashboard_view);
-      if (!this.gs.strNoE(dashboard_view.name)) {
-        dashboard_view = undefined;
-        this.saveDashboard();
-      }
+    dashboard_view = dashboard_view ? dashboard_view : new DashboardView(this.dashboard.default_dash_view_typ, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1);
+    dashboard_view.active = 'y';
+    this.dashboard.dashboard_views.push(dashboard_view)
+    this.filterAvailableGraphs(dashboard_view);
+    if (!this.gs.strNoE(dashboard_view.name)) {
+      dashboard_view = undefined;
+      this.saveDashboard();
     }
   }
 

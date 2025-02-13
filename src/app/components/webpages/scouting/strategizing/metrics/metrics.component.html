@@ -1,29 +1,19 @@
 <app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="false">
-  <div class="flex align-items-baseline gap-1rem">
-    <app-form-element [Type]="'select'" [LabelText]="'View Type'" [(Model)]="dashboardViewType"
-      [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"
-      [MinWidth]="'200px'"></app-form-element>
+  <app-form-element [Type]="'select'" [LabelText]="'Viewing View Type'" [(Model)]="dashboard.default_dash_view_typ"
+    [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"
+    [MinWidth]="'200px'" [FormGroupInline]="true"></app-form-element>
 
-    <app-button [ButtonType]="'add'" (FunctionCallBack)="addViewToDashboard()"></app-button>
-  </div>
-
-
-  <app-button-ribbon>
-    <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
-  </app-button-ribbon>
-
-  <app-form-element [Type]="'select'" [LabelText]="'Viewing Views'" [(Model)]="dashboard.default_dash_view_typ"
-    [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"></app-form-element>
-
-  <div class="flex align-items-baseline gap-1rem">
+  <div class="inline-flex align-items-baseline gap-1rem">
     <app-form-element [Type]="'select'" [LabelText]="'Inactive Dashboard Views'" [(Model)]="InactiveDashboardView"
       [SelectList]="inactiveViews" [DisplayProperty]="'name'" [DisplayEmptyOption]="true"
       [MinWidth]="'250px'"></app-form-element>
 
     <app-button [ButtonType]="'add'" (FunctionCallBack)="addViewToDashboard(InactiveDashboardView)"></app-button>
   </div>
-
-
+  <app-button [ButtonType]="'warning'" (FunctionCallBack)="addViewToDashboard()">Add View</app-button>
+  <app-button-ribbon>
+    <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
+  </app-button-ribbon>
 </app-box>
 
 <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
