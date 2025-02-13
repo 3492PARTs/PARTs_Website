@@ -44,6 +44,7 @@
     </p>
   </div>
 
+  <!--strategies-->
   <div class="padding-bottom-1rem">
     @for (ms of activeMatchStrategies; track ms.id; let i = $index) { @if
     (ms.user){
@@ -69,6 +70,32 @@
     } }
   </div>
 
+  <!--graphs-->
+  @if (redTeams.length > 0 && blueTeams.length > 0) {
+  <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
+    'two-column-grid': !mobile, 
+    }">
+    <div>
+      <app-header [h]="1">
+        @for (t of redTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="redTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+    <div>
+      <app-header [h]="1">
+        @for (t of blueTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="blueTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+
+  </div>
+  }
+
+  <!--teams-->
   <app-tab-container>
     <app-tab *ngFor="let mpr of matchToPlan" [TabName]="mpr.team.team_no.toString()" [TabTextColor]="mpr.alliance">
       <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>

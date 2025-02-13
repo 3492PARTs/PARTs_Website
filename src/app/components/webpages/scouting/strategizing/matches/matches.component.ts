@@ -15,15 +15,17 @@ import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
 import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
 import { User } from '../../../../../models/user.models';
 import { LoadingComponent } from "../../../../atoms/loading/loading.component";
+import { DashboardComponent } from "../../../../elements/dashboard/dashboard.component";
+import { HeaderComponent } from "../../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-plan-matches',
-  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent],
+  imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent, DashboardComponent, HeaderComponent],
   templateUrl: './matches.component.html',
   styleUrls: ['./matches.component.scss']
 })
 export class MatchesComponent implements OnInit {
-
+  mobile = false;
   matches: Match[] = [];
   teams: Team[] = [];
 
@@ -45,12 +47,8 @@ export class MatchesComponent implements OnInit {
   activeMatchStrategies: MatchStrategy[] = [];
   activeMatchStrategiesButtonData: { display: boolean, id: number }[] = [];
   matchToPlan: MatchPlanning[] = [];
-
-  graphOptionsList: any[] = [];
-  graphOptionsSelected: any[] = [];
-  redChart: Chart | null = null;
-  blueChart: Chart | null = null;
-  chosenGraphDataPoints = '';
+  redTeams: Team[] = [];
+  blueTeams: Team[] = [];
 
   user = new User();
 
@@ -61,7 +59,7 @@ export class MatchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //Chart.register(...registerables);
+    this.mobile = this.gs.isMobile();
 
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
@@ -137,6 +135,9 @@ export class MatchesComponent implements OnInit {
       this.matchToPlan = [];
       let tmp: MatchPlanning[] = [];
 
+      this.redTeams = [new Team(match.red_one_id), new Team(match.red_two_id), new Team(match.red_three_id)];
+      this.blueTeams = [new Team(match.blue_one_id), new Team(match.blue_two_id), new Team(match.blue_three_id)];
+
       const allianceMembers = [
         { team: match.red_one_id, alliance: 'red' },
         { team: match.red_two_id, alliance: 'red' },
@@ -204,6 +205,8 @@ export class MatchesComponent implements OnInit {
   }
 
   clearResults(): void {
+    this.redTeams = [];
+    this.blueTeams = [];
     this.matchToPlan = [];
     this.activeMatch = undefined;
     this.activeMatchStrategies = [];
