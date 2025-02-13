@@ -586,11 +586,23 @@ export class DashboardGraph {
     }
 }
 
+export class DashboardViewType {
+    dash_view_typ = '';
+    dash_view_nm = '';
+}
+
+export class DashboardView {
+    id = NaN;
+    dash_view_typ = new DashboardViewType();
+    dashboard_graphs: DashboardGraph[] = [];
+    teams: Team[] = [];
+    reference_team_id = NaN;
+    order = NaN;
+    active = '';
+}
 
 export class Dashboard {
     id = NaN;
     active = 'y';
-    dashboard_graphs: DashboardGraph[] = [];
-    teams: Team[] = [];
-    reference_team_id = NaN;
+    dashboard_views: DashboardView[] = []
 }
