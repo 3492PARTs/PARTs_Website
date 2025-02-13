@@ -23,11 +23,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  @Input() set DashViewType(s: string) {
-    this.dashViewType = s;
-    this.getDashboard();
-  }
-  dashViewType: string | undefined = undefined;
+  @Input() DashViewType: string | undefined = undefined;
   @Input() Teams: Team[] = [];
   @Input() VerticalLayout = false;
 
@@ -58,15 +54,17 @@ export class DashboardComponent implements OnInit {
   private resizeTimer: number | null | undefined;
 
   constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService) {
+
+  }
+
+  ngOnInit(): void {
+    this.updateAppSize();
+
     this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.init();
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.updateAppSize();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -124,7 +122,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getDashboard(): void {
-    this.api.get(true, 'scouting/strategizing/dashboard/', this.dashViewType ? { dash_view_typ_id: this.dashViewType } : undefined, (result: Dashboard) => {
+    this.api.get(true, 'scouting/strategizing/dashboard/', this.DashViewType ? { dash_view_typ_id: this.DashViewType } : undefined, (result: Dashboard) => {
       this.dashboard = result;
       this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
       this.activeViewCount = this.dashboard.dashboard_views.filter(dv => dv.active === 'y').length;
@@ -138,7 +136,7 @@ export class DashboardComponent implements OnInit {
     let i = 0;
 
     this.dashboard.dashboard_views.forEach(dv => {
-      if (dv.dash_view_typ.dash_view_typ == this.dashboard.default_dash_view_typ?.dash_view_typ && dv.active == 'y' && (dv.teams.length > 0 || this.Teams.length > 0))
+      if (dv.active == 'y' && (dv.teams.length > 0 || this.Teams.length > 0))
         dv.dashboard_graphs.forEach(dg => {
           this.gs.triggerChange(() => {
             this.graphTeam(dv, dg.graph_id);

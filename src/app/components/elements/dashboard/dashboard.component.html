@@ -1,4 +1,4 @@
-@if (!dashViewType) {
+@if (!DashViewType) {
 <app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="false">
     <app-form-element [Type]="'select'" [LabelText]="'Viewing View Type'" [(Model)]="dashboard.default_dash_view_typ"
         [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"
@@ -70,7 +70,7 @@
             }
         </ng-template>
 
-        @if (!dashViewType) {
+        @if (!DashViewType) {
         <app-box [Title]="'View Configuration'" [Collapsible]="true" [Collapsed]="false">
             <app-form (SubmitFunction)="saveDashboard()">
                 <app-form-element [Type]="'text'" [LabelText]="'View Name'" [(Model)]="dashboard_view.name"
