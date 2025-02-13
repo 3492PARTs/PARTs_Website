@@ -125,7 +125,7 @@ export class DashboardComponent implements OnInit {
     this.api.get(true, 'scouting/strategizing/dashboard/', this.DashViewType ? { dash_view_typ_id: this.DashViewType } : undefined, (result: Dashboard) => {
       this.dashboard = result;
       this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
-      this.activeViewCount = this.dashboard.dashboard_views.filter(dv => dv.active === 'y').length;
+      this.calcActiveViewCount();
       this.inactiveViews = this.dashboard.dashboard_views.filter(dv => dv.active === 'n');
 
       this.getDashboardGraphs();
@@ -165,11 +165,16 @@ export class DashboardComponent implements OnInit {
     dashboard_view.availableGraphs = this.graphs.filter(g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
   }
 
+  private calcActiveViewCount(): void {
+    this.activeViewCount = this.dashboard.dashboard_views.filter(dv => dv.active === 'y').length;
+  }
+
   addViewToDashboard(dashboard_view?: DashboardView): void {
     dashboard_view = dashboard_view ? dashboard_view : new DashboardView(this.dashboard.default_dash_view_typ, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1);
     dashboard_view.active = 'y';
     this.dashboard.dashboard_views.push(dashboard_view)
     this.filterAvailableGraphs(dashboard_view);
+    this.calcActiveViewCount();
     if (!this.gs.strNoE(dashboard_view.name)) {
       dashboard_view = undefined;
       this.saveDashboard();

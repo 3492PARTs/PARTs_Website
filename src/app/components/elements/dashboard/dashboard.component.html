@@ -38,7 +38,7 @@
 
             <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
                 <div class="full-width flex-grow-2 relative graph">
-                    @if (!dashboard_graph.data) {
+                    @if (!dashboard_graph.data && dashboard_view.teams.length > 0) {
                     <app-loading [Loading]="true" [Height]="'100%'" [MinHeight]="'255px'"></app-loading>
                     }
                     <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
