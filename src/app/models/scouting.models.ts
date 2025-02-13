@@ -30,6 +30,10 @@ export class Team implements ITeam {
     checked = false;
     pit_result = 0;
     rank = NaN;
+
+    constructor(team_no = NaN) {
+        this.team_no = team_no;
+    }
 }
 
 export interface IEvent {

@@ -24,50 +24,18 @@
     </div>
   </app-form-element-group>
 
-  <p *ngIf="initPromise !== undefined">Loading...</p>
-
-  <app-table
-    [TableCols]="matchesTableCols"
-    [TableData]="matches"
-    (RecordClickCallBack)="planMatch($event)"
-    [Highlighting]="true"
-    [AllowActiveRecord]="true"
-    [Stripes]="true"
-    [Width]="'100%'"
-    [ScrollHeight]="'50rem'"
-    [CursorPointer]="true"
-    [StrikeThroughFn]="strikeThoughMatch"
-  >
-  </app-table>
+  <div id="matches-table">
+    <app-loading [Loading]="initPromise !== undefined"></app-loading>
+    <app-table [TableCols]="matchesTableCols" [TableData]="matches" (RecordClickCallBack)="planMatch($event)"
+      [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'" [ScrollHeight]="'50rem'"
+      [CursorPointer]="true" [StrikeThroughFn]="strikeThoughMatch">
+    </app-table>
+  </div>
 </app-box>
 
-<app-box
-  *ngIf="activeMatch"
-  [Title]="
+<app-box *ngIf="activeMatch" [Title]="
     activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number
-  "
-  (ReturnFunction)="clearResults()"
->
-  <div class="flex justify-content-space-between">
-    <!--<app-modal [ButtonType]="'main'" [ButtonText]="'Statistics'" [Title]="'Match Statistics'">
-            <app-form-element [Type]="'multiSelect'" [LabelText]="'Graph Options'" [SelectList]="graphOptionsList"
-                [(Model)]="graphOptionsSelected" [DisplayProperty]="'ColLabel'" (FunctionCallBack)="buildGraph()">
-            </app-form-element>
-
-            <app-form-element-group [LabelText]="'Red Alliance'">
-                <p>{{chosenGraphDataPoints}}</p>
-
-                <canvas id="red-chart" class="chart">{{redChart}}</canvas>
-            </app-form-element-group>
-
-            <app-form-element-group [LabelText]="'Blue Alliance'">
-                <p>{{chosenGraphDataPoints}}</p>
-
-                <canvas id="blue-chart" class="chart">{{blueChart}}</canvas>
-            </app-form-element-group>
-        </app-modal>-->
-  </div>
-
+  " (ReturnFunction)="clearResults()">
   <div>
     <p>Match Time: {{ activeMatch.time | dateToStr }}</p>
     <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">
@@ -76,27 +44,22 @@
     </p>
   </div>
 
+  <!--strategies-->
   <div class="padding-bottom-1rem">
     @for (ms of activeMatchStrategies; track ms.id; let i = $index) { @if
     (ms.user){
     <div class="match-strategy">
       @if (ms.img_url) {
-      <app-button
-        class="img-btn"
-        [ButtonType]="'image-outline'"
-        [BackgroundColor]="'#808080'"
-        (FunctionCallBack)="toggleImageDisplay(i)"
-      ></app-button>
+      <app-button class="img-btn" [ButtonType]="'image-outline'" [BackgroundColor]="'#808080'"
+        (FunctionCallBack)="toggleImageDisplay(i)"></app-button>
       }
 
-      <app-form-element-group
-        [LabelText]="
+      <app-form-element-group [LabelText]="
           ms.user.first_name +
           ' ' +
           ms.user.last_name +
           ((ms.time | dateToStr) || '')
-        "
-      >
+        ">
         <p>{{ ms.strategy }}</p>
 
         @if (ms.img_url && activeMatchStrategiesButtonData[i].display) {
@@ -107,39 +70,50 @@
     } }
   </div>
 
+  <!--graphs-->
+  @if (redTeams.length > 0 && blueTeams.length > 0) {
+  <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
+    'two-column-grid': !mobile, 
+    }">
+    <div>
+      <app-header [h]="1">
+        @for (t of redTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="redTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+    <div>
+      <app-header [h]="1">
+        @for (t of blueTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="blueTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+
+  </div>
+  }
+
+  <!--teams-->
   <app-tab-container>
-    <app-tab
-      *ngFor="let mpr of matchToPlan"
-      [TabName]="mpr.team.team_no.toString()"
-    >
-      <app-pit-result-display
-        *ngIf="mpr.pitData"
-        [ScoutPitResult]="mpr.pitData"
-      ></app-pit-result-display>
+    <app-tab *ngFor="let mpr of matchToPlan" [TabName]="mpr.team.team_no.toString()" [TabTextColor]="mpr.alliance">
+      <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
 
       <app-form-element-group [LabelText]="'Notes'">
-        <app-form-element-group
-          *ngFor="let note of mpr.notes"
-          [LabelText]="
+        <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="
             (note.user
               ? note.user.first_name + ' ' + note.user.last_name + ' '
               : '') + ((note.time | dateToStr) || '')
-          "
-        >
+          ">
           <p>{{ note.note }}</p>
         </app-form-element-group>
       </app-form-element-group>
 
       <div class="padding-bottom-1rem"></div>
 
-      <app-table
-        [TableCols]="scoutCols"
-        [TableData]="mpr.scoutAnswers || []"
-        [EnableFilter]="true"
-        [Responsive]="true"
-        [Scrollable]="true"
-        [ScrollHeight]="'calc(100vh - 24rem)'"
-      >
+      <app-table [TableCols]="scoutCols" [TableData]="mpr.scoutAnswers || []" [EnableFilter]="true" [Responsive]="true"
+        [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
       </app-table>
     </app-tab>
   </app-tab-container>
