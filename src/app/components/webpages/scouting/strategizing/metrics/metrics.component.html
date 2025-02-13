@@ -45,7 +45,7 @@
 
         <div class="flex align-items-baseline gap-1rem">
           <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd"
-            [SelectList]="graphs" [DisplayProperty]="'name'" [DisplayEmptyOption]="true"
+            [SelectList]="dashboard_view.availableGraphs" [DisplayProperty]="'name'" [DisplayEmptyOption]="true"
             [MinWidth]="'200px'"></app-form-element>
 
           <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboardView(dashboard_view)"></app-button>
@@ -85,9 +85,9 @@
 
     <app-box [Title]="dashboard_view.name">
       <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
-    'two-column-grid': appSize >= appSizeXLG && dashboard.dashboard_views.length <= 1, 
-    'three-column-grid': appSize >= appSize_3XLG && dashboard.dashboard_views.length <= 1,
-    'four-column-grid': appSize >= appSize_7XLG && dashboard.dashboard_views.length <= 1,
+    'two-column-grid': appSize >= appSizeXLG && activeViewCount <= 1, 
+    'three-column-grid': appSize >= appSize_3XLG && activeViewCount <= 1,
+    'four-column-grid': appSize >= appSize_7XLG && activeViewCount <= 1,
     }">
         @for (dashboard_graph of dashboard_view.dashboard_graphs; track $index) {
         <ng-template #graph>
