@@ -163,12 +163,16 @@ export class MetricsComponent implements OnInit {
   }
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
-    if (this.graphToAdd) {
-      dashboard_view.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, dashboard_view.dashboard_graphs.length > 0 ? (dashboard_view.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
-      this.graphToAdd = undefined;
-      //this.saveDashboard();
-      this.getDashboardGraphs();
+    if (this.gs.strNoE(dashboard_view.name)) {
+      this.gs.triggerFormValidationBanner(['Name is required']);
     }
+    else
+      if (this.graphToAdd) {
+        dashboard_view.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, dashboard_view.dashboard_graphs.length > 0 ? (dashboard_view.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
+        this.graphToAdd = undefined;
+        this.saveDashboard();
+        //this.getDashboardGraphs();
+      }
   }
 
   graphTeam(dashboard_view: DashboardView, graphId: number): void {

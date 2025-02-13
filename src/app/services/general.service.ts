@@ -138,6 +138,14 @@ export class GeneralService {
     return await this.cs.Banner.getById(id)
   }
 
+  triggerFormValidationBanner(ss: string[]): void {
+    let ret = '';
+    ss.forEach(s => {
+      ret += `&bull;  ${s} is invalid\n`
+    });
+
+    this.addBanner(new Banner(0, ret, 3500));
+  }
   /* Error Service */
   acceptError() {
     this.showErrorModal = false;
