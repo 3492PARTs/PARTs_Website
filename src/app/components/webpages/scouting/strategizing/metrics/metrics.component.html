@@ -1,62 +1,133 @@
 <app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="true">
   <div class="flex align-items-baseline gap-1rem">
-    <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd" [SelectList]="graphs"
-      [DisplayProperty]="'name'" [DisplayEmptyOption]="true" [MinWidth]="'200px'"></app-form-element>
-    <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboard()"></app-button>
-  </div>
-  <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [(Model)]="dashboard.teams" [SelectList]="teams"
-    [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-    [DisplayEmptyOption]="true"></app-form-element>
+    <app-form-element [Type]="'select'" [LabelText]="'View Type'" [(Model)]="dashboardViewType"
+      [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'"
+      [DisplayEmptyOption]="true"></app-form-element>
 
-  <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard.reference_team_id"
-    [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [BindingProperty]="'team_no'"
-    [DisplayEmptyOption]="true"></app-form-element>
+    <app-button [ButtonType]="'add'" (FunctionCallBack)="addViewToDashboard()"></app-button>
+  </div>
+
 
   <app-button-ribbon>
     <app-button [ButtonType]="'success'" (FunctionCallBack)="saveDashboard()">Save</app-button>
   </app-button-ribbon>
-</app-box>
 
-<app-box [Title]="'Graphs'">
-  <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
-    'two-column-grid': appSize >= appSizeXLG, 
-    'three-column-grid': appSize >= appSize_3XLG,
-    'four-column-grid': appSize >= appSize_7XLG
-    }">
-    @for (dashboard_graph of dashboard.dashboard_graphs; track $index) {
-    <ng-template #graph>
-      <app-chart [ChartType]="dashboard_graph.graph_typ" [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl"
-        [XScaleMin]="dashboard_graph.x_scale_min" [XScaleMax]="dashboard_graph.x_scale_max"
-        [YScaleMin]="dashboard_graph.y_scale_min" [YScaleMax]="dashboard_graph.y_scale_max"></app-chart>
-    </ng-template>
+  <app-form-element [Type]="'select'" [LabelText]="'Viewing Views'" [(Model)]="dashboard.default_dash_view_typ"
+    [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"></app-form-element>
 
-    <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
-      <div class="full-width flex-grow-2 relative graph">
-        @if (!dashboard_graph.data) {
-        <app-loading [Loading]="true" [Height]="'100%'" [MinHeight]="'255px'"></app-loading>
-        }
-        <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
-        <ng-container *ngTemplateOutlet="graph"></ng-container>
-      </div>
+  <div class="flex align-items-baseline gap-1rem">
+    <app-form-element [Type]="'select'" [LabelText]="'Inactive Dashboard Views'" [(Model)]="InactiveDashboardView"
+      [SelectList]="inactiveViews" [DisplayProperty]="'name'" [DisplayEmptyOption]="true"
+      [MinWidth]="'250px'"></app-form-element>
 
-      <div class="full-width flex align-items-flex-end justify-content-space-between">
-        <div class="flex gap-p5rem padding-left-1rem">
-          <app-modal [ButtonType]="'arrow-expand-all'" [Title]="dashboard_graph.graph_name">
-            <ng-container *ngTemplateOutlet="graph"></ng-container>
-          </app-modal>
-
-          <app-button [ButtonType]="'refresh'" (FunctionCallBack)="graphTeam(dashboard_graph.graph_id)"></app-button>
-          <app-button [ButtonType]="'delete'" (FunctionCallBack)="removeGraph(dashboard_graph)"></app-button>
-        </div>
-
-        <div class="flex gap-p5rem padding-right-1rem">
-          <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrementOrder(dashboard_graph)"
-            [Disabled]="hideMinus(dashboard_graph)"></app-button>
-          <app-button [ButtonType]="'add'" (FunctionCallBack)="incrementOrder(dashboard_graph)"
-            [Disabled]="hidePlus(dashboard_graph)"></app-button>
-        </div>
-      </div>
-    </div>
-    }
+    <app-button [ButtonType]="'add'" (FunctionCallBack)="addViewToDashboard(InactiveDashboardView)"></app-button>
   </div>
+
+
 </app-box>
+
+<div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
+    'two-column-grid': activeViewCount === 2,
+    'three-column-grid': activeViewCount === 3,
+    'four-column-grid': activeViewCount === 4,
+    'five-column-grid': activeViewCount > 4,
+    }">
+  @for (dashboard_view of dashboard.dashboard_views; track $index) {
+  @if (dashboard_view.active === 'y') {
+  <div>
+    <app-box [Title]="'View Configuration'" [Collapsible]="true" [Collapsed]="true">
+      <app-form (SubmitFunction)="saveDashboard()">
+        <app-form-element [Type]="'text'" [LabelText]="'View Name'" [(Model)]="dashboard_view.name"
+          [Required]="true"></app-form-element>
+
+        <app-form-element [Type]="'checkbox'" [LabelText]="'active'" [(Model)]="dashboard_view.active" [TrueValue]="'y'"
+          [FalseValue]="'n'"></app-form-element>
+
+        <div class="flex align-items-baseline gap-1rem">
+          <app-form-element [Type]="'select'" [LabelText]="'Available Graphs'" [(Model)]="graphToAdd"
+            [SelectList]="graphs" [DisplayProperty]="'name'" [DisplayEmptyOption]="true"
+            [MinWidth]="'200px'"></app-form-element>
+
+          <app-button [ButtonType]="'add'" (FunctionCallBack)="addGraphToDashboardView(dashboard_view)"></app-button>
+        </div>
+
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [(Model)]="dashboard_view.teams"
+          [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+          [BindingProperty]="'team_no'"></app-form-element>
+
+        <app-form-element [Type]="'select'" [LabelText]="'Reference Team'" [(Model)]="dashboard_view.reference_team_id"
+          [SelectList]="teams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+          [BindingProperty]="'team_no'" [DisplayEmptyOption]="true"></app-form-element>
+
+        <div class="full-width flex align-items-flex-end justify-content-space-between">
+          <div class="flex gap-p5rem padding-left-1rem">
+            <app-modal [ButtonType]="'arrow-expand-all'" [Title]="dashboard_view.name">
+
+            </app-modal>
+
+            <app-button [ButtonType]="'refresh'" (FunctionCallBack)="graphViewTeam(dashboard_view)"></app-button>
+            <app-button [ButtonType]="'delete'" (FunctionCallBack)="removeView(dashboard_view)"></app-button>
+          </div>
+
+          <div class="flex gap-p5rem padding-right-1rem">
+            <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrementViewOrder(dashboard_view)"
+              [Disabled]="hideViewMinus(dashboard_view)"></app-button>
+            <app-button [ButtonType]="'add'" (FunctionCallBack)="incrementViewOrder(dashboard_view)"
+              [Disabled]="hideViewPlus(dashboard_view)"></app-button>
+          </div>
+        </div>
+
+        <app-button-ribbon>
+          <app-button [Type]="'success'" [ButtonType]="'success'">Save</app-button>
+        </app-button-ribbon>
+      </app-form>
+    </app-box>
+
+    <app-box [Title]="dashboard_view.name">
+      <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
+    'two-column-grid': appSize >= appSizeXLG && dashboard.dashboard_views.length <= 1, 
+    'three-column-grid': appSize >= appSize_3XLG && dashboard.dashboard_views.length <= 1,
+    'four-column-grid': appSize >= appSize_7XLG && dashboard.dashboard_views.length <= 1,
+    }">
+        @for (dashboard_graph of dashboard_view.dashboard_graphs; track $index) {
+        <ng-template #graph>
+          <app-chart [ChartType]="dashboard_graph.graph_typ" [Data]="dashboard_graph.data" [ChartImgUrl]="chartImageUrl"
+            [XScaleMin]="dashboard_graph.x_scale_min" [XScaleMax]="dashboard_graph.x_scale_max"
+            [YScaleMin]="dashboard_graph.y_scale_min" [YScaleMax]="dashboard_graph.y_scale_max"></app-chart>
+        </ng-template>
+
+        <div class="flex flex-wrap justify-content-space-between align-items-stretch align-content-stretch">
+          <div class="full-width flex-grow-2 relative graph">
+            @if (!dashboard_graph.data) {
+            <app-loading [Loading]="true" [Height]="'100%'" [MinHeight]="'255px'"></app-loading>
+            }
+            <app-header [h]="1">{{ dashboard_graph.graph_name }}</app-header>
+            <ng-container *ngTemplateOutlet="graph"></ng-container>
+          </div>
+
+          <div class="full-width flex align-items-flex-end justify-content-space-between">
+            <div class="flex gap-p5rem padding-left-1rem">
+              <app-modal [ButtonType]="'arrow-expand-all'" [Title]="dashboard_graph.graph_name">
+                <ng-container *ngTemplateOutlet="graph"></ng-container>
+              </app-modal>
+
+              <app-button [ButtonType]="'refresh'"
+                (FunctionCallBack)="graphTeam(dashboard_view, dashboard_graph.graph_id)"></app-button>
+              <app-button [ButtonType]="'delete'" (FunctionCallBack)="removeGraph(dashboard_graph)"></app-button>
+            </div>
+
+            <div class="flex gap-p5rem padding-right-1rem">
+              <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrementOrder(dashboard_view, dashboard_graph)"
+                [Disabled]="hideMinus(dashboard_view, dashboard_graph)"></app-button>
+              <app-button [ButtonType]="'add'" (FunctionCallBack)="incrementOrder(dashboard_view, dashboard_graph)"
+                [Disabled]="hidePlus(dashboard_view, dashboard_graph)"></app-button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </app-box>
+  </div>
+  }
+  }
+</div>
