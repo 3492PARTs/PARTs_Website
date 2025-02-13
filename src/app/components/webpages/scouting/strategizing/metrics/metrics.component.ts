@@ -120,7 +120,7 @@ export class MetricsComponent implements OnInit {
   private getDashboard(): void {
     this.api.get(true, 'scouting/strategizing/dashboard/', undefined, (result: Dashboard) => {
       this.dashboard = result;
-      this.dashboard.dashboard_views.forEach(dv => this.filterGraphs(dv));
+      this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
       this.activeViewCount = this.dashboard.dashboard_views.filter(dv => dv.active === 'y').length;
       this.inactiveViews = this.dashboard.dashboard_views.filter(dv => dv.active === 'n');
 
@@ -152,22 +152,26 @@ export class MetricsComponent implements OnInit {
     this.api.get(true, 'form/graph/', undefined, (result: Graph[]) => {
       this.graphs = result;
 
-      this.dashboard.dashboard_views.forEach(dv => this.filterGraphs(dv));
+      this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
 
     });
   }
 
-  private filterGraphs(dashboard_view: DashboardView): void {
+  private filterAvailableGraphs(dashboard_view: DashboardView): void {
     dashboard_view.availableGraphs = this.graphs.filter(g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
   }
 
   addViewToDashboard(dashboard_view?: DashboardView): void {
-    if (dashboard_view) dashboard_view.active = 'y';
-    this.dashboard.dashboard_views.push(dashboard_view ? dashboard_view : new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1))
-    this.dashboardViewType = undefined;
-    if (dashboard_view) {
-      dashboard_view = undefined;
-      this.saveDashboard();
+    if (this.dashboardViewType) {
+      dashboard_view = dashboard_view ? dashboard_view : new DashboardView(this.dashboardViewType, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1);
+      dashboard_view.active = 'y';
+      this.dashboard.dashboard_views.push(dashboard_view)
+      this.dashboardViewType = undefined;
+      this.filterAvailableGraphs(dashboard_view);
+      if (!this.gs.strNoE(dashboard_view.name)) {
+        dashboard_view = undefined;
+        this.saveDashboard();
+      }
     }
   }
 
