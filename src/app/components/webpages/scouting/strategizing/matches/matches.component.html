@@ -76,7 +76,7 @@
     'two-column-grid': !mobile, 
     }">
     <div>
-      <app-header [h]="1">
+      <app-header [h]="1">Red:
         @for (t of redTeams; track $index) {
         {{t.team_no + ($last ? '' : ' & ')}}
         }
@@ -84,7 +84,7 @@
       <app-dashboard [DashViewType]="'matches'" [Teams]="redTeams" [VerticalLayout]="true"></app-dashboard>
     </div>
     <div>
-      <app-header [h]="1">
+      <app-header [h]="1">Blue:
         @for (t of blueTeams; track $index) {
         {{t.team_no + ($last ? '' : ' & ')}}
         }
