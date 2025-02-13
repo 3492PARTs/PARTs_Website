@@ -51,7 +51,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() Type = 'text';
   @Input() PickerMode: PickerMode | null = null;
   _PickerMode: PickerMode = 'popup';
-
+  multiSelectModel: any[] = [];
   @Input()
   set SelectList(sl: any) {
     this.setSelectList(sl);
@@ -262,9 +262,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       });
 
-      this.gs.triggerChange(() => {
-        this.change(tmp);
-      });
+      this.multiSelectModel = tmp
     }
 
     this.gs.triggerChange(() => {
@@ -293,6 +291,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         }
       }
 
+      this.ModelChange.emit(this.Model);
+    }
+    else if (this.Type === 'multiSelect') {
+      const mm = this.multiSelectModel[index];
+      mm['checked'] = newValue;
+      let m: any = (this.Model as any[]).find(m => m[this.BindingProperty || ''] === mm[this.BindingProperty || '']);
+
+      if (m)
+        m['checked'] = mm['checked'];
+      else
+        (this.Model as any[]).push(mm);
+      //this._SelectList[index]['checked'] = newValue;
       this.ModelChange.emit(this.Model);
     }
     else if (index !== -1) {
@@ -545,13 +555,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   selectAll(): void {
-    for (let i = 0; i < this._SelectList.length; i++) {
+    for (let i = 0; i < this.multiSelectModel.length; i++) {
       this.change(true, i);
     }
   }
 
   deselectAll(): void {
-    for (let i = 0; i < this._SelectList.length; i++) {
+    for (let i = 0; i < this.multiSelectModel.length; i++) {
       this.change(false, i);
     }
   }
