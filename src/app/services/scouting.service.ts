@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy, AllianceSelection, IAllianceSelection } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
-import { QuestionCondition, QuestionWithConditions } from '../models/form.models';
 import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
 import { IFilterDelegate } from '../models/dexie.models';
 import { Banner } from '../models/api.models';
+import { Question } from '../models/form.models';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +15,22 @@ import { Banner } from '../models/api.models';
 export class ScoutingService {
   private outstandingResponsesTimeout: number | undefined;
 
-  private outstandingLoadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
-  private outstandingLoadSeasonsPromise: Promise<Season[] | null> | null = null;
-  private outstandingLoadEventsPromise: Promise<Event[] | null> | null = null;
-  private outstandingLoadTeamsPromise: Promise<Team[] | null> | null = null;
-  private outstandingLoadMatchesPromise: Promise<Match[] | null> | null = null;
-  private outstandingInitFieldScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
-  private outstandingGetFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
-  private outstandingInitPitScoutingPromise: Promise<QuestionWithConditions[] | null> | null = null;
-  private outstandingGetPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
-  private outstandingLoadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
-  private outstandingLoadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
-  private outstandingLoadSchedulesPromise: Promise<Schedule[] | null> | null = null;
-  private outstandingLoadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
+  private loadAllScoutingInfoPromise: Promise<AllScoutInfo | null> | null = null;
+  private loadSeasonsPromise: Promise<Season[] | null> | null = null;
+  private loadEventsPromise: Promise<Event[] | null> | null = null;
+  private loadTeamsPromise: Promise<Team[] | null> | null = null;
+  private loadMatchesPromise: Promise<Match[] | null> | null = null;
+  private initFieldScoutingPromise: Promise<FieldFormForm | null> | null = null;
+  private getFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
+  private initPitScoutingPromise: Promise<Question[] | null> | null = null;
+  private getPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
+  private loadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
+  private loadScheduleTypesPromise: Promise<ScheduleType[] | null> | null = null;
+  private loadSchedulesPromise: Promise<Schedule[] | null> | null = null;
+  private loadTeamNotesPromise: Promise<TeamNote[] | null> | null = null;
+  private loadMatchStrategiesPromise: Promise<MatchStrategy[] | null> | null = null;
+  private loadAllianceSelectionPromise: Promise<AllianceSelection[] | null> | null = null;
+  private uploadOutstandingResponsesPromise: Promise<void> | null = null;
 
   private outstandingResponsesUploadedTimeout: number | undefined;
   private outstandingResponsesUploadedBS = new BehaviorSubject<number>(0);
@@ -46,40 +49,65 @@ export class ScoutingService {
 
   }
 
-  async uploadOutstandingResponses(loadingScreen = true) {
-    let fieldUploaded = false;
+  async uploadOutstandingResponses(loadingScreen = true): Promise<void> {
+    if (!this.uploadOutstandingResponsesPromise)
+      this.uploadOutstandingResponsesPromise = new Promise<void>(async resolve => {
+        let fieldUploaded = false;
 
-    await this.cs.ScoutFieldFormResponse.getAll().then(sfrs => {
-      sfrs.forEach(async s => {
-        await this.saveFieldScoutingResponse(s, s.id, loadingScreen).then(success => {
-          if (success)
-            fieldUploaded = success;
+        await this.cs.ScoutFieldFormResponse.getAll().then(async sfrs => {
+          for (let i = 0; i < sfrs.length; i++) {
+            let s = sfrs[i];
+            await this.saveFieldScoutingResponse(s, s.id, loadingScreen).then(success => {
+              if (success)
+                fieldUploaded = success;
+            });
+          }
         });
-      });
-    });
 
-    if (fieldUploaded) {
-      this.loadTeams();
-      this.loadFieldScoutingForm();
-    }
+        if (fieldUploaded) {
+          this.loadTeams();
+          this.loadFieldScoutingForm();
+        }
 
-    let pitUploaded = false;
+        let pitUploaded = false;
 
-    await this.cs.ScoutPitFormResponse.getAll().then(sprs => {
-      sprs.forEach(async s => {
-        await this.savePitScoutingResponse(s, s.id, loadingScreen).then(success => {
-          if (success)
-            pitUploaded = success;
+        await this.cs.ScoutPitFormResponse.getAll().then(async sprs => {
+          for (let i = 0; i < sprs.length; i++) {
+            let s = sprs[i];
+            await this.savePitScoutingResponse(s, s.id, loadingScreen).then(success => {
+              if (success)
+                pitUploaded = success;
+            });
+          }
         });
+
+
+        if (pitUploaded) {
+          if (!fieldUploaded) this.loadTeams();
+          this.loadPitScoutingForm();
+        }
+
+        await this.cs.MatchStrategyResponse.getAll().then(async mrs => {
+          for (let i = 0; i < mrs.length; i++) {
+            let s = mrs[i];
+            await this.saveMatchStrategy(s, s.id, loadingScreen);
+          }
+        });
+
+        await this.cs.TeamNoteResponse.getAll().then(async trs => {
+          for (let i = 0; i < trs.length; i++) {
+            let s = trs[i];
+            await this.saveTeamNote(s, s.id, loadingScreen);
+          }
+        });
+
+        this.triggerResponsesUploaded();
+
+        resolve();
+        this.uploadOutstandingResponsesPromise = null;
       });
-    });
 
-    if (pitUploaded) {
-      if (!fieldUploaded) this.loadTeams();
-      this.loadPitScoutingForm();
-    }
-
-    this.triggerResponsesUploaded();
+    return this.uploadOutstandingResponsesPromise;
   }
 
   private triggerResponsesUploaded(): void {
@@ -91,9 +119,13 @@ export class ScoutingService {
   }
 
   // Load All Scouting Information -----------------------------------------------------------
+  getLoadAllScoutingInfoPromise(): Promise<AllScoutInfo | null> | null {
+    return this.loadAllScoutingInfoPromise;
+  }
+
   loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllScoutInfo | null> {
-    if (!this.outstandingLoadAllScoutingInfoPromise) {
-      this.outstandingLoadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
+    if (!this.loadAllScoutingInfoPromise) {
+      this.loadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: AllScoutInfo) => {
           /** 
            * On success load results and store in db 
@@ -105,6 +137,10 @@ export class ScoutingService {
           await this.updateScheduleTypesCache(result.schedule_types);
           await this.updateSchedulesCache(result.schedules);
           await this.updateScoutFieldSchedulesCache(result.scout_field_schedules);
+          await this.updateTeamNotesCache(result.team_notes);
+          await this.updateMatchStrategiesCache(result.match_strategies);
+          await this.updateFieldFormFormCache(result.field_form_form);
+          await this.updateAllianceSelectionCache(result.alliance_selections);
 
           if (callbackFn) callbackFn(result);
 
@@ -172,6 +208,34 @@ export class ScoutingService {
             allLoaded = false;
           });
 
+          await this.getTeamNotesFromCache().then(tns => {
+            result.team_notes = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getMatchStrategiesFromCache().then(mss => {
+            result.match_strategies = mss;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getFieldFormFormFromCache().then(ff => {
+            result.field_form_form = ff;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          await this.getAllianceSelectionFromCache().then(als => {
+            result.alliance_selections = als;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
           if (!allLoaded) {
             this.gs.addBanner(new Banner(0, 'Error loading all scouting info from cache.'));
             resolve(null);
@@ -179,20 +243,20 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadAllScoutingInfoPromise = null;
+          this.loadAllScoutingInfoPromise = null;
         }, () => {
-          this.outstandingLoadAllScoutingInfoPromise = null;
+          this.loadAllScoutingInfoPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadAllScoutingInfoPromise;
+    return this.loadAllScoutingInfoPromise;
   }
 
   // Load Seasons -----------------------------------------------------------
   loadSeasons(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Season[] | null> {
-    if (!this.outstandingLoadSeasonsPromise) {
-      this.outstandingLoadSeasonsPromise = new Promise<Season[] | null>(resolve => {
+    if (!this.loadSeasonsPromise) {
+      this.loadSeasonsPromise = new Promise<Season[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/season/', undefined, async (result: Season[]) => {
           /** 
            * On success load results and store in db 
@@ -222,21 +286,21 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadSeasonsPromise = null;
+          this.loadSeasonsPromise = null;
         }, () => {
-          this.outstandingLoadSeasonsPromise = null;
+          this.loadSeasonsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadSeasonsPromise;
+    return this.loadSeasonsPromise;
   }
 
   private async updateSeasonsCache(ss: Season[]): Promise<void> {
     let current = await this.getCurrentSeason();
     let newCurrent = ss.filter(s => s.current === 'y');
 
-    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].season_id !== current[0].season_id) {
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].id !== current[0].id) {
       await this.SeasonEventChangedClearCache();
     }
     await this.cs.Season.RemoveAllAsync();
@@ -255,7 +319,7 @@ export class ScoutingService {
         changed = !value;
 
         value.forEach(async v => {
-          if (s.season_id !== v.season_id) {
+          if (s.id !== v.id) {
             v.current = 'n';
             changed = true;
             await this.cs.Season.AddOrEditAsync(v);
@@ -279,8 +343,8 @@ export class ScoutingService {
 
   // Load Events -----------------------------------------------------------
   loadEvents(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Event[] | null> {
-    if (!this.outstandingLoadEventsPromise) {
-      this.outstandingLoadEventsPromise = new Promise<Event[] | null>(resolve => {
+    if (!this.loadEventsPromise) {
+      this.loadEventsPromise = new Promise<Event[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/event/', undefined, async (result: Event[]) => {
           /** 
            * On success load results and store in db 
@@ -310,21 +374,21 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadEventsPromise = null;
+          this.loadEventsPromise = null;
         }, () => {
-          this.outstandingLoadEventsPromise = null;
+          this.loadEventsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadEventsPromise;
+    return this.loadEventsPromise;
   }
 
   private async updateEventsCache(es: Event[]): Promise<void> {
     let current = await this.getCurrentEvent();
     let newCurrent = es.filter(e => e.current === 'y');
 
-    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].event_id !== current[0].event_id) {
+    if (newCurrent.length > 0 && current.length > 0 && newCurrent[0].id !== current[0].id) {
       await this.SeasonEventChangedClearCache();
     }
 
@@ -344,7 +408,7 @@ export class ScoutingService {
         changed = !value;
 
         value.forEach(async v => {
-          if (e.event_id !== e.event_id) {
+          if (e.id !== e.id) {
             v.current = 'n';
             changed = true;
             await this.cs.Event.AddOrEditAsync(v);
@@ -368,8 +432,8 @@ export class ScoutingService {
 
   // Load Teams -----------------------------------------------------------
   getTeams(loadingScreen = true, current: boolean): Promise<Team[] | null> {
-    if (!this.outstandingLoadTeamsPromise) {
-      this.outstandingLoadTeamsPromise = new Promise<Team[] | null>(resolve => {
+    if (!this.loadTeamsPromise) {
+      this.loadTeamsPromise = new Promise<Team[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/team/', { current: current }, async (result: Team[]) => {
           /** 
            * On success load results and store in db 
@@ -380,26 +444,27 @@ export class ScoutingService {
            * On fail load results from db
            **/
           resolve(null);
-          this.outstandingLoadTeamsPromise = null;
+          this.loadTeamsPromise = null;
         }, () => {
-          this.outstandingLoadTeamsPromise = null;
+          this.loadTeamsPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadTeamsPromise;
+    return this.loadTeamsPromise;
   }
 
   loadTeams(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Team[] | null> {
     return new Promise<Team[] | null>(resolve => {
-      this.getTeams(true, true).then(async (result: Team[] | null) => {
+      this.getTeams(loadingScreen, true).then(async (result: Team[] | null) => {
         /** 
          * On success load results and store in db 
          **/
         if (result) {
           await this.updateTeamsCache(result);
 
-          this.loadAllScoutingInfo();
+          // TODO I am not sure why this is here.
+          // this.loadAllScoutingInfo();
 
           if (callbackFn) callbackFn(result);
         }
@@ -454,8 +519,8 @@ export class ScoutingService {
 
   // Load Matches -----------------------------------------------------------
   loadMatches(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Match[] | null> {
-    if (!this.outstandingLoadMatchesPromise) {
-      this.outstandingLoadMatchesPromise = new Promise<Match[] | null>(resolve => {
+    if (!this.loadMatchesPromise) {
+      this.loadMatchesPromise = new Promise<Match[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/match/', undefined, async (result: Match[]) => {
           /** 
            * On success load results and store in db 
@@ -485,13 +550,13 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadMatchesPromise = null;
+          this.loadMatchesPromise = null;
         }, () => {
-          this.outstandingLoadMatchesPromise = null;
+          this.loadMatchesPromise = null;
         });
       });
     }
-    return this.outstandingLoadMatchesPromise;
+    return this.loadMatchesPromise;
   }
 
   private async updateMatchesCache(ms: Match[]): Promise<void> {
@@ -508,17 +573,17 @@ export class ScoutingService {
   }
 
   // Field Scouting -----------------------------------------------------------
-  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
-    if (!this.outstandingInitFieldScoutingPromise) {
-      this.outstandingInitFieldScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
-        this.api.get(loadingScreen, 'form/question/', {
+  loadFieldScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<FieldFormForm | null> {
+    if (!this.initFieldScoutingPromise) {
+      this.initFieldScoutingPromise = new Promise<FieldFormForm | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/field/form/', {
           form_typ: 'field',
           active: 'y'
-        }, async (result: QuestionWithConditions[]) => {
+        }, async (result: FieldFormForm) => {
           /** 
            * On success load results and store in db 
            **/
-          await this.updateScoutingQuestionsCache('field', result);
+          await this.updateFieldFormFormCache(result);
 
           if (callbackFn) callbackFn(result);
           resolve(result);
@@ -527,11 +592,11 @@ export class ScoutingService {
            * On fail load results from db
            **/
           let allLoaded = true;
-          let result: QuestionWithConditions[] = [];
+          let result: FieldFormForm | null = null;
 
-          await this.getScoutingQuestionsFromCache('field').then((spqs: QuestionWithConditions[]) => {
-            result = spqs;
-            if (spqs.length <= 0) allLoaded = false;
+          await this.getFieldFormFormFromCache().then((fff: FieldFormForm) => {
+            if (!fff) allLoaded = false;
+            else result = fff;
           }).catch((reason: any) => {
             console.log(reason);
             allLoaded = false;
@@ -544,35 +609,27 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingInitFieldScoutingPromise = null;
+          this.initFieldScoutingPromise = null;
         }, () => {
-          this.outstandingInitFieldScoutingPromise = null;
+          this.initFieldScoutingPromise = null;
         });
       });
     }
 
-    return this.outstandingInitFieldScoutingPromise;
+    return this.initFieldScoutingPromise;
   }
 
   saveFieldScoutingResponse(sfr: ScoutFieldFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      let response = this.gs.cloneObject(sfr.question_answers) as QuestionWithConditions[];
-
-      response.forEach(r => {
-        r.answer = this.gs.formatQuestionAnswer(r.answer);
-
-        r.conditions.forEach((c: QuestionCondition) => {
-          if (c.question_to) c.question_to.answer = this.gs.formatQuestionAnswer(c.question_to?.answer);
-        });
+      sfr.answers.forEach(a => {
+        a.flow?.flow_questions.forEach(q => q.question.answer = '');
       });
 
-      sfr.question_answers = response;
-
-      this.api.post(loadingScreen, 'form/save-answers/', { question_answers: sfr.question_answers, team: sfr.team, match_id: sfr.match?.match_id, form_typ: sfr.form_typ }, async (result: any) => {
+      this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
         this.gs.successfulResponseBanner(result);
 
         if (id) {
-          await this.cs.ScoutFieldFormResponse.RemoveAsync(id)
+          await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
         }
 
         resolve(true);
@@ -596,28 +653,32 @@ export class ScoutingService {
   }
 
   loadFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
-    if (forceCall || !this.outstandingGetFieldScoutingResponsesPromise)
-      this.outstandingGetFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
+    if (forceCall || !this.getFieldScoutingResponsesPromise)
+      this.getFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
         let last = null;
-        await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('time')).then(sfrr => {
-          //console.log(sfrr);
-          if (sfrr) last = sfrr['time'];
-        });
+
+        if (!forceCall)
+          await this.cs.ScoutFieldResponse.getLast(sfrrs => sfrrs.orderBy('id')).then(sfrr => {
+            //console.log(sfrr);
+            if (sfrr) last = sfrr['id'];
+          });
 
         let params: any = undefined;
 
         if (!forceCall && last)
           params = {
-            after_date_time: last
+            after_scout_field_id: last
           }
 
         this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
 
-          await this.updateScoutFieldResponseColumnsCache(result.scoutCols);
+          this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
+          const ids = result.removed_responses;
           if (params) {
             // we are only loading the diff
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
+            await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
             await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
 
             await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
@@ -629,15 +690,12 @@ export class ScoutingService {
           else {
             // loading all
             this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-            await this.updateScoutFieldResponsesCache(result.scoutAnswers);
+            this.updateScoutFieldResponsesCache(result.scoutAnswers);
           }
-
-          const ids = result.removed_responses.map(t => { return t.scout_field_id });
-          await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
 
           resolve(result);
 
-          this.outstandingGetFieldScoutingResponsesPromise = null;
+          this.getFieldScoutingResponsesPromise = null;
         }, async (err: any) => {
           const scoutResponses = new ScoutFieldResponsesReturn();
 
@@ -664,11 +722,28 @@ export class ScoutingService {
           else
             resolve(scoutResponses);
 
-          this.outstandingGetFieldScoutingResponsesPromise = null;
+          this.getFieldScoutingResponsesPromise = null;
         });
       });
 
-    return this.outstandingGetFieldScoutingResponsesPromise;
+    return this.getFieldScoutingResponsesPromise;
+  }
+
+  private async updateFieldFormFormCache(fieldForm: FieldFormForm) {
+    await this.cs.FieldFormForm.RemoveAllAsync().then(async () => {
+      fieldForm.id = 1;
+      await this.cs.FieldFormForm.AddAsync(fieldForm);
+    });
+  }
+
+  getFieldFormFormFromCache(filterDelegate: IFilterDelegate | undefined = undefined): Promise<FieldFormForm> {
+    return new Promise<FieldFormForm>(resolve => {
+      this.cs.FieldFormForm.getAll(filterDelegate).then(fff => resolve(fff[0]));
+    });
+  }
+
+  private async removeFieldFormFormFromCache(): Promise<void> {
+    await this.cs.FieldFormForm.RemoveAllAsync();
   }
 
   getFieldResponseColumnsFromCache(): PromiseExtended<any[]> {
@@ -696,13 +771,13 @@ export class ScoutingService {
   }
 
   // Pit Scouting --------------------------------------------------------------
-  loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<QuestionWithConditions[] | null> {
-    if (!this.outstandingInitPitScoutingPromise) {
-      this.outstandingInitPitScoutingPromise = new Promise<QuestionWithConditions[] | null>(resolve => {
+  loadPitScoutingForm(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Question[] | null> {
+    if (!this.initPitScoutingPromise) {
+      this.initPitScoutingPromise = new Promise<Question[] | null>(resolve => {
         this.api.get(loadingScreen, 'form/question/', {
           form_typ: 'pit',
           active: 'y'
-        }, async (result: QuestionWithConditions[]) => {
+        }, async (result: Question[]) => {
           /** 
            * On success load results and store in db 
            **/
@@ -716,9 +791,9 @@ export class ScoutingService {
            * On fail load results from db
            **/
           let allLoaded = true;
-          let result: QuestionWithConditions[] = [];
+          let result: Question[] = [];
 
-          await this.getScoutingQuestionsFromCache('pit').then((spqs: QuestionWithConditions[]) => {
+          await this.getScoutingQuestionsFromCache('pit').then((spqs: Question[]) => {
             result = spqs;
             if (spqs.length <= 0) allLoaded = false;
           }).catch((reason: any) => {
@@ -733,25 +808,24 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingInitPitScoutingPromise = null;
+          this.initPitScoutingPromise = null;
         }, () => {
-          this.outstandingInitPitScoutingPromise = null;
+          this.initPitScoutingPromise = null;
         });
       });
     }
 
-    return this.outstandingInitPitScoutingPromise;
+    return this.initPitScoutingPromise;
   }
 
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
-      let scoutQuestions = this.gs.cloneObject(spr.question_answers) as QuestionWithConditions[];
-
-      scoutQuestions.forEach(r => {
-        r.answer = this.gs.formatQuestionAnswer(r.answer);
-      });
-
-      spr.question_answers = scoutQuestions;
+      spr.answers.forEach(a => {
+        if (a.question) {
+          a.question.answer = '';
+          a.value = this.gs.formatQuestionAnswer(a.value);
+        }
+      })
       spr.form_typ = 'pit';
 
       const sprPost = this.gs.cloneObject(spr);
@@ -764,28 +838,31 @@ export class ScoutingService {
 
         let count = 0;
 
-        spr?.robotPics.forEach(pic => {
-          if (pic && pic.size >= 0) {
-            const team_no = spr?.team;
+        spr?.pics.forEach(pic => {
+          if (pic.img && pic.img.size >= 0) {
+            const team_no = spr?.team_id;
 
             window.setTimeout(() => {
               this.gs.incrementOutstandingCalls();
 
-              this.gs.resizeImageToMaxSize(pic).then(resizedPic => {
-                if (resizedPic) {
-                  const formData = new FormData();
-                  formData.append('file', resizedPic);
-                  formData.append('team_no', team_no?.toString() || '');
+              if (pic.img)
+                this.gs.resizeImageToMaxSize(pic.img).then(resizedPic => {
+                  if (resizedPic) {
+                    const formData = new FormData();
+                    formData.append('file', resizedPic);
+                    formData.append('team_no', team_no?.toString() || '');
+                    formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
+                    formData.append('img_title', pic.img_title);
 
-                  this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                    this.gs.successfulResponseBanner(result);
-                  }, (err: any) => {
-                    this.gs.triggerError(err);
-                  });
-                }
-              }).finally(() => {
-                this.gs.decrementOutstandingCalls();
-              });
+                    this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
+                      this.gs.successfulResponseBanner(result);
+                    }, (err: any) => {
+                      this.gs.triggerError(err);
+                    });
+                  }
+                }).finally(() => {
+                  this.gs.decrementOutstandingCalls();
+                });
             }, 1500 * ++count);
           }
         });
@@ -814,14 +891,14 @@ export class ScoutingService {
   }
 
   loadPitScoutingResponses(loadingScreen = true): Promise<ScoutPitResponsesReturn | null> {
-    if (!this.outstandingGetPitScoutingResponsesPromise)
-      this.outstandingGetPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
+    if (!this.getPitScoutingResponsesPromise)
+      this.getPitScoutingResponsesPromise = new Promise<ScoutPitResponsesReturn | null>(async resolve => {
         this.api.get(loadingScreen, 'scouting/pit/responses/', undefined, async (result: ScoutPitResponsesReturn) => {
 
           await this.updateScoutPitResponsesCache(result.teams);
 
           resolve(result);
-          this.outstandingGetPitScoutingResponsesPromise = null;
+          this.getPitScoutingResponsesPromise = null;
         }, async (err: any) => {
           const result = new ScoutPitResponsesReturn();
 
@@ -842,11 +919,11 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingGetPitScoutingResponsesPromise = null;
+          this.getPitScoutingResponsesPromise = null;
         });
       });
 
-    return this.outstandingGetPitScoutingResponsesPromise;
+    return this.getPitScoutingResponsesPromise;
   }
 
   private async updateScoutPitResponsesCache(sprs: ScoutPitResponse[]): Promise<void> {
@@ -868,8 +945,8 @@ export class ScoutingService {
 
   // Field Schedules -------------------------------------------------------------------------
   loadScoutingFieldSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScoutFieldSchedule[] | null> {
-    if (!this.outstandingLoadScoutFieldSchedulesPromise) {
-      this.outstandingLoadScoutFieldSchedulesPromise = new Promise<ScoutFieldSchedule[] | null>(resolve => {
+    if (!this.loadScoutFieldSchedulesPromise) {
+      this.loadScoutFieldSchedulesPromise = new Promise<ScoutFieldSchedule[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/scout-field-schedule/', undefined, async (result: ScoutFieldSchedule[]) => {
           /** 
            * On success load results and store in db 
@@ -899,14 +976,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadScoutFieldSchedulesPromise = null;
+          this.loadScoutFieldSchedulesPromise = null;
         }, () => {
-          this.outstandingLoadScoutFieldSchedulesPromise = null;
+          this.loadScoutFieldSchedulesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadScoutFieldSchedulesPromise;
+    return this.loadScoutFieldSchedulesPromise;
   }
 
   private async updateScoutFieldSchedulesCache(sfss: ScoutFieldSchedule[]): Promise<void> {
@@ -927,10 +1004,11 @@ export class ScoutingService {
     else if (r1.st_time > r2.st_time) return 1;
     else return 0;
   }
+
   // Schedules -------------------------------------------------------------------------
   loadSchedules(loadingScreen = true, callbackFn?: (result: any) => void): Promise<Schedule[] | null> {
-    if (!this.outstandingLoadSchedulesPromise) {
-      this.outstandingLoadSchedulesPromise = new Promise<Schedule[] | null>(resolve => {
+    if (!this.loadSchedulesPromise) {
+      this.loadSchedulesPromise = new Promise<Schedule[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/schedule/', undefined, async (result: Schedule[]) => {
           /** 
            * On success load results and store in db 
@@ -960,14 +1038,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadSchedulesPromise = null;
+          this.loadSchedulesPromise = null;
         }, () => {
-          this.outstandingLoadSchedulesPromise = null;
+          this.loadSchedulesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadSchedulesPromise;
+    return this.loadSchedulesPromise;
   }
 
   private async updateSchedulesCache(ss: Schedule[]): Promise<void> {
@@ -985,8 +1063,8 @@ export class ScoutingService {
 
   // Schedule Types -------------------------------------------------------------------------
   loadScheduleTypes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<ScheduleType[] | null> {
-    if (!this.outstandingLoadScheduleTypesPromise) {
-      this.outstandingLoadScheduleTypesPromise = new Promise<ScheduleType[] | null>(resolve => {
+    if (!this.loadScheduleTypesPromise) {
+      this.loadScheduleTypesPromise = new Promise<ScheduleType[] | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/schedule-type/', undefined, async (result: ScheduleType[]) => {
           /** 
            * On success load results and store in db 
@@ -1016,14 +1094,14 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadScheduleTypesPromise = null;
+          this.loadScheduleTypesPromise = null;
         }, () => {
-          this.outstandingLoadScheduleTypesPromise = null;
+          this.loadScheduleTypesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadScheduleTypesPromise;
+    return this.loadScheduleTypesPromise;
   }
 
   private async updateScheduleTypesCache(sts: ScheduleType[]): Promise<void> {
@@ -1037,9 +1115,9 @@ export class ScoutingService {
 
   // Team Notes -----------------------------------------------------------
   loadTeamNotes(loadingScreen = true, callbackFn?: (result: any) => void): Promise<TeamNote[] | null> {
-    if (!this.outstandingLoadTeamNotesPromise) {
-      this.outstandingLoadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
-        this.api.get(loadingScreen, 'scouting/match-planning/team-notes/', undefined, async (result: TeamNote[]) => {
+    if (!this.loadTeamNotesPromise) {
+      this.loadTeamNotesPromise = new Promise<TeamNote[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/strategizing/team-notes/', undefined, async (result: TeamNote[]) => {
           /** 
            * On success load results and store in db 
            **/
@@ -1069,14 +1147,44 @@ export class ScoutingService {
           else
             resolve(result);
 
-          this.outstandingLoadTeamNotesPromise = null;
+          this.loadTeamNotesPromise = null;
         }, () => {
-          this.outstandingLoadTeamNotesPromise = null;
+          this.loadTeamNotesPromise = null;
         });
       });
     }
 
-    return this.outstandingLoadTeamNotesPromise;
+    return this.loadTeamNotesPromise;
+  }
+
+  saveTeamNote(teamNote: TeamNote, id?: number, loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      if (id) teamNote.id = NaN;
+
+      this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
+        this.gs.successfulResponseBanner(result);
+
+        if (id) {
+          await this.removeTeamNoteResponseFromCache(id)
+        }
+
+        resolve(true);
+      }, (error) => {
+        this.startUploadOutstandingResponsesTimeout();
+
+        if (!id) this.cs.TeamNoteResponse.AddAsync(teamNote).then(() => {
+          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          resolve(true);
+        }).catch((reason: any) => {
+          console.log(reason);
+          this.gs.triggerError(reason);
+          resolve(false);
+        });
+        else
+          resolve(false);
+      });
+    });
   }
 
   private updateTeamNotesCache(notes: TeamNote[]) {
@@ -1086,22 +1194,213 @@ export class ScoutingService {
   }
 
   getTeamNotesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
-    return this.cs.TeamNote.getAll(filterDelegate);
+    return this.cs.TeamNote.getAll(filterDelegate).then(tns => tns.sort((tn1, tn2) => {
+      if (tn1.time < tn2.time) return 1;
+      else if (tn1.time > tn2.time) return -1;
+      else return 0;
+    }));
+  }
+
+  getTeamNoteResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<ITeamNote[]> {
+    return this.cs.TeamNoteResponse.getAll(filterDelegate);
+  }
+
+  removeTeamNoteResponseFromCache(id: number): Promise<void> {
+    return this.cs.TeamNoteResponse.RemoveAsync(id)
+  }
+
+  // Match Strategies -----------------------------------------------------------
+  loadMatchStrategies(loadingScreen = true, callbackFn?: (result: any) => void): Promise<MatchStrategy[] | null> {
+    if (!this.loadMatchStrategiesPromise) {
+      this.loadMatchStrategiesPromise = new Promise<MatchStrategy[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/strategizing/match-strategy/', undefined, async (result: MatchStrategy[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateMatchStrategiesCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          let result: MatchStrategy[] = [];
+
+          await this.getMatchStrategiesFromCache().then((tns: MatchStrategy[]) => {
+            result = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner(0, 'Error loading match strategies form from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.loadMatchStrategiesPromise = null;
+        }, () => {
+          this.loadMatchStrategiesPromise = null;
+        });
+      });
+    }
+
+    return this.loadMatchStrategiesPromise;
+  }
+
+  saveMatchStrategy(matchStrategy: MatchStrategy, id?: number, loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      if (id) matchStrategy.id = NaN;
+
+      const fd = new FormData();
+      if (matchStrategy.img)
+        fd.append('img', matchStrategy.img);
+      if (!this.gs.strNoE(matchStrategy.id))
+        fd.append('id', matchStrategy.id.toString());
+
+      fd.append('match_key', matchStrategy.match?.match_key.toString() || '');
+      fd.append('user_id', matchStrategy.user?.id.toString() || '');
+      fd.append('strategy', matchStrategy.strategy);
+
+
+      this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
+        this.gs.successfulResponseBanner(result);
+
+        if (id) {
+          await this.cs.MatchStrategyResponse.RemoveAsync(id)
+        }
+
+        resolve(true);
+      }, (error) => {
+        this.startUploadOutstandingResponsesTimeout();
+
+        if (!id) this.cs.MatchStrategyResponse.AddAsync(matchStrategy).then(() => {
+          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          resolve(true);
+        }).catch((reason: any) => {
+          console.log(reason);
+          this.gs.triggerError(reason);
+          resolve(false);
+        });
+        else
+          resolve(false);
+      });
+    });
+  }
+
+  private async updateMatchStrategiesCache(matchStrategies: MatchStrategy[]) {
+    await this.cs.MatchStrategy.RemoveAllAsync().then(async () => {
+      await this.cs.MatchStrategy.AddBulkAsync(matchStrategies);
+    });
+  }
+
+  getMatchStrategiesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatchStrategy[]> {
+    return this.cs.MatchStrategy.getAll(filterDelegate);
+  }
+
+  filterMatchStrategiesFromCache(fn: (obj: MatchStrategy) => boolean): PromiseExtended<MatchStrategy[]> {
+    return this.cs.MatchStrategy.filterAll(fn);
+  }
+
+  getMatchStrategyResponsesFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IMatchStrategy[]> {
+    return this.cs.MatchStrategyResponse.getAll(filterDelegate);
+  }
+
+  removeMatchStrategyResponseFromCache(id: number): Promise<void> {
+    return this.cs.MatchStrategyResponse.RemoveAsync(id)
+  }
+
+  // Alliance Selections -----------------------------------------------------------
+  loadAllianceSelection(loadingScreen = true, callbackFn?: (result: any) => void): Promise<AllianceSelection[] | null> {
+    if (!this.loadAllianceSelectionPromise) {
+      this.loadAllianceSelectionPromise = new Promise<AllianceSelection[] | null>(resolve => {
+        this.api.get(loadingScreen, 'scouting/strategizing/alliance-selection/', undefined, async (result: AllianceSelection[]) => {
+          /** 
+           * On success load results and store in db 
+           **/
+          await this.updateAllianceSelectionCache(result);
+
+          if (callbackFn) callbackFn(result);
+          resolve(result);
+        }, async (error: any) => {
+          /** 
+           * On fail load results from db
+           **/
+          let allLoaded = true;
+
+          let result: AllianceSelection[] = [];
+
+          await this.getAllianceSelectionFromCache().then((tns: AllianceSelection[]) => {
+            result = tns;
+          }).catch((reason: any) => {
+            console.log(reason);
+            allLoaded = false;
+          });
+
+          if (!allLoaded) {
+            this.gs.addBanner(new Banner(0, 'Error loading alliance selections form from cache.'));
+            resolve(null);
+          }
+          else
+            resolve(result);
+
+          this.loadAllianceSelectionPromise = null;
+        }, () => {
+          this.loadAllianceSelectionPromise = null;
+        });
+      });
+    }
+
+    return this.loadAllianceSelectionPromise;
+  }
+
+  saveAllianceSelections(selections: AllianceSelection[], loadingScreen = true): Promise<boolean> {
+    return new Promise(resolve => {
+
+      this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
+        this.gs.successfulResponseBanner(result);
+        resolve(true);
+      }, (error) => {
+        this.gs.triggerError(error);
+        resolve(false);
+      });
+    });
+  }
+
+  private async updateAllianceSelectionCache(selections: AllianceSelection[]) {
+    await this.cs.AllianceSelection.RemoveAllAsync().then(async () => {
+      await this.cs.AllianceSelection.AddBulkAsync(selections);
+    });
+  }
+
+  getAllianceSelectionFromCache(filterDelegate: IFilterDelegate | undefined = undefined): PromiseExtended<IAllianceSelection[]> {
+    return this.cs.AllianceSelection.getAll(filterDelegate);
+  }
+
+  filterAllianceSelectionFromCache(fn: (obj: AllianceSelection) => boolean): PromiseExtended<AllianceSelection[]> {
+    return this.cs.AllianceSelection.filterAll(fn);
   }
 
   // Others ----------------------------------------------------------------------
 
-  getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<QuestionWithConditions[]> {
-    return this.cs.QuestionWithConditions.getAll((q) => q.where({ 'form_typ': form_typ }));
+  getScoutingQuestionsFromCache(form_typ: string): PromiseExtended<Question[]> {
+    return this.cs.Question.filterAll((q) => q.form_typ.form_typ === form_typ);
   }
 
-  private async updateScoutingQuestionsCache(form_typ: string, questions: QuestionWithConditions[]) {
-    await this.getScoutingQuestionsFromCache(form_typ).then(qs => {
-      qs.forEach(async q => {
-        await this.cs.QuestionWithConditions.RemoveAsync(q.question_id);
-      });
+  private async updateScoutingQuestionsCache(form_typ: string, questions: Question[]) {
+    await this.getScoutingQuestionsFromCache(form_typ).then(async qs => {
+      const ids = qs.map(q => q.id);
+
+      await this.cs.Question.RemoveBulkAsync(ids);
     });
-    await this.cs.QuestionWithConditions.AddBulkAsync(questions);
+
+    await this.cs.Question.AddOrEditBulkAsync(questions);
   }
 
   private async SeasonEventChangedClearCache(): Promise<void> {
@@ -1116,6 +1415,7 @@ export class ScoutingService {
     await this.updateScheduleTypesCache([]);
     await this.updateSchedulesCache([]);
     await this.updateScoutFieldSchedulesCache([]);
+    await this.removeFieldFormFormFromCache();
   }
 }
 

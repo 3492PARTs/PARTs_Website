@@ -8,10 +8,12 @@ import {
   ElementRef,
   ViewChild,
   Renderer2,
-  DoCheck,
   OnChanges,
   HostListener,
-  RendererStyleFlags2
+  RendererStyleFlags2,
+  QueryList,
+  ViewChildren,
+  SimpleChanges
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
@@ -26,7 +28,6 @@ import { DateToStrPipe } from '../../../pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-table',
-  standalone: true,
   imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
@@ -40,9 +41,10 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() TableData: any[] = [];
   @Input() TableCols: TableColType[] = [];
-  @Input() TableDataButtons: any[] = [];
+  @Input() TableDataButtons: TableButtonType[] = [];
 
   @Input() TableTitle!: string;
+  @Input() TableName!: string;
 
   @Input() EnableFilter = false;
   @Input() DisableSort = false;
@@ -97,10 +99,11 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() OrderByReverse = false;
   ActiveRec: object | null = null;
   @Input()
-  set SetActiveRec(rec: object) {
+  set SetActiveRec(rec: any) {
     this.ActiveRec = rec;
     this.SetTableContainerWidth();
   }
+  @Output() SetActiveRecChange = new EventEmitter();
   FixedTableScrollColWidth = '0px';
   @ViewChild('InfoContainer', { read: ElementRef, static: true }) InfoContainer?: ElementRef;
 
@@ -111,9 +114,20 @@ export class TableComponent implements OnInit, OnChanges {
 
   buttonCellWidth = 'auto';
 
+  @ViewChildren(FormElementComponent) formElements = new QueryList<FormElementComponent>();
+
+  showButtonColumn = false;
+
+  @Input() TriggerUpdate!: any;
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.generateTableDisplayValues();
+    this.ShowButtonColumn();
+    if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
+      this.TableName = this.TableTitle;
+
     if (this.Width !== '' && this.Table) {
       this.renderer.setStyle(this.Table.nativeElement, 'width', this.Width, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
     }
@@ -133,47 +147,35 @@ export class TableComponent implements OnInit, OnChanges {
       );
     }
 
-    /*$(function () {
-      var startX,
-        startWidth,
-        $handle,
-        $table,
-        pressed = false;
-
-      $(document)
-        .on({
-          mousemove: function (event) {
-            if (pressed) {
-              $handle.width(startWidth + (event.pageX - startX));
-            }
-          },
-          mouseup: function () {
-            if (pressed) {
-              $table.removeClass('resizing');
-              pressed = false;
-            }
-          }
-        })
-        .on('mousedown', '.table-resizable th', function (event) {
-          $handle = $(this);
-          pressed = true;
-          startX = event.pageX;
-          startWidth = $handle.width();
-
-          $table = $handle.closest('.table-resizable').addClass('resizing');
-        })
-        .on('dblclick', '.table-resizable thead', function () {
-          // Reset column sizes on double click
-          $(this)
-            .find('th[style]')
-            .css('width', '');
-        });
-    });*/
 
   }
 
-  ngOnChanges() {
-    this.toType();
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'TableData':
+          case 'TableCols':
+            this.generateTableDisplayValues();
+            break;
+          case 'ShowAddButton':
+          case 'ShowEditButton':
+          case 'ShowRemoveButton':
+          case 'ShowViewButton':
+          case 'ShowArchiveButton':
+            this.ShowButtonColumn();
+            break;
+          case 'TableDataButtons':
+            this.generateTableDisplayValues();
+            this.ShowButtonColumn();
+            break;
+          case 'TriggerUpdate':
+            this.generateTableDisplayValues();
+            this.ShowButtonColumn();
+            break;
+        }
+      }
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -185,6 +187,37 @@ export class TableComponent implements OnInit, OnChanges {
     this.resizeTimer = window.setTimeout(() => {
       this.SetTableContainerWidth();
     }, 200);
+  }
+
+  generateTableDisplayValues(): void {
+    this.TableData.forEach(rec => {
+      this.TableCols.forEach(col => {
+        if (this.gs.strNoE(col.Type) && col.PropertyName?.includes('.')) {
+          rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
+        }
+        else if (col.Type === 'function') {
+          rec[(col.PropertyName || '') + (col.ColValueFunction?.name || '')] = col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? this.GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec;
+        }
+
+        if (col.ColorFunction) {
+          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+        }
+
+        if (col.FontColorFunction) {
+          rec[(col.PropertyName || '') + (col.FontColorFunction?.name || '')] = col.FontColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+        }
+
+        if (col.UnderlineFn) {
+          rec[(col.PropertyName || '') + (col.UnderlineFn?.name || '')] = col.UnderlineFn(rec, col.PropertyName);
+        }
+
+        this.TableDataButtons.forEach(btn => {
+          if (btn.HideFunction) {
+            rec[btn.ButtonType + (btn.HideFunction?.name || '')] = btn.HideFunction(rec);
+          }
+        });
+      });
+    });
   }
 
   private toType() {
@@ -210,6 +243,7 @@ export class TableComponent implements OnInit, OnChanges {
     if (this.AllowActiveRecord) {
       this.ActiveRec = Rec;
       this.SetTableContainerWidth();
+      this.SetActiveRecChange.emit(this.ActiveRec);
     }
   }
 
@@ -278,12 +312,16 @@ export class TableComponent implements OnInit, OnChanges {
     return this.gs.getDisplayValue(rec, property);
   }
 
+  SetTableDisplayValue(rec: any, property: string, value: any) {
+    this.gs.setDisplayValue(rec, property, value);
+  }
+
   IsPropertyInColumnSettings(PropertyName: any) {
     return true;
   }
 
-  ShowButtonColumn() {
-    const buttonWidth = 3.2;
+  ShowButtonColumn(): void {
+    const buttonWidth = 3.6;
     let colWidth = 0;
 
     if (this.ShowAddButton) {
@@ -325,10 +363,10 @@ export class TableComponent implements OnInit, OnChanges {
       this.ShowArchiveButton ||
       this.TableDataButtons.length > 0
     ) {
-      return true;
+      this.showButtonColumn = true;
     }
-
-    return false;
+    else
+      this.showButtonColumn = false;
   }
 
   Remove(rec: any) {
@@ -387,9 +425,11 @@ export class TableColType {
   PropertyName?: string;
   Width?: string;
   Alignment?: string;
-  SelectList?: [];
+  SelectList?: any[];
   BindingProperty?: string;
   DisplayProperty?: string;
+  DisplayProperty2?: string;
+  DisplayEmptyOption?: boolean;
   TrueValue?: any;
   FalseValue?: any;
   Type?: string;
@@ -397,9 +437,20 @@ export class TableColType {
   MinValue?: number;
   MaxValue?: number;
   Rows?: number;
+  Required? = false;
+  Href?: string;
   ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;
   FontColorFunction?: (arg: any) => string;
-  UnderlineFn?: (arg0: any, arg1: any) => boolean;
+  UnderlineFn?: (rec: any, property?: any) => boolean;
+}
+
+export class TableButtonType {
+  ButtonType = '';
+  RecordCallBack: (arg: any) => any = () => { };
+  Title?: string;
+  Type?: string;
+  Text?: string;
+  HideFunction?: (arg: any) => boolean;
 }

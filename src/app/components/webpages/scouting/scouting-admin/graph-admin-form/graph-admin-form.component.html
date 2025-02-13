@@ -1,0 +1,87 @@
+<app-box [Title]="'Manage Graphs'">
+  <app-form-element-group [InlineElements]="true">
+    <div class="flex justify-content-space-between flex-wrap">
+      <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+
+      <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="filterOptions" [(Model)]="filterOption"
+        [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+    </div>
+  </app-form-element-group>
+
+  <app-table [TableCols]="graphTableCols" [TableData]="graphs" [Width]="'100%'" [ShowAddButton]="true"
+    (AddRecordCallBack)="showGraphModal()" [ShowEditButton]="true" (EditRecordCallBack)="showGraphModal($event)"
+    [Scrollable]="true" [ScrollHeight]="'72vh'" [(FilterText)]="filterText" [EnableRemovedFilter]="true"
+    [RemovedFilterProperty]="'active'" [RemovedFilterPropertyValue]="filterOption">
+  </app-table>
+</app-box>
+
+<app-modal [Title]="'Manage Graph'" [(Visible)]="graphModalVisible">
+  @if (activeGraph) {
+  <app-form (SubmitFunction)="saveGraph()">
+    <app-form-element [LabelText]="'Name'" [(Model)]="activeGraph.name" [Required]="true" [Type]="'text'"
+      [FormGroupInline]="true">
+    </app-form-element>
+
+    <app-form-element [LabelText]="'Graph Type'" [(Model)]="activeGraph.graph_typ" [Required]="true" [Type]="'select'"
+      [SelectList]="graphTypes" [DisplayProperty]="'graph_nm'" [FormGroupInline]="true">
+    </app-form-element>
+
+    @if (activeGraph.id) {
+    <app-form-element [LabelText]="'Active'" [(Model)]="activeGraph.active" [Type]="'checkbox'" [TrueValue]="'y'"
+      [FalseValue]="'n'" [FormGroupInline]="true">
+    </app-form-element>
+    }
+
+    <br>
+
+    <app-form-element [LabelText]="'X Scale Min'" [(Model)]="activeGraph.x_scale_min" [Required]="true"
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
+    </app-form-element>
+
+    <app-form-element [LabelText]="'X Scale Max'" [(Model)]="activeGraph.x_scale_max" [Required]="true"
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
+    </app-form-element>
+
+    <app-form-element [LabelText]="'Y Scale Min'" [(Model)]="activeGraph.y_scale_min" [Required]="true"
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
+    </app-form-element>
+
+    <app-form-element [LabelText]="'Y Scale Max'" [(Model)]="activeGraph.y_scale_max" [Required]="true"
+      [Type]="'number'" [FormGroupInline]="true" [Width]="'150px'">
+    </app-form-element>
+
+    @if (activeGraph.graph_typ && activeGraph.graph_typ.requires_bins) {
+    <app-table [TableCols]="binTableCols" [TableData]="activeGraph.graphbin_set" [Width]="'100%'" [ShowAddButton]="true"
+      (AddRecordCallBack)="addBin()" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeBin($event)"
+      [Scrollable]="true">
+    </app-table>
+    }
+    @else if (activeGraph.graph_typ &&
+    activeGraph.graph_typ.requires_categories) {
+    <app-table [TableCols]="categoryTableCols" [TableData]="activeGraph.graphcategory_set" [Width]="'100%'"
+      [ShowAddButton]="true" (AddRecordCallBack)="addCategory()" [ShowRemoveButton]="true"
+      (RemoveRecordCallBack)="removeCategory($event)" [Scrollable]="true" [AllowActiveRecord]="true"
+      [ShowViewButton]="true" (ViewRecordCallBack)="viewCategory($event)" [(SetActiveRec)]="activeCategory">
+    </app-table>
+
+    @if (activeCategory){
+
+    <app-table [TableCols]="categoryAttributeTableCols" [TableData]="activeCategory.graphcategoryattribute_set"
+      [Width]="'100%'" [ShowAddButton]="true" (AddRecordCallBack)="addCategoryAttribute()" [ShowRemoveButton]="true"
+      (RemoveRecordCallBack)="removeCategoryAttribute($event)" [Scrollable]="true">
+    </app-table>
+    }
+    }
+
+    @if (activeGraph.graph_typ &&
+    !activeGraph.graph_typ.requires_categories) {
+    <app-table [TableCols]="graphQuestionTableCols" [TableData]="activeGraph.graphquestion_set" [Width]="'100%'"
+      [ShowAddButton]="true" (AddRecordCallBack)="addGraphQuestion()" [ShowRemoveButton]="true"
+      (RemoveRecordCallBack)="removeGraphQuestion($event)" [Scrollable]="true">
+    </app-table>
+    }<app-button-ribbon>
+      <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+    </app-button-ribbon>
+  </app-form>
+  }
+</app-modal>

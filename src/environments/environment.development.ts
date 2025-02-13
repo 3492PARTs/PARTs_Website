@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    version: '-v1',
+    version: 'local',
     baseUrl: 'http://127.0.0.1:8000/',
     backupBaseUrl: 'http://127.0.0.1:8000/',
     tokenString: '8fa1792e-ce4b-11ed-afa1-0242ac120402',

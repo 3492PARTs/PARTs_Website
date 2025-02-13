@@ -3,11 +3,10 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-mechanical',
-  standalone: true,
-  imports: [BoxComponent, RouterLink],
-  templateUrl: './mechanical.component.html',
-  styleUrls: ['./mechanical.component.scss']
+    selector: 'app-mechanical',
+    imports: [BoxComponent, RouterLink],
+    templateUrl: './mechanical.component.html',
+    styleUrls: ['./mechanical.component.scss']
 })
 export class MechanicalComponent implements AfterViewInit {
 

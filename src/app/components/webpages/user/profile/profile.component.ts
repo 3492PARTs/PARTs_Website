@@ -18,11 +18,10 @@ import { FormComponent } from '../../../atoms/form/form.component';
 import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
 
 @Component({
-  selector: 'app-profile',
-  standalone: true,
-  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
 
@@ -41,8 +40,8 @@ export class ProfileComponent implements OnInit {
   input: UserData = new UserData();
 
   alertTableCols: TableColType[] = [
-    { PropertyName: 'alert_subject', ColLabel: 'Subject' },
-    { PropertyName: 'alert_body', ColLabel: 'Message' },
+    { PropertyName: 'subject', ColLabel: 'Subject' },
+    { PropertyName: 'body', ColLabel: 'Message' },
     { PropertyName: 'staged_time', ColLabel: 'Sent' },
 
   ];

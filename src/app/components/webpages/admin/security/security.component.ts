@@ -15,7 +15,6 @@ import { Link } from '../../../../models/navigation.models';
 
 @Component({
   selector: 'app-security',
-  standalone: true,
   imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
   templateUrl: './security.component.html',
   styleUrls: ['./security.component.scss']
@@ -266,7 +265,7 @@ export class SecurityComponent implements OnInit {
 
   deleteLink(link: Link): void {
     this.gs.triggerConfirm('Are you sure you would like to delete this link?', () => {
-      this.us.deleteLink(link.link_id, () => {
+      this.us.deleteLink(link.id, () => {
         this.resetLink();
       });
     });

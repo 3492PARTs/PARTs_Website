@@ -3,11 +3,10 @@ import { BoxComponent } from '../../atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-join',
-  standalone: true,
-  imports: [BoxComponent, RouterLink],
-  templateUrl: './join.component.html',
-  styleUrls: ['./join.component.scss']
+    selector: 'app-join',
+    imports: [BoxComponent, RouterLink],
+    templateUrl: './join.component.html',
+    styleUrls: ['./join.component.scss']
 })
 export class JoinComponent implements AfterViewInit {
 

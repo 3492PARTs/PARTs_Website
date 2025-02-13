@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Season, Team, EventToTeams, Event } from '../../../../../models/scouting.models';
+import { Season, Team, EventToTeams, Event, Match, CompetitionLevel } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { RetMessage, GeneralService } from '../../../../../services/general.service';
@@ -15,7 +15,6 @@ import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-manage-season',
-  standalone: true,
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
   templateUrl: './manage-season.component.html',
   styleUrls: ['./manage-season.component.scss']
@@ -54,6 +53,15 @@ export class ManageSeasonComponent implements OnInit {
   linkTeamToEventModalVisible = false;
   removeTeamFromEventModalVisible = false;
 
+
+  newMatchModalVisible = false;
+  newMatch = new Match();
+  newMatchSeason: Season | undefined = undefined;
+  newMatchEvents: Event[] = [];
+  newMatchTeams: Team[] = [];
+
+  competitionLevels: CompetitionLevel[] = [new CompetitionLevel('qm', 'Qualifying Match'), new CompetitionLevel('qf', 'Quarter Finals'), new CompetitionLevel('sf', 'Semi Finals'), new CompetitionLevel('f', 'Finals')];
+
   constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService) { }
 
   ngOnInit(): void {
@@ -87,8 +95,8 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncSeason(): void {
-    this.api.get(true, 'scouting/admin/sync-season/', {
-      season_id: this.currentSeason.season_id.toString()
+    this.api.get(true, 'tba/sync-season/', {
+      season_id: this.currentSeason.id.toString()
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
       this.init();
@@ -98,7 +106,8 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncEvent(event_cd: string): void {
-    this.api.get(true, 'scouting/admin/sync-event/', {
+    this.api.get(true, 'tba/sync-event/', {
+      season_id: this.currentSeason.id.toString(),
       event_cd: event_cd
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
@@ -111,7 +120,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncMatches(): void {
-    this.api.get(true, 'scouting/admin/sync-matches/', undefined, (result: any) => {
+    this.api.get(true, 'tba/sync-matches/', undefined, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -119,7 +128,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   syncEventTeamInfo(): void {
-    this.api.get(true, 'scouting/admin/sync-event-team-info/', {
+    this.api.get(true, 'tba/sync-event-team-info/', {
       force: 1
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
@@ -128,14 +137,23 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
+  runScoutingReport(): void {
+    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
+      //console.log(result);
+      this.gs.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
   setSeasonEvent(): void | null {
-    if (!this.currentSeason.season_id || !this.currentEvent.event_id) {
+    if (!this.currentSeason.id || !this.currentEvent.id) {
       this.gs.triggerError('No season or event selected.');
       return null;
     }
     this.api.get(true, 'scouting/admin/set-season-event/', {
-      season_id: this.currentSeason.season_id.toString(),
-      event_id: this.currentEvent.event_id.toString(),
+      season_id: this.currentSeason.id.toString(),
+      event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
@@ -146,7 +164,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
-    this.eventList = await this.getEventsForSeason(this.currentSeason.season_id);
+    this.eventList = await this.getEventsForSeason(this.currentSeason.id);
 
     let current = this.eventList.filter(e => e.current === 'y');
     if (current.length > 0) this.currentEvent = current[0];
@@ -297,7 +315,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   buildLinkTeamToEventTeamList(): void {
-    this.eventToTeams.event_id = this.linkTeamToEventEvent?.event_id || -1;
+    this.eventToTeams.event_id = this.linkTeamToEventEvent?.id || -1;
     this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.teams || []);
   }
 
@@ -350,5 +368,25 @@ export class ManageSeasonComponent implements OnInit {
   showRemoveTeamFromEventModal(visible: boolean) {
     this.removeTeamFromEventModalVisible = visible;
     this.clearRemoveEventToTeams();
+  }
+
+  saveMatch(): void {
+    this.api.post(true, 'scouting/admin/match/', this.newMatch, (result: any) => {
+      this.init();
+      this.newMatchModalVisible = false;
+    }, (err: any) => {
+      console.log('error', err);
+      this.gs.triggerError(err);
+      this.gs.decrementOutstandingCalls();
+    });
+  }
+
+  async getEventsForNewMatch() {
+    this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.id || NaN);
+  }
+
+  getTeamsForNewMatch() {
+    console.log(this.newMatch.event);
+    this.newMatchTeams = this.gs.cloneObject(this.newMatch.event.teams);
   }
 }

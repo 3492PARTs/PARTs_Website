@@ -1,68 +1,91 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import LoadImg from 'blueimp-load-image';
 import { ScoutPitResponse, ScoutPitImage } from '../../../models/scouting.models';
 import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../../atoms/header/header.component";
 
 @Component({
   selector: 'app-scout-pic-display',
-  standalone: true,
-  imports: [ButtonComponent, CommonModule],
+  imports: [ButtonComponent, CommonModule, HeaderComponent],
   templateUrl: './scout-pic-display.component.html',
   styleUrls: ['./scout-pic-display.component.scss']
 })
-export class ScoutPicDisplayComponent {
-  @Input()
-  set ScoutPitResult(spr: ScoutPitResponse) {
-    this._ScoutPitResult = spr;
-    this.preview(this._ScoutPitResult);
-  }
-  _ScoutPitResult = new ScoutPitResponse();
+export class ScoutPicDisplayComponent implements OnInit, OnChanges {
+  @Input() ScoutPitImages: ScoutPitImage[] = [];
+
+  @Input() PitImgTyp = '';
+
+  @Input() Title = '';
+
+  displayPicIndex = 0;
+
+  elementId = '';
 
   constructor(private gs: GeneralService, private api: APIService) { }
 
-  prevImage(sp: ScoutPitResponse): void {
-    if (sp.display_pic_index - 1 < 0) sp.display_pic_index = sp.pics.length - 1;
-    else sp.display_pic_index--;
-
-    this.preview(sp, sp.display_pic_index)
+  ngOnInit(): void {
+    this.elementId = this.gs.getNextGsId();
+    this.setImages();
   }
 
-  nextImage(sp: ScoutPitResponse): void {
-    if (sp.display_pic_index + 1 > sp.pics.length - 1) sp.display_pic_index = 0;
-    else sp.display_pic_index++;
-
-    this.preview(sp, sp.display_pic_index)
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'ScoutPitImages':
+          case 'PitImgTyp':
+            this.setImages();
+            break;
+        }
+      }
+    }
   }
 
-  preview(sp: ScoutPitResponse, index?: number): void {
-    if (sp && sp.pics.length > 0) {
+  setImages(): void {
+    this.ScoutPitImages = this.ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.preview();
+  }
+
+  prevImage(): void {
+    if (this.displayPicIndex - 1 < 0) this.displayPicIndex = this.ScoutPitImages.length - 1;
+    else this.displayPicIndex--;
+
+    this.preview(this.displayPicIndex);
+  }
+
+  nextImage(): void {
+    if (this.displayPicIndex + 1 > this.ScoutPitImages.length - 1) this.displayPicIndex = 0;
+    else this.displayPicIndex++;
+
+    this.preview(this.displayPicIndex);
+  }
+
+  preview(index?: number): void {
+    if (this.ScoutPitImages.length > 0) {
       let link = '';
 
       if (index !== undefined) {
-        link = sp.pics[index].pic;
-        sp.display_pic_index = index;
+        link = this.ScoutPitImages[index].img_url;
+        this.displayPicIndex = index;
       }
       else {
-        for (let i = 0; i < sp.pics.length; i++) {
-          if (sp.pics[i].default) {
-            sp.display_pic_index = i;
-            link = sp.pics[i].pic;
+        for (let i = 0; i < this.ScoutPitImages.length; i++) {
+          if (this.ScoutPitImages[i].default) {
+            this.displayPicIndex = i;
+            link = this.ScoutPitImages[i].img_url;
             break;
           }
         }
 
         if (this.gs.strNoE(link)) {
-          link = sp.pics[0].pic;
-          sp.display_pic_index = 0;
+          link = this.ScoutPitImages[0].img_url;
+          this.displayPicIndex = 0;
         }
       }
 
-      let el = document.getElementById(sp.team_no.toString());
-
-      if (el) el.replaceChildren();
 
       LoadImg(
         link,
@@ -70,7 +93,12 @@ export class ScoutPicDisplayComponent {
           if (img && img.style) {
             img.style.width = '100%';
             img.style.height = 'auto';
-            document.getElementById(sp.team_no.toString())!.appendChild(img);
+            let el = document.getElementById(this.elementId);
+
+            if (el) {
+              el.replaceChildren();
+              el.appendChild(img);
+            }
           }
         },
         {
@@ -87,11 +115,10 @@ export class ScoutPicDisplayComponent {
 
   setDefaultPic(spi: ScoutPitImage): void {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
-      scout_pit_img_id: spi.scout_pit_img_id
+      scout_pit_img_id: spi.id
     }, (result: any) => {
       this.gs.successfulResponseBanner(result);
-      // TODO: need to emit this this.search();
-      this._ScoutPitResult.pics.forEach(p => p.default = false);
+      this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {
       this.gs.triggerError(err);

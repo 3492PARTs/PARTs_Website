@@ -1,7 +1,7 @@
 import { Banner } from "./api.models";
-import { QuestionWithConditions } from "./form.models";
+import { Question } from "./form.models";
 import { Link } from "./navigation.models";
-import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType } from "./scouting.models";
+import { Match, ScoutFieldFormResponse, ScoutFieldSchedule, Season, Team, Event, ScoutPitResponse, Schedule, TeamNote, ScheduleType, MatchStrategy, FieldFormForm, AllianceSelection } from "./scouting.models";
 import { AuthPermission, User } from "./user.models";
 
 export class LoadedStores {
@@ -28,8 +28,11 @@ const eventInstance = new Event();
 const teamInstance = new Team();
 const teamNoteInstance = new TeamNote();
 const matchInstance = new Match();
+const matchStrategyInstance = new MatchStrategy();
+const allianceSelectionInstance = new AllianceSelection(new Event(), new Team(), '', NaN);
+const fieldFormFormInstance = new FieldFormForm();
 const scoutFieldScheduleInstance = new ScoutFieldSchedule();
-const questionWithConditionsInstance = new QuestionWithConditions();
+const questionInstance = new Question();
 const scoutPitResponseInstance = new ScoutPitResponse();
 const scheduleTypeInstance = new ScheduleType();
 const scheduleInstance = new Schedule();
@@ -67,9 +70,29 @@ export const DBStores = {
         TableName: 'TeamNote',
         Columns: generateColumns(teamNoteInstance),
     },
+    TeamNoteResponse: {
+        TableName: 'TeamNoteResponse',
+        Columns: '++id'//generateColumns(teamNoteInstance),
+    },
     Match: {
         TableName: 'Match',
         Columns: generateColumns(matchInstance),
+    },
+    MatchStrategy: {
+        TableName: 'MatchStrategy',
+        Columns: generateColumns(matchStrategyInstance),
+    },
+    MatchStrategyResponse: {
+        TableName: 'MatchStrategyResponse',
+        Columns: '++id'//generateColumns(matchStrategyInstance),
+    },
+    AllianceSelection: {
+        TableName: 'AllianceSelection',
+        Columns: generateColumns(allianceSelectionInstance),
+    },
+    FieldFormForm: {
+        TableName: 'FieldFormForm',
+        Columns: generateColumns(fieldFormFormInstance),
     },
     ScoutFieldSchedule: {
         TableName: 'ScoutFieldSchedule',
@@ -85,7 +108,7 @@ export const DBStores = {
     },
     ScoutFieldResponse: {
         TableName: 'ScoutFieldResponse',
-        Columns: 'scout_field_id,team_no,rank,match,time,user_id'//generateColumns(scoutFieldResponseInstance),
+        Columns: 'id,team_id,rank,match,time,user_id'//generateColumns(scoutFieldResponseInstance),
     },
     ScheduleType: {
         TableName: 'ScheduleType',
@@ -101,11 +124,11 @@ export const DBStores = {
     },
     QuestionWithConditions: {
         TableName: 'QuestionWithConditions',
-        Columns: generateColumns(questionWithConditionsInstance),
+        Columns: generateColumns(questionInstance),
     },
     ScoutPitResponse: {
         TableName: 'ScoutPitResponse',
-        Columns: 'team_no,team_nm,scout_pit_id',//generateColumns(scoutPitResponseInstance),
+        Columns: 'team_no,team_nm,id',//generateColumns(scoutPitResponseInstance),
     },
     LoadedStores: {
         TableName: 'LoadedStores',

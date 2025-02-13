@@ -6,14 +6,13 @@ import { AuthService, AuthCallStates } from '../../../../../services/auth.servic
 import { GeneralService } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
 import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
+import { TableButtonType, TableColType, TableComponent } from '../../../../atoms/table/table.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 
 @Component({
   selector: 'app-scouting-activity',
-  standalone: true,
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
   templateUrl: './scouting-activity.component.html',
   styleUrls: ['./scouting-activity.component.scss']
@@ -28,8 +27,9 @@ export class ScoutingActivityComponent implements OnInit {
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
     { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
-  userActivityTableButtons = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
+  userActivityTableButtons: TableButtonType[] = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
   userActivityModalVisible = false;
+  triggerUserActivityTableUpdate = false;
 
   activeUserScoutingFieldSchedule: ScoutFieldSchedule[] = [];
   userScoutActivityScheduleTableCols: TableColType[] = [
@@ -72,7 +72,7 @@ export class ScoutingActivityComponent implements OnInit {
           fs.st_time = new Date(fs.st_time),
             fs.end_time = new Date(fs.end_time)
         });
-
+        this.triggerUserActivityTableUpdate = !this.triggerUserActivityTableUpdate
       };
 
       this.gs.decrementOutstandingCalls();
@@ -133,17 +133,17 @@ export class ScoutingActivityComponent implements OnInit {
 
     schedules.forEach(s => {
       schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
-      if ((s.red_one_id as User).id === user.id)
+      if (s.red_one_id && (s.red_one_id as User).id === user.id)
         schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
-      else if ((s.red_two_id as User).id === user.id)
+      else if (s.red_two_id && (s.red_two_id as User).id === user.id)
         schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
-      else if ((s.red_three_id as User).id === user.id)
+      else if (s.red_three_id && (s.red_three_id as User).id === user.id)
         schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
-      else if ((s.blue_one_id as User).id === user.id)
+      else if (s.blue_one_id && (s.blue_one_id as User).id === user.id)
         schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
-      else if ((s.blue_two_id as User).id === user.id)
+      else if (s.blue_two_id && (s.blue_two_id as User).id === user.id)
         schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
-      else if ((s.blue_three_id as User).id === user.id)
+      else if (s.blue_three_id && (s.blue_three_id as User).id === user.id)
         schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
 
       schedule += '\n\n';
@@ -161,18 +161,24 @@ export class ScoutingActivityComponent implements OnInit {
     let str = '';
 
     let red_one = new User();
-    Object.assign(red_one, sfs.red_one_id);
+    if (sfs.red_one_id)
+      Object.assign(red_one, sfs.red_one_id);
     let red_two = new User();
-    Object.assign(red_two, sfs.red_two_id);
+    if (sfs.red_two_id)
+      Object.assign(red_two, sfs.red_two_id);
     let red_three = new User();
-    Object.assign(red_three, sfs.red_three_id);
+    if (sfs.red_three_id)
+      Object.assign(red_three, sfs.red_three_id);
 
     let blue_one = new User();
-    Object.assign(blue_one, sfs.blue_one_id);
+    if (sfs.blue_one_id)
+      Object.assign(blue_one, sfs.blue_one_id);
     let blue_two = new User();
-    Object.assign(blue_two, sfs.blue_two_id);
+    if (sfs.blue_two_id)
+      Object.assign(blue_two, sfs.blue_two_id);
     let blue_three = new User();
-    Object.assign(blue_three, sfs.blue_three_id);
+    if (sfs.blue_three_id)
+      Object.assign(blue_three, sfs.blue_three_id);
 
     str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
     str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
@@ -241,7 +247,7 @@ export class ScoutingActivityComponent implements OnInit {
   markScoutPresent(sfs: ScoutFieldSchedule): void {
     this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
       this.api.get(true, 'scouting/admin/mark-scout-present/', {
-        scout_field_sch_id: sfs.scout_field_sch_id,
+        scout_field_sch_id: sfs.id,
         user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);

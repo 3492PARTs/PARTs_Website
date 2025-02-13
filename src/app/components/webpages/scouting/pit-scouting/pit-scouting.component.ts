@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { APIStatus, Banner } from '../../../../models/api.models';
-import { QuestionWithConditions } from '../../../../models/form.models';
-import { Team, ScoutPitFormResponse, ScoutPitImage } from '../../../../models/scouting.models';
+import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { CacheService } from '../../../../services/cache.service';
@@ -15,11 +14,12 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { Question, Answer } from '../../../../models/form.models';
+import { WhiteboardComponent } from "../../../atoms/whiteboard/whiteboard.component";
 
 @Component({
   selector: 'app-pit-scouting',
-  standalone: true,
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })
@@ -28,12 +28,16 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];
 
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
 
   private previouslySelectedTeam!: number;
   robotPic!: File;
+  autoTitle = '';
+  autoPic: File | undefined = undefined;
   previewUrl: any = null;
   scoutPitResponse = new ScoutPitFormResponse();
+
+  stampOptions = ['start', 'end', 'pick-up', 'place', 'coral', 'algae'];
 
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
@@ -46,6 +50,8 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   apiStatus = APIStatus.prcs;
 
+  fieldForm: FieldForm | undefined = undefined;
+
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
@@ -55,7 +61,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.populateOutstandingResponses();
     });
 
-    this.api.apiStatus.subscribe(s => this.apiStatus = s)
+    this.api.apiStatus.subscribe(s => this.apiStatus = s);
   }
 
   ngOnInit() {
@@ -76,20 +82,27 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   init(): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(result => {
-      if (result) {
-        this.buildTeamLists(result.teams);
+    this.ss.getFieldFormFormFromCache().then(fff => {
+      if (fff) {
+        this.fieldForm = fff.field_form;
       }
+      this.gs.decrementOutstandingCalls();
+    });
 
+    this.gs.incrementOutstandingCalls();
+    this.ss.loadTeams().then(result => {
+      if (result) {
+        this.buildTeamLists(result);
+      }
       this.gs.decrementOutstandingCalls();
     });
 
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingForm().then(result => {
-      if (this.gs.strNoE(this.scoutPitResponse.team)) {
+      if (this.gs.strNoE(this.scoutPitResponse.team_id)) {
 
         if (result) {
-          this.scoutPitResponse.question_answers = result;
+          this.questions = result;
         }
       }
       this.gs.decrementOutstandingCalls();
@@ -108,10 +121,18 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         });
       }
 
+      const wasOutstanding = this.outstandingTeams.find(t => t.team_no == this.scoutPitResponse.team_id) ? true : false;
+
+
       this.outstandingTeams = teams?.filter(t => t.pit_result === 0) || [];
       if (amendWithOutstandingResponses) this.amendOutstandTeamsList();
 
       this.completedTeams = teams?.filter(t => t.pit_result === 1) || [];
+
+      if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
+        const fn = () => { window.location.reload(); }
+        this.gs.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
+      }
     }, 200);
 
   }
@@ -120,7 +141,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.cs.ScoutPitFormResponse.getAll().then((sprs: ScoutPitFormResponse[]) => {
       sprs.forEach(spr => {
         for (let i = 0; i < this.outstandingTeams.length; i++) {
-          if (this.outstandingTeams[i].team_no === spr.team) this.outstandingTeams.splice(i, 1);
+          if (this.outstandingTeams[i].team_no === spr.team_id) this.outstandingTeams.splice(i, 1);
         }
       });
     });
@@ -131,7 +152,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.outstandingResults = [];
 
       sprs.forEach(s => {
-        this.outstandingResults.push({ id: s.id, team: s.team });
+        this.outstandingResults.push({ id: s.id, team: s.team_id });
       });
 
     });
@@ -159,10 +180,10 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.scoutPitResponse.question_answers) as QuestionWithConditions[];
+    let scoutQuestions = this.gs.cloneObject(this.questions) as Question[];
 
     scoutQuestions.forEach(el => {
-      let answer = this.gs.formatQuestionAnswer(el.answer)
+      let answer = this.gs.formatQuestionAnswer(el.answer);
       if (!this.gs.strNoE(answer)) {
         dirty = true;
       }
@@ -176,7 +197,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         },
         () => {
           this.gs.triggerChange(() => {
-            this.scoutPitResponse.team = this.previouslySelectedTeam;
+            this.scoutPitResponse.team_id = this.previouslySelectedTeam;
           });
         });
     }
@@ -187,10 +208,11 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   private setNewTeam(load: boolean): void {
     this.ss.getScoutingQuestionsFromCache('pit').then(psqs => {
-      this.previouslySelectedTeam = this.scoutPitResponse.team;
+      this.previouslySelectedTeam = this.scoutPitResponse.team_id;
       this.scoutPitResponse = new ScoutPitFormResponse();
-      this.scoutPitResponse.team = this.previouslySelectedTeam;
-      this.scoutPitResponse.question_answers = psqs;
+      this.scoutPitResponse.team_id = this.previouslySelectedTeam;
+      //TODO this.scoutPitResponse.answers = psqs;
+      this.questions = psqs;
       this.robotPic = new File([], '');
       this.previewUrl = null;
       this.previewImages = [];
@@ -200,9 +222,20 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   addRobotPicture() {
-    if (this.robotPic)
-      this.scoutPitResponse.robotPics.push(this.robotPic);
+    if (this.robotPic && this.robotPic.size > 0)
+      this.scoutPitResponse.pics.push(new ScoutPitImage('', '', 'robot-img', this.robotPic));
     this.removeRobotPicture();
+  }
+
+  addAutoPicture() {
+    if (this.autoPic && this.autoPic.size > 0) {
+      if (!this.gs.strNoE(this.autoTitle)) {
+        this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
+        this.removeAutoPicture();
+      }
+      else
+        this.gs.addBanner(new Banner(0, "Must add title to auto path.", 3500));
+    }
   }
 
   removeRobotPicture() {
@@ -210,10 +243,15 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.previewUrl = null;
   }
 
+  removeAutoPicture() {
+    this.autoTitle = '';
+    this.autoPic = undefined;
+  }
+
   reset(): void {
     this.previouslySelectedTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
-    this.scoutPitResponse.question_answers = this.gs.cloneObject(this.questions);
+    this.scoutPitResponse.answers = this.gs.cloneObject(this.questions);
     this.formDisabled = false;
     this.previewImages = [];
     this.gs.scrollTo(0);
@@ -223,7 +261,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   save(spr?: ScoutPitFormResponse, id?: number): void | null {
     if (!spr) spr = this.scoutPitResponse;
 
-    if (this.gs.strNoE(spr.team)) {
+    if (this.gs.strNoE(spr.team_id)) {
       this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
       return null;
     }
@@ -232,6 +270,18 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.gs.addBanner(new Banner(0, "Must add or remove staged image.", 3500));
       return null;
     }
+
+    if (this.autoPic && this.autoPic.size > 0) {
+      this.gs.addBanner(new Banner(0, "Must add or clear drawn path.", 3500));
+      return null;
+    }
+
+    this.questions.forEach(q => {
+      const quest = this.gs.cloneObject(q);
+      quest.answer = this.gs.formatQuestionAnswer(quest.answer);
+      spr.answers.push(new Answer(quest.answer, quest));
+    }
+    );
 
     this.ss.savePitScoutingResponse(spr, id).then((success: boolean) => {
       if (success && !id) this.reset();
@@ -244,26 +294,16 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   preview() {
-    this.gs.incrementOutstandingCalls();
-    // Show preview
-    const mimeType = this.robotPic.type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.readAsDataURL(this.robotPic);
-    reader.onload = (_event) => {
-      this.previewUrl = reader.result;
-      this.gs.decrementOutstandingCalls();
-    };
+    this.gs.previewImageFile(this.robotPic, (ev: ProgressEvent<FileReader>) => {
+      this.previewUrl = ev.target?.result as string;
+    });
   }
 
   loadTeam(): void {
     this.api.get(true, 'scouting/pit/team-data/', {
-      team_num: this.scoutPitResponse.team
+      team_num: this.scoutPitResponse.team_id
     }, (result: any) => {
-      this.scoutPitResponse.question_answers = (result['questions'] as QuestionWithConditions[]);
+      this.questions = (result['questions'] as Question[]);
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {
@@ -278,12 +318,12 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   deleteStagedPic(index: number): void {
-    this.scoutPitResponse.robotPics.splice(index, 1);
+    this.scoutPitResponse.pics.splice(index, 1);
   }
 }
 
 export class ScoutPitInit {
-  scoutQuestions: QuestionWithConditions[] = [];
+  scoutQuestions: Question[] = [];
   teams: Team[] = [];
   comp_teams: Team[] = [];
 }

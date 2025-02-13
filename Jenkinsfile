@@ -17,7 +17,7 @@ node {
         stage('Clone repository') {
             checkout scm
         }
-
+        
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
             env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
             sh '''

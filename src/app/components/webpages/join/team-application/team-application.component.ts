@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Banner } from '../../../../models/api.models';
-import { QuestionWithConditions } from '../../../../models/form.models';
+import { Question, Answer } from '../../../../models/form.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../../services/general.service';
@@ -12,11 +12,11 @@ import { FormElementGroupComponent } from '../../../atoms/form-element-group/for
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
+import { QuestionDisplayFormComponent } from "../../../elements/question-display-form/question-display-form.component";
 
 @Component({
   selector: 'app-team-application',
-  standalone: true,
-  imports: [BoxComponent, FormComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink],
+  imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })
@@ -42,6 +42,8 @@ export class TeamApplicationComponent implements OnInit {
 
   disabled = false;
 
+  formElements = new QueryList<FormElementComponent>();
+
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
@@ -57,11 +59,11 @@ export class TeamApplicationComponent implements OnInit {
       active: 'y'
     }, (result: any) => {
       this.questions = [];
-      let qs = result as QuestionWithConditions[];
-      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+      let qs = result as Question[];
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
-        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
       this.authService.authInFlight.subscribe(r => {
@@ -88,9 +90,10 @@ export class TeamApplicationComponent implements OnInit {
         question_answers: questions.map(subForm => {
           subForm.questions.forEach(q => {
             q.answer = this.gs.formatQuestionAnswer(q.answer);
-          })
-          return subForm.questions
-        }).reduce((x, y) => { return x.concat(y) }), form_typ: 'team-app'
+          });
+
+          return subForm.questions.map(q => new Answer(q.answer, q));
+        }).flat(), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
         this.gs.scrollTo(0);
@@ -105,11 +108,11 @@ export class TeamApplicationComponent implements OnInit {
       response_id: response_id
     }, (result: any) => {
       this.questions = [];
-      let qs = result as QuestionWithConditions[];
-      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_nm }))]
+      let qs = result as Question[];
+      let form_sub_typs = [...new Set(qs.map(q => { return q.form_sub_typ.form_sub_nm }))]
 
       form_sub_typs.forEach(fst => {
-        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_nm === fst)))
+        this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
       this.gs.devConsoleLog('team app - getResponse', this.questions);
@@ -120,17 +123,21 @@ export class TeamApplicationComponent implements OnInit {
   }
 
   export(): void {
-    let questions: QuestionWithConditions[] = [];
+    let questions: Question[] = [];
     this.questions.forEach(fsw => fsw.questions.forEach(question => questions.push(question)));
     this.gs.downloadFileAs('TeamApplication.csv', this.gs.questionsToCSV(questions), 'text/csv');
+  }
+
+  setFormElements(fes: QueryList<FormElementComponent>): void {
+    this.formElements.reset([...fes]);
   }
 }
 
 class FormSubTypeWrapper {
   form_sub_typ = '';
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
 
-  constructor(form_sub_typ: string, questions: QuestionWithConditions[] = []) {
+  constructor(form_sub_typ: string, questions: Question[] = []) {
     this.form_sub_typ = form_sub_typ;
     this.questions = questions;
   }

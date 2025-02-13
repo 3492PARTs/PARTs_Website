@@ -15,7 +15,6 @@ import { HeaderComponent } from "../../../atoms/header/header.component";
 
 @Component({
   selector: 'app-admin-users',
-  standalone: true,
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
   templateUrl: './admin-users.component.html',
   styleUrls: ['./admin-users.component.scss']
@@ -117,7 +116,7 @@ export class AdminUsersComponent implements OnInit {
 
   getPhoneTypeForTable(type: number): string {
     for (let pt of this.phoneTypes) {
-      if (pt.phone_type_id === type) return pt.carrier;
+      if (pt.id === type) return pt.carrier;
     }
 
     return '';

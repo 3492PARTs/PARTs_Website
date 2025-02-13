@@ -1,0 +1,32 @@
+<app-table [TableCols]="questionAggregatesTableCols" [TableData]="questionAggregates" [Width]="'100%'"
+  [ShowAddButton]="true" (AddRecordCallBack)="showQuestionAggregateModal()" [ShowEditButton]="true"
+  (EditRecordCallBack)="showQuestionAggregateModal($event)"></app-table>
+
+<app-modal [Title]="'Field Question Aggregate'" [(Visible)]="questionAggregateModalVisible">
+  <app-form (SubmitFunction)="saveQuestionAggregate()">
+    <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeQuestionAggregate.name"
+      [Required]="true"></app-form-element>
+
+    <app-form-element [Type]="'select'" [LabelText]="'Aggregate Function'"
+      [(Model)]="activeQuestionAggregate.question_aggregate_typ" [Required]="true" [SelectList]="questionAggregateTypes"
+      [DisplayProperty]="'question_aggregate_nm'"
+      [SelectComparatorFunction]="compareQuestionAggregateTypes"></app-form-element>
+
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Horizontal'"
+      [(Model)]="activeQuestionAggregate.horizontal"></app-form-element>
+
+    @if(activeQuestionAggregate.id) {
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionAggregate.active"
+      [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
+    }
+
+    <app-table [TableCols]="questionAggregateQuestionsTableCols"
+      [TableData]="activeQuestionAggregate.aggregate_questions" [Width]="'100%'" [ShowAddButton]="true"
+      (AddRecordCallBack)="addQuestionToAggregate()" [ShowRemoveButton]="true"
+      (RemoveRecordCallBack)="removeQuestionFromAggregate($event)" [Scrollable]="true"></app-table>
+
+    <app-button-ribbon>
+      <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+    </app-button-ribbon>
+  </app-form>
+</app-modal>

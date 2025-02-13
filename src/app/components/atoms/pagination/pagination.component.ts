@@ -3,11 +3,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Page } from '../../../services/general.service';
 
 @Component({
-  selector: 'app-pagination',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+    selector: 'app-pagination',
+    imports: [CommonModule],
+    templateUrl: './pagination.component.html',
+    styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
 

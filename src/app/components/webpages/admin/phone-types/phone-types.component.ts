@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-phone-types',
-  standalone: true,
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './phone-types.component.html',
   styleUrls: ['./phone-types.component.scss']
@@ -62,7 +61,7 @@ export class PhoneTypesComponent implements OnInit {
   deletePhoneType(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this phone type?', () => {
       this.api.delete(true, 'admin/phone-type/', {
-        phone_type_id: this.activePhoneType.phone_type_id
+        phone_type_id: this.activePhoneType.id
       }, (result: any) => {
         this.resetPhoneType();
         this.getPhoneTypes();

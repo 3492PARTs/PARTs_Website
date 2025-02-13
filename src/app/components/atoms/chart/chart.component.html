@@ -1,0 +1,47 @@
+<div>
+    @if (ChartTitle.length > 0) {
+    <app-header [h]="1">{{ChartTitle}}</app-header>
+    }
+
+    @if (ChartType !== 'ht-map') {
+    <canvas [id]="id">{{chart}}</canvas>
+    }
+    @else {
+    @if (url && url.length > 0) {
+    <div class="margin-top-1rem">
+        <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
+            <div #imageContainer id="image-container">
+                @if (heatmaps && heatmaps.length > 0) {
+                <img #image id="image" [src]="url" />
+                @for (heatmap of heatmaps; track $index) {
+                @if (datasetColors[heatmap.question.question]) {
+                <div #box class="box" [ngStyle]="{
+                      top: heatmap.question.y + '%',
+                      left: heatmap.question.x + '%',
+                      width: heatmap.question.width + '%',
+                      height: heatmap.question.height + '%'
+                    }">
+                    <app-display-question-svg [Question]="heatmap.question"
+                        [Stroke]="datasetColors[heatmap.question.question].borderColor || ''"></app-display-question-svg>
+
+                    <div class="touchpoint-wrapper">
+                        @for (point of heatmap.points; track $index) {
+                        <div #box class="box" [ngStyle]="{
+                          top: 'calc(' + point.y + '% - 4px)',
+                          left: 'calc(' + point.x + '% - 4px)',
+                          width: '8px',
+                          height: '8px',
+                          border: '4px solid ' + datasetColors[heatmap.question.question].backgroundColor || ''
+                        }"></div>
+                        }
+                    </div>
+                </div>
+                }
+                }
+                }
+            </div>
+        </div>
+    </div>
+    }
+    }
+</div>

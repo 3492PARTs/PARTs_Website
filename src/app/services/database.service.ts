@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, ScoutFieldFormResponse } from '../models/scouting.models';
+import { IAllianceSelection, IEvent, IFieldFormForm, IMatch, IMatchStrategy, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, ScoutFieldFormResponse } from '../models/scouting.models';
 import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { IAuthPermission, IUser, User } from '../models/user.models';
 import { ILink } from '../models/navigation.models';
-import { IQuestionWithConditions } from '../models/form.models';
+import { IQuestion } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { BehaviorSubject } from 'rxjs';
 
@@ -23,8 +23,13 @@ export class DatabaseService extends Dexie {
   EventTable!: Dexie.Table<IEvent, number>;
   TeamTable!: Dexie.Table<ITeam, number>;
   TeamNoteTable!: Dexie.Table<ITeamNote, number>;
+  TeamNoteResponseTable!: Dexie.Table<ITeamNote, number>;
 
   MatchTable!: Dexie.Table<IMatch, string>;
+  MatchStrategyTable!: Dexie.Table<IMatchStrategy, number>;
+  MatchStrategyResponseTable!: Dexie.Table<IMatchStrategy, number>;
+  AllianceSelectionTable!: Dexie.Table<IAllianceSelection, number>;
+  FieldFormFormTable!: Dexie.Table<IFieldFormForm, number>;
   ScoutFieldScheduleTable!: Dexie.Table<IScoutFieldSchedule, number>;
   ScoutFieldFormResponseTable!: Dexie.Table<IScoutFieldFormResponse, number>;
   // These are used for the responses page
@@ -37,13 +42,13 @@ export class DatabaseService extends Dexie {
   ScoutPitFormResponseTable!: Dexie.Table<IScoutPitFormResponse, number>;
   ScoutPitResponseTable!: Dexie.Table<IScoutPitResponse, number>;
 
-  QuestionWithConditionsTable!: Dexie.Table<IQuestionWithConditions, number>;
+  QuestionTable!: Dexie.Table<IQuestion, number>;
 
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
   BannerTable!: Dexie.Table<Banner, number>;
 
-  versionNumber: number = 3;
+  versionNumber: number = 4;
 
   private dbName: string = 'index-db-parts-app';
   constructor() {
@@ -75,8 +80,13 @@ export class DatabaseService extends Dexie {
     this.EventTable = this.table(DBStores.Event.TableName);
     this.TeamTable = this.table(DBStores.Team.TableName);
     this.TeamNoteTable = this.table(DBStores.TeamNote.TableName);
+    this.TeamNoteResponseTable = this.table(DBStores.TeamNoteResponse.TableName);
 
     this.MatchTable = this.table(DBStores.Match.TableName);
+    this.MatchStrategyTable = this.table(DBStores.MatchStrategy.TableName);
+    this.MatchStrategyResponseTable = this.table(DBStores.MatchStrategyResponse.TableName);
+    this.AllianceSelectionTable = this.table(DBStores.AllianceSelection.TableName);
+    this.FieldFormFormTable = this.table(DBStores.FieldFormForm.TableName);
     this.ScoutFieldScheduleTable = this.table(DBStores.ScoutFieldSchedule.TableName);
     this.ScoutFieldFormResponseTable = this.table(DBStores.ScoutFieldFormResponse.TableName);
     this.ScoutFieldResponseColumnTable = this.table(DBStores.ScoutFieldResponseColumn.TableName);
@@ -88,7 +98,7 @@ export class DatabaseService extends Dexie {
     this.ScoutPitFormResponseTable = this.table(DBStores.ScoutPitFormResponse.TableName);
     this.ScoutPitResponseTable = this.table(DBStores.ScoutPitResponse.TableName);
 
-    this.QuestionWithConditionsTable = this.table(DBStores.QuestionWithConditions.TableName);
+    this.QuestionTable = this.table(DBStores.QuestionWithConditions.TableName);
 
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
 

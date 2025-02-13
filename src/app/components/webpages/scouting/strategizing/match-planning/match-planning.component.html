@@ -1,0 +1,106 @@
+<app-box [Title]="'Match Planning'">
+  @if (outstandingResponses.length > 0) {
+  <app-form-element-group [LabelText]="'Strategies to upload'">
+    <div
+      id="outstanding-results"
+      class="flex align-items-center gap-1rem flex-wrap"
+    >
+      <app-button
+        [ButtonType]="'refresh'"
+        (FunctionCallBack)="uploadOutstandingResponses()"
+      ></app-button>
+      @for (or of outstandingResponses; track $index) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="viewResult(or.id)"
+        >{{ or.match }}
+      </app-button>
+      }
+    </div>
+  </app-form-element-group>
+  } @if (formDisabled) {
+  <div class="padding-bottom-1rem padding-top-1rem">
+    <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()"
+      >Reset</app-button
+    >
+    <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()"
+      >Remove Result</app-button
+    >
+  </div>
+  }
+
+  <app-form (SubmitFunction)="saveMatchStrategy()">
+    <app-form-element-group [LabelText]="'Match'" [InlineElements]="true">
+      <div class="flex flex-wrap align-items-baseline">
+        <app-form-element
+          [Type]="'select'"
+          [LabelText]="'Match'"
+          [SelectList]="matches"
+          [(Model)]="match"
+          [DisplayProperty]="'match_number'"
+          [MinWidth]="'100px'"
+          (FunctionCallBack)="setMatchStrategies()"
+          [Required]="true"
+          [DisplayEmptyOption]="true"
+          [Disabled]="formDisabled"
+        ></app-form-element>
+
+        <div class="flex align-items-center">
+          <app-form-element
+            [Type]="'select'"
+            [LabelText]="'Match Strategy'"
+            [SelectList]="activeMatchStrategies"
+            [(Model)]="activeMatchStrategy"
+            [DisplayProperty]="'display_value'"
+            [MinWidth]="'200px'"
+            [MaxWidth]="'260px'"
+            [DisplayEmptyOption]="true"
+            [Disabled]="formDisabled"
+          ></app-form-element>
+
+          <app-button
+            [ButtonType]="'add'"
+            (FunctionCallBack)="setMatchStrategy()"
+            [Disabled]="formDisabled"
+          ></app-button>
+        </div>
+      </div>
+    </app-form-element-group>
+
+    @if (activeMatchStrategy) {
+    <app-form-element-group>
+      <app-form-element
+        [Type]="'area'"
+        [LabelText]="'Strategy'"
+        [(Model)]="activeMatchStrategy.strategy"
+        [Width]="'100%'"
+        [Rows]="8"
+        [Required]="true"
+        [Disabled]="formDisabled"
+      ></app-form-element>
+
+      @if (fieldForm && !activeMatchStrategy.img_url) {
+      <app-whiteboard
+        [ImageUrl]="fieldForm.full_img_url"
+        [(Image)]="activeMatchStrategy.img"
+        [StampOptions]="activeTeams"
+      ></app-whiteboard>
+      } @else if (activeMatchStrategy.img_url) {
+      <img id="strategy-image" [src]="activeMatchStrategy.img_url" />
+      }
+
+      <app-button-ribbon>
+        @if (activeMatchStrategy.img_url && !formDisabled) {
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="clearImageUrl()"
+          >New Image</app-button
+        >
+        }
+        <app-button
+          [Type]="'submit'"
+          [ButtonType]="'success'"
+          [Disabled]="formDisabled"
+          >Save</app-button
+        >
+      </app-button-ribbon>
+    </app-form-element-group>
+    }
+  </app-form>
+</app-box>

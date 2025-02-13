@@ -6,11 +6,10 @@ import { AppSize, GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-about',
-  standalone: true,
-  imports: [BoxComponent, HeaderComponent, ModalComponent, CommonModule],
-  templateUrl: './about.component.html',
-  styleUrls: ['./about.component.scss']
+    selector: 'app-about',
+    imports: [BoxComponent, HeaderComponent, ModalComponent, CommonModule],
+    templateUrl: './about.component.html',
+    styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
 

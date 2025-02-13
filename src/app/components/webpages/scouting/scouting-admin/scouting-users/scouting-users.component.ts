@@ -15,7 +15,6 @@ import { HeaderComponent } from '../../../../atoms/header/header.component';
 
 @Component({
   selector: 'app-scouting-users',
-  standalone: true,
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
   templateUrl: './scouting-users.component.html',
   styleUrls: ['./scouting-users.component.scss']
@@ -122,7 +121,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   getPhoneTypeForTable(type: number): string {
     for (let pt of this.phoneTypes) {
-      if (pt.phone_type_id === type) return pt.carrier;
+      if (pt.id === type) return pt.carrier;
     }
 
     return '';

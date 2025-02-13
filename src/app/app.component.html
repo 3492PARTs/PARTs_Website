@@ -1,31 +1,31 @@
-<app-loading></app-loading>
-
 <app-banners></app-banners>
 
-<app-modal [(visible)]="gs.showErrorModal" [Title]="'Error'" [zIndex]="103">
-    <p>
-        {{ gs.errorMessage }}
-    </p>
+<app-modal [(Visible)]="gs.showErrorModal" [Title]="'Error'" [zIndex]="103">
+  <p>
+    {{ gs.errorMessage }}
+  </p>
 
-    <app-button-ribbon>
-        <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.acceptError()">{{ gs.errorButtonText }}</app-button>
-    </app-button-ribbon>
+  <app-button-ribbon>
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.acceptError()">{{
+      gs.errorButtonText
+      }}</app-button>
+  </app-button-ribbon>
 </app-modal>
 
-<app-modal [(visible)]="gs.showConfirmModal" [Title]="'Confirm'" [zIndex]="102">
-    <p>
-        {{ gs.confirmMessage }}
-    </p>
+<app-modal [(Visible)]="gs.showConfirmModal" [Title]="'Confirm'" [zIndex]="102">
+  <p>
+    {{ gs.confirmMessage }}
+  </p>
 
-    <app-button-ribbon>
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="gs.acceptConfirm()">{{ gs.confirmButtonText
-            }}</app-button>
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="gs.rejectConfirm()">{{ gs.confirmButtonCancelText }}
-        </app-button>
-
-    </app-button-ribbon>
+  <app-button-ribbon>
+    <app-button [ButtonType]="'danger'" (FunctionCallBack)="gs.acceptConfirm()">{{ gs.confirmButtonText }}</app-button>
+    <app-button [ButtonType]="'warning'" (FunctionCallBack)="gs.rejectConfirm()">{{ gs.confirmButtonCancelText }}
+    </app-button>
+  </app-button-ribbon>
 </app-modal>
 
 <app-navigation>
-    <router-outlet />
+  <router-outlet />
 </app-navigation>
+
+<app-modal></app-modal>

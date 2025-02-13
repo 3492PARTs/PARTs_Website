@@ -8,9 +8,10 @@ import $ from 'jquery';
 import { Router } from '@angular/router';
 import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { QuestionWithConditions, Response } from '../models/form.models';
+import { Question, Flow, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
+import { TableColType } from '../components/atoms/table/table.component';
 
 @Injectable({
   providedIn: 'root'
@@ -313,7 +314,8 @@ export class GeneralService {
     );
   }
 
-  previewImageFile(image: File, onLoad: any) {
+  previewImageFile(image: File, onLoad: (ev: ProgressEvent<FileReader>) => any) {
+    this.incrementOutstandingCalls();
     // Show preview
     const mimeType = image.type;
     if (mimeType.match(/image\/*/) == null) {
@@ -322,7 +324,10 @@ export class GeneralService {
 
     const reader = new FileReader();
     reader.readAsDataURL(image);
-    reader.onload = onLoad;
+    reader.onload = (ev: ProgressEvent<FileReader>) => {
+      onLoad(ev);
+      this.decrementOutstandingCalls();
+    };
   }
 
   devConsoleLog(location: string, x?: any): void {
@@ -337,8 +342,10 @@ export class GeneralService {
     return JSON.parse(JSON.stringify(o));
   }
 
-  triggerChange(tmpFx: () => void) {
-    window.setTimeout(() => { tmpFx() }, 0);
+  triggerChange(tmpFx: () => void, timeoutMs = 0) {
+    window.setTimeout(() => {
+      tmpFx();
+    }, timeoutMs);
   }
 
   // For one given property and its value, get the value of another property in the same object
@@ -357,6 +364,17 @@ export class GeneralService {
       if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
     }
     return -1;
+  }
+
+  updateTableSelectList(list: TableColType[], PropertyName: string, selectList: any[]): void {
+    const l = list.find(l => l.PropertyName === PropertyName);
+    if (l)
+      l.SelectList = selectList;
+  }
+
+  updateObjectInArray(arr: any[], property: string, obj: any): void {
+    let i = this.arrayObjectIndexOf(arr, property, obj[property]);
+    arr[i] = obj;
   }
 
   formatDateString(s: string | Date): string {
@@ -431,7 +449,7 @@ export class GeneralService {
     );
   }
 
-  formatQuestionAnswer(answer: any): String {
+  formatQuestionAnswer(answer: any): string {
     if (Array.isArray(answer)) {
       let str = '';
       answer.forEach(opt => {
@@ -445,7 +463,26 @@ export class GeneralService {
       answer = str;
     }
 
-    return answer;
+    return !this.strNoE(answer) ? (this.isObject(answer) ? JSON.stringify(answer) : answer) : '';
+  }
+
+  isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
+    if (conditionalQuestion.question_condition_typ && question.id === conditionalQuestion.question_conditional_on)
+      switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
+        case 'equal':
+          return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
+        case 'exist':
+          return !this.strNoE(answer)
+        case 'lt':
+          return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
+        case 'lt-equal':
+          return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
+        case 'gt':
+          return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
+        case 'gt-equal':
+          return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
+      }
+    return false;
   }
 
   resizeImageToMaxSize(file: File): Promise<File> {
@@ -455,6 +492,21 @@ export class GeneralService {
     }
 
     return imageCompression(file, options);
+  }
+
+  openFullscreen(event: MouseEvent) {
+    const img = event.target as HTMLImageElement;
+
+    if (img) {
+      if (img.requestFullscreen) {
+        img.requestFullscreen();
+      }
+      /*else if (img['webkitRequestFullscreen']) {
+        img['webkitRequestFullscreen']();
+      } else if (img['msRequestFullscreen']) {
+        img['msRequestFullscreen']();
+      }*/
+    }
   }
 
   /*
@@ -550,14 +602,14 @@ export class GeneralService {
     return csv;
   }
 
-  questionsToCSV(questions: QuestionWithConditions[]): string {
+  questionsToCSV(questions: Question[]): string {
     let header = this.questionsToCSVHeader(questions);
     let body = this.questionsToCSVBody(questions);
 
     return `${header}\n${body}`;
   }
 
-  questionsToCSVHeader(questions: QuestionWithConditions[]): string {
+  questionsToCSVHeader(questions: Question[]): string {
     let header = '';
     questions.forEach(q => {
       header += `"${q.question}",`
@@ -566,7 +618,7 @@ export class GeneralService {
     return header;
   }
 
-  questionsToCSVBody(questions: QuestionWithConditions[]): string {
+  questionsToCSVBody(questions: Question[]): string {
     let body = '';
     questions.forEach(q => {
       body += `"${this.formatQuestionAnswer(q.answer)}",`
@@ -585,7 +637,7 @@ export class GeneralService {
     return csv;
   }
 
-  getDisplayValue(rec: any, property: string): string {
+  getDisplayValue(rec: any, property: string): any {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
@@ -602,6 +654,24 @@ export class GeneralService {
     }
 
     return ret; // do not turn into a string this will bite objects in the butt
+  }
+
+  setDisplayValue(rec: any, property: string, value: any): void {
+    if (!property) {
+      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
+    }
+
+    let ret = '';
+
+    try {
+      const variable = `rec.${property}`;
+      const comand = `${variable} = value;`;
+      eval(comand);
+    }
+    catch (err) {
+      console.log(err);
+    }
+
   }
 
   keepElementInView(elementId: string): { x: number, y: number } | undefined {
@@ -635,40 +705,84 @@ export class GeneralService {
     return { x: xOffset, y: yOffset };
   }
 
+  decodeBoolean(b: boolean, values: { true: string, false: string }): string {
+    return b ? values.true : values.false;
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return this.decodeBoolean(b, { true: 'Sent', false: 'Not Sent' });
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return this.decodeBoolean(b, { true: 'Yes', false: 'No' });
+  }
+
+  decodeYesNo(s: string): string {
+    return this.decodeBoolean(s === 'y', { true: 'Yes', false: 'No' });
+  }
+
   objectToString(o: any): string {
     //console.log(o);
     let s = '';
-    if (typeof o === 'object')
-      for (const [key, value] of Object.entries(o)) {
-        if (value instanceof Array) {
-          s += `${key}: `;
-          value.forEach(element => {
-            s += `${this.objectToString(element)}, `;
-          });
-          s = s.substring(0, s.length - 2);
-          //s += '\n';
+    if (this.isObject(o))
+      if (Object.keys(o).length > 0)
+        for (const [key, value] of Object.entries(o)) {
+          if (value instanceof Array) {
+            s += `${key}: `;
+            value.forEach(element => {
+              if (this.isObject(element))
+                if (Object.keys(element).length > 0)
+                  s += `${this.objectToString(element)}`;
+                else
+                  s += '';
+              else
+                s += `${element}, `;
+            });
+            s = `${s.substring(0, s.length - 2)}\n`;
+          }
+          else if (this.isObject(value)) {
+            if (Object.keys(value as Object).length > 0)
+              s += `${this.objectToString(value)}`;
+            else
+              s += '';
+            //s = s.substring(0, s.length - 2);
+          }
+          else s += `${key}: ${value}\n`;
         }
-        else s += `${key}: ${value}\n`;
-      }
+      else
+        return '';
+    else if (o instanceof Array) {
+      o.forEach(element => {
+        if (this.isObject(element))
+          if (Object.keys(element).length > 0)
+            s += `${this.objectToString(element)}`;
+          else
+            s += '';
+        else
+          s += `${element}, `;
+      });
+      //s = `${s.substring(0, s.length - 2)}\n`;
+    }
     else
       return o;
     return s;
   }
 
-  booleanDecode(b: boolean, values: { true: string, false: string }): string {
-    return b ? values.true : values.false;
+  objectToFormData(o: any): FormData {
+    const formData = new FormData()
+
+    for (const [k, v] of Object.entries(o)) {
+      /*if (moment.isMoment(v)) {
+        formData.append(k, v.format('YYYY-MM-DD'));
+      }
+      else*/
+      formData.append(k, v as string | Blob);
+    }
+    return formData;
   }
 
-  decodeSentBoolean(b: boolean): string {
-    return this.booleanDecode(b, { true: 'Sent', false: 'Not Sent' });
-  }
-
-  decodeYesNoBoolean(b: boolean): string {
-    return this.booleanDecode(b, { true: 'Yes', false: 'No' });
-  }
-
-  decodeYesNo(s: string): string {
-    return this.booleanDecode(s === 'y', { true: 'Yes', false: 'No' });
+  isObject(o: any) {
+    return o && typeof o === 'object' && o.constructor === Object;
   }
 }
 

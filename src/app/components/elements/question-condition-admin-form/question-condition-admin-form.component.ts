@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { QuestionWithConditions, QuestionCondition } from '../../../models/form.models';
+import { Question, QuestionCondition, QuestionConditionType } from '../../../models/form.models';
 import { APIService } from '../../../services/api.service';
 import { GeneralService } from '../../../services/general.service';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
@@ -8,10 +8,10 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { FormComponent } from '../../atoms/form/form.component';
+import { AuthCallStates, AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-question-condition-admin-form',
-  standalone: true,
   imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
   templateUrl: './question-condition-admin-form.component.html',
   styleUrls: ['./question-condition-admin-form.component.scss']
@@ -19,32 +19,39 @@ import { FormComponent } from '../../atoms/form/form.component';
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
 
-  questions: QuestionWithConditions[] = [];
+  questions: Question[] = [];
+  questionConditionTypes: QuestionConditionType[] = [];
   questionConditions: QuestionCondition[] = [];
   questionConditionModalVisible = false;
   activeQuestionCondition = new QuestionCondition();
   questionConditionsTableCols: TableColType[] = [
     { PropertyName: 'question_from.display_value', ColLabel: 'Question From' },
-    { PropertyName: 'condition', ColLabel: 'Condition' },
+    { PropertyName: 'question_condition_typ.question_condition_nm', ColLabel: 'Condition Type' },
+    { PropertyName: 'value', ColLabel: 'Condition' },
     { PropertyName: 'question_to.display_value', ColLabel: 'Question To' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.decodeYesNo.bind(this) },
   ];
-  questionConditionQuestionFromList: QuestionWithConditions[] = [];
-  questionConditionQuestionToList: QuestionWithConditions[] = [];
+  questionConditionQuestionFromList: Question[] = [];
+  questionConditionQuestionToList: Question[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.getQuestions();
-    this.getQuestionConditions();
+    this.authService.authInFlight.subscribe((r) => {
+      if (r === AuthCallStates.comp) {
+        this.getQuestions();
+        this.getQuestionConditions();
+        this.getQuestionConditionTypes();
+      }
+    });
   }
 
   getQuestions(): void {
     this.api.get(true, 'form/question/', {
       form_typ: this.FormType,
       active: 'y'
-    }, (result: any) => {
-      this.questions = result as QuestionWithConditions[];
+    }, (result: Question[]) => {
+      this.questions = result;
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
@@ -62,6 +69,14 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     });
   }
 
+  getQuestionConditionTypes(): void {
+    this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
+      this.questionConditionTypes = result;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
+  }
+
   showQuestionConditionModal(qc?: QuestionCondition) {
     this.questionConditionModalVisible = true;
     this.activeQuestionCondition = qc ? this.gs.cloneObject(qc) : new QuestionCondition();
@@ -71,47 +86,34 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   buildQuestionConditionFromLists(): void {
-    this.questionConditionQuestionFromList = [];
-
-    this.questions.forEach(q => {
-      let match = false;
-      this.questionConditions.forEach(qc => {
-        if ([qc.question_to.question_id].includes(q.question_id))
-          match = true
-      });
-
-      if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === q.question_id)
-        match = true;
-
-      if (!match)
-        this.questionConditionQuestionFromList.push(q);
-    });
+    this.questionConditionQuestionFromList = this.gs.cloneObject(this.questions);
   }
 
   buildQuestionConditionToLists(): void {
     this.questionConditionQuestionToList = [];
 
-    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as QuestionWithConditions);
+    //So the active question shows in the drop down
+    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as Question);
 
     this.questions.forEach(question => {
       let match = false;
+      // If its in another group keep out of this one
       this.questionConditions.forEach(qc => {
-        if ([qc.question_from.question_id, qc.question_to.question_id].includes(question.question_id)) {
+        if ([qc.question_from.id, qc.question_to.id].includes(question.id)) {
           match = true;
         }
       });
 
+      // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_from.question_id) &&
-        this.activeQuestionCondition.question_from.question_id === question.question_id) {
+        !this.gs.strNoE(this.activeQuestionCondition.question_from.id) &&
+        this.activeQuestionCondition.question_from.id === question.id) {
         match = true;
       }
 
       if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.question_id) &&
-        this.activeQuestionCondition.question_to.question_id === question.question_id) {
+        !this.gs.strNoE(this.activeQuestionCondition.question_to.id) &&
+        this.activeQuestionCondition.question_to.id === question.id) {
         match = false;
       }
 
@@ -120,9 +122,9 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     });
   }
 
-  compareQuestions(q1: QuestionWithConditions, q2: QuestionWithConditions): boolean {
+  compareQuestions(q1: Question, q2: Question): boolean {
     if (q1 && q2)
-      return q1.question_id === q2.question_id;
+      return q1.id === q2.id;
     else
       return false;
   }

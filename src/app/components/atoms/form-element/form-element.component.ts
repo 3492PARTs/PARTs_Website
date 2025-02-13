@@ -25,7 +25,6 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielm
 
 @Component({
   selector: 'app-form-element',
-  standalone: true,
   imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective, OwlDateTimeModule, OwlNativeDateTimeModule],
   templateUrl: './form-element.component.html',
   styleUrls: ['./form-element.component.scss']
@@ -55,48 +54,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input()
   set SelectList(sl: any) {
-    this.gs.triggerChange(() => {
-      this._SelectList = sl;
-
-      if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList) {
-        let tmp = JSON.parse(JSON.stringify(this._SelectList));
-        //this.gs.devConsoleLog(tmp);
-        tmp.forEach((e: any) => {
-          e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
-          if (this.Model) {
-            if (typeof this.Model === 'string') {
-              if (e[this.DisplayProperty || ''] === 'Other') {
-                let other = '';
-                this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
-                  let match = false;
-                  // TODO: Revisit this logic i dont think this loop is needed
-                  tmp.forEach((element: any) => {
-                    if (option === element[this.BindingProperty || '']) match = true;
-                  });
-
-                  if (!match)
-                    e['checked'] = option;
-                });
-
-              }
-              else
-                e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
-            }
-            else
-              this.Model.forEach((m: any) => {
-                if (e[this.BindingProperty || ''] === m[this.BindingProperty || ''])
-                  e['checked'] = m['checked'];
-              });
-
-
-          }
-        });
-
-        this.change(tmp);
-      }
-
-      this.setElementPositions();
-    });
+    this.setSelectList(sl);
   }
   _SelectList: any[] = [];
   //@Input() RadioList: any[] = [];
@@ -145,8 +103,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input() ImageChangeEvent: (e: any) => void = () => { };
 
-  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef = new ElementRef(null);
-  @ViewChild('multiSelect', { read: ElementRef, static: false }) multiSelect: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelectDropdown', { read: ElementRef, static: false }) dropdown: ElementRef | undefined = undefined;
+  @ViewChild('multiSelect', { read: ElementRef, static: false }) multiSelect: ElementRef | undefined = undefined;
   private expanded = false;
 
   @ViewChild('fileUpload') fileUpload: { nativeElement: { value: string; }; } = { nativeElement: { value: '' } };
@@ -159,12 +117,12 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   @Input() IconOnly = false;
 
-  @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef = new ElementRef(null);
-  @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef = new ElementRef(null);
-  @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef = new ElementRef(null);
+  @ViewChild('formElement', { read: ElementRef, static: false }) formElement: ElementRef | undefined = undefined;
+  @ViewChild('label', { read: ElementRef, static: false }) label: ElementRef | undefined = undefined;
+  @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef | undefined = undefined;
 
-  @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef = new ElementRef(null);
-  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef = new ElementRef(null);
+  @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef | undefined = undefined;
+  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef | undefined = undefined;
 
   //private resizeTimeout: number | null | undefined;
 
@@ -176,8 +134,14 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     if (!this.FieldSize) this.FieldSize = 2000;
 
+    if (this.gs.strNoE(this.Name) && !this.gs.strNoE(this.LabelText))
+      this.Name = this.LabelText;
+
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
       this.Width = '100%';
+    }
+    else if (this.Width === 'auto' && this.Type === 'number') {
+      this.Width = '100px';
     }
     //else if (this.Type === 'number' && this.gs.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
     //window.setTimeout(() => { this.change(this.MinValue); }, 1);
@@ -192,14 +156,15 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         });
       }
     }
+    else if (this.Type === 'number' && Number.isNaN(this.Model))
+      this.Model = null;
 
     this.markRequired();
 
     this.navigationService.currentNavigationState.subscribe(ns => {
       if (ns === NavigationState.collapsed && this.Type != 'select') this.MinWidth = 'auto';
-      window.setTimeout(() => {
-        this.setElementPositions();
-      }, 102);
+      this.setElementPositions();
+
     });
 
     this.setDatePanel();
@@ -218,6 +183,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 //console.log(changes);
                 this.phoneMaskFn(modelChanges.currentValue);
               }
+            }
+            else if (this.Type === 'multiSelect' && JSON.stringify(modelChanges.currentValue) !== JSON.stringify(modelChanges.previousValue)) {
+              this.setSelectList(this._SelectList);
             }
             this.markRequired();
             break;
@@ -239,13 +207,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-    this.setElementPositions()
 
-    window.setTimeout(() => {
-      if (this.Width === 'auto' && this.Type === 'number') {
-        this.Width = '100px';
-      }
-    }, 1);
+    this.setElementPositions();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -254,18 +217,61 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     this.setDatePanel();
   }
 
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: any) {
+    this.positionMultiSelect();
+  }
+
   setElementPositions(): void {
     this.positionMultiSelect();
 
     this.resizeFormElement();
 
-    this.setIndicatorPosition();
+    this.gs.triggerChange(() => this.setIndicatorPosition());
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: any) {
-    this.positionMultiSelect();
+  setSelectList(sl: any): void {
+    this._SelectList = this.gs.cloneObject(sl);
+
+    if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList && this._SelectList.length > 0) {
+      let tmp = this.gs.cloneObject(this._SelectList);
+      //this.gs.devConsoleLog(tmp);
+      tmp.forEach((e: any) => {
+        e['checked'] = this.gs.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
+        if (this.Model) {
+          if (typeof this.Model === 'string') {
+            if (e[this.DisplayProperty || ''] === 'Other') {
+              let other = '';
+              this.Model.split(',').map(s => s = s.trim()).forEach((option: any) => {
+                let match = false;
+                // TODO: Revisit this logic i dont think this loop is needed
+                tmp.forEach((element: any) => {
+                  if (option === element[this.BindingProperty || '']) match = true;
+                });
+
+                if (!match)
+                  e['checked'] = option;
+              });
+
+            }
+            else
+              e['checked'] = this.Model.split(',').map(s => s = s.trim()).includes(e[this.BindingProperty || '']).toString();
+          }
+          else
+            e['checked'] = this.Model.find((m: any) => e[this.BindingProperty || ''] === m[this.BindingProperty || ''])?.['checked'] || false;
+        }
+      });
+
+      this.gs.triggerChange(() => {
+        this.change(tmp);
+      });
+    }
+
+    this.gs.triggerChange(() => {
+      this.setElementPositions();
+    });
   }
+
 
   change(newValue: any, index = -1) {
     if (this.Type === 'checkbox' && this.LabelText.toLowerCase() !== 'other') {
@@ -296,6 +302,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else {
       this.Model = newValue;
+
       this.ModelChange.emit(newValue);
     }
 
@@ -304,7 +311,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   private positionMultiSelect(): void {
-    if (this.Type === 'multiSelect' && this.multiSelect) {
+    if (this.Type === 'multiSelect' && this.multiSelect && this.dropdown) {
       const rect = this.multiSelect.nativeElement.getBoundingClientRect();
       this.renderer.setStyle(
         this.dropdown.nativeElement,
@@ -387,33 +394,33 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setIndicatorPosition(): void {
-    this.gs.triggerChange(() => {
-      if (this.validationIndicator) {
-        if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
-          if (this.label) {
-            if (['radio', 'multiCheckbox'].includes(this.Type))
-              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
-            if (['checkbox'].includes(this.Type))
-              this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
-          }
-        }
-        else if (this.Type === 'area') {
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
-        }
-        else if (this.input) {
-          let width = this.input.nativeElement.offsetWidth;
-
-          let offset = '0.5rem';
-
-          if (this.Type === 'select')
-            offset = '1.25rem'
-          else if (['date', 'datetime'].includes(this.Type))
-            offset = '2.8rem'
-
-          this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
+    //this.gs.triggerChange(() => {
+    if (this.validationIndicator && this.validationIndicator.nativeElement) {
+      if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
+        if (this.label) {
+          if (['radio', 'multiCheckbox'].includes(this.Type))
+            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
+          if (['checkbox'].includes(this.Type))
+            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         }
       }
-    });
+      else if (this.Type === 'area') {
+        this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
+      }
+      else if (this.input && this.input.nativeElement) {
+        let width = this.input.nativeElement.offsetWidth;
+
+        let offset = '0.5rem';
+
+        if (this.Type === 'select')
+          offset = '1.25rem'
+        else if (['date', 'datetime'].includes(this.Type))
+          offset = '2.8rem'
+
+        this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
+      }
+    }
+    //});
 
   }
 
@@ -466,54 +473,61 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   multiSelectMenu(): void {
     this.positionMultiSelect();
-    if (this.expanded) {
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'height', '0px'
-      );
-      window.setTimeout(() => {
+    if (this.dropdown) {
+      if (this.expanded) {
         this.renderer.setStyle(
           this.dropdown.nativeElement,
-          'visibility', 'hidden'
+          'height', '0px'
         );
-      }, 150);
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'overflow-y', 'hidden'
-      );
+        this.gs.triggerChange(() => {
+          if (this.dropdown)
+            this.renderer.setStyle(
+              this.dropdown.nativeElement,
+              'visibility', 'hidden'
+            );
+        }, 150);
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'overflow-y', 'hidden'
+        );
 
-      this.expanded = !this.expanded;
-    } else {
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'height', this.dropdown.nativeElement.scrollHeight + 'px'
-      );
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'visibility', 'visible'
-      );
-      this.renderer.setStyle(
-        this.dropdown.nativeElement,
-        'overflow-y', 'auto'
-      );
+        this.expanded = !this.expanded;
+      } else {
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'height', this.dropdown.nativeElement.scrollHeight + 'px'
+        );
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'visibility', 'visible'
+        );
+        this.renderer.setStyle(
+          this.dropdown.nativeElement,
+          'overflow-y', 'auto'
+        );
 
-      this.expanded = !this.expanded;
+        this.expanded = !this.expanded;
+      }
     }
   }
 
   multiSelectClose(): void {
-    this.renderer.setStyle(
-      this.dropdown.nativeElement,
-      'height', '0px'
-    );
-    window.setTimeout(() => {
+    if (this.dropdown) {
       this.renderer.setStyle(
         this.dropdown.nativeElement,
-        'visibility', 'hidden'
+        'height', '0px'
       );
-    }, 150);
 
-    this.expanded = false;
+      this.gs.triggerChange(() => {
+        if (this.dropdown)
+          this.renderer.setStyle(
+            this.dropdown.nativeElement,
+            'visibility', 'hidden'
+          );
+      }, 150);
+
+      this.expanded = false;
+    }
   }
 
   formatMAC(value: string): void {
@@ -582,7 +596,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       */
 
       this.stopwatchSetValue();
-      window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+      this.gs.triggerChange(this.stopwatchRunFunction.bind(this), 10);
     }
   }
 
@@ -594,7 +608,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   resizeFormElement(): void {
     // This is to make sure the form element is the right width for the label
-    window.setTimeout(() => {
+    /*window.setTimeout(() => {
       if (!['radio', 'checkbox', 'multiCheckbox'].includes(this.Type) && this.label) {
         const width = (this.Type === 'multiSelect' ? (this.multiSelectText.nativeElement.clientWidth + 20) : this.label.nativeElement.clientWidth) + 32;
 
@@ -604,61 +618,67 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       }
 
       this.positionLabel();
-    }, 0);
+    }, 0);*/
+    this.positionLabel();
   }
 
   positionLabel(): void {
-
-    this.gs.triggerChange(() => {
+    if (this.label && this.label.nativeElement) {
+      //this.gs.triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
-        if (this.Type === 'number') {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px)`
-          );
-        }
-        else if (this.input) {
-          const width = this.input.nativeElement.offsetWidth;
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'max-width', `calc(${width}px - 16px - 16px - 16px)`
-          );
+        if (this.input) {
+          if (this.Type === 'number') {
+            const width = this.input.nativeElement.offsetWidth;
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'max-width', `calc(${width}px - 16px - 16px)`
+            );
+          }
+          else {
+            const width = this.input.nativeElement.offsetWidth;
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'max-width', `calc(${width}px - 16px - 16px - 16px)`
+            );
+          }
         }
 
 
         const { lineHeight } = getComputedStyle(this.label.nativeElement);
         const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);
         const amountOfLinesTilAdjust = 1.0;
-
+        /*
         if (this.LabelText.includes('ou to the PARTs program')) {
           let x = 0;
-        }
+        }*/
 
-        if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-' + labelOffset + 'px'
-          );
-          this.renderer.setStyle(
-            this.formElement.nativeElement,
-            'margin-top', labelOffset + 'px'
-          );
-        }
-        else {
-          //if (this.LabelText.includes('Lining up '))
-          //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
-          this.renderer.setStyle(
-            this.label.nativeElement,
-            'top', '-4px'
-          );
-          this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+        if (this.formElement) {
+          if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
+            //if (this.LabelText.includes('Lining up '))
+            //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'top', '-' + labelOffset + 'px'
+            );
+            this.renderer.setStyle(
+              this.formElement.nativeElement,
+              'margin-top', labelOffset + 'px'
+            );
+          }
+          else {
+            //if (this.LabelText.includes('Lining up '))
+            //  this.gs.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            this.renderer.setStyle(
+              this.label.nativeElement,
+              'top', this.Type === 'rating' ? '-12px' : '-4px'
+            );
+            this.renderer.removeStyle(this.formElement.nativeElement, 'margin-top');
+          }
         }
       }
-    });
+      //});
+    }
   }
 
   strNoE(a: any): boolean {
@@ -684,7 +704,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   phoneMaskFn(value: string, init = false) {
-
     this.phoneMaskModel = '';
 
     // This code manipulates the input to look like a phone number.
@@ -694,7 +713,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     const prefix = phone.slice(3, 6);
     const suffix = phone.slice(6, 10);*/
 
-    window.setTimeout(() => {
+    this.gs.triggerChange(() => {
       /*this.phoneMaskModel = areaCode.length >= 1 ? '(' : '';
       this.phoneMaskModel += areaCode;
       this.phoneMaskModel += prefix.length > 0 ? ') ' : '';
@@ -705,7 +724,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel = !this.gs.strNoE(val) ? val : null;
 
       if (!init) this.change(phone);
-    }, 1);
+    });
   };
 
   increment(): void {
@@ -734,5 +753,10 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   runResetFunction(): void {
     this.ResetFunction.emit();
+  }
+
+  setRating(n: number): void {
+    if (!this.Disabled)
+      this.change(n);
   }
 }
