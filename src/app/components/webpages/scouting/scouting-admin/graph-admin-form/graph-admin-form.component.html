@@ -8,10 +8,11 @@
     </div>
   </app-form-element-group>
 
-  <app-table [TableCols]="graphTableCols" [TableData]="graphs" [Width]="'100%'" [ShowAddButton]="true"
-    (AddRecordCallBack)="showGraphModal()" [ShowEditButton]="true" (EditRecordCallBack)="showGraphModal($event)"
-    [Scrollable]="true" [ScrollHeight]="'72vh'" [(FilterText)]="filterText" [EnableRemovedFilter]="true"
-    [RemovedFilterProperty]="'active'" [RemovedFilterPropertyValue]="filterOption">
+  <app-table [TableCols]="graphTableCols" [TableData]="graphs" [TableDataButtons]="graphTableButtons" [Width]="'100%'"
+    [ShowAddButton]="true" (AddRecordCallBack)="showGraphModal()" [ShowEditButton]="true"
+    (EditRecordCallBack)="showGraphModal($event)" [Scrollable]="true" [ScrollHeight]="'72vh'"
+    [(FilterText)]="filterText" [EnableRemovedFilter]="true" [RemovedFilterProperty]="'active'"
+    [RemovedFilterPropertyValue]="filterOption">
   </app-table>
 </app-box>
 
