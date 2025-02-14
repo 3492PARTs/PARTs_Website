@@ -94,7 +94,7 @@ export class TooltipDirective {
 
     this.renderer.setStyle(this.tooltipElement, 'top', `${top}px`);
     this.renderer.setStyle(this.tooltipElement, 'left', `${left}px`);
-    this.renderer.setStyle(this.tooltipElement, 'position', 'absolute'); // Important!
+    this.renderer.setStyle(this.tooltipElement, 'position', 'fixed'); // Important!
     this.renderer.setStyle(this.tooltipElement, 'z-index', '1000'); // Ensure it's on top
 
   }
