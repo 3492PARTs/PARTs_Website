@@ -11,12 +11,12 @@
     <div class="margin-top-1rem">
         <div>
             @for (heatmap of heatmaps; track $index) {
-            <div class="legend">
+            <div class="legend" (click)="toggleHeatmap(heatmap)">
                 <div class="legend-box" [ngStyle]="{
                 'background-color': datasetColors[heatmap.label].backgroundColor,
                 'border-color': datasetColors[heatmap.label].borderColor
                 }"></div>
-                <p>{{heatmap.label}}</p>
+                <p [ngClass]="{'strike-through': !heatmapsToDisplay.includes(heatmap.label)}">{{heatmap.label}}</p>
             </div>
             }
         </div>
@@ -38,6 +38,7 @@
                 }
 
                 @for (heatmap of heatmaps; track $index) {
+                @if (heatmapsToDisplay.includes(heatmap.label)) {
                 <div #box class="box" [ngStyle]="{
                       top: heatmap.question.y + '%',
                       left: heatmap.question.x + '%',
@@ -50,13 +51,15 @@
                         <div #box class="box" [ngStyle]="{
                           top: 'calc(' + point.y + '% - 4px)',
                           left: 'calc(' + point.x + '% - 4px)',
-                          width: '8px',
-                          height: '8px',
-                          border: '4px solid ' + datasetColors[heatmap.label].backgroundColor
-                        }"></div>
+                          width: '1rem',
+                          height: '1rem',
+                          'background-color': datasetColors[heatmap.label].backgroundColor,
+                          'border-color': datasetColors[heatmap.label].borderColor
+                        }" appTooltip="{{heatmap.label}}" tooltipPosition="top"></div>
                         }
                     </div>
                 </div>
+                }
                 }
                 }
             </div>

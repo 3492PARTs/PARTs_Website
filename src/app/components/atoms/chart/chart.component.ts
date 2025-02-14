@@ -6,12 +6,13 @@ import { GeneralService } from '../../../services/general.service';
 import { HeaderComponent } from "../header/header.component";
 import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
+import { TooltipDirective } from '../../../directives/tooltip/tooltip.directive';
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-chart',
-  imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent],
+  imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent, TooltipDirective],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
@@ -47,6 +48,7 @@ export class ChartComponent implements OnInit {
 
   heatmaps: Heatmap[] = [];
   uniqueHeatmapQuestions: Question[] = [];
+  heatmapsToDisplay: string[] = [];
 
   private resizeTimer: number | null | undefined;
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
@@ -94,6 +96,7 @@ export class ChartComponent implements OnInit {
           if (this.heatmaps) {
             this.heatmaps.forEach(h => this.getDatasetColor(h.label));
             this.uniqueHeatmapQuestions = this.getUniqueHeatmapQuestions(this.heatmaps);
+            this.heatmaps.forEach(h => this.heatmapsToDisplay.push(h.label));
           }
           break;
       }
@@ -422,4 +425,13 @@ export class ChartComponent implements OnInit {
 
     return questions;
   }
+
+  toggleHeatmap(heatmap: Heatmap): void {
+    const i = this.heatmapsToDisplay.findIndex(h => h === heatmap.label);
+    if (i !== -1)
+      this.heatmapsToDisplay.splice(i, 1);
+    else
+      this.heatmapsToDisplay.push(heatmap.label);
+  }
+
 }
