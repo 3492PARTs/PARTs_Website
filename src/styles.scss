@@ -24,4 +24,5 @@
   pointer-events: none; /* Prevent the tooltip from blocking mouse events on the underlying element */
   white-space: pre-wrap; /* Allow text to wrap */
   max-width: 200px; /* Set a maximum width */
+  display: inline-block;
 }

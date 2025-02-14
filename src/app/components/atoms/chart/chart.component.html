@@ -3,7 +3,7 @@
     <app-header [h]="1">{{ChartTitle}}</app-header>
     }
 
-    @if (ChartType !== 'ht-map') {
+    @if (ChartType !== 'touch-map') {
     <canvas [id]="id">{{chart}}</canvas>
     }
     @else {
@@ -16,7 +16,8 @@
                 'background-color': datasetColors[heatmap.label].backgroundColor,
                 'border-color': datasetColors[heatmap.label].borderColor
                 }"></div>
-                <p [ngClass]="{'strike-through': !heatmapsToDisplay.includes(heatmap.label)}">{{heatmap.label}}</p>
+                <p [ngClass]="{'strike-through': !heatmapsToDisplay.includes(heatmap.label)}">{{heatmap.label}} :
+                    {{heatmap.points.length}}</p>
             </div>
             }
         </div>
@@ -27,7 +28,7 @@
                 <img #image id="image" [src]="url" />
 
                 @for (question of uniqueHeatmapQuestions; track $index) {
-                <div #box class="box" [ngStyle]="{
+                <div class="svg" [ngStyle]="{
                         top: question.y + '%',
                         left: question.x + '%',
                         width: question.width + '%',
@@ -39,25 +40,24 @@
 
                 @for (heatmap of heatmaps; track $index) {
                 @if (heatmapsToDisplay.includes(heatmap.label)) {
-                <div #box class="box" [ngStyle]="{
+                <div class="box" [ngStyle]="{
                       top: heatmap.question.y + '%',
                       left: heatmap.question.x + '%',
                       width: heatmap.question.width + '%',
                       height: heatmap.question.height + '%'
                     }">
-
-                    <div class="touchpoint-wrapper">
-                        @for (point of heatmap.points; track $index) {
-                        <div #box class="box" [ngStyle]="{
-                          top: 'calc(' + point.y + '% - 4px)',
-                          left: 'calc(' + point.x + '% - 4px)',
-                          width: '1rem',
-                          height: '1rem',
+                    @for (point of heatmap.points; track $index) {
+                    <div class="point" [ngStyle]="{
+                          top: 'calc(' + point.y + '% - 1rem)',
+                          left: 'calc(' + point.x + '% - 1rem)',
+                          width: '2rem',
+                          height: '2rem',
                           'background-color': datasetColors[heatmap.label].backgroundColor,
                           'border-color': datasetColors[heatmap.label].borderColor
-                        }" appTooltip="{{heatmap.label}}" tooltipPosition="top"></div>
-                        }
+                        }" appTooltip="{{heatmap.label}}" tooltipPosition="top">
+                        <div></div>
                     </div>
+                    }
                 </div>
                 }
                 }

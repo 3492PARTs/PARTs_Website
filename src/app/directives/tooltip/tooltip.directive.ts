@@ -54,7 +54,7 @@ export class TooltipDirective {
     switch (this.tooltipPosition) {
       case 'top':
         top = hostRect.top - tooltipRect.height - 5; // 5px margin
-        left = hostRect.left + (hostRect.width / 2) - (tooltipRect.width / 2) + 20;
+        left = hostRect.left + (hostRect.width / 2) - (tooltipRect.width / 2);
         break;
       case 'bottom':
         top = hostRect.bottom + 5;

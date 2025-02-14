@@ -396,13 +396,13 @@ export class BoxAndWhiskerPlot {
     outliers: number[] = [];
 }
 
-export class HeatMapPoint {
+export class TouchMapPoint {
     x = NaN;
     y = NaN;
 }
 
-export class Heatmap {
+export class TouchMap {
     label = '';
     question = new Question();
-    points: HeatMapPoint[] = [];
+    points: TouchMapPoint[] = [];
 }
