@@ -26,3 +26,21 @@
   left: 0;
   //background-color: rgba($color: #5405f5, $alpha: 0.5);
 }
+
+.legend {
+  display: inline-block;
+  margin-right: 1rem;
+
+  .legend-box {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+    border: 1px solid black;
+  }
+
+  p {
+    display: inline-block;
+    margin: 0;
+  }
+}

@@ -23,6 +23,7 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
   @ViewChild('svgDiv', { read: ElementRef, static: false }) svgDiv: ElementRef | undefined = undefined;
 
   @Input() Inverted = false;
+  @Input() HideLabel = false;
 
   @Input() Stroke = '#ffffff';
   @Input() Fill = '#80808087';

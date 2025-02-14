@@ -402,6 +402,7 @@ export class HeatMapPoint {
 }
 
 export class Heatmap {
+    label = '';
     question = new Question();
     points: HeatMapPoint[] = [];
 }
