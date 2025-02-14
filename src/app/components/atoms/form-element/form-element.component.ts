@@ -231,7 +231,8 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setSelectList(sl: any): void {
-    this._SelectList = this.gs.cloneObject(sl);
+    if (sl)
+      this._SelectList = this.gs.cloneObject(sl);
 
     if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList && this._SelectList.length > 0) {
       let tmp = this.gs.cloneObject(this._SelectList);

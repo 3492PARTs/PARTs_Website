@@ -71,7 +71,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
         this.showHideTableCols();
         this.filter();
 
-        this.showScoutFieldColsList = this.gs.cloneObject(this.showScoutFieldCols);
+        this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResponses.scoutCols);
       }
 
       this.gs.decrementOutstandingCalls();
@@ -138,14 +138,17 @@ export class FieldScoutingResponsesComponent implements OnInit {
   }
 
   showHideTableCols(): void {
-    let tmp: object[] = [];
-    for (let i = 0; i < this.showScoutFieldCols.length; i++) {
-      if (this.showScoutFieldCols[i]['checked']) {
-        tmp.push(this.showScoutFieldCols[i]);
+    this.gs.triggerChange(() => {
+      let tmp: object[] = [];
+      for (let i = 0; i < this.showScoutFieldCols.length; i++) {
+        if (this.showScoutFieldCols[i]['checked']) {
+          tmp.push(this.showScoutFieldCols[i]);
+        }
       }
-    }
 
-    this.scoutTableCols = tmp;
+      this.scoutTableCols = tmp;
+    }, 500);
+
   }
 
   resetTableColumns(): void {
@@ -159,7 +162,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
     let temp = this.scoutResponses.scoutAnswers;
 
     if (!this.gs.strNoE(this.filterTeam)) {
-      temp = temp.filter(r => r['team_no'].toString().includes(this.filterTeam));
+      temp = temp.filter(r => r['team_id'].toString().includes(this.filterTeam));
     }
 
     if (!this.gs.strNoE(this.filterRank)) {
