@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-import { BoxAndWhiskerPlot, Heatmap, Histogram, HistogramBin, Plot, Question } from '../../../models/form.models';
+import { BoxAndWhiskerPlot, TouchMap, Histogram, HistogramBin, Plot, Question } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { HeaderComponent } from "../header/header.component";
 import { CommonModule } from '@angular/common';
@@ -46,7 +46,7 @@ export class ChartComponent implements OnInit {
   private colorCounter = 0;
   url = '';
 
-  heatmaps: Heatmap[] = [];
+  heatmaps: TouchMap[] = [];
   uniqueHeatmapQuestions: Question[] = [];
   heatmapsToDisplay: string[] = [];
 
@@ -92,8 +92,8 @@ export class ChartComponent implements OnInit {
           if (boxWhiskerPlots && boxWhiskerPlots.length > 0)
             chartConfig = this.createBoxAndWhiskerChartConfig(boxWhiskerPlots);
           break;
-        case 'ht-map':
-          this.heatmaps = d as Heatmap[];
+        case 'touch-map':
+          this.heatmaps = d as TouchMap[];
           if (this.heatmaps) {
             this.heatmaps.forEach(h => this.getDatasetColor(h.label));
             this.uniqueHeatmapQuestions = this.getUniqueHeatmapQuestions(this.heatmaps);
@@ -412,7 +412,7 @@ export class ChartComponent implements OnInit {
     return this.datasetColors[label];
   }
 
-  private getUniqueHeatmapQuestions(heatmaps: Heatmap[]): Question[] {
+  private getUniqueHeatmapQuestions(heatmaps: TouchMap[]): Question[] {
     const questions: Question[] = [];
 
     heatmaps.forEach(h => {
@@ -427,7 +427,7 @@ export class ChartComponent implements OnInit {
     return questions;
   }
 
-  toggleHeatmap(heatmap: Heatmap): void {
+  toggleHeatmap(heatmap: TouchMap): void {
     const i = this.heatmapsToDisplay.findIndex(h => h === heatmap.label);
     if (i !== -1)
       this.heatmapsToDisplay.splice(i, 1);

@@ -3,7 +3,7 @@
     <app-header [h]="1">{{ChartTitle}}</app-header>
     }
 
-    @if (ChartType !== 'ht-map') {
+    @if (ChartType !== 'touch-map') {
     <canvas [id]="id">{{chart}}</canvas>
     }
     @else {
