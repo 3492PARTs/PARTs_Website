@@ -82,6 +82,7 @@ export class ChartComponent implements OnInit {
             chartConfig = this.createScatterChartConfig(plots);
           break;
         case 'diff-plot':
+        case 'line':
           const diffPlots = d as Plot[];
           if (diffPlots && diffPlots.length > 0)
             chartConfig = this.createLineChartConfig(diffPlots);

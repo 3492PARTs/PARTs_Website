@@ -5,7 +5,7 @@ import { AuthCallStates, AuthService } from '../../../../../services/auth.servic
 import { BoxComponent } from "../../../../atoms/box/box.component";
 import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
 import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
-import { TableColType, TableComponent } from "../../../../atoms/table/table.component";
+import { TableButtonType, TableColType, TableComponent } from "../../../../atoms/table/table.component";
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
 import { FormComponent } from "../../../../atoms/form/form.component";
 import { GeneralService } from '../../../../../services/general.service';
@@ -40,6 +40,9 @@ export class GraphAdminFormComponent implements OnInit {
     { PropertyName: 'y_scale_min', ColLabel: 'Y Scale Min' },
     { PropertyName: 'y_scale_max', ColLabel: 'Y Scale Max' },
   ];
+  graphTableButtons: TableButtonType[] = [
+    { ButtonType: 'copy', RecordCallBack: this.copyGraph.bind(this) }
+  ]
   graphModalVisible = false;
   activeGraph: Graph | undefined = undefined;
 
@@ -235,5 +238,14 @@ export class GraphAdminFormComponent implements OnInit {
       this.graphModalVisible = false;
       this.activeGraph = undefined;
     });
+  }
+
+  private copyGraph(graph: Graph): void {
+    const g = this.gs.cloneObject(graph) as Graph;
+    g.id = NaN;
+    g.graphbin_set.forEach(gb => gb.id = NaN);
+    g.graphcategory_set.forEach(gc => gc.id = NaN);
+    g.graphquestion_set.forEach(gq => gq.id = NaN);
+    this.showGraphModal(g);
   }
 }
