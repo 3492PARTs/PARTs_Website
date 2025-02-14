@@ -1,4 +1,5 @@
-<app-box *ngIf="!activeMatch" [Title]="'Matches'">
+@if (!activeMatch) {
+<app-box [Title]="'Matches'">
   <app-form-element-group [LabelText]="'Legend'">
     <div id="legend" class="flex justify-content-space-between">
       <div class="flex align-items-center">
@@ -32,21 +33,23 @@
     </app-table>
   </div>
 </app-box>
+}
+@else {
+<!--match info-->
+<app-box [Title]="activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number"
+  (ReturnFunction)="clearResults()">
 
-<app-box *ngIf="activeMatch" [Title]="
-    activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number
-  " (ReturnFunction)="clearResults()">
-  <div>
+  <app-form-element-group>
     <p>Match Time: {{ activeMatch.time | dateToStr }}</p>
     <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">
       Red Score: {{ activeMatch.red_score }} Blue Score:
       {{ activeMatch.blue_score }}
     </p>
-  </div>
+  </app-form-element-group>
 
   <!--strategies-->
   <div class="padding-bottom-1rem">
-    @for (ms of activeMatchStrategies; track ms.id; let i = $index) { @if
+    @for (ms of matchStrategies; track ms.id; let i = $index) { @if
     (ms.user){
     <div class="match-strategy">
       @if (ms.img_url) {
@@ -62,7 +65,7 @@
         ">
         <p>{{ ms.strategy }}</p>
 
-        @if (ms.img_url && activeMatchStrategiesButtonData[i].display) {
+        @if (ms.img_url && matchStrategiesButtonData[i].display) {
         <img class="img" [src]="ms.img_url" (click)="openFullscreen($event)" />
         }
       </app-form-element-group>
@@ -76,7 +79,7 @@
     'two-column-grid': !mobile, 
     }">
     <div>
-      <app-header [h]="1">
+      <app-header [h]="1">Red:
         @for (t of redTeams; track $index) {
         {{t.team_no + ($last ? '' : ' & ')}}
         }
@@ -84,7 +87,7 @@
       <app-dashboard [DashViewType]="'matches'" [Teams]="redTeams" [VerticalLayout]="true"></app-dashboard>
     </div>
     <div>
-      <app-header [h]="1">
+      <app-header [h]="1">Blue:
         @for (t of blueTeams; track $index) {
         {{t.team_no + ($last ? '' : ' & ')}}
         }
@@ -97,11 +100,15 @@
 
   <!--teams-->
   <app-tab-container>
-    <app-tab *ngFor="let mpr of matchToPlan" [TabName]="mpr.team.team_no.toString()" [TabTextColor]="mpr.alliance">
-      <app-pit-result-display *ngIf="mpr.pitData" [ScoutPitResult]="mpr.pitData"></app-pit-result-display>
+    <app-tab *ngFor="let matchTeamData of matchTeamsData" [TabName]="matchTeamData.team.team_no.toString()"
+      [TabTextColor]="matchTeamData.alliance">
+      <!--pit data-->
+      <app-pit-result-display *ngIf="matchTeamData.pitData"
+        [ScoutPitResult]="matchTeamData.pitData"></app-pit-result-display>
 
+      <!--notes-->
       <app-form-element-group [LabelText]="'Notes'">
-        <app-form-element-group *ngFor="let note of mpr.notes" [LabelText]="
+        <app-form-element-group *ngFor="let note of matchTeamData.notes" [LabelText]="
             (note.user
               ? note.user.first_name + ' ' + note.user.last_name + ' '
               : '') + ((note.time | dateToStr) || '')
@@ -112,9 +119,11 @@
 
       <div class="padding-bottom-1rem"></div>
 
-      <app-table [TableCols]="scoutCols" [TableData]="mpr.scoutAnswers || []" [EnableFilter]="true" [Responsive]="true"
-        [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
+      <!--Field results table-->
+      <app-table [TableCols]="scoutCols" [TableData]="matchTeamData.scoutAnswers || []" [EnableFilter]="true"
+        [Responsive]="true" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
       </app-table>
     </app-tab>
   </app-tab-container>
 </app-box>
+}

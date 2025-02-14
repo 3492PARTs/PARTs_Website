@@ -427,7 +427,7 @@ export class TeamNote implements ITeamNote {
     void_ind = 'n';
 }
 
-export class MatchPlanning {
+export class MatchTeamData {
     team!: Team;
     pitData = new ScoutPitResponse();
     scoutAnswers!: any;

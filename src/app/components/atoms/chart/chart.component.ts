@@ -1,17 +1,18 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-import { BoxAndWhiskerPlot, Heatmap, Histogram, HistogramBin, Plot } from '../../../models/form.models';
+import { BoxAndWhiskerPlot, Heatmap, Histogram, HistogramBin, Plot, Question } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { HeaderComponent } from "../header/header.component";
 import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
+import { TooltipDirective } from '../../../directives/tooltip/tooltip.directive';
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
   selector: 'app-chart',
-  imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent],
+  imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent, TooltipDirective],
   templateUrl: './chart.component.html',
   styleUrl: './chart.component.scss'
 })
@@ -46,6 +47,8 @@ export class ChartComponent implements OnInit {
   url = '';
 
   heatmaps: Heatmap[] = [];
+  uniqueHeatmapQuestions: Question[] = [];
+  heatmapsToDisplay: string[] = [];
 
   private resizeTimer: number | null | undefined;
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
@@ -90,8 +93,11 @@ export class ChartComponent implements OnInit {
           break;
         case 'ht-map':
           this.heatmaps = d as Heatmap[];
-          if (this.heatmaps)
-            this.heatmaps.forEach(h => this.getDatasetColor(h.question.question));
+          if (this.heatmaps) {
+            this.heatmaps.forEach(h => this.getDatasetColor(h.label));
+            this.uniqueHeatmapQuestions = this.getUniqueHeatmapQuestions(this.heatmaps);
+            this.heatmaps.forEach(h => this.heatmapsToDisplay.push(h.label));
+          }
           break;
       }
 
@@ -404,4 +410,28 @@ export class ChartComponent implements OnInit {
     }
     return this.datasetColors[label];
   }
+
+  private getUniqueHeatmapQuestions(heatmaps: Heatmap[]): Question[] {
+    const questions: Question[] = [];
+
+    heatmaps.forEach(h => {
+      if (!questions.find(q => h.question.id === q.id)) {
+        const question = this.gs.cloneObject(h.question) as Question;
+        question.question = question.question;
+        questions.push(question);
+      }
+    });
+
+
+    return questions;
+  }
+
+  toggleHeatmap(heatmap: Heatmap): void {
+    const i = this.heatmapsToDisplay.findIndex(h => h === heatmap.label);
+    if (i !== -1)
+      this.heatmapsToDisplay.splice(i, 1);
+    else
+      this.heatmapsToDisplay.push(heatmap.label);
+  }
+
 }

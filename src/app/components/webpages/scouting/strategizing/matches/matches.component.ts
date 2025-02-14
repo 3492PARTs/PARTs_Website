@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Match, MatchPlanning, MatchStrategy, ScoutPitResponse, Team, TeamNote } from '../../../../../models/scouting.models';
+import { Match, MatchTeamData, MatchStrategy, ScoutPitResponse, Team, TeamNote } from '../../../../../models/scouting.models';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService, AppSize } from '../../../../../services/general.service';
 import { ScoutingService } from '../../../../../services/scouting.service';
@@ -44,9 +44,10 @@ export class MatchesComponent implements OnInit {
 
   scoutCols: TableColType[] = [];
   activeMatch: Match | undefined = undefined;
-  activeMatchStrategies: MatchStrategy[] = [];
-  activeMatchStrategiesButtonData: { display: boolean, id: number }[] = [];
-  matchToPlan: MatchPlanning[] = [];
+  matchStrategies: MatchStrategy[] = [];
+  matchStrategiesButtonData: { display: boolean, id: number }[] = [];
+
+  matchTeamsData: MatchTeamData[] = [];
   redTeams: Team[] = [];
   blueTeams: Team[] = [];
 
@@ -92,110 +93,106 @@ export class MatchesComponent implements OnInit {
       this.initPromise = new Promise<boolean>(resolve => {
         const calls: any[] = [];
 
-        this.gs.incrementOutstandingCalls();
         calls.push(
-          this.ss.loadAllScoutingInfo().then(result => {
+          this.ss.loadAllScoutingInfo(false).then(result => {
             if (result) {
               this.teams = result.teams;
 
               const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
               this.matches = ourMatches;
             }
-            this.gs.decrementOutstandingCalls();
           }));
 
-        //
+        // refresh for any new data
         calls.push(
           this.ss.loadFieldScoutingResponses(false).then(result => {
             if (result) {
               this.scoutCols = result.scoutCols;
-
-              //this.buildGraphOptionsList();
             }
-            //this.gs.decrementOutstandingCalls();
           }));
 
-        //this.gs.incrementOutstandingCalls();
-        calls.push(this.ss.loadPitScoutingResponses(false).then(result => {
-          //this.gs.decrementOutstandingCalls();
-        }));
+        // refresh for any new data
+        calls.push(this.ss.loadPitScoutingResponses(false));
 
         Promise.all(calls).then((results: any[]) => {
           resolve(true);
           this.initPromise = undefined;
         });
       });
-
   }
 
   async planMatch(match: Match): Promise<void> {
     if (!this.initPromise) {
       this.gs.incrementOutstandingCalls();
 
-      this.matchToPlan = [];
-      let tmp: MatchPlanning[] = [];
+      this.matchStrategies = [];
+      this.gs.incrementOutstandingCalls();
+      this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_key === match.match_key).then(mss => {
+        this.matchStrategies = mss;
+        this.matchStrategies.sort((ms1, ms2) => {
+          if (ms1.time < ms2.time) return 1;
+          else if (ms1.time > ms2.time) return -1;
+          else return 0;
+        });
+        this.gs.decrementOutstandingCalls();
+      });
+      this.matchStrategiesButtonData = this.matchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
+
+
+      this.matchTeamsData = [];
+      let tmp: MatchTeamData[] = [];
 
       this.redTeams = [new Team(match.red_one_id), new Team(match.red_two_id), new Team(match.red_three_id)];
       this.blueTeams = [new Team(match.blue_one_id), new Team(match.blue_two_id), new Team(match.blue_three_id)];
 
       const allianceMembers = [
-        { team: match.red_one_id, alliance: 'red' },
-        { team: match.red_two_id, alliance: 'red' },
-        { team: match.red_three_id, alliance: 'red' },
-        { team: match.blue_one_id, alliance: 'blue' },
-        { team: match.blue_two_id, alliance: 'blue' },
-        { team: match.blue_three_id, alliance: 'blue' },
+        { team: this.teams.find(t => t.team_no === match.red_one_id), alliance: 'red' },
+        { team: this.teams.find(t => t.team_no === match.red_two_id), alliance: 'red' },
+        { team: this.teams.find(t => t.team_no === match.red_three_id), alliance: 'red' },
+        { team: this.teams.find(t => t.team_no === match.blue_one_id), alliance: 'blue' },
+        { team: this.teams.find(t => t.team_no === match.blue_two_id), alliance: 'blue' },
+        { team: this.teams.find(t => t.team_no === match.blue_three_id), alliance: 'blue' },
 
       ]
 
       for (const allianceMember of allianceMembers) {
-        let team = new Team();
+        const calls: Promise<any>[] = [];
         let pitData = new ScoutPitResponse();
         let scoutAnswers: any = null;
         let notes: TeamNote[] = [];
 
-        await this.ss.getTeamFromCache(allianceMember.team as number).then(async t => {
-          if (t) {
-            team = t;
-            await this.ss.getPitResponseFromCache(t.team_no).then(spr => {
-              if (spr) {
-                pitData = spr;
-              }
-            });
+        if (allianceMember.team !== undefined) {
+          const team = allianceMember.team;
 
-            await this.ss.getFieldResponseFromCache(f => f.where({ 'team_id': t.team_no })).then(sprs => {
-              scoutAnswers = sprs;
-            });
+          calls.push(this.ss.getPitResponseFromCache(team.team_no).then(spr => {
+            if (spr) {
+              pitData = spr;
+            }
+          }));
 
-            await this.ss.getTeamNotesFromCache(f => f.where({ 'team_id': t.team_no })).then(tns => {
-              notes = tns;
-            });
+          calls.push(this.ss.getFieldResponseFromCache(f => f.where({ 'team_id': team.team_no })).then(sprs => {
+            scoutAnswers = sprs;
+          }));
 
-            this.activeMatchStrategies = [];
-            await this.ss.filterMatchStrategiesFromCache(ms => ms.match?.match_key === match.match_key).then(mss => {
-              this.activeMatchStrategies = mss;
-              this.activeMatchStrategies.sort((ms1, ms2) => {
-                if (ms1.time < ms2.time) return 1;
-                else if (ms1.time > ms2.time) return -1;
-                else return 0;
+          calls.push(this.ss.getTeamNotesFromCache(f => f.where({ 'team_id': team.team_no })).then(tns => {
+            notes = tns;
+          }));
+
+          await Promise.all(calls).then((results: any[]) => {
+            tmp.push(
+              {
+                team: team,
+                pitData: pitData,
+                scoutAnswers: scoutAnswers,
+                notes: notes,
+                alliance: allianceMember.alliance,
               });
-            });
-            this.activeMatchStrategiesButtonData = this.activeMatchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
-
-          }
-        });
-
-        tmp.push(
-          {
-            team: team,
-            pitData: pitData,
-            scoutAnswers: scoutAnswers,
-            notes: notes,
-            alliance: allianceMember.alliance,
+            this.initPromise = undefined;
           });
+        }
       }
 
-      this.matchToPlan = tmp;
+      this.matchTeamsData = tmp;
       this.activeMatch = match;
 
       this.gs.decrementOutstandingCalls();
@@ -207,9 +204,9 @@ export class MatchesComponent implements OnInit {
   clearResults(): void {
     this.redTeams = [];
     this.blueTeams = [];
-    this.matchToPlan = [];
+    this.matchTeamsData = [];
     this.activeMatch = undefined;
-    this.activeMatchStrategies = [];
+    this.matchStrategies = [];
   }
 
   rankToColor(team: number): string {
@@ -315,6 +312,6 @@ export class MatchesComponent implements OnInit {
   }
 
   toggleImageDisplay(i: number): void {
-    this.activeMatchStrategiesButtonData[i].display = !this.activeMatchStrategiesButtonData[i].display;
+    this.matchStrategiesButtonData[i].display = !this.matchStrategiesButtonData[i].display;
   }
 }

@@ -9,30 +9,53 @@
     @else {
     @if (url && url.length > 0) {
     <div class="margin-top-1rem">
+        <div>
+            @for (heatmap of heatmaps; track $index) {
+            <div class="legend" (click)="toggleHeatmap(heatmap)">
+                <div class="legend-box" [ngStyle]="{
+                'background-color': datasetColors[heatmap.label].backgroundColor,
+                'border-color': datasetColors[heatmap.label].borderColor
+                }"></div>
+                <p [ngClass]="{'strike-through': !heatmapsToDisplay.includes(heatmap.label)}">{{heatmap.label}}</p>
+            </div>
+            }
+        </div>
+
         <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
             <div #imageContainer id="image-container">
                 @if (heatmaps && heatmaps.length > 0) {
                 <img #image id="image" [src]="url" />
+
+                @for (question of uniqueHeatmapQuestions; track $index) {
+                <div #box class="box" [ngStyle]="{
+                        top: question.y + '%',
+                        left: question.x + '%',
+                        width: question.width + '%',
+                        height: question.height + '%'
+                      }">
+                    <app-display-question-svg [Question]="question"></app-display-question-svg>
+                </div>
+                }
+
                 @for (heatmap of heatmaps; track $index) {
-                @if (datasetColors[heatmap.question.question]) {
+                @if (heatmapsToDisplay.includes(heatmap.label)) {
                 <div #box class="box" [ngStyle]="{
                       top: heatmap.question.y + '%',
                       left: heatmap.question.x + '%',
                       width: heatmap.question.width + '%',
                       height: heatmap.question.height + '%'
                     }">
-                    <app-display-question-svg [Question]="heatmap.question"
-                        [Stroke]="datasetColors[heatmap.question.question].borderColor || ''"></app-display-question-svg>
 
                     <div class="touchpoint-wrapper">
                         @for (point of heatmap.points; track $index) {
                         <div #box class="box" [ngStyle]="{
                           top: 'calc(' + point.y + '% - 4px)',
                           left: 'calc(' + point.x + '% - 4px)',
-                          width: '8px',
-                          height: '8px',
-                          border: '4px solid ' + datasetColors[heatmap.question.question].backgroundColor || ''
-                        }"></div>
+                          width: '1rem',
+                          height: '1rem',
+                          'background-color': datasetColors[heatmap.label].backgroundColor,
+                          'border-color': datasetColors[heatmap.label].borderColor
+                        }" appTooltip="{{heatmap.label}}" tooltipPosition="top"></div>
                         }
                     </div>
                 </div>

@@ -12,3 +12,16 @@
 @use "./scss/abstracts/width.scss";
 @use "./scss/abstracts/height.scss";
 @use "./scss/modules/generics.scss";
+
+/* tooltip.component.css or global styles.css */
+.app-tooltip {
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  color: white; /* White text */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px; /* Adjust as needed */
+  /* Other styling as you like */
+  pointer-events: none; /* Prevent the tooltip from blocking mouse events on the underlying element */
+  white-space: pre-wrap; /* Allow text to wrap */
+  max-width: 200px; /* Set a maximum width */
+}

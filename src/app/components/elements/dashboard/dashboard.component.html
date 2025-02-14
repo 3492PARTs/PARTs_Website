@@ -1,5 +1,5 @@
 @if (!DashViewType) {
-<app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="false">
+<app-box [Title]="'Dashboard Configuration'" [Collapsible]="true" [Collapsed]="true">
     <app-form-element [Type]="'select'" [LabelText]="'Viewing View Type'" [(Model)]="dashboard.default_dash_view_typ"
         [SelectList]="dashboardViewTypes" [DisplayProperty]="'dash_view_nm'" [DisplayEmptyOption]="true"
         [MinWidth]="'200px'" [FormGroupInline]="true" (FunctionCallBack)="saveDashboard()"></app-form-element>
@@ -19,10 +19,9 @@
 }
 
 <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
-      'two-column-grid': activeViewCount === 2 && !VerticalLayout,
-      'three-column-grid': activeViewCount === 3 && !VerticalLayout,
-      'four-column-grid': activeViewCount === 4 && !VerticalLayout,
-      'five-column-grid': activeViewCount > 4 && !VerticalLayout,
+      'two-column-grid': activeViewCount === 2 && !VerticalLayout && appSize >= appSizeXLG,
+      'three-column-grid': activeViewCount === 3 && !VerticalLayout && appSize >= appSize_3XLG,
+      'four-column-grid': activeViewCount > 3 && !VerticalLayout && appSize >= appSize_3XLG,
       }">
     @for (dashboard_view of dashboard.dashboard_views; track $index) {
     @if (dashboard_view.active === 'y') {
@@ -73,7 +72,7 @@
         </ng-template>
 
         @if (!DashViewType) {
-        <app-box [Title]="'View Configuration'" [Collapsible]="true" [Collapsed]="false">
+        <app-box [Title]="'View Configuration'" [Collapsible]="true" [Collapsed]="true">
             <app-form (SubmitFunction)="saveDashboard()">
                 <app-form-element [Type]="'text'" [LabelText]="'View Name'" [(Model)]="dashboard_view.name"
                     [Required]="true"></app-form-element>
