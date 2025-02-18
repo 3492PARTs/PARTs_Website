@@ -1,5 +1,11 @@
 import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
 
+export interface IConditionalOnQuestion {
+    conditional_on: number;
+    condition_value: string;
+    question_condition_typ: QuestionConditionType;
+}
+
 export interface IQuestion {
     id: number;
     flow_id_set: number[];
@@ -28,10 +34,14 @@ export interface IQuestion {
 
     scout_question: IScoutQuestion;
 
-    question_conditional_on: number;
-    question_condition_value: string;
-    question_condition_typ: QuestionConditionType | undefined;
+    conditional_on_questions: IConditionalOnQuestion[];
     conditional_question_id_set: number[];
+}
+
+export class ConditionalOnQuestion implements IConditionalOnQuestion {
+    conditional_on = NaN;
+    condition_value = '';
+    question_condition_typ = new QuestionConditionType();
 }
 
 export class Question implements IQuestion {
@@ -62,9 +72,7 @@ export class Question implements IQuestion {
 
     scout_question = new ScoutQuestion();
 
-    question_conditional_on = NaN;
-    question_condition_value = '';
-    question_condition_typ: QuestionConditionType | undefined = undefined;
+    conditional_on_questions: ConditionalOnQuestion[] = [];
     conditional_question_id_set: number[] = [];
 }
 

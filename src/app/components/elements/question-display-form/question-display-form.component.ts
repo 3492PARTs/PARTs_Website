@@ -96,24 +96,24 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           this.QuestionAnswers.forEach(qa => {
             // if answer is based on question
             if (qa.question) {
-              if (q.question_conditional_on === qa.question.id && this.gs.isQuestionConditionMet(qa.value, qa.question, q))
-                q.question_conditional_on = NaN;
+              if (this.gs.isQuestionConditionMet(qa.value, qa.question, q))
+                q.conditional_on_questions = [];
             }
             else
               qa.flow_answers.forEach(fa => {
-                if (fa.question && q.question_conditional_on === fa.question.id && this.gs.isQuestionConditionMet(fa.value, fa.question, q))
-                  q.question_conditional_on = NaN;
+                if (fa.question && this.gs.isQuestionConditionMet(fa.value, fa.question, q))
+                  q.conditional_on_questions = [];
               });
           });
 
         });
 
-        this.questionsWithConditions = questions.filter(q => this.gs.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
+        this.questionsWithConditions = questions.filter(q => q.conditional_on_questions.length <= 0).map(q => new QuestionWithConditions(q));
       }
 
       // Push questions into the one they are conditional on
-      questions.filter(q => !this.gs.strNoE(q.question_conditional_on)).forEach(q => {
-        this.questionsWithConditions.find(qwc => qwc.question.id === q.question_conditional_on)?.conditionalQuestions.push(q);
+      questions.filter(q => q.conditional_on_questions.length > 0).forEach(q => {
+        this.questionsWithConditions.find(qwc => q.conditional_on_questions.map(v => v.conditional_on).includes(qwc.question.id))?.conditionalQuestions.push(q);
       });
 
       // find questions who are not a top level question or their direct child conditional queston
