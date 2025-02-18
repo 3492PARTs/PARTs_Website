@@ -475,20 +475,21 @@ export class GeneralService {
   }
 
   isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-    if (conditionalQuestion.question_condition_typ && question.id === conditionalQuestion.question_conditional_on)
-      switch (conditionalQuestion.question_condition_typ.question_condition_typ) {
+    const condition = conditionalQuestion.conditional_on_questions.find(coq => coq.conditional_on === question.id);
+    if (condition)
+      switch (condition.question_condition_typ.question_condition_typ) {
         case 'equal':
-          return (answer || '').toString().toLowerCase() === conditionalQuestion.question_condition_value.toLowerCase();
+          return (answer || '').toString().toLowerCase() === condition.condition_value.toLowerCase();
         case 'exist':
           return !this.strNoE(answer)
         case 'lt':
-          return parseFloat(answer) < parseFloat(conditionalQuestion.question_condition_value);
+          return parseFloat(answer) < parseFloat(condition.condition_value);
         case 'lt-equal':
-          return parseFloat(answer) <= parseFloat(conditionalQuestion.question_condition_value);
+          return parseFloat(answer) <= parseFloat(condition.condition_value);
         case 'gt':
-          return parseFloat(answer) > parseFloat(conditionalQuestion.question_condition_value);
+          return parseFloat(answer) > parseFloat(condition.condition_value);
         case 'gt-equal':
-          return parseFloat(answer) >= parseFloat(conditionalQuestion.question_condition_value);
+          return parseFloat(answer) >= parseFloat(condition.condition_value);
       }
     return false;
   }

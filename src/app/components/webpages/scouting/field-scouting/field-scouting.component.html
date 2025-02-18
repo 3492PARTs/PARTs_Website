@@ -1,22 +1,9 @@
 <app-box [Title]="'Field Scouting Form'">
-  <app-form-element-group
-    [LabelText]="'Team results to upload'"
-    *ngIf="outstandingResponses.length > 0"
-  >
-    <div
-      id="outstanding-results"
-      class="flex align-items-center gap-1rem flex-wrap"
-    >
-      <app-button
-        [ButtonType]="'refresh'"
-        (FunctionCallBack)="uploadOutstandingResponses()"
-      ></app-button>
-      <app-button
-        [ButtonType]="'main'"
-        *ngFor="let or of outstandingResponses"
-        (FunctionCallBack)="viewResult(or.id)"
-        >{{ or.team }}</app-button
-      >
+  <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResponses.length > 0">
+    <div id="outstanding-results" class="flex align-items-center gap-1rem flex-wrap">
+      <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResponses()"></app-button>
+      <app-button [ButtonType]="'main'" *ngFor="let or of outstandingResponses"
+        (FunctionCallBack)="viewResult(or.id)">{{ or.team }}</app-button>
     </div>
   </app-form-element-group>
   <br *ngIf="outstandingResponses.length > 0" />
@@ -28,12 +15,10 @@
           {{ scoutFieldSchedule.red_one_id?.first_name }}
           {{ scoutFieldSchedule.red_one_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.red_one_field_response &&
             scoutFieldResponse.match?.red_one_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.red_one_id }}</p>
         </div>
@@ -44,12 +29,10 @@
           {{ scoutFieldSchedule.blue_one_id?.first_name }}
           {{ scoutFieldSchedule.blue_one_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.blue_one_field_response &&
             scoutFieldResponse.match?.blue_one_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_one_id }}</p>
         </div>
@@ -60,12 +43,10 @@
           {{ scoutFieldSchedule.red_two_id?.first_name }}
           {{ scoutFieldSchedule.red_two_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.red_two_field_response &&
             scoutFieldResponse.match?.red_two_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.red_two_id }}</p>
         </div>
@@ -76,12 +57,10 @@
           {{ scoutFieldSchedule.blue_two_id?.first_name }}
           {{ scoutFieldSchedule.blue_two_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.blue_two_field_response &&
             scoutFieldResponse.match?.blue_two_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_two_id }}</p>
         </div>
@@ -92,12 +71,10 @@
           {{ scoutFieldSchedule.red_three_id?.first_name }}
           {{ scoutFieldSchedule.red_three_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.red_three_field_response &&
             scoutFieldResponse.match?.red_three_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.red_three_id }}</p>
         </div>
@@ -108,12 +85,10 @@
           {{ scoutFieldSchedule.blue_three_id?.first_name }}
           {{ scoutFieldSchedule.blue_three_id?.last_name }}
         </p>
-        <div
-          *ngIf="
+        <div *ngIf="
             !scoutFieldResponse.match?.blue_three_field_response &&
             scoutFieldResponse.match?.blue_three_id
-          "
-        >
+          ">
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_three_id }}</p>
         </div>
@@ -125,69 +100,35 @@
   <div id="field-scouting-form">
     <app-form (SubmitFunction)="save()" [FormElements]="formElements">
       <div *ngIf="formDisabled" class="padding-bottom-1rem">
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()"
-          >Reset</app-button
-        >
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()"
-          >Remove Result</app-button
-        >
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
       </div>
 
       <div class="flex align-items-baseline">
         @if(matches.length > 0) {
-        <app-form-element
-          [LabelText]="'Match'"
-          [Type]="'select'"
-          [SelectList]="matches"
-          [DisplayProperty]="'match_number'"
-          [DisplayEmptyOption]="true"
-          [(Model)]="scoutFieldResponse.match"
-          [Required]="!noMatch"
-          (FunctionCallBack)="buildTeamList()"
-          [Disabled]="formDisabled"
-          [MinWidth]="'100px'"
-        >
+        <app-form-element [LabelText]="'Match'" [Type]="'select'" [SelectList]="matches"
+          [DisplayProperty]="'match_number'" [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.match"
+          [Required]="!noMatch" (FunctionCallBack)="buildTeamList()" [Disabled]="formDisabled" [MinWidth]="'100px'">
         </app-form-element>
 
-        <app-button
-          [ButtonType]="'warning'"
-          (FunctionCallBack)="setNoMatch()"
-          [Disabled]="formDisabled"
-          >No Match </app-button
-        >} @if (noMatch || matches.length <=0) {
-        <app-button
-          [ButtonType]="!invertedImage ? 'main' : 'danger'"
-          (FunctionCallBack)="setInvertedImage(!invertedImage)"
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="setNoMatch()" [Disabled]="formDisabled">No Match
+        </app-button>} @if (noMatch || matches.length <=0) { <app-button
+          [ButtonType]="!invertedImage ? 'main' : 'danger'" (FunctionCallBack)="setInvertedImage(!invertedImage)"
           [Disabled]="
             activeFormSubTypeForm !== undefined &&
             activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
             stopwatchSecond !== autoTime
-          "
-          >{{ !invertedImage ? "Set Blue" : "Set Red" }}</app-button
-        >
-        }
+          ">{{ !invertedImage ? "Set Blue" : "Set Red" }}</app-button>
+          }
       </div>
-      <app-form-element
-        [LabelText]="'Team'"
-        [Type]="'select'"
-        [FormGroup]="true"
-        [SelectList]="teams"
-        [BindingProperty]="'team_no'"
-        [DisplayProperty]="'team_no'"
-        [DisplayProperty2]="'team_nm'"
-        [DisplayEmptyOption]="true"
-        [(Model)]="scoutFieldResponse.team_id"
-        [Required]="true"
-        [Disabled]="
+      <app-form-element [LabelText]="'Team'" [Type]="'select'" [FormGroup]="true" [SelectList]="teams"
+        [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+        [DisplayEmptyOption]="true" [(Model)]="scoutFieldResponse.team_id" [Required]="true" [Disabled]="
           formDisabled ||
           (activeFormSubTypeForm !== undefined &&
             activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
             stopwatchSecond !== autoTime)
-        "
-        [MinWidth]="'100px'"
-        (FunctionCallBack)="changeFieldInversionForTeam()"
-        [MaxWidth]="'300px'"
-      >
+        " [MinWidth]="'100px'" (FunctionCallBack)="changeFieldInversionForTeam()" [MaxWidth]="'300px'">
       </app-form-element>
 
       @if(activeFormSubTypeForm) {
@@ -196,76 +137,41 @@
         activeFormSubTypeForm.flows.length > 0) {
         <div #flowButtonsWrapper>
           @if (flowsActionStack.length > 0) {
-          <app-button
-            id="undo-btn"
-            [ButtonType]="'arrow-u-left-top'"
-            (FunctionCallBack)="undoFlowAction()"
-            [BackgroundColor]="'#808080'"
-          ></app-button>
+          <app-button id="undo-btn" [ButtonType]="'arrow-u-left-top'" (FunctionCallBack)="undoFlowAction()"
+            [BackgroundColor]="'#808080'"></app-button>
           }
 
-          <app-button
-            id="full-screen-btn"
-            [ButtonType]="
+          <app-button id="full-screen-btn" [ButtonType]="
               !fullScreen ? 'arrow-expand-all' : 'arrow-collapse-all'
-            "
-            (FunctionCallBack)="setFullScreen(!fullScreen)"
-            [BackgroundColor]="'#808080'"
-          ></app-button>
+            " (FunctionCallBack)="setFullScreen(!fullScreen)" [BackgroundColor]="'#808080'"></app-button>
         </div>
         }
 
-        <app-header
-          #formSubTypeHeader
-          [h]="2"
-          [Color]="fullScreen ? 'white' : undefined"
-          >{{ activeFormSubTypeForm.form_sub_typ.form_sub_nm }}
+        <app-header #formSubTypeHeader [h]="2" [Color]="fullScreen ? 'white' : undefined">{{
+          activeFormSubTypeForm.form_sub_typ.form_sub_nm }}
           {{
-            activeFormSubTypeForm.form_sub_typ.form_sub_typ === "auto"
-              ? stopwatchSecond.toString().padStart(2, "0") +
-                "s:" +
-                stopwatchLoopCount.toString().padStart(3, "0") +
-                "ms"
-              : ""
-          }}</app-header
-        >
+          activeFormSubTypeForm.form_sub_typ.form_sub_typ === "auto"
+          ? stopwatchSecond.toString().padStart(2, "0") +
+          "s:" +
+          stopwatchLoopCount.toString().padStart(3, "0") +
+          "ms"
+          : ""
+          }}</app-header>
       </div>
       }
 
-      <div
-        #imageBackground
-        id="image-background"
-        class="flex align-items-center justify-content-center"
-      >
-        <div
-          #imageContainer
-          id="image-container"
-          *ngIf="
+      <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
+        <div #imageContainer id="image-container" *ngIf="
             activeFormSubTypeForm &&
             activeFormSubTypeForm?.flows &&
             activeFormSubTypeForm.flows.length > 0
-          "
-          (click)="stopwatchStart()"
-        >
-          <img
-            #image
-            id="image"
-            *ngIf="fieldForm.img_url && activeFormSubTypeForm"
-            [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url"
-          />
+          " (click)="stopwatchStart()">
+          <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm"
+            [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url" />
 
-          <div
-            class="flow"
-            *ngFor="let flow of activeFormSubTypeForm?.flows || []"
-          >
-            <div
-              #box
-              class="box"
-              *ngFor="let q of flow.flow_questions; let i = index"
-              id="{{ q.id }}"
-            >
-              <div
-                [ngClass]="{
+          <div class="flow" *ngFor="let flow of activeFormSubTypeForm?.flows || []">
+            <div #box class="box" *ngFor="let q of flow.flow_questions; let i = index" id="{{ q.id }}">
+              <div [ngClass]="{
                   'full-width':
                     q.question.question_typ.question_typ === 'mnt-psh-btn',
                   'full-height':
@@ -273,29 +179,20 @@
                   flex: q.question.question_typ.question_typ !== 'mnt-psh-btn',
                   'align-items-baseline':
                     q.question.question_typ.question_typ !== 'mnt-psh-btn'
-                }"
-              >
-                <app-question-form-element
-                  [Question]="flow.flow_questions[i].question"
-                  (QuestionChange)="
+                }">
+                <app-question-form-element [Question]="flow.flow_questions[i].question" (QuestionChange)="
                     advanceFlow(flow, flow.flow_questions[i], $event)
-                  "
-                  [Inverted]="invertedImage"
-                ></app-question-form-element>
+                  " [Inverted]="invertedImage"></app-question-form-element>
 
                 @if (q.question.question_typ.question_typ !== 'mnt-psh-btn') {
-                <app-button
-                  [ButtonType]="'check-bold'"
-                  (FunctionCallBack)="
+                <app-button [ButtonType]="'check-bold'" (FunctionCallBack)="
                     advanceFlow(
                       flow,
                       flow.flow_questions[i],
                       flow.flow_questions[i].question,
                       true
                     )
-                  "
-                  [BackgroundColor]="'lightgray'"
-                ></app-button>
+                  " [BackgroundColor]="'lightgray'"></app-button>
                 }
               </div>
             </div>
@@ -303,58 +200,28 @@
         </div>
       </div>
 
-      <app-question-display-form
-        *ngIf="activeFormSubTypeForm"
-        [(Questions)]="activeFormSubTypeForm.questions"
-        [QuestionAnswers]="scoutFieldResponse.answers"
-        (FormElementsChange)="setFormElements($event)"
-        [Disabled]="formDisabled"
-      >
+      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
+        [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
+        [Disabled]="formDisabled">
       </app-question-display-form>
 
       <app-button-ribbon>
-        <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset(true)"
-          >Reset</app-button
-        >
+        <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset(true)">Reset</app-button>
 
-        @if(!activeFormSubTypeForm ||
-        (activeFormSubTypeForm.form_sub_typ.form_sub_typ === 'auto' &&
-        activeFormSubTypeForm.flows.length > 0)||
-        activeFormSubTypeForm.form_sub_typ.form_sub_typ ===
-        formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ.form_sub_typ)
-        {
-        <app-button
-          [ButtonType]="'danger'"
-          (FunctionCallBack)="nextFormSubType()"
-          [Disabled]="true"
-          >Next</app-button
-        >
-        } @else {
-        <app-button
-          [ButtonType]="'danger'"
-          (FunctionCallBack)="nextFormSubType()"
-          [Disabled]="
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="nextFormSubType()" [Disabled]="
             !activeFormSubTypeForm ||
             activeFormSubTypeForm.form_sub_typ.form_sub_typ ===
               formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ
                 .form_sub_typ
-          "
-          >Next</app-button
-        >
-        }
+          ">Next</app-button>
 
-        <app-button
-          [Type]="'submit'"
-          [ButtonType]="'success'"
-          [Disabled]="
+        <app-button [Type]="'submit'" [ButtonType]="'success'" [Disabled]="
             formDisabled ||
             !activeFormSubTypeForm ||
             activeFormSubTypeForm.form_sub_typ.form_sub_typ !==
               formSubTypeForms[formSubTypeForms.length - 1].form_sub_typ
                 .form_sub_typ
-          "
-          >Save</app-button
-        >
+          ">Save</app-button>
       </app-button-ribbon>
 
       @if (formDisabled) {
@@ -373,10 +240,7 @@
         } @else if (ans.flow) {
         <p class="margin-bottom-0">Question Flow: {{ ans.flow.name }}</p>
         @for (qfa of ans.flow_answers; track $index; let i = $index) {
-        <p
-          class="tab-2 margin-bottom-0"
-          [ngClass]="{ 'margin-top-0': i === 0 }"
-        >
+        <p class="tab-2 margin-bottom-0" [ngClass]="{ 'margin-top-0': i === 0 }">
           {{ qfa.question?.question }}: {{ qfa.value }}
         </p>
         <p class="tab-2 margin-top-0">

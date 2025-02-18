@@ -591,8 +591,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   getNextStage(flow: Flow, currentStage: number): number {
     let sceneFound = false;
 
-    const questions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && this.gs.strNoE(q.question.question_conditional_on));
-    const conditionalQuestions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && !this.gs.strNoE(q.question.question_conditional_on));
+    const questions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && q.question.conditional_on_questions.length <= 0);
+    const conditionalQuestions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && q.question.conditional_on_questions.length > 0);
 
     sceneFound = questions.length > 0;
 

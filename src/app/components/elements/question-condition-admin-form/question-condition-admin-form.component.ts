@@ -98,11 +98,11 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.questions.forEach(question => {
       let match = false;
       // If its in another group keep out of this one
-      this.questionConditions.forEach(qc => {
+      /*this.questionConditions.forEach(qc => {
         if ([qc.question_from.id, qc.question_to.id].includes(question.id)) {
           match = true;
         }
-      });
+      });*/
 
       // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
