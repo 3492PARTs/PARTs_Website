@@ -181,6 +181,7 @@ export class QuestionAggregateQuestion {
     id = NaN;
     question_condition_typ: QuestionConditionType | undefined = undefined;
     question: Question | undefined = undefined;
+    use_answer_time = false;
     active = 'y';
 }
 

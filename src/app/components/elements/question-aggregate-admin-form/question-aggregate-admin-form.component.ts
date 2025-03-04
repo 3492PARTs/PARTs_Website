@@ -37,6 +37,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', Required: true },
     { PropertyName: 'question_condition_typ', ColLabel: 'Condition Type', Type: 'select', DisplayProperty: 'question_condition_nm' },
     { PropertyName: 'condition_value', ColLabel: 'Condition Value', Type: 'text' },
+    { PropertyName: 'use_answer_time', ColLabel: 'Use Anser Time', Type: 'checkbox' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
