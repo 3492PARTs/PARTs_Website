@@ -162,6 +162,8 @@ export class Match implements IMatch {
 export interface IScoutFieldSchedule {
     id: number;
     event_id: number;
+    red_leader: User | undefined;
+    blue_leader: User | undefined;
     red_one_id: User | number | null | any;
     red_two_id: User | number | null | any;
     red_three_id: User | number | null | any;
@@ -186,6 +188,8 @@ export interface IScoutFieldSchedule {
 export class ScoutFieldSchedule implements IScoutFieldSchedule {
     id = NaN;
     event_id = NaN;
+    red_leader: User | undefined = undefined;
+    blue_leader: User | undefined = undefined;
     red_one_id: User | number | null | any = new User();
     red_two_id: User | number | null | any = new User();
     red_three_id: User | number | null | any = new User();

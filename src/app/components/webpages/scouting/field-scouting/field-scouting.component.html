@@ -8,7 +8,19 @@
   </app-form-element-group>
   <br *ngIf="outstandingResponses.length > 0" />
 
+  @if(scoutFieldSchedule) {
   <div id="scout-header">
+    @if(scoutFieldSchedule.red_leader || scoutFieldSchedule.blue_leader) {
+    <div>
+      @if (scoutFieldSchedule.red_leader) {
+      <p>Red Leader: {{scoutFieldSchedule.red_leader.first_name}} {{scoutFieldSchedule.red_leader.last_name}}</p>
+      }
+
+      @if (scoutFieldSchedule.blue_leader) {
+      <p>Blue Leader: {{scoutFieldSchedule.blue_leader.first_name}} {{scoutFieldSchedule.blue_leader.last_name}}</p>
+      }
+    </div>
+    }
     <div id="scouts">
       <div class="red">
         <p>
@@ -96,6 +108,7 @@
     </div>
   </div>
   <br />
+  }
 
   <div id="field-scouting-form">
     <app-form (SubmitFunction)="save()" [FormElements]="formElements">
