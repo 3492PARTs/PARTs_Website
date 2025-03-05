@@ -10,10 +10,13 @@ import { TableButtonType, TableColType, TableComponent } from '../../../../atoms
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
+import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
+import { FormComponent } from "../../../../atoms/form/form.component";
+import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-scouting-activity',
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
   templateUrl: './scouting-activity.component.html',
   styleUrls: ['./scouting-activity.component.scss']
 })
@@ -229,18 +232,14 @@ export class ScoutingActivityComponent implements OnInit {
     });
   }
 
-  toggleUserUnderReviewStatus(): void {
-    this.gs.triggerConfirm('Are you sure you want to change this scout\'s under review status?', () => {
-      this.api.get(true, 'scouting/admin/toggle-scout-under-review/', {
-        user_id: this.activeUserScoutingUserInfo.user.id.toString(),
-      }, (result: any) => {
-        if (this.gs.checkResponse(result)) {
-          this.getUsersScoutingUserInfo();
-          this.gs.successfulResponseBanner(result);
-        }
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
+  saveUserInfo(): void {
+    this.api.post(true, 'scouting/admin/scouting-user-info/', this.activeUserScoutingUserInfo, (result: any) => {
+      if (this.gs.checkResponse(result)) {
+        this.getUsersScoutingUserInfo();
+        this.gs.successfulResponseBanner(result);
+      }
+    }, (err: any) => {
+      this.gs.triggerError(err);
     });
   }
 
