@@ -1,58 +1,37 @@
 <app-box [Title]="'Scouting Activity'">
-  <app-table
-    [TableCols]="userActivityTableCols"
-    [TableData]="usersScoutingUserInfo"
-    [EnableFilter]="true"
-    [Scrollable]="true"
-    [ShowViewButton]="true"
-    (ViewRecordCallBack)="showUserActivityModal($event)"
-    [ScrollHeight]="'calc(100vh - 24rem)'"
-    [TriggerUpdate]="triggerUserActivityTableUpdate"
-  >
+  <app-table [TableCols]="userActivityTableCols" [TableData]="usersScoutingUserInfo" [EnableFilter]="true"
+    [Scrollable]="true" [ShowViewButton]="true" (ViewRecordCallBack)="showUserActivityModal($event)"
+    [ScrollHeight]="'calc(100vh - 24rem)'" [TriggerUpdate]="triggerUserActivityTableUpdate">
   </app-table>
 
-  <app-modal
-    [Title]="'User Scouting Activity'"
-    [(Visible)]="userActivityModalVisible"
-  >
-    <app-form-element-group [LabelText]="'User Status'">
-      <div class="flex justify-content-space-between align-items-center">
-        <p class="margin-bottom-0">
-          Under Review:
-          {{
-            getUserReviewStatusForTable(
-              activeUserScoutingUserInfo.user_info.under_review
-            )
-          }}
-        </p>
+  <app-modal [Title]="'User Scouting Activity'" [(Visible)]="userActivityModalVisible">
+    <app-form-element-group [LabelText]="'User Status'" [InlineElements]="true">
+      <app-form (SubmitFunction)="saveUserInfo()">
+        <app-form-element [LabelText]="'Group Leader'" [Type]="'checkbox'"
+          [(Model)]="activeUserScoutingUserInfo.group_leader"></app-form-element>
 
-        <app-button
-          [ButtonType]="'main'"
-          (FunctionCallBack)="toggleUserUnderReviewStatus()"
-          >Toggle Review Status</app-button
-        >
-      </div>
+        <app-form-element [LabelText]="'Under Review'" [Type]="'checkbox'"
+          [(Model)]="activeUserScoutingUserInfo.under_review"></app-form-element>
+
+        <app-form-element [LabelText]="'Eliminate Results'" [Type]="'checkbox'"
+          [(Model)]="activeUserScoutingUserInfo.eliminate_results"></app-form-element>
+
+        <app-button-ribbon>
+          <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+        </app-button-ribbon>
+      </app-form>
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Schedule'">
-      <app-table
-        [TableCols]="userScoutActivityScheduleTableCols"
-        [TableData]="activeUserScoutingFieldSchedule"
-        [TableDataButtons]="userActivityTableButtons"
-        [Width]="'100%'"
-      >
+      <app-table [TableCols]="userScoutActivityScheduleTableCols" [TableData]="activeUserScoutingFieldSchedule"
+        [TableDataButtons]="userActivityTableButtons" [Width]="'100%'">
       </app-table>
     </app-form-element-group>
 
     <app-form-element-group [LabelText]="'Results'">
-      <app-table
-        [TableCols]="activeUserScoutingScoutCols"
-        [TableData]="activeUserScoutingScoutAnswers"
-        [Scrollable]="true"
-        [ScrollHeight]="'calc(100vh - 24rem)'"
-        [Width]="userScoutActivityResultsTableWidth"
-        [Responsive]="true"
-      >
+      <app-table [TableCols]="activeUserScoutingScoutCols" [TableData]="activeUserScoutingScoutAnswers"
+        [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'" [Width]="userScoutActivityResultsTableWidth"
+        [Responsive]="true">
       </app-table>
     </app-form-element-group>
   </app-modal>

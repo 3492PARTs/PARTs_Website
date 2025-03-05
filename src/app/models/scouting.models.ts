@@ -469,13 +469,12 @@ export class ScoutFieldResultsSerializer {
     scoutAnswers: any[] = [];
 }
 
-export class ScoutingUserInfo {
-    id!: number;
-    under_review = false;
-}
 export class UserInfo {
     user = new User();
-    user_info = new ScoutingUserInfo();
+    id!: number;
+    under_review = false;
+    group_leader = false;
+    eliminate_results = false;
 }
 
 export class FieldForm {
