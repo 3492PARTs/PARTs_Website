@@ -51,7 +51,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   matches: Match[] = [];
   noMatch = false;
 
-  scoutFieldSchedule: ScoutFieldSchedule = new ScoutFieldSchedule();
+  scoutFieldSchedule: ScoutFieldSchedule | undefined = undefined;
 
   private checkScoutTimeout: number | undefined;
   user!: User;
@@ -84,6 +84,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   init(): void {
+    this.updateScoutFieldSchedule().then(() => this.setUpdateScoutFieldScheduleTimeout());
+
     this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(async result => {
       if (result) {
@@ -123,12 +125,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.amendMatchList();
         this.buildTeamList(NaN, result.teams);
       }
-      await this.updateScoutFieldSchedule();
+
       this.gs.decrementOutstandingCalls();
     });
 
     this.populateOutstandingResponses();
-    this.setUpdateScoutFieldScheduleTimeout();
   }
 
   populateOutstandingResponses(): void {
@@ -187,7 +188,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   setUpdateScoutFieldScheduleTimeout(): void {
     let interval = 1000 * 60 * 1; // 1 mins
-    if (this.scoutFieldSchedule.end_time) {
+    if (this.scoutFieldSchedule && this.scoutFieldSchedule.end_time) {
       let d = new Date();
       let d2 = new Date(this.scoutFieldSchedule.end_time);
       interval = d2.getTime() - d.getTime();
@@ -196,16 +197,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   async updateScoutFieldSchedule(): Promise<void> {
-    await this.ss.filterScoutFieldSchedulesFromCache(sfs => {
-      const date = new Date();
-      const start = new Date(sfs.st_time);
-      const end = new Date(sfs.end_time);
-      return start <= date && date < end;
-    }).then(sfss => {
-      if (sfss.length > 1)
-        this.gs.addBanner(new Banner(0, 'Multiple active field schedules active.', 5000));
-
-      if (sfss.length > 0) this.scoutFieldSchedule = sfss[0];
+    await this.ss.loadScoutingFieldSchedules(true, (sfss: ScoutFieldSchedule[]) => {
+      this.scoutFieldSchedule = sfss.find(sfs => {
+        const date = new Date();
+        const start = new Date(sfs.st_time);
+        const end = new Date(sfs.end_time);
+        return start <= date && date < end;
+      });
     });
   }
 
@@ -295,29 +293,31 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
 
 
-      // set the selected team based on which user is assigned to which team
-      if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_one_id as number;
-      }
+      if (this.scoutFieldSchedule) {
+        // set the selected team based on which user is assigned to which team
+        if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_one_id as number;
+        }
 
-      if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two_id && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_two_id as number;
-      }
+        if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two_id && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_two_id as number;
+        }
 
-      if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three_id && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_three_id as number;
-      }
+        if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three_id && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_three_id as number;
+        }
 
-      if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one_id && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_one_id as number;
-      }
+        if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one_id && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_one_id as number;
+        }
 
-      if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two_id && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_two_id as number;
-      }
+        if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two_id && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_two_id as number;
+        }
 
-      if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three_id && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
-        this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_three_id as number;
+        if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three_id && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+          this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_three_id as number;
+        }
       }
     }
     else {
