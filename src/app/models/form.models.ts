@@ -181,6 +181,7 @@ export class QuestionAggregateQuestion {
     id = NaN;
     question_condition_typ: QuestionConditionType | undefined = undefined;
     question: Question | undefined = undefined;
+    order = NaN;
     active = 'y';
 }
 
@@ -188,6 +189,7 @@ export class QuestionAggregate {
     id!: number;
     name = '';
     horizontal = true;
+    use_answer_time = false;
     question_aggregate_typ?: QuestionAggregateType;
     aggregate_questions: QuestionAggregateQuestion[] = [];
     active = 'y'

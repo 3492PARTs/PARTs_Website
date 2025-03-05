@@ -15,6 +15,9 @@
     <app-form-element [Type]="'checkbox'" [LabelText]="'Horizontal'"
       [(Model)]="activeQuestionAggregate.horizontal"></app-form-element>
 
+    <app-form-element [Type]="'checkbox'" [LabelText]="'Use Answer Time'"
+      [(Model)]="activeQuestionAggregate.use_answer_time"></app-form-element>
+
     @if(activeQuestionAggregate.id) {
     <app-form-element [Type]="'checkbox'" [LabelText]="'Active'" [(Model)]="activeQuestionAggregate.active"
       [TrueValue]="'y'" [FalseValue]="'n'"></app-form-element>
