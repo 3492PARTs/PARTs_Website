@@ -83,9 +83,9 @@ export class ChartComponent implements OnInit {
           break;
         case 'diff-plot':
         case 'line':
-          const diffPlots = d as Plot[];
-          if (diffPlots && diffPlots.length > 0)
-            chartConfig = this.createLineChartConfig(diffPlots);
+          const linePlots = d as Plot[];
+          if (linePlots && linePlots.length > 0)
+            chartConfig = this.createLineChartConfig(linePlots, 'Entry', this.ChartType === 'diff-plot' ? 'Difference' : 'Count');
           break;
         case 'box-wskr':
           const boxWhiskerPlots = d as BoxAndWhiskerPlot[];
@@ -279,7 +279,7 @@ export class ChartComponent implements OnInit {
     return chartConfig;
   }
 
-  private createLineChartConfig(plots: Plot[]): ChartConfiguration {
+  private createLineChartConfig(plots: Plot[], xAxisTitle = 'Entry', yAxisTitle = 'Count'): ChartConfiguration {
     const chartData: ChartData = {
       datasets: plots.map(plot => {
         let counter = 0; // Initialize a counter for linear mapping
@@ -309,13 +309,13 @@ export class ChartComponent implements OnInit {
         scales: {
           x: {
             type: 'linear',  // Use a linear scale
-            title: { display: true, text: 'Point Count' }, // Label appropriately
+            title: { display: true, text: xAxisTitle }, // Label appropriately
             beginAtZero: true, // Start x-axis at 0 (or adjust as needed)
             min: this.XScaleMin,
             max: this.XScaleMax,
           },
           y: {
-            title: { display: true, text: 'Distance' },
+            title: { display: true, text: yAxisTitle },
             beginAtZero: true,
             min: this.YScaleMin,
             max: this.YScaleMax
