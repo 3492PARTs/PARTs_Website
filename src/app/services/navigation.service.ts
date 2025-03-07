@@ -56,9 +56,9 @@ export class NavigationService {
     new Link('Users', '/scouting/scouting-admin/scouting-users', 'account-group'),
   ], [
     new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
+    new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
     new Link('Match Planning', '/scouting/strategizing/match-planning', 'clipboard-list-outline'),
     new Link('Team Notes', '/scouting/strategizing/team-notes', 'note-multiple'),
-    new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
     new Link('Alliance Selection', '/scouting/strategizing/alliance-selection', 'account-multiple-plus'),
   ]];
 
