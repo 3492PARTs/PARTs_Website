@@ -28,7 +28,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   teamScoutResultsModalVisible = false;
   teamScoutResults: any[] = [];
-  teamScoutPitResult: ScoutPitResponse = new ScoutPitResponse();
+  teamScoutPitResult: ScoutPitResponse | undefined = undefined;
 
   showScoutFieldCols!: any[];
   showScoutFieldColsList!: any[];

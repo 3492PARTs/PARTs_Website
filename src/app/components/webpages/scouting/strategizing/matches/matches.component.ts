@@ -157,7 +157,7 @@ export class MatchesComponent implements OnInit {
 
       for (const allianceMember of allianceMembers) {
         const calls: Promise<any>[] = [];
-        let pitData = new ScoutPitResponse();
+        let pitData: ScoutPitResponse | undefined = undefined;
         let scoutAnswers: any = null;
         let notes: TeamNote[] = [];
 
