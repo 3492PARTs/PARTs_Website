@@ -134,9 +134,10 @@ export class MatchesComponent implements OnInit {
           else if (ms1.time > ms2.time) return -1;
           else return 0;
         });
+        this.matchStrategiesButtonData = this.matchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
+
         this.gs.decrementOutstandingCalls();
       });
-      this.matchStrategiesButtonData = this.matchStrategies.map<{ display: boolean, id: number }>(t => { return { display: false, id: t.id } });
 
 
       this.matchTeamsData = [];
