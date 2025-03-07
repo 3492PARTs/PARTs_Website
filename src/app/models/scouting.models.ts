@@ -433,7 +433,7 @@ export class TeamNote implements ITeamNote {
 
 export class MatchTeamData {
     team!: Team;
-    pitData = new ScoutPitResponse();
+    pitData: ScoutPitResponse | undefined = undefined;;
     scoutAnswers!: any;
     notes: TeamNote[] = [];
     alliance = '';

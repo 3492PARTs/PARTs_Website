@@ -39,13 +39,11 @@
 <app-box [Title]="activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number"
   (ReturnFunction)="clearResults()">
 
-  <app-form-element-group>
-    <p>Match Time: {{ activeMatch.time | dateToStr }}</p>
-    <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">
-      Red Score: {{ activeMatch.red_score }} Blue Score:
-      {{ activeMatch.blue_score }}
-    </p>
-  </app-form-element-group>
+  <p>Match Time: {{ activeMatch.time | dateToStr }}</p>
+  <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">
+    Red Score: {{ activeMatch.red_score }} Blue Score:
+    {{ activeMatch.blue_score }}
+  </p>
 
   <!--strategies-->
   <div class="padding-bottom-1rem">
@@ -65,7 +63,7 @@
         ">
         <p>{{ ms.strategy }}</p>
 
-        @if (ms.img_url && matchStrategiesButtonData[i].display) {
+        @if (ms.img_url && matchStrategiesButtonData[i] && matchStrategiesButtonData[i].display) {
         <img class="img" [src]="ms.img_url" (click)="openFullscreen($event)" />
         }
       </app-form-element-group>
