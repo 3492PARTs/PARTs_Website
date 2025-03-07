@@ -65,7 +65,7 @@
         ">
         <p>{{ ms.strategy }}</p>
 
-        @if (ms.img_url && matchStrategiesButtonData[i].display) {
+        @if (ms.img_url && matchStrategiesButtonData[i] && matchStrategiesButtonData[i].display) {
         <img class="img" [src]="ms.img_url" (click)="openFullscreen($event)" />
         }
       </app-form-element-group>
