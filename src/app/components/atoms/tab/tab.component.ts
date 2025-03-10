@@ -3,13 +3,13 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-tab',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './tab.component.html',
   styleUrls: ['./tab.component.scss']
 })
 export class TabComponent implements OnInit {
   @Input() TabName = '';
+  @Input() TabTextColor = '';
 
   @ViewChild('thisTab', { read: ElementRef, static: true }) tab?: ElementRef;
 

@@ -19,15 +19,16 @@ import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.c
 import { ClickOutsideDirective } from '../../directives/click-outside/click-outside.directive';
 import { ClickInsideDirective } from '../../directives/click-inside/click-inside.directive';
 import { DateToStrPipe } from '../../pipes/date-to-str.pipe';
+import { LoadingComponent } from "../atoms/loading/loading.component";
 
 @Component({
   selector: 'app-navigation',
-  standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe],
+  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
+  loading = false;
 
   private resizeTimeout: any;
   private scrollResizeTimer: any;
@@ -44,7 +45,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   subNav = '';
   pageIDs: any = {};
-  pagesWithNavs = ['admin', 'scouting admin', 'match planning'];
   navExpanded = true;
   manualNavExpander = false;
   hideNavExpander = false;
@@ -60,7 +60,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   user: User = new User();
 
-  appMenu: Link[] = [];
+  pagesWithNavigation: string[] = [];
+  applicationMenu: Link[] = [];
   userLinks: Link[] = [];
 
   siteHeaderHeight = 7;
@@ -77,22 +78,39 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   frontendEnv = "";
   backendEnv = "";
 
+  //subPages: Link[] = [];
+  subPage = '-1';
+
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
     private auth: AuthService,
-    private cs: CacheService,
     private router: Router,
     private api: APIService,
     private pwa: PwaService,
     private ns: NotificationsService,
     private navigationService: NavigationService) {
+    this.gs.currentOutstandingCalls.subscribe(o => {
+      this.loading = o > 0;
+
+      const body = document.body;
+      const html = document.documentElement;
+
+      if (this.loading) {
+        html.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+      }
+      else {
+        html.style.overflow = 'initial';
+        body.style.overflow = 'initial';
+      }
+    });
 
     this.auth.user.subscribe(u => this.user = u);
 
     this.auth.userLinks.subscribe((ul) => {
       this.userLinks = this.gs.cloneObject(ul);
 
-      this.appMenu.forEach(mi => {
+      this.applicationMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
           let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
@@ -105,7 +123,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       this.userLinks.forEach(ul => {
         this.removeHeader = false;
 
-        this.appMenu.forEach(mi => {
+        this.applicationMenu.forEach(mi => {
           mi.menu_items.forEach(mii => {
             this.checkActiveMenuItem(this.urlEnd, mi, mii);
           });
@@ -115,7 +133,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.pwa.installEligible.subscribe(e => {
       window.setTimeout(() => {
-        this.appMenu.forEach(mi => {
+        this.applicationMenu.forEach(mi => {
           if (mi.menu_name === 'Members') {
             let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
@@ -133,22 +151,49 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe(
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
+          if (this.urlEnd !== event.url)
+            this.gs.scrollTo(0);
+
           this.urlEnd = event.url;
 
           this.navigationService.setSubPages(this.urlEnd);
 
           this.resetActiveMenuItem();
-          this.appMenu.forEach(mi => {
+          this.applicationMenu.forEach(mi => {
             mi.menu_items.forEach(mii => {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
-
-
-          if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
-
         }
       });
+
+    //this.navigationService.subPages.subscribe(s => this.subPages = s);
+
+    this.navigationService.subPage.subscribe(s => {
+      if (this.subPage !== s || this.gs.strNoE(s)) {
+        let isFirst = false;
+        this.navigationService.allSubPages.forEach(spg => {
+          if (spg[0] && spg[0].routerlink === s) {
+            isFirst = true;
+          }
+        });
+
+        let urlPieces = this.subPage.split('/');
+        urlPieces.splice(urlPieces.length - 1, 1);
+        const url1 = urlPieces.join('/');
+
+        urlPieces = s.split('/');
+        urlPieces.splice(urlPieces.length - 1, 1);
+        const url2 = urlPieces.join('/');
+
+        const stayOpen = isFirst && this.subPage !== '-1' && url1 !== url2;
+
+        //true is open, false closed
+        if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(stayOpen);
+
+        this.subPage = s;
+      }
+    });
 
     this.ns.notifications.subscribe(n => this.notifications = n);
     this.ns.messages.subscribe(m => this.messages = m);
@@ -178,30 +223,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.screenXs = this.gs.getAppSize() === AppSize.XS;
 
-    this.appMenu = [
-      new Link('Join PARTs', '', 'account-supervisor', [
-        new Link('Mechanical', 'join/mechanical'),
-        new Link('Electrical', 'join/electrical'),
-        new Link('Programming', 'join/programming'),
-        new Link('Impact', 'join/impact'),
-        new Link('Application Form', 'join/team-application'),
-      ], 'Our Subteams'),
-      new Link('Contact Us', 'contact', 'card-account-details'),
-      new Link('Sponsoring', 'sponsor', 'account-child-circle'),
-      new Link('About', 'about', 'information'),
-      new Link('Media', 'media', 'image-multiple'),
-      new Link('Resources', 'resources', 'archive'), //book clipboard-text-outline folder-open-outline
-      new Link('FIRST', 'first', 'first'),
-      new Link('Members', '', 'folder', [
-        new Link('Login', 'login'),
-      ], 'Members Area'),
-    ];
+    this.applicationMenu = this.navigationService.applicationMenu;
+
+    this.pagesWithNavigation = this.navigationService.pagesWithNavigation;
 
     // Check if comp page is available
     this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
       if ((result as CompetitionInit).event) {
         this.gs.triggerChange(() => {
-          this.appMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
+          this.applicationMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
         });
       }
     });
@@ -300,40 +330,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       //if (!environment.production) console.log('top + delta: ' + top);
       this.setHeaderPosition(top);
-      //if (!environment.production) console.log('--end--');
-      /*
-      //In chrome and some browser scroll is given to body tag
-let pos = (document.documentElement.scrollTop || document.body.scrollTop) + document.documentElement.offsetHeight;
-let max = document.documentElement.scrollHeight;
-// pos/max will give you the distance between scroll bottom and and bottom of screen in percentage.
- if(pos == max )   {
- //Do your action here
- }
-      
-      if (!this.userScrolling) {
-        this.scrollPosition = window.scrollY;
-        this.userScrolling = true;
-      }
-
-      if (window.scrollY <= 70 && window.scrollY - this.scrollPosition >= 0) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '-' + window.scrollY + 'px');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease');
-      } else if (window.scrollY - this.scrollPosition >= 5) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '-7rem');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease, top 0.15s linear');
-      } else if (window.scrollY - this.scrollPosition < -5) {
-        this.renderer.setStyle(this.header.nativeElement, 'top', '0');
-        this.renderer.setStyle(this.header.nativeElement, 'transition', 'width 0.15s ease, top 0.15s linear');
-      }
-
-      if (this.scrollResizeTimer != null) {
-        window.clearTimeout(this.scrollResizeTimer);
-      }
-
-      this.scrollResizeTimer = window.setTimeout(() => {
-        this.userScrolling = false;
-        this.scrollPosition = window.scrollY;
-      }, 200);*/
     }
   }
 
@@ -515,18 +511,18 @@ let max = document.documentElement.scrollHeight;
   }
 
   resetActiveMenuItem(): void {
-    this.appMenu.forEach(mi => mi.menu_name_active_item = '');
+    this.applicationMenu.forEach(mi => mi.menu_name_active_item = '');
   }
 
   isActiveMenuItem(): boolean {
     let active = false;
-    this.appMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
+    this.applicationMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
     return active;
   }
 
   getActiveMenuItemName(): string {
     let active = '';
-    this.appMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
+    this.applicationMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
     return active;
   }
 

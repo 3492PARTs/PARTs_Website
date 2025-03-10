@@ -16,6 +16,8 @@ export class APIService {
 
   private outstandingApiStatusCheck: Promise<string> | null = null;
 
+  connectionErrorStatuses = [0, 504];
+
   constructor(private http: HttpClient, private gs: GeneralService) {
     this.gs.siteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
@@ -127,10 +129,11 @@ export class APIService {
   }
 
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
+    console.log(err);
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
     // This means connection is down error, check
-    if ([0, 504].includes(err.status)) {
+    if (this.connectionErrorStatuses.includes(err.status)) {
       this.getAPIStatus();
     }
     if (onError) onError(err);

@@ -1,0 +1,51 @@
+.box {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 1rem;
+}
+
+.ten {
+  background-color: #3333ff;
+}
+
+.fifteen {
+  background-color: #33cc33;
+}
+
+.twenty {
+  background-color: #ffcc00;
+}
+
+.thirty {
+  background-color: #ff6600;
+}
+
+.left-overs {
+  background-color: #ff0000;
+}
+
+.chart {
+  width: 100% !important;
+  height: 500px !important;
+}
+
+.match-strategy {
+  position: relative;
+
+  .img-btn {
+    position: absolute;
+    top: -1.5rem;
+    right: -1.5rem;
+    z-index: 1;
+  }
+
+  .img {
+    width: 100%;
+  }
+}
+
+#matches-table {
+  margin-top: 1rem;
+  position: relative;
+  min-height: 300px;
+}

@@ -4,11 +4,10 @@ import { HeaderComponent } from '../../atoms/header/header.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-media',
-  standalone: true,
-  imports: [BoxComponent, HeaderComponent, RouterLink],
-  templateUrl: './media.component.html',
-  styleUrls: ['./media.component.scss']
+    selector: 'app-media',
+    imports: [BoxComponent, HeaderComponent, RouterLink],
+    templateUrl: './media.component.html',
+    styleUrls: ['./media.component.scss']
 })
 export class MediaComponent implements OnInit {
 

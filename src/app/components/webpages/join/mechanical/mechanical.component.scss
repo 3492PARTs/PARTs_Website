@@ -1,4 +1,4 @@
-@import "../../../../../scss/abstracts/variables.scss";
+@use "../../../../../scss/abstracts/variables.scss";
 
 #subgroups {
   width: 100%;
@@ -9,7 +9,7 @@
 }
 
 #subgroups td {
-  border: 2px solid $gray;
+  border: 2px solid variables.$gray;
   overflow: hidden;
 }
 

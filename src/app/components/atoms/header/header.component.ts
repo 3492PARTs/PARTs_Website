@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    imports: [CommonModule],
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   @Input() h?: number;
@@ -15,6 +14,7 @@ export class HeaderComponent implements OnInit {
   @Input() marginBottom = true;
   @Input() marginTop = true;
   @Input() Width = 'auto';
+  @Input() Color: string | undefined = undefined;
 
   constructor() { }
 

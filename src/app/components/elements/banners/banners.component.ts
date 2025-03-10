@@ -9,11 +9,10 @@ import { ButtonComponent } from '../../atoms/button/button.component';
 import { BoxComponent } from '../../atoms/box/box.component';
 
 @Component({
-  selector: 'app-banners',
-  standalone: true,
-  imports: [CommonModule, ButtonComponent, BoxComponent],
-  templateUrl: './banners.component.html',
-  styleUrls: ['./banners.component.scss']
+    selector: 'app-banners',
+    imports: [CommonModule, ButtonComponent, BoxComponent],
+    templateUrl: './banners.component.html',
+    styleUrls: ['./banners.component.scss']
 })
 export class BannersComponent implements OnInit, AfterViewInit {
   private scrollPosition = 0;

@@ -1,0 +1,49 @@
+#image-container {
+  display: flex;
+  position: relative;
+}
+
+#image {
+  width: 100%;
+}
+
+.svg {
+  position: absolute;
+}
+
+.box {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  p {
+    margin: 0;
+  }
+
+  .point {
+    //background-image: radial-gradient(red, green, blue);
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 50%;
+    z-index: 1;
+  }
+}
+
+.legend {
+  display: inline-block;
+  margin-right: 1rem;
+  cursor: pointer;
+
+  .legend-box {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-right: 1rem;
+    border: 1px solid black;
+  }
+
+  p {
+    display: inline-block;
+    margin: 0;
+  }
+}

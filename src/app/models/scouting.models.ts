@@ -1,15 +1,15 @@
-import { IQuestionWithConditions, QuestionWithConditions } from "./form.models";
+import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow, Graph } from "./form.models";
 import { User } from "./user.models";
 
 export interface ISeason {
-    season_id: number;
+    id: number;
     season: string;
     current: string;
 }
 
 
 export class Season implements ISeason {
-    season_id = NaN;
+    id = NaN;
     season = '';
     current = 'n';
 }
@@ -20,6 +20,7 @@ export interface ITeam {
     void_ind: string;
     checked: boolean;
     pit_result: number;
+    rank: number;
 }
 
 export class Team implements ITeam {
@@ -28,10 +29,15 @@ export class Team implements ITeam {
     void_ind = 'n'
     checked = false;
     pit_result = 0;
+    rank = NaN;
+
+    constructor(team_no = NaN) {
+        this.team_no = team_no;
+    }
 }
 
 export interface IEvent {
-    event_id: number;
+    id: number;
     season_id: number;
     event_nm: string;
     date_st: Date;
@@ -53,7 +59,7 @@ export interface IEvent {
 }
 
 export class Event implements IEvent {
-    event_id = NaN;
+    id = NaN;
     season_id = NaN;
     event_nm = '';
     date_st!: Date;
@@ -86,27 +92,32 @@ export class CompetitionLevel implements ICompetitionLevel {
     comp_lvl_typ_nm = '';
     comp_lvl_order = 0;
     void_ind = '';
+
+    constructor(comp_lvl_typ?: string, comp_lvl_typ_nm?: string) {
+        this.comp_lvl_typ = comp_lvl_typ || '';
+        this.comp_lvl_typ_nm = comp_lvl_typ_nm || '';
+    }
 }
 export interface IMatch {
-    match_id: string;
+    match_key: string;
     match_number: number;
     event: IEvent;
-    red_one: ITeam | number;
+    red_one_id: number;
     red_one_rank: number;
     red_one_field_response: boolean;
-    red_two: ITeam | number;
+    red_two_id: number;
     red_two_rank: number;
     red_two_field_response: boolean;
-    red_three: ITeam | number;
+    red_three_id: number;
     red_three_rank: number;
     red_three_field_response: boolean;
-    blue_one: ITeam | number;
+    blue_one_id: number;
     blue_one_rank: number;
     blue_one_field_response: boolean;
-    blue_two: ITeam | number;
+    blue_two_id: number;
     blue_two_rank: number;
     blue_two_field_response: boolean;
-    blue_three: ITeam | number;
+    blue_three_id: number;
     blue_three_rank: number;
     blue_three_field_response: boolean;
 
@@ -120,25 +131,25 @@ export interface IMatch {
 }
 
 export class Match implements IMatch {
-    match_id = '';
+    match_key = '';
     match_number = NaN;
     event!: Event;
-    red_one!: ITeam | number;
+    red_one_id = NaN;
     red_one_rank!: number;
     red_one_field_response!: boolean;
-    red_two!: ITeam | number;
+    red_two_id = NaN;
     red_two_rank!: number;
     red_two_field_response!: boolean;
-    red_three!: ITeam | number;
+    red_three_id = NaN;
     red_three_rank!: number;
     red_three_field_response!: boolean;
-    blue_one!: ITeam | number;
+    blue_one_id = NaN;
     blue_one_rank!: number;
     blue_one_field_response!: boolean;
-    blue_two!: ITeam | number;
+    blue_two_id = NaN;
     blue_two_rank!: number;
     blue_two_field_response!: boolean;
-    blue_three!: ITeam | number;
+    blue_three_id = NaN;
     blue_three_rank!: number;
     blue_three_field_response!: boolean;
     red_score!: number;
@@ -149,8 +160,10 @@ export class Match implements IMatch {
 
 }
 export interface IScoutFieldSchedule {
-    scout_field_sch_id: number;
-    event_id: IEvent | number;
+    id: number;
+    event_id: number;
+    red_leader: User | undefined;
+    blue_leader: User | undefined;
     red_one_id: User | number | null | any;
     red_two_id: User | number | null | any;
     red_three_id: User | number | null | any;
@@ -173,8 +186,10 @@ export interface IScoutFieldSchedule {
 }
 
 export class ScoutFieldSchedule implements IScoutFieldSchedule {
-    scout_field_sch_id = NaN;
-    event_id: Event | number = new Event();
+    id = NaN;
+    event_id = NaN;
+    red_leader: User | undefined = undefined;
+    blue_leader: User | undefined = undefined;
     red_one_id: User | number | null | any = new User();
     red_two_id: User | number | null | any = new User();
     red_three_id: User | number | null | any = new User();
@@ -200,7 +215,6 @@ export interface IScoutQuestion {
     id: number;
     question_id: number;
     season_id: number;
-    scorable: boolean;
     void_ind: string;
 }
 
@@ -208,53 +222,53 @@ export class ScoutQuestion implements IScoutQuestion {
     id!: number;
     question_id!: number;
     season_id!: number;
-    scorable = false;
     void_ind = 'n';
 }
 
 export interface IScoutFieldFormResponse {
     id: number;
-    question_answers: IQuestionWithConditions[];
-    team: number;
-    match: IMatch | null;
+    team_id: number;
+    match: IMatch | undefined;
     form_typ: string;
+    answers: Answer[];
 }
 
 export class ScoutFieldFormResponse implements IScoutFieldFormResponse {
     id!: number;
-    question_answers: QuestionWithConditions[] = [];
-    team!: number;
-    match!: Match | null;
+    team_id!: number;
+    match: Match | undefined = undefined;
     form_typ = 'field';
+    answers: Answer[] = [];
 
-    constructor(question_answers?: QuestionWithConditions[], team?: number, match?: Match | null) {
-        this.question_answers = question_answers || [];
-        this.team = team || NaN;
-        this.match = match || null;
+    constructor(team?: number, match?: Match, answers?: Answer[]) {
+        this.team_id = team || NaN;
+        this.match = match || undefined;
+        this.answers = answers || [];
+        this.form_typ = "field";
     }
 }
 
 export interface IScoutPitFormResponse {
     id: number;
-    question_answers: IQuestionWithConditions[];
-    team: number;
+    answers: Answer[];
+    team_id: number;
     response_id: number;
     form_typ: string;
-    robotPics: File[];
+    pics: ScoutPitImage[];
 }
 
 export class ScoutPitFormResponse implements IScoutPitFormResponse {
     id!: number;
-    question_answers: QuestionWithConditions[] = [];
-    team!: number;
+    answers: Answer[] = [];
+    team_id!: number;
     response_id = NaN;
     form_typ = 'field';
-    robotPics: File[] = [];
+    pics: ScoutPitImage[] = [];
 
-    constructor(question_answers?: QuestionWithConditions[], team?: number, robotPics?: File[]) {
-        this.question_answers = question_answers || [];
-        this.team = team || NaN;
-        this.robotPics = robotPics || [];
+    constructor(question_answers?: Answer[], team?: number, pics?: ScoutPitImage[]) {
+        this.answers = question_answers || [];
+        this.team_id = team || NaN;
+        this.pics = pics || [];
     }
 }
 
@@ -268,11 +282,11 @@ export class ScoutFieldResponsesReturn {
     scoutAnswers: any[] = [];
     current_season = new Season();
     current_event = new Event();
-    removed_responses: ScoutField[] = [];
+    removed_responses: number[] = [];
 }
 
 export class ScoutField {
-    scout_field_id = NaN
+    id = NaN
     response = ''
     event = NaN
     team_no = NaN
@@ -292,33 +306,59 @@ export class ScoutPitResponseAnswer implements IScoutPitResponseAnswer {
     answer = '';
 }
 
+export interface IScoutPitImageType {
+    pit_image_typ: string;
+    pit_image_nm: string;
+}
+
+export class ScoutPitImageType {
+    pit_image_typ = '';
+    pit_image_nm = '';
+}
+
+
 export interface IScoutPitImage {
-    scout_pit_img_id: number;
-    pic: string;
+    id: number;
+    img: File | undefined;
+    img_url: string;
+    img_title: string;
+    pit_image_typ: IScoutPitImageType;
     default: boolean;
 }
 
 export class ScoutPitImage implements IScoutPitImage {
-    scout_pit_img_id = NaN;
-    pic = '';
+    id = NaN;
+    img: File | undefined = undefined;
+    img_url = '';
+    img_title = '';
+    pit_image_typ = new ScoutPitImageType();
     default = false;
+
+    constructor(img_url = '', img_title = '', pit_image_typ = '', img: File | undefined = undefined, def = false) {
+        this.img_url = img_url;
+        this.img = img;
+        this.img_title = img_title;
+        this.pit_image_typ = {
+            pit_image_typ: pit_image_typ,
+            pit_image_nm: ''
+        },
+            this.default = def;
+    }
 }
 
 export interface IScoutPitResponse {
-    scout_pit_id: number;
+    id: number;
     team_no: number;
     team_nm: string;
     pics: IScoutPitImage[];
-    display_pic_index: number;
     responses: IScoutPitResponseAnswer[];
 }
 
 export class ScoutPitResponse implements IScoutPitResponse {
-    scout_pit_id = NaN;
+    id = NaN;
     team_no = NaN;
     team_nm = '';
     pics: ScoutPitImage[] = [];
-    display_pic_index = 0;
     responses: ScoutPitResponseAnswer[] = [];
 }
 
@@ -329,7 +369,7 @@ export class ScoutPitResponsesReturn {
 }
 
 export interface ISchedule {
-    sch_id: number;
+    id: number;
     sch_typ: string;
     sch_nm: string;
     event_id: Event | number;
@@ -343,7 +383,7 @@ export interface ISchedule {
 }
 
 export class Schedule implements ISchedule {
-    sch_id = NaN;
+    id = NaN;
     sch_typ = ''
     sch_nm = ''
     event_id: Event | number = new Event();
@@ -372,30 +412,28 @@ export class ScheduleByType {
 }
 
 export interface ITeamNote {
-    team_note_id: number;
-    event: Event | number;
-    team_no: Team | number;
-    match_id: Match | string;
-    user: User | number;
+    id: number;
+    team_id: number;
+    match: Match | undefined;
+    user: User | undefined;
     note: string;
     time: Date;
     void_ind: string;
 }
 
 export class TeamNote implements ITeamNote {
-    team_note_id = NaN;
-    event: Event | number = NaN;
-    team_no: Team | number = NaN;
-    match_id: Match | string = '';
-    user: User | number = NaN;
+    id = NaN;
+    team_id = NaN;
+    match: Match | undefined = undefined;
+    user: User | undefined = undefined;
     note = '';
     time!: Date;
     void_ind = 'n';
 }
 
-export class MatchPlanning {
+export class MatchTeamData {
     team!: Team;
-    pitData = new ScoutPitResponse();
+    pitData: ScoutPitResponse | undefined = undefined;;
     scoutAnswers!: any;
     notes: TeamNote[] = [];
     alliance = '';
@@ -409,6 +447,10 @@ export class AllScoutInfo {
     schedules: Schedule[] = [];
     scout_field_schedules: ScoutFieldSchedule[] = [];
     schedule_types: ScheduleType[] = [];
+    team_notes: TeamNote[] = [];
+    match_strategies: MatchStrategy[] = [];
+    field_form_form = new FieldFormForm();
+    alliance_selections: AllianceSelection[] = [];
 }
 
 export class ScoutPitSchedule {
@@ -431,11 +473,154 @@ export class ScoutFieldResultsSerializer {
     scoutAnswers: any[] = [];
 }
 
-export class ScoutingUserInfo {
-    id!: number;
-    under_review = false;
-}
 export class UserInfo {
     user = new User();
-    user_info = new ScoutingUserInfo();
+    id!: number;
+    under_review = false;
+    group_leader = false;
+    eliminate_results = false;
+}
+
+export class FieldForm {
+    id!: number;
+    season_id!: number;
+    img!: File;
+    img_url = '';
+    inv_img!: File;
+    inv_img_url = '';
+    full_img!: File;
+    full_img_url = '';
+}
+
+export interface IFormSubTypeForm {
+    form_sub_typ: IFormSubType;
+    questions: IQuestion[];
+    flows: Flow[];
+}
+
+export class FormSubTypeForm implements IFormSubTypeForm {
+    form_sub_typ = new FormSubType();
+    questions: Question[] = [];
+    flows: Flow[] = [];
+}
+
+export interface IFieldFormForm {
+    id: number;
+    field_form: FieldForm;
+    form_sub_types: IFormSubTypeForm[];
+}
+
+
+export class FieldFormForm implements IFieldFormForm {
+    id = NaN;
+    field_form = new FieldForm();
+    form_sub_types: FormSubTypeForm[] = [];
+}
+
+export interface IMatchStrategy {
+    id: number;
+    match: Match | undefined;
+    user: User | undefined;
+    strategy: string;
+    time: Date;
+    img: File | undefined;
+    img_url: string;
+    display_value: string;
+}
+
+export class MatchStrategy implements IMatchStrategy {
+    id!: number;
+    match: Match | undefined = undefined;
+    user: User | undefined = undefined;
+    strategy = '';
+    time = new Date()
+    img: File | undefined = undefined;
+    img_url = '';
+    display_value = '';
+}
+
+export interface IAllianceSelection {
+    id: number;
+    event: Event | undefined;
+    team: Team | undefined;
+    note: string;
+    order: number;
+}
+
+export class AllianceSelection implements IAllianceSelection {
+    id = NaN;
+    event: Event | undefined = undefined;
+    team: Team | undefined = undefined;
+    note = "";
+    order = NaN;
+
+    constructor(event: Event, team: Team, note: string, order: number) {
+        this.event = event;
+        this.team = team;
+        this.note = note;
+        this.order = order;
+    }
+}
+
+export class FieldResponse {
+    id = NaN;
+    match: Match | undefined = undefined
+    user = new User();
+    time = new Date()
+    answers: Answer[] = [];
+    display_value = '';
+}
+
+export class DashboardGraph {
+    id = NaN;
+    graph_id = NaN;
+    graph_name = '';
+    graph_nm = '';
+    graph_typ = '';
+    x_scale_min = 1;
+    x_scale_max = 1;
+    y_scale_min = 1;
+    y_scale_max = 1;
+    order = NaN;
+    active = 'y';
+
+    //front end only
+    data: any[] | undefined = undefined;
+
+    constructor(graph_id = NaN, order = NaN) {
+        this.graph_id = graph_id;
+        this.order = order;
+    }
+}
+
+export class DashboardViewType {
+    dash_view_typ = '';
+    dash_view_nm = '';
+}
+
+export class DashboardView {
+    id = NaN;
+    dash_view_typ = new DashboardViewType();
+    dashboard_graphs: DashboardGraph[] = [];
+    teams: Team[] = [];
+    reference_team_id = NaN;
+    name = '';
+    order = NaN;
+    active = 'y';
+
+    //front end only
+    availableGraphs: Graph[] = [];
+
+    constructor(dash_view_typ?: DashboardViewType, order = NaN) {
+        this.order = order;
+        if (dash_view_typ)
+            this.dash_view_typ = dash_view_typ;
+    }
+}
+
+export class Dashboard {
+    id = NaN;
+    active = 'y';
+    dashboard_views: DashboardView[] = [];
+    default_dash_view_typ: DashboardViewType | undefined = undefined;
 }

@@ -4,11 +4,10 @@ import { FormManagerComponent } from '../../../elements/form-manager/form-manage
 import { TableColType } from '../../../atoms/table/table.component';
 
 @Component({
-  selector: 'app-team-contact-form',
-  standalone: true,
-  imports: [BoxComponent, FormManagerComponent],
-  templateUrl: './team-contact-form.component.html',
-  styleUrls: ['./team-contact-form.component.scss']
+    selector: 'app-team-contact-form',
+    imports: [BoxComponent, FormManagerComponent],
+    templateUrl: './team-contact-form.component.html',
+    styleUrls: ['./team-contact-form.component.scss']
 })
 export class TeamContactFormComponent {
 

@@ -1,7 +1,7 @@
 import { AuthPermission, IAuthPermission } from "./user.models";
 
 export interface ISubLink {
-    link_id: number;
+    id: number;
     menu_name: string;
     menu_name_active_item: string;
     menu_header: string;
@@ -12,7 +12,7 @@ export interface ISubLink {
 }
 
 export class SubLink implements ISubLink {
-    link_id = NaN;
+    id = NaN;
     menu_name = '';
     menu_name_active_item = '';
     menu_header = '';
@@ -30,7 +30,7 @@ export class SubLink implements ISubLink {
 }
 
 export interface ILink {
-    link_id: number;
+    id: number;
     menu_name: string;
     menu_name_active_item: string;
     menu_header: string;
@@ -43,7 +43,7 @@ export interface ILink {
 }
 
 export class Link implements ILink {
-    link_id = NaN;
+    id = NaN;
     menu_name = '';
     menu_name_active_item = '';
     menu_header = '';

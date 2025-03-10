@@ -1,14 +1,60 @@
-<div>
+<div
+  *ngIf="Question"
+  [ngClass]="{
+    'full-height': Question.question_typ.question_typ === 'mnt-psh-btn'
+  }"
+>
+  <div
+    [ngClass]="{
+      'flex-grow-2': Question.question_typ.question_typ !== 'number',
+      'full-height': Question.question_typ.question_typ === 'mnt-psh-btn'
+    }"
+  >
+    <app-form-element
+      *ngIf="
+        Question.question_typ.question_typ !== 'mnt-psh-btn';
+        else mntPshBtn
+      "
+      [LabelText]="Question.question"
+      [Type]="Question.question_typ.question_typ"
+      [FormGroup]="true"
+      [SelectList]="Question.questionoption_set"
+      [BindingProperty]="'option'"
+      [DisplayProperty]="'option'"
+      [DisplayEmptyOption]="true"
+      [Model]="Question.answer"
+      (ModelChange)="change($event)"
+      [TrueValue]="'true'"
+      [FalseValue]="'false'"
+      [FormGroupInline]="Question.question_typ.question_typ === 'number'"
+      [Required]="Question.required === 'y'"
+      [Width]="
+        ['area', 'multiCheckbox', 'number'].includes(
+          Question.question_typ.question_typ
+        )
+          ? '100%'
+          : 'auto'
+      "
+      [FieldSize]="
+        Question.question_typ.question_typ === 'multiCheckbox'
+          ? 1000
+          : Question.question_typ.question_typ === 'text'
+          ? 255
+          : 2000
+      "
+      [Rows]="8"
+      [Disabled]="Disabled"
+      [NumberIncDec]="true"
+      (FunctionCallBack)="runFunction()"
+    >
+    </app-form-element>
 
-    <div [ngClass]="{'flex-grow-2': Question.question_typ.question_typ !== 'number' }">
-        <app-form-element [LabelText]="Question.question" [Type]="Question.question_typ.question_typ" [FormGroup]="true"
-            [SelectList]="Question.questionoption_set" [BindingProperty]="'option'" [DisplayProperty]="'option'"
-            [DisplayEmptyOption]="true" [Model]="Question.answer" (ModelChange)="change($event)" [TrueValue]="'true'"
-            [FalseValue]="'false'" [FormGroupInline]="Question.question_typ.question_typ === 'number'"
-            [Required]="Question.required === 'y'"
-            [Width]="['area', 'multiCheckbox', 'number'].includes(Question.question_typ.question_typ) ? '100%' : 'auto'"
-            [FieldSize]="Question.question_typ.question_typ === 'multiCheckbox' ? 1000 : Question.question_typ.question_typ === 'text' ? 255 : 2000"
-            [Rows]="8" [Disabled]="Disabled" [NumberIncDec]="true">
-        </app-form-element>
-    </div>
+    <ng-template #mntPshBtn>
+      <app-display-question-svg
+        [Inverted]="Inverted"
+        [Question]="Question"
+        (QuestionChange)="questionChange($event)"
+      ></app-display-question-svg>
+    </ng-template>
+  </div>
 </div>

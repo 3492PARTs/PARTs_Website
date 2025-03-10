@@ -10,13 +10,13 @@ import {
   EventEmitter
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
+import { ReturnLinkComponent } from "../return-link/return-link.component";
 
 @Component({
-  selector: 'app-box',
-  standalone: true,
-  imports: [CommonModule, ButtonComponent],
-  templateUrl: './box.component.html',
-  styleUrls: ['./box.component.scss']
+    selector: 'app-box',
+    imports: [CommonModule, ButtonComponent, ReturnLinkComponent],
+    templateUrl: './box.component.html',
+    styleUrls: ['./box.component.scss']
 })
 export class BoxComponent implements OnInit {
   @Input() Width = '0';
@@ -32,6 +32,8 @@ export class BoxComponent implements OnInit {
   @Input() Collapsible = false;
   @Input() Collapsed = false;
   @Output() CollapsedChange = new EventEmitter();
+
+  @Output() ReturnFunction = new EventEmitter();
 
   @ViewChild('thisBox', { read: ElementRef, static: true }) box: ElementRef = new ElementRef(null);
   @ViewChild('content', { read: ElementRef, static: true }) content: ElementRef = new ElementRef(null);
@@ -83,5 +85,9 @@ export class BoxComponent implements OnInit {
         this.changeCollapsed(true);
       }
     }
+  }
+
+  runReturnFunction(): void {
+    this.ReturnFunction.emit();
   }
 }

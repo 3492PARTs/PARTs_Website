@@ -1,0 +1,127 @@
+@if (!activeMatch) {
+<app-box [Title]="'Matches'">
+  <app-form-element-group [LabelText]="'Legend'">
+    <div id="legend" class="flex justify-content-space-between">
+      <div class="flex align-items-center">
+        <div class="box ten"></div>
+        <p>top 10</p>
+      </div>
+      <div class="flex align-items-center">
+        <div class="box fifteen"></div>
+        <p>top 15</p>
+      </div>
+      <div class="flex align-items-center">
+        <div class="box twenty"></div>
+        <p>top 20</p>
+      </div>
+      <div class="flex align-items-center">
+        <div class="box thirty"></div>
+        <p>top 30</p>
+      </div>
+      <div class="flex align-items-center">
+        <div class="box left-overs"></div>
+        <p>remaining</p>
+      </div>
+    </div>
+  </app-form-element-group>
+
+  <div id="matches-table">
+    <app-loading [Loading]="initPromise !== undefined"></app-loading>
+    <app-table [TableCols]="matchesTableCols" [TableData]="matches" (RecordClickCallBack)="planMatch($event)"
+      [Highlighting]="true" [AllowActiveRecord]="true" [Stripes]="true" [Width]="'100%'" [ScrollHeight]="'50rem'"
+      [CursorPointer]="true" [StrikeThroughFn]="strikeThoughMatch">
+    </app-table>
+  </div>
+</app-box>
+}
+@else {
+<!--match info-->
+<app-box [Title]="activeMatch.comp_level.comp_lvl_typ_nm + ' ' + activeMatch.match_number"
+  (ReturnFunction)="clearResults()">
+
+  <p>Match Time: {{ activeMatch.time | dateToStr }}</p>
+  <p *ngIf="activeMatch.red_score !== -1 || activeMatch.blue_score !== -1">
+    Red Score: {{ activeMatch.red_score }} Blue Score:
+    {{ activeMatch.blue_score }}
+  </p>
+
+  <!--strategies-->
+  <div class="padding-bottom-1rem">
+    @for (ms of matchStrategies; track ms.id; let i = $index) { @if
+    (ms.user){
+    <div class="match-strategy">
+      @if (ms.img_url) {
+      <app-button class="img-btn" [ButtonType]="'image-outline'" [BackgroundColor]="'#808080'"
+        (FunctionCallBack)="toggleImageDisplay(i)"></app-button>
+      }
+
+      <app-form-element-group [LabelText]="
+          ms.user.first_name +
+          ' ' +
+          ms.user.last_name +
+          ((ms.time | dateToStr) || '')
+        ">
+        <p>{{ ms.strategy }}</p>
+
+        @if (ms.img_url && matchStrategiesButtonData[i] && matchStrategiesButtonData[i].display) {
+        <img class="img" [src]="ms.img_url" (click)="openFullscreen($event)" />
+        }
+      </app-form-element-group>
+    </div>
+    } }
+  </div>
+
+  <!--graphs-->
+  @if (redTeams.length > 0 && blueTeams.length > 0) {
+  <div class="full-width grid column-gap-1rem row-gap-1rem justify-items-stretch" [ngClass]="{
+    'two-column-grid': !mobile, 
+    }">
+    <div>
+      <app-header [h]="1">Red:
+        @for (t of redTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="redTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+    <div>
+      <app-header [h]="1">Blue:
+        @for (t of blueTeams; track $index) {
+        {{t.team_no + ($last ? '' : ' & ')}}
+        }
+      </app-header>
+      <app-dashboard [DashViewType]="'matches'" [Teams]="blueTeams" [VerticalLayout]="true"></app-dashboard>
+    </div>
+
+  </div>
+  }
+
+  <!--teams-->
+  <app-tab-container>
+    <app-tab *ngFor="let matchTeamData of matchTeamsData" [TabName]="matchTeamData.team.team_no.toString()"
+      [TabTextColor]="matchTeamData.alliance">
+      <!--pit data-->
+      <app-pit-result-display *ngIf="matchTeamData.pitData"
+        [ScoutPitResult]="matchTeamData.pitData"></app-pit-result-display>
+
+      <!--notes-->
+      <app-form-element-group [LabelText]="'Notes'">
+        <app-form-element-group *ngFor="let note of matchTeamData.notes" [LabelText]="
+            (note.user
+              ? note.user.first_name + ' ' + note.user.last_name + ' '
+              : '') + ((note.time | dateToStr) || '')
+          ">
+          <p>{{ note.note }}</p>
+        </app-form-element-group>
+      </app-form-element-group>
+
+      <div class="padding-bottom-1rem"></div>
+
+      <!--Field results table-->
+      <app-table [TableCols]="scoutCols" [TableData]="matchTeamData.scoutAnswers || []" [EnableFilter]="true"
+        [Responsive]="true" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
+      </app-table>
+    </app-tab>
+  </app-tab-container>
+</app-box>
+}

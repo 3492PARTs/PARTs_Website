@@ -2,7 +2,7 @@
   <app-form-element-group [LabelText]="'Table Display'">
     <div class="flex flex-wrap justify-content-space-between align-items-baseline">
       <app-form-element [Type]="'multiSelect'" [LabelText]="'Columns to display'" [DisplayProperty]="'ColLabel'"
-        [BindingProperty]="'checked'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
+        [BindingProperty]="'PropertyName'" [SelectList]="showScoutFieldColsList" [(Model)]="showScoutFieldCols"
         (FunctionCallBack)="showHideTableCols()" (ResetFunction)="resetTableColumns()">
       </app-form-element>
 
@@ -41,13 +41,14 @@
   </app-form-element-group>
 
   <app-table [TableCols]="scoutTableCols" [TableData]="scoutTableRows" [Scrollable]="true" [(FilterText)]="filterText"
-    [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)" [ScrollHeight]="'calc(100vh - 20rem)'"
+    [Responsive]="true" (RecordClickCallBack)="getTeamInfo($event)" [ScrollHeight]="'calc(100vh - 40rem)'"
     [CursorPointer]="true">
   </app-table>
 
-  <app-modal [(visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
+  <app-modal [(Visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
+    @if (teamScoutPitResult) {
     <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
-
+    }
     <app-form-element-group [LabelText]="'Notes'">
       <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="(note.time | dateToStr) || ''">
         <p>{{ note.note }}</p>

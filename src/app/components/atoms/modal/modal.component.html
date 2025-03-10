@@ -1,4 +1,4 @@
-<app-button #thisButton *ngIf="!(ButtonType === '')" [ButtonType]="ButtonType" (FunctionCallBack)="open()">
+<app-button #thisButton *ngIf="ButtonType !== ''" [ButtonType]="ButtonType" (FunctionCallBack)="open()">
   {{ ButtonText }}
 </app-button>
 

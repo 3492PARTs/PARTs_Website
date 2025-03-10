@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 .Scrollable {
   width: 100%;
@@ -49,13 +49,19 @@
   padding: 0.3em;
 }
 
-.table .thead th {
-  color: white;
-  background-color: $main_color;
-  border-bottom: 3px solid $accent_color;
-  vertical-align: middle;
-  text-align: left;
-  font-size: 14px;
+.table .thead {
+  th {
+    background-color: variables.$main_color;
+    border-bottom: 3px solid variables.$accent_color;
+    vertical-align: middle;
+    text-align: left;
+  }
+
+  th,
+  th > a {
+    color: white;
+    font-size: 14px;
+  }
 }
 
 .table .thead:first-child {
@@ -79,7 +85,7 @@
 }
 
 .table .tbody tr {
-  border-top: 1px solid $gray;
+  border-top: 1px solid variables.$gray;
 }
 
 .table .tbody tr:first-child {
@@ -104,7 +110,7 @@
 /*tables with full borders*/
 .table.bordered th,
 .table.bordered td {
-  border: 1px solid $gray;
+  border: 1px solid variables.$gray;
 }
 
 /*tables with highlighting*/
@@ -209,7 +215,7 @@
 }
 
 .resize-lines th {
-  border-right: 1px solid $gray;
+  border-right: 1px solid variables.$gray;
 
   &:last-child {
     border: none;
@@ -218,12 +224,4 @@
 
 .btn-add-col {
   text-align: center !important;
-}
-
-.strike-through {
-  text-decoration: line-through;
-}
-
-.underline {
-  text-decoration: underline;
 }

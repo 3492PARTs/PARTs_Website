@@ -4,11 +4,10 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
-  selector: 'app-tab-container',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './tab-container.component.html',
-  styleUrls: ['./tab-container.component.scss']
+    selector: 'app-tab-container',
+    imports: [CommonModule],
+    templateUrl: './tab-container.component.html',
+    styleUrls: ['./tab-container.component.scss']
 })
 export class TabContainerComponent implements AfterContentInit {
   @ContentChildren(TabComponent) tabContainerTabs: QueryList<TabComponent> = new QueryList<TabComponent>();

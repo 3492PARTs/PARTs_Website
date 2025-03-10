@@ -1,4 +1,4 @@
-@import "../../../../../scss/abstracts/variables.scss";
+@use "../../../../../scss/abstracts/variables.scss";
 
 #results {
   display: flex;
@@ -9,7 +9,7 @@
   width: 90%;
 
   /*MOBILE NAV*/
-  @media only screen and (max-width: $screen-size-sm) {
+  @media only screen and (max-width: variables.$screen-size-sm) {
     width: 100%;
   }
 }

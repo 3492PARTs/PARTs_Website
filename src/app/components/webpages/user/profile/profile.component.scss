@@ -1,7 +1,7 @@
-@import "../../../../../scss/abstracts/variables.scss";
+@use "../../../../../scss/abstracts/variables.scss";
 
 #profile-wrapper {
-  @media screen and (min-width: $screen-size-xlg) {
+  @media screen and (min-width: variables.$screen-size-xlg) {
     display: flex;
     column-gap: 1.6rem;
     padding: 0 1.6rem;

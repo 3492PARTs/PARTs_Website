@@ -3,11 +3,10 @@ import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormManagerComponent } from '../../../elements/form-manager/form-manager.component';
 
 @Component({
-  selector: 'app-team-application-form',
-  standalone: true,
-  imports: [BoxComponent, FormManagerComponent],
-  templateUrl: './team-application-form.component.html',
-  styleUrls: ['./team-application-form.component.scss']
+    selector: 'app-team-application-form',
+    imports: [BoxComponent, FormManagerComponent],
+    templateUrl: './team-application-form.component.html',
+    styleUrls: ['./team-application-form.component.scss']
 })
 export class TeamApplicationFormComponent {
 

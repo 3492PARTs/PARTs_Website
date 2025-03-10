@@ -1,26 +1,33 @@
 <app-box [Title]="'Team Application'">
-    <p class="important">Click <a routerLink="/contact">here</a> request information for Middle School robotics
-        form.</p>
-    <br>
+  <p class="important">
+    Click <a routerLink="/contact">here</a> request information for Middle
+    School robotics form.
+  </p>
+  <br />
 
-    <app-form (SubmitFunction)="save()">
-        <app-form-element-group *ngFor="let formSubType of questions" [LabelText]="formSubType.form_sub_typ">
-            <app-form-element *ngFor="let q of formSubType.questions" [LabelText]="q.question"
-                [Type]="q.question_typ.question_typ" [FormGroup]="true" [SelectList]="q.questionoption_set"
-                [BindingProperty]="'option'" [DisplayProperty]="'option'" [DisplayEmptyOption]="true"
-                [(Model)]="q.answer" [TrueValue]="'true'" [FalseValue]="'false'" [Required]="q.required === 'y'"
-                [RadioGroupStacked]="true"
-                [Width]="['area', 'multiCheckbox'].includes(q.question_typ.question_typ) ? '100%' :  ['checkbox', 'date', 'phone'].includes(q.question_typ.question_typ) ? 'auto' : '300px'"
-                [Rows]="5"
-                [FieldSize]="q.question_typ.question_typ === 'multiCheckbox' ? 1000 : q.question_typ.question_typ === 'text' ? 255 : 2000"
-                [Disabled]="disabled">
-            </app-form-element>
-        </app-form-element-group>
+  <app-form (SubmitFunction)="save()" [FormElements]="formElements">
+    <app-form-element-group
+      *ngFor="let formSubType of questions"
+      [LabelText]="formSubType.form_sub_typ"
+    >
+      <app-question-display-form
+        [(Questions)]="formSubType.questions"
+        (FormElementsChange)="setFormElements($event)"
+        [Disabled]="disabled"
+      >
+      </app-question-display-form>
+    </app-form-element-group>
 
-
-        <app-button-ribbon>
-            <app-button *ngIf="disabled" (FunctionCallBack)="export()">Export</app-button>
-            <app-button [Type]="'submit'" [Disabled]="disabled">Submit</app-button>
-        </app-button-ribbon>
-    </app-form>
+    <app-button-ribbon>
+      <app-button *ngIf="disabled" (FunctionCallBack)="export()"
+        >Export</app-button
+      >
+      <app-button
+        [Type]="'submit'"
+        [Disabled]="disabled"
+        [ButtonType]="'success'"
+        >Save</app-button
+      >
+    </app-button-ribbon>
+  </app-form>
 </app-box>

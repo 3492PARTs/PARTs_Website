@@ -16,11 +16,10 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../atoms/form/form.component';
 
 @Component({
-  selector: 'app-sponsor-shop',
-  standalone: true,
-  imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, CommonModule, FormComponent],
-  templateUrl: './sponsor-shop.component.html',
-  styleUrls: ['./sponsor-shop.component.scss']
+    selector: 'app-sponsor-shop',
+    imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, CommonModule, FormComponent],
+    templateUrl: './sponsor-shop.component.html',
+    styleUrls: ['./sponsor-shop.component.scss']
 })
 export class SponsorShopComponent implements OnInit {
   sponsors: Sponsor[] = [];

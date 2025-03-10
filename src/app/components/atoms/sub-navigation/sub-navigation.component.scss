@@ -1,4 +1,4 @@
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
 
 #nav {
   height: 100%;
@@ -29,7 +29,7 @@
 
   &:hover,
   &.active {
-    background-color: darken($main_color, 10%);
+    background-color: darken(variables.$main_color, 10%);
   }
 
   .icon {

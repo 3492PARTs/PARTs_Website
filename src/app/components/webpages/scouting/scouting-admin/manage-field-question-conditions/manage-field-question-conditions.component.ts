@@ -3,11 +3,10 @@ import { QuestionConditionAdminFormComponent } from '../../../../elements/questi
 import { BoxComponent } from '../../../../atoms/box/box.component';
 
 @Component({
-  selector: 'app-manage-field-question-conditions',
-  standalone: true,
-  imports: [QuestionConditionAdminFormComponent, BoxComponent],
-  templateUrl: './manage-field-question-conditions.component.html',
-  styleUrls: ['./manage-field-question-conditions.component.scss']
+    selector: 'app-manage-field-question-conditions',
+    imports: [QuestionConditionAdminFormComponent, BoxComponent],
+    templateUrl: './manage-field-question-conditions.component.html',
+    styleUrls: ['./manage-field-question-conditions.component.scss']
 })
 export class ManageFieldQuestionConditionsComponent {
 

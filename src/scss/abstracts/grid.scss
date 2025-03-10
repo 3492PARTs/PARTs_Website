@@ -1,3 +1,48 @@
 .grid {
   display: grid;
+  grid-template-columns: repeat(1, 100%);
+}
+
+.two-column-grid {
+  grid-template-columns: repeat(2, calc(100% / 2));
+
+  &.column-gap-1rem {
+    grid-template-columns: repeat(2, calc((100% / 2) - (1rem / 2)));
+  }
+}
+
+.three-column-grid {
+  grid-template-columns: repeat(3, calc(100% / 3));
+
+  &.column-gap-1rem {
+    grid-template-columns: repeat(3, calc(((100% / 3) - (2rem / 3))));
+  }
+}
+
+.four-column-grid {
+  grid-template-columns: repeat(4, calc((100% / 4)));
+
+  &.column-gap-1rem {
+    grid-template-columns: repeat(4, calc(((100% / 4) - (3rem / 4))));
+  }
+}
+
+.five-column-grid {
+  grid-template-columns: repeat(5, calc((100% / 5)));
+
+  &.column-gap-1rem {
+    grid-template-columns: repeat(5, calc(((100% / 5) - (4rem / 5))));
+  }
+}
+
+.column-gap-1rem {
+  column-gap: 1rem;
+}
+
+.row-gap-1rem {
+  row-gap: 1rem;
+}
+
+.justify-items-stretch {
+  justify-items: stretch;
 }

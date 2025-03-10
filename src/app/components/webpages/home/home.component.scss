@@ -1,12 +1,16 @@
 //@import '../../../scss/_helpers/variables';
 //@import '../../../scss/_vendors/_cssSliderScss/cssSlider';
 //@import '../../../scss/_pages/join';
-@import "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/abstracts/variables.scss";
+@use "../../../../scss/vendors/_cssSliderScss/_cssSlider";
 
 /*#cssSlider {
   //max-height: calc(100vh - 7rem);
 }
 /*HOME*/
+#content {
+  margin-bottom: -1.6rem;
+}
 
 #mainHome {
   width: 100%;
@@ -39,7 +43,7 @@
     height: 140rem;
     width: 140rem;
 
-    fill: rgba($accent_color, 0.6);
+    fill: rgba(variables.$accent_color, 0.6);
   }
 }
 
@@ -91,8 +95,8 @@
 
 #joinH1 {
   text-align: center;
-  color: $main_color;
-  text-shadow: rgba($accent_color, 0.9) 0px 0px 25px;
+  color: variables.$main_color;
+  text-shadow: rgba(variables.$accent_color, 0.9) 0px 0px 25px;
   font-family: GearBox;
 }
 
@@ -131,7 +135,7 @@
 }
 
 #homeJoin-wrapper:hover > #homeJoin > #joinText > #joinH1 {
-  color: $accent_color;
+  color: variables.$accent_color;
   text-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -263,6 +267,6 @@
     height: 140rem;
     width: 140rem;
 
-    fill: rgba($accent_color, 0.6);
+    fill: rgba(variables.$accent_color, 0.6);
   }
 }

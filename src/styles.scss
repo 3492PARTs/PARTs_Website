@@ -1,13 +1,28 @@
-@import "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
-@import "./scss/vendors/syncfusion.scss";
-@import "./scss/vendors/_cssSliderScss/_cssSlider";
+@use "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css";
+//@use "./scss/vendors/syncfusion.scss"; // This is for the graphs
+//@use "./scss/vendors/_cssSliderScss/_cssSlider";
 
-@import "./scss/modules/font.scss";
-@import "./scss/abstracts/variables.scss";
-@import "./scss/base/reset.scss";
-@import "./scss/base/typography.scss";
-@import "./scss/base/overrides.scss";
-@import "./scss/abstracts/flex-box.scss";
-@import "./scss/abstracts/grid.scss";
-@import "./scss/abstracts/width.scss";
-@import "./scss/modules/generics.scss";
+@use "./scss/modules/font.scss";
+//@import "./scss/abstracts/variables.scss";
+@use "./scss/base/reset.scss";
+@use "./scss/base/typography.scss";
+@use "./scss/base/overrides.scss";
+@use "./scss/abstracts/flex-box.scss";
+@use "./scss/abstracts/grid.scss";
+@use "./scss/abstracts/width.scss";
+@use "./scss/abstracts/height.scss";
+@use "./scss/modules/generics.scss";
+
+/* tooltip.component.css or global styles.css */
+.app-tooltip {
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+  color: white; /* White text */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px; /* Adjust as needed */
+  /* Other styling as you like */
+  pointer-events: none; /* Prevent the tooltip from blocking mouse events on the underlying element */
+  white-space: pre-wrap; /* Allow text to wrap */
+  max-width: 200px; /* Set a maximum width */
+  display: inline-block;
+}

@@ -18,7 +18,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-scouting-schedule',
-  standalone: true,
   imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
   templateUrl: './scouting-schedule.component.html',
   styleUrls: ['./scouting-schedule.component.scss']
@@ -108,7 +107,7 @@ export class ScoutingScheduleComponent implements OnInit {
 
   copyScoutFieldScheduleEntry(): void {
     let ss = new ScoutFieldSchedule();
-    ss.event_id = this.currentEvent.event_id;
+    ss.event_id = this.currentEvent.id;
     ss.red_one_id = this.ActiveScoutFieldSchedule.red_one_id;
     ss.red_two_id = this.ActiveScoutFieldSchedule.red_two_id;
     ss.red_three_id = this.ActiveScoutFieldSchedule.red_three_id;
@@ -119,12 +118,12 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   saveScoutFieldScheduleEntry(): void | null {
-    if (!this.currentEvent || this.currentEvent.event_id < 0) {
+    if (!this.currentEvent || this.currentEvent.id < 0) {
       this.gs.triggerError('Event not set, can\'t schedule scouts.');
       return null;
     }
     let sfs = JSON.parse(JSON.stringify(this.ActiveScoutFieldSchedule));
-    sfs.event_id = this.currentEvent.event_id;
+    sfs.event_id = this.currentEvent.id;
     sfs.red_one_id = sfs.red_one_id && (sfs!.red_one_id as User).id ? (sfs!.red_one_id as User).id : null;
     sfs.red_two_id = sfs.red_two_id && (sfs!.red_two_id as User).id ? (sfs!.red_two_id as User).id : null;
     sfs.red_three_id = sfs.red_three_id && (sfs!.red_three_id as User).id ? (sfs!.red_three_id as User).id : null;

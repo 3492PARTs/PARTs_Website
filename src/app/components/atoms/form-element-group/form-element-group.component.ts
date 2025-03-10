@@ -6,11 +6,10 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-form-element-group',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './form-element-group.component.html',
-  styleUrls: ['./form-element-group.component.scss']
+    selector: 'app-form-element-group',
+    imports: [CommonModule],
+    templateUrl: './form-element-group.component.html',
+    styleUrls: ['./form-element-group.component.scss']
 })
 export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() Inline = false;
@@ -24,6 +23,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
 
   @Input() RemoveBorder = false;
+  @Input() MarginTop = '';
 
   constructor(private gs: GeneralService) {
   }

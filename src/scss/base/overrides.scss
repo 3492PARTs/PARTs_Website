@@ -1,9 +1,11 @@
+@use "../abstracts/variables.scss";
+
 .date-panel-scale {
   transform: scale(1.3) !important;
 }
 
 .owl-dt-calendar-table .owl-dt-calendar-cell-selected {
-  background-color: $main_color;
+  background-color: variables.$main_color;
 }
 
 .owl-dt-container-disabled,

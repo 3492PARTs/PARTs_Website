@@ -2,19 +2,16 @@ import { Component, Input, OnInit } from '@angular/core';
 import { APIService } from '../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../services/auth.service';
 import { GeneralService } from '../../../services/general.service';
-import { FormElementComponent } from '../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent } from '../../atoms/table/table.component';
 import { QuestionAdminFormComponent } from '../question-admin-form/question-admin-form.component';
 import { Response } from '../../../models/form.models';
-import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
 import { ModalComponent } from '../../atoms/modal/modal.component';
 
 @Component({
   selector: 'app-form-manager',
-  standalone: true,
-  imports: [FormElementComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, FormElementGroupComponent, ModalComponent],
+  imports: [ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, ModalComponent],
   templateUrl: './form-manager.component.html',
   styleUrls: ['./form-manager.component.scss']
 })

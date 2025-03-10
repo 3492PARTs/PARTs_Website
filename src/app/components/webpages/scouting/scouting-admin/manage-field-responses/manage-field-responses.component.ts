@@ -12,7 +12,6 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 
 @Component({
   selector: 'app-manage-field-responses',
-  standalone: true,
   imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-responses.component.html',
   styleUrls: ['./manage-field-responses.component.scss']
@@ -20,7 +19,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 export class ManageFieldResponsesComponent implements OnInit {
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutResultsCols: TableColType[] = [
-    { PropertyName: 'team_no', ColLabel: 'Team' },
+    { PropertyName: 'team_id', ColLabel: 'Team' },
     { PropertyName: 'match', ColLabel: 'Match' },
     { PropertyName: 'time', ColLabel: 'Time' },
     { PropertyName: 'user', ColLabel: 'Scout' },
@@ -67,7 +66,7 @@ export class ManageFieldResponsesComponent implements OnInit {
   deleteFieldResult(): void {
     this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
-        scout_field_id: this.activeScoutResult.scout_field_id
+        scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
         this.getFieldResponses();
