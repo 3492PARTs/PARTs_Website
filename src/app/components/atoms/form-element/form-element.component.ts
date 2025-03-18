@@ -294,7 +294,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
       this.ModelChange.emit(this.Model);
     }
-    else if (this.Type === 'multiSelect') {
+    else if (this.Type === 'multiSelect' || this.Type === 'multiCheckbox') {
+      if (!this.Model) this.Model = [];
+
       const mm = this.multiSelectModel[index];
       mm['checked'] = newValue;
       let m: any = (this.Model as any[]).find(m => m[this.BindingProperty || ''] === mm[this.BindingProperty || '']);

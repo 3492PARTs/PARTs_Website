@@ -231,7 +231,7 @@
       <div *ngSwitchCase="'multiCheckbox'" (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
         <ng-container *ngIf="BindingProperty && DisplayProperty">
           <app-form-element *ngFor="let c of _SelectList; let i = index" [Type]="'checkbox'"
-            [LabelText]="c[DisplayProperty]" [Model]="Model[i]['checked']" (ModelChange)="change($event, i)"
+            [LabelText]="c[DisplayProperty]" [Model]="multiSelectModel[i]['checked']" (ModelChange)="change($event, i)"
             [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled" [FieldSize]="FieldSize">
           </app-form-element>
         </ng-container>
