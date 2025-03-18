@@ -25,7 +25,7 @@
       <app-form-element [LabelText]="'Edit Scouted Team'" [Type]="'select'" [FormGroup]="true" [FormGroupInline]="true"
         [SelectList]="completedTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
         [DisplayProperty2]="'team_nm'" [(Model)]="scoutPitResponse.team_id" (FunctionCallBack)="changeTeam(true)"
-        [DisplayEmptyOption]="true" [MinWidth]="'180px'" [Required]="!scoutPitResponse.team_id"
+        [DisplayEmptyOption]="true" [MinWidth]="'200px'" [Required]="!scoutPitResponse.team_id"
         [Disabled]="formDisabled || apiStatus !== 'on'">
       </app-form-element>
     </div>

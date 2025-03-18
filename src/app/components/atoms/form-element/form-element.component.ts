@@ -184,7 +184,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
                 this.phoneMaskFn(modelChanges.currentValue);
               }
             }
-            else if (this.Type === 'multiSelect' && JSON.stringify(modelChanges.currentValue) !== JSON.stringify(modelChanges.previousValue)) {
+            else if (['multiSelect', 'multiCheckbox'].includes(this.Type) && JSON.stringify(modelChanges.currentValue) !== JSON.stringify(modelChanges.previousValue)) {
               this.setSelectList(this._SelectList);
             }
             this.markRequired();

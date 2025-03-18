@@ -218,7 +218,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.previewUrl = null;
       this.previewImages = [];
 
-      if (load) this.loadTeam();
+      if (load) this.loadTeamPitData();
     });
   }
 
@@ -300,7 +300,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadTeam(): void {
+  loadTeamPitData(): void {
     this.api.get(true, 'scouting/pit/team-data/', {
       team_num: this.scoutPitResponse.team_id
     }, (result: any) => {
