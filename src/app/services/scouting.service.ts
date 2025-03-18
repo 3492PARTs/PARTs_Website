@@ -863,11 +863,11 @@ export class ScoutingService {
                 }).finally(() => {
                   this.gs.decrementOutstandingCalls();
                 });
-            }, 1500 * ++count);
+            }, 5000 * ++count);
           }
         });
 
-        window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1500 * count)
+        window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 5000 * count)
 
         if (id) {
           await this.cs.ScoutPitFormResponse.RemoveAsync(id);
