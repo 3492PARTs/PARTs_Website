@@ -410,8 +410,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   dismissBanners(): void {
-    console.log('remove banners');
-    console.log(JSON.stringify(this.gs.getBanners()));
     this.gs.getBanners().forEach(b => this.gs.removeBanner(b));
   }
 

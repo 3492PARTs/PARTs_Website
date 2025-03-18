@@ -386,7 +386,6 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getTeamsForNewMatch() {
-    console.log(this.newMatch.event);
     this.newMatchTeams = this.gs.cloneObject(this.newMatch.event.teams);
   }
 }
