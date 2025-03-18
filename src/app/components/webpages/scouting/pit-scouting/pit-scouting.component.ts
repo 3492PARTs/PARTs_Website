@@ -16,10 +16,11 @@ import { QuestionDisplayFormComponent } from '../../../elements/question-display
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { Question, Answer } from '../../../../models/form.models';
 import { WhiteboardComponent } from "../../../atoms/whiteboard/whiteboard.component";
+import { ModalComponent } from "../../../atoms/modal/modal.component";
 
 @Component({
   selector: 'app-pit-scouting',
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })

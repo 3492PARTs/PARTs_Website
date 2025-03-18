@@ -1,3 +1,14 @@
 #strategy-image {
   width: 100%;
 }
+
+#path {
+  position: relative;
+  padding-top: 3.5rem;
+
+  #modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
