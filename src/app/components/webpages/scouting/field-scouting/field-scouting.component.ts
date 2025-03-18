@@ -182,8 +182,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }, (result: any) => {
         this.gs.successfulResponseBanner(result);
       });
-
-    //this.setUpdateScoutFieldScheduleTimeout();
   }
 
   setUpdateScoutFieldScheduleTimeout(): void {
@@ -204,6 +202,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         const end = new Date(sfs.end_time);
         return start <= date && date < end;
       });
+
+      if (this.scoutFieldSchedule) this.checkInScout();
     });
   }
 
