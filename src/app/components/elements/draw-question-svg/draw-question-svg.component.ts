@@ -110,6 +110,14 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     }
   }
 
+  handleClick(event: MouseEvent) {
+    // Check if the click hit the path element.
+    if (event.target === this.myPath.nativeElement) {
+      console.log('Shape Tapped!');
+    }
+  }
+
+
   addPoint(x: number, y: number) {
     this.points.push({ x, y });
   }
