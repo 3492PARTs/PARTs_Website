@@ -39,29 +39,21 @@
       <app-form-element [Type]="'area'" [LabelText]="'Strategy'" [(Model)]="activeMatchStrategy.strategy"
         [Width]="'100%'" [Rows]="8" [Required]="true" [Disabled]="formDisabled"></app-form-element>
 
-      <div class="full-width" id="path">
-        <ng-template #view>
+
+
+      <app-button-ribbon><app-modal [ButtonText]="'Path'" [Title]="'Path'">
           @if (fieldForm && !activeMatchStrategy.img_url) {
           <app-whiteboard [ImageUrl]="fieldForm.full_img_url" [(Image)]="activeMatchStrategy.img"
             [StampOptions]="activeTeams"></app-whiteboard>
           } @else if (activeMatchStrategy.img_url) {
           <img id="strategy-image" [src]="activeMatchStrategy.img_url" />
           }
-        </ng-template>
+          @if (activeMatchStrategy.img_url && !formDisabled) {
+          <app-button [ButtonType]="'danger'" (FunctionCallBack)="clearImageUrl()">New Image</app-button>
+          }
+        </app-modal>
 
-        <div id="modal">
-          <app-modal [ButtonType]="'expand'" [Title]="'Path'">
-            <ng-container *ngTemplateOutlet="view"></ng-container>
-          </app-modal>
-        </div>
 
-        <ng-container *ngTemplateOutlet="view"></ng-container>
-      </div>
-
-      <app-button-ribbon>
-        @if (activeMatchStrategy.img_url && !formDisabled) {
-        <app-button [ButtonType]="'danger'" (FunctionCallBack)="clearImageUrl()">New Image</app-button>
-        }
         <app-button [Type]="'submit'" [ButtonType]="'success'" [Disabled]="formDisabled">Save</app-button>
       </app-button-ribbon>
     </app-form-element-group>
