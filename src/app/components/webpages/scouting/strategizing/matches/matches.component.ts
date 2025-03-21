@@ -98,7 +98,7 @@ export class MatchesComponent implements OnInit {
             if (result) {
               this.teams = result.teams;
 
-              const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
+              const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 3492 || m.red_three_id === 3492);
               this.matches = ourMatches;
             }
           }));
