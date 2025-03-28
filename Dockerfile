@@ -9,7 +9,8 @@ WORKDIR /usr/local/app
 # Add the source code to app
 COPY ./ /usr/local/app/
 
-RUN npm install && npx ng build 
+RUN npm install 
+RUN npx ng build 
     
 # The runtime image, used to just run the code provided its virtual environment
 FROM python:3.11-slim-buster as runtime
@@ -23,7 +24,7 @@ WORKDIR /usr/local/app/dist/parts-website/browser/
 
 # Copy virtual env from previous step
 COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
-#&& python3 -m venv /venv \
+
 RUN apt update \
     && apt upgrade -y \
     && apt install curl sshpass wget -y \
