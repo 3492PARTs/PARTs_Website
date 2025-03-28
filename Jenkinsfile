@@ -34,7 +34,7 @@ node {
                 sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.ts
                 '''
                 
-                app = docker.build("bduke97/parts_website")
+                app = docker.build("bduke97/parts_website", "-f ./Dockerfile --target=runtime .")
             }
             else {
                 sh'''
