@@ -23,13 +23,11 @@ WORKDIR /usr/local/app/dist/parts-website/browser/
 
 # Copy virtual env from previous step
 COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
-
+#&& python3 -m venv /venv \
 RUN apt update \
     && apt upgrade -y \
-    && apt install curl \
-    #&& python3 -m venv /venv \
+    && apt install curl sshpass wget -y \
     && pip install pysftp \
-    && apt install sshpass wget -y \
     && mkdir /scripts/ \
     && cd /scripts \
     && wget https://raw.githubusercontent.com/bduke-dev/scripts/main/delete_remote_files.py \
