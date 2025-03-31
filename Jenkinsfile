@@ -29,7 +29,7 @@ node {
         }
 
         stage('Build image') {  
-            if (env.BRANCH_NAME == 'main') {
+            if (true || env.BRANCH_NAME == 'main') {
                 sh'''
                 sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.ts
                 '''
@@ -58,7 +58,7 @@ node {
         */
 
         stage('Push image') {
-            if (env.BRANCH_NAME != 'main') {
+            if (false && env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                     app.push("${env.FORMATTED_BRANCH_NAME}")
                     //app.push("latest")
@@ -67,7 +67,7 @@ node {
         }
 
         stage('Deploy') {
-            if (env.BRANCH_NAME == 'main') {
+            if (true || env.BRANCH_NAME == 'main') {
                 env.ENV_HOST = "vhost90-public.wvnet.edu"
                 withCredentials([usernamePassword(credentialsId: 'parts-server', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                     app.inside {
