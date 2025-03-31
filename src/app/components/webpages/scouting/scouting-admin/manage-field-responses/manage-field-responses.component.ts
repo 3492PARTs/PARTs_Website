@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { ScoutFieldResponsesReturn } from '../../../../../models/scouting.models';
+import { Col, ScoutFieldResponsesReturn } from '../../../../../models/scouting.models';
 import { APIService } from '../../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
 import { GeneralService, AppSize } from '../../../../../services/general.service';
@@ -18,6 +18,7 @@ import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ri
 })
 export class ManageFieldResponsesComponent implements OnInit {
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
+  scoutResultColumns: Col[] = [];
   scoutResultsCols: TableColType[] = [
     { PropertyName: 'team_id', ColLabel: 'Team' },
     { PropertyName: 'match', ColLabel: 'Match' },
@@ -54,6 +55,12 @@ export class ManageFieldResponsesComponent implements OnInit {
     this.ss.loadFieldScoutingResponses(true, true).then(result => {
       if (result) {
         this.scoutResults = result;
+      }
+    });
+
+    this.ss.loadFieldScoutingResponseColumns(true).then(result => {
+      if (result) {
+        this.scoutResultColumns = result;
       }
     });
   }

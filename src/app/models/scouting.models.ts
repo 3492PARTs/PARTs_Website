@@ -278,11 +278,21 @@ export interface IScoutResults {
 }
 
 export class ScoutFieldResponsesReturn {
-    scoutCols: any[] = [];
+    count = NaN;
+    previous = NaN;
+    next = NaN;
+    //scoutCols: any[] = [];
     scoutAnswers: any[] = [];
     current_season = new Season();
     current_event = new Event();
     removed_responses: number[] = [];
+}
+
+export class Col {
+    PropertyName = ''
+    ColLabel = ''
+    Width = ''
+    order = ''
 }
 
 export class ScoutField {

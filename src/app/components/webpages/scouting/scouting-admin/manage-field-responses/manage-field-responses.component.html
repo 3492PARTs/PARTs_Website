@@ -1,28 +1,15 @@
 <app-box [Title]="'Manage Field Responses'">
-  <app-table
-    [TableCols]="scoutResultsCols"
-    [TableData]="scoutResults.scoutAnswers"
-    [Width]="'100%'"
-    [ScrollHeight]="'50rem'"
-    [Scrollable]="true"
-    [ShowViewButton]="true"
-    (ViewRecordCallBack)="showScoutFieldResultModal($event)"
-  ></app-table>
+  <app-table [TableCols]="scoutResultsCols" [TableData]="scoutResults.scoutAnswers" [Width]="'100%'"
+    [ScrollHeight]="'50rem'" [Scrollable]="true" [ShowViewButton]="true"
+    (ViewRecordCallBack)="showScoutFieldResultModal($event)"></app-table>
 
   <app-modal [(Visible)]="scoutResultModalVisible" [Title]="'Field Response'">
     <div class="overflow-x">
-      <app-table
-        [TableCols]="scoutResults.scoutCols"
-        [TableData]="[activeScoutResult || {}]"
-        [Width]="tableWidth"
-      ></app-table>
+      <app-table [TableCols]="scoutResultColumns" [TableData]="[activeScoutResult || {}]"
+        [Width]="tableWidth"></app-table>
     </div>
     <app-button-ribbon>
-      <app-button
-        [ButtonType]="'danger'"
-        (FunctionCallBack)="deleteFieldResult()"
-        >Delete</app-button
-      >
+      <app-button [ButtonType]="'danger'" (FunctionCallBack)="deleteFieldResult()">Delete</app-button>
     </app-button-ribbon>
   </app-modal>
 </app-box>

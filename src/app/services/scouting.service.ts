@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from './api.service';
 import { CacheService } from './cache.service';
-import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy, AllianceSelection, IAllianceSelection } from '../models/scouting.models';
+import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy, AllianceSelection, IAllianceSelection, Col } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
@@ -22,6 +22,7 @@ export class ScoutingService {
   private loadMatchesPromise: Promise<Match[] | null> | null = null;
   private initFieldScoutingPromise: Promise<FieldFormForm | null> | null = null;
   private getFieldScoutingResponsesPromise: Promise<ScoutFieldResponsesReturn | null> | null = null;
+  private getFieldScoutingResponseColumnsPromise: Promise<Col[] | null> | null = null;
   private initPitScoutingPromise: Promise<Question[] | null> | null = null;
   private getPitScoutingResponsesPromise: Promise<ScoutPitResponsesReturn | null | null> | null = null;
   private loadScoutFieldSchedulesPromise: Promise<ScoutFieldSchedule[] | null> | null = null;
@@ -655,6 +656,9 @@ export class ScoutingService {
   loadFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
     if (forceCall || !this.getFieldScoutingResponsesPromise)
       this.getFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
+
+        if (loadingScreen) this.gs.incrementOutstandingCalls();
+
         let last = null;
 
         if (!forceCall)
@@ -662,71 +666,95 @@ export class ScoutingService {
             //console.log(sfrr);
             if (sfrr) last = sfrr['id'];
           });
+        else
+          await this.cs.ScoutFieldResponse.RemoveAllAsync();
 
-        let params: any = undefined;
+        let params: any = {};
 
         if (!forceCall && last)
           params = {
             after_scout_field_id: last
           }
 
-        this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
+        let done = false;
+        let page = 1;
+        let count = 1;
+        let ids: number[] = [];
 
-          this.updateScoutFieldResponseColumnsCache(result.scoutCols);
 
-          const ids = result.removed_responses;
-          if (params) {
-            // we are only loading the diff
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-            await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
+        while (!done) {
+
+          params['pg_num'] = page;
+
+          await this.api.get(false, 'scouting/field/responses/', params).then(async (result: ScoutFieldResponsesReturn) => {
+
+            count = result.count;
+
+            ids = result.removed_responses;
+
             await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
 
-            await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-              result.scoutAnswers = frrs;
-            }).catch(reason => {
-              console.log(reason);
-            });
-          }
-          else {
-            // loading all
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-            this.updateScoutFieldResponsesCache(result.scoutAnswers);
-          }
+            done = page >= count;
+            page++;
+          });
+        }
+
+        let result = new ScoutFieldResponsesReturn();
+
+        await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
+
+        await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+          result.scoutAnswers = frrs;
+        }).catch(reason => {
+          this.gs.addBanner(new Banner(0, 'Error loading field scouting responses from cache.'));
+          console.log(reason);
+        });
+
+        resolve(result);
+
+        this.getFieldScoutingResponsesPromise = null;
+
+        if (loadingScreen) this.gs.decrementOutstandingCalls();
+
+      });
+
+    return this.getFieldScoutingResponsesPromise;
+  }
+
+  loadFieldScoutingResponseColumns(loadingScreen = true): Promise<Col[] | null> {
+    if (!this.getFieldScoutingResponseColumnsPromise)
+      this.getFieldScoutingResponseColumnsPromise = new Promise<Col[] | null>(async resolve => {
+        this.api.get(loadingScreen, 'scouting/field/response-columns/', undefined, async (result: Col[]) => {
+
+          this.updateScoutFieldResponseColumnsCache(result);
 
           resolve(result);
 
           this.getFieldScoutingResponsesPromise = null;
         }, async (err: any) => {
-          const scoutResponses = new ScoutFieldResponsesReturn();
+          let cols: Col[] = [];
 
           let allLoaded = true;
 
-          await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-            scoutResponses.scoutAnswers = frrs;
-          }).catch(reason => {
-            console.log(reason);
-            allLoaded = false;
-          });
-
           await this.getFieldResponseColumnsFromCache().then(frcs => {
-            scoutResponses.scoutCols = frcs;
+            cols = frcs as Col[];
           }).catch(reason => {
             console.log(reason);
             allLoaded = false;
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading field scouting responses from cache.'));
+            this.gs.addBanner(new Banner(0, 'Error loading field scouting response columns from cache.'));
             resolve(null);
           }
           else
-            resolve(scoutResponses);
+            resolve(cols);
 
-          this.getFieldScoutingResponsesPromise = null;
+          this.getFieldScoutingResponseColumnsPromise = null;
         });
       });
 
-    return this.getFieldScoutingResponsesPromise;
+    return this.getFieldScoutingResponseColumnsPromise;
   }
 
   private async updateFieldFormFormCache(fieldForm: FieldFormForm) {

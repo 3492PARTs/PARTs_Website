@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn } from '../../../../models/scouting.models';
+import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '../../../../models/scouting.models';
 import { APIService } from '../../../../services/api.service';
 import { AuthService, AuthCallStates } from '../../../../services/auth.service';
 import { GeneralService } from '../../../../services/general.service';
@@ -25,6 +25,7 @@ import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbo
 export class FieldScoutingResponsesComponent implements OnInit {
 
   scoutResponses: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
+  scoutResponseColumns: Col[] = [];
 
   teamScoutResultsModalVisible = false;
   teamScoutResults: any[] = [];
@@ -55,14 +56,25 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   init(forceCall = false): void {
     this.gs.incrementOutstandingCalls();
-    this.ss.loadFieldScoutingResponses(true, forceCall).then(async (result: ScoutFieldResponsesReturn | null) => {
+    this.ss.loadFieldScoutingResponses(true, forceCall).then(result => {
       if (result) {
-        this.scoutResponses = result;
+        this.gs.triggerChange(() => {
+          this.scoutResponses = result;
 
-        if (environment.environment === 'local')
-          this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
+          if (environment.environment === 'local1')
+            this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
+        });
 
-        this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponses.scoutCols);
+      }
+
+      this.gs.decrementOutstandingCalls();
+    });
+
+    this.ss.loadFieldScoutingResponseColumns(true).then(result => {
+      if (result) {
+        this.scoutResponseColumns = result;
+
+        this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponseColumns);
 
         for (let i = 0; i < this.showScoutFieldCols.length; i++) {
           this.showScoutFieldCols[i]['checked'] = true;
@@ -71,7 +83,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
         this.showHideTableCols();
         this.filter();
 
-        this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResponses.scoutCols);
+        this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResponseColumns);
       }
 
       this.gs.decrementOutstandingCalls();
@@ -99,7 +111,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
     }
 
     let csv = '';
-    export_file.scoutCols.forEach(element => {
+    this.scoutResponseColumns.forEach(element => {
       csv += '"' + element['ColLabel'] + '"' + ',';
     });
 
@@ -107,7 +119,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
     csv += '\n';
 
     export_file.scoutAnswers.forEach(el => {
-      export_file.scoutCols.forEach(element => {
+      this.scoutResponseColumns.forEach(element => {
         csv += '"' + el[element['PropertyName']] + '"' + ',';
       });
       csv = csv.substring(0, csv.length - 1);
