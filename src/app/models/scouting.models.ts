@@ -278,6 +278,9 @@ export interface IScoutResults {
 }
 
 export class ScoutFieldResponsesReturn {
+    count = NaN;
+    previous = NaN;
+    next = NaN;
     //scoutCols: any[] = [];
     scoutAnswers: any[] = [];
     current_season = new Season();

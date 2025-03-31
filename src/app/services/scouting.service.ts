@@ -656,6 +656,9 @@ export class ScoutingService {
   loadFieldScoutingResponses(loadingScreen = true, forceCall = false): Promise<ScoutFieldResponsesReturn | null> {
     if (forceCall || !this.getFieldScoutingResponsesPromise)
       this.getFieldScoutingResponsesPromise = new Promise<ScoutFieldResponsesReturn | null>(async resolve => {
+
+        if (loadingScreen) this.gs.incrementOutstandingCalls();
+
         let last = null;
 
         if (!forceCall)
@@ -663,59 +666,56 @@ export class ScoutingService {
             //console.log(sfrr);
             if (sfrr) last = sfrr['id'];
           });
+        else
+          await this.cs.ScoutFieldResponse.RemoveAllAsync();
 
-        let params: any = undefined;
+        let params: any = {};
 
         if (!forceCall && last)
           params = {
             after_scout_field_id: last
           }
 
-        this.api.get(loadingScreen, 'scouting/field/responses/', params, async (result: ScoutFieldResponsesReturn) => {
+        let done = false;
+        let page = 1;
+        let count = 1;
+        let ids: number[] = [];
 
-          const ids = result.removed_responses;
-          if (params) {
-            // we are only loading the diff
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load diff');
-            await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
+
+        while (!done) {
+
+          params['pg_num'] = page;
+
+          await this.api.get(false, 'scouting/field/responses/', params).then(async (result: ScoutFieldResponsesReturn) => {
+
+            count = result.count;
+
+            ids = result.removed_responses;
+
             await this.cs.ScoutFieldResponse.AddOrEditBulkAsync(result.scoutAnswers);
 
-            await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-              result.scoutAnswers = frrs;
-            }).catch(reason => {
-              console.log(reason);
-            });
-          }
-          else {
-            // loading all
-            this.gs.devConsoleLog('scouting.service.ts.getFieldScoutingResponses', 'load all');
-            this.updateScoutFieldResponsesCache(result.scoutAnswers);
-          }
-
-          resolve(result);
-
-          this.getFieldScoutingResponsesPromise = null;
-        }, async (err: any) => {
-          const scoutResponses = new ScoutFieldResponsesReturn();
-
-          let allLoaded = true;
-
-          await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
-            scoutResponses.scoutAnswers = frrs;
-          }).catch(reason => {
-            console.log(reason);
-            allLoaded = false;
+            done = page >= count;
+            page++;
           });
+        }
 
-          if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading field scouting responses from cache.'));
-            resolve(null);
-          }
-          else
-            resolve(scoutResponses);
+        let result = new ScoutFieldResponsesReturn();
 
-          this.getFieldScoutingResponsesPromise = null;
+        await this.cs.ScoutFieldResponse.RemoveBulkAsync(ids);
+
+        await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
+          result.scoutAnswers = frrs;
+        }).catch(reason => {
+          this.gs.addBanner(new Banner(0, 'Error loading field scouting responses from cache.'));
+          console.log(reason);
         });
+
+        resolve(result);
+
+        this.getFieldScoutingResponsesPromise = null;
+
+        if (loadingScreen) this.gs.decrementOutstandingCalls();
+
       });
 
     return this.getFieldScoutingResponsesPromise;

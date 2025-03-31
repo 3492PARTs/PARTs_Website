@@ -58,10 +58,13 @@ export class FieldScoutingResponsesComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.ss.loadFieldScoutingResponses(true, forceCall).then(result => {
       if (result) {
-        this.scoutResponses = result;
+        this.gs.triggerChange(() => {
+          this.scoutResponses = result;
 
-        if (environment.environment === 'local')
-          this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
+          if (environment.environment === 'local1')
+            this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
+        });
+
       }
 
       this.gs.decrementOutstandingCalls();
