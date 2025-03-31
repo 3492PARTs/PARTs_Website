@@ -58,13 +58,11 @@ export class FieldScoutingResponsesComponent implements OnInit {
     this.gs.incrementOutstandingCalls();
     this.ss.loadFieldScoutingResponses(true, forceCall).then(result => {
       if (result) {
-        this.gs.triggerChange(() => {
-          this.scoutResponses = result;
+        this.scoutResponses = result;
 
-          if (environment.environment === 'local1')
-            this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
-        });
-
+        if (environment.environment === 'local1')
+          this.scoutResponses.scoutAnswers = this.scoutResponses.scoutAnswers.slice(0, 20);
+        this.filter();
       }
 
       this.gs.decrementOutstandingCalls();
@@ -81,7 +79,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
         }
 
         this.showHideTableCols();
-        this.filter();
 
         this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResponseColumns);
       }
