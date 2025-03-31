@@ -105,9 +105,12 @@ export class MatchesComponent implements OnInit {
 
         // refresh for any new data
         calls.push(
-          this.ss.loadFieldScoutingResponses(false).then(result => {
+          this.ss.loadFieldScoutingResponses(false));
+
+        calls.push(
+          this.ss.loadFieldScoutingResponseColumns(false).then(result => {
             if (result) {
-              this.scoutCols = result.scoutCols;
+              this.scoutCols = result;
             }
           }));
 
