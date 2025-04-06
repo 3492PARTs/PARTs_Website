@@ -1,5 +1,4 @@
 @use "../../../../scss/abstracts/variables.scss";
-@use "../../../../scss/vendors/_banners.sass";
 
 #parts {
   color: variables.$accent_color;
@@ -25,6 +24,26 @@
 #banners {
   height: 16em;
   overflow: auto;
+  text-align: center;
+
+  /*SCREEN SIZE:WIDE SCREEN*/
+  @media only screen and (min-width: variables.$screen-size-lg) {
+    height: auto !important;
+    overflow-x: scroll;
+
+    ul {
+      display: inline-flex;
+    }
+  }
+}
+
+.icon {
+  color: variables.$accent_color;
+  font-size: 24px;
+}
+
+.important {
+  font-size: 18px;
 }
 
 #robot-history {

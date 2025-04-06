@@ -4,12 +4,13 @@ import { HeaderComponent } from '../../atoms/header/header.component';
 import { ModalComponent } from '../../atoms/modal/modal.component';
 import { AppSize, GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
+import { BlueBannerComponent } from "../../elements/blue-banner/blue-banner.component";
 
 @Component({
-    selector: 'app-about',
-    imports: [BoxComponent, HeaderComponent, ModalComponent, CommonModule],
-    templateUrl: './about.component.html',
-    styleUrls: ['./about.component.scss']
+  selector: 'app-about',
+  imports: [BoxComponent, HeaderComponent, ModalComponent, CommonModule, BlueBannerComponent],
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit {
 
