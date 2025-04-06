@@ -3,24 +3,8 @@
     P A R T s
   </h1>
 
-  <div id="banners">
-    <ul class="banners">
-      <app-blue-banner [Title]="'FIRST IMPACT AWARD'" [Event]="'2025 SMOKY MOUNTAINS REGIONAL'"></app-blue-banner>
-      <app-blue-banner [Title]="'WINNER'" [Event]="'2025 GREATER PITTSBURGH REGIONAL'"></app-blue-banner>
-      <app-blue-banner [Title]="'WINNER'" [Event]="'2016 WEST VIRGINIA ROBOTICS EXTREME'"></app-blue-banner>
-      <app-blue-banner [Title]="'WOODIE FLOWERS FINALIST AWARD'" [Event]="'2016 QUEEN CITY REGIONAL'"></app-blue-banner>
-      <app-blue-banner [Title]="'WINNER'" [Event]="'2015 SMOKY MOUNTAINS REGIONAL'"></app-blue-banner>
-      <app-blue-banner [Title]="'ENGINEERING INSPIRATION AWARD'"
-        [Event]="'2014 SMOKY MOUNTAINS REGIONAL'"></app-blue-banner>
-      <app-blue-banner [Title]="'WINNER'" [Event]="'2011 PITTSBURGH REGIONAL'"></app-blue-banner>
-    </ul>
-  </div>
-  <div class="flex align-items-center justify-content-center">
-    <span class="icon mdi mdi-pan-{{screenSize <= screenSizeSmall ? 'vertical' : 'horizontal'}}"></span>
-    <p class="important">
-      Scroll
-    </p>
-  </div>
+  <app-blue-banner></app-blue-banner>
+
   <main id="mainAbout">
     <div id="aboutParts">
       <div id="history">

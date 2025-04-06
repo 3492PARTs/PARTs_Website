@@ -1,7 +1,20 @@
-<li>
-    <img src="/appIcons/first.svg" />
-    <span class="title text">{{Title.toUpperCase()}}</span>
-    <br>
-    <br>
-    <span class="text">{{Event.toUpperCase()}}</span>
-</li>
+<div id="banners">
+    <ul class="banners">
+        @for (award of awards; track $index) {
+        <li class="banner">
+            <img src="/appIcons/first.svg" />
+            <br>
+            <span class="title text">{{award.title}}</span>
+            <br>
+            <br>
+            <span class="text">{{award.event}}</span>
+        </li>
+        }
+    </ul>
+</div>
+<div class="flex align-items-center justify-content-center">
+    <span class="icon mdi mdi-pan-{{screenSize <= screenSizeSmall ? 'vertical' : 'horizontal'}}"></span>
+    <p class="important">
+        Scroll
+    </p>
+</div>

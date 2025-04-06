@@ -13,8 +13,6 @@
 @use "./scss/abstracts/height.scss";
 @use "./scss/modules/generics.scss";
 
-@use "./scss/vendors/_banners.scss";
-
 /* tooltip.component.css or global styles.css */
 .app-tooltip {
   background-color: rgba(0, 0, 0, 0.8); /* Dark background */
