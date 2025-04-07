@@ -133,7 +133,7 @@ $blue: #0f4bcb;
   @media only screen and (max-width: variables.$screen-size-sm) {
     position: absolute;
     top: 50%;
-    left: 0;
+    right: 0;
     transform: translateY(-50%);
   }
 }
