@@ -2,12 +2,12 @@ import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { AppSize, GeneralService } from '../../../services/general.service';
 
 @Component({
-  selector: 'app-blue-banner',
+  selector: 'app-blue-banners',
   imports: [],
-  templateUrl: './blue-banner.component.html',
-  styleUrl: './blue-banner.component.scss'
+  templateUrl: './blue-banners.component.html',
+  styleUrl: './blue-banners.component.scss'
 })
-export class BlueBannerComponent implements OnInit {
+export class BlueBannersComponent implements OnInit {
   screenSize!: AppSize;
   screenSizeSmall = AppSize.SM;
 
