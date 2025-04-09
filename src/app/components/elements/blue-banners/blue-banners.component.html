@@ -3,12 +3,17 @@
         <ul class="banners">
             @for (award of awards; track $index) {
             <li class="banner">
-                <img src="/appIcons/first.svg" />
-                <br>
-                <span class="title text">{{award.title}}</span>
-                <br>
-                <br>
-                <span class="text">{{award.event}}</span>
+                <div class="flex flex-direction-column align-items-center full-height">
+                    <div class="flex flex-direction-column align-items-center">
+                        <img src="/appIcons/first.svg" />
+
+                        <p class="title text">{{award.title}}</p>
+                    </div>
+                    <div class="flex flex-direction-column align-items-center flex-grow-2 justify-content-center">
+
+                        <p class="text">{{award.event}}</p>
+                    </div>
+                </div>
             </li>
             }
         </ul>
