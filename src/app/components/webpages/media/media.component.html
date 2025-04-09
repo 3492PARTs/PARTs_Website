@@ -4,6 +4,18 @@
       <app-header [h]="1" [centered]="true" [underlined]="false" [marginBottom]="false" [marginTop]="false">Click an
         image to visit its albums</app-header>
     </app-box>
+
+    <div id="albums">
+      @for (album of albums; track $index) {
+      <div class="album">
+        <a [routerLink]="album.routerLink">
+          <img [src]="album.imgSrc" />
+        </a>
+        <label>{{album.label}}</label>
+      </div>
+      }
+    </div>
+
     <div class="albums">
       <a routerLink="competition">
         <img src="/albumCovers/Competition/Competition.png" />

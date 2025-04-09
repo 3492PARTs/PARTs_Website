@@ -155,3 +155,97 @@
   -ms-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+////////////////////////////////////////////
+///
+///
+///
+///
+///
+///
+@font-face {
+  font-family: "StencilStd";
+  src: url(/fonts/StencilStd.otf) format("opentype");
+  unicode-range: U+0000-00FF;
+}
+
+#albums {
+  background-color: rebeccapurple;
+
+  .album {
+    position: relative;
+    background-color: green;
+    display: inline-block;
+    //width: 500px;
+    //height: 500px;
+    padding-bottom: 0%;
+    border-radius: 50%;
+    overflow: hidden;
+
+    a img {
+      width: 100%;
+      object-fit: cover;
+      height: 100%;
+    }
+
+    label {
+      position: absolute;
+      top: 60%;
+      left: 0;
+      width: 100%;
+      height: 20%;
+      background-color: rgba(white, $alpha: 0.6);
+      font-family: StencilStd;
+      color: variables.$main_color;
+      font-size: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: calc(variables.$screen-size-xs - 1px)) {
+  .album {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media screen and (min-width: variables.$screen-size-xs) {
+  .album {
+    width: 40%;
+  }
+}
+
+@media screen and (min-width: variables.$screen-size-sm) {
+  .album {
+    width: 40%;
+  }
+}
+
+@media screen and (min-width: variables.$screen-size-lg) {
+  .album {
+    width: 35%;
+  }
+}
+
+@media screen and (min-width: variables.$screen-size-xlg) {
+  .album {
+    width: 30%;
+  }
+
+  @media screen and (min-width: variables.$screen-size-xxlg) {
+    .album {
+      width: 25%;
+    }
+  }
+
+  @media screen and (min-width: variables.$screen-size-xxxlg) {
+    .album {
+      width: 20%;
+    }
+
+    @media screen and (min-width: variables.$screen-size-xxxxlg) {
+      .album {
+        width: 15%;
+      }
+    }
+  }
+}
