@@ -31,7 +31,7 @@ $blue: #0f4bcb;
   }
 }
 
-.banners li,
+.banners .banner,
 .banner {
   line-height: 1.2;
   text-align: center;
@@ -75,7 +75,7 @@ $blue: #0f4bcb;
   left: 0;
 }
 
-.banners li,
+.banners .banner,
 .banner {
   -webkit-filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.1));
   filter: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="filter"><feGaussianBlur in="SourceAlpha" stdDeviation="5" /><feOffset dx="1" dy="11" result="offsetblur" /><feFlood flood-color="rgba(0,0,0,0.1)" /><feComposite in2="offsetblur" operator="in" /><feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge></filter></svg>#filter');
@@ -96,11 +96,11 @@ $blue: #0f4bcb;
 }
 
 .banners {
-  display: inline-block;
+  //display: inline-block;
 }
 
 #banners {
-  height: 16em;
+  max-height: 32em;
   overflow: auto;
   text-align: center;
   padding-bottom: 1rem;
@@ -109,10 +109,10 @@ $blue: #0f4bcb;
   /*SCREEN SIZE:WIDE SCREEN*/
   @media only screen and (min-width: variables.$screen-size-lg) {
     height: auto !important;
-    overflow-x: scroll;
+    overflow-x: auto;
 
-    ul {
-      display: inline-flex;
+    .banners {
+      //display: inline-flex;
     }
   }
 }
