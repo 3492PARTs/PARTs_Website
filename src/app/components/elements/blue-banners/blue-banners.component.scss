@@ -38,20 +38,21 @@ $blue: #0f4bcb;
   vertical-align: top;
   display: inline-block;
   margin: 0 3px 30px;
-  width: 120px;
+  width: 140px;
   position: relative;
   background: $blue;
   padding: 10px;
   white-space: normal;
 
   .text {
-    font-family: "Adam", sans-serif;
+    font-family: sans-serif;
     color: white;
     font-size: 80%;
     text-transform: uppercase;
   }
 
   .title {
+    font-family: "Adam", sans-serif;
     font-style: italic;
     padding-top: 1rem;
   }
@@ -68,7 +69,7 @@ $blue: #0f4bcb;
   content: "";
   position: absolute;
   display: block;
-  border: 60px solid $blue;
+  border: 70px solid $blue;
   border-top-width: 5px;
   border-bottom: 20px transparent solid;
   top: 100%;
