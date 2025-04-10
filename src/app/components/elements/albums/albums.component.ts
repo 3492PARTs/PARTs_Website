@@ -35,6 +35,7 @@ export class AlbumsComponent {
 
 export class Album {
   routerLink?: string = '';
+  href?: string = '';
   imgSrc = '';
   label = '';
   links?: { label: string, href: string }[] = [];

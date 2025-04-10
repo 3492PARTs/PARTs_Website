@@ -3,7 +3,7 @@
     <div class="album-wrapper" (click)="toggleVisibility($event)"
         (appClickOutsideElement)="toggleVisibility($event, true)">
         <div class="album">
-            <a [routerLink]="album.routerLink">
+            <a [routerLink]="album.routerLink" [href]="album.href" [target]="album.href ? '_blank' : undefined">
                 <img [src]="album.imgSrc" />
                 <label class="flex align-items-center">
                     <span>{{album.label}}</span>
