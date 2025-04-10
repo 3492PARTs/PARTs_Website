@@ -1,6 +1,6 @@
 <div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
     @for (album of Albums; track $index) {
-    <div class="album-wrapper" (click)="toggleVisibility($event)">
+    <div class="album-wrapper" (click)="toggleVisibility($event)" (appClickOutsideElement)="toggleVisibility($event)">
         <div class="album">
             <a [routerLink]="album.routerLink">
                 <img [src]="album.imgSrc" />
@@ -8,7 +8,7 @@
             </a>
         </div>
         @if (album.links) {
-        <div id="links">
+        <div class="links">
             @for (link of album.links; track $index) {
             <div class="link">
                 <h2>

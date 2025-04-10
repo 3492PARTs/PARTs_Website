@@ -1,26 +1,34 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ClickOutsideElementDirective } from '../../../directives/click-outside-element/click-outside-element.directive';
 
 @Component({
   selector: 'app-albums',
-  imports: [RouterLink],
+  imports: [RouterLink, ClickOutsideElementDirective],
   templateUrl: './albums.component.html',
   styleUrl: './albums.component.scss'
 })
 export class AlbumsComponent {
   @Input() Albums: Album[] = [];
 
-  toggleVisibility(event: Event) {
-    const clickedElement = event.currentTarget as HTMLElement;
+  toggleVisibility(event: Event, forceClose = false) {
+    const clickedElement = event.currentTarget ? event.currentTarget as HTMLElement : ((event as unknown) as HTMLElement);
     const linksElement = clickedElement.children.item(1) as HTMLElement;
-    if (linksElement) {
 
-      if (['', '0', '0px'].includes(linksElement.style.height)) {
-        linksElement.style.height = `${linksElement.scrollHeight}px`;
+    if (!forceClose) {
+
+      if (linksElement) {
+
+        if (['', '0', '0px'].includes(linksElement.style.height)) {
+          linksElement.style.height = `${linksElement.scrollHeight}px`;
+        }
+        else {
+          linksElement.style.height = '0px';
+        }
       }
-      else {
-        linksElement.style.height = '0px';
-      }
+    }
+    else {
+      linksElement.style.height = '0px';
     }
   }
 }
