@@ -5,17 +5,7 @@
         image to visit its albums</app-header>
     </app-box>
 
-    <div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
-      @for (album of albums; track $index) {
-      <div class="album">
-        <a [routerLink]="album.routerLink">
-          <img [src]="album.imgSrc" />
-          <label><span>{{album.label}}</span></label>
-        </a>
-
-      </div>
-      }
-    </div>
+    <app-albums [Albums]="albums"></app-albums>
 
     <div class="albums">
       <a routerLink="competition">

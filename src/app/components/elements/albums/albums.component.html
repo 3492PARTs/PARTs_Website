@@ -1,0 +1,11 @@
+<div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
+    @for (album of Albums; track $index) {
+    <div class="album">
+        <a [routerLink]="album.routerLink">
+            <img [src]="album.imgSrc" />
+            <label><span>{{album.label}}</span></label>
+        </a>
+
+    </div>
+    }
+</div>
