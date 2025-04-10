@@ -1,11 +1,23 @@
 <div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
     @for (album of Albums; track $index) {
-    <div class="album">
-        <a [routerLink]="album.routerLink">
-            <img [src]="album.imgSrc" />
-            <label><span>{{album.label}}</span></label>
-        </a>
-
+    <div class="album-wrapper" (click)="toggleVisibility($event)">
+        <div class="album">
+            <a [routerLink]="album.routerLink">
+                <img [src]="album.imgSrc" />
+                <label><span>{{album.label}}</span></label>
+            </a>
+        </div>
+        @if (album.links) {
+        <div id="links">
+            @for (link of album.links; track $index) {
+            <div class="link">
+                <h2>
+                    <a target="_blank" [href]="link.href">{{ link.label }}</a>
+                </h2>
+            </div>
+            }
+        </div>
+        }
     </div>
     }
 </div>

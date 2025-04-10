@@ -1,6 +1,13 @@
 <div id="content">
   <main id="mainMedia">
     <app-return-card [Title]="'Click an image to visit its album'" [RouterLink]="'/media'"></app-return-card>
+
+    <app-albums [Albums]="albums"></app-albums>
+
+
+
+
+
     <input id="wallpapers" name="wallpapers" type="radio" name="wallpapers" style="display: none;" />
     <label for="wallpapers">
       <div class="wallpapers">
