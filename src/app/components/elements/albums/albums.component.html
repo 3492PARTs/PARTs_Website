@@ -1,10 +1,13 @@
 <div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
     @for (album of Albums; track $index) {
-    <div class="album-wrapper" (click)="toggleVisibility($event)" (appClickOutsideElement)="toggleVisibility($event)">
+    <div class="album-wrapper" (click)="toggleVisibility($event)"
+        (appClickOutsideElement)="toggleVisibility($event, true)">
         <div class="album">
             <a [routerLink]="album.routerLink">
                 <img [src]="album.imgSrc" />
-                <label><span>{{album.label}}</span></label>
+                <label class="flex align-items-center">
+                    <span>{{album.label}}</span>
+                </label>
             </a>
         </div>
         @if (album.links) {
