@@ -4,10 +4,11 @@
       <app-header [h]="1" [centered]="true" [underlined]="false" [marginBottom]="false" [marginTop]="false">Click an
         image to visit its albums</app-header>
     </app-box>
-
-    <app-albums [Albums]="albums"></app-albums>
-
     <div class="albums">
+
+      <app-albums [Albums]="albums"></app-albums>
+    </div>
+    <!--<div class="albums">
       <a routerLink="competition">
         <img src="/albumCovers/Competition/Competition.png" />
       </a>
@@ -20,6 +21,6 @@
       <a routerLink="wallpapers">
         <img src="/albumCovers/Wallpapers/Wallpapers.png" />
       </a>
-    </div>
+    </div>-->
   </main>
 </div>
