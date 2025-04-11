@@ -14,21 +14,19 @@ export class AlbumsComponent {
   toggleVisibility(event: Event, forceClose = false) {
     const clickedElement = event.currentTarget ? event.currentTarget as HTMLElement : ((event as unknown) as HTMLElement);
     const linksElement = clickedElement.children.item(1) as HTMLElement;
-
-    if (!forceClose) {
-
-      if (linksElement) {
-
+    if (linksElement) {
+      if (!forceClose) {
         if (['', '0', '0px'].includes(linksElement.style.height)) {
           linksElement.style.height = `${linksElement.scrollHeight}px`;
         }
         else {
           linksElement.style.height = '0px';
         }
+
       }
-    }
-    else {
-      linksElement.style.height = '0px';
+      else {
+        linksElement.style.height = '0px';
+      }
     }
   }
 }
