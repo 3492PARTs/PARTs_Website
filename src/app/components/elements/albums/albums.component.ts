@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClickOutsideElementDirective } from '../../../directives/click-outside-element/click-outside-element.directive';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-albums',
-  imports: [RouterLink, ClickOutsideElementDirective],
+  imports: [RouterLink, ClickOutsideElementDirective, CommonModule],
   templateUrl: './albums.component.html',
   styleUrl: './albums.component.scss'
 })
