@@ -12,3 +12,9 @@
   font-family: GearBox;
   src: url(/fonts/GearBox.ttf);
 }
+
+@font-face {
+  font-family: "StencilStd";
+  src: url(/fonts/StencilStd.otf) format("opentype");
+  unicode-range: U+0000-00FF;
+}
