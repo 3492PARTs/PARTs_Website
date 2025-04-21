@@ -11,6 +11,7 @@ import { Album, AlbumsComponent } from '../../../elements/albums/albums.componen
 export class CompetitionComponent implements OnInit {
 
   albums: Album[] = [
+    { imgSrc: '/webImages/Albums/Competition/25Worlds.JPG', label: '2025 Worlds', href: 'https://photos.app.goo.gl/WM1ZLsUrSzBwMqNL6' },
     { imgSrc: '/webImages/Albums/Competition/25Smoky.JPG', label: '2025 Smoky Mountain', href: 'https://photos.app.goo.gl/JkE9NAdqwrMyaFGx6' },
     { imgSrc: '/webImages/Albums/Competition/25Pitt.JPG', label: '2025 Pittsburgh', href: 'https://photos.app.goo.gl/foGtWbbh1trpKwxf7' },
     { imgSrc: '/webImages/Albums/Competition/24WVROX.JPG', label: '2024 WVROX', href: 'https://photos.app.goo.gl/12ugV5VcbNBz9DiL6' },
