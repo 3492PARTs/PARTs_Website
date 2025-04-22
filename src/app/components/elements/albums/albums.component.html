@@ -1,0 +1,37 @@
+<div id="albums" class="flex flex-wrap justify-content-center gap-1rem">
+    @for (album of Albums; track $index) {
+    <div class="album-wrapper" (click)="toggleVisibility($event)"
+        (appClickOutsideElement)="toggleVisibility($event, true)">
+        <div class="album">
+            <ng-template #image>
+                <img [src]="album.imgSrc" />
+                <label class="flex align-items-center">
+                    <span>{{album.label}}</span>
+                </label>
+            </ng-template>
+
+            @if(!album.href) {
+            <a [routerLink]="album.routerLink">
+                <ng-container *ngTemplateOutlet="image"></ng-container>
+            </a>
+            }
+            @else {
+            <a [href]="album.href" target="'_blank'">
+                <ng-container *ngTemplateOutlet="image"></ng-container>
+            </a>
+            }
+        </div>
+        @if (album.links) {
+        <div class="links">
+            @for (link of album.links; track $index) {
+            <div class="link">
+                <h2>
+                    <a target="_blank" [href]="link.href">{{ link.label }}</a>
+                </h2>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+</div>
