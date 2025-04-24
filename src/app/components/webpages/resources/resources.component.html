@@ -1,14 +1,6 @@
-<div
-  id="resources"
-  class="flex flex-wrap align-items-stretch justify-content-space-around"
->
+<div id="resources" class="flex flex-wrap align-items-stretch justify-content-space-around">
   <div class="resource">
-    <app-box
-      [Title]="'Chief Delphi'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'Chief Delphi'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/collaboration.svg" />
       <h4>
         Forums and discussions created by FRC&reg; teams to talk about the
@@ -16,20 +8,13 @@
         have.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button (FunctionCallBack)="openURL('https://www.chiefdelphi.com/')"
-          >CHECK IT OUT</app-button
-        >
+        <app-button (FunctionCallBack)="openURL('https://www.chiefdelphi.com/')">CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
 
   <div class="resource">
-    <app-box
-      [Title]="'WPILib Docs'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'WPILib Docs'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/survey.svg" />
       <h4>
         The documentation on this site encompasses a number of helpful documents
@@ -37,20 +22,13 @@
         on programming a robot.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button (FunctionCallBack)="openURL('https://docs.wpilib.org')"
-          >CHECK IT OUT</app-button
-        >
+        <app-button (FunctionCallBack)="openURL('https://docs.wpilib.org')">CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
 
   <div class="resource">
-    <app-box
-      [Title]="'FRC&reg; 2024 Game Manual'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'FRC&reg; 2024 Game Manual'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/book.svg" />
       <h4>
         Manual including all rules and regulations for the 2024 game, FIRST&reg;
@@ -58,79 +36,53 @@
         download any as a PDF for future reference.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button
-          (FunctionCallBack)="
+        <app-button (FunctionCallBack)="
             openURL(
               'https://firstfrc.blob.core.windows.net/frc2024/Manual/2024GameManual.pdf'
             )
-          "
-          >CHECK IT OUT</app-button
-        >
+          ">CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
 
   <div class="resource">
-    <app-box
-      [Title]="'The Blue Alliance (TBA)'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'The Blue Alliance (TBA)'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/tba.png" />
       <h4>
         FIRST Robotics Competition team information, event results, and videos.
         Click
-        <a target="_blank" href="http://www.thebluealliance.com/team/3492"
-          >here</a
-        >
+        <a target="_blank" href="http://www.thebluealliance.com/team/3492">here</a>
         for the Blue Alliance page for Team 3492.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button
-          (FunctionCallBack)="openURL('http://www.thebluealliance.com/')"
-          >CHECK IT OUT</app-button
-        >
+        <app-button (FunctionCallBack)="openURL('http://www.thebluealliance.com/')">CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
 
   <div class="resource">
-    <app-box
-      [Title]="'PARTs 3492 GitHub Repository'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'PARTs 3492 GitHub Repository'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/GitHub.svg" />
       <h4>
         This is where you can look at the code we have created for our robots
         and other various projects over the years.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button (FunctionCallBack)="openURL('https://github.com/3492PARTs')"
-          >CHECK IT OUT</app-button
-        >
+        <app-button (FunctionCallBack)="openURL('https://github.com/3492PARTs')">CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
 
   <div class="resource">
-    <app-box
-      [Title]="'PARTs 3492 Wiki'"
-      [CenterTitle]="true"
-      [Width]="'100%'"
-      [Height]="'100%'"
-    >
+    <app-box [Title]="'PARTs 3492 Wiki'" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <img class="icon" src="/appIcons/BookStack_logo.svg" />
       <h4>
         This is the team wiki where you will find information and training that
         we have written over the years.
       </h4>
       <app-button-ribbon [TextAlign]="'center'">
-        <app-button (FunctionCallBack)="openURL('https://partswiki.bduke.dev')"
-          >CHECK IT OUT</app-button
-        >
+        <app-button (FunctionCallBack)="openURL('https://wiki.parts3492.org')">
+          >CHECK IT OUT</app-button>
       </app-button-ribbon>
     </app-box>
   </div>
