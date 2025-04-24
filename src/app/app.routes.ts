@@ -99,7 +99,7 @@ export const routes: Routes = [
     { path: 'media/community-outreach', title: 'Media Community Outreach', component: MediaCommunityOutreachComponent },
     { path: 'media/competition', title: 'Media Competition', component: CompetitionComponent },
     { path: 'media/wallpapers', title: 'Media Wallpapers', component: WallpapersComponent },
-    { path: 'resources', title: 'Media Resources', component: ResourcesComponent },
+    { path: 'resources', title: 'Resources', component: ResourcesComponent },
     { path: 'first', title: 'FIRST', component: FirstComponent },
     { path: 'admin/admin-users', title: 'Admin Users', component: AdminUsersComponent, canActivate: [authGuard] },
     { path: 'admin/error-log', title: 'Admin Error Log', component: ErrorLogComponent, canActivate: [authGuard] },
