@@ -1,7 +1,7 @@
 # Stage 1: Compile and Build angular codebase
 
 # Use official node image as the base image
-FROM node:lts as builder
+FROM node:lts AS builder
 
 # Set the working directory
 WORKDIR /usr/local/app
@@ -13,7 +13,7 @@ RUN npm install
 RUN npx ng build 
     
 # The runtime image, used to just run the code provided its virtual environment
-FROM python:3.11-slim-buster as runtime
+FROM python:3.12-slim AS runtime
 
 RUN  useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu
 
