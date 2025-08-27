@@ -21,6 +21,7 @@ export class NavigationService {
       new Link('Application Form', 'join/team-application'),
     ], 'Our Subteams'),
     new Link('Contact Us', 'contact', 'card-account-details'),
+    new Link('Calendar', 'calendar', 'calendar'),
     new Link('Sponsoring', 'sponsor', 'account-child-circle'),
     new Link('About', 'about', 'information'),
     new Link('Media', 'media', 'image-multiple'),
