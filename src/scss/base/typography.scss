@@ -3,8 +3,11 @@
 /*FONT*/
 
 * {
-  font-family: "Nunito-Regular";
+  font-family: "Nunito", sans-serif;
   color: variables.$fontColor;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .gear-box {

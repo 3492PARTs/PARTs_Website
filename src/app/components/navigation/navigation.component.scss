@@ -80,7 +80,6 @@ nav {
     font-size: 1.04rem;
     color: #b7b9cc;
     display: block;
-    font-family: "Nunito-Black";
   }
 
   #logo {
@@ -154,7 +153,7 @@ nav {
       color: #fff !important;
 
       span {
-        font-family: "Nunito-Black" !important;
+        font-family: "" !important;
       }
 
       .icon,
@@ -221,7 +220,6 @@ nav {
 
             p {
               color: #fff !important;
-              font-family: "Nunito-Black" !important;
             }
           }
 
