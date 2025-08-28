@@ -13,10 +13,10 @@ import { Album, AlbumsComponent } from "../../elements/albums/albums.component";
 export class MediaComponent implements OnInit {
 
   albums: Album[] = [
-    { routerLink: 'competition', imgSrc: '/webImages/Albums/Competition.jpg', label: 'competition' },
-    { routerLink: 'build-season', imgSrc: '/webImages/Albums/BuildSeason.JPG', label: 'build season' },
-    { routerLink: 'community-outreach', imgSrc: '/webImages/Albums/CommunityOutreach.JPG', label: 'community outreach' },
-    { routerLink: 'wallpapers', imgSrc: '/webImages/Albums/Wallpapers.jpg', label: 'wallpapers' },
+    { routerLink: 'competition', imgSrc: 'https://i.imgur.com/uB8jcu5.jpeg', label: 'competition' },
+    { routerLink: 'build-season', imgSrc: 'https://i.imgur.com/ztgI2r8.jpeg', label: 'build season' },
+    { routerLink: 'community-outreach', imgSrc: 'https://i.imgur.com/3KB9Ryh.jpeg', label: 'community outreach' },
+    { routerLink: 'wallpapers', imgSrc: 'https://i.imgur.com/u57q9iR.jpeg', label: 'wallpapers' },
   ];
 
   constructor() { }
