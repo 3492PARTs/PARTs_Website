@@ -25,6 +25,7 @@ COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
 RUN apt update \
     && apt upgrade -y \
     && apt install curl sshpass wget -y \
+    && pip install paramiko==3.5.1 \
     && pip install pysftp \
     && mkdir /scripts/ \
     && cd /scripts \
