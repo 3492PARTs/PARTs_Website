@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BoxComponent } from '../../atoms/box/box.component';
 import { HeaderComponent } from '../../atoms/header/header.component';
-import { RouterLink } from '@angular/router';
 import { Album, AlbumsComponent } from "../../elements/albums/albums.component";
 
 @Component({
   selector: 'app-media',
-  imports: [BoxComponent, HeaderComponent, RouterLink, AlbumsComponent],
+  imports: [BoxComponent, HeaderComponent, AlbumsComponent],
   templateUrl: './media.component.html',
   styleUrls: ['./media.component.scss']
 })
