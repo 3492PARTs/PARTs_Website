@@ -1,36 +1,40 @@
 <app-box [Title]="'Manage Phone Types'">
   <app-form (SubmitFunction)="savePhoneType()">
     <div class="flex align-items-center">
-      <app-form-element
-        *ngIf="!newPhoneType"
-        [Type]="'select'"
-        [LabelText]="'Carrier'"
-        [FormGroupInline]="true"
-        [(Model)]="activePhoneType"
-        [SelectList]="phoneTypes"
-        [DisplayProperty]="'carrier'"
-        [DisplayEmptyOption]="true"
-      >
-      </app-form-element>
+      @if (!newPhoneType) {
+        <app-form-element
+          [Type]="'select'"
+          [LabelText]="'Carrier'"
+          [FormGroupInline]="true"
+          [(Model)]="activePhoneType"
+          [SelectList]="phoneTypes"
+          [DisplayProperty]="'carrier'"
+          [DisplayEmptyOption]="true"
+          >
+        </app-form-element>
+      }
 
-      <app-button
-        *ngIf="!newPhoneType"
-        [ButtonType]="'main'"
-        (FunctionCallBack)="toggleNewPhoneType()"
-        >New Phone Type
-      </app-button>
-      <app-button
-        *ngIf="newPhoneType"
-        [ButtonType]="'main'"
-        (FunctionCallBack)="toggleNewPhoneType()"
-        >Edit Phone Type
-      </app-button>
-      <app-button
-        *ngIf="activePhoneType.id"
-        [ButtonType]="'danger'"
-        (FunctionCallBack)="deletePhoneType()"
-        >Delete Phone Type
-      </app-button>
+      @if (!newPhoneType) {
+        <app-button
+          [ButtonType]="'main'"
+          (FunctionCallBack)="toggleNewPhoneType()"
+          >New Phone Type
+        </app-button>
+      }
+      @if (newPhoneType) {
+        <app-button
+          [ButtonType]="'main'"
+          (FunctionCallBack)="toggleNewPhoneType()"
+          >Edit Phone Type
+        </app-button>
+      }
+      @if (activePhoneType.id) {
+        <app-button
+          [ButtonType]="'danger'"
+          (FunctionCallBack)="deletePhoneType()"
+          >Delete Phone Type
+        </app-button>
+      }
     </div>
 
     <app-form-element
@@ -38,14 +42,14 @@
       [LabelText]="'Carrier'"
       [(Model)]="activePhoneType.carrier"
       [Required]="true"
-    >
+      >
     </app-form-element>
     <app-form-element
       [Type]="'text'"
       [LabelText]="'Address'"
       [(Model)]="activePhoneType.phone_type"
       [Required]="true"
-    >
+      >
     </app-form-element>
 
     <app-button-ribbon>

@@ -10,7 +10,7 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { BoxComponent } from '../../../atoms/box/box.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
-import { CommonModule } from '@angular/common';
+
 import { FormComponent } from '../../../atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '../../../elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
@@ -20,7 +20,7 @@ import { ModalComponent } from "../../../atoms/modal/modal.component";
 
 @Component({
   selector: 'app-pit-scouting',
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
+  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
   templateUrl: './pit-scouting.component.html',
   styleUrls: ['./pit-scouting.component.scss']
 })

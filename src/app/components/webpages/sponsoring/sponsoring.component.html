@@ -1,18 +1,20 @@
 <div id="content">
   <main id="mainSponsor">
-    <app-box *ngIf="test">
-      <a [routerLink]="'shop'">test</a>
-    </app-box>
+    @if (test) {
+      <app-box>
+        <a [routerLink]="'shop'">test</a>
+      </app-box>
+    }
 
     <app-box [Title]="'The Opportunity'">
       <p>To meet its financial needs, the team depends on corporate and business sponsors, personal donations, and
         fundraising events. The team has held events at local restaurants, sold items such as food and bumper stickers,
         and opened a GoFundMe account. Expenses for the team include the cost of robot components, event registration
         fees, travel expenses, hotels, meals, competition shirts, and other miscellaneous items (e.g., flags, signs,
-        badges).</p>
+      badges).</p>
       <p>We greatly appreciate your consideration and support for our organization. We hope that you join us in
         continuing
-        to build a strong team of intelligent, responsible, and motivated students.</p>
+      to build a strong team of intelligent, responsible, and motivated students.</p>
       <h1>Benefits of Being a Sponsor</h1>
       <ul>
         <li>
@@ -37,82 +39,82 @@
       <ul>
         <li>
           <a href="mailto: team3492@gmail.com">Email: team3492&#64;gmail.com</a> or <a target="_blank"
-            routerLink="../contact">Contact Us Here</a>
-        </li>
-        <li>
-          Contact Angie Abbott through Winfield Middle School at (304) 586-3072.
-        </li>
-        <li>
-          Send a check to Winfield Middle School. On the memo line, indicate that your donation is for 'Robotics'.
-        </li>
-        <li>
-          <a href="https://www.givebacks.com/causes/winfieldmiddle/campaigns/946fed213f5a55" target="_blank">Donate
-            online</a>
-        </li>
-        <li>
-          <a href="https://winfieldmiddle.memberhub.com/store?limit=21&live=true" target="_blank">Support us by visiting
-            our shop!</a>
-        </li>
-        <li>
-          <a href="https://pctcrobotics.onpointcustoms.com/" target="_blank">Support us by showing your orange and blue
-            with apparel!</a>
-        </li>
-      </ul>
-      <p>To help make the decision easier, please understand that as a 501(c)3 organization 100% of all donations will
-        be
-        utilized efficiently and effectively to support the Robotics Team. Also, all donations will be acknowledged in
-        writing upon request.</p>
-      <p>Thank you for your support!</p>
-    </app-box>
+        routerLink="../contact">Contact Us Here</a>
+      </li>
+      <li>
+        Contact Angie Abbott through Winfield Middle School at (304) 586-3072.
+      </li>
+      <li>
+        Send a check to Winfield Middle School. On the memo line, indicate that your donation is for 'Robotics'.
+      </li>
+      <li>
+        <a href="https://www.givebacks.com/causes/winfieldmiddle/campaigns/946fed213f5a55" target="_blank">Donate
+        online</a>
+      </li>
+      <li>
+        <a href="https://winfieldmiddle.memberhub.com/store?limit=21&live=true" target="_blank">Support us by visiting
+        our shop!</a>
+      </li>
+      <li>
+        <a href="https://pctcrobotics.onpointcustoms.com/" target="_blank">Support us by showing your orange and blue
+        with apparel!</a>
+      </li>
+    </ul>
+    <p>To help make the decision easier, please understand that as a 501(c)3 organization 100% of all donations will
+      be
+      utilized efficiently and effectively to support the Robotics Team. Also, all donations will be acknowledged in
+    writing upon request.</p>
+    <p>Thank you for your support!</p>
+  </app-box>
 
-    <app-box [Title]="'Sponsorship Levels & Recognition'">
-      <h2>Platinum</h2>
-      <ul>
-        <li>
-          $5,000 and Up
-        </li>
-        <li>
-          Identification as Sponsor in Team Name
-        </li>
-        <li>
-          As Well as All Lower Tiers
-        </li>
-      </ul>
-      <h2>Gold</h2>
-      <ul>
-        <li>
-          $2,500-$4,999
-        </li>
-        <li>
-          Name on Robot
-        </li>
-        <li>
-          As Well as All Lower Tiers
-        </li>
-      </ul>
-      <h2>Silver</h2>
-      <ul>
-        <li>
-          $1,000-$2,499
-        </li>
-        <li>
-          Listing on Team T-Shirts
-        </li>
-        <!--<li>
-          As Well as the Lower Tier
-        </li>-->
-      </ul>
-      <!--<h2>Bronze</h2>
-      <ul>
-        <li>
-          Up to $999
-        </li>
-        <li>
-          Listed in all Literature, Logo on Team Website
-        </li>
-      </ul>-->
-      <h3 id="closingSponsor">All donations, regardless of amount, are graciously accepted and sincerely appreciated!
-      </h3>
-    </app-box>
-  </main>
+  <app-box [Title]="'Sponsorship Levels & Recognition'">
+    <h2>Platinum</h2>
+    <ul>
+      <li>
+        $5,000 and Up
+      </li>
+      <li>
+        Identification as Sponsor in Team Name
+      </li>
+      <li>
+        As Well as All Lower Tiers
+      </li>
+    </ul>
+    <h2>Gold</h2>
+    <ul>
+      <li>
+        $2,500-$4,999
+      </li>
+      <li>
+        Name on Robot
+      </li>
+      <li>
+        As Well as All Lower Tiers
+      </li>
+    </ul>
+    <h2>Silver</h2>
+    <ul>
+      <li>
+        $1,000-$2,499
+      </li>
+      <li>
+        Listing on Team T-Shirts
+      </li>
+      <!--<li>
+      As Well as the Lower Tier
+    </li>-->
+  </ul>
+  <!--<h2>Bronze</h2>
+  <ul>
+    <li>
+      Up to $999
+    </li>
+    <li>
+      Listed in all Literature, Logo on Team Website
+    </li>
+  </ul>-->
+  <h3 id="closingSponsor">All donations, regardless of amount, are graciously accepted and sincerely appreciated!
+  </h3>
+</app-box>
+</main>
 </div>

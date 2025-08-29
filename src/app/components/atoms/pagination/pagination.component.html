@@ -5,9 +5,11 @@
         <span aria-hidden="true">&laquo;</span>
       </p>
     </li>
-    <li class="page-item" *ngFor="let pg of pages">
-      <p class="page-link" [ngClass]="{'active': pg === _page}" (click)="getPage(pg)">{{ pg }}</p>
-    </li>
+    @for (pg of pages; track pg) {
+      <li class="page-item">
+        <p class="page-link" [ngClass]="{'active': pg === _page}" (click)="getPage(pg)">{{ pg }}</p>
+      </li>
+    }
     <li class="page-item" [ngClass]="{'disabled': !_pageInfo.next}">
       <p class="page-link" aria-label="Next" (click)="getPage(_pageInfo.next ? _pageInfo.next : _pageInfo.count)">
         <span aria-hidden="true">&raquo;</span>

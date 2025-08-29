@@ -1,12 +1,17 @@
 <app-box [Title]="'Field Scouting Form'">
-  <app-form-element-group [LabelText]="'Team results to upload'" *ngIf="outstandingResponses.length > 0">
+  @if (outstandingResponses.length > 0) {
+  <app-form-element-group [LabelText]="'Team results to upload'">
     <div id="outstanding-results" class="flex align-items-center gap-1rem flex-wrap">
       <app-button [ButtonType]="'refresh'" (FunctionCallBack)="uploadOutstandingResponses()"></app-button>
-      <app-button [ButtonType]="'main'" *ngFor="let or of outstandingResponses"
-        (FunctionCallBack)="viewResult(or.id)">{{ or.team }}</app-button>
+      @for (or of outstandingResponses; track or) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="viewResult(or.id)">{{ or.team }}</app-button>
+      }
     </div>
   </app-form-element-group>
-  <br *ngIf="outstandingResponses.length > 0" />
+  }
+  @if (outstandingResponses.length > 0) {
+  <br />
+  }
 
   @if(scoutFieldSchedule) {
   <div id="scout-header">
@@ -27,13 +32,15 @@
           {{ scoutFieldSchedule.red_one_id?.first_name }}
           {{ scoutFieldSchedule.red_one_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.red_one_field_response &&
-            scoutFieldResponse.match?.red_one_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.red_one_field_response &&
+        scoutFieldResponse.match?.red_one_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.red_one_id }}</p>
         </div>
+        }
       </div>
 
       <div class="blue">
@@ -41,13 +48,15 @@
           {{ scoutFieldSchedule.blue_one_id?.first_name }}
           {{ scoutFieldSchedule.blue_one_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.blue_one_field_response &&
-            scoutFieldResponse.match?.blue_one_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.blue_one_field_response &&
+        scoutFieldResponse.match?.blue_one_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_one_id }}</p>
         </div>
+        }
       </div>
 
       <div class="red">
@@ -55,13 +64,15 @@
           {{ scoutFieldSchedule.red_two_id?.first_name }}
           {{ scoutFieldSchedule.red_two_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.red_two_field_response &&
-            scoutFieldResponse.match?.red_two_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.red_two_field_response &&
+        scoutFieldResponse.match?.red_two_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.red_two_id }}</p>
         </div>
+        }
       </div>
 
       <div class="blue">
@@ -69,13 +80,15 @@
           {{ scoutFieldSchedule.blue_two_id?.first_name }}
           {{ scoutFieldSchedule.blue_two_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.blue_two_field_response &&
-            scoutFieldResponse.match?.blue_two_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.blue_two_field_response &&
+        scoutFieldResponse.match?.blue_two_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_two_id }}</p>
         </div>
+        }
       </div>
 
       <div class="red">
@@ -83,13 +96,15 @@
           {{ scoutFieldSchedule.red_three_id?.first_name }}
           {{ scoutFieldSchedule.red_three_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.red_three_field_response &&
-            scoutFieldResponse.match?.red_three_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.red_three_field_response &&
+        scoutFieldResponse.match?.red_three_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.red_three_id }}</p>
         </div>
+        }
       </div>
 
       <div class="blue">
@@ -97,13 +112,15 @@
           {{ scoutFieldSchedule.blue_three_id?.first_name }}
           {{ scoutFieldSchedule.blue_three_id?.last_name }}
         </p>
-        <div *ngIf="
-            !scoutFieldResponse.match?.blue_three_field_response &&
-            scoutFieldResponse.match?.blue_three_id
-          ">
+        @if (
+        !scoutFieldResponse.match?.blue_three_field_response &&
+        scoutFieldResponse.match?.blue_three_id
+        ) {
+        <div>
           <hr />
           <p>{{ scoutFieldResponse.match?.blue_three_id }}</p>
         </div>
+        }
       </div>
     </div>
   </div>
@@ -112,10 +129,12 @@
 
   <div id="field-scouting-form">
     <app-form (SubmitFunction)="save()" [FormElements]="formElements">
-      <div *ngIf="formDisabled" class="padding-bottom-1rem">
+      @if (formDisabled) {
+      <div class="padding-bottom-1rem">
         <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset()">Reset</app-button>
         <app-button [ButtonType]="'danger'" (FunctionCallBack)="removeResult()">Remove Result</app-button>
       </div>
+      }
 
       <div class="flex align-items-baseline">
         @if(matches.length > 0) {
@@ -174,16 +193,19 @@
       }
 
       <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
-        <div #imageContainer id="image-container" *ngIf="
-            activeFormSubTypeForm &&
-            activeFormSubTypeForm?.flows &&
-            activeFormSubTypeForm.flows.length > 0
-          " (click)="stopwatchStart()">
-          <img #image id="image" *ngIf="fieldForm.img_url && activeFormSubTypeForm"
-            [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url" />
-
-          <div class="flow" *ngFor="let flow of activeFormSubTypeForm?.flows || []">
-            <div #box class="box" *ngFor="let q of flow.flow_questions; let i = index" id="{{ q.id }}">
+        @if (
+        activeFormSubTypeForm &&
+        activeFormSubTypeForm.flows &&
+        activeFormSubTypeForm.flows.length > 0
+        ) {
+        <div #imageContainer id="image-container" (click)="stopwatchStart()">
+          @if (fieldForm.img_url && activeFormSubTypeForm) {
+          <img #image id="image" [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url" />
+          }
+          @for (flow of activeFormSubTypeForm.flows || []; track flow) {
+          <div class="flow">
+            @for (q of flow.flow_questions; track q; let i = $index) {
+            <div #box class="box" id="{{ q.id }}">
               <div [ngClass]="{
                   'full-width':
                     q.question.question_typ.question_typ === 'mnt-psh-btn',
@@ -196,7 +218,6 @@
                 <app-question-form-element [Question]="flow.flow_questions[i].question" (QuestionChange)="
                     advanceFlow(flow, flow.flow_questions[i], $event)
                   " [Inverted]="invertedImage"></app-question-form-element>
-
                 @if (q.question.question_typ.question_typ !== 'mnt-psh-btn') {
                 <app-button [ButtonType]="'check-bold'" (FunctionCallBack)="
                     advanceFlow(
@@ -209,14 +230,19 @@
                 }
               </div>
             </div>
+            }
           </div>
+          }
         </div>
+        }
       </div>
 
-      <app-question-display-form *ngIf="activeFormSubTypeForm" [(Questions)]="activeFormSubTypeForm.questions"
+      @if (activeFormSubTypeForm) {
+      <app-question-display-form [(Questions)]="activeFormSubTypeForm.questions"
         [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
         [Disabled]="formDisabled">
       </app-question-display-form>
+      }
 
       <app-button-ribbon>
         <app-button [ButtonType]="'warning'" (FunctionCallBack)="reset(true)">Reset</app-button>

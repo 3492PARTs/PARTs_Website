@@ -1,6 +1,8 @@
-<app-button #thisButton *ngIf="ButtonType !== ''" [ButtonType]="ButtonType" (FunctionCallBack)="open()">
-  {{ ButtonText }}
-</app-button>
+@if (ButtonType !== '') {
+  <app-button #thisButton [ButtonType]="ButtonType" (FunctionCallBack)="open()">
+    {{ ButtonText }}
+  </app-button>
+}
 
 <div class="overlay" [ngClass]="{'visible': _visible}" [ngStyle]="{'z-index': zIndex}">
   <div class="popup" (appClickOutside)="clickOutsideClose()"

@@ -9,13 +9,13 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../atoms/table/table.component';
-import { CommonModule } from '@angular/common';
+
 import { Banner } from '../../../models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-question-admin-form',
-  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, FormElementGroupComponent],
+  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent],
   templateUrl: './question-admin-form.component.html',
   styleUrls: ['./question-admin-form.component.scss']
 })

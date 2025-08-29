@@ -16,9 +16,11 @@
         [PitImgTyp]="'robot-img'"
       ></app-scout-pic-display>
 
-      <div *ngFor="let r of activePitScoutResult.responses">
-        <p>{{ r.question }}: {{ r.answer }}</p>
-      </div>
+      @for (r of activePitScoutResult.responses; track r) {
+        <div>
+          <p>{{ r.question }}: {{ r.answer }}</p>
+        </div>
+      }
 
       <app-scout-pic-display
         [ScoutPitImages]="activePitScoutResult.pics"
@@ -29,7 +31,7 @@
     <app-button-ribbon>
       <app-button [ButtonType]="'danger'" (FunctionCallBack)="deletePitResult()"
         >Delete</app-button
-      >
-    </app-button-ribbon>
-  </app-modal>
-</app-box>
+        >
+      </app-button-ribbon>
+    </app-modal>
+  </app-box>

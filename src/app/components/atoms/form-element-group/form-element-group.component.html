@@ -6,9 +6,11 @@
     'remove-border': RemoveBorder
   }"
   [ngStyle]="{ 'margin-top': MarginTop }"
->
-  <div class="FormElementGroupLabel" *ngIf="LabelText != ''">
-    {{ LabelText }}
-  </div>
+  >
+  @if (LabelText != '') {
+    <div class="FormElementGroupLabel">
+      {{ LabelText }}
+    </div>
+  }
   <ng-content></ng-content>
 </div>

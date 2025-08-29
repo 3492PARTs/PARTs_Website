@@ -1,21 +1,29 @@
 <app-box [Title]="'Portal'">
   <app-form-element-group [LabelText]="'Your Scouting Schedule'">
-    <div *ngIf="fieldSchedule.length <= 0">
-      <p>You do not currently have any scheduled scouting.</p>
-    </div>
+    @if (fieldSchedule.length <= 0) {
+      <div>
+        <p>You do not currently have any scheduled scouting.</p>
+      </div>
+    }
 
-    <app-table *ngIf="fieldSchedule.length > 0" [TableCols]="scoutFieldScheduleTableCols" [TableData]="fieldSchedule"
-      [Scrollable]="true">
-    </app-table>
+    @if (fieldSchedule.length > 0) {
+      <app-table [TableCols]="scoutFieldScheduleTableCols" [TableData]="fieldSchedule"
+        [Scrollable]="true">
+      </app-table>
+    }
   </app-form-element-group>
 
   <app-form-element-group [LabelText]="'Your Pit Schedule'">
-    <div *ngIf="schedule.length <= 0">
-      <p>You do not currently have any scheduled pit times.</p>
-    </div>
+    @if (schedule.length <= 0) {
+      <div>
+        <p>You do not currently have any scheduled pit times.</p>
+      </div>
+    }
 
-    <app-table *ngIf="schedule.length > 0" [TableCols]="scheduleTableCols" [TableData]="schedule" [Scrollable]="true">
-    </app-table>
+    @if (schedule.length > 0) {
+      <app-table [TableCols]="scheduleTableCols" [TableData]="schedule" [Scrollable]="true">
+      </app-table>
+    }
   </app-form-element-group>
 
   <app-form-element-group [LabelText]="'Full Scouting Schedule'">

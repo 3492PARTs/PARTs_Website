@@ -12,12 +12,12 @@ import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbo
 import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { CommonModule } from '@angular/common';
+
 import { FormComponent } from '../../../atoms/form/form.component';
 
 @Component({
     selector: 'app-sponsor-shop',
-    imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, CommonModule, FormComponent],
+    imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
     templateUrl: './sponsor-shop.component.html',
     styleUrls: ['./sponsor-shop.component.scss']
 })

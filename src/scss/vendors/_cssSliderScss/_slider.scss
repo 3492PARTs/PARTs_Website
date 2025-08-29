@@ -1,29 +1,31 @@
+@use "./variables";
+@use "sass:math";
 /**********IMAGE/SLIDER STYLING **********/
 
 /*don't show the other images*/
 
 #cssSlider {
-  @if ($ASPECT_RATIO != 0) {
-    padding-bottom: ($ASPECT_RATIO) * 100%;
+  @if (variables.$ASPECT_RATIO != 0) {
+    padding-bottom: (variables.$ASPECT_RATIO) * 100%;
     /*to find % aspect ratio, (height/width)*100% 900/2048*/
     height: 0;
   } @else {
-    height: $SLIDER_HEIGHT;
+    height: variables.$SLIDER_HEIGHT;
   }
 
-  width: $SLIDER_WIDTH;
+  width: variables.$SLIDER_WIDTH;
 
   position: relative;
   overflow: hidden;
-  background-color: $SLIDER_BACKGROUND;
+  background-color: variables.$SLIDER_BACKGROUND;
 
   #sliderImages {
     left: 0;
-    width: calc(100% * #{$SLIDE_COUNT});
+    width: calc(100% * #{variables.$SLIDE_COUNT});
     height: 100%;
     /*size of the images*/
     div {
-      width: calc(100% / #{$SLIDE_COUNT});
+      width: calc(100% / #{variables.$SLIDE_COUNT});
       height: 100%;
       float: left;
       overflow: hidden;
@@ -57,18 +59,18 @@
 
 #cssSlider > #sliderImages {
   -webkit-animation-name: slider;
-  -webkit-animation-duration: #{$SLIDE_TIME + "s"};
+  -webkit-animation-duration: #{variables.$SLIDE_TIME + "s"};
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite;
   animation-name: slider;
-  animation-duration: #{$SLIDE_TIME + "s"};
+  animation-duration: #{variables.$SLIDE_TIME + "s"};
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 
   /* IE 10+ hack - cant animate translate */
   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     animation-name: slider-ie !important;
-    animation-duration: #{$SLIDE_TIME + "s"};
+    animation-duration: #{variables.$SLIDE_TIME + "s"};
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
   }
@@ -80,8 +82,8 @@
   padding: 0;
   /*this is the time to transition between images
     when using the arrows*/
-  transition: #{$SLIDE_TIME * math.div(math.div($SLIDE_TIME, $SLIDE_COUNT), 100) +
-    "s"};
+  transition: #{variables.$SLIDE_TIME *
+    math.div(math.div(variables.$SLIDE_TIME, variables.$SLIDE_COUNT), 100) + "s"};
 }
 
 /********** END IMAGE/SLIDER STYLING **********/

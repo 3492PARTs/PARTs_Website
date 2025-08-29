@@ -1,10 +1,12 @@
 <div id="banner-wrapper" #thisBannerWrapper [ngClass]="{'top-zero' : top0}" [ngStyle]="{'z-index': zIndex}">
-  <div *ngFor="let b of banners" class="banner">
-    <app-box>
-      <div class="banner-content" (mouseenter)="pauseTimeout(b)" (mouseleave)="resumeTimeout(b)">
-        <p [innerHTML]="b.message"></p>
-        <app-button [ButtonType]="'dismiss'" (FunctionCallBack)="dismissBanner(b)"></app-button>
-      </div>
-    </app-box>
-  </div>
+  @for (b of banners; track b) {
+    <div class="banner">
+      <app-box>
+        <div class="banner-content" (mouseenter)="pauseTimeout(b)" (mouseleave)="resumeTimeout(b)">
+          <p [innerHTML]="b.message"></p>
+          <app-button [ButtonType]="'dismiss'" (FunctionCallBack)="dismissBanner(b)"></app-button>
+        </div>
+      </app-box>
+    </div>
+  }
 </div>

@@ -13,11 +13,11 @@ import { FormComponent } from "../../../../atoms/form/form.component";
 import { Banner } from '../../../../../models/api.models';
 import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
 import { ModalComponent } from "../../../../atoms/modal/modal.component";
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-match-planning',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent, CommonModule],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
   templateUrl: './match-planning.component.html',
   styleUrl: './match-planning.component.scss'
 })

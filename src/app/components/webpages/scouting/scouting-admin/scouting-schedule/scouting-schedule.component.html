@@ -17,13 +17,13 @@
         )
       "
       [ScrollHeight]="'50rem'"
-    >
+      >
     </app-table>
 
     <app-modal
       [Title]="scoutScheduleModalTitle"
       [(Visible)]="scoutScheduleModalVisible"
-    >
+      >
       <app-form (SubmitFunction)="saveScoutFieldScheduleEntry()">
         <app-form-element-group [LabelText]="'New Entry'">
           <app-form-element
@@ -37,7 +37,7 @@
             [(Model)]="ActiveScoutFieldSchedule.red_one_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [LabelText]="'Red Two'"
@@ -50,7 +50,7 @@
             [(Model)]="ActiveScoutFieldSchedule.red_two_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [LabelText]="'Red Three'"
@@ -63,7 +63,7 @@
             [(Model)]="ActiveScoutFieldSchedule.red_three_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [LabelText]="'Blue One'"
@@ -76,7 +76,7 @@
             [(Model)]="ActiveScoutFieldSchedule.blue_one_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [LabelText]="'Blue Two'"
@@ -89,7 +89,7 @@
             [(Model)]="ActiveScoutFieldSchedule.blue_two_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [LabelText]="'Blue Three'"
@@ -102,7 +102,7 @@
             [(Model)]="ActiveScoutFieldSchedule.blue_three_id"
             [FormGroupInline]="true"
             [SelectComparatorFunction]="compareUserObjects"
-          >
+            >
           </app-form-element>
           <app-form-element
             [Type]="'datetime'"
@@ -111,7 +111,7 @@
             [(Model)]="ActiveScoutFieldSchedule.st_time"
             (FunctionCallBack)="setFieldScheduleEndTime()"
             [Required]="true"
-          >
+            >
           </app-form-element>
           <app-form-element
             [Type]="'datetime'"
@@ -119,140 +119,147 @@
             [LabelText]="'End Time'"
             [(Model)]="ActiveScoutFieldSchedule.end_time"
             [Required]="true"
-          >
+            >
           </app-form-element>
 
-          <app-form-element
-            *ngIf="ActiveScoutFieldSchedule.id"
-            [Type]="'checkbox'"
-            [FormGroup]="true"
-            [LabelText]="'Delete?'"
-            [(Model)]="ActiveScoutFieldSchedule.void_ind"
-            [TrueValue]="'y'"
-            [FalseValue]="'n'"
-          >
-          </app-form-element>
-
-          <app-button-ribbon>
-            <app-button
-              *ngIf="ActiveScoutFieldSchedule.id"
-              [ButtonType]="'warning'"
-              (FunctionCallBack)="notifyUsers(ActiveScoutFieldSchedule.id)"
-            >
-              Notify</app-button
-            >
-            <app-button
-              *ngIf="ActiveScoutFieldSchedule.id"
-              [ButtonType]="'main'"
-              (FunctionCallBack)="copyScoutFieldScheduleEntry()"
-              >Copy</app-button
-            >
-            <app-button [ButtonType]="'main'" [Type]="'submit'"
-              >Save
-            </app-button>
-          </app-button-ribbon>
-        </app-form-element-group>
-      </app-form>
-    </app-modal>
-  </app-form-element-group>
-
-  <app-form-element-group [LabelText]="'Subgroup Pit Schedules'">
-    <app-table
-      *ngFor="let sch of scheduleByType"
-      [TableTitle]="sch.sch_typ.sch_nm"
-      [TableCols]="scheduleTableCols"
-      [TableData]="sch.schedule"
-      [Scrollable]="true"
-      [ShowAddButton]="true"
-      (AddRecordCallBack)="showScoutScheduleModal(sch.sch_typ)"
-      [ShowEditButton]="true"
-      (EditRecordCallBack)="showScoutScheduleModal(sch.sch_typ, $event)"
-      [EnableFilter]="true"
-    >
-    </app-table>
-
-    <app-modal [(Visible)]="scheduleModalVisible" [Title]="'Schedule'">
-      <app-form>
-        <app-form-element-group>
-          <app-form (SubmitFunction)="saveScheduleEntry()">
+          @if (ActiveScoutFieldSchedule.id) {
             <app-form-element
-              [LabelText]="'User'"
-              [FormGroup]="true"
-              [Type]="'select'"
-              [SelectList]="users"
-              [DisplayProperty]="'first_name'"
-              [DisplayProperty2]="'last_name'"
-              [DisplayEmptyOption]="true"
-              [(Model)]="currentSchedule.user"
-              [FormGroupInline]="true"
-              [SelectComparatorFunction]="compareUserObjects"
-              [Required]="true"
-            >
-            </app-form-element>
-
-            <app-form-element
-              [LabelText]="'Type'"
-              [FormGroup]="true"
-              [Type]="'select'"
-              [SelectList]="scheduleTypes"
-              [DisplayProperty]="'sch_nm'"
-              [BindingProperty]="'sch_typ'"
-              [(Model)]="currentSchedule.sch_typ"
-              [FormGroupInline]="true"
-              [Required]="true"
-            >
-            </app-form-element>
-
-            <app-form-element
-              [Type]="'datetime'"
-              [FormGroup]="true"
-              [LabelText]="'Start Time'"
-              [(Model)]="currentSchedule.st_time"
-              (FunctionCallBack)="setScheduleEndTime()"
-              [Required]="true"
-            >
-            </app-form-element>
-            <app-form-element
-              [Type]="'datetime'"
-              [FormGroup]="true"
-              [LabelText]="'End Time'"
-              [(Model)]="currentSchedule.end_time"
-              [Required]="true"
-            >
-            </app-form-element>
-
-            <app-form-element
-              *ngIf="currentSchedule.id"
               [Type]="'checkbox'"
               [FormGroup]="true"
               [LabelText]="'Delete?'"
-              [(Model)]="currentSchedule.void_ind"
+              [(Model)]="ActiveScoutFieldSchedule.void_ind"
               [TrueValue]="'y'"
               [FalseValue]="'n'"
-            >
+              >
             </app-form-element>
+          }
 
-            <app-button-ribbon>
+          <app-button-ribbon>
+            @if (ActiveScoutFieldSchedule.id) {
               <app-button
-                *ngIf="currentSchedule.id"
                 [ButtonType]="'warning'"
-                (FunctionCallBack)="notifyUser(currentSchedule.id)"
-              >
+                (FunctionCallBack)="notifyUsers(ActiveScoutFieldSchedule.id)"
+                >
                 Notify</app-button
-              >
-              <app-button
-                *ngIf="currentSchedule.id"
-                [ButtonType]="'main'"
-                (FunctionCallBack)="copyScheduleEntry()"
-                >Copy</app-button
-              >
-              <app-button [ButtonType]="'main'" [Type]="'submit'"
-                >Save
-              </app-button>
-            </app-button-ribbon>
+                >
+              }
+              @if (ActiveScoutFieldSchedule.id) {
+                <app-button
+                  [ButtonType]="'main'"
+                  (FunctionCallBack)="copyScoutFieldScheduleEntry()"
+                  >Copy</app-button
+                  >
+                }
+                <app-button [ButtonType]="'main'" [Type]="'submit'"
+                  >Save
+                </app-button>
+              </app-button-ribbon>
+            </app-form-element-group>
           </app-form>
-        </app-form-element-group>
-      </app-form>
-    </app-modal>
-  </app-form-element-group>
-</app-box>
+        </app-modal>
+      </app-form-element-group>
+
+      <app-form-element-group [LabelText]="'Subgroup Pit Schedules'">
+        @for (sch of scheduleByType; track sch) {
+          <app-table
+            [TableTitle]="sch.sch_typ.sch_nm"
+            [TableCols]="scheduleTableCols"
+            [TableData]="sch.schedule"
+            [Scrollable]="true"
+            [ShowAddButton]="true"
+            (AddRecordCallBack)="showScoutScheduleModal(sch.sch_typ)"
+            [ShowEditButton]="true"
+            (EditRecordCallBack)="showScoutScheduleModal(sch.sch_typ, $event)"
+            [EnableFilter]="true"
+            >
+          </app-table>
+        }
+
+        <app-modal [(Visible)]="scheduleModalVisible" [Title]="'Schedule'">
+          <app-form>
+            <app-form-element-group>
+              <app-form (SubmitFunction)="saveScheduleEntry()">
+                <app-form-element
+                  [LabelText]="'User'"
+                  [FormGroup]="true"
+                  [Type]="'select'"
+                  [SelectList]="users"
+                  [DisplayProperty]="'first_name'"
+                  [DisplayProperty2]="'last_name'"
+                  [DisplayEmptyOption]="true"
+                  [(Model)]="currentSchedule.user"
+                  [FormGroupInline]="true"
+                  [SelectComparatorFunction]="compareUserObjects"
+                  [Required]="true"
+                  >
+                </app-form-element>
+
+                <app-form-element
+                  [LabelText]="'Type'"
+                  [FormGroup]="true"
+                  [Type]="'select'"
+                  [SelectList]="scheduleTypes"
+                  [DisplayProperty]="'sch_nm'"
+                  [BindingProperty]="'sch_typ'"
+                  [(Model)]="currentSchedule.sch_typ"
+                  [FormGroupInline]="true"
+                  [Required]="true"
+                  >
+                </app-form-element>
+
+                <app-form-element
+                  [Type]="'datetime'"
+                  [FormGroup]="true"
+                  [LabelText]="'Start Time'"
+                  [(Model)]="currentSchedule.st_time"
+                  (FunctionCallBack)="setScheduleEndTime()"
+                  [Required]="true"
+                  >
+                </app-form-element>
+                <app-form-element
+                  [Type]="'datetime'"
+                  [FormGroup]="true"
+                  [LabelText]="'End Time'"
+                  [(Model)]="currentSchedule.end_time"
+                  [Required]="true"
+                  >
+                </app-form-element>
+
+                @if (currentSchedule.id) {
+                  <app-form-element
+                    [Type]="'checkbox'"
+                    [FormGroup]="true"
+                    [LabelText]="'Delete?'"
+                    [(Model)]="currentSchedule.void_ind"
+                    [TrueValue]="'y'"
+                    [FalseValue]="'n'"
+                    >
+                  </app-form-element>
+                }
+
+                <app-button-ribbon>
+                  @if (currentSchedule.id) {
+                    <app-button
+                      [ButtonType]="'warning'"
+                      (FunctionCallBack)="notifyUser(currentSchedule.id)"
+                      >
+                      Notify</app-button
+                      >
+                    }
+                    @if (currentSchedule.id) {
+                      <app-button
+                        [ButtonType]="'main'"
+                        (FunctionCallBack)="copyScheduleEntry()"
+                        >Copy</app-button
+                        >
+                      }
+                      <app-button [ButtonType]="'main'" [Type]="'submit'"
+                        >Save
+                      </app-button>
+                    </app-button-ribbon>
+                  </app-form>
+                </app-form-element-group>
+              </app-form>
+            </app-modal>
+          </app-form-element-group>
+        </app-box>

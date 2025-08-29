@@ -32,7 +32,7 @@
   [EnableRemovedFilter]="true"
   [RemovedFilterProperty]="'active'"
   [RemovedFilterPropertyValue]="questionOption"
->
+  >
 </app-table>
 
 <app-modal [(Visible)]="questionModalVisible" [Title]="'Manage Question'">
@@ -46,7 +46,7 @@
       [FormGroupInline]="true"
       [Width]="'300px'"
       [Rows]="3"
-    >
+      >
     </app-form-element>
 
     <app-form-element
@@ -57,7 +57,7 @@
       [Width]="'6em'"
       [FormGroup]="true"
       [FormGroupInline]="true"
-    >
+      >
     </app-form-element>
 
     <app-form-element
@@ -73,26 +73,27 @@
       [FormGroup]="true"
       [FormGroupInline]="true"
       [DisplayEmptyOption]="true"
-    >
+      >
     </app-form-element>
 
-    <app-form-element
-      *ngIf="
-        FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0
-      "
-      [Type]="'select'"
-      [LabelText]="'Form Sub Type'"
-      [SelectList]="FormMetadata.form_sub_types"
-      [MinWidth]="'200px'"
-      [DisplayProperty]="'form_sub_nm'"
-      [(Model)]="activeQuestion.form_sub_typ"
-      [DisplayEmptyOption]="true"
-      [FormGroup]="true"
-      [FormGroupInline]="true"
-      [Required]="true"
-      [SelectComparatorFunction]="compareFormSubTypeObjects"
-    >
-    </app-form-element>
+    @if (
+      FormMetadata.form_sub_types && FormMetadata.form_sub_types.length > 0
+      ) {
+      <app-form-element
+        [Type]="'select'"
+        [LabelText]="'Form Sub Type'"
+        [SelectList]="FormMetadata.form_sub_types"
+        [MinWidth]="'200px'"
+        [DisplayProperty]="'form_sub_nm'"
+        [(Model)]="activeQuestion.form_sub_typ"
+        [DisplayEmptyOption]="true"
+        [FormGroup]="true"
+        [FormGroupInline]="true"
+        [Required]="true"
+        [SelectComparatorFunction]="compareFormSubTypeObjects"
+        >
+      </app-form-element>
+    }
 
     <app-form-element
       [Type]="'text'"
@@ -101,7 +102,7 @@
       [Required]="true"
       [FormGroup]="true"
       [FormGroupInline]="true"
-    >
+      >
     </app-form-element>
 
     <app-form-element
@@ -133,25 +134,26 @@
       [Width]="'8em'"
       [FormGroup]="true"
       [FormGroupInline]="true"
-    >
+      >
     </app-form-element>
 
-    <div
-      *ngIf="
-        activeQuestion.question_typ &&
-        activeQuestion.question_typ.is_list === 'y'
-      "
-    >
-      <app-table
-        [TableTitle]="'Options'"
-        [TableCols]="optionsTableCols"
-        [TableData]="activeQuestion.questionoption_set"
-        [ShowAddButton]="true"
-        (AddRecordCallBack)="addOption()"
-        [Scrollable]="true"
-      >
-      </app-table>
-    </div>
+    @if (
+      activeQuestion.question_typ &&
+      activeQuestion.question_typ.is_list === 'y'
+      ) {
+      <div
+        >
+        <app-table
+          [TableTitle]="'Options'"
+          [TableCols]="optionsTableCols"
+          [TableData]="activeQuestion.questionoption_set"
+          [ShowAddButton]="true"
+          (AddRecordCallBack)="addOption()"
+          [Scrollable]="true"
+          >
+        </app-table>
+      </div>
+    }
 
     <app-button-ribbon>
       <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>

@@ -1,17 +1,19 @@
 <div class="box-padding" #thisBox>
   <div class="box">
     @if (ReturnFunction.observed || Collapsible || Title.length > 0) {
-    <div id="box-header" class="flex justify-content-flex-start align-items-center gap-1rem full-width"
-      [ngClass]="{ 'text-align-center': CenterTitle}">
-      @if (ReturnFunction.observed) {
-      <app-return-link (FunctionCallBack)="runReturnFunction()"></app-return-link>
-      }
+      <div id="box-header" class="flex justify-content-flex-start align-items-center gap-1rem full-width"
+        [ngClass]="{ 'text-align-center': CenterTitle}">
+        @if (ReturnFunction.observed) {
+          <app-return-link (FunctionCallBack)="runReturnFunction()"></app-return-link>
+        }
 
-      <app-button *ngIf="Collapsible" [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
-        [Direction]="!Collapsed"></app-button>
+        @if (Collapsible) {
+          <app-button [ButtonType]="'collapse'" class="collapse" (FunctionCallBack)="collapseBox()"
+          [Direction]="!Collapsed"></app-button>
+        }
 
-      <h2 id="title" [ngClass]="{HeaderWithCollapse: Collapsible}" [innerHTML]="Title"></h2>
-    </div>
+        <h2 id="title" [ngClass]="{HeaderWithCollapse: Collapsible}" [innerHTML]="Title"></h2>
+      </div>
     }
     <div #content class="box-content">
       <ng-content></ng-content>

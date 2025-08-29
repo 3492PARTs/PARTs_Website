@@ -1,8 +1,10 @@
+@use "./variables";
+@use "sass:math";
 /********** PLAY PAUSE OF ALL ANIMATIONS **********/
 
 /*restart the show*/
 $i: 1;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #slide#{$i}:checked ~ #sliderImages {
     -webkit-animation: none;
     animation: none;
@@ -18,7 +20,7 @@ $i: 1;
 }
 
 $i: 1;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #pause:checked ~ #slideDesc > #slideText#{$i},
   #cssSlider > #pause:checked ~ #pageNav #previousArrow > #slideL#{$i},
   #cssSlider > #pause:checked ~ #pageNav > #nextArrow > #slideR#{$i},
@@ -36,7 +38,7 @@ $i: 1;
 
 $i: 1;
 $c: 0;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #slide#{$i}:checked ~ #sliderImages {
     margin-left: -100% * $c;
   }
@@ -49,16 +51,19 @@ $c: 0;
 
 /********** AUTOMATIC PAGE ADVANCEMENT **********/
 @keyframes slider {
-  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $gap: math.div(
+    (100 - (variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+    variables.$SLIDE_COUNT
+  );
   $i: 0;
   $c: 0;
   @while $i < 100 {
     #{$i}%,
-    #{$i + $SLIDE_PAUSE_PERCENT}% {
-      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
+    #{$i + variables.$SLIDE_PAUSE_PERCENT}% {
+      transform: translateX($c * math.div(-100%, variables.$SLIDE_COUNT));
     }
 
-    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $i: $i + variables.$SLIDE_PAUSE_PERCENT + $gap;
     $c: $c + 1;
   }
 
@@ -68,16 +73,19 @@ $c: 0;
 }
 
 @-webkit-keyframes slider {
-  $gap: math.div((100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $gap: math.div(
+    (100-(variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+    variables.$SLIDE_COUNT
+  );
   $i: 0;
   $c: 0;
   @while $i < 100 {
     #{$i}%,
-    #{$i + $SLIDE_PAUSE_PERCENT}% {
-      transform: translateX($c * math.div(-100%, $SLIDE_COUNT));
+    #{$i + variables.$SLIDE_PAUSE_PERCENT}% {
+      transform: translateX($c * math.div(-100%, variables.$SLIDE_COUNT));
     }
 
-    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $i: $i + variables.$SLIDE_PAUSE_PERCENT + $gap;
     $c: $c + 1;
   }
 
@@ -90,17 +98,17 @@ $c: 0;
 /* IE IS FINALLY DEAD*/
 /*IE FIX
 @keyframes slider-ie {
-  $total: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT));
-  $gap: (100-($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)) / $SLIDE_COUNT;
+  $total: (100-(SLIDE_PAUSE_PERCENT * SLIDE_COUNT));
+  $gap: (100-(SLIDE_PAUSE_PERCENT * SLIDE_COUNT)) / SLIDE_COUNT;
   $i: 0;
   $c: 0;
   @while $i < 100 {
     #{$i}%,
-    #{$i + $SLIDE_PAUSE_PERCENT}% {
-      margin-left: ($c * -$SLIDER_WIDTH/$SLIDE_COUNT);
+    #{$i + SLIDE_PAUSE_PERCENT}% {
+      margin-left: ($c * -SLIDER_WIDTH/SLIDE_COUNT);
     }
 
-    $i: $i + $SLIDE_PAUSE_PERCENT + $gap;
+    $i: $i + SLIDE_PAUSE_PERCENT + gap;
     $c: $c + 1;
   }
 
@@ -114,15 +122,18 @@ $c: 0;
 /********** ANIMATIONS **********/
 
 /*arrows*/
-$gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+$gap: math.div(
+  (100 - (variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+  variables.$SLIDE_COUNT
+);
 
 @-webkit-keyframes arrows {
   0%,
-  #{$SLIDE_PAUSE_PERCENT + $gap}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap}% {
     opacity: 0;
     z-index: 15;
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
   100% {
     opacity: 0;
     z-index: -1;
@@ -131,11 +142,11 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 @keyframes arrows {
   0%,
-  #{$SLIDE_PAUSE_PERCENT + $gap}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap}% {
     opacity: 0;
     z-index: 15;
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 0.01}%,
   100% {
     opacity: 0;
     z-index: -1;
@@ -146,11 +157,11 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 @keyframes point {
   1%,
-  #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
-    background: $INDICATOR_POINT_COLOR;
+  #{math.floor(variables.$SLIDE_PAUSE_PERCENT + $gap)}% {
+    background: variables.$INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
-  #{floor($SLIDE_PAUSE_PERCENT + $gap) + 1}%,
+  #{math.floor(variables.$SLIDE_PAUSE_PERCENT + $gap) + 1}%,
   100% {
     background: transparent;
   }
@@ -158,11 +169,11 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 @-webkit-keyframes point {
   0%,
-  #{floor($SLIDE_PAUSE_PERCENT + $gap)}% {
-    background: $INDICATOR_POINT_COLOR;
+  #{math.floor(variables.$SLIDE_PAUSE_PERCENT + $gap)}% {
+    background: variables.$INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
-  #{floor($SLIDE_PAUSE_PERCENT + $gap) + 1}%,
+  #{math.floor(variables.$SLIDE_PAUSE_PERCENT + $gap) + 1}%,
   100% {
     background: transparent;
   }
@@ -170,9 +181,12 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
 
 /*text box*/
 @keyframes textBoxBounce {
-  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $gap: math.div(
+    (100 - (variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+    variables.$SLIDE_COUNT
+  );
   0.7%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
@@ -180,30 +194,33 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
     transform: translateY(10px);
   }
   1%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 2}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1}% {
     opacity: 0;
     z-index: 2;
     visibility: hidden;
     -webkit-transform: translateY(-100px);
     transform: translateY(-100px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
   100% {
     z-index: 0;
   }
 }
 
 @-webkit-keyframes textBoxBounce {
-  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $gap: math.div(
+    (100 - (variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+    variables.$SLIDE_COUNT
+  );
   0.7%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
@@ -211,30 +228,33 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
     transform: translateY(10px);
   }
   1%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 2}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1}% {
     opacity: 0;
     z-index: 2;
     visibility: hidden;
     -webkit-transform: translateY(-100px);
     transform: translateY(-100px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
   100% {
     z-index: 0;
   }
 }
 
 @keyframes textBoxBounce {
-  $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
+  $gap: math.div(
+    (100 - (variables.$SLIDE_PAUSE_PERCENT * variables.$SLIDE_COUNT)),
+    variables.$SLIDE_COUNT
+  );
   0.7%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 1}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
@@ -242,21 +262,21 @@ $gap: math.div((100 - ($SLIDE_PAUSE_PERCENT * $SLIDE_COUNT)), $SLIDE_COUNT);
     transform: translateY(10px);
   }
   1%,
-  #{$SLIDE_PAUSE_PERCENT + $gap - 2}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap - 2}% {
     opacity: 1;
     z-index: 2;
     visibility: visible;
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1}% {
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1}% {
     opacity: 0;
     z-index: 2;
     visibility: hidden;
     -webkit-transform: translateY(-100px);
     transform: translateY(-100px);
   }
-  #{$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
+  #{variables.$SLIDE_PAUSE_PERCENT + $gap + 1.01}%,
   100% {
     z-index: 0;
   }

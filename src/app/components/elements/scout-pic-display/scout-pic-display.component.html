@@ -1,33 +1,39 @@
-<div
-  class="team-pic-wrapper"
-  *ngIf="ScoutPitImages && ScoutPitImages.length > 0"
->
-  <app-header [h]="2" *ngIf="Title.length > 0">{{ Title }}</app-header>
-  <div class="default-pic-btn" *ngIf="ScoutPitImages.length > 1">
-    <app-button
-      [ButtonType]="'check'"
-      [BackgroundColor]="ScoutPitImages[displayPicIndex].default ? 'green' : ''"
-      (FunctionCallBack)="setDefaultPic(ScoutPitImages[displayPicIndex])"
-    ></app-button>
-  </div>
-
-  <div class="team-pic" [id]="elementId"></div>
-
-  <div class="prev-pic" *ngIf="ScoutPitImages.length > 1">
-    <app-button
-      [ButtonType]="'collapse'"
-      [Rotate]="'90deg'"
-      (FunctionCallBack)="prevImage()"
+@if (ScoutPitImages && ScoutPitImages.length > 0) {
+  <div
+    class="team-pic-wrapper"
     >
-    </app-button>
+    @if (Title.length > 0) {
+      <app-header [h]="2">{{ Title }}</app-header>
+    }
+    @if (ScoutPitImages.length > 1) {
+      <div class="default-pic-btn">
+        <app-button
+          [ButtonType]="'check'"
+          [BackgroundColor]="ScoutPitImages[displayPicIndex].default ? 'green' : ''"
+          (FunctionCallBack)="setDefaultPic(ScoutPitImages[displayPicIndex])"
+        ></app-button>
+      </div>
+    }
+    <div class="team-pic" [id]="elementId"></div>
+    @if (ScoutPitImages.length > 1) {
+      <div class="prev-pic">
+        <app-button
+          [ButtonType]="'collapse'"
+          [Rotate]="'90deg'"
+          (FunctionCallBack)="prevImage()"
+          >
+        </app-button>
+      </div>
+    }
+    @if (ScoutPitImages.length > 1) {
+      <div class="next-pic">
+        <app-button
+          [ButtonType]="'collapse'"
+          [Rotate]="'-90deg'"
+          (FunctionCallBack)="nextImage()"
+          >
+        </app-button>
+      </div>
+    }
   </div>
-
-  <div class="next-pic" *ngIf="ScoutPitImages.length > 1">
-    <app-button
-      [ButtonType]="'collapse'"
-      [Rotate]="'-90deg'"
-      (FunctionCallBack)="nextImage()"
-    >
-    </app-button>
-  </div>
-</div>
+}

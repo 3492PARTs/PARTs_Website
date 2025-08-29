@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Renderer2 } from '@angular/core';
 import { FormInitialization, Flow, FormSubType } from '../../../../../models/form.models';
 import { FieldForm } from '../../../../../models/scouting.models';
@@ -15,7 +15,7 @@ import { DrawQuestionSvgComponent } from "../../../../elements/draw-question-svg
 
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, CommonModule, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrl: './manage-field-form.component.scss'
 })
