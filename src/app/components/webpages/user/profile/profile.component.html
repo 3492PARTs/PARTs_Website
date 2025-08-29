@@ -9,7 +9,7 @@
                 ? user.image
                 : '../../../../../assets/appIcons/BeanieBot40x40.png'
             "
-          />
+            />
           <div id="profile-edit-btn">
             <!--<app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>-->
           </div>
@@ -19,36 +19,38 @@
       <app-modal
         [Title]="'Edit Profile Image'"
         [(Visible)]="editProfileImageModalVisible"
-      >
-        <app-form-element
-          *ngIf="!showCropper"
-          [Type]="'image'"
-          [LabelText]="'Profile Image'"
-          [ImageChangeEvent]="fileChangeEvent.bind(this)"
         >
-        </app-form-element>
+        @if (!showCropper) {
+          <app-form-element
+            [Type]="'image'"
+            [LabelText]="'Profile Image'"
+            [ImageChangeEvent]="fileChangeEvent.bind(this)"
+            >
+          </app-form-element>
+        }
 
         <div id="cropper-wrapper">
-          <div
-            *ngIf="editProfileImageModalVisible"
-            id="cropper-size"
-            #EditProfileImageModalCropper
-          >
-            <!--<image-cropper *ngIf="showCropper" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+          @if (editProfileImageModalVisible) {
+            <div
+              id="cropper-size"
+              #EditProfileImageModalCropper
+              >
+              <!--<image-cropper *ngIf="showCropper" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
               [aspectRatio]="1 / 1" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
               (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [roundCropper]="true"
               [imageQuality]="60">
             </image-cropper>-->
           </div>
+        }
 
-          <app-button-ribbon
-            [ngStyle]="{ visibility: showCropper ? 'visible' : 'hidden' }"
-            #EditProfileImageModalButtonRibbon
+        <app-button-ribbon
+          [ngStyle]="{ visibility: showCropper ? 'visible' : 'hidden' }"
+          #EditProfileImageModalButtonRibbon
           >
-            <app-button
-              [ButtonType]="'success'"
-              (FunctionCallBack)="saveProfile()"
-              >Save</app-button
+          <app-button
+            [ButtonType]="'success'"
+            (FunctionCallBack)="saveProfile()"
+            >Save</app-button
             >
           </app-button-ribbon>
         </div>
@@ -81,7 +83,7 @@
           <app-modal
             [Title]="activeAlert.subject"
             [(Visible)]="alertModalVisible"
-          >
+            >
             <app-form-element
               [Type]="'area'"
               [LabelText]="(activeAlert.staged_time | dateToStr) || ''"
@@ -96,93 +98,93 @@
                 [ButtonType]="'danger'"
                 (FunctionCallBack)="dismissAlert(activeAlert)"
                 >Delete</app-button
-              >
-            </app-button-ribbon>
-          </app-modal>
-        </app-tab>
+                >
+              </app-button-ribbon>
+            </app-modal>
+          </app-tab>
 
-        <app-tab [TabName]="'General'">
-          <app-form>
-            <app-form-element
-              [Type]="'text'"
-              [(Model)]="editUser.first_name"
-              [LabelText]="'First Name'"
-            >
-            </app-form-element>
+          <app-tab [TabName]="'General'">
+            <app-form>
+              <app-form-element
+                [Type]="'text'"
+                [(Model)]="editUser.first_name"
+                [LabelText]="'First Name'"
+                >
+              </app-form-element>
 
-            <app-form-element
-              [Type]="'text'"
-              [(Model)]="editUser.last_name"
-              [LabelText]="'Last Name'"
-            >
-            </app-form-element>
+              <app-form-element
+                [Type]="'text'"
+                [(Model)]="editUser.last_name"
+                [LabelText]="'Last Name'"
+                >
+              </app-form-element>
 
-            <app-form-element
-              [Type]="'text'"
-              [(Model)]="editUser.email"
-              [LabelText]="'Email'"
-            >
-            </app-form-element>
+              <app-form-element
+                [Type]="'text'"
+                [(Model)]="editUser.email"
+                [LabelText]="'Email'"
+                >
+              </app-form-element>
 
-            <app-button-ribbon>
-              <app-button
-                [ButtonType]="'success'"
-                (FunctionCallBack)="saveProfile()"
-                >Save</app-button
-              >
-            </app-button-ribbon>
-          </app-form>
-        </app-tab>
+              <app-button-ribbon>
+                <app-button
+                  [ButtonType]="'success'"
+                  (FunctionCallBack)="saveProfile()"
+                  >Save</app-button
+                  >
+                </app-button-ribbon>
+              </app-form>
+            </app-tab>
 
-        <app-tab [TabName]="'Security'">
-          <app-form>
-            <app-form-element
-              [Type]="'password'"
-              [(Model)]="input.password"
-              [LabelText]="'Password'"
-              [Width]="'100%'"
-            >
-            </app-form-element>
-            <br />
-            <app-form-element
-              [Type]="'password'"
-              [(Model)]="input.passwordConfirm"
-              [LabelText]="'Confirm Password'"
-              [Width]="'100%'"
-            >
-            </app-form-element>
-            <br />
-            <p class="matching-pass">
-              <span
-                class="do-not-match"
+            <app-tab [TabName]="'Security'">
+              <app-form>
+                <app-form-element
+                  [Type]="'password'"
+                  [(Model)]="input.password"
+                  [LabelText]="'Password'"
+                  [Width]="'100%'"
+                  >
+                </app-form-element>
+                <br />
+                <app-form-element
+                  [Type]="'password'"
+                  [(Model)]="input.passwordConfirm"
+                  [LabelText]="'Confirm Password'"
+                  [Width]="'100%'"
+                  >
+                </app-form-element>
+                <br />
+                <p class="matching-pass">
+                  <span
+                    class="do-not-match"
                 [ngClass]="{
                   hide:
                     gs.strNoE(input.password) ||
                     input.password === input.passwordConfirm
                 }"
-                >passwords do not match</span
-              >
-              <span
-                class="do-match"
+                    >passwords do not match</span
+                    >
+                    <span
+                      class="do-match"
                 [ngClass]="{
                   hide:
                     input.password !== input.passwordConfirm ||
                     gs.strNoE(input.password)
                 }"
-                >passwords match</span
-              >
-            </p>
+                      >passwords match</span
+                      >
+                    </p>
 
-            <app-button-ribbon>
-              <app-button
-                [ButtonType]="'success'"
-                (FunctionCallBack)="saveProfile()"
-                >Save</app-button
-              >
-            </app-button-ribbon>
-          </app-form>
-        </app-tab>
-      </app-tab-container>
-    </app-box>
-  </div>
-</div>
+                    <app-button-ribbon>
+                      <app-button
+                        [ButtonType]="'success'"
+                        (FunctionCallBack)="saveProfile()"
+                        >Save</app-button
+                        >
+                      </app-button-ribbon>
+                    </app-form>
+                  </app-tab>
+                </app-tab-container>
+              </app-box>
+            </div>
+          </div>

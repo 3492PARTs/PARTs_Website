@@ -33,7 +33,7 @@
       [ScrollHeight]="'50rem'"
       [ShowRemoveButton]="true"
       (RemoveRecordCallBack)="removeCartItem($event)"
-    >
+      >
     </app-table>
 
     <app-form (SubmitFunction)="saveSponsorOrder()">
@@ -43,7 +43,7 @@
           [LabelText]="'Name'"
           [(Model)]="activeSponsor.sponsor_nm"
           [FormGroupInline]="true"
-        >
+          >
         </app-form-element>
         <app-form-element
           [Type]="'email'"
@@ -60,46 +60,48 @@
         <app-button-ribbon>
           <app-button [ButtonType]="'main'" [Type]="'submit'"
             >Submit Order</app-button
-          >
-        </app-button-ribbon>
-      </app-form-element-group>
-    </app-form>
-  </app-modal>
-
-  <div id="item-grid">
-    <div *ngFor="let item of items" class="item-grid-item">
-      <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
-        <div class="item-info">
-          <div>
-            <div class="item-pic">
-              <div
-                class="item-pic-img"
-                [id]="'item' + item.item_id"
-                appOnCreate
-                (onCreate)="previewImage(item.img_url, 'item' + item.item_id)"
-              ></div>
-            </div>
-            <div class="item-desc">
-              <p>Requested: {{ item.quantity - item.sponsor_quantity }}</p>
-              <p>{{ item.item_desc }}</p>
-            </div>
-          </div>
-          <div class="item-quantity">
-            <app-form-element
-              [Type]="'number'"
-              [LabelText]="'Quantity'"
-              [(Model)]="item.cart_quantity"
-              [MinValue]="0"
-              [FormGroupInline]="true"
             >
-            </app-form-element>
-            <app-button
-              [ButtonType]="'cart-plus'"
-              (FunctionCallBack)="addItemToCart(item)"
-            ></app-button>
-          </div>
+          </app-button-ribbon>
+        </app-form-element-group>
+      </app-form>
+    </app-modal>
+
+    <div id="item-grid">
+      @for (item of items; track item) {
+        <div class="item-grid-item">
+          <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
+            <div class="item-info">
+              <div>
+                <div class="item-pic">
+                  <div
+                    class="item-pic-img"
+                    [id]="'item' + item.item_id"
+                    appOnCreate
+                    (onCreate)="previewImage(item.img_url, 'item' + item.item_id)"
+                  ></div>
+                </div>
+                <div class="item-desc">
+                  <p>Requested: {{ item.quantity - item.sponsor_quantity }}</p>
+                  <p>{{ item.item_desc }}</p>
+                </div>
+              </div>
+              <div class="item-quantity">
+                <app-form-element
+                  [Type]="'number'"
+                  [LabelText]="'Quantity'"
+                  [(Model)]="item.cart_quantity"
+                  [MinValue]="0"
+                  [FormGroupInline]="true"
+                  >
+                </app-form-element>
+                <app-button
+                  [ButtonType]="'cart-plus'"
+                  (FunctionCallBack)="addItemToCart(item)"
+                ></app-button>
+              </div>
+            </div>
+          </app-box>
         </div>
-      </app-box>
+      }
     </div>
-  </div>
-</app-main-view>
+  </app-main-view>

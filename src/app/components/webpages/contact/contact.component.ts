@@ -10,12 +10,12 @@ import { FormElementComponent } from '../../atoms/form-element/form-element.comp
 import { FormComponent } from '../../atoms/form/form.component';
 import { ButtonComponent } from '../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
-import { CommonModule } from '@angular/common';
+
 import { QuestionDisplayFormComponent } from "../../elements/question-display-form/question-display-form.component";
 
 @Component({
   selector: 'app-contact',
-  imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
+  imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss']
 })

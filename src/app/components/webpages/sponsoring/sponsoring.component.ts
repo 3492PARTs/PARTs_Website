@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { BoxComponent } from '../../atoms/box/box.component';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-sponsoring',
-    imports: [BoxComponent, CommonModule, RouterLink],
+    imports: [BoxComponent, RouterLink],
     templateUrl: './sponsoring.component.html',
     styleUrls: ['./sponsoring.component.scss']
 })

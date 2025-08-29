@@ -1,7 +1,9 @@
 <div class="border">
-  <label class="tabs" [ngClass]="{'activeTab': t.active}" *ngFor="let t of tabs" (click)="showTab(t)"
-    [ngStyle]="{color: t.element?.TabTextColor || null}">
-    {{ t.name }}
-  </label>
+  @for (t of tabs; track t) {
+    <label class="tabs" [ngClass]="{'activeTab': t.active}" (click)="showTab(t)"
+      [ngStyle]="{color: t.element?.TabTextColor || null}">
+      {{ t.name }}
+    </label>
+  }
 </div>
 <ng-content select="app-tab"></ng-content>

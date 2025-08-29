@@ -80,7 +80,6 @@ nav {
     font-size: 1.04rem;
     color: #b7b9cc;
     display: block;
-    font-family: "Nunito-Black";
   }
 
   #logo {
@@ -154,7 +153,7 @@ nav {
       color: #fff !important;
 
       span {
-        font-family: "Nunito-Black" !important;
+        font-family: "" !important;
       }
 
       .icon,
@@ -221,7 +220,6 @@ nav {
 
             p {
               color: #fff !important;
-              font-family: "Nunito-Black" !important;
             }
           }
 
@@ -686,6 +684,10 @@ header {
 
     @include mixins.flex-center;
 
+    h2 {
+      font-weight: 500;
+    }
+
     div {
       width: 100%;
       height: 100%;
@@ -745,16 +747,19 @@ header {
           }
         }
 
-        img {
+        svg {
           max-width: 100%;
           max-height: 100%;
           align-self: center;
+          fill: white;
         }
 
         #nasarap,
         #WVSpaceGrant {
           grid-column-start: 1;
           grid-column-end: span 2;
+          width: 200%;
+          height: 200%;
           //grid-row-start: 1;
         }
       }

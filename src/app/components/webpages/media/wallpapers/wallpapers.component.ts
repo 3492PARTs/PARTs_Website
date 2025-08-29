@@ -11,9 +11,9 @@ import { Album, AlbumsComponent } from '../../../elements/albums/albums.componen
 export class WallpapersComponent implements OnInit {
 
   albums: Album[] = [
-    { imgSrc: '/webImages/Albums/Wallpapers/Beaniebot4K2.jpg', label: '4K2', links: [{ label: 'Desktop', href: 'https://photos.app.goo.gl/jJUwS9i9rYK5Cu97A' }] },
+    { imgSrc: 'https://i.imgur.com/P6vuJyf.jpeg', label: '4K2', links: [{ label: 'Desktop', href: 'https://photos.app.goo.gl/jJUwS9i9rYK5Cu97A' }] },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/Beaniebot4K.png', label: '4K',
+      imgSrc: 'https://i.imgur.com/skEcLCB.png', label: '4K',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/uLfpY26VKaDfsP3z5' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/uD2AqRXSMwaiwu6T7' },
@@ -21,7 +21,7 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/SimpleBot.jpg', label: 'Simple Bot',
+      imgSrc: 'https://i.imgur.com/b4VzRAR.jpeg', label: 'Simple Bot',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/xMcAhSHXZSh42Y5y5' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/PEA7xVA7ZkAhPyMg8' },
@@ -29,7 +29,7 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/Dark Beanie Bot.jpg', label: 'Dark Beanie Bot',
+      imgSrc: 'https://i.imgur.com/ARKqZ1q.jpeg', label: 'Dark Beanie Bot',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/3UxWMk6gfkkMiDQ89' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/1zrARLqNFrpcWCcP6' },
@@ -37,7 +37,7 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/8Bit.png', label: '8Bit',
+      imgSrc: 'https://i.imgur.com/a9vXKGv.png', label: '8Bit',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/W3Yozrcfdf48VKFaA' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/QcUSf2A6kZc3mt3v8' },
@@ -45,7 +45,7 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/3492MaterialDesignDesktop.jpg', label: 'Material Design',
+      imgSrc: 'https://i.imgur.com/O0P3rhT.jpeg', label: 'Material Design',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/46Tg68jRd2dGPFEo6' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/hG9wVUMwSv6q4opn6' },
@@ -53,7 +53,7 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/3492GalaxyDesktop.jpg', label: 'Galaxy',
+      imgSrc: 'https://i.imgur.com/OHJw887.jpeg', label: 'Galaxy',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/cTWE3F5SJf6cVqD78' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/56zHssUizVsGPjKy7' },
@@ -61,14 +61,14 @@ export class WallpapersComponent implements OnInit {
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/Peace,Love,3492.jpg', label: 'Peace Love BeanieBot',
+      imgSrc: 'https://i.imgur.com/S6v2QH6.jpeg', label: 'Peace Love BeanieBot',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/qHQKUpHPodc9nZE26' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/RBwyyNRSV6kf1ax68' },
       ]
     },
     {
-      imgSrc: '/webImages/Albums/Wallpapers/BeanieBot.jpg', label: 'Beanie Bot',
+      imgSrc: 'https://i.imgur.com/BYloTEM.jpeg', label: 'Beanie Bot',
       links: [
         { label: 'Desktop', href: 'https://photos.app.goo.gl/JnoHZ4AMr6W8RXSu5' },
         { label: 'Phone', href: 'https://photos.app.goo.gl/LrUnUYa8HRHN39GUA' },

@@ -5,30 +5,32 @@
       !VerticalOnly &&
       (appSize >= appSizeXLG || (isMobile() && screenSize > appSizeSM))
   }"
->
+  >
   <div class="team-header">
     <app-header [h]="1"
       >{{ ScoutPitResult.team_no }} - {{ ScoutPitResult.team_nm }}</app-header
-    >
+      >
 
+      <app-scout-pic-display
+        [ScoutPitImages]="ScoutPitResult.pics"
+        [PitImgTyp]="'robot-img'"
+      ></app-scout-pic-display>
+    </div>
+    <div class="team-info">
+      @if (ScoutPitResult) {
+        @for (r of ScoutPitResult.responses; track r) {
+          <div>
+            <p>{{ r.question }}: {{ r.answer }}</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <div>
     <app-scout-pic-display
       [ScoutPitImages]="ScoutPitResult.pics"
-      [PitImgTyp]="'robot-img'"
+      [PitImgTyp]="'auto-path'"
+      [Title]="'Autonomous Paths'"
     ></app-scout-pic-display>
   </div>
-  <div class="team-info">
-    <ng-container *ngIf="ScoutPitResult">
-      <div *ngFor="let r of ScoutPitResult.responses">
-        <p>{{ r.question }}: {{ r.answer }}</p>
-      </div>
-    </ng-container>
-  </div>
-</div>
-
-<div>
-  <app-scout-pic-display
-    [ScoutPitImages]="ScoutPitResult.pics"
-    [PitImgTyp]="'auto-path'"
-    [Title]="'Autonomous Paths'"
-  ></app-scout-pic-display>
-</div>

@@ -1,3 +1,6 @@
+@use "./variables";
+@use "sass:math";
+
 /********** NEXT SLIDE ARROW NAVIGATION **********/
 
 /*APPEARANCE*/
@@ -38,19 +41,19 @@
 }
 
 #cssSlider > #pageNav > #previousArrow > .slideL {
-  @include arrowStyle($ARROW_PREVIOUS_PATH);
+  @include arrowStyle(variables.$ARROW_PREVIOUS_PATH);
 }
 
 #cssSlider > #pageNav > #nextArrow > .slideR {
-  @include arrowStyle($ARROW_NEXT_PATH);
+  @include arrowStyle(variables.$ARROW_NEXT_PATH);
 }
 
 #cssSlider > #pageNav > #playPause > #playBtn {
-  @include arrowStyle($ARROW_PLAY_PATH);
+  @include arrowStyle(variables.$ARROW_PLAY_PATH);
 }
 
 #cssSlider > #pageNav > #playPause > #pauseBtn {
-  @include arrowStyle($ARROW_PAUSE_PATH);
+  @include arrowStyle(variables.$ARROW_PAUSE_PATH);
 }
 
 /*POSITION*/
@@ -71,12 +74,12 @@
 /*ONLY DISPLAY IF ON SLIDER*/
 
 #cssSlider > #pageNav:hover > #playPause > .playPauseBtn {
-  opacity: $BTN_OPACITY;
+  opacity: variables.$BTN_OPACITY;
 }
 
 #cssSlider > #pageNav:hover > #previousArrow > .slideL,
 #cssSlider > #pageNav:hover > #nextArrow > .slideR {
-  opacity: math.div($BTN_OPACITY, $SLIDE_COUNT);
+  opacity: math.div(variables.$BTN_OPACITY, variables.$SLIDE_COUNT);
 }
 
 /*DON'T SHOW PLAY AND PAUSE*/
@@ -92,10 +95,10 @@
 /*WHICH ARROW SHOULD BE ON TOP*/
 
 $i: 1;
-$l: $SLIDE_COUNT;
+$l: variables.$SLIDE_COUNT;
 $r: 2;
 //$t: 0;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #slide#{$i}:checked ~ #pageNav > #previousArrow > #slideL#{$l},
   #cssSlider > #slide#{$i}:checked ~ #pageNav > #nextArrow > #slideR#{$r} {
     z-index: 15;
@@ -103,11 +106,11 @@ $r: 2;
 
   $i: $i + 1;
 
-  @if $l == $SLIDE_COUNT {
+  @if $l == variables.$SLIDE_COUNT {
     $l: 0;
   }
 
-  @if $r == $SLIDE_COUNT {
+  @if $r == variables.$SLIDE_COUNT {
     $r: 0;
   }
 
@@ -118,15 +121,16 @@ $r: 2;
 /*STARTING ARROW ANIMATION, FOR WHICH TO BE ON TOP*/
 
 @mixin arrowTime($time) {
-  -webkit-animation: arrows #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
-  animation: arrows #{($SLIDE_TIME * 1000) + "ms"} infinite $time;
+  -webkit-animation: arrows #{(variables.$SLIDE_TIME * 1000) + "ms"} infinite
+    $time;
+  animation: arrows #{(variables.$SLIDE_TIME * 1000) + "ms"} infinite $time;
 }
 
 $i: 1;
-$l: $SLIDE_COUNT;
+$l: variables.$SLIDE_COUNT;
 $r: 2;
 $t: 0;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #play:checked ~ #pageNav > #previousArrow > #slideL#{$l},
   #cssSlider > #play:checked ~ #pageNav > #nextArrow > #slideR#{$r} {
     @include arrowTime(#{$t}ms);
@@ -134,17 +138,17 @@ $t: 0;
 
   $i: $i + 1;
 
-  @if $l == $SLIDE_COUNT {
+  @if $l == variables.$SLIDE_COUNT {
     $l: 0;
   }
 
-  @if $r == $SLIDE_COUNT {
+  @if $r == variables.$SLIDE_COUNT {
     $r: 0;
   }
 
   $l: $l + 1;
   $r: $r + 1;
-  $t: $t + math.div(($SLIDE_TIME * 1000), $SLIDE_COUNT);
+  $t: $t + math.div((variables.$SLIDE_TIME * 1000), variables.$SLIDE_COUNT);
 }
 
 /********** END NEXT SLIDE ARROW NAVIGATION **********/

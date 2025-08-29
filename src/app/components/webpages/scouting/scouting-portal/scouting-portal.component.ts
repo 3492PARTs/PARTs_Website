@@ -7,13 +7,13 @@ import { GeneralService } from '../../../../services/general.service';
 import { ScoutingService } from '../../../../services/scouting.service';
 import { UserService } from '../../../../services/user.service';
 import { BoxComponent } from '../../../atoms/box/box.component';
-import { CommonModule } from '@angular/common';
+
 import { TableColType, TableComponent } from '../../../atoms/table/table.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 
 @Component({
   selector: 'app-scouting-portal',
-  imports: [BoxComponent, CommonModule, TableComponent, FormElementGroupComponent],
+  imports: [BoxComponent, TableComponent, FormElementGroupComponent],
   templateUrl: './scouting-portal.component.html',
   styleUrls: ['./scouting-portal.component.scss']
 })

@@ -18,21 +18,21 @@
   <app-form-element-group [LabelText]="'Filter'">
     <div class="flex align-items-baseline justify-content-space-between flex-wrap">
       <app-form-element [Type]="'text'" [LabelText]="'Team Search'" [(Model)]="filterTeam"
-        (FunctionCallBack)="filter()"></app-form-element>
+      (FunctionCallBack)="filter()"></app-form-element>
 
       <app-form-element [Type]="'text'" [LabelText]="'Wildcard Search'" [(Model)]="filterText"></app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Rank'" [(Model)]="filterRank" [MinValue]="1"
-        [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
+      [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
 
       <app-form-element [Type]="'checkbox'" [LabelText]="'Above'" [(Model)]="filterAboveRank"
-        [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
+      [Disabled]="filterRankGTE !== null || filterRankLTE !== null"></app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Rank GTE'" [(Model)]="filterRankGTE" [MinValue]="1"
-        [Disabled]="filterRank !== null"></app-form-element>
+      [Disabled]="filterRank !== null"></app-form-element>
 
       <app-form-element [Type]="'number'" [LabelText]="'Rank LTE'" [(Model)]="filterRankLTE" [MinValue]="1"
-        [Disabled]="filterRank !== null"></app-form-element>
+      [Disabled]="filterRank !== null"></app-form-element>
 
       <app-button [ButtonType]="'main'" (FunctionCallBack)="filter()">Filter by Rank</app-button>
 
@@ -47,12 +47,14 @@
 
   <app-modal [(Visible)]="teamScoutResultsModalVisible" [Title]="'Individual Results'">
     @if (teamScoutPitResult) {
-    <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
+      <app-pit-result-display [ScoutPitResult]="teamScoutPitResult"></app-pit-result-display>
     }
     <app-form-element-group [LabelText]="'Notes'">
-      <app-form-element-group *ngFor="let note of teamNotes" [LabelText]="(note.time | dateToStr) || ''">
-        <p>{{ note.note }}</p>
-      </app-form-element-group>
+      @for (note of teamNotes; track note) {
+        <app-form-element-group [LabelText]="(note.time | dateToStr) || ''">
+          <p>{{ note.note }}</p>
+        </app-form-element-group>
+      }
     </app-form-element-group>
 
     <app-table [TableCols]="scoutResponseColumns" [TableData]="teamScoutResults" [Scrollable]="true"

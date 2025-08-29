@@ -1,27 +1,27 @@
 @use "sass:math";
 
-@import "_variables";
+@use "_variables";
 
 /*FONT IMPORT
 
 @font-face {
   font-family: timeburner;
-  src: url($FONT_PATH);
+  src: url(FONT_PATH);
 }
 
 //@import "_mixins";
 
 /*slider imports*/
 
-@import "_arrowNavigation";
-@import "_slideIndicators";
-@import "_slider";
-@import "_slideDesc";
-@import "_slideAdvancement";
+@use "_arrowNavigation";
+@use "_slideIndicators";
+@use "_slider";
+@use "_slideDesc";
+@use "_slideAdvancement";
 
 /* Checks before we compile*/
 
-@if ($SLIDE_COUNT * $SLIDE_PAUSE_PERCENT > 100) {
+@if (variables.$SLIDE_COUNT * variables.$SLIDE_PAUSE_PERCENT > 100) {
   @error "Slider can't take up more than 100% of the time.";
 }
 

@@ -1,3 +1,5 @@
+@use "./variables";
+@use "sass:math";
 /********** SLIDE INDICATORS **********/
 
 /*PAGE INDICATORS APPEARANCE*/
@@ -15,7 +17,7 @@
   height: 1.5em;
   width: 1.5em;
   border-radius: 100%;
-  background-color: $INDICATOR_BACKGROUND_COLOR;
+  background-color: variables.$INDICATOR_BACKGROUND_COLOR;
   /*color of page indicator*/
   cursor: pointer;
   position: relative;
@@ -38,32 +40,32 @@
 /*STARTING PAGE INDICATOR WHICH TO BE LIT ANIMATION*/
 
 @mixin pointTime($time) {
-  -webkit-animation: point #{$SLIDE_TIME * 1000 + "ms"} infinite $time;
-  animation: point #{$SLIDE_TIME * 1000 + "ms"} infinite $time;
+  -webkit-animation: point #{variables.$SLIDE_TIME * 1000 + "ms"} infinite $time;
+  animation: point #{variables.$SLIDE_TIME * 1000 + "ms"} infinite $time;
 }
 
 $i: 1;
 $t: 0;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider > #play:checked ~ #pageIndicators > .indicator > #point#{$i},
   #cssSlider > #pause:checked ~ #pageIndicators > .indicator > #point#{$i} {
     @include pointTime(#{$t}ms);
   }
 
   $i: $i + 1;
-  $t: $t + math.div(($SLIDE_TIME * 1000), $SLIDE_COUNT);
+  $t: $t + math.div((variables.$SLIDE_TIME * 1000), variables.$SLIDE_COUNT);
 }
 
 /*WHICH INDICATOR SHOULD BE LIT*/
 
 $i: 1;
-@while $i <= $SLIDE_COUNT {
+@while $i <= variables.$SLIDE_COUNT {
   #cssSlider
     > #slide#{$i}:checked
     ~ #pageIndicators
     > .indicator
     > #point#{$i} {
-    background: $INDICATOR_POINT_COLOR;
+    background: variables.$INDICATOR_POINT_COLOR;
     /*color of page indicator dot*/
   }
 
@@ -73,7 +75,7 @@ $i: 1;
 /*used to override the animation for lit indicator*/
 
 #cssSlider > #pageIndicators > .indicator:hover > .point {
-  background: $INDICATOR_POINT_COLOR;
+  background: variables.$INDICATOR_POINT_COLOR;
   /*color of page indicator dot*/
 }
 

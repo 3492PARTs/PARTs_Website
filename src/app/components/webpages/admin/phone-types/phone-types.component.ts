@@ -8,11 +8,11 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { FormComponent } from '../../../atoms/form/form.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-phone-types',
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './phone-types.component.html',
   styleUrls: ['./phone-types.component.scss']
 })

@@ -1,4 +1,5 @@
 @use "../../../../scss/abstracts/variables.scss";
+@use "sass:color";
 
 .border {
   border-bottom: 1px solid #ddd;
@@ -15,7 +16,7 @@
   border: 1px solid transparent;
 
   &:hover {
-    color: darken(variables.$gray, 20%);
+    color: color.adjust(variables.$gray, $lightness: -20%);
     cursor: pointer;
   }
 }

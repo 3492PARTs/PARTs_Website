@@ -9,13 +9,13 @@ import { FormElementGroupComponent } from '../../../../atoms/form-element-group/
 import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
-import { CommonModule } from '@angular/common';
+
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 
 @Component({
   selector: 'app-manage-season',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ModalComponent, FormComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
   templateUrl: './manage-season.component.html',
   styleUrls: ['./manage-season.component.scss']
 })

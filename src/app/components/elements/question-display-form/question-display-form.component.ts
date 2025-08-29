@@ -4,11 +4,11 @@ import { Question, Answer } from '../../../models/form.models';
 import { GeneralService } from '../../../services/general.service';
 import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
 import { QuestionFormElementComponent } from '../question-form-element/question-form-element.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-question-display-form',
-  imports: [FormElementGroupComponent, QuestionFormElementComponent, CommonModule],
+  imports: [FormElementGroupComponent, QuestionFormElementComponent],
   templateUrl: './question-display-form.component.html',
   styleUrls: ['./question-display-form.component.scss']
 })

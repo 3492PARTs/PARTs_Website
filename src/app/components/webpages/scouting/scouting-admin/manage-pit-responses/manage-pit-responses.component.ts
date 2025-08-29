@@ -9,12 +9,12 @@ import { TableColType, TableComponent } from '../../../../atoms/table/table.comp
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
 import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
-import { CommonModule } from '@angular/common';
+
 import { ScoutPicDisplayComponent } from '../../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
   selector: 'app-manage-pit-responses',
-  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, ScoutPicDisplayComponent],
+  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
   templateUrl: './manage-pit-responses.component.html',
   styleUrls: ['./manage-pit-responses.component.scss']
 })

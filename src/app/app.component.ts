@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, DOCUMENT } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet, RouterState } from '@angular/router';
 import { BannersComponent } from './components/elements/banners/banners.component';
 import { ModalComponent } from './components/atoms/modal/modal.component';
-import { DOCUMENT } from '@angular/common';
+
 import { environment } from '../environments/environment';
 import { Banner } from './models/api.models';
 import { AuthService } from './services/auth.service';
@@ -10,13 +10,12 @@ import { GeneralService } from './services/general.service';
 import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from './components/atoms/button/button.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
-import { LoadingComponent } from "./components/atoms/loading/loading.component";
 
 declare const gtag: Function;
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent, LoadingComponent],
+  imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

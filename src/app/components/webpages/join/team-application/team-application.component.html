@@ -6,28 +6,31 @@
   <br />
 
   <app-form (SubmitFunction)="save()" [FormElements]="formElements">
-    <app-form-element-group
-      *ngFor="let formSubType of questions"
-      [LabelText]="formSubType.form_sub_typ"
-    >
-      <app-question-display-form
-        [(Questions)]="formSubType.questions"
-        (FormElementsChange)="setFormElements($event)"
-        [Disabled]="disabled"
-      >
-      </app-question-display-form>
-    </app-form-element-group>
+    @for (formSubType of questions; track formSubType) {
+      <app-form-element-group
+        [LabelText]="formSubType.form_sub_typ"
+        >
+        <app-question-display-form
+          [(Questions)]="formSubType.questions"
+          (FormElementsChange)="setFormElements($event)"
+          [Disabled]="disabled"
+          >
+        </app-question-display-form>
+      </app-form-element-group>
+    }
 
     <app-button-ribbon>
-      <app-button *ngIf="disabled" (FunctionCallBack)="export()"
-        >Export</app-button
-      >
-      <app-button
-        [Type]="'submit'"
-        [Disabled]="disabled"
-        [ButtonType]="'success'"
-        >Save</app-button
-      >
-    </app-button-ribbon>
-  </app-form>
-</app-box>
+      @if (disabled) {
+        <app-button (FunctionCallBack)="export()"
+          >Export</app-button
+          >
+        }
+        <app-button
+          [Type]="'submit'"
+          [Disabled]="disabled"
+          [ButtonType]="'success'"
+          >Save</app-button
+          >
+        </app-button-ribbon>
+      </app-form>
+    </app-box>

@@ -14,11 +14,11 @@ import { ButtonComponent } from '../../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
 import { FormComponent } from '../../../../atoms/form/form.component';
 import { ModalComponent } from '../../../../atoms/modal/modal.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-scouting-schedule',
-  imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent, CommonModule],
+  imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent],
   templateUrl: './scouting-schedule.component.html',
   styleUrls: ['./scouting-schedule.component.scss']
 })

@@ -11,12 +11,12 @@ import { FormElementComponent } from '../../../atoms/form-element/form-element.c
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { CommonModule } from '@angular/common';
+
 import { QuestionDisplayFormComponent } from "../../../elements/question-display-form/question-display-form.component";
 
 @Component({
   selector: 'app-team-application',
-  imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, CommonModule, RouterLink, QuestionDisplayFormComponent],
+  imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
   templateUrl: './team-application.component.html',
   styleUrls: ['./team-application.component.scss']
 })

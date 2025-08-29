@@ -1,6 +1,8 @@
-<div *ngIf="Loading" class="loading" [ngStyle]="{ width: Width, height: Height, 'min-height': MinHeight }">
-  <div class=" lds-ripple">
-    <div></div>
-    <div></div>
+@if (Loading) {
+  <div class="loading" [ngStyle]="{ width: Width, height: Height, 'min-height': MinHeight }">
+    <div class=" lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
   </div>
-</div>
+}
