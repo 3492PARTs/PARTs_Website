@@ -34,6 +34,12 @@
   position: relative;
   overflow: hidden;
 
+  h1,
+  h2,
+  em {
+    font-weight: 500;
+  }
+
   #gears1 {
     position: absolute;
     right: -54rem;

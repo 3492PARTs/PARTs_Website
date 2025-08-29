@@ -684,6 +684,10 @@ header {
 
     @include mixins.flex-center;
 
+    h2 {
+      font-weight: 500;
+    }
+
     div {
       width: 100%;
       height: 100%;
@@ -754,6 +758,8 @@ header {
         #WVSpaceGrant {
           grid-column-start: 1;
           grid-column-end: span 2;
+          width: 200%;
+          height: 200%;
           //grid-row-start: 1;
         }
       }
