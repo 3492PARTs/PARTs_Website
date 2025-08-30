@@ -27,7 +27,7 @@ export class ManageSeasonComponent implements OnInit {
   events: Event[] = [];
   teams: Team[] = [];
 
-  newSeason!: number | null;
+  newSeason = new Season();
   delSeason!: number | null;
   newEvent: Event = new Event();
   delEvent!: number | null;
@@ -161,6 +161,8 @@ export class ManageSeasonComponent implements OnInit {
     }, (err: any) => {
       this.gs.triggerError(err);
     });
+
+    this.saveSeason(this.currentSeason);
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
@@ -197,19 +199,15 @@ export class ManageSeasonComponent implements OnInit {
     this.init();
   }
 
-  addSeason(): void {
-    if (this.newSeason) {
-      const s = new Season();
-      s.season = this.newSeason.toString();
-      this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-        this.gs.successfulResponseBanner(result);
-        this.init();
-        this.newSeason = null;
-        this.manageSeasonModalVisible = false;
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
-    }
+  saveSeason(s: Season): void {
+    this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.init();
+      s = new Season();
+      this.manageSeasonModalVisible = false;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   deleteSeason(): void | null {

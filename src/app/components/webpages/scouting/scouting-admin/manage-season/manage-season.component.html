@@ -1,43 +1,71 @@
 <app-box [Title]="'Manage Season'">
-  <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
-    <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
-      [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true"
-      [MinWidth]="'100px'">
-    </app-form-element>
+  <app-form (SubmitFunction)="setSeasonEvent()">
+    <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
+      <div>
+        <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
+          [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true"
+          [MinWidth]="'100px'" [Required]="true">
+        </app-form-element>
 
-    <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList" [DisplayProperty]="'event_nm'"
-      [(Model)]="currentEvent" [FormGroupInline]="true" [DisplayEmptyOption]="true" [MinWidth]="'100px'">
-    </app-form-element>
+        <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="eventList"
+          [DisplayProperty]="'event_nm'" [(Model)]="currentEvent" [FormGroupInline]="true" [DisplayEmptyOption]="true"
+          [MinWidth]="'100px'" [Required]="true">
+        </app-form-element>
 
-    @if (currentEvent && currentEvent.id) {
-      <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
-        [LabelText]="'Competition Page Active'" [(Model)]="currentEvent.competition_page_active" [FormGroupInline]="true">
-      </app-form-element>
-    }
+        @if (currentEvent && currentEvent.id) {
+        <app-form-element [Type]="'checkbox'" [TrueValue]="'y'" [FalseValue]="'n'"
+          [LabelText]="'Competition Page Active'" [(Model)]="currentEvent.competition_page_active"
+          [FormGroupInline]="true">
+        </app-form-element>
+        }
+      </div>
+      @if (currentSeason) {
+      <div>
+        <app-form-element [Type]="'text'" [LabelText]="'Game'" [Width]="'300px'" [(Model)]="currentSeason.game"
+          [FormGroupInline]="true" [FieldSize]="255" [Required]="true">
+        </app-form-element>
 
-    <app-button-ribbon>
-      @if (currentSeason.id) {
-        <app-button [ButtonType]="'success'" (FunctionCallBack)="setSeasonEvent()">Save
-        </app-button>
+        <app-form-element [Type]="'text'" [LabelText]="'Manual URL'" [Width]="'300px'" [(Model)]="currentSeason.manual"
+          [FormGroupInline]="true" [FieldSize]="2000" [Required]="true">
+        </app-form-element>
+      </div>
       }
+      <app-button-ribbon>
+        @if (currentSeason.id) {
+        <app-button [ButtonType]="'success'" [Type]="'submit'">Save
+        </app-button>
+        }
 
-      <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetSeasonForm()">Reset</app-button>
-    </app-button-ribbon>
-  </app-form-element-group>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="resetSeasonForm()">Reset</app-button>
+      </app-button-ribbon>
+    </app-form-element-group>
+  </app-form>
 
   <app-form-element-group [LabelText]="'Manage Seasons, Events, and Teams'">
     <div class="flex flex-wrap space-between">
       <app-modal [ButtonType]="'main'" [ButtonText]="'Manage Seasons'" [Title]="'Manage Seasons'"
         [(Visible)]="manageSeasonModalVisible">
-        <div class="inline-flex align-items-center padding-right-half-em">
-          <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason"
-            [FormGroupInline]="true" [MinWidth]="'100px'">
-          </app-form-element>
+        <app-form (SubmitFunction)="saveSeason(newSeason)">
+          <div class="inline-flex align-items-center padding-right-half-em">
+            <app-form-element [Type]="'number'" [LabelText]="'Season'" [Width]="'6em'" [(Model)]="newSeason.season"
+              [FormGroupInline]="true" [MinWidth]="'100px'" [Required]="true">
+            </app-form-element>
 
-          <div class="padding-bottom-2rem">
-            <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeason()">Add Season</app-button>
+            <app-form-element [Type]="'text'" [LabelText]="'Game'" [Width]="'300px'" [(Model)]="newSeason.game"
+              [FormGroupInline]="true" [FieldSize]="255" [Required]="true">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [LabelText]="'Manual URL'" [Width]="'300px'" [(Model)]="newSeason.manual"
+              [FormGroupInline]="true" [FieldSize]="2000" [Required]="true">
+            </app-form-element>
+
+
+            <div class="padding-bottom-2rem">
+              <app-button [ButtonType]="'add'" [Type]="'submit'">Add Season</app-button>
+            </div>
+
           </div>
-        </div>
+        </app-form>
 
         <div class="inline-flex align-items-center padding-right-half-em">
           <app-form-element [Type]="'select'" [LabelText]="'Seasons'" [SelectList]="seasons" [DisplayEmptyOption]="true"
@@ -187,18 +215,16 @@
 
           <!--there are two of these because if the model is not initialized it will throw an error this is the best solution for the moment-->
           @if (removeTeamFromEventEvent) {
-            <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'"
-              [SelectList]="removeTeamFromEventTeams" [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'"
-              [DisplayProperty2]="'team_nm'" [(Model)]="removeTeamFromEventEvent.teams" [Required]="true"
-              [MinWidth]="'100px'">
-            </app-form-element>
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
+            [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [(Model)]="removeTeamFromEventEvent.teams" [Required]="true" [MinWidth]="'100px'">
+          </app-form-element>
           }
 
           @if (!removeTeamFromEventEvent) {
-            <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'"
-              [SelectList]="removeTeamFromEventTeams" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-              [Required]="true" [MinWidth]="'100px'">
-            </app-form-element>
+          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
+            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [Required]="true" [MinWidth]="'100px'">
+          </app-form-element>
           }
 
           <app-button-ribbon>
@@ -274,37 +300,37 @@
   </app-form-element-group>
 
   @if (currentSeason.id || currentEvent.id) {
-    <app-form-element-group [LabelText]="'External Information Sources'">
-      <div class="flex flex-wrap space-between">
-        @if (currentSeason.id) {
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
-          Sync Season</app-button>
-        }
-        @if (currentEvent.id) {
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
-          Sync Event</app-button>
-        }
-        @if (currentEvent.id) {
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
-          Sync Matches</app-button>
-        }
-        @if (currentEvent.id) {
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
-          Sync Event-Team Info</app-button>
-        }
-        @if (currentSeason.id) {
-          <app-button [ButtonType]="'main'" (FunctionCallBack)="runScoutingReport()">
-          Run Scouting Report</app-button>
-        }
-      </div>
-    </app-form-element-group>
+  <app-form-element-group [LabelText]="'External Information Sources'">
+    <div class="flex flex-wrap space-between">
+      @if (currentSeason.id) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+        Sync Season</app-button>
+      }
+      @if (currentEvent.id) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
+        Sync Event</app-button>
+      }
+      @if (currentEvent.id) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+        Sync Matches</app-button>
+      }
+      @if (currentEvent.id) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
+        Sync Event-Team Info</app-button>
+      }
+      @if (currentSeason.id) {
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="runScoutingReport()">
+        Run Scouting Report</app-button>
+      }
+    </div>
+  </app-form-element-group>
   }
 
   @if (syncSeasonResponse.retMessage) {
-    <app-form-element-group [LabelText]="'Response'">
-      <div id="respose">
-        <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
-      </div>
-    </app-form-element-group>
+  <app-form-element-group [LabelText]="'Response'">
+    <div id="respose">
+      <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
+    </div>
+  </app-form-element-group>
   }
 </app-box>

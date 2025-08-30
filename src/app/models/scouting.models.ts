@@ -5,6 +5,8 @@ export interface ISeason {
     id: number;
     season: string;
     current: string;
+    game: string;
+    manual: string;
 }
 
 
@@ -12,6 +14,8 @@ export class Season implements ISeason {
     id = NaN;
     season = '';
     current = 'n';
+    game = '';
+    manual = '';
 }
 
 export interface ITeam {
