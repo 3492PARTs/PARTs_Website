@@ -5,10 +5,11 @@ import { FormComponent } from '../form/form.component';
 import { AppSize, GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
+import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
 
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule, ButtonComponent, HeaderComponent],
+  imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })
@@ -29,20 +30,11 @@ export class ModalComponent implements OnInit {
     this._visible = v;
     this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
     this.setPageScrolling();
-    this.clickOutsideCapture = true;
-
-    if (this._visible) {
-      window.setTimeout(() => {
-        this.clickOutsideCapture = false;
-      }, 500);
-    }
   }
   @Output() VisibleChange = new EventEmitter();
   _visible = false;
 
   @Input() zIndex = 17;
-
-  private clickOutsideCapture = true;
 
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
@@ -87,11 +79,6 @@ export class ModalComponent implements OnInit {
     this.ms.incrementModalVisibleCount();
     this.VisibleChange.emit(this._visible);
     this.setPageScrolling();
-    this.clickOutsideCapture = true;
-
-    window.setTimeout(() => {
-      this.clickOutsideCapture = false;
-    }, 500);
   }
 
   close() {
@@ -105,9 +92,8 @@ export class ModalComponent implements OnInit {
   }
 
   clickOutsideClose() {
-    if (!this.clickOutsideCapture) {
-      //this.close();
-      this.clickOutsideCapture = true;
+    if (this._visible) {
+      this.close();
     }
   }
 
