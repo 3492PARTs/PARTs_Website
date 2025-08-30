@@ -19,21 +19,6 @@ import { BlueBannersComponent } from '../../elements/blue-banners/blue-banners.c
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
-  bot2011ModalVisible = false;
-  bot2012ModalVisible = false;
-  bot2013ModalVisible = false;
-  bot2014ModalVisible = false;
-  bot2015ModalVisible = false;
-  bot2016ModalVisible = false;
-  bot2017ModalVisible = false;
-  bot2018ModalVisible = false;
-  bot2019ModalVisible = false;
-  bot2020ModalVisible = false;
-  bot2022ModalVisible = false;
-  bot2023ModalVisible = false;
-  bot2024ModalVisible = false;
-  bot2025ModalVisible = false;
-
   screenSize!: AppSize;
   screenSizeSmall = AppSize.SM;
 
@@ -43,7 +28,7 @@ export class AboutComponent implements OnInit {
       title: '2025 - B.O.B.',
       img: 'https://i.imgur.com/TcV2Hjv.jpeg',
       paragraphs: [
-        `"B.O.B.", named after our Software mentor Brandon Duke, was our fourteenth robot designed to play the 2025 game
+        `"B.O.B." or "Brand-o-bot", named after our Software mentor Brandon Duke, was our fourteenth robot designed to play the 2025 game
           REEFSCAPE. He was designed to intake coral through its rear hopper and place it out of
           a manipulator on his elevator. He did this though the use of vision processing to align
           with the scoring target`,
