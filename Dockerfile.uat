@@ -10,16 +10,14 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
-RUN npm install
-
 # Generate the build of the application
-RUN npx ng build --configuration=uat
-# npm run build --configuration=uat
+
+RUN npm install \
+    && npx ng build --configuration=uat
 
 # Stage 2: Serve app with nginx server
-
 # Use official nginx image as the base image
-FROM nginx:latest
+FROM nginx:latest AS runtime
 
 # Copy nginx conf
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
