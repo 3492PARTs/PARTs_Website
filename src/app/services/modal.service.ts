@@ -27,4 +27,8 @@ export class ModalService {
     if (this.modalVisibleCount > 0) this.modalVisibleCount--;
     this.setModalVisible();
   }
+
+  getModalVisibleCount(): number {
+    return this.modalVisibleCount;
+  }
 }
