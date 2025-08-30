@@ -47,7 +47,8 @@ export class ManageSeasonComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  manageSeasonModalVisible = false;
+  addSeasonModalVisible = false;
+  removeSeasonEventModalVisible = false;
   manageEventsModalVisible = false;
   manageTeamModalVisible = false;
   linkTeamToEventModalVisible = false;
@@ -160,9 +161,7 @@ export class ManageSeasonComponent implements OnInit {
       this.init();
     }, (err: any) => {
       this.gs.triggerError(err);
-    });
-
-    this.saveSeason(this.currentSeason);
+    }).then(() => this.saveSeason(this.currentSeason));
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
@@ -204,7 +203,7 @@ export class ManageSeasonComponent implements OnInit {
       this.gs.successfulResponseBanner(result);
       this.init();
       s = new Season();
-      this.manageSeasonModalVisible = false;
+      this.addSeasonModalVisible = false;
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -221,7 +220,7 @@ export class ManageSeasonComponent implements OnInit {
           this.delSeason = null;
           this.delEvent = null;
           this.delEventList = [];
-          this.manageSeasonModalVisible = false;
+          this.removeSeasonEventModalVisible = false;
         }, (err: any) => {
           this.gs.triggerError(err);
         });
@@ -263,6 +262,7 @@ export class ManageSeasonComponent implements OnInit {
         }, (result: any) => {
           this.gs.successfulResponseBanner(result);
           this.delEvent = null;
+          this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();
           this.init();
         }, (err: any) => {
