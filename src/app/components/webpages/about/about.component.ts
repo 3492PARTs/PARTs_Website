@@ -72,7 +72,8 @@ export class AboutComponent implements OnInit {
           This contributes a significant amount of points towards the regional pool rank.`,
         `At Worlds we competed in the Daly division. We finished ranking 61 out of
           75. Even though we did not win the division we did win the
-          Team Sustainability Award sponsored by Dow.`
+          Team Sustainability Award sponsored by Dow.`,
+        `In the <a href="https://www.thebluealliance.com/events/regional/2025#rankings" target="_blank">Regional Championship Pool</a>, we ranked #83 having earned 123 points.`
       ]
     },
     {
