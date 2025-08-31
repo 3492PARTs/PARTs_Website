@@ -31,7 +31,7 @@ node {
         stage('Build image') {  
             if (env.BRANCH_NAME == 'main') {
                 sh'''
-                sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.ts
+                sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                 '''
                 
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile --target=runtime .")
@@ -39,7 +39,7 @@ node {
             else {
                 sh'''
                 sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
-                && sed -i "s/VERSION/$BUILD_DATE/g" src/environments/environment.uat.ts
+                && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
 
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile.uat .")
