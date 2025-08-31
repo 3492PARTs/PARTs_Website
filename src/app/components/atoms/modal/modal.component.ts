@@ -5,10 +5,11 @@ import { FormComponent } from '../form/form.component';
 import { AppSize, GeneralService } from '../../../services/general.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
+import { ClickOutsideDirective } from '../../../directives/click-outside/click-outside.directive';
 
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule, ButtonComponent, HeaderComponent],
+  imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss']
 })
@@ -26,28 +27,21 @@ export class ModalComponent implements OnInit {
 
   @Input()
   set Visible(v: boolean) {
-    this._visible = v;
-    this._visible ? this.ms.incrementModalVisibleCount() : this.ms.decrementModalVisibleCount();
+    if (v && !this.openTime) this.open();
+    if (!v && this.openTime) this.close();
     this.setPageScrolling();
-    this.clickOutsideCapture = true;
-
-    if (this._visible) {
-      window.setTimeout(() => {
-        this.clickOutsideCapture = false;
-      }, 500);
-    }
   }
   @Output() VisibleChange = new EventEmitter();
-  _visible = false;
 
   @Input() zIndex = 17;
-
-  private clickOutsideCapture = true;
 
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
 
-  constructor(private ms: ModalService, private gs: GeneralService) { }
+  protected openTime: number | undefined = undefined;
+  protected modalNumber = 0;
+
+  constructor(public ms: ModalService, private gs: GeneralService) { }
 
   ngOnInit() {
     this.setModalSize();
@@ -83,21 +77,17 @@ export class ModalComponent implements OnInit {
   }
 
   open() {
-    this._visible = true;
+    this.openTime = Date.now();
     this.ms.incrementModalVisibleCount();
-    this.VisibleChange.emit(this._visible);
+    this.modalNumber = this.ms.getModalVisibleCount();
+    this.VisibleChange.emit(true);
     this.setPageScrolling();
-    this.clickOutsideCapture = true;
-
-    window.setTimeout(() => {
-      this.clickOutsideCapture = false;
-    }, 500);
   }
 
   close() {
-    this._visible = false;
+    this.openTime = undefined;
     this.ms.decrementModalVisibleCount();
-    this.VisibleChange.emit(this._visible);
+    this.VisibleChange.emit(false);
     this.setPageScrolling();
     this.form.forEach(elem => {
       elem.reset();
@@ -105,9 +95,12 @@ export class ModalComponent implements OnInit {
   }
 
   clickOutsideClose() {
-    if (!this.clickOutsideCapture) {
-      //this.close();
-      this.clickOutsideCapture = true;
+    if (this.openTime && this.modalNumber == this.ms.getModalVisibleCount()) {
+      var delta = Date.now() - this.openTime; // milliseconds elapsed since start
+
+      if (delta > 10) {
+        window.setTimeout(() => this.close(), 10);
+      }
     }
   }
 
@@ -115,7 +108,7 @@ export class ModalComponent implements OnInit {
     const body = document.body;
     const html = document.documentElement;
 
-    if (this._visible) {
+    if (this.openTime) {
       html.style.overflow = 'hidden';
       body.style.overflow = 'hidden';
     }

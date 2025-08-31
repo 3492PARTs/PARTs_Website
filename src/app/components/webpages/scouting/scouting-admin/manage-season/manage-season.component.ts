@@ -27,7 +27,7 @@ export class ManageSeasonComponent implements OnInit {
   events: Event[] = [];
   teams: Team[] = [];
 
-  newSeason!: number | null;
+  newSeason = new Season();
   delSeason!: number | null;
   newEvent: Event = new Event();
   delEvent!: number | null;
@@ -47,7 +47,8 @@ export class ManageSeasonComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  manageSeasonModalVisible = false;
+  addSeasonModalVisible = false;
+  removeSeasonEventModalVisible = false;
   manageEventsModalVisible = false;
   manageTeamModalVisible = false;
   linkTeamToEventModalVisible = false;
@@ -160,7 +161,7 @@ export class ManageSeasonComponent implements OnInit {
       this.init();
     }, (err: any) => {
       this.gs.triggerError(err);
-    });
+    }).then(() => this.saveSeason(this.currentSeason));
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
@@ -197,19 +198,15 @@ export class ManageSeasonComponent implements OnInit {
     this.init();
   }
 
-  addSeason(): void {
-    if (this.newSeason) {
-      const s = new Season();
-      s.season = this.newSeason.toString();
-      this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-        this.gs.successfulResponseBanner(result);
-        this.init();
-        this.newSeason = null;
-        this.manageSeasonModalVisible = false;
-      }, (err: any) => {
-        this.gs.triggerError(err);
-      });
-    }
+  saveSeason(s: Season): void {
+    this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
+      this.gs.successfulResponseBanner(result);
+      this.init();
+      s = new Season();
+      this.addSeasonModalVisible = false;
+    }, (err: any) => {
+      this.gs.triggerError(err);
+    });
   }
 
   deleteSeason(): void | null {
@@ -223,7 +220,7 @@ export class ManageSeasonComponent implements OnInit {
           this.delSeason = null;
           this.delEvent = null;
           this.delEventList = [];
-          this.manageSeasonModalVisible = false;
+          this.removeSeasonEventModalVisible = false;
         }, (err: any) => {
           this.gs.triggerError(err);
         });
@@ -265,6 +262,7 @@ export class ManageSeasonComponent implements OnInit {
         }, (result: any) => {
           this.gs.successfulResponseBanner(result);
           this.delEvent = null;
+          this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();
           this.init();
         }, (err: any) => {

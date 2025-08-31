@@ -1,10 +1,10 @@
 @if (ButtonType !== '') {
-  <app-button #thisButton [ButtonType]="ButtonType" (FunctionCallBack)="open()">
-    {{ ButtonText }}
-  </app-button>
+<app-button #thisButton [ButtonType]="ButtonType" (FunctionCallBack)="open()">
+  {{ ButtonText }}
+</app-button>
 }
 
-<div class="overlay" [ngClass]="{'visible': _visible}" [ngStyle]="{'z-index': zIndex}">
+<div class="overlay" [ngClass]="{'visible': openTime}" [ngStyle]="{'z-index': zIndex}">
   <div class="popup" (appClickOutside)="clickOutsideClose()"
     [ngStyle]="{'width': _Width, 'min-width': MinWidth, 'max-width': MaxWidth}">
     <div class="popup-title">

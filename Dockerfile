@@ -9,24 +9,22 @@ WORKDIR /usr/local/app
 # Add the source code to app
 COPY ./ /usr/local/app/
 
-RUN npm install 
-RUN npx ng build 
+RUN npm install \
+    && npx ng build 
     
 # The runtime image, used to just run the code provided its virtual environment
 FROM python:3.11-slim AS runtime
-
-RUN  useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu
 
 WORKDIR /usr/local/app/dist/parts-website/browser/
 
 # Copy virtual env from previous step
 COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
 
-RUN apt update \
+RUN  useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
+    && apt update \
     && apt upgrade -y \
     && apt install curl sshpass wget -y \
-    && pip install paramiko==3.5.1 \
-    && pip install pysftp \
+    && pip install paramiko==3.5.1  pysftp \
     && mkdir /scripts/ \
     && cd /scripts \
     && wget https://raw.githubusercontent.com/bduke-dev/scripts/main/delete_remote_files.py \
