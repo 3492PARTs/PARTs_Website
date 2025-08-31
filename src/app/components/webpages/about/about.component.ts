@@ -31,7 +31,7 @@ export class AboutComponent implements OnInit {
         `"B.O.B." or "Brand-o-bot", named after our Software mentor Brandon Duke, was our fourteenth robot designed to play the 2025 game
           REEFSCAPE. He was designed to intake coral through its rear hopper and place it out of
           a manipulator on his elevator. He did this though the use of vision processing to align
-          with the scoring target`,
+          with the scoring target.`,
         `In REEFSCAPE<SUP> SM </SUP> presented by Haas, two competing alliances are invited to score coral, harvest algae, and
           attach to the barge before time runs out. Alliances earn additional rewards for meeting specific scoring
           thresholds and for cooperating with their opponents.`,
