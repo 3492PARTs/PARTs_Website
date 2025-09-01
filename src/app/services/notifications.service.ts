@@ -158,5 +158,6 @@ export class Alert {
   channel_send_id = 0;
   body = '';
   subject = '';
+  url = '';
   staged_time = new Date();
 }

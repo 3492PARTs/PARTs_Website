@@ -287,6 +287,9 @@
                 <div class="notification-message">
                   <p>{{ n.subject }}</p>
                   <p [innerHTML]="n.body"></p>
+                  @if (n.url) {
+                  <a [href]="n.url" target="_blank">Link</a>
+                  }
                 </div>
               </div>
             </div>
