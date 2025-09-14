@@ -1,26 +1,26 @@
 @if (loading) {
-  <div class="loading">
-    <app-loading [Loading]="loading" [Height]="'100%'"></app-loading>
-  </div>
+<div class="loading">
+  <app-loading [Loading]="loading" [Height]="'100%'"></app-loading>
+</div>
 }
 
 @if (siteBanners.length > 0) {
-  <div id="site-banner" class="flex flex-wrap align-items-center"
-  [ngStyle]="{ height: siteBannerHeight + 'rem' }" [ngClass]="{
+<div id="site-banner" class="flex flex-wrap align-items-center" [ngStyle]="{ height: siteBannerHeight + 'rem' }"
+  [ngClass]="{
     expanded: navExpanded,
     hideNav: !showNav,
     'right-hand-nav': rightHandNav
   }">
-    @for (sb of siteBanners; track sb) {
-      <div class="banner-message flex align-items-center gap-1rem">
-        <span class="icon mdi mdi-alert-outline"></span>
-        <p [innerHTML]="sb.message"></p>
-        <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end">
-          <app-button [ButtonType]="'dismiss'" [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button>
-        </div>
-      </div>
-    }
+  @for (sb of siteBanners; track sb) {
+  <div class="banner-message flex align-items-center gap-1rem">
+    <span class="icon mdi mdi-alert-outline"></span>
+    <p [innerHTML]="sb.message"></p>
+    <div class="banner-dismiss flex-grow-2 flex justify-content-flex-end">
+      <app-button [ButtonType]="'dismiss'" [Color]="'white'" (FunctionCallBack)="dismissSiteBanner(sb)"></app-button>
+    </div>
   </div>
+  }
+</div>
 }
 
 <div #thisWrapper id="wrapper" [ngClass]="{ expanded: navExpanded, hideNav: !showNav }">
@@ -45,9 +45,20 @@
         collapsed: !navExpanded,
         size: !hideNavExpander
       }" appClickOutside (appClickOutside)="closeSubNav()">
+      <!--Environment header-->
+      @if (frontendEnv.length > 0) {
+      <div id="environment">
+        <p>
+          {{ frontendEnv }}{{ backendEnv.length > 0 ? ":" : ""
+          }}{{ backendEnv }}
+        </p>
+        <hr />
+      </div>
+      }
+
       <ul>
         @for (mi of applicationMenu; track mi) {
-<li id="{{ getNavPageID(mi.menu_name) }}" class="height" (click)="
+        <li id="{{ getNavPageID(mi.menu_name) }}" class="height" (click)="
             mi.menu_items.length > 0
               ? openSubNav(
                   getNavPageID(mi.menu_name),
@@ -55,7 +66,7 @@
                 )
               : closeSubNav(true)
           ">
-            <!--menu item link-->
+          <!--menu item link-->
           <a [routerLink]="
               mi.routerlink && !mi.routerlink.includes('https')
                 ? mi.routerlink
@@ -65,14 +76,13 @@
                 ? openURL(mi.routerlink)
                 : null
             ">
-              @if (mi.icon !== 'first') {
-                <span [ngClass]="{ 'right-hand-nav': rightHandNav }"
-                class="mdi icon mdi-{{ mi.icon }}"></span>
-              }
-              @if (mi.icon === 'first') {
-                <svg class="icon" [ngClass]="{ 'right-hand-nav': rightHandNav }"
-                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 669 401">
-                  <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
+            @if (mi.icon !== 'first') {
+            <span [ngClass]="{ 'right-hand-nav': rightHandNav }" class="mdi icon mdi-{{ mi.icon }}"></span>
+            }
+            @if (mi.icon === 'first') {
+            <svg class="icon" [ngClass]="{ 'right-hand-nav': rightHandNav }" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 669 401">
+              <g transform="translate(0,401) scale(0.1,-0.1)" fill="#ffffff" stroke="none">
                 <path d="M811 3984 c-62 -7 -116 -16 -119 -19 -7 -6 -693 -3748 -688 -3752 1
               -1 72 -10 158 -19 l155 -16 726 317 725 317 69 -55 c227 -183 526 -321 848
               -392 302 -66 676 -72 986 -14 194 36 415 106 558 179 l62 31 67 -62 c37 -34
@@ -115,58 +125,57 @@
               36 82 52 111 l31 54 174 -174 c96 -96 174 -176 174 -179z m1254 -558 c78 -80
               83 -72 -64 -99 -119 -22 -464 -24 -585 -4 -92 15 -307 69 -317 79 -4 4 144 75
               330 159 l337 151 115 -108 c63 -60 146 -140 184 -178z" />
-                  </g>
-                </svg>
-              }
-              <!--menu item name-->
-              <p routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="menu-link">
-                {{
-                !mi.menu_name_active_item
-                ? mi.menu_name
-                : mi.menu_name_active_item
-                }}
-              </p>
-              <!--arrow icon for menu item with submenu items-->
-              @if (mi.menu_items.length > 0) {
-                <span [ngStyle]="{ color: 'white' }"
-              class="mdi icon page-options mdi-menu-right" [ngClass]="{
+              </g>
+            </svg>
+            }
+            <!--menu item name-->
+            <p routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="menu-link">
+              {{
+              !mi.menu_name_active_item
+              ? mi.menu_name
+              : mi.menu_name_active_item
+              }}
+            </p>
+            <!--arrow icon for menu item with submenu items-->
+            @if (mi.menu_items.length > 0) {
+            <span [ngStyle]="{ color: 'white' }" class="mdi icon page-options mdi-menu-right" [ngClass]="{
                 rotate: subNav === getNavPageID(mi.menu_name) + '-1'
               }"></span>
-              }
-            </a>
-            <!--submenu items-->
-            @if (mi.menu_items.length > 0) {
-              <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar"
-                [ngClass]="{ show: subNav === getNavPageID(mi.menu_name) + '-1' }">
-                @if (mi.menu_header) {
-                  <span class="header">{{
-                    mi.menu_header
-                  }}</span>
-                }
-                <ul>
-                  @for (mii of mi.menu_items; track mii) {
-                    <li>
-                      @if (
-                        !pagesWithNavigation.includes(mii.menu_name.toLowerCase())
-                        ) {
-                        <a [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
-                          (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
-                          {{ mii.menu_name }}
-                        </a>
-                      }
-                      @if (
-                        pagesWithNavigation.includes(mii.menu_name.toLowerCase())
-                        ) {
-                        <a (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
-                          {{ mii.menu_name }}
-                        </a>
-                      }
-                    </li>
-                  }
-                </ul>
-              </div>
             }
-          </li>
+          </a>
+          <!--submenu items-->
+          @if (mi.menu_items.length > 0) {
+          <div id="{{ getNavPageID(mi.menu_name) + '-1' }}" class="side-sidebar"
+            [ngClass]="{ show: subNav === getNavPageID(mi.menu_name) + '-1' }">
+            @if (mi.menu_header) {
+            <span class="header">{{
+              mi.menu_header
+              }}</span>
+            }
+            <ul>
+              @for (mii of mi.menu_items; track mii) {
+              <li>
+                @if (
+                !pagesWithNavigation.includes(mii.menu_name.toLowerCase())
+                ) {
+                <a [routerLink]="mii.routerlink ? mii.routerlink : null" routerLinkActive="active-link"
+                  (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                  {{ mii.menu_name }}
+                </a>
+                }
+                @if (
+                pagesWithNavigation.includes(mii.menu_name.toLowerCase())
+                ) {
+                <a (click)="setActiveMenuSubmenuAndItem(mi, mii, mii.routerlink)">
+                  {{ mii.menu_name }}
+                </a>
+                }
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </li>
         }
       </ul>
 
@@ -176,14 +185,13 @@
 
       <div id="page-nav">
         @if (pagesWithNavigation.includes(getActiveMenuItemName())) {
-          <app-sub-navigation [setNavExpanded]="navExpanded"
-            [hideNavExpander]="hideNavExpander">
-          </app-sub-navigation>
+        <app-sub-navigation [setNavExpanded]="navExpanded" [hideNavExpander]="hideNavExpander">
+        </app-sub-navigation>
         }
       </div>
 
       @if (pagesWithNavigation.includes(getActiveMenuItemName())) {
-        <hr />
+      <hr />
       }
 
       <div id="social-icons" class="flex flex-wrap gap-1rem justify-content-space-around"
@@ -201,17 +209,6 @@
           <span class="mdi icon mdi-github"></span>
         </a>
       </div>
-
-      <!--Environment header-->
-      @if (frontendEnv.length > 0) {
-        <div id="environment">
-          <hr />
-          <p>
-            {{ frontendEnv }}{{ backendEnv.length > 0 ? ":" : ""
-            }}{{ backendEnv }}
-          </p>
-        </div>
-      }
     </div>
 
     <!--wide screen nav expander-->
@@ -234,75 +231,77 @@
     }">
     <!--narrow screen nav expander-->
     @if (hideNavExpander) {
-      <div id="mobile-menu" (click)="toggleShowNav()">
-        <span class="mdi mdi-menu icon"></span>
-      </div>
+    <div id="mobile-menu" (click)="toggleShowNav()">
+      <span class="mdi mdi-menu icon"></span>
+    </div>
     }
 
     <!--app menu bar-->
     <div id="menu-bar" [ngClass]="{ small_search: screenXs }">
       <!--search, not in use, disabled-->
       @if (screenXs) {
-        <div id="search-icon-wrapper">
-          @if (false) {
-            <span class="mdi mdi-magnify icon" id="search-icon" (click)="xsToggleSearch()" appClickOutside
-            (appClickOutside)="xsShowSearch = false"></span>
-          }
-        </div>
+      <div id="search-icon-wrapper">
+        @if (false) {
+        <span class="mdi mdi-magnify icon" id="search-icon" (click)="xsToggleSearch()" appClickOutside
+          (appClickOutside)="xsShowSearch = false"></span>
+        }
+      </div>
       }
 
       <div id="search-wrapper" [ngClass]="{ xsShowSearch: xsShowSearch, full_width: !showNav }">
         @if (false) {
-          <app-form-element [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
-          </app-form-element>
+        <app-form-element [Width]="'100%'" id="search" [Type]="'search'" [Placeholder]="'Search for...'">
+        </app-form-element>
         }
       </div>
 
       <!--user information/notifications/messages-->
       @if (user && user.id) {
-        <div id="user-center-wrapper" appClickOutside
-          (appClickOutside)="hideNotificationModal()">
-          <!--notifications-->
-          <div class="icon-wrapper">
+      <div id="user-center-wrapper" appClickOutside (appClickOutside)="hideNotificationModal()">
+        <!--notifications-->
+        <div class="icon-wrapper">
           <span class="mdi mdi-{{
               notifications.length <= 0 ? 'bell' : 'bell-ring'
             }} icon" [ngClass]="{ active: notifications.length > 0 }" (click)="showNotificationModal()"></span>
-          </div>
+        </div>
         <div id="notification-modal" [ngClass]="{
             full_width: !showNav,
             growInAnimation: showNotificationModalVisible
           }">
-            <h6>Notification Center</h6>
-            <div id="notification-list">
-              @for (n of notifications; track n) {
-                <div class="notification">
-                  <div class="notification-dismiss">
-                    <app-button [ButtonType]="'dismiss'" (click)="dismissNotification(n)"></app-button>
-                  </div>
-                  <div class="notification-icon-wrapper">
-                    <div class="notification-icon">
-                      <span class="mdi mdi-bell icon"></span>
-                    </div>
-                  </div>
-                  <div class="notification-content">
-                    <div class="notification-time">
-                      <p>{{ n.staged_time | dateToStr : true : true }}</p>
-                    </div>
-                    <div class="notification-message">
-                      <p>{{ n.subject }}</p>
-                      <p [innerHTML]="n.body"></p>
-                    </div>
-                  </div>
+          <h6>Notification Center</h6>
+          <div id="notification-list">
+            @for (n of notifications; track n) {
+            <div class="notification">
+              <div class="notification-dismiss">
+                <app-button [ButtonType]="'dismiss'" (click)="dismissNotification(n)"></app-button>
+              </div>
+              <div class="notification-icon-wrapper">
+                <div class="notification-icon">
+                  <span class="mdi mdi-bell icon"></span>
                 </div>
-              }
-              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{ tab: 'Notifications' }"
-                (click)="hideNotificationModal()">
-                <p>View All Notifications</p>
+              </div>
+              <div class="notification-content">
+                <div class="notification-time">
+                  <p>{{ n.staged_time | dateToStr : true : true }}</p>
+                </div>
+                <div class="notification-message">
+                  <p>{{ n.subject }}</p>
+                  <p [innerHTML]="n.body"></p>
+                  @if (n.url) {
+                  <a [href]="n.url" target="_blank">Link</a>
+                  }
+                </div>
               </div>
             </div>
+            }
+            <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{ tab: 'Notifications' }"
+              (click)="hideNotificationModal()">
+              <p>View All Notifications</p>
+            </div>
           </div>
-          <!--messages-->
-          <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
+        </div>
+        <!--messages-->
+        <div class="icon-wrapper no-padding" appClickOutside (appClickOutside)="hideMessageModal()">
           <span [ngClass]="{ active: messages.length > 0 }" class="mdi mdi-{{
               messages.length <= 0 ? 'email' : 'email-open'
             }} icon" (click)="showMessageModal()"></span>
@@ -310,88 +309,88 @@
               full_width: !showNav,
               growInAnimation: showMessageModalVisible
             }">
-              <h6>Message Center</h6>
-              <div id="notification-list">
-                @for (m of messages; track m) {
-                  <div class="notification">
-                    <div class="notification-icon-wrapper">
-                      <div class="notification-icon">
-                        <span class="mdi mdi-bell icon"></span>
-                      </div>
-                    </div>
-                    <div class="notification-content">
-                      <div class="notification-message">
-                        <p>{{ m.subject }}</p>
-                        <p [innerHTML]="m.body"></p>
-                      </div>
-                      <div class="notification-time">
-                        <p>
-                          Person &middot;
-                          {{ m.staged_time | dateToStr : true : true }}
-                        </p>
-                      </div>
-                    </div>
+            <h6>Message Center</h6>
+            <div id="notification-list">
+              @for (m of messages; track m) {
+              <div class="notification">
+                <div class="notification-icon-wrapper">
+                  <div class="notification-icon">
+                    <span class="mdi mdi-bell icon"></span>
                   </div>
-                }
-                <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{ tab: 'Messages' }"
-                  (click)="hideMessageModal()">
-                  <p>View All Messages</p>
                 </div>
+                <div class="notification-content">
+                  <div class="notification-message">
+                    <p>{{ m.subject }}</p>
+                    <p [innerHTML]="m.body"></p>
+                  </div>
+                  <div class="notification-time">
+                    <p>
+                      Person &middot;
+                      {{ m.staged_time | dateToStr : true : true }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              }
+              <div id="notifications-view-all" routerLink="user/profile" [queryParams]="{ tab: 'Messages' }"
+                (click)="hideMessageModal()">
+                <p>View All Messages</p>
               </div>
             </div>
           </div>
-          <div class="vertical-divider"></div>
-          <!--user profile-->
-          <div id="profile" appClickOutside (appClickOutside)="hideUserModal()">
-            <div id="profile-info" (click)="showUserModal()">
-              <p>{{ user.first_name }} {{ user.last_name }}</p>
-              <div id="profile-picture">
+        </div>
+        <div class="vertical-divider"></div>
+        <!--user profile-->
+        <div id="profile" appClickOutside (appClickOutside)="hideUserModal()">
+          <div id="profile-info" (click)="showUserModal()">
+            <p>{{ user.first_name }} {{ user.last_name }}</p>
+            <div id="profile-picture">
               <img [src]="
                   user.image
                     ? user.image
                     : '../../../assets/appIcons/BeanieBot40x40.png'
                 " />
-              </div>
             </div>
-            @if (user && user.id) {
-<div id="user-modal" [ngClass]="{
+          </div>
+          @if (user && user.id) {
+          <div id="user-modal" [ngClass]="{
               full_width: !showNav,
               growInAnimation: showUserModalVisible
             }">
-                <div class="profile-option">
-                  <div>
-                    <span class="mdi mdi-human-greeting icon"></span>
-                  </div>
-                  <div>
-                    <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
-                  </div>
-                </div>
-                <div class="profile-option" routerLink="user/profile" [queryParams]="{ tab: 'General' }"
-                  (click)="hideUserModal()">
-                  <div>
-                    <span class="mdi mdi-cogs icon"></span>
-                  </div>
-                  <div>
-                    <p>Settings</p>
-                  </div>
-                </div>
-                <div id="user-profile-divider"></div>
-                <div class="profile-option" id="logout" (click)="logOut(); hideUserModal()">
-                  <div>
-                    <span class="mdi mdi-logout icon"></span>
-                  </div>
-                  <div>
-                    <p>Logout</p>
-                  </div>
-                </div>
+            <div class="profile-option">
+              <div>
+                <span class="mdi mdi-human-greeting icon"></span>
               </div>
-            }
+              <div>
+                <a routerLink="user/profile" (click)="hideUserModal()">Profile</a>
+              </div>
+            </div>
+            <div class="profile-option" routerLink="user/profile" [queryParams]="{ tab: 'General' }"
+              (click)="hideUserModal()">
+              <div>
+                <span class="mdi mdi-cogs icon"></span>
+              </div>
+              <div>
+                <p>Settings</p>
+              </div>
+            </div>
+            <div id="user-profile-divider"></div>
+            <div class="profile-option" id="logout" (click)="logOut(); hideUserModal()">
+              <div>
+                <span class="mdi mdi-logout icon"></span>
+              </div>
+              <div>
+                <p>Logout</p>
+              </div>
+            </div>
           </div>
+          }
         </div>
+      </div>
       } @else {
-        <div id="login-link">
-          <a routerLink="login">Log In</a>
-        </div>
+      <div id="login-link">
+        <a routerLink="login">Log In</a>
+      </div>
       }
       <!--this shows if the user center does not-->
     </div>
@@ -411,7 +410,7 @@
         xsm: screenXs
       }">
       @if (siteBanners.length > 0) {
-        <div [ngStyle]="{ width: '100%', height: siteBannerHeight + 'rem' }"></div>
+      <div [ngStyle]="{ width: '100%', height: siteBannerHeight + 'rem' }"></div>
       }
       <ng-content> </ng-content>
     </main>

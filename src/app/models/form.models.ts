@@ -243,7 +243,7 @@ export class FormType implements IFormType {
 }
 
 export interface IResponse {
-    response_id: number;
+    id: number;
     form_typ: string;
     time: Date;
     archive_ind: string;
@@ -251,7 +251,7 @@ export interface IResponse {
 }
 
 export class Response implements IResponse {
-    response_id = NaN;
+    id = NaN;
     form_typ = '';
     time = new Date();
     archive_ind = "n";

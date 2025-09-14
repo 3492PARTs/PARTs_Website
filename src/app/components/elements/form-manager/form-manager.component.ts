@@ -45,9 +45,9 @@ export class FormManagerComponent implements OnInit {
 
   openResponse(res: Response): void {
     if (res.form_typ === 'team-app')
-      this.gs.navigateByUrl(`/join/team-application?response_id=${res.response_id}`);
+      this.gs.navigateByUrl(`/join/team-application?response_id=${res.id}`);
     else
-      this.gs.navigateByUrl(`/contact?response_id=${res.response_id}`);
+      this.gs.navigateByUrl(`/contact?response_id=${res.id}`);
   }
 
   archiveResponse(res: Response): void {
@@ -66,7 +66,7 @@ export class FormManagerComponent implements OnInit {
   deleteResponse(res: Response): void {
     this.gs.triggerConfirm('Are you sure you want to delete this response?', () => {
       this.api.delete(true, 'form/response/', {
-        response_id: res.response_id
+        response_id: res.id
       }, (result: any) => {
         this.getResponses();
       }, (err: any) => {
