@@ -31,8 +31,8 @@ export class SecurityComponent implements OnInit {
   availablePermissions: AuthPermission[] = [];
 
   permissionsTableCols: TableColType[] = [
-    { PropertyName: 'codename', ColLabel: 'Code' },
     { PropertyName: 'name', ColLabel: 'Permission' },
+    { PropertyName: 'codename', ColLabel: 'Code' },
   ];
   permissionsModalVisible = false;
   permissions: AuthPermission[] = [];
