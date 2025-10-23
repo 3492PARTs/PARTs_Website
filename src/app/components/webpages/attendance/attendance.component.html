@@ -1,3 +1,5 @@
 <app-box>
     <app-button (FunctionCallBack)="save()">Take Attendance</app-button>
+
+    <app-table [TableCols]="attendanceTableCols" [TableData]="attendance"></app-table>
 </app-box>
