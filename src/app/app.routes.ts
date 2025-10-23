@@ -54,6 +54,7 @@ import { ManageFieldFlowConditionsComponent } from './components/webpages/scouti
 import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
 import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
 import { GraphAdminFormComponent } from './components/webpages/scouting/scouting-admin/graph-admin-form/graph-admin-form.component';
+import { AttendanceComponent } from './components/webpages/attendance/attendance.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -110,6 +111,7 @@ export const routes: Routes = [
     { path: 'admin/team-contact-form', title: 'Admin Team Contact', component: TeamContactFormComponent, canActivate: [authGuard] },
     { path: 'competition', title: 'Competition', component: EventCompetitionComponent },
     { path: 'user/profile', title: 'User Profile', component: ProfileComponent, canActivate: [authGuard] },
+    { path: 'attendance', title: 'Attendance', component: AttendanceComponent, canActivate: [authGuard] },
     // otherwise redirect to home
     { path: '**', redirectTo: '' }
 ];
