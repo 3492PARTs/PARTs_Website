@@ -53,6 +53,12 @@ export class AttendanceComponent implements OnInit {
     if (this.user) {
       const a = new Attendance();
       a.user = this.user;
+
+      a.meeting = this.meetings.find(m => {
+        const d = new Date();
+        return d >= m.start && (!m.end || d <= m.end);
+      });
+
       this.api.post(true, 'attendance/attendance/',
         a,
         (result: any) => {

@@ -13,6 +13,7 @@ export class Attendance {
     user = new User();
     time_in = new Date();
     time_out: Date | undefined = undefined;
+    absent = false;
     bonus_approved = false;
     meeting: Meeting | undefined = undefined;
 }
