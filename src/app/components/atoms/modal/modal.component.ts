@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener, ElementRef } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
@@ -37,6 +37,8 @@ export class ModalComponent implements OnInit {
 
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
+
+  @ViewChild('owl-dt-popup-container') datetimePicker!: ElementRef;
 
   protected openTime: number | undefined = undefined;
   protected modalNumber = 0;
@@ -98,7 +100,7 @@ export class ModalComponent implements OnInit {
     if (this.openTime && this.modalNumber == this.ms.getModalVisibleCount()) {
       var delta = Date.now() - this.openTime; // milliseconds elapsed since start
 
-      if (delta > 10) {
+      if (delta > 10 && !this.datetimePicker.nativeElement) { //owl-dt-popup-container
         window.setTimeout(() => this.close(), 10);
       }
     }
