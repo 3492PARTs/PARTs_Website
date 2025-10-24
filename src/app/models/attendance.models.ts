@@ -4,6 +4,8 @@ export class Meeting {
     id = NaN;
     start = new Date();
     end: Date | undefined = undefined;
+    title = '';
+    description = '';
 }
 
 export class Attendance {

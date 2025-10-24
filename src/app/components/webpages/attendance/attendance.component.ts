@@ -25,7 +25,7 @@ export class AttendanceComponent implements OnInit {
   attendance: Attendance[] = [];
   attendanceTableCols: TableColType[] = [
     { PropertyName: 'user.first_name', ColLabel: 'User' },
-    { PropertyName: 'meeting.start', ColLabel: 'Meeting' },
+    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved' },
@@ -33,6 +33,7 @@ export class AttendanceComponent implements OnInit {
 
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
+    { PropertyName: 'title', ColLabel: 'Title' },
     { PropertyName: 'start', ColLabel: 'Start' },
     { PropertyName: 'end', ColLabel: 'End' },
   ];
@@ -87,5 +88,10 @@ export class AttendanceComponent implements OnInit {
       }, (err: any) => {
         this.gs.triggerError(err);
       });
+  }
+
+  showMeetingModal(meeting?: Meeting): void {
+    this.meeting = meeting ? this.gs.cloneObject(meeting) : new Meeting();
+    this.meetingModalVisible = true;
   }
 }
