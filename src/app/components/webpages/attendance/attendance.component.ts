@@ -12,6 +12,7 @@ import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
+import { LocationCheckResult, LocationService } from '../../../services/location.service';
 
 @Component({
   selector: 'app-attendance',
@@ -48,7 +49,7 @@ export class AttendanceComponent implements OnInit {
   meeting = new Meeting();
   triggerMeetingTableUpdate = false;
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService) {
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService) {
     auth.user.subscribe(u => this.user = u);
 
   }
@@ -58,24 +59,33 @@ export class AttendanceComponent implements OnInit {
   }
 
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
-    if (this.user) {
-      const a = attendance ? attendance : new Attendance();
-      a.user = this.user;
 
-      if (meeting)
-        a.meeting = meeting;
+    this.locationService.checkLocation().subscribe((result: LocationCheckResult) => {
+      if (result.isAllowed) {
+        if (this.user) {
+          const a = attendance ? attendance : new Attendance();
+          a.user = this.user;
 
-      this.api.post(true, 'attendance/attendance/',
-        a,
-        (result: any) => {
-          this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-          this.getAttendance();
-        }, (err: any) => {
-          this.gs.triggerError(err);
-        });
-    }
-    else
-      this.gs.triggerError('Couldn\'t take attendance see a mentor.');
+          if (meeting)
+            a.meeting = meeting;
+
+          this.api.post(true, 'attendance/attendance/',
+            a,
+            (result: any) => {
+              this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+              this.getAttendance();
+            }, (err: any) => {
+              this.gs.triggerError(err);
+            });
+        }
+        else
+          this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+      }
+      else {
+        this.gs.triggerError('You are not at the school, cannot take attendance.');
+        console.log(result.errorMessage);
+      }
+    });
   }
 
   checkIn(): void | null {
