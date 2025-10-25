@@ -55,6 +55,7 @@ import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouti
 import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
 import { GraphAdminFormComponent } from './components/webpages/scouting/scouting-admin/graph-admin-form/graph-admin-form.component';
 import { AttendanceComponent } from './components/webpages/attendance/attendance.component';
+import { MeetingsComponent } from './components/webpages/admin/meetings/meetings.component';
 
 export const routes: Routes = [
     { path: '', title: 'Home', component: HomeComponent },
@@ -103,6 +104,7 @@ export const routes: Routes = [
     { path: 'resources', title: 'Resources', component: ResourcesComponent },
     { path: 'first', title: 'FIRST', component: FirstComponent },
     { path: 'admin/admin-users', title: 'Admin Users', component: AdminUsersComponent, canActivate: [authGuard] },
+    { path: 'admin/meetings', title: 'Admin Meetings', component: MeetingsComponent, canActivate: [authGuard] },
     { path: 'admin/error-log', title: 'Admin Error Log', component: ErrorLogComponent, canActivate: [authGuard] },
     { path: 'admin/phone-types', title: 'Admin Phone Types', component: PhoneTypesComponent, canActivate: [authGuard] },
     { path: 'admin/requested-items', title: 'Admin Requested Items', component: RequestedItemsComponent, canActivate: [authGuard] },
