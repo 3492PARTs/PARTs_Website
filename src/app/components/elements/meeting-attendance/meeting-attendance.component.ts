@@ -57,6 +57,7 @@ export class MeetingAttendanceComponent implements OnInit {
   meetingModalVisible = false;
   meeting = new Meeting();
   triggerMeetingTableUpdate = false;
+  meetingAttendance: Attendance[] = [];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService) {
     auth.user.subscribe(u => {
@@ -103,7 +104,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   }
 
-  getAttendance(): void | null {
+  getAttendance(meeting?: Meeting): void | null {
     let qp = {};
     if (!this.AdminInterface)
       if (this.user)
@@ -113,9 +114,14 @@ export class MeetingAttendanceComponent implements OnInit {
         return null;
       }
 
+    if (meeting)
+      qp = { meeting_id: meeting.id }
 
     this.api.get(true, 'attendance/attendance/', qp, (result: Attendance[]) => {
-      this.attendance = result;
+      if (meeting)
+        this.meetingAttendance = result;
+      else
+        this.attendance = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
   }
@@ -211,6 +217,10 @@ export class MeetingAttendanceComponent implements OnInit {
   showMeetingModal(meeting?: Meeting): void {
     this.meeting = meeting ? this.gs.cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
+
+    if (this.AdminInterface && meeting) {
+      this.getAttendance(meeting);
+    }
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {
