@@ -35,7 +35,8 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('debug-step-out', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
+    new TableButtonType('account-alert', this.markAbsent.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
   ];
   attendanceModalVisible = false;
 
@@ -46,8 +47,9 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'end', ColLabel: 'End' },
   ];
   meetingsTableButtons: TableButtonType[] = [
-    new TableButtonType('debug-step-into', this.attendMeeting.bind(this), undefined, undefined, undefined, this.hasAttendedMeeting.bind(this)),
-    new TableButtonType('debug-step-out', this.leaveMeeting.bind(this), undefined, undefined, undefined, this.hasLeftMeeting.bind(this)),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.hasAttendance.bind(this)),
+    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), undefined, undefined, undefined, this.hasAttendedMeeting.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), undefined, undefined, undefined, this.hasLeftMeeting.bind(this)),
   ];
   meetingModalVisible = false;
   meeting = new Meeting();
@@ -148,6 +150,18 @@ export class AttendanceComponent implements OnInit {
       this.gs.triggerError('Couldn\'t take attendance see a mentor.');
   }
 
+  markAbsent(meeting: Meeting): void | null {
+    const a = new Attendance();
+    a.absent = true;
+    a.meeting = meeting;
+    if (this.user) {
+      a.user = this.user;
+      this.saveAttendance(a);
+    }
+    else
+      this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+  }
+
   // MEETING -----------------------------------------------------------
   getMeetings(): void | null {
     this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
@@ -188,7 +202,11 @@ export class AttendanceComponent implements OnInit {
   }
 
   hasLeftMeeting(meeting: Meeting): boolean {
-    return this.attendance.find(a => a.time_out !== null && a.meeting?.id === meeting.id) !== undefined;
+    return this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
+  }
+
+  hasAttendance(meeting: Meeting): boolean {
+    return this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   decodeYesNoBoolean(val: boolean): string {
