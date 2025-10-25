@@ -1,17 +1,31 @@
 <app-box>
-    <app-button (FunctionCallBack)="saveAttendance()">Take Attendance</app-button>
-
     <app-table [TableTitle]="'Meetings'" [TableCols]="meetingsTableCols" [TableData]="meetings" [ShowAddButton]="true"
         (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="true" (EditRecordCallBack)="showMeetingModal($event)"
-        [TableDataButtons]="meetingsTableButtons" [TriggerUpdate]="triggerMeetingTableUpdate"></app-table>
+        [TableDataButtons]="meetingsTableButtons" [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeMeeting($event)"></app-table>
 
     <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="attendance"
         [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
-        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"></app-table>
+        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
+        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)"></app-table>
 
+    <app-modal [(Visible)]="attendanceModalVisible" [Title]="'Manage Attendance'">
+        <app-form (SubmitFunction)="saveAttendance(attendanceEntry)">
+            <app-form-element [LabelText]="'Time In'" [Type]="'datetime'"
+                [(Model)]="attendanceEntry.time_in"></app-form-element>
+            <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'"
+                [(Model)]="attendanceEntry.time_out"></app-form-element>
+            <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'"
+                [(Model)]="attendanceEntry.absent"></app-form-element>
+            <app-form-element [LabelText]="'Bonus Approved'" [Type]="'checkbox'"
+                [(Model)]="attendanceEntry.bonus_approved"></app-form-element>
+            <app-button-ribbon>
+                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+            </app-button-ribbon>
+        </app-form>
+    </app-modal>
 
-
-    <app-modal [ButtonText]="'Meetings'" [(Visible)]="meetingModalVisible" [Title]="'Manage Meeting'">
+    <app-modal [(Visible)]="meetingModalVisible" [Title]="'Manage Meeting'">
         <app-form (SubmitFunction)="saveMeeting()">
             <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="meeting.title"
                 [FieldSize]="2000"></app-form-element>

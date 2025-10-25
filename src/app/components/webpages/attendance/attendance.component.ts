@@ -24,6 +24,7 @@ export class AttendanceComponent implements OnInit {
 
   private user: User | undefined = undefined;
   attendance: Attendance[] = [];
+  attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [
     { PropertyName: 'user.first_name', ColLabel: 'User' },
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
@@ -35,6 +36,7 @@ export class AttendanceComponent implements OnInit {
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('debug-step-out', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
   ];
+  attendanceModalVisible = false;
 
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
@@ -54,67 +56,33 @@ export class AttendanceComponent implements OnInit {
     auth.user.subscribe(u => this.user = u);
 
   }
+
   ngOnInit(): void {
     this.getAttendance();
     this.getMeetings();
   }
 
+  // ATTENDANCE -----------------------------------------------------------
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
-    //test my home { latitude: 38.3843043, longitude: -81.7166867 }
-    this.locationService.checkLocation().subscribe((result: LocationCheckResult) => {
-      if (result.isAllowed) {
-        if (this.user) {
-          const a = attendance ? attendance : new Attendance();
-          a.user = this.user;
+    if (this.user) {
+      const a = attendance ? attendance : new Attendance();
+      a.user = this.user;
 
-          if (meeting)
-            a.meeting = meeting;
+      if (meeting)
+        a.meeting = meeting;
 
-          this.api.post(true, 'attendance/attendance/',
-            a,
-            (result: any) => {
-              this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-              this.getAttendance();
-            }, (err: any) => {
-              this.gs.triggerError(err);
-            });
-        }
-        else
-          this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
-      }
-      else {
-        this.gs.triggerError('You are not at the school, cannot take attendance.');
-        console.log(result.errorMessage);
-        this.getAttendance();
-      }
-    });
-  }
-
-  checkIn(): void | null {
-    this.saveAttendance();
-  }
-
-  checkOut(attendance: Attendance): void | null {
-    attendance.time_out = new Date();
-    this.saveAttendance(attendance);
-  }
-
-  hasCheckedOut(attendance: Attendance): boolean {
-    return attendance.time_out !== null;
-  }
-
-  attendMeeting(meeting: Meeting): void | null {
-    this.saveAttendance(undefined, meeting);
-  }
-
-  leaveMeeting(meeting: Meeting): void | null {
-    const a = this.attendance.find(a => a.meeting?.id === meeting.id);
-    if (a) {
-      a.time_out = new Date();
-      this.saveAttendance(a);
+      this.api.post(true, 'attendance/attendance/',
+        a,
+        (result: any) => {
+          this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+          this.getAttendance();
+          this.attendanceModalVisible = false;
+        }, (err: any) => {
+          this.gs.triggerError(err);
+        });
     }
     else
-      this.gs.triggerError('Couldn\'t take attendance see a mentor.');
+      this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
   }
 
   removeAttendance(attendance: Attendance): void | null {
@@ -133,6 +101,53 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
+  showAttendanceModal(attendance?: Attendance): void {
+    this.attendanceEntry = attendance ? this.gs.cloneObject(attendance) : new Attendance();
+    this.attendanceModalVisible = true;
+  }
+
+  checkIn(): void | null {
+    this.checkLocation(this.saveAttendance);
+  }
+
+  checkOut(attendance: Attendance): void | null {
+    attendance.time_out = new Date();
+    this.checkLocation(this.saveAttendance.bind(this, attendance));
+  }
+
+  checkLocation(fn: () => any): void | null {
+    //test my home { latitude: 38.3843043, longitude: -81.7166867 }
+    this.locationService.checkLocation({ latitude: 38.3843043, longitude: -81.7166867 }).subscribe((result: LocationCheckResult) => {
+      if (result.isAllowed) {
+        fn();
+      }
+      else {
+        this.gs.triggerError('You are not at the school, cannot take attendance.');
+        console.log(result.errorMessage);
+        this.getAttendance();
+      }
+    });
+  }
+
+  hasCheckedOut(attendance: Attendance): boolean {
+    return attendance.time_out !== null;
+  }
+
+  attendMeeting(meeting: Meeting): void | null {
+    this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
+  }
+
+  leaveMeeting(meeting: Meeting): void | null {
+    const a = this.attendance.find(a => a.meeting?.id === meeting.id);
+    if (a) {
+      a.time_out = new Date();
+      this.checkLocation(this.saveAttendance.bind(this, a));
+    }
+    else
+      this.gs.triggerError('Couldn\'t take attendance see a mentor.');
+  }
+
+  // MEETING -----------------------------------------------------------
   getMeetings(): void | null {
     this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
       this.meetings = result;
@@ -140,17 +155,26 @@ export class AttendanceComponent implements OnInit {
     });
   }
 
-  saveMeeting(): void | null {
+  saveMeeting(meeting?: Meeting): void | null {
     this.api.post(true, 'attendance/meetings/',
-      this.meeting,
+      meeting ? meeting : this.meeting,
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
         this.meetingModalVisible = false;
         this.meeting = new Meeting();
         this.getMeetings();
+        this.getAttendance();
       }, (err: any) => {
         this.gs.triggerError(err);
       });
+  }
+
+  removeMeeting(meeting: Meeting): void | null {
+    this.gs.triggerConfirm('Are you sure you want to remove this record?', () => {
+      meeting.void_ind = 'y';
+      this.saveMeeting(meeting);
+    });
+
   }
 
   showMeetingModal(meeting?: Meeting): void {
