@@ -37,8 +37,8 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.isAdminInterface.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut.bind(this)),
   ];
   attendanceModalVisible = false;
 
@@ -58,12 +58,16 @@ export class MeetingAttendanceComponent implements OnInit {
   triggerMeetingTableUpdate = false;
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService) {
-    auth.user.subscribe(u => this.user = u);
+    auth.user.subscribe(u => {
+      this.user = !Number.isNaN(u.id) ? u : undefined;
+      if (this.user !== undefined) this.getAttendance();
+    }
+    );
 
   }
 
   ngOnInit(): void {
-    this.getAttendance();
+    if (this.AdminInterface) this.getAttendance();
     this.getMeetings();
   }
 
@@ -99,8 +103,17 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   getAttendance(): void | null {
+    let qp = {};
+    if (!this.AdminInterface)
+      if (this.user)
+        qp = { user_id: this.user.id }
+      else {
+        this.gs.triggerError('No user, couldn\'t get attendance see a mentor.');
+        return null;
+      }
 
-    this.api.get(true, 'attendance/attendance/', undefined, (result: Attendance[]) => {
+
+    this.api.get(true, 'attendance/attendance/', qp, (result: Attendance[]) => {
       this.attendance = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
@@ -135,7 +148,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hasCheckedOut(attendance: Attendance): boolean {
-    return attendance.time_out !== null;
+    return this.AdminInterface || attendance.time_out !== null;
   }
 
   attendMeeting(meeting: Meeting): void | null {
@@ -200,18 +213,23 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {
-    return this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
+    return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasLeftMeeting(meeting: Meeting): boolean {
-    return this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
+    return this.AdminInterface || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasAttendance(meeting: Meeting): boolean {
-    return this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
+    return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   decodeYesNoBoolean(val: boolean): string {
     return this.gs.decodeYesNoBoolean(val);
+  }
+
+  // UTILITY ---------------------------------------
+  isAdminInterface(): boolean {
+    return this.AdminInterface;
   }
 }
