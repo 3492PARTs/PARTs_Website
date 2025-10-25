@@ -14,10 +14,11 @@ import { APIService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
 import { LocationService, LocationCheckResult } from '../../../services/location.service';
+import { HeaderComponent } from "../../atoms/header/header.component";
 
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent],
   templateUrl: './meeting-attendance.component.html',
   styleUrl: './meeting-attendance.component.scss'
 })
@@ -26,6 +27,10 @@ export class MeetingAttendanceComponent implements OnInit {
   @Input() AdminInterface = false;
 
   private user: User | undefined = undefined;
+
+  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapproved' }, { property: 'Approved', value: 'approved' }];
+  attendanceFilterOption = 'all';
+
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [
@@ -40,6 +45,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.isAdminInterface.bind(this)),
     new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut.bind(this)),
+    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), undefined, undefined, undefined, this.isAttendanceApproved.bind(this))
   ];
   attendanceModalVisible = false;
 
@@ -140,20 +146,6 @@ export class MeetingAttendanceComponent implements OnInit {
     this.checkLocation(this.saveAttendance.bind(this, attendance));
   }
 
-  checkLocation(fn: () => any): void | null {
-    //test my home { latitude: 38.3843043, longitude: -81.7166867 }
-    this.locationService.checkLocation({ latitude: 38.3843043, longitude: -81.7166867 }).subscribe((result: LocationCheckResult) => {
-      if (result.isAllowed) {
-        fn();
-      }
-      else {
-        this.gs.triggerError('You are not at the school, cannot take attendance.');
-        console.log(result.errorMessage);
-        this.getAttendance();
-      }
-    });
-  }
-
   hasCheckedOut(attendance: Attendance): boolean {
     return this.AdminInterface || attendance.time_out !== null;
   }
@@ -182,6 +174,15 @@ export class MeetingAttendanceComponent implements OnInit {
     }
     else
       this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+  }
+
+  approveAttendance(attendance: Attendance): void | null {
+    attendance.approved = true;
+    this.saveAttendance(attendance);
+  }
+
+  isAttendanceApproved(attendance: Attendance): boolean {
+    return !this.AdminInterface || attendance.approved;
   }
 
   // MEETING -----------------------------------------------------------
@@ -242,5 +243,23 @@ export class MeetingAttendanceComponent implements OnInit {
   // UTILITY ---------------------------------------
   isAdminInterface(): boolean {
     return this.AdminInterface;
+  }
+
+  isNotAdminInterface(): boolean {
+    return !this.isAdminInterface();
+  }
+
+  checkLocation(fn: () => any): void | null {
+    //test my home { latitude: 38.3843043, longitude: -81.7166867 }
+    this.locationService.checkLocation({ latitude: 38.3843043, longitude: -81.7166867 }).subscribe((result: LocationCheckResult) => {
+      if (result.isAllowed) {
+        fn();
+      }
+      else {
+        this.gs.triggerError('You are not at the school, cannot take attendance.');
+        console.log(result.errorMessage);
+        this.getAttendance();
+      }
+    });
   }
 }

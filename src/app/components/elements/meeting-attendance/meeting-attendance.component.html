@@ -1,15 +1,24 @@
 <app-box>
-    <app-table [TableTitle]="'Meetings'" [TableCols]="meetingsTableCols" [TableData]="meetings"
-        [ShowAddButton]="AdminInterface" (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
+    <app-header [h]="2">Meetings</app-header>
+    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings" [ShowAddButton]="AdminInterface"
+        (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
         (RemoveRecordCallBack)="removeMeeting($event)" [ShowViewButton]="!AdminInterface"
         (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'"></app-table>
 
-    <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="attendance"
-        [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
-        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
-        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"></app-table>
+    <app-header [h]="2">Attendance</app-header>
+    @if (AdminInterface) {
+    <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
+        [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
+        [BindingProperty]="'value'"></app-form-element>
+    }
+    <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
+        (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
+        [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
+        (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
+        [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approved'"
+        [RemovedFilterPropertyValue]="attendanceFilterOption === 'approved'"></app-table>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
         <app-form (SubmitFunction)="saveMeeting()">
