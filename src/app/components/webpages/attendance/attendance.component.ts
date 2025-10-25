@@ -59,7 +59,7 @@ export class AttendanceComponent implements OnInit {
   }
 
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
-
+    //test my home { latitude: 38.3843043, longitude: -81.7166867 }
     this.locationService.checkLocation().subscribe((result: LocationCheckResult) => {
       if (result.isAllowed) {
         if (this.user) {
@@ -84,6 +84,7 @@ export class AttendanceComponent implements OnInit {
       else {
         this.gs.triggerError('You are not at the school, cannot take attendance.');
         console.log(result.errorMessage);
+        this.getAttendance();
       }
     });
   }

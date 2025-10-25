@@ -94,7 +94,7 @@ export class LocationService {
    * distance calculation.  The returned shape matches the original
    * implementation (`GeoCheckResult`).
    */
-  public checkLocation(): Observable<LocationCheckResult> {
+  public checkLocation(latLang?: { latitude: number, longitude: number }): Observable<LocationCheckResult> {
     return this.getCurrentLocation().pipe(
       map(coordRes => {
         if (!coordRes.success) {
@@ -105,12 +105,20 @@ export class LocationService {
           };
         }
 
+        let targetLat = this.targetLat;
+        let targetLng = this.targetLng;
+
+        if (latLang) {
+          targetLat = latLang.latitude;
+          targetLng = latLang.longitude;
+        }
+
         // We have valid latitude/longitude – evaluate distance
         const distance = this.haversineDistance(
           coordRes.latitude as number,
           coordRes.longitude as number,
-          this.targetLat,
-          this.targetLng
+          targetLat,
+          targetLng
         );
 
         if (distance <= this.allowedRadius) {
