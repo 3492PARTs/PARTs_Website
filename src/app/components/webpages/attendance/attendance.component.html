@@ -1,11 +1,13 @@
 <app-box>
     <app-button (FunctionCallBack)="saveAttendance()">Take Attendance</app-button>
 
-    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings" [ShowAddButton]="true"
-        (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="true"
-        (EditRecordCallBack)="showMeetingModal($event)"></app-table>
+    <app-table [TableTitle]="'Meetings'" [TableCols]="meetingsTableCols" [TableData]="meetings" [ShowAddButton]="true"
+        (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="true" (EditRecordCallBack)="showMeetingModal($event)"
+        [TableDataButtons]="meetingsTableButtons" [TriggerUpdate]="triggerMeetingTableUpdate"></app-table>
 
-    <app-table [TableCols]="attendanceTableCols" [TableData]="attendance"></app-table>
+    <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="attendance"
+        [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"></app-table>
 
 
 

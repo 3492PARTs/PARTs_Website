@@ -7,7 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
 import { Attendance, Meeting } from '../../../models/attendance.models';
 import { Banner } from '../../../models/api.models';
-import { TableColType, TableComponent } from '../../atoms/table/table.component';
+import { TableButtonType, TableColType, TableComponent } from '../../atoms/table/table.component';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
@@ -30,6 +30,9 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved' },
   ];
+  attendanceTableButtons: TableButtonType[] = [
+    new TableButtonType('debug-step-out', this.checkOut.bind(this)),
+  ];
 
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
@@ -37,8 +40,13 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'start', ColLabel: 'Start' },
     { PropertyName: 'end', ColLabel: 'End' },
   ];
+  meetingsTableButtons: TableButtonType[] = [
+    new TableButtonType('debug-step-into', this.attendMeeting.bind(this), undefined, undefined, undefined, this.hasAttendedMeeting.bind(this)),
+    new TableButtonType('debug-step-out', this.leaveMeeting.bind(this), undefined, undefined, undefined, this.hasLeftMeeting.bind(this)),
+  ];
   meetingModalVisible = false;
   meeting = new Meeting();
+  triggerMeetingTableUpdate = false;
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService) {
     auth.user.subscribe(u => this.user = u);
@@ -49,20 +57,19 @@ export class AttendanceComponent implements OnInit {
     this.getMeetings();
   }
 
-  saveAttendance(): void | null {
+  saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
     if (this.user) {
-      const a = new Attendance();
+      const a = attendance ? attendance : new Attendance();
       a.user = this.user;
 
-      a.meeting = this.meetings.find(m => {
-        const d = new Date();
-        return d >= m.start && (!m.end || d <= m.end);
-      });
+      if (meeting)
+        a.meeting = meeting;
 
       this.api.post(true, 'attendance/attendance/',
         a,
         (result: any) => {
           this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+          this.getAttendance();
         }, (err: any) => {
           this.gs.triggerError(err);
         });
@@ -71,15 +78,49 @@ export class AttendanceComponent implements OnInit {
       this.gs.triggerError('Couldn\'t take attendance see a mentor.');
   }
 
+  checkIn(): void | null {
+    this.saveAttendance();
+  }
+
+  checkOut(attendance: Attendance): void | null {
+    attendance.time_out = new Date();
+    this.saveAttendance(attendance);
+  }
+
+  attendMeeting(meeting: Meeting): void | null {
+    this.saveAttendance(undefined, meeting);
+  }
+
+  leaveMeeting(meeting: Meeting): void | null {
+    const a = this.attendance.find(a => a.meeting?.id === meeting.id);
+    if (a) {
+      a.time_out = new Date();
+      this.saveAttendance(a);
+    }
+    else
+      this.gs.triggerError('Couldn\'t take attendance see a mentor.');
+  }
+
+  removeAttendance(attendance: Attendance): void | null {
+    this.gs.triggerConfirm('Are you sure you want to remove this record?', () => {
+      attendance.void_ind = 'y';
+      this.saveAttendance(attendance);
+    });
+
+  }
+
   getAttendance(): void | null {
+
     this.api.get(true, 'attendance/attendance/', undefined, (result: Attendance[]) => {
       this.attendance = result;
+      this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
   }
 
   getMeetings(): void | null {
     this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
       this.meetings = result;
+      this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
   }
 
@@ -99,5 +140,13 @@ export class AttendanceComponent implements OnInit {
   showMeetingModal(meeting?: Meeting): void {
     this.meeting = meeting ? this.gs.cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
+  }
+
+  hasAttendedMeeting(meeting: Meeting): boolean {
+    return this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
+  }
+
+  hasLeftMeeting(meeting: Meeting): boolean {
+    return this.attendance.find(a => a.time_out !== null && a.meeting?.id === meeting.id) !== undefined;
   }
 }

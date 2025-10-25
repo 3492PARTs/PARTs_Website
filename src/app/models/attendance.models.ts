@@ -1,7 +1,9 @@
+import { Season } from "./scouting.models";
 import { User } from "./user.models";
 
 export class Meeting {
     id = NaN;
+    season = new Season();
     start = new Date();
     end: Date | undefined = undefined;
     title = '';
@@ -16,4 +18,5 @@ export class Attendance {
     absent = false;
     bonus_approved = false;
     meeting: Meeting | undefined = undefined;
+    void_ind = 'n';
 }

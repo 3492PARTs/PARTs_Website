@@ -453,4 +453,13 @@ export class TableButtonType {
   Type?: string;
   Text?: string;
   HideFunction?: (arg: any) => boolean;
+
+  constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean) {
+    this.ButtonType = ButtonType;
+    this.RecordCallBack = RecordCallBack;
+    this.Title = Title;
+    this.Type = Type;
+    this.Text = Text;
+    this.HideFunction = HideFunction;
+  }
 }

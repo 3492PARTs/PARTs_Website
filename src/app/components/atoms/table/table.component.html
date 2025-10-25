@@ -1,10 +1,10 @@
 @if (TableTitle) {
-  <app-header [h]="3" [marginBottom]="false">{{
-    TableTitle
+<app-header [h]="3" [marginBottom]="false">{{
+  TableTitle
   }}</app-header>
 }
 @if (EnableFilter) {
-  <app-form-element [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'" [Model]="FilterText"
+<app-form-element [FormGroup]="false" [LabelText]="'Filter'" [Type]="'text'" [Model]="FilterText"
   (ModelChange)="filterTextChange($event)"></app-form-element>
 }
 <div class="TableContainer" [ngClass]="{ 'table-responsive': Responsive }" #TableContainer>
@@ -19,120 +19,116 @@
     <thead class="thead">
       <tr [ngClass]="{ 'resize-lines': Resizable }">
         @if (showButtonColumn && ButtonsFirstCol) {
-          <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
-            <!--Table buttons as first column-->
-            @if (ShowAddButton) {
-              <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()">
-              </app-button>
-            }
-          </th>
+        <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
+          <!--Table buttons as first column-->
+          @if (ShowAddButton) {
+          <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()">
+          </app-button>
+          }
+        </th>
         }
         @for (col of TableCols; track col) {
-<th (click)="SetOrder(col.PropertyName || '')" [ngClass]="{
+        <th (click)="SetOrder(col.PropertyName || '')" [ngClass]="{
             rightAlign: col.Alignment == 'right',
             centerAlign: col.Alignment == 'center'
           }" [ngStyle]="{ width: col.Width ? col.Width : 'auto' }">
-            @if (col.Href) {
-              <a [href]="col.Href" target="_blank">{{ col.ColLabel }}</a>
-            } @else {
-              {{ col.ColLabel }}
-            }
-            @if (
-              !OrderByReverse &&
-              !DisableSort &&
-              (col.PropertyName || '') == OrderByProperty
-              ) {
-              <span class="up-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
-                </svg>
-              </span>
-            }
-            @if (
-              OrderByReverse &&
-              !DisableSort &&
-              (col.PropertyName || '') == OrderByProperty
-              ) {
-              <span class="down-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
-                </svg>
-              </span>
-            }
-          </th>
+          @if (col.Href) {
+          <a [href]="col.Href" target="_blank">{{ col.ColLabel }}</a>
+          } @else {
+          {{ col.ColLabel }}
+          }
+          @if (
+          !OrderByReverse &&
+          !DisableSort &&
+          (col.PropertyName || '') == OrderByProperty
+          ) {
+          <span class="up-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 16.67l2.829 2.83 9.175-9.339 9.167 9.339 2.829-2.83-11.996-12.17z" />
+            </svg>
+          </span>
+          }
+          @if (
+          OrderByReverse &&
+          !DisableSort &&
+          (col.PropertyName || '') == OrderByProperty
+          ) {
+          <span class="down-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
+            </svg>
+          </span>
+          }
+        </th>
         }
         @if (showButtonColumn && !ButtonsFirstCol) {
-          <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
-            <!--Table buttons as last column-->
-            @if (ShowAddButton) {
-              <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()">
-              </app-button>
-            }
-          </th>
+        <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
+          <!--Table buttons as last column-->
+          @if (ShowAddButton) {
+          <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()">
+          </app-button>
+          }
+        </th>
         }
         @if (Scrollable) {
-          <th [ngStyle]="{ width: FixedTableScrollColWidth }"></th>
+        <th [ngStyle]="{ width: FixedTableScrollColWidth }"></th>
         }
       </tr>
     </thead>
     <tbody class="tbody" #MainTableBody>
       @for (
-        rec of TableData
-        | ObjectWildCardFilterPipe : FilterText
-        | OrderBy : OrderByProperty : OrderByReverse
-        | RemovedFilterPipe
-        : EnableRemovedFilter
-        : RemovedFilterProperty
-        : RemovedFilterPropertyValue; track
-        rec; let i = $index) {
-<tr [ngClass]="{
+      rec of TableData
+      | ObjectWildCardFilterPipe : FilterText
+      | OrderBy : OrderByProperty : OrderByReverse
+      | RemovedFilterPipe
+      : EnableRemovedFilter
+      : RemovedFilterProperty
+      : RemovedFilterPropertyValue; track
+      rec; let i = $index) {
+      <tr [ngClass]="{
           ActiveRow: rec == ActiveRec,
           CursorPointer: CursorPointer,
           'strike-through': StrikeThroughFn ? StrikeThroughFn(rec) : null
         }">
-          <ng-template #tableButtons>
-            <div>
-              @if (ShowViewButton) {
-                <app-button [ButtonType]="'view'" [SymbolSize]="'3rem'"
-                  (FunctionCallBack)="View(rec)">
-                </app-button>
-              }
-              @if (ShowEditButton) {
-                <app-button [ButtonType]="'edit'" [SymbolSize]="'3rem'"
-                  (FunctionCallBack)="Edit(rec)">
-                </app-button>
-              }
-              @if (ShowArchiveButton) {
-                <app-button [ButtonType]="'archive'" [SymbolSize]="'3rem'"
-                  (FunctionCallBack)="Archive(rec)">
-                </app-button>
-              }
-              @if (ShowRemoveButton) {
-                <app-button [ButtonType]="'delete'" [SymbolSize]="'3rem'"
-                (FunctionCallBack)="Remove(rec)"></app-button>
-              }
-              @for (btn of TableDataButtons; track btn) {
-                @if (
-                  btn.HideFunction
-                  ? rec[btn.ButtonType + (btn.HideFunction.name || '')] ===
-                  false
-                  : true
-                  ) {
-                  <app-button [ButtonType]="btn.ButtonType" [SymbolSize]="'3rem'" (FunctionCallBack)="btn.RecordCallBack(rec)"
-                    [Title]="btn.Title || ''" [Type]="btn.Type || ''">{{ btn.Text }}
-                  </app-button>
-                }
-              }
-            </div>
-          </ng-template>
-          @if (showButtonColumn && ButtonsFirstCol) {
-            <td class="btn-col" [ngStyle]="{ width: buttonCellWidth }">
-              <!--Table buttons as first column-->
-              <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
-            </td>
-          }
-          @for (col of TableCols; track col) {
-<td (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{
+        <ng-template #tableButtons>
+          <div>
+            @if (ShowViewButton) {
+            <app-button [ButtonType]="'view'" [SymbolSize]="'3rem'" (FunctionCallBack)="View(rec)">
+            </app-button>
+            }
+            @if (ShowEditButton) {
+            <app-button [ButtonType]="'edit'" [SymbolSize]="'3rem'" (FunctionCallBack)="Edit(rec)">
+            </app-button>
+            }
+            @if (ShowArchiveButton) {
+            <app-button [ButtonType]="'archive'" [SymbolSize]="'3rem'" (FunctionCallBack)="Archive(rec)">
+            </app-button>
+            }
+            @if (ShowRemoveButton) {
+            <app-button [ButtonType]="'delete'" [SymbolSize]="'3rem'" (FunctionCallBack)="Remove(rec)"></app-button>
+            }
+            @for (btn of TableDataButtons; track btn) {
+            @if (
+            btn.HideFunction
+            ? rec[btn.ButtonType + (btn.HideFunction.name || '')] ===
+            false
+            : true
+            ) {
+            <app-button [ButtonType]="btn.ButtonType" [SymbolSize]="'3rem'" (FunctionCallBack)="btn.RecordCallBack(rec)"
+              [Title]="btn.Title || ''" [Type]="btn.Type || ''">{{ btn.Text }}
+            </app-button>
+            }
+            }
+          </div>
+        </ng-template>
+        @if (showButtonColumn && ButtonsFirstCol) {
+        <td class="btn-col" [ngStyle]="{ width: buttonCellWidth }">
+          <!--Table buttons as first column-->
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
+        </td>
+        }
+        @for (col of TableCols; track col) {
+        <td (click)="RecordClick(rec)" (dblclick)="DblClkRecordClick(rec)" [ngStyle]="{
             'background-color': !rec[
               (col.PropertyName || '~') + (col.ColorFunction?.name || '~')
             ]
@@ -156,51 +152,50 @@
                 (col.PropertyName || '~') + (col.UnderlineFn?.name || '~')
               ] === true
           }">
-              @if (!col.Type) {
-                <p class="margin-bottom-0" [innerHTML]="rec[col.PropertyName || ''] | dateToStr"></p>
-              } @else {
-                @switch (col.Type) {
-                  @case ('function') {
-<p class="margin-bottom-0" [innerHTML]="
+          @if (!col.Type) {
+          <p class="margin-bottom-0" [innerHTML]="rec[col.PropertyName || ''] | dateToStr"></p>
+          } @else {
+          @switch (col.Type) {
+          @case ('function') {
+          <p class="margin-bottom-0" [innerHTML]="
                   rec[
                     (col.PropertyName || '') +
                       (col.ColValueFunction?.name || '')
                   ]
                 "></p>
-                  }
-                  @case ('image') {
-<span [id]="'image' + i" appOnCreate (onCreate)="
+          }
+          @case ('image') {
+          <span [id]="'image' + i" appOnCreate (onCreate)="
                   previewImage(rec[col.PropertyName || ''], 'image' + i)
                 ">
-                    </span>
-                  }
-                  @default {
-                    <app-form-element [Type]="col.Type || ''" [Name]="col.ColLabel + ' [' + (i + 1) + ']'"
-                [Model]="GetTableDisplayValue(rec, col.PropertyName || '')" (ModelChange)="
+          </span>
+          }
+          @default {
+          <app-form-element [Type]="col.Type || ''" [Name]="col.ColLabel + ' [' + (i + 1) + ']'"
+            [Model]="GetTableDisplayValue(rec, col.PropertyName || '')" (ModelChange)="
                   SetTableDisplayValue(rec, col.PropertyName || '', $event)
                 " [Width]="'100%'" [Disabled]="DisableInputs" [Required]="col.Required === true"
-                      [FieldSize]="col.FieldSize ? col.FieldSize : null" [Rows]="col.Rows ? col.Rows : null"
-                      [MinValue]="col.MinValue ? col.MinValue : null" [MaxValue]="col.MaxValue ? col.MaxValue : null"
-                      [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty || null"
-                      [DisplayProperty2]="col.DisplayProperty2 || null" [BindingProperty]="col.BindingProperty || null"
-                      [DisplayEmptyOption]="col.DisplayEmptyOption || false"
-                      [TrueValue]="col.TrueValue ? col.TrueValue : true"
-                [FalseValue]="col.FalseValue ? col.FalseValue : false" (FunctionCallBack)="
+            [FieldSize]="col.FieldSize ? col.FieldSize : null" [Rows]="col.Rows ? col.Rows : null"
+            [MinValue]="col.MinValue ? col.MinValue : null" [MaxValue]="col.MaxValue ? col.MaxValue : null"
+            [SelectList]="col.SelectList" [DisplayProperty]="col.DisplayProperty || null"
+            [DisplayProperty2]="col.DisplayProperty2 || null" [BindingProperty]="col.BindingProperty || null"
+            [DisplayEmptyOption]="col.DisplayEmptyOption || false" [TrueValue]="col.TrueValue ? col.TrueValue : true"
+            [FalseValue]="col.FalseValue ? col.FalseValue : false" (FunctionCallBack)="
                   col.FunctionCallBack ? col.FunctionCallBack(rec) : null
                 ">
-                    </app-form-element>
-                  }
-                }
-              }
-            </td>
+          </app-form-element>
           }
-          @if (showButtonColumn && !ButtonsFirstCol) {
-            <td class="btn-col" [ngStyle]="{ width: buttonCellWidth }">
-              <!--Table buttons as last column-->
-              <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
-            </td>
           }
-        </tr>
+          }
+        </td>
+        }
+        @if (showButtonColumn && !ButtonsFirstCol) {
+        <td class="btn-col" [ngStyle]="{ width: buttonCellWidth }">
+          <!--Table buttons as last column-->
+          <ng-container *ngTemplateOutlet="tableButtons"></ng-container>
+        </td>
+        }
+      </tr>
       }
     </tbody>
   </table>
