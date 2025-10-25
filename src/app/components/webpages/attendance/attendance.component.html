@@ -19,6 +19,18 @@
                 [(Model)]="attendanceEntry.absent"></app-form-element>
             <app-form-element [LabelText]="'Bonus Approved'" [Type]="'checkbox'"
                 [(Model)]="attendanceEntry.bonus_approved"></app-form-element>
+
+            @if (attendanceEntry.meeting) {
+            <app-form-element-group [LabelText]="'Meeting Information'">
+                <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="attendanceEntry.meeting.title"
+                    [Disabled]="true"></app-form-element>
+                <app-form-element [LabelText]="'Description'" [Type]="'area'"
+                    [(Model)]="attendanceEntry.meeting.description" [Disabled]="true" [Rows]="5"
+                    [Width]="'100%'"></app-form-element>
+            </app-form-element-group>
+
+            }
+
             <app-button-ribbon>
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>

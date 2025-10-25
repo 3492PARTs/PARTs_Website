@@ -13,10 +13,11 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { LocationCheckResult, LocationService } from '../../../services/location.service';
+import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-attendance',
-  imports: [BoxComponent, ButtonComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent],
+  imports: [BoxComponent, ButtonComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, FormElementGroupComponent],
   templateUrl: './attendance.component.html',
   styleUrl: './attendance.component.scss'
 })
