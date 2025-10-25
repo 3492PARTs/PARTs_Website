@@ -35,6 +35,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
     { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.isAdminInterface.bind(this)),

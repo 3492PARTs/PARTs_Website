@@ -4,23 +4,25 @@
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
         (RemoveRecordCallBack)="removeMeeting($event)" [ShowViewButton]="!AdminInterface"
-        (ViewRecordCallBack)="showMeetingModal($event)"></app-table>
+        (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'"></app-table>
 
     <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="attendance"
         [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
         (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
-        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)"></app-table>
+        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"></app-table>
 
     <app-modal [(Visible)]="attendanceModalVisible" [Title]="'Attendance'">
         <app-form (SubmitFunction)="saveAttendance(attendanceEntry)">
-            <app-form-element [LabelText]="'Time In'" [Type]="'datetime'"
-                [(Model)]="attendanceEntry.time_in"></app-form-element>
-            <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'"
-                [(Model)]="attendanceEntry.time_out"></app-form-element>
-            <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'"
-                [(Model)]="attendanceEntry.absent"></app-form-element>
+            <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
+                [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
+            <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
+                [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
+            <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
+                [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
             <app-form-element [LabelText]="'Bonus Approved'" [Type]="'checkbox'"
                 [(Model)]="attendanceEntry.bonus_approved" [Disabled]="!AdminInterface"></app-form-element>
+            <app-form-element [LabelText]="'Approved'" [Type]="'checkbox'" [(Model)]="attendanceEntry.approved"
+                [Disabled]="!AdminInterface"></app-form-element>
 
             @if (attendanceEntry.meeting) {
             <app-form-element-group [LabelText]="'Meeting Information'">
@@ -32,10 +34,11 @@
             </app-form-element-group>
 
             }
-
+            @if (AdminInterface || !attendanceEntry.approved) {
             <app-button-ribbon>
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>
+            }
         </app-form>
     </app-modal>
 

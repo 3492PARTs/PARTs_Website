@@ -18,6 +18,7 @@ export class Attendance {
     time_out: Date | undefined = undefined;
     absent = false;
     bonus_approved = false;
+    approved = false;
     meeting: Meeting | undefined = undefined;
     void_ind = 'n';
 }
