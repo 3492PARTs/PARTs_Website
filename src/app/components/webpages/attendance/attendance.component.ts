@@ -29,7 +29,8 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
-    { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved' },
+    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('debug-step-out', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
@@ -163,5 +164,9 @@ export class AttendanceComponent implements OnInit {
 
   hasLeftMeeting(meeting: Meeting): boolean {
     return this.attendance.find(a => a.time_out !== null && a.meeting?.id === meeting.id) !== undefined;
+  }
+
+  decodeYesNoBoolean(val: boolean): string {
+    return this.gs.decodeYesNoBoolean(val);
   }
 }
