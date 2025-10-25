@@ -31,7 +31,7 @@ export class AttendanceComponent implements OnInit {
     { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved' },
   ];
   attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('debug-step-out', this.checkOut.bind(this)),
+    new TableButtonType('debug-step-out', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut),
   ];
 
   meetings: Meeting[] = [];
@@ -85,6 +85,10 @@ export class AttendanceComponent implements OnInit {
   checkOut(attendance: Attendance): void | null {
     attendance.time_out = new Date();
     this.saveAttendance(attendance);
+  }
+
+  hasCheckedOut(attendance: Attendance): boolean {
+    return attendance.time_out !== null;
   }
 
   attendMeeting(meeting: Meeting): void | null {
