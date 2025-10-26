@@ -34,7 +34,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [
-    { PropertyName: 'user.first_name', ColLabel: 'User' },
+    { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
@@ -42,7 +42,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.isAdminInterface.bind(this)),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
     new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
     new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.isAttendanceApproved.bind(this)),
   ];
@@ -66,7 +66,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   attendanceReport: AttendanceReport[] = [];
   attendanceReportTableCols: TableColType[] = [
-    { PropertyName: 'user.first_name', ColLabel: 'User' },
+    { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'time', ColLabel: 'Hours' },
   ];
 
@@ -150,7 +150,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   checkIn(): void | null {
-    this.checkLocation(this.saveAttendance);
+    this.checkLocation(this.saveAttendance.bind(this));
   }
 
   checkOut(attendance: Attendance): void | null {
@@ -159,7 +159,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hasCheckedOut(attendance: Attendance): boolean {
-    return this.AdminInterface || attendance.time_out !== null;
+    return this.AdminInterface || attendance.time_out !== null || attendance.absent;
   }
 
   attendMeeting(meeting: Meeting): void | null {
@@ -186,6 +186,10 @@ export class MeetingAttendanceComponent implements OnInit {
     }
     else
       this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+  }
+
+  hideAbsentButton(attendance: Attendance): boolean {
+    return attendance.absent || attendance.approved || attendance.meeting !== undefined;
   }
 
   approveAttendance(attendance: Attendance): void | null {
