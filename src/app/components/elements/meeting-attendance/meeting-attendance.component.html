@@ -7,6 +7,9 @@
         (RemoveRecordCallBack)="removeMeeting($event)" [ShowViewButton]="!AdminInterface"
         (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'"></app-table>
 
+    <app-header [h]="2">Attendance Report</app-header>
+    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"></app-table>
+
     <app-header [h]="2">Attendance</app-header>
     @if (AdminInterface) {
     <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
@@ -19,9 +22,6 @@
         (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approved'"
         [RemovedFilterPropertyValue]="attendanceFilterOption === 'approved'"></app-table>
-
-    <app-header [h]="2">Attendance Report</app-header>
-    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"></app-table>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
         <app-form (SubmitFunction)="saveMeeting()">
