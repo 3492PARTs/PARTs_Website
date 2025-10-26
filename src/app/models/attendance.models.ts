@@ -28,3 +28,8 @@ export class AttendanceReport {
     time = NaN;
     percentage = NaN;
 }
+
+export class MeetingHours {
+    hours = NaN;
+    bonus_hours = NaN;
+}

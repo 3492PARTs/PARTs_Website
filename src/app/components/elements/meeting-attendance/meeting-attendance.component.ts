@@ -8,7 +8,7 @@ import { FormElementGroupComponent } from "../../atoms/form-element-group/form-e
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
 import { Banner } from '../../../models/api.models';
-import { Attendance, AttendanceReport, Meeting } from '../../../models/attendance.models';
+import { Attendance, AttendanceReport, Meeting, MeetingHours } from '../../../models/attendance.models';
 import { User } from '../../../models/user.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
@@ -74,6 +74,8 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'percentage', ColLabel: 'Percentage', Type: 'percent' },
   ];
 
+  totalMeetingHours = new MeetingHours();
+
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
     auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
@@ -89,7 +91,6 @@ export class MeetingAttendanceComponent implements OnInit {
       this.userService.getUsers(1, 1).then(result => this.users = result ? result : []);
     }
     this.getMeetings();
-
   }
 
   // ATTENDANCE -----------------------------------------------------------
@@ -216,6 +217,7 @@ export class MeetingAttendanceComponent implements OnInit {
     this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
       this.meetings = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
+      this.getMeetingHours();
     });
   }
 
@@ -282,6 +284,13 @@ export class MeetingAttendanceComponent implements OnInit {
 
     this.api.get(true, 'attendance/attendance-report/', qp, (result: AttendanceReport[]) => {
       this.attendanceReport = result;
+    });
+  }
+
+  // MEETING HOURS -----------------------------------------------------------
+  getMeetingHours(): void | null {
+    this.api.get(true, 'attendance/meeting-hours/', undefined, (result: MeetingHours) => {
+      this.totalMeetingHours = result;
     });
   }
 
