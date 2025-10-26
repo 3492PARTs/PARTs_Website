@@ -154,8 +154,10 @@
                 (col.PropertyName || '~') + (col.UnderlineFn?.name || '~')
               ] === true
           }">
-          @if (!col.Type) {
-          <p class="margin-bottom-0" [innerHTML]="rec[col.PropertyName || ''] | dateToStr"></p>
+          @if (!col.Type || tableTextTypes.includes(col.Type)) {
+          <p class="margin-bottom-0"
+            [innerHTML]="((rec[col.PropertyName || ''] ? rec[col.PropertyName || ''] : '') | dateToStr) + (col.Type === 'percent' ? '%' : '')">
+          </p>
           } @else {
           @switch (col.Type) {
           @case ('function') {

@@ -71,6 +71,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'time', ColLabel: 'Hours' },
+    { PropertyName: 'percentage', ColLabel: 'Percentage', Type: 'percent' },
   ];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {

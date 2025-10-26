@@ -120,6 +120,8 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() TriggerUpdate!: any;
 
+  tableTextTypes = ['percent'];
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {

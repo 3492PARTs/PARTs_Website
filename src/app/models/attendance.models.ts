@@ -26,4 +26,5 @@ export class Attendance {
 export class AttendanceReport {
     user = new User();
     time = NaN;
+    percentage = NaN;
 }
