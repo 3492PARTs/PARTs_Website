@@ -87,6 +87,11 @@ export class MeetingAttendanceComponent implements OnInit {
       if (meeting)
         a.meeting = meeting;
 
+      if (a.approved && !a.time_out) {
+        this.gs.triggerError('Cannot approve if no time out.');
+        return null;
+      }
+
       this.api.post(true, 'attendance/attendance/',
         a,
         (result: any) => {
