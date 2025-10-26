@@ -95,7 +95,7 @@ export class MeetingAttendanceComponent implements OnInit {
     if (this.user) {
       const a = attendance ? attendance : new Attendance();
 
-      if (!a.user)
+      if (Number.isNaN(a.user.id))
         a.user = this.user;
 
       if (meeting)
@@ -299,7 +299,7 @@ export class MeetingAttendanceComponent implements OnInit {
         fn();
       }
       else {
-        this.gs.triggerError('You are not at the school, cannot take attendance.');
+        this.gs.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
         console.log(result.errorMessage);
         this.getAttendance();
       }

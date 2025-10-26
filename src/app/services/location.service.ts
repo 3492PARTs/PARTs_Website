@@ -40,7 +40,7 @@ export class LocationService {
    *  ---------------------------------------------------------- */
   private readonly targetLat = 38.5352373;   // Example: Winfield Middle School
   private readonly targetLng = -81.8890643;
-  private readonly allowedRadius = 1000; // metres (1 km)
+  private readonly allowedRadius = 5000; // metres (1 km)
 
   /** -------------------------------------------------------------
    *  PUBLIC API
