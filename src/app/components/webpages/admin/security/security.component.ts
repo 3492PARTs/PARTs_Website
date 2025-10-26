@@ -31,8 +31,8 @@ export class SecurityComponent implements OnInit {
   availablePermissions: AuthPermission[] = [];
 
   permissionsTableCols: TableColType[] = [
-    { PropertyName: 'codename', ColLabel: 'Code' },
     { PropertyName: 'name', ColLabel: 'Permission' },
+    { PropertyName: 'codename', ColLabel: 'Code' },
   ];
   permissionsModalVisible = false;
   permissions: AuthPermission[] = [];
@@ -96,11 +96,9 @@ export class SecurityComponent implements OnInit {
   }
 
   getPermissionDisplayValue(prmsns: AuthPermission[]): string {
-    let codename = prmsns.reduce((pV: AuthPermission, cV: AuthPermission, i: number) => {
-      return { id: -1, codename: `${pV.codename}, ${cV.codename}`, content_type: -1, name: '' };
-    }, { id: -1, codename: '', content_type: -1, name: '' }).codename;
+    let names = prmsns.map((prm: AuthPermission) => prm.name).sort().reduce((s1: string, s2: string, i: number) => `${s1}, ${s2}`);
 
-    return codename.substring(2, codename.length);
+    return names;
   }
 
   showGroupModal(group?: AuthGroup): void {
