@@ -8,6 +8,7 @@ export class Meeting {
     end: Date | undefined = undefined;
     title = '';
     description = '';
+    bonus = false;
     void_ind = 'n';
 }
 
