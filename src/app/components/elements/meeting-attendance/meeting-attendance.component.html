@@ -51,8 +51,6 @@
                 [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
                 [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
-            <app-form-element [LabelText]="'Bonus Approved'" [Type]="'checkbox'"
-                [(Model)]="attendanceEntry.bonus_approved" [Disabled]="!AdminInterface"></app-form-element>
             <app-form-element [LabelText]="'Approved'" [Type]="'checkbox'" [(Model)]="attendanceEntry.approved"
                 [Disabled]="!AdminInterface"></app-form-element>
 

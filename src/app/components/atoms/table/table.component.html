@@ -65,7 +65,7 @@
         <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
           <!--Table buttons as last column-->
           @if (ShowAddButton) {
-          <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()">
+          <app-button [ButtonType]="'add'" [SymbolSize]="'3rem'" (FunctionCallBack)="Add()" [Title]="'Add'">
           </app-button>
           }
         </th>
@@ -93,19 +93,21 @@
         <ng-template #tableButtons>
           <div>
             @if (ShowViewButton) {
-            <app-button [ButtonType]="'view'" [SymbolSize]="'3rem'" (FunctionCallBack)="View(rec)">
+            <app-button [ButtonType]="'view'" [SymbolSize]="'3rem'" (FunctionCallBack)="View(rec)" [Title]="'View'">
             </app-button>
             }
             @if (ShowEditButton) {
-            <app-button [ButtonType]="'edit'" [SymbolSize]="'3rem'" (FunctionCallBack)="Edit(rec)">
+            <app-button [ButtonType]="'edit'" [SymbolSize]="'3rem'" (FunctionCallBack)="Edit(rec)" [Title]="'Edit'">
             </app-button>
             }
             @if (ShowArchiveButton) {
-            <app-button [ButtonType]="'archive'" [SymbolSize]="'3rem'" (FunctionCallBack)="Archive(rec)">
+            <app-button [ButtonType]="'archive'" [SymbolSize]="'3rem'" (FunctionCallBack)="Archive(rec)"
+              [Title]="'Archive'">
             </app-button>
             }
             @if (ShowRemoveButton) {
-            <app-button [ButtonType]="'delete'" [SymbolSize]="'3rem'" (FunctionCallBack)="Remove(rec)"></app-button>
+            <app-button [ButtonType]="'delete'" [SymbolSize]="'3rem'" (FunctionCallBack)="Remove(rec)"
+              [Title]="'Remove'"></app-button>
             }
             @for (btn of TableDataButtons; track btn) {
             @if (

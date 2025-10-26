@@ -39,13 +39,12 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
     { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'bonus_approved', ColLabel: 'Bonus Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.isAdminInterface.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), undefined, undefined, undefined, this.hasCheckedOut.bind(this)),
-    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), undefined, undefined, undefined, this.isAttendanceApproved.bind(this))
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.isAdminInterface.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
+    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.isAttendanceApproved.bind(this)),
   ];
   attendanceModalVisible = false;
 
@@ -56,9 +55,9 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'end', ColLabel: 'End' },
   ];
   meetingsTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), undefined, undefined, undefined, this.hasAttendance.bind(this)),
-    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), undefined, undefined, undefined, this.hasAttendedMeeting.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), undefined, undefined, undefined, this.hasLeftMeeting.bind(this)),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this)),
+    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), 'Check In', undefined, undefined, this.hasAttendedMeeting.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), 'Check Out', undefined, undefined, this.hasLeftMeeting.bind(this)),
   ];
   meetingModalVisible = false;
   meeting = new Meeting();
@@ -182,7 +181,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   isAttendanceApproved(attendance: Attendance): boolean {
-    return !this.AdminInterface || attendance.approved;
+    return !this.AdminInterface || attendance.approved || !attendance.time_out;
   }
 
   // MEETING -----------------------------------------------------------
