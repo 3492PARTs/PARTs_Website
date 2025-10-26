@@ -8,6 +8,9 @@
         (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
+    <p>Meeting Hours Available: {{totalMeetingHours.hours || 0}}</p>
+    <p>Bonus Meeting Hours Available:
+        {{totalMeetingHours.bonus_hours || 0}}</p>
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"></app-table>
 
     <app-header [h]="2">Attendance</app-header>
