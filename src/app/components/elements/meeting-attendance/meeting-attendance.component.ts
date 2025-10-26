@@ -55,6 +55,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'title', ColLabel: 'Title' },
     { PropertyName: 'start', ColLabel: 'Start' },
     { PropertyName: 'end', ColLabel: 'End' },
+    { PropertyName: 'bonus', ColLabel: 'Bonus', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
   meetingsTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this)),
@@ -70,6 +71,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'time', ColLabel: 'Hours' },
+    { PropertyName: 'percentage', ColLabel: 'Percentage', Type: 'percent' },
   ];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {

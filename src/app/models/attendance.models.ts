@@ -8,6 +8,7 @@ export class Meeting {
     end: Date | undefined = undefined;
     title = '';
     description = '';
+    bonus = false;
     void_ind = 'n';
 }
 
@@ -25,4 +26,5 @@ export class Attendance {
 export class AttendanceReport {
     user = new User();
     time = NaN;
+    percentage = NaN;
 }

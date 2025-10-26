@@ -33,15 +33,18 @@
                 [Disabled]="!AdminInterface" [FormGroupInline]="true"></app-form-element>
             <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="meeting.end"
                 [Disabled]="!AdminInterface" [FormGroupInline]="true"></app-form-element>
+            <app-form-element [LabelText]="'Bonus'" [Type]="'checkbox'" [(Model)]="meeting.bonus"
+                [Disabled]="!AdminInterface"></app-form-element>
+
             @if (AdminInterface) {
+            <app-button-ribbon>
+                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+            </app-button-ribbon>
+
             <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="meetingAttendance"
                 [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
                 (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
                 [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"></app-table>
-
-            <app-button-ribbon>
-                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
-            </app-button-ribbon>
             }
         </app-form>
     </app-modal>
