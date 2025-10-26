@@ -15,6 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 import { GeneralService, RetMessage } from '../../../services/general.service';
 import { LocationService, LocationCheckResult } from '../../../services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-meeting-attendance',
@@ -27,6 +28,7 @@ export class MeetingAttendanceComponent implements OnInit {
   @Input() AdminInterface = false;
 
   private user: User | undefined = undefined;
+  users: User[] = [];
 
   attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapproved' }, { property: 'Approved', value: 'approved' }];
   attendanceFilterOption = 'all';
@@ -70,7 +72,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'time', ColLabel: 'Hours' },
   ];
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService) {
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
     auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
       if (this.user !== undefined) this.getAttendance();
@@ -80,15 +82,21 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.AdminInterface) this.getAttendance();
+    if (this.AdminInterface) {
+      this.getAttendance();
+      this.userService.getUsers(1, 1).then(result => this.users = result ? result : []);
+    }
     this.getMeetings();
+
   }
 
   // ATTENDANCE -----------------------------------------------------------
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
     if (this.user) {
       const a = attendance ? attendance : new Attendance();
-      a.user = this.user;
+
+      if (Number.isNaN(a.user.id))
+        a.user = this.user;
 
       if (meeting)
         a.meeting = meeting;
@@ -291,10 +299,14 @@ export class MeetingAttendanceComponent implements OnInit {
         fn();
       }
       else {
-        this.gs.triggerError('You are not at the school, cannot take attendance.');
+        this.gs.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
         console.log(result.errorMessage);
         this.getAttendance();
       }
     });
+  }
+
+  compareUserObjects(u1: User, u2: User): boolean {
+    return this.userService.compareUserObjects(u1, u2);
   }
 }

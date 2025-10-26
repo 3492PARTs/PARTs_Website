@@ -84,7 +84,7 @@
       : EnableRemovedFilter
       : RemovedFilterProperty
       : RemovedFilterPropertyValue; track
-      rec; let i = $index) {
+      $index; let i = $index) {
       <tr [ngClass]="{
           ActiveRow: rec == ActiveRec,
           CursorPointer: CursorPointer,

@@ -159,10 +159,7 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   compareUserObjects(u1: User, u2: User): boolean {
-    if (u1 && u2 && u1.id && u2.id) {
-      return u1.id === u2.id;
-    }
-    return false;
+    return this.us.compareUserObjects(u1, u2);
   }
 
   // Scheduling ------------------------------------------------------------------------------------------------------------------------
