@@ -17,9 +17,9 @@
         [BindingProperty]="'value'"></app-form-element>
     }
     <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
-        (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
-        [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
-        (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
+        (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
+        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approved'"
         [RemovedFilterPropertyValue]="attendanceFilterOption === 'approved'"></app-table>
 
@@ -48,6 +48,11 @@
 
     <app-modal [(Visible)]="attendanceModalVisible" [Title]="'Attendance'">
         <app-form (SubmitFunction)="saveAttendance(attendanceEntry)">
+            @if (AdminInterface) {
+            <app-form-element [LabelText]="'User'" [Type]="'select'" [(Model)]="attendanceEntry.user"
+                [Disabled]="attendanceEntry.approved" [SelectList]="users" [DisplayProperty]="'name'"
+                [SelectComparatorFunction]="compareUserObjects.bind(this)"></app-form-element>
+            }
             <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
                 [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"></app-form-element>
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"

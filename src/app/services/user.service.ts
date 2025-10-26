@@ -139,4 +139,11 @@ export class UserService {
       if (fn) fn();
     });
   }
+
+  compareUserObjects(u1: User, u2: User): boolean {
+    if (u1 && u2 && u1.id && u2.id) {
+      return u1.id === u2.id;
+    }
+    return false;
+  }
 }
