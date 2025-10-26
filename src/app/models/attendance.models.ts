@@ -21,3 +21,8 @@ export class Attendance {
     meeting: Meeting | undefined = undefined;
     void_ind = 'n';
 }
+
+export class AttendanceReport {
+    user = new User();
+    time = NaN;
+}

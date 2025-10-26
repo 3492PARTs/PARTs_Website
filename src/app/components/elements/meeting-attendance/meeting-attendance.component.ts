@@ -8,7 +8,7 @@ import { FormElementGroupComponent } from "../../atoms/form-element-group/form-e
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
 import { Banner } from '../../../models/api.models';
-import { Attendance, Meeting } from '../../../models/attendance.models';
+import { Attendance, AttendanceReport, Meeting } from '../../../models/attendance.models';
 import { User } from '../../../models/user.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
@@ -63,6 +63,12 @@ export class MeetingAttendanceComponent implements OnInit {
   meeting = new Meeting();
   triggerMeetingTableUpdate = false;
   meetingAttendance: Attendance[] = [];
+
+  attendanceReport: AttendanceReport[] = [];
+  attendanceReportTableCols: TableColType[] = [
+    { PropertyName: 'user.first_name', ColLabel: 'User' },
+    { PropertyName: 'time', ColLabel: 'Hours' },
+  ];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService) {
     auth.user.subscribe(u => {
@@ -134,6 +140,8 @@ export class MeetingAttendanceComponent implements OnInit {
         this.attendance = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
+
+    this.getAttendanceReport();
   }
 
   showAttendanceModal(attendance?: Attendance): void {
@@ -242,6 +250,25 @@ export class MeetingAttendanceComponent implements OnInit {
 
   decodeYesNoBoolean(val: boolean): string {
     return this.gs.decodeYesNoBoolean(val);
+  }
+
+  // ATTENDANCE REPORT -----------------------------------------------------------
+  getAttendanceReport(meeting?: Meeting): void | null {
+    let qp = {};
+    if (!this.AdminInterface)
+      if (this.user)
+        qp = { user_id: this.user.id }
+      else {
+        this.gs.triggerError('No user, couldn\'t get attendance see a mentor.');
+        return null;
+      }
+
+    if (meeting)
+      qp = { meeting_id: meeting.id }
+
+    this.api.get(true, 'attendance/attendance-report/', qp, (result: AttendanceReport[]) => {
+      this.attendanceReport = result;
+    });
   }
 
   // UTILITY ---------------------------------------
