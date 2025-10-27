@@ -276,14 +276,17 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {
+    if (!this.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasLeftMeeting(meeting: Meeting): boolean {
+    if (!this.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasAttendance(meeting: Meeting): boolean {
+    if (!this.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
@@ -342,5 +345,12 @@ export class MeetingAttendanceComponent implements OnInit {
 
   compareUserObjects(u1: User, u2: User): boolean {
     return this.userService.compareUserObjects(u1, u2);
+  }
+
+  isDayToTakeAttendance(meeting: Meeting): boolean {
+    const time = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+    const start = new Date(new Date(meeting.start).setHours(0, 0, 0, 0)).getTime();
+    const end = new Date(new Date(meeting.end).setHours(0, 0, 0, 0)).getTime();
+    return start === time || end === time;
   }
 }
