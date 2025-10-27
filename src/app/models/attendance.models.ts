@@ -5,7 +5,7 @@ export class Meeting {
     id = NaN;
     season = new Season();
     start = new Date();
-    end: Date | undefined = undefined;
+    end = new Date(new Date().setHours(new Date().getHours() + 1));
     title = '';
     description = '';
     bonus = false;
