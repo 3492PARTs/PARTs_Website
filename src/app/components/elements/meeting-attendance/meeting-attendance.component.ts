@@ -114,6 +114,7 @@ export class MeetingAttendanceComponent implements OnInit {
         (result: any) => {
           this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
           this.getAttendance();
+          if (a.meeting) this.getAttendance(a.meeting);
           this.attendanceModalVisible = false;
         }, (err: any) => {
           this.gs.triggerError(err);
@@ -155,8 +156,12 @@ export class MeetingAttendanceComponent implements OnInit {
     this.getAttendanceReport();
   }
 
-  showAttendanceModal(attendance?: Attendance): void {
+  showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
     this.attendanceEntry = attendance ? this.gs.cloneObject(attendance) : new Attendance();
+
+    if (meeting)
+      this.attendanceEntry.meeting = meeting;
+
     this.attendanceModalVisible = true;
   }
 

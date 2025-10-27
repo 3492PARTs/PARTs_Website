@@ -45,9 +45,11 @@
             </app-button-ribbon>
 
             <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="meetingAttendance"
-                [ShowAddButton]="true" (AddRecordCallBack)="checkIn()" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
-                [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"></app-table>
+                [ShowAddButton]="true"
+                (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
+                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
+                [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
+                (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"></app-table>
             }
         </app-form>
     </app-modal>
