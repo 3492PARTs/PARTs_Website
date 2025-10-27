@@ -11,6 +11,8 @@ import { Album, AlbumsComponent } from '../../../elements/albums/albums.componen
 export class MediaCommunityOutreachComponent implements OnInit {
 
   albums: Album[] = [
+    { imgSrc: 'https://i.imgur.com/f8ky7Mb.jpeg', label: '2025 WV Makes', href: 'https://photos.app.goo.gl/we2SSDRrwgHFfzqLA' },
+    { imgSrc: 'https://i.imgur.com/EF2LkwD.jpeg', label: '2025 Toyota Trunk or Treat', href: 'https://photos.app.goo.gl/KbDdhRpjTaeL2CAQ9' },
     { imgSrc: 'https://i.imgur.com/URtPJsT.jpeg', label: '2025 Cardboard Regatta', href: 'https://photos.app.goo.gl/FGHeDJyLaqvByjsh8' },
     { imgSrc: 'https://i.imgur.com/LkOK5Oa.jpeg', label: '2024 FLL Scrimmage', href: 'https://photos.app.goo.gl/4X6yiTVMMGTaVD5v6' },
     { imgSrc: 'https://i.imgur.com/u3DS4i6.jpeg', label: '2024 Lakeside', href: 'https://photos.app.goo.gl/KJ3F6mKuyi5kFHYS9' },
