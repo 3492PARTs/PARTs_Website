@@ -66,6 +66,13 @@ export class MeetingAttendanceComponent implements OnInit {
   meeting = new Meeting();
   triggerMeetingTableUpdate = false;
   meetingAttendance: Attendance[] = [];
+  meetingAttendanceTableCols: TableColType[] = [
+    { PropertyName: 'user.name', ColLabel: 'User' },
+    { PropertyName: 'time_in', ColLabel: 'Time In' },
+    { PropertyName: 'time_out', ColLabel: 'Time Out' },
+    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+  ];
 
   attendanceReport: AttendanceReport[] = [];
   attendanceReportTableCols: TableColType[] = [

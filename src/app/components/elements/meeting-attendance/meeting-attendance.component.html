@@ -44,8 +44,8 @@
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>
 
-            <app-table [TableTitle]="'Attendance'" [TableCols]="attendanceTableCols" [TableData]="meetingAttendance"
-                [ShowAddButton]="true"
+            <app-table [TableTitle]="'Attendance'" [TableCols]="meetingAttendanceTableCols"
+                [TableData]="meetingAttendance" [ShowAddButton]="true"
                 (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
                 [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
                 [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
