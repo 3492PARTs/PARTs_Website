@@ -420,6 +420,10 @@ export class TableComponent implements OnInit, OnChanges {
   previewImage(link: string, id: string): void {
     this.gs.previewImage(link, id);
   }
+
+  strNoE(s: any): boolean {
+    return this.gs.strNoE(s);
+  }
 }
 
 export class TableColType {

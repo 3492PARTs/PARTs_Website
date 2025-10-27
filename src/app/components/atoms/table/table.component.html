@@ -156,7 +156,7 @@
           }">
           @if (!col.Type || tableTextTypes.includes(col.Type)) {
           <p class="margin-bottom-0"
-            [innerHTML]="((rec[col.PropertyName || ''] ? rec[col.PropertyName || ''] + (col.Type === 'percent' ? '%' : '') : '') | dateToStr)">
+            [innerHTML]="((!strNoE(rec[col.PropertyName || '']) ? rec[col.PropertyName || ''] + (col.Type === 'percent' ? '%' : '') : '') | dateToStr)">
           </p>
           } @else {
           @switch (col.Type) {
