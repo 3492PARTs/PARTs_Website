@@ -116,6 +116,11 @@ export class MeetingAttendanceComponent implements OnInit {
         return null;
       }
 
+      if (a.time_out && a.time_out < a.time_out) {
+        this.gs.triggerError('You cannot check out before checking in.');
+        return null;
+      }
+
       this.api.post(true, 'attendance/attendance/',
         a,
         (result: any) => {
@@ -234,8 +239,14 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   saveMeeting(meeting?: Meeting): void | null {
+    const m = meeting ? meeting : this.meeting;
+    if (m.end < m.start) {
+      this.gs.triggerError('Meeting end cannot be before start.');
+      return null;
+    }
+
     this.api.post(true, 'attendance/meetings/',
-      meeting ? meeting : this.meeting,
+      m,
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
         this.meetingModalVisible = false;

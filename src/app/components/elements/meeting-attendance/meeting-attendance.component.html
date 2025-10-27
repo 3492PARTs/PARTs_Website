@@ -29,13 +29,13 @@
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
         <app-form (SubmitFunction)="saveMeeting()">
             <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="meeting.title" [FieldSize]="2000"
-                [Disabled]="!AdminInterface"></app-form-element>
+                [Disabled]="!AdminInterface" [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Description'" [Type]="'area'" [(Model)]="meeting.description"
                 [FieldSize]="4000" [Rows]="5" [Width]="'100%'" [Disabled]="!AdminInterface"></app-form-element>
             <app-form-element [LabelText]="'Start'" [Type]="'datetime'" [(Model)]="meeting.start"
-                [Disabled]="!AdminInterface" [FormGroupInline]="true"></app-form-element>
+                [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="meeting.end"
-                [Disabled]="!AdminInterface" [FormGroupInline]="true"></app-form-element>
+                [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Bonus'" [Type]="'checkbox'" [(Model)]="meeting.bonus"
                 [Disabled]="!AdminInterface"></app-form-element>
 
@@ -59,10 +59,11 @@
             @if (AdminInterface) {
             <app-form-element [LabelText]="'User'" [Type]="'select'" [(Model)]="attendanceEntry.user"
                 [Disabled]="attendanceEntry.approved" [SelectList]="users" [DisplayProperty]="'name'"
-                [SelectComparatorFunction]="compareUserObjects.bind(this)"></app-form-element>
+                [SelectComparatorFunction]="compareUserObjects.bind(this)" [Required]="true"></app-form-element>
             }
             <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
-                [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"></app-form-element>
+                [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"
+                [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
                 [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"></app-form-element>
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
