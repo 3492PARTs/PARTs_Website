@@ -110,17 +110,17 @@ export class AuthService {
 
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
-      this.refreshToken((result: Token) => {
+      this.refreshToken(async (result: Token) => {
         this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
         this.getTokenExp(result.access);
         this.getTokenExp(result.refresh);
         this.tokenBS.next(result);
         localStorage.setItem(this.tokenStringLocalStorage, result.refresh);
 
-        this.getLoggedInUserData();
+        await this.getLoggedInUserData();
         this.ps.subscribeToNotifications();
         this.authInFlightBS.next(AuthCallStates.comp);
-      }, (err: HttpErrorResponse) => {
+      }, async (err: HttpErrorResponse) => {
         console.log('error', err);
 
         if (!this.api.connectionErrorStatuses.includes(err.status) || this.isSessionExpired()) {
@@ -128,7 +128,7 @@ export class AuthService {
           this.authInFlightBS.next(AuthCallStates.err);
         }
         else {
-          this.getLoggedInUserData();
+          await this.getLoggedInUserData();
           this.authInFlightBS.next(AuthCallStates.comp);
         }
       });
@@ -142,7 +142,7 @@ export class AuthService {
     localStorage.removeItem(this.tokenStringLocalStorage);
     if (this.rememberMeTimeout)
       window.clearTimeout(this.rememberMeTimeout);
-    this.router.navigateByUrl('login');
+    this.router.navigateByUrl(`login?returnUrl=${this.router.url}`);
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
@@ -278,18 +278,16 @@ export class AuthService {
     this.ns.getUserAlerts(false, 'message');
   }
 
-  getUserObject(): Promise<boolean> {
+  async getUserObject(): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => {
-        return u.where({ 'id': this.getTokenLoad(this.tokenBS.value?.refresh || '').user_id })
-      }, async (result: User) => {
+      this.ds.get(true, 'user/user-data/', undefined, 'User', (u: Dexie.Table) => u.where({ 'id': parseInt(this.getTokenLoad(this.tokenBS.value?.refresh || '-1').user_id) }), async (result: User) => {
         // comes from cache as an array, this only happens if app is offline
         if (Array.isArray(result))
           result = result[0];
         result = (result as User);
 
         this.userBS.next(result);
-        this.cs.User.AddOrEditAsync(result);
+        await this.cs.User.AddOrEditAsync(result);
 
         if (result.links)
           this.populateAppLinks(result.links);
@@ -413,7 +411,7 @@ export class TokenLoad {
   exp!: number;
   username!: string;
   email!: string;
-  user_id!: number;
+  user_id!: string;
   iat!: number;
   jti!: number;
   token_type = '';

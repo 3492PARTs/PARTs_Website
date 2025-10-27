@@ -25,6 +25,7 @@ export class DataService {
       if (onNext && cacheData && cacheData.length > 0) {
         onNext(cacheData);
       }
+      else if (onError && (!cacheData || cacheData.length <= 0)) onError('No cached user');
       else if (onError) onError(error);
     }, () => {
       if (onComplete) onComplete();
