@@ -95,6 +95,9 @@ export class NavigationService {
         subPages = this.allSubPages[0];
         if (!environment.production && !subPages.find(sp => sp.routerlink === '/admin/requested-items')) subPages.push(new Link('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
+      case 'scouting-admin':
+        subPages = this.allSubPages[1];
+        break;
       case 'scouting':
         switch (area[2]) {
           case 'scouting-admin':
