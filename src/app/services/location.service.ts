@@ -55,7 +55,6 @@ export class LocationService {
    * 3. If both methods fail, it emits the final failure result.
    */
   public getCurrentLocation(): Observable<LocationCoordinatesResult> {
-    return this.getIpLocation();
     // 1. Attempt Browser Geolocation first (more precise)
     return this.getBrowserLocation().pipe(
       // Use switchMap to check the result and potentially switch to the fallback Observable
