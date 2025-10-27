@@ -62,12 +62,11 @@
                 [SelectComparatorFunction]="compareUserObjects.bind(this)" [Required]="true"></app-form-element>
             }
             <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
-                [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"
-                [Required]="true"></app-form-element>
+                [Disabled]="attendanceEntry.approved" [FormGroupInline]="true" [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
-                [Disabled]="attendanceEntry.approved && !AdminInterface" [FormGroupInline]="true"></app-form-element>
+                [Disabled]="attendanceEntry.approved" [FormGroupInline]="true"></app-form-element>
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
-                [Disabled]="attendanceEntry.approved && !AdminInterface"></app-form-element>
+                [Disabled]="attendanceEntry.approved"></app-form-element>
             <app-form-element [LabelText]="'Approved'" [Type]="'checkbox'" [(Model)]="attendanceEntry.approved"
                 [Disabled]="!AdminInterface"></app-form-element>
 
