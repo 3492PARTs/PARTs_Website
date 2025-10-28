@@ -1,6 +1,14 @@
 <app-box>
     <app-header [h]="2">Meetings</app-header>
-    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings" [ShowAddButton]="AdminInterface"
+
+    <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="meetingFilterOptions"
+        [(Model)]="meetingFilterOption" [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+
+    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings | dateFilter
+    : meetingFilterOption !== 'all'
+    : 'start'
+    : today
+    : meetingFilterOption === 'future' ? 'gte' : 'lt'" [ShowAddButton]="AdminInterface"
         (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
@@ -11,7 +19,8 @@
     <p>Meeting Hours Available: {{totalMeetingHours.hours || 0}}</p>
     <p>Bonus Meeting Hours Available:
         {{totalMeetingHours.bonus_hours || 0}}</p>
-    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"></app-table>
+    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
+        [EnableFilter]="AdminInterface"></app-table>
 
     <app-header [h]="2">Attendance</app-header>
     @if (AdminInterface) {

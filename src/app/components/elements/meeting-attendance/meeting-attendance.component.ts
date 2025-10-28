@@ -16,10 +16,11 @@ import { GeneralService, RetMessage } from '../../../services/general.service';
 import { LocationService, LocationCheckResult } from '../../../services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '../../../services/user.service';
+import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
   templateUrl: './meeting-attendance.component.html',
   styleUrl: './meeting-attendance.component.scss'
 })
@@ -29,6 +30,10 @@ export class MeetingAttendanceComponent implements OnInit {
 
   private user: User | undefined = undefined;
   users: User[] = [];
+
+  meetingFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Future', value: 'future' }, { property: 'Past', value: 'past' }];
+  meetingFilterOption = 'future';
+  today = new Date();
 
   attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapproved' }, { property: 'Approved', value: 'approved' }];
   attendanceFilterOption = 'all';
@@ -234,7 +239,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceStartOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !attendance.absent && attendance.meeting) {
+    if (this.AdminInterface && !attendance.approved && !attendance.absent && attendance.meeting) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
     }
 
