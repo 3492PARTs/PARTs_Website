@@ -264,7 +264,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceStartOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !this.isAttendanceApproved(attendance) && !attendance.absent && attendance.meeting) {
+    if (this.AdminInterface && this.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
     }
 
@@ -273,7 +273,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceEndOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !this.isAttendanceApproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
+    if (this.AdminInterface && this.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
     }
 
