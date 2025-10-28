@@ -202,7 +202,7 @@ export class TableComponent implements OnInit, OnChanges {
         }
 
         if (col.ColorFunction) {
-          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(col.ColorFunctionRecAsParam ? rec : this.GetTableDisplayValue(rec, (col.PropertyName || '')));
         }
 
         if (col.FontColorFunction) {
@@ -448,6 +448,7 @@ export class TableColType {
   ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;
+  ColorFunctionRecAsParam? = false;
   FontColorFunction?: (arg: any) => string;
   UnderlineFn?: (rec: any, property?: any) => boolean;
 }
