@@ -178,12 +178,14 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   checkIn(): void | null {
-    this.checkLocation(this.saveAttendance.bind(this));
+    this.saveAttendance();
+    //this.checkLocation(this.saveAttendance.bind(this));
   }
 
   checkOut(attendance: Attendance): void | null {
     attendance.time_out = new Date();
-    this.checkLocation(this.saveAttendance.bind(this, attendance));
+    this.saveAttendance(attendance);
+    //this.checkLocation(this.saveAttendance.bind(this, attendance));
   }
 
   hasCheckedOut(attendance: Attendance): boolean {
@@ -191,14 +193,16 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendMeeting(meeting: Meeting): void | null {
-    this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
+    this.saveAttendance();
+    //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
   }
 
   leaveMeeting(meeting: Meeting): void | null {
     const a = this.attendance.find(a => a.meeting?.id === meeting.id);
     if (a) {
       a.time_out = new Date();
-      this.checkLocation(this.saveAttendance.bind(this, a));
+      this.saveAttendance(a);
+      //this.checkLocation(this.saveAttendance.bind(this, a));
     }
     else
       this.gs.triggerError('Couldn\'t take attendance see a mentor.');
@@ -239,7 +243,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceEndOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !attendance.absent && attendance.meeting && attendance.time_out) {
+    if (this.AdminInterface && !attendance.approved && !attendance.absent && attendance.meeting && attendance.time_out) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
     }
 
@@ -366,7 +370,7 @@ export class MeetingAttendanceComponent implements OnInit {
     return !this.isAdminInterface();
   }
 
-  checkLocation(fn: () => any): void | null {
+  /*checkLocation(fn: () => any): void | null {
     //test my home { latitude: 38.3843043, longitude: -81.7166867 }
     this.locationService.checkLocation({ latitude: 38.3843043, longitude: -81.7166867 }).subscribe((result: LocationCheckResult) => {
       if (result.isAllowed) {
@@ -378,7 +382,7 @@ export class MeetingAttendanceComponent implements OnInit {
         this.getAttendance();
       }
     });
-  }
+  }*/
 
   compareUserObjects(u1: User, u2: User): boolean {
     return this.userService.compareUserObjects(u1, u2);
