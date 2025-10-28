@@ -311,11 +311,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   GetTableDisplayValue(rec: any, property: string) {
-    return this.gs.getDisplayValue(rec, property);
+    return GeneralService.getPropertyValue(rec, property);
   }
 
   SetTableDisplayValue(rec: any, property: string, value: any) {
-    this.gs.setDisplayValue(rec, property, value);
+    this.gs.setPropertyValue(rec, property, value);
   }
 
   IsPropertyInColumnSettings(PropertyName: any) {

@@ -18,7 +18,7 @@ export class Attendance {
     time_in = new Date();
     time_out: Date | undefined = undefined;
     absent = false;
-    approved = false;
+    approval_typ = new AttendanceApproval();
     meeting: Meeting | undefined = undefined;
     void_ind = 'n';
 }
@@ -32,4 +32,9 @@ export class AttendanceReport {
 export class MeetingHours {
     hours = NaN;
     bonus_hours = NaN;
+}
+
+export class AttendanceApproval {
+    approval_typ = 'unapp';
+    approval_nm = 'Unapproved';
 }
