@@ -198,7 +198,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendMeeting(meeting: Meeting): void | null {
-    this.saveAttendance();
+    this.saveAttendance(undefined, meeting);
     //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
   }
 
