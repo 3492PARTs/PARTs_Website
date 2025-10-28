@@ -35,28 +35,6 @@ export class MeetingAttendanceComponent implements OnInit {
   meetingFilterOption = 'future';
   today = new Date();
 
-  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }];
-  attendanceFilterOption = 'unapp';
-
-  attendance: Attendance[] = [];
-  attendanceEntry = new Attendance();
-  attendanceTableCols: TableColType[] = [
-    { PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
-    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
-  ];
-  attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
-    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
-    new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
-  ];
-  attendanceModalVisible = false;
-  attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
-
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
     { PropertyName: 'title', ColLabel: 'Title' },
@@ -90,6 +68,29 @@ export class MeetingAttendanceComponent implements OnInit {
 
   totalMeetingHours = new MeetingHours();
 
+  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }];
+  attendanceFilterOption = 'all';
+
+  attendance: Attendance[] = [];
+  attendanceEntry = new Attendance();
+  attendanceTableCols: TableColType[] = [
+    { PropertyName: 'user.name', ColLabel: 'User' },
+    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
+    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
+    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true },
+    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
+  ];
+  attendanceTableButtons: TableButtonType[] = [
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
+    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
+    new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
+  ];
+  attendanceModalVisible = false;
+  attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
+
+
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
     auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
@@ -105,6 +106,9 @@ export class MeetingAttendanceComponent implements OnInit {
       this.userService.getUsers(1, 1).then(result => this.users = result ? result : []);
     }
     this.getMeetings();
+
+    if (this.AdminInterface)
+      this.attendanceFilterOption = 'unapp';
   }
 
   // ATTENDANCE -----------------------------------------------------------
@@ -118,7 +122,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (meeting)
         a.meeting = meeting;
 
-      if (this.isAttendanceApproved(a) && !a.time_out) {
+      if (this.isAttendanceApproved(a) && !a.time_out && !a.absent && a.void_ind !== 'y') {
         this.gs.triggerError('Cannot approve if no time out.');
         return null;
       }
