@@ -17,6 +17,8 @@ import { LocationService, LocationCheckResult } from '../../../services/location
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '../../../services/user.service';
 import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
+import { environment } from '../../../../environments/environment';
+
 
 @Component({
   selector: 'app-meeting-attendance',
@@ -105,7 +107,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (this.AdminInterface) {
       this.getAttendance();
-      this.userService.getUsers(1, 1).then(result => this.users = result ? result : []);
+      this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []);
     }
     this.getMeetings();
 
