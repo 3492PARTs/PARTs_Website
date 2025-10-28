@@ -602,7 +602,7 @@ export class GeneralService {
 
     for (let i = 0; i < tableData.length; i++) {
       tableCols.forEach(element => {
-        csv += '"' + this.getDisplayValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
+        csv += '"' + GeneralService.getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
       });
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
@@ -646,7 +646,7 @@ export class GeneralService {
     return csv;
   }
 
-  getDisplayValue(rec: any, property: string): any {
+  static getPropertyValue(rec: any, property: string): any {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
@@ -665,7 +665,7 @@ export class GeneralService {
     return ret; // do not turn into a string this will bite objects in the butt
   }
 
-  setDisplayValue(rec: any, property: string, value: any): void {
+  setPropertyValue(rec: any, property: string, value: any): void {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }

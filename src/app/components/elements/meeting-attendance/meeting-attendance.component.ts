@@ -8,7 +8,7 @@ import { FormElementGroupComponent } from "../../atoms/form-element-group/form-e
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
 import { Banner } from '../../../models/api.models';
-import { Attendance, AttendanceReport, Meeting, MeetingHours } from '../../../models/attendance.models';
+import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours } from '../../../models/attendance.models';
 import { User } from '../../../models/user.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
@@ -35,8 +35,8 @@ export class MeetingAttendanceComponent implements OnInit {
   meetingFilterOption = 'future';
   today = new Date();
 
-  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapproved' }, { property: 'Approved', value: 'approved' }];
-  attendanceFilterOption = 'all';
+  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }];
+  attendanceFilterOption = 'unapp';
 
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
@@ -46,14 +46,16 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
     { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true },
     { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
   ];
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
     new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
-    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.isAttendanceApproved.bind(this)),
+    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
+    new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
   ];
   attendanceModalVisible = false;
+  attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
@@ -76,7 +78,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' },
     { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
   ];
 
   attendanceReport: AttendanceReport[] = [];
@@ -116,7 +118,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (meeting)
         a.meeting = meeting;
 
-      if (a.approved && !a.time_out) {
+      if (this.isAttendanceApproved(a) && !a.time_out) {
         this.gs.triggerError('Cannot approve if no time out.');
         return null;
       }
@@ -173,6 +175,18 @@ export class MeetingAttendanceComponent implements OnInit {
     this.getAttendanceReport();
   }
 
+  isAttendanceUnapproved(attendance: Attendance): boolean {
+    return attendance.approval_typ.approval_typ === 'unapp';
+  }
+
+  isAttendanceApproved(attendance: Attendance): boolean {
+    return attendance.approval_typ.approval_typ === 'app';
+  }
+
+  isAttendanceRejected(attendance: Attendance): boolean {
+    return attendance.approval_typ.approval_typ === 'rej';
+  }
+
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
     this.attendanceEntry = attendance ? this.gs.cloneObject(attendance) : new Attendance();
 
@@ -226,20 +240,25 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hideAbsentButton(attendance: Attendance): boolean {
-    return attendance.absent || attendance.approved || attendance.meeting !== undefined;
+    return attendance.absent || this.isAttendanceApproved(attendance) || attendance.meeting !== undefined;
   }
 
   approveAttendance(attendance: Attendance): void | null {
-    attendance.approved = true;
+    attendance.approval_typ.approval_typ = 'app';
     this.saveAttendance(attendance);
   }
 
-  isAttendanceApproved(attendance: Attendance): boolean {
-    return !this.AdminInterface || attendance.approved || !attendance.time_out;
+  rejectAttendance(attendance: Attendance): void | null {
+    attendance.approval_typ.approval_typ = 'rej';
+    this.saveAttendance(attendance);
+  }
+
+  hideApproveRejectAttendance(attendance: Attendance): boolean {
+    return !this.AdminInterface || this.isAttendanceApproved(attendance) || this.isAttendanceRejected(attendance) || !attendance.time_out;
   }
 
   attendanceStartOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !attendance.approved && !attendance.absent && attendance.meeting) {
+    if (this.AdminInterface && !this.isAttendanceApproved(attendance) && !attendance.absent && attendance.meeting) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
     }
 
@@ -248,7 +267,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceEndOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && !attendance.approved && !attendance.absent && attendance.meeting && attendance.time_out) {
+    if (this.AdminInterface && !this.isAttendanceApproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
     }
 
@@ -336,10 +355,12 @@ export class MeetingAttendanceComponent implements OnInit {
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
-  decodeYesNoBoolean(val: boolean): string {
-    return this.gs.decodeYesNoBoolean(val);
+  isDayToTakeAttendance(meeting: Meeting): boolean {
+    const time = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+    const start = new Date(new Date(meeting.start).setHours(0, 0, 0, 0)).getTime();
+    const end = new Date(new Date(meeting.end).setHours(0, 0, 0, 0)).getTime();
+    return start === time || end === time;
   }
-
   // ATTENDANCE REPORT -----------------------------------------------------------
   getAttendanceReport(meeting?: Meeting): void | null {
     let qp = {};
@@ -393,10 +414,8 @@ export class MeetingAttendanceComponent implements OnInit {
     return this.userService.compareUserObjects(u1, u2);
   }
 
-  isDayToTakeAttendance(meeting: Meeting): boolean {
-    const time = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
-    const start = new Date(new Date(meeting.start).setHours(0, 0, 0, 0)).getTime();
-    const end = new Date(new Date(meeting.end).setHours(0, 0, 0, 0)).getTime();
-    return start === time || end === time;
+  decodeYesNoBoolean(val: boolean): string {
+    return this.gs.decodeYesNoBoolean(val);
   }
+
 }
