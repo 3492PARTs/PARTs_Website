@@ -248,17 +248,21 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceOutlierColor(start: Date, end: Date): string {
-    const timeDifferenceMs = Math.abs(start.getTime() - end.getTime());
+    const timeDifferenceMs = end.getTime() - start.getTime();
     const fiveMinutesMs = 5 * 60 * 1000;
+    const thirtyMinutesMs = fiveMinutesMs * 6;
 
     if (timeDifferenceMs < 0) {
-      return 'red';
-    }
-    else if (timeDifferenceMs < fiveMinutesMs) {
       return 'green';
     }
-    else {
+    else if (timeDifferenceMs < fiveMinutesMs) {
+      return 'lightgreen';
+    }
+    else if (timeDifferenceMs < thirtyMinutesMs) {
       return 'yellow'
+    }
+    else {
+      return 'red'
     }
   }
 
