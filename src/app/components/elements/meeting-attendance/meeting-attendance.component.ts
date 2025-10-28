@@ -92,15 +92,17 @@ export class MeetingAttendanceComponent implements OnInit {
 
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
-    auth.user.subscribe(u => {
-      this.user = !Number.isNaN(u.id) ? u : undefined;
-      if (this.user !== undefined) this.getAttendance();
-    }
-    );
+
 
   }
 
   ngOnInit(): void {
+    this.auth.user.subscribe(u => {
+      this.user = !Number.isNaN(u.id) ? u : undefined;
+      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
+    }
+    );
+
     if (this.AdminInterface) {
       this.getAttendance();
       this.userService.getUsers(1, 1).then(result => this.users = result ? result : []);
