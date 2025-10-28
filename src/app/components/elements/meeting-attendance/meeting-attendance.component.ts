@@ -38,8 +38,8 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
-    { PropertyName: 'time_in', ColLabel: 'Time In' },
-    { PropertyName: 'time_out', ColLabel: 'Time Out' },
+    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
+    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true },
     { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     { PropertyName: 'approved', ColLabel: 'Approved', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
   ];
@@ -227,6 +227,39 @@ export class MeetingAttendanceComponent implements OnInit {
 
   isAttendanceApproved(attendance: Attendance): boolean {
     return !this.AdminInterface || attendance.approved || !attendance.time_out;
+  }
+
+  attendanceStartOutlierColor(attendance: Attendance): string {
+    if (this.AdminInterface && !attendance.absent && attendance.meeting) {
+      return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
+    }
+
+    return 'initial'
+
+  }
+
+  attendanceEndOutlierColor(attendance: Attendance): string {
+    if (this.AdminInterface && !attendance.absent && attendance.meeting && attendance.time_out) {
+      return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
+    }
+
+    return 'initial'
+
+  }
+
+  attendanceOutlierColor(start: Date, end: Date): string {
+    const timeDifferenceMs = Math.abs(start.getTime() - end.getTime());
+    const fiveMinutesMs = 5 * 60 * 1000;
+
+    if (timeDifferenceMs < 0) {
+      return 'red';
+    }
+    else if (timeDifferenceMs < fiveMinutesMs) {
+      return 'green';
+    }
+    else {
+      return 'yellow'
+    }
   }
 
   // MEETING -----------------------------------------------------------
