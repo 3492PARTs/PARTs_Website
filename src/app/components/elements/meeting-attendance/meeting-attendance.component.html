@@ -6,7 +6,7 @@
 
     <app-table [TableCols]="meetingsTableCols" [TableData]="meetings | dateFilter
     : meetingFilterOption !== 'all'
-    : 'start'
+    : 'end'
     : today
     : meetingFilterOption === 'future' ? 'gte' : 'lt'" [ShowAddButton]="AdminInterface"
         (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
