@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { GeneralService } from '../services/general.service';
 
 @Pipe({ name: 'ObjectWildCardFilterPipe', standalone: true })
 export class ObjectWildCardFilterPipe implements PipeTransform {
@@ -45,7 +46,7 @@ export class RemovedFilterPipe implements PipeTransform {
 
     return ObjectArray.filter((ObjectItem: { [x: string]: any; }) => {
       // let TextFound: boolean = false;
-      const ret: boolean = ObjectItem[Property] === Value;
+      const ret: boolean = GeneralService.getPropertyValue(ObjectItem, Property) === Value;
       return ret;
     });
   }

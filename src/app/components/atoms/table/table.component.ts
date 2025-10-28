@@ -120,6 +120,8 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() TriggerUpdate!: any;
 
+  tableTextTypes = ['percent'];
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
@@ -200,7 +202,7 @@ export class TableComponent implements OnInit, OnChanges {
         }
 
         if (col.ColorFunction) {
-          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(col.ColorFunctionRecAsParam ? rec : this.GetTableDisplayValue(rec, (col.PropertyName || '')));
         }
 
         if (col.FontColorFunction) {
@@ -309,11 +311,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   GetTableDisplayValue(rec: any, property: string) {
-    return this.gs.getDisplayValue(rec, property);
+    return GeneralService.getPropertyValue(rec, property);
   }
 
   SetTableDisplayValue(rec: any, property: string, value: any) {
-    this.gs.setDisplayValue(rec, property, value);
+    this.gs.setPropertyValue(rec, property, value);
   }
 
   IsPropertyInColumnSettings(PropertyName: any) {
@@ -418,6 +420,10 @@ export class TableComponent implements OnInit, OnChanges {
   previewImage(link: string, id: string): void {
     this.gs.previewImage(link, id);
   }
+
+  strNoE(s: any): boolean {
+    return this.gs.strNoE(s);
+  }
 }
 
 export class TableColType {
@@ -442,6 +448,7 @@ export class TableColType {
   ColValueFunction?: (arg: any) => any;
   FunctionCallBack?: (arg: any) => any;
   ColorFunction?: (arg: any) => string;
+  ColorFunctionRecAsParam? = false;
   FontColorFunction?: (arg: any) => string;
   UnderlineFn?: (rec: any, property?: any) => boolean;
 }
@@ -453,4 +460,13 @@ export class TableButtonType {
   Type?: string;
   Text?: string;
   HideFunction?: (arg: any) => boolean;
+
+  constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean) {
+    this.ButtonType = ButtonType;
+    this.RecordCallBack = RecordCallBack;
+    this.Title = Title;
+    this.Type = Type;
+    this.Text = Text;
+    this.HideFunction = HideFunction;
+  }
 }

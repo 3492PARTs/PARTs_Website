@@ -1,15 +1,8 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/webpages/home/home.component';
 import { AboutComponent } from './components/webpages/about/about.component';
-import { AdminUsersComponent } from './components/webpages/admin/admin-users/admin-users.component';
-import { ErrorLogComponent } from './components/webpages/admin/error-log/error-log.component';
-import { PhoneTypesComponent } from './components/webpages/admin/phone-types/phone-types.component';
-import { RequestedItemsComponent } from './components/webpages/admin/requested-items/requested-items.component';
-import { SecurityComponent } from './components/webpages/admin/security/security.component';
-import { TeamApplicationFormComponent } from './components/webpages/admin/team-application-form/team-application-form.component';
-import { TeamContactFormComponent } from './components/webpages/admin/team-contact-form/team-contact-form.component';
 import { ContactComponent } from './components/webpages/contact/contact.component';
-import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component';
+import { EventCompetitionComponent } from './components/webpages/event-competition/event-competition.component'; // Public
 import { FirstComponent } from './components/webpages/first/first.component';
 import { ElectricalComponent } from './components/webpages/join/electrical/electrical.component';
 import { ImpactComponent } from './components/webpages/join/impact/impact.component';
@@ -24,65 +17,15 @@ import { CompetitionComponent } from './components/webpages/media/competition/co
 import { MediaComponent } from './components/webpages/media/media.component';
 import { WallpapersComponent } from './components/webpages/media/wallpapers/wallpapers.component';
 import { ResourcesComponent } from './components/webpages/resources/resources.component';
-import { FieldScoutingResponsesComponent } from './components/webpages/scouting/field-scouting-responses/field-scouting-responses.component';
-import { FieldScoutingComponent } from './components/webpages/scouting/field-scouting/field-scouting.component';
-import { MatchesComponent } from './components/webpages/scouting/strategizing/matches/matches.component';
-import { TeamNotesComponent } from './components/webpages/scouting/strategizing/team-notes/team-notes.component';
-import { ScoutPitResponsesComponent } from './components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component';
-import { PitScoutingComponent } from './components/webpages/scouting/pit-scouting/pit-scouting.component';
-import { ManageFieldQuestionAggregatesComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component';
-import { ManageFieldQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-question-conditions/manage-field-question-conditions.component';
-import { ManageFieldQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-questions/manage-field-questions.component';
-import { ManageFieldResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component';
-import { ManagePitQuestionConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component';
-import { ManagePitQuestionsComponent } from './components/webpages/scouting/scouting-admin/manage-pit-questions/manage-pit-questions.component';
-import { ManagePitResponsesComponent } from './components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component';
-import { ManageSeasonComponent } from './components/webpages/scouting/scouting-admin/manage-season/manage-season.component';
-import { ScoutingActivityComponent } from './components/webpages/scouting/scouting-admin/scouting-activity/scouting-activity.component';
-import { ScoutingScheduleComponent } from './components/webpages/scouting/scouting-admin/scouting-schedule/scouting-schedule.component';
-import { ScoutingUsersComponent } from './components/webpages/scouting/scouting-admin/scouting-users/scouting-users.component';
-import { ScoutingPortalComponent } from './components/webpages/scouting/scouting-portal/scouting-portal.component';
 import { SponsorShopComponent } from './components/webpages/sponsoring/sponsor-shop/sponsor-shop.component';
 import { SponsoringComponent } from './components/webpages/sponsoring/sponsoring.component';
-import { ProfileComponent } from './components/webpages/user/profile/profile.component';
 import { authGuard } from './helpers/auth.guard';
 import { CalendarComponent } from './components/webpages/calendar/calendar.component';
-import { MetricsComponent } from './components/webpages/scouting/strategizing/metrics/metrics.component';
-import { AllianceSelectionComponent } from './components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component';
-import { MatchPlanningComponent } from './components/webpages/scouting/strategizing/match-planning/match-planning.component';
-import { ManageFieldFlowConditionsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component';
-import { ManageFieldFlowsComponent } from './components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component';
-import { ManageFieldFormComponent } from './components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component';
-import { GraphAdminFormComponent } from './components/webpages/scouting/scouting-admin/graph-admin-form/graph-admin-form.component';
 
 export const routes: Routes = [
+    // public endpoints (keep as is)
     { path: '', title: 'Home', component: HomeComponent },
     { path: 'login', title: 'Login', component: LoginComponent },
-    { path: 'scouting/field', title: 'Field Scouting', component: FieldScoutingComponent, canActivate: [authGuard] },
-    { path: 'scouting/pit', title: 'Pit Scouting', component: PitScoutingComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/scouting-users', title: 'Scout Admin Users', component: ScoutingUsersComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-season', title: 'Scout Admin Season', component: ManageSeasonComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/schedule', title: 'Scout Admin Schedule', component: ScoutingScheduleComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/activity', title: 'Scout Admin Activity', component: ScoutingActivityComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-questions', title: 'Scout Admin Field Questions', component: ManageFieldQuestionsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-form', title: 'Scout Admin Field Form', component: ManageFieldFormComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-question-aggregates', title: 'Scout Admin Field Question Aggregates', component: ManageFieldQuestionAggregatesComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-question-conditions', title: 'Scout Admin Field Question Conditions', component: ManageFieldQuestionConditionsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-flows', title: 'Scout Admin Field Flows', component: ManageFieldFlowsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-flow-conditions', title: 'Scout Admin Field Flow Conditions', component: ManageFieldFlowConditionsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-field-responses', title: 'Scout Admin Field Responses', component: ManageFieldResponsesComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-pit-questions', title: 'Scout Admin Pit Questions', component: ManagePitQuestionsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-pit-question-conditions', title: 'Scout Admin Pit Question Conditions', component: ManagePitQuestionConditionsComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/manage-pit-responses', title: 'Scout Admin Pit Responses', component: ManagePitResponsesComponent, canActivate: [authGuard] },
-    { path: 'scouting/scouting-admin/graph-admin-form', title: 'Scout Admin Graph Admin', component: GraphAdminFormComponent, canActivate: [authGuard] },
-    { path: 'scouting/field-responses', title: 'Field Responses', component: FieldScoutingResponsesComponent, canActivate: [authGuard] },
-    { path: 'scouting/pit-responses', title: 'Pit Responses', component: ScoutPitResponsesComponent, canActivate: [authGuard] },
-    { path: 'scouting/portal', title: 'Scout Portal', component: ScoutingPortalComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/matches', title: 'Matches', component: MatchesComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/team-notes', title: 'Team Notes', component: TeamNotesComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/alliance-selection', title: 'Alliance Selection', component: AllianceSelectionComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/metrics', title: 'Metrics', component: MetricsComponent, canActivate: [authGuard] },
-    { path: 'scouting/strategizing/match-planning', title: 'Match Planning', component: MatchPlanningComponent, canActivate: [authGuard] },
     { path: 'contact', title: 'Contact Us', component: ContactComponent },
     { path: 'calendar', title: 'Calendar', component: CalendarComponent },
     { path: 'join', title: 'Join', component: JoinComponent },
@@ -101,15 +44,213 @@ export const routes: Routes = [
     { path: 'media/wallpapers', title: 'Media Wallpapers', component: WallpapersComponent },
     { path: 'resources', title: 'Resources', component: ResourcesComponent },
     { path: 'first', title: 'FIRST', component: FirstComponent },
-    { path: 'admin/admin-users', title: 'Admin Users', component: AdminUsersComponent, canActivate: [authGuard] },
-    { path: 'admin/error-log', title: 'Admin Error Log', component: ErrorLogComponent, canActivate: [authGuard] },
-    { path: 'admin/phone-types', title: 'Admin Phone Types', component: PhoneTypesComponent, canActivate: [authGuard] },
-    { path: 'admin/requested-items', title: 'Admin Requested Items', component: RequestedItemsComponent, canActivate: [authGuard] },
-    { path: 'admin/security', title: 'Admin Security', component: SecurityComponent, canActivate: [authGuard] },
-    { path: 'admin/team-application-form', title: 'Admin Team Application', component: TeamApplicationFormComponent, canActivate: [authGuard] },
-    { path: 'admin/team-contact-form', title: 'Admin Team Contact', component: TeamContactFormComponent, canActivate: [authGuard] },
-    { path: 'competition', title: 'Competition', component: EventCompetitionComponent },
-    { path: 'user/profile', title: 'User Profile', component: ProfileComponent, canActivate: [authGuard] },
+    { path: 'competition', title: 'Competition', component: EventCompetitionComponent }, // Moved to public section
+
+    // authenticated endpoints, lazy loaded and served on request
+
+    // Core Scouting Routes (scouting-bundle)
+    {
+        path: 'scouting',
+        canActivate: [authGuard],
+        children: [
+            {
+                path: 'field',
+                title: 'Field Scouting',
+                loadComponent: () => import('./components/webpages/scouting/field-scouting/field-scouting.component').then(mod => mod.FieldScoutingComponent),
+            },
+            {
+                path: 'pit',
+                title: 'Pit Scouting',
+                loadComponent: () => import('./components/webpages/scouting/pit-scouting/pit-scouting.component').then(mod => mod.PitScoutingComponent),
+            },
+            {
+                path: 'field-responses',
+                title: 'Field Responses',
+                loadComponent: () => import('./components/webpages/scouting/field-scouting-responses/field-scouting-responses.component').then(mod => mod.FieldScoutingResponsesComponent),
+            },
+            {
+                path: 'pit-responses',
+                title: 'Pit Responses',
+                loadComponent: () => import('./components/webpages/scouting/pit-scouting-responses/pit-scouting-responses.component').then(mod => mod.ScoutPitResponsesComponent),
+            },
+            {
+                path: 'portal',
+                title: 'Scout Portal',
+                loadComponent: () => import('./components/webpages/scouting/scouting-portal/scouting-portal.component').then(mod => mod.ScoutingPortalComponent),
+            },
+            {
+                path: 'strategizing/matches',
+                title: 'Matches',
+                loadComponent: () => import('./components/webpages/scouting/strategizing/matches/matches.component').then(mod => mod.MatchesComponent),
+            },
+            {
+                path: 'strategizing/team-notes',
+                title: 'Team Notes',
+                loadComponent: () => import('./components/webpages/scouting/strategizing/team-notes/team-notes.component').then(mod => mod.TeamNotesComponent),
+            },
+            {
+                path: 'strategizing/alliance-selection',
+                title: 'Alliance Selection',
+                loadComponent: () => import('./components/webpages/scouting/strategizing/alliance-selection/alliance-selection.component').then(mod => mod.AllianceSelectionComponent),
+            },
+            {
+                path: 'strategizing/metrics',
+                title: 'Metrics',
+                loadComponent: () => import('./components/webpages/scouting/strategizing/metrics/metrics.component').then(mod => mod.MetricsComponent),
+            },
+            {
+                path: 'strategizing/match-planning',
+                title: 'Match Planning',
+                loadComponent: () => import('./components/webpages/scouting/strategizing/match-planning/match-planning.component').then(mod => mod.MatchPlanningComponent),
+            },
+        ]
+    },
+
+    // Scouting Admin Routes (scouting-admin-bundle)
+    {
+        path: 'scouting-admin',
+        canActivate: [authGuard],
+        children: [
+            {
+                path: 'scouting-users',
+                title: 'Scout Admin Users',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/scouting-users/scouting-users.component').then(mod => mod.ScoutingUsersComponent),
+            },
+            {
+                path: 'manage-season',
+                title: 'Scout Admin Season',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-season/manage-season.component').then(mod => mod.ManageSeasonComponent),
+            },
+            {
+                path: 'schedule',
+                title: 'Scout Admin Schedule',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/scouting-schedule/scouting-schedule.component').then(mod => mod.ScoutingScheduleComponent),
+            },
+            {
+                path: 'activity',
+                title: 'Scout Admin Activity',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/scouting-activity/scouting-activity.component').then(mod => mod.ScoutingActivityComponent),
+            },
+            {
+                path: 'manage-field-questions',
+                title: 'Scout Admin Field Questions',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-questions/manage-field-questions.component').then(mod => mod.ManageFieldQuestionsComponent),
+            },
+            {
+                path: 'manage-field-form',
+                title: 'Scout Admin Field Form',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-form/manage-field-form.component').then(mod => mod.ManageFieldFormComponent),
+            },
+            {
+                path: 'manage-field-question-aggregates',
+                title: 'Scout Admin Field Question Aggregates',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-question-aggregates/manage-field-question-aggregates.component').then(mod => mod.ManageFieldQuestionAggregatesComponent),
+            },
+            {
+                path: 'manage-field-question-conditions',
+                title: 'Scout Admin Field Question Conditions',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-question-conditions/manage-field-question-conditions.component').then(mod => mod.ManageFieldQuestionConditionsComponent),
+            },
+            {
+                path: 'manage-field-flows',
+                title: 'Scout Admin Field Flows',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-flows/manage-field-flows.component').then(mod => mod.ManageFieldFlowsComponent),
+            },
+            {
+                path: 'manage-field-flow-conditions',
+                title: 'Scout Admin Field Flow Conditions',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-flow-conditions/manage-field-flow-conditions.component').then(mod => mod.ManageFieldFlowConditionsComponent),
+            },
+            {
+                path: 'manage-field-responses',
+                title: 'Scout Admin Field Responses',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-field-responses/manage-field-responses.component').then(mod => mod.ManageFieldResponsesComponent),
+            },
+            {
+                path: 'manage-pit-questions',
+                title: 'Scout Admin Pit Questions',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-pit-questions/manage-pit-questions.component').then(mod => mod.ManagePitQuestionsComponent),
+            },
+            {
+                path: 'manage-pit-question-conditions',
+                title: 'Scout Admin Pit Question Conditions',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-pit-question-conditions/manage-pit-question-conditions.component').then(mod => mod.ManagePitQuestionConditionsComponent),
+            },
+            {
+                path: 'manage-pit-responses',
+                title: 'Scout Admin Pit Responses',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/manage-pit-responses/manage-pit-responses.component').then(mod => mod.ManagePitResponsesComponent),
+            },
+            {
+                path: 'graph-admin-form',
+                title: 'Scout Admin Graph Admin',
+                loadComponent: () => import('./components/webpages/scouting/scouting-admin/graph-admin-form/graph-admin-form.component').then(mod => mod.GraphAdminFormComponent),
+            },
+        ]
+    },
+
+    // Admin Routes (admin-bundle)
+    {
+        path: 'admin', // Parent route for admin section
+        canActivate: [authGuard],
+        children: [
+            {
+                path: 'admin-users',
+                title: 'Admin Users',
+                loadComponent: () => import('./components/webpages/admin/admin-users/admin-users.component').then(mod => mod.AdminUsersComponent),
+            },
+            {
+                path: 'meetings',
+                title: 'Admin Meetings',
+                loadComponent: () => import('./components/webpages/admin/meetings/meetings.component').then(mod => mod.MeetingsComponent),
+            },
+            {
+                path: 'error-log',
+                title: 'Admin Error Log',
+                loadComponent: () => import('./components/webpages/admin/error-log/error-log.component').then(mod => mod.ErrorLogComponent),
+            },
+            {
+                path: 'phone-types',
+                title: 'Admin Phone Types',
+                loadComponent: () => import('./components/webpages/admin/phone-types/phone-types.component').then(mod => mod.PhoneTypesComponent),
+            },
+            {
+                path: 'requested-items',
+                title: 'Admin Requested Items',
+                loadComponent: () => import('./components/webpages/admin/requested-items/requested-items.component').then(mod => mod.RequestedItemsComponent),
+            },
+            {
+                path: 'security',
+                title: 'Admin Security',
+                loadComponent: () => import('./components/webpages/admin/security/security.component').then(mod => mod.SecurityComponent),
+            },
+            {
+                path: 'team-application-form',
+                title: 'Admin Team Application',
+                loadComponent: () => import('./components/webpages/admin/team-application-form/team-application-form.component').then(mod => mod.TeamApplicationFormComponent),
+            },
+            {
+                path: 'team-contact-form',
+                title: 'Admin Team Contact',
+                loadComponent: () => import('./components/webpages/admin/team-contact-form/team-contact-form.component').then(mod => mod.TeamContactFormComponent),
+            },
+        ]
+    },
+
+    // User and Attendance Routes
+    {
+        path: 'user/profile',
+        title: 'User Profile',
+        loadComponent: () => import('./components/webpages/user/profile/profile.component').then(mod => mod.ProfileComponent),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'attendance',
+        title: 'Attendance',
+        loadComponent: () => import('./components/webpages/attendance/attendance.component').then(mod => mod.AttendanceComponent),
+        canActivate: [authGuard]
+    },
+
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '' },
 ];

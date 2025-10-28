@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener, ElementRef } from '@angular/core';
 import { ModalService } from '../../../services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
@@ -98,7 +98,9 @@ export class ModalComponent implements OnInit {
     if (this.openTime && this.modalNumber == this.ms.getModalVisibleCount()) {
       var delta = Date.now() - this.openTime; // milliseconds elapsed since start
 
-      if (delta > 10) {
+      if (delta > 10 &&
+        document.getElementsByClassName('owl-dt-popup-container').length <= 0 &&
+        document.getElementsByClassName('owl-dialog-container').length <= 0) {
         window.setTimeout(() => this.close(), 10);
       }
     }
