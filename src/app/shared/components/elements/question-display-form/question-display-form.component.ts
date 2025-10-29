@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
-import { Question, Answer } from '../../../core/models/form.models';
-import { GeneralService } from '../../../core/services/general.service';
+import { Question, Answer } from '../../../../core/models/form.models';
+import { GeneralService } from '../../../../core/services/general.service';
 import { FormElementGroupComponent } from '../../../shared/components/atoms/form-element-group/form-element-group.component';
 import { QuestionFormElementComponent } from '../question-form-element/question-form-element.component';
 

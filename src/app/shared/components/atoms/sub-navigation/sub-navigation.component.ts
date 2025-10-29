@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output } from '@angular/core';
-import { Link } from '../../../core/models/navigation.models';
-import { NavigationService } from '../../../core/services/navigation.service';
+import { Link } from '../../../../core/models/navigation.models';
+import { NavigationService } from '../../../../core/services/navigation.service';
 import { RouterLink } from '@angular/router';
 
 @Component({

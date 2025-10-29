@@ -1,7 +1,7 @@
 import { Component, Input, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 
 @Component({
     selector: 'app-tab-container',

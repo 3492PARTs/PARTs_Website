@@ -1,8 +1,8 @@
 import { Component, input, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import LoadImg from 'blueimp-load-image';
 import { ScoutPitResponse, ScoutPitImage } from '../../../scouting/models/scouting.models';
-import { APIService } from '../../../core/services/api.service';
-import { GeneralService } from '../../../core/services/general.service';
+import { APIService } from '../../../../core/services/api.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
 
 import { HeaderComponent } from "../../atoms/header/header.component";

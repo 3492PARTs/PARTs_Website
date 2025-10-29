@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
-import { Banner } from '../../../../models/api.models';
+import { Sponsor, Item } from '../../../admin/components/admin/requested-items/requested-items.component';
+import { Banner } from '../../../../core/models/api.models';
 import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
 import { GeneralService } from '../../../../core/services/general.service';

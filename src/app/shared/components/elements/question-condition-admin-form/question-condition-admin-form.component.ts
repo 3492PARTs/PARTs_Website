@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question, QuestionCondition, QuestionConditionType } from '../../../core/models/form.models';
-import { APIService } from '../../../core/services/api.service';
-import { GeneralService } from '../../../core/services/general.service';
+import { Question, QuestionCondition, QuestionConditionType } from '../../../../core/models/form.models';
+import { APIService } from '../../../../core/services/api.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { TableColType, TableComponent } from '../../../shared/components/atoms/table/table.component';
 import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
 import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';

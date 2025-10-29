@@ -2,8 +2,8 @@ import { Component, OnInit, ContentChildren, QueryList, EventEmitter, Input, Out
 import { FormsModule, NgForm } from '@angular/forms';
 import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { FormElementComponent } from '../form-element/form-element.component';
-import { Banner } from '../../../core/models/api.models';
-import { GeneralService } from '../../../core/services/general.service';
+import { Banner } from '../../../../core/models/api.models';
+import { GeneralService } from '../../../../core/services/general.service';
 import { TableComponent } from '../table/table.component';
 @Component({
   selector: 'app-form',

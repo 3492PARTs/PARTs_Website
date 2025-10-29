@@ -4,7 +4,7 @@ import { User } from '../../../../auth/models/user.models';
 import { APIService } from '../../../../core/services/api.service';
 import { UserData, AuthService } from '../../../../auth/services/auth.service';
 import { GeneralService } from '../../../../core/services/general.service';
-import { Alert, NotificationsService } from '../../../../services/notifications.service';
+import { Alert, NotificationsService } from '../../../../core/services/notifications.service';
 import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
 import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
 import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
@@ -15,7 +15,7 @@ import { TableColType, TableComponent } from '../../../../shared/components/atom
 import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
 import { CommonModule } from '@angular/common';
 import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
+import { DateToStrPipe } from '../../../../shared/pipes/date-to-str.pipe';
 
 @Component({
     selector: 'app-profile',

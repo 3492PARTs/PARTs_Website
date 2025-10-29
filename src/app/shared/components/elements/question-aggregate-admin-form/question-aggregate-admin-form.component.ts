@@ -5,10 +5,10 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
-import { QuestionAggregateType, QuestionAggregate, Question, QuestionAggregateQuestion, QuestionCondition, QuestionConditionType } from '../../../core/models/form.models';
-import { APIService } from '../../../core/services/api.service';
+import { QuestionAggregateType, QuestionAggregate, Question, QuestionAggregateQuestion, QuestionCondition, QuestionConditionType } from '../../../../core/models/form.models';
+import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { ScoutingService } from '../../../scouting/services/scouting.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Banner } from '../../../../models/api.models';
+import { Banner } from '../../../../core/models/api.models';
 import { Question, Answer } from '../../../../models/form.models';
 import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';

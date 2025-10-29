@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { APIService } from '../../../core/services/api.service';
+import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
 import { TableComponent } from '../../../shared/components/atoms/table/table.component';
 import { QuestionAdminFormComponent } from '../question-admin-form/question-admin-form.component';
-import { Response } from '../../../core/models/form.models';
+import { Response } from '../../../../core/models/form.models';
 import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
 
 @Component({

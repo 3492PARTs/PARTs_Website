@@ -16,7 +16,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';

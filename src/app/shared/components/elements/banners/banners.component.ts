@@ -1,9 +1,9 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
+import { AppSize, GeneralService } from '../../../../core/services/general.service';
 import $ from 'jquery';
-import { ModalService } from '../../../core/services/modal.service';
-import { Banner } from '../../../core/models/api.models';
+import { ModalService } from '../../../../core/services/modal.service';
+import { Banner } from '../../../../core/models/api.models';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
 import { BoxComponent } from '../../../shared/components/atoms/box/box.component';

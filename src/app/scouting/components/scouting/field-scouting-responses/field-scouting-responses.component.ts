@@ -13,7 +13,7 @@ import { TableComponent } from '../../../../shared/components/atoms/table/table.
 import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
 import { PitResultDisplayComponent } from '../../../../shared/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
-import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
+import { DateToStrPipe } from '../../../../shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 @Component({

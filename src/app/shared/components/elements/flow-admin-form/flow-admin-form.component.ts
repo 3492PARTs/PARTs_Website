@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GeneralService } from '../../../core/services/general.service';
-import { APIService } from '../../../core/services/api.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { APIService } from '../../../../core/services/api.service';
 import { AuthCallStates, AuthService } from '../../../auth/services/auth.service';
-import { Flow, FormInitialization, Question, FlowQuestion } from '../../../core/models/form.models';
+import { Flow, FormInitialization, Question, FlowQuestion } from '../../../../core/models/form.models';
 import { TableColType, TableComponent } from '../../../shared/components/atoms/table/table.component';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";

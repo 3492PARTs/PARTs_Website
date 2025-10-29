@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '../../../core/models/form.models';
-import { APIService } from '../../../core/services/api.service';
+import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '../../../../core/models/form.models';
+import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
+import { AppSize, GeneralService } from '../../../../core/services/general.service';
 import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
 import { FormComponent } from '../../../shared/components/atoms/form/form.component';
 import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
@@ -10,7 +10,7 @@ import { ButtonComponent } from '../../../shared/components/atoms/button/button.
 import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
 import { TableComponent, TableColType } from '../../../shared/components/atoms/table/table.component';
 
-import { Banner } from '../../../core/models/api.models';
+import { Banner } from '../../../../core/models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({

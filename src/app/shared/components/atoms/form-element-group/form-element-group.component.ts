@@ -2,7 +2,7 @@ import { Component, Input, ContentChildren, QueryList, AfterViewInit, OnInit, Ev
 import { FormElementComponent } from '../form-element/form-element.component';
 import { FormComponent } from '../form/form.component';
 import { QuestionFormElementComponent } from '../../../shared/components/elements/question-form-element/question-form-element.component';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

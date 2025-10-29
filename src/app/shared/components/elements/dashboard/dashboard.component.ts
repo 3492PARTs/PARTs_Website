@@ -1,9 +1,9 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { Graph } from '../../../core/models/form.models';
+import { Graph } from '../../../../core/models/form.models';
 import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardViewType, DashboardGraph } from '../../../scouting/models/scouting.models';
-import { APIService } from '../../../core/services/api.service';
+import { APIService } from '../../../../core/services/api.service';
 import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
+import { AppSize, GeneralService } from '../../../../core/services/general.service';
 import { ScoutingService } from '../../../scouting/services/scouting.service';
 import { BoxComponent } from "../../atoms/box/box.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
