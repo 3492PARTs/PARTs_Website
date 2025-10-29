@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthGroup, AuthPermission, User } from '../../../../models/user.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { UserService } from '../../../../services/user.service';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { BoxComponent } from '../../../atoms/box/box.component';
+import { AuthGroup, AuthPermission, User } from '../../../../auth/models/user.models';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { UserService } from '../../../../user/services/user.service';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
 import { Link } from '../../../../models/navigation.models';
 
 @Component({

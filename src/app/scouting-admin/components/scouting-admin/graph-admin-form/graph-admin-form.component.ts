@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from '../../../../services/api.service';
+import { APIService } from '../../../../core/services/api.service';
 import { Graph, GraphBin, GraphCategory, GraphCategoryAttribute, GraphQuestion, GraphQuestionType, GraphType, Question, QuestionAggregate, QuestionConditionType } from '../../../../models/form.models';
-import { AuthCallStates, AuthService } from '../../../../services/auth.service';
+import { AuthCallStates, AuthService } from '../../../../auth/services/auth.service';
 import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
 import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
 import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
 import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
-import { GeneralService } from '../../../../services/general.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 

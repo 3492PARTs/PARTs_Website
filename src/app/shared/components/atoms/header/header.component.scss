@@ -1,4 +1,4 @@
-@use "../../../../scss/abstracts/variables.scss";
+@use "abstracts/variables";
 
 .underlined {
   border-bottom: 2px solid variables.$main_color;

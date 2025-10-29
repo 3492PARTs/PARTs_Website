@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { BoxComponent } from '../../../atoms/box/box.component';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
 import { FormManagerComponent } from '../../../elements/form-manager/form-manager.component';
-import { TableColType } from '../../../atoms/table/table.component';
+import { TableColType } from '../../../../shared/components/atoms/table/table.component';
 
 @Component({
     selector: 'app-team-contact-form',

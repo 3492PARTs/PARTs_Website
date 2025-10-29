@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from '../../../../services/api.service';
-import { ErrorLog, AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { Page } from '../../../../services/general.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { PaginationComponent } from '../../../atoms/pagination/pagination.component';
+import { APIService } from '../../../../core/services/api.service';
+import { ErrorLog, AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { Page } from '../../../../core/services/general.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
+import { PaginationComponent } from '../../../../shared/components/atoms/pagination/pagination.component';
 
 @Component({
     selector: 'app-error-log',

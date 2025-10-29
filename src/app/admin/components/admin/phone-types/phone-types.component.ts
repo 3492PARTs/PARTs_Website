@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from '../../../../services/api.service';
-import { PhoneType, AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { UserService } from '../../../../services/user.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { APIService } from '../../../../core/services/api.service';
+import { PhoneType, AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { UserService } from '../../../../user/services/user.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
 
 
 @Component({

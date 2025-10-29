@@ -2,15 +2,15 @@
 import { Component, Renderer2 } from '@angular/core';
 import { FormInitialization, Flow, FormSubType } from '../../../../models/form.models';
 import { FieldForm } from '../../../../models/scouting.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
 import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 
 @Component({

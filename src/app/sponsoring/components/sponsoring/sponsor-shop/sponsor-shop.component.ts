@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
 import { Banner } from '../../../../models/api.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { MainViewComponent } from '../../../atoms/main-view/main-view.component';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { MainViewComponent } from '../../../../shared/components/atoms/main-view/main-view.component';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
 
-import { FormComponent } from '../../../atoms/form/form.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
 
 @Component({
     selector: 'app-sponsor-shop',

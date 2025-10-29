@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule, Event } from '../../../../models/scouting.models';
-import { User } from '../../../../models/user.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
+import { User } from '../../../../auth/models/user.models';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
 import { ScoutingService } from '../../../../services/scouting.service';
-import { UserService } from '../../../../services/user.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { UserService } from '../../../../user/services/user.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
 
 
 @Component({

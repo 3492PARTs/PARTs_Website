@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BoxComponent } from '../../../atoms/box/box.component';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
 import { FormManagerComponent } from '../../../elements/form-manager/form-manager.component';
 
 @Component({
