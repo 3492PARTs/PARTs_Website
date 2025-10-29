@@ -133,6 +133,8 @@ export class AuthService {
         }
       });
     }
+    else
+      this.authInFlightBS.next(AuthCallStates.err);
   }
 
   logOut(): void {
