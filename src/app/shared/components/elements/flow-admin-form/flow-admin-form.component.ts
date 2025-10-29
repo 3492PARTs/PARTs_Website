@@ -14,7 +14,7 @@ import { ButtonComponent } from "../../atoms/button/button.component";
   selector: 'app-flow-admin-form',
   imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './flow-admin-form.component.html',
-  styleUrl: './flow-admin-form.component.scss'
+  styleUrls: ['./flow-admin-form.component.scss']
 })
 export class FlowAdminFormComponent implements OnInit {
   @Input() FormType = '';

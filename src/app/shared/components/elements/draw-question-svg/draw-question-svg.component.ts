@@ -11,7 +11,7 @@ import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.c
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './draw-question-svg.component.html',
-  styleUrl: './draw-question-svg.component.scss'
+  styleUrls: ['./draw-question-svg.component.scss']
 })
 export class DrawQuestionSvgComponent implements AfterViewInit {
   @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;

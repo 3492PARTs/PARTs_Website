@@ -8,7 +8,7 @@ import { GeneralService } from '../../../core/services/general.service';
   selector: 'app-display-question-svg',
   imports: [SafeHTMLPipe, CommonModule],
   templateUrl: './display-question-svg.component.html',
-  styleUrl: './display-question-svg.component.scss'
+  styleUrls: ['./display-question-svg.component.scss']
 })
 export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 

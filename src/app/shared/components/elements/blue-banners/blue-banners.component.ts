@@ -5,7 +5,7 @@ import { AppSize, GeneralService } from '../../../core/services/general.service'
   selector: 'app-blue-banners',
   imports: [],
   templateUrl: './blue-banners.component.html',
-  styleUrl: './blue-banners.component.scss'
+  styleUrls: ['./blue-banners.component.scss']
 })
 export class BlueBannersComponent implements OnInit {
   screenSize!: AppSize;

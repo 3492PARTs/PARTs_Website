@@ -5,7 +5,7 @@ import { DashboardComponent } from "../../../../../shared/components/elements/da
   selector: 'app-metrics',
   imports: [DashboardComponent],
   templateUrl: './metrics.component.html',
-  styleUrl: './metrics.component.scss'
+  styleUrls: ['./metrics.component.scss']
 })
 export class MetricsComponent {
 

@@ -19,7 +19,7 @@ import { ModalComponent } from "../../../../../shared/components/atoms/modal/mod
   selector: 'app-match-planning',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
   templateUrl: './match-planning.component.html',
-  styleUrl: './match-planning.component.scss'
+  styleUrls: ['./match-planning.component.scss']
 })
 export class MatchPlanningComponent implements OnInit {
 

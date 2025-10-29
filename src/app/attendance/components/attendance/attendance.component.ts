@@ -5,7 +5,7 @@ import { MeetingAttendanceComponent } from "../../elements/meeting-attendance/me
   selector: 'app-attendance',
   imports: [MeetingAttendanceComponent],
   templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.scss'
+  styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent {
 

@@ -15,7 +15,7 @@ import { ScoutingService } from '../../../scouting/services/scouting.service';
   selector: 'app-question-aggregate-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './question-aggregate-admin-form.component.html',
-  styleUrl: './question-aggregate-admin-form.component.scss'
+  styleUrls: ['./question-aggregate-admin-form.component.scss']
 })
 export class QuestionAggregateAdminFormComponent implements OnInit {
   @Input() FormTyp = '';

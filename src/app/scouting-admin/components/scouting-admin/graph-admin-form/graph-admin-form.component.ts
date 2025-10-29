@@ -16,7 +16,7 @@ import { ButtonRibbonComponent } from "../../../../shared/components/atoms/butto
   selector: 'app-graph-admin-form',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './graph-admin-form.component.html',
-  styleUrl: './graph-admin-form.component.scss'
+  styleUrls: ['./graph-admin-form.component.scss']
 })
 export class GraphAdminFormComponent implements OnInit {
   private FormTyp = 'field';

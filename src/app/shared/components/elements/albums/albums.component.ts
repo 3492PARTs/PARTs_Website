@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-albums',
   imports: [RouterLink, ClickOutsideElementDirective, CommonModule],
   templateUrl: './albums.component.html',
-  styleUrl: './albums.component.scss'
+  styleUrls: ['./albums.component.scss']
 })
 export class AlbumsComponent {
   @Input() Albums: Album[] = [];

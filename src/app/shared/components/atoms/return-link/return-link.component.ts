@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
     selector: 'app-return-link',
     imports: [RouterLink, CommonModule],
     templateUrl: './return-link.component.html',
-    styleUrl: './return-link.component.scss'
+    styleUrls: ['./return-link.component.scss']
 })
 export class ReturnLinkComponent {
   @Input() RouterLink = '';

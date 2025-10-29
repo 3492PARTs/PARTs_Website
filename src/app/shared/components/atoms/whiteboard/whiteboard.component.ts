@@ -9,7 +9,7 @@ import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
   selector: 'app-whiteboard',
   imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
   templateUrl: './whiteboard.component.html',
-  styleUrl: './whiteboard.component.scss'
+  styleUrls: ['./whiteboard.component.scss']
 })
 export class WhiteboardComponent implements OnInit {
 

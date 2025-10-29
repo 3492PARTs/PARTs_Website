@@ -6,7 +6,7 @@ import { FlowConditionAdminFormComponent } from "../../../../shared/components/e
   selector: 'app-manage-field-flow-conditions',
   imports: [BoxComponent, FlowConditionAdminFormComponent],
   templateUrl: './manage-field-flow-conditions.component.html',
-  styleUrl: './manage-field-flow-conditions.component.scss'
+  styleUrls: ['./manage-field-flow-conditions.component.scss']
 })
 export class ManageFieldFlowConditionsComponent {
 

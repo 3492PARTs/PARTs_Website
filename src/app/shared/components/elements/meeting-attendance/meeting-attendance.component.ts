@@ -24,7 +24,7 @@ import { environment } from '../../../../environments/environment';
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
   templateUrl: './meeting-attendance.component.html',
-  styleUrl: './meeting-attendance.component.scss'
+  styleUrls: ['./meeting-attendance.component.scss']
 })
 export class MeetingAttendanceComponent implements OnInit {
 

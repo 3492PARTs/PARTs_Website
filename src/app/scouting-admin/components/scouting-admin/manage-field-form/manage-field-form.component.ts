@@ -17,7 +17,7 @@ import { DrawQuestionSvgComponent } from "../../../../shared/components/elements
   selector: 'app-manage-field-form',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
-  styleUrl: './manage-field-form.component.scss'
+  styleUrls: ['./manage-field-form.component.scss']
 })
 export class ManageFieldFormComponent {
   formType = 'field';

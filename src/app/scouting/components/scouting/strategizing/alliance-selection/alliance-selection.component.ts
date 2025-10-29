@@ -12,7 +12,7 @@ import { FormElementGroupComponent } from "../../../../../shared/components/atom
   selector: 'app-alliance-selection',
   imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './alliance-selection.component.html',
-  styleUrl: './alliance-selection.component.scss'
+  styleUrls: ['./alliance-selection.component.scss']
 })
 export class AllianceSelectionComponent implements OnInit {
 

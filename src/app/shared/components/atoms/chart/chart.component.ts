@@ -14,7 +14,7 @@ Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, Lin
   selector: 'app-chart',
   imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent, TooltipDirective],
   templateUrl: './chart.component.html',
-  styleUrl: './chart.component.scss'
+  styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
   id = '';

@@ -14,7 +14,7 @@ import { ButtonComponent } from "../../atoms/button/button.component";
   selector: 'app-flow-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './flow-condition-admin-form.component.html',
-  styleUrl: './flow-condition-admin-form.component.scss'
+  styleUrls: ['./flow-condition-admin-form.component.scss']
 })
 export class
   FlowConditionAdminFormComponent implements OnInit {
