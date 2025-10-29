@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BoxComponent } from "../../../../atoms/box/box.component";
-import { QuestionAggregateAdminFormComponent } from "../../../../elements/question-aggregate-admin-form/question-aggregate-admin-form.component";
+import { BoxComponent } from "../../../atoms/box/box.component";
+import { QuestionAggregateAdminFormComponent } from "../../../elements/question-aggregate-admin-form/question-aggregate-admin-form.component";
 
 @Component({
   selector: 'app-manage-field-question-aggregates',

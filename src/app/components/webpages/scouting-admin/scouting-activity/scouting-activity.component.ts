@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, UserInfo } from '../../../../../models/scouting.models';
-import { User } from '../../../../../models/user.models';
-import { APIService } from '../../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
-import { GeneralService } from '../../../../../services/general.service';
-import { ScoutingService } from '../../../../../services/scouting.service';
-import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableButtonType, TableColType, TableComponent } from '../../../../atoms/table/table.component';
-import { ModalComponent } from '../../../../atoms/modal/modal.component';
-import { FormElementGroupComponent } from '../../../../atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../../atoms/button/button.component';
-import { FormElementComponent } from "../../../../atoms/form-element/form-element.component";
-import { FormComponent } from "../../../../atoms/form/form.component";
-import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
+import { ScoutFieldSchedule, UserInfo } from '../../../../models/scouting.models';
+import { User } from '../../../../models/user.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { TableButtonType, TableColType, TableComponent } from '../../../atoms/table/table.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { FormElementComponent } from "../../../atoms/form-element/form-element.component";
+import { FormComponent } from "../../../atoms/form/form.component";
+import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-scouting-activity',

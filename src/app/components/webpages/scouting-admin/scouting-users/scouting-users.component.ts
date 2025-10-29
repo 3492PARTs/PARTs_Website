@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { User, AuthGroup } from '../../../../../models/user.models';
-import { APIService } from '../../../../../services/api.service';
-import { PhoneType, AuthService, AuthCallStates } from '../../../../../services/auth.service';
-import { GeneralService } from '../../../../../services/general.service';
-import { UserService } from '../../../../../services/user.service';
-import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
-import { ModalComponent } from '../../../../atoms/modal/modal.component';
-import { FormElementComponent } from '../../../../atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
-import { FormComponent } from '../../../../atoms/form/form.component';
-import { HeaderComponent } from '../../../../atoms/header/header.component';
+import { User, AuthGroup } from '../../../../models/user.models';
+import { APIService } from '../../../../services/api.service';
+import { PhoneType, AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService } from '../../../../services/general.service';
+import { UserService } from '../../../../services/user.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '../../../atoms/form/form.component';
+import { HeaderComponent } from '../../../atoms/header/header.component';
 
 @Component({
   selector: 'app-scouting-users',

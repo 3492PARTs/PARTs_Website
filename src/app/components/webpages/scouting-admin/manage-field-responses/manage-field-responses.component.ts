@@ -1,14 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Col, ScoutFieldResponsesReturn } from '../../../../../models/scouting.models';
-import { APIService } from '../../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
-import { GeneralService, AppSize } from '../../../../../services/general.service';
-import { ScoutingService } from '../../../../../services/scouting.service';
-import { BoxComponent } from '../../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../../atoms/table/table.component';
-import { ModalComponent } from '../../../../atoms/modal/modal.component';
-import { ButtonComponent } from '../../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../../atoms/button-ribbon/button-ribbon.component';
+import { Col, ScoutFieldResponsesReturn } from '../../../../models/scouting.models';
+import { APIService } from '../../../../services/api.service';
+import { AuthService, AuthCallStates } from '../../../../services/auth.service';
+import { GeneralService, AppSize } from '../../../../services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
+import { BoxComponent } from '../../../atoms/box/box.component';
+import { TableColType, TableComponent } from '../../../atoms/table/table.component';
+import { ModalComponent } from '../../../atoms/modal/modal.component';
+import { ButtonComponent } from '../../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-manage-field-responses',
