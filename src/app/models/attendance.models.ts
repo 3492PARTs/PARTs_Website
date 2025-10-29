@@ -14,7 +14,7 @@ export class Meeting {
 
 export class Attendance {
     id = NaN;
-    user = new User();
+    user: User | undefined = undefined;
     time_in = new Date();
     time_out: Date | undefined = undefined;
     absent = false;
