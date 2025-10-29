@@ -6,7 +6,7 @@
       Type === 'checkbox' && LabelText.toLowerCase() === 'other'
   }" [ngStyle]="{ width: Type === 'checkbox' ? Width : 'auto' }">
   @if (LabelText !== '') {
-<label #label [ngClass]="{
+  <label #label [ngClass]="{
       checkboxLabel: ['checkbox', 'multiCheckbox'].includes(Type),
       otherOptionCheckboxLabel:
         Type === 'checkbox' && LabelText.toLowerCase() === 'other',
@@ -26,7 +26,7 @@
       checkboxNoLabel: Type === 'checkbox' && LabelText.length <= 0
     }">
     @if (!Disabled && ((Required && Touched) || !valid)) {
-<div class="validation" #validationIndicator [ngClass]="{
+    <div class="validation" #validationIndicator [ngClass]="{
         select: Type === 'select',
         area: Type === 'area',
         date: Type === 'date',
@@ -37,46 +37,51 @@
         file: Type === 'file',
         checkboxNoLabel: Type === 'checkbox' && LabelText.length <= 0
       }">
-        @if (valid && hasValue) {
-          <span class="mdi mdi-check icon icon-valid"></span>
-        } @else {
-          <span class="mdi mdi-alert-circle-outline icon icon-invalid"></span>
-        }
-      </div>
-    }
-
-    @switch (Type) {
-      @case ('text') {
-        <input #input type="text" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
-          disabled: Disabled,
-          valid: isFormElementValid(),
-          invalid: isFormElementInvalid(),
-          required: isFormElementRequired()
-        }" [ngStyle]="{
-          width: 'calc(' + Width + ' - 0.64rem)',
-          'min-width': MinWidth,
-          'max-width': MaxWidth
-        }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
-          (focus)="focusIn()" (focusout)="focusOut()" />
+      @if (valid && hasValue) {
+      <span class="mdi mdi-check icon icon-valid"></span>
+      } @else {
+      <span class="mdi mdi-alert-circle-outline icon icon-invalid"></span>
       }
-      @case ('email') {
-        <input #input type="text" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
-          disabled: Disabled,
-          valid: isFormElementValid(),
-          invalid: isFormElementInvalid(),
-          required: isFormElementRequired()
-        }" [ngStyle]="{
-          width: 'calc(' + Width + ' - 0.64rem)',
-          'min-width': MinWidth,
-          'max-width': MaxWidth
-        }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
-          (focus)="focusIn()" (focusout)="focusOut()" />
-      }
-      @case ('password') {
-        <input #input type="password" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
+    </div>
+    } @switch (Type) { @case ('text') {
+    <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+      (focus)="focusIn()" (focusout)="focusOut()" />
+    } @case ('email') {
+    <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+      (focus)="focusIn()" (focusout)="focusOut()" />
+    } @case ('password') {
+    <input #input type="password" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+      (focusout)="focusOut()" />
+    } @case ('number') {
+    <div class="number">
+      <input type="number" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           disabled: Disabled,
           valid: isFormElementValid(),
           invalid: isFormElementInvalid(),
@@ -86,32 +91,41 @@
           'min-width': MinWidth,
           'max-width': MaxWidth
         }" [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
-          (focusout)="focusOut()" />
+        (focusout)="focusOut()" />
+      @if (NumberIncDec) {
+      <div class="number-stepper inline-flex flex-wrap gap-1rem align-items-center">
+        <app-button [ButtonType]="'add'" (FunctionCallBack)="increment()"></app-button>
+        <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement()"></app-button>
+      </div>
       }
-      @case ('number') {
-        <div class="number">
-        <input type="number" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
-            (focusout)="focusOut()" />
-          @if (NumberIncDec) {
-            <div class="number-stepper inline-flex flex-wrap gap-1rem align-items-center">
-              <app-button [ButtonType]="'add'" (FunctionCallBack)="increment()"></app-button>
-              <app-button [ButtonType]="'minus'" (FunctionCallBack)="decrement()"></app-button>
-            </div>
-          }
-        </div>
-      }
-      @case ('phone') {
-        <input #input type="text" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
+    </div>
+    } @case ('phone') {
+    <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="phoneMaskModel" (ngModelChange)="phoneMaskFn($event)" maxlength="14" [disabled]="Disabled"
+      (focus)="focusIn()" (focusout)="focusOut()" />
+    } @case ('mac') {
+    <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="Model" (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17" (focus)="focusIn()"
+      (focusout)="focusOut()" />
+    } @case ('search') {
+    <div id="search">
+      <input type="text" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           disabled: Disabled,
           valid: isFormElementValid(),
           invalid: isFormElementInvalid(),
@@ -120,12 +134,63 @@
           width: 'calc(' + Width + ' - 0.64rem)',
           'min-width': MinWidth,
           'max-width': MaxWidth
-        }" [ngModel]="phoneMaskModel" (ngModelChange)="phoneMaskFn($event)" maxlength="14" [disabled]="Disabled"
-          (focus)="focusIn()" (focusout)="focusOut()" />
-      }
-      @case ('mac') {
-        <input #input type="text" class="form-control" id="{{ LabelID }}"
-        placeholder="{{ Placeholder }}" [ngClass]="{
+        }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()"
+        (focusout)="focusOut()" />
+      <button>
+        <span class="mdi mdi-magnify magnify-icon"></span>
+      </button>
+    </div>
+    } @case ('select') {
+    <select #input class="form-control" id="{{ LabelID }}" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }" [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
+      (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
+      <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
+      <option [ngValue]="undefined" [disabled]="!DisplayEmptyOption"></option>
+      @if (BindingProperty && DisplayProperty) { @for (obj of _SelectList; track
+      obj) {
+      <option [ngValue]="obj[BindingProperty]">
+        {{ obj[DisplayProperty] }}
+        {{
+        DisplayProperty2
+        ? obj[DisplayProperty2]
+        ? obj[DisplayProperty2]
+        : ""
+        : ""
+        }}
+      </option>
+      } } @else if (!BindingProperty && DisplayProperty) { @for (obj of
+      _SelectList; track obj) {
+      <option [ngValue]="obj">
+        {{ obj[DisplayProperty] }}
+        {{
+        DisplayProperty2
+        ? obj[DisplayProperty2]
+        ? obj[DisplayProperty2]
+        : ""
+        : ""
+        }}
+      </option>
+      } } @else { @for (obj of _SelectList; track obj) {
+      <option [ngValue]="obj">
+        {{ obj }}
+      </option>
+      } }
+    </select>
+    } @case ('area') {
+    <div class="area" [ngStyle]="{
+        width: 'calc(' + Width + ' - 0.64rem)',
+        'min-width': MinWidth,
+        'max-width': MaxWidth
+      }">
+      <textarea #input class="form-control" [ngClass]="{
           disabled: Disabled,
           valid: isFormElementValid(),
           invalid: isFormElementInvalid(),
@@ -134,290 +199,187 @@
           width: 'calc(' + Width + ' - 0.64rem)',
           'min-width': MinWidth,
           'max-width': MaxWidth
-        }" [ngModel]="Model" (ngModelChange)="formatMAC($event)" [disabled]="Disabled" maxlength="17"
-          (focus)="focusIn()" (focusout)="focusOut()" />
+        }" rows="{{ Rows }}" placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
+        maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
+      <p class="margin-bottom-0">
+        {{ Model ? Model.length : 0 }}/{{ FieldSize }}
+      </p>
+    </div>
+    } @case ('checkbox') { @if (LabelText.toLowerCase() !== 'other') {
+    <input type="hidden" name="toggle" [(ngModel)]="Model" />
+    <input class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)" [checked]="TrueValue === Model"
+      [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
+    } @else {
+    <input class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change('')"
+      [checked]="Model && Model.trim().length > 0" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
+    <app-form-element [Type]="'area'" [Model]="Model" (ModelChange)="change($event)" [Disabled]="Disabled"
+      [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5" [FieldSize]="FieldSize">
+    </app-form-element>
+    } } @case ('multiCheckbox') {
+    <div (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
+      @if (BindingProperty && DisplayProperty) { @for (c of _SelectList; track
+      c; let i = $index) {
+      <app-form-element [Type]="'checkbox'" [LabelText]="c[DisplayProperty]" [Model]="multiSelectModel[i]['checked']"
+        (ModelChange)="change($event, i)" [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled"
+        [FieldSize]="FieldSize">
+      </app-form-element>
+      } }
+    </div>
+    } @case ('radio') { @for (obj of _SelectList; track obj; let i = $index) {
+    <div class="radio" [ngClass]="{ 'form-group-inline': !RadioGroupStacked }">
+      @if (BindingProperty && DisplayProperty) {
+      <input type="radio" name="Radio{{ LabelID }}" id="{{LabelID}}radio{{ i }}" [value]="obj[BindingProperty]"
+        [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model"
+        (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled" />
+      <label for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
+        obj[DisplayProperty]
+        }}</label>
+      } @if (BindingProperty === '' && DisplayProperty === '') {
+      <input type="radio" name="Radio{{ LabelID }}" id="{{LabelID}}radio{{ i }}" [value]="obj" [ngModel]="Model"
+        (ngModelChange)="change($event)" [checked]="obj === Model" (focus)="focusIn()" (focusout)="focusOut()"
+        [disabled]="Disabled" />
+      <label for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
+        obj
+        }}</label>
       }
-      @case ('search') {
-        <div id="search">
-        <input type="text" #input class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" (focus)="focusIn()"
-            (focusout)="focusOut()" />
-          <button>
-            <span class="mdi mdi-magnify magnify-icon"></span>
-          </button>
-        </div>
-      }
-      @case ('select') {
-        <select #input class="form-control" id="{{ LabelID }}" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" [ngModel]="Model" (ngModelChange)="change($event)" [disabled]="Disabled" (focus)="focusIn()"
-          (focusout)="focusOut()" [compareWith]="SelectComparatorFunction">
-          <!--<option [ngValue]="strNoE(Model) ? Model : null" [disabled]="!DisplayEmptyOption"></option>-->
-          <option [ngValue]="undefined" [disabled]="!DisplayEmptyOption"></option>
-          @if (BindingProperty && DisplayProperty) {
-            @for (obj of _SelectList; track obj) {
-              <option [ngValue]="obj[BindingProperty]">
-                {{ obj[DisplayProperty] }}
-                {{
-                DisplayProperty2
-                ? obj[DisplayProperty2]
-                ? obj[DisplayProperty2]
-                : ""
-                : ""
-                }}
-              </option>
-            }
-          } @else if (!BindingProperty && DisplayProperty) {
-            @for (obj of _SelectList; track obj) {
-              <option [ngValue]="obj">
-                {{ obj[DisplayProperty] }}
-                {{
-                DisplayProperty2
-                ? obj[DisplayProperty2]
-                ? obj[DisplayProperty2]
-                : ""
-                : ""
-                }}
-              </option>
-            }
-          } @else {
-            @for (obj of _SelectList; track obj) {
-              <option [ngValue]="obj">
-                {{ obj }}
-              </option>
-            }
-          }
-        </select>
-      }
-      @case ('area') {
-<div class="area" [ngStyle]="{
+    </div>
+    } } @case ('datetime') {
+    <input #input (focus)="focusIn()" (focusout)="focusOut()" class="form-control" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
+      (ngModelChange)="change($event)" />
+    <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
+        [ngClass]="{ disabled: Disabled }"></span></span>
+    <owl-date-time #dt [hour12Timer]="true" [disabled]="Disabled" [pickerMode]="_PickerMode"
+      [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
+    } @case ('date') {
+    <input #input (focus)="focusIn()" (focusout)="focusOut()" class="form-control" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
+      (ngModelChange)="change($event)" />
+    <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
+        [ngClass]="{ disabled: Disabled }"></span></span>
+    <owl-date-time #dt [pickerType]="'calendar'" [disabled]="Disabled" [pickerMode]="_PickerMode"
+      [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
+    } @case ('file') {
+    <div class="file-upload form-control" [ngClass]="{ disabled: Disabled }" [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }">
+      <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none"
+        [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
+      <div>
+        <p>
+          {{ Model ? fileName || "No file uploaded." : "No file uploaded." }}
+        </p>
+      </div>
+      <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()" [Disabled]="Disabled"></app-button>
+    </div>
+    } @case ('image') {
+    <input class="form-control" type="file" id="{{ LabelID }}" (change)="ImageChangeEvent($event)"
+      placeholder="Upload file" [ngModel]="Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
+    } @case ('multiSelect') {
+    <div class="flex align-items-baseline flex-wrap">
+      <div class="form-control" id="multiSelect" [ngClass]="{
+          disabled: Disabled,
+          valid: isFormElementValid(),
+          invalid: isFormElementInvalid(),
+          required: isFormElementRequired()
+        }" [ngStyle]="{
           width: 'calc(' + Width + ' - 0.64rem)',
           'min-width': MinWidth,
           'max-width': MaxWidth
-        }">
-        <textarea #input class="form-control" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" rows="{{ Rows }}" placeholder="{{ Placeholder }}" [ngModel]="Model" (ngModelChange)="change($event)"
-          maxlength="{{ FieldSize }}" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()"></textarea>
-          <p class="margin-bottom-0">
-            {{ Model ? Model.length : 0 }}/{{ FieldSize }}
-          </p>
-        </div>
-      }
-      @case ('checkbox') {
-        @if (LabelText.toLowerCase() !== 'other') {
-          <input type="hidden" name="toggle" [(ngModel)]="Model" />
-          <input class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change($event)"
-            [checked]="TrueValue === Model" [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
-        } @else {
-          <input class="checkbox" type="checkbox" id="{{ LabelID }}" (change)="change('')"
-            [checked]="Model && Model.trim().length > 0" [disabled]="Disabled" (focus)="focusIn()"
-            (focusout)="focusOut()" />
-          <app-form-element [Type]="'area'" [Model]="Model" (ModelChange)="change($event)" [Disabled]="Disabled"
-            [LabelText]="'Please specify'" [Width]="'100%'" [Rows]="5" [FieldSize]="FieldSize">
-          </app-form-element>
-        }
-      }
-      @case ('multiCheckbox') {
-        <div (appClickInside)="focusIn()" (appClickOutside)="focusOut()">
-          @if (BindingProperty && DisplayProperty) {
-            @for (c of _SelectList; track c; let i = $index) {
-              <app-form-element [Type]="'checkbox'"
-                [LabelText]="c[DisplayProperty]" [Model]="multiSelectModel[i]['checked']" (ModelChange)="change($event, i)"
-                [TrueValue]="TrueValue" [FalseValue]="FalseValue" [Disabled]="Disabled" [FieldSize]="FieldSize">
-              </app-form-element>
-            }
+        }" #multiSelect (appClickOutside)="multiSelectClose()">
+        <span (click)="multiSelectMenu()">
+          <p #multiSelectText id="multi-select-text">{{ LabelText }}</p>
+          <div class="arrow-wrapper">
+            <i class="arrow down"></i>
+          </div>
+        </span>
+        @if (DisplayProperty) {
+        <div id="dropdown" #multiSelectDropdown>
+          <div class="multi-select-buttons">
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
+            &nbsp;
+            <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
+          </div>
+          @for (obj of multiSelectModel; track obj; let i = $index) {
+          <div class="multi-select-option">
+            <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="multiSelectModel[i]['checked']"
+              (ngModelChange)="change($event, i)" [disabled]="Disabled" />
+            <label for="{{ LabelID }}{{ i }}">
+              {{ obj[DisplayProperty] }}
+              {{
+              DisplayProperty2
+              ? obj[DisplayProperty2]
+              ? " - " + obj[DisplayProperty2]
+              : ""
+              : ""
+              }}</label>
+          </div>
           }
         </div>
-      }
-      @case ('radio') {
-        @for (obj of _SelectList; track obj; let i = $index) {
-          <div class="radio"
-            [ngClass]="{ 'form-group-inline': !RadioGroupStacked }">
-            @if (BindingProperty && DisplayProperty) {
-              <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj[BindingProperty]"
-                [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model"
-                (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled" />
-              <label for="radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{ obj[DisplayProperty] }}</label>
-            }
-            @if (BindingProperty === '' && DisplayProperty === '') {
-              <input type="radio" name="Radio{{ LabelID }}" id="radio{{ i }}" [value]="obj" [ngModel]="Model"
-                (ngModelChange)="change($event)" [checked]="obj === Model" (focus)="focusIn()" (focusout)="focusOut()"
-                [disabled]="Disabled" />
-              <label for="radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{ obj }}</label>
-            }
-          </div>
         }
+      </div>
+      @if (ResetFunction.observed) {
+      <div class="padding-left-1rem">
+        <app-button [ButtonType]="'reset'" (FunctionCallBack)="runResetFunction()"></app-button>
+      </div>
       }
-      @case ('datetime') {
-        <input #input (focus)="focusIn()" (focusout)="focusOut()" class="form-control" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
-          (ngModelChange)="change($event)" />
-        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
-        [ngClass]="{ disabled: Disabled }"></span></span>
-        <owl-date-time #dt [hour12Timer]="true" [disabled]="Disabled" [pickerMode]="_PickerMode"
-        [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
-      }
-      @case ('date') {
-        <input #input (focus)="focusIn()" (focusout)="focusOut()" class="form-control" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [disabled]="Disabled" [ngModel]="Model"
-          (ngModelChange)="change($event)" />
-        <span [owlDateTimeTrigger]="dt" [disabled]="Disabled"><span class="mdi mdi-calendar calendar-icon"
-        [ngClass]="{ disabled: Disabled }"></span></span>
-        <owl-date-time #dt [pickerType]="'calendar'" [disabled]="Disabled" [pickerMode]="_PickerMode"
-        [panelClass]="_PickerMode === 'popup' ? 'date-panel-scale' : ''"></owl-date-time>
-      }
-      @case ('file') {
-<div class="file-upload form-control" [ngClass]="{ disabled: Disabled }" [ngClass]="{
+    </div>
+    } @case ('stopwatch') {
+    <div class="stopwatch">
+      <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
           disabled: Disabled,
           valid: isFormElementValid(),
           invalid: isFormElementInvalid(),
           required: isFormElementRequired()
-        }">
-          <input type="file" class="file-input" (change)="fileProgress($event)" #fileUpload style="display: none"
-            [disabled]="Disabled" (focus)="focusIn()" (focusout)="focusOut()" />
-          <div>
-            <p>
-              {{ Model ? fileName || "No file uploaded." : "No file uploaded." }}
-            </p>
-          </div>
-          <app-button [ButtonType]="'attach'" (FunctionCallBack)="fileUpload.click()" [Disabled]="Disabled"></app-button>
-        </div>
-      }
-      @case ('image') {
-        <input class="form-control" type="file" id="{{ LabelID }}"
-          (change)="ImageChangeEvent($event)" placeholder="Upload file" [ngModel]="Model" [disabled]="Disabled"
-          (focus)="focusIn()" (focusout)="focusOut()" />
-      }
-      @case ('multiSelect') {
-        <div class="flex align-items-baseline flex-wrap">
-        <div class="form-control" id="multiSelect" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" #multiSelect (appClickOutside)="multiSelectClose()">
-            <span (click)="multiSelectMenu()">
-              <p #multiSelectText id="multi-select-text">{{ LabelText }}</p>
-              <div class="arrow-wrapper">
-                <i class="arrow down"></i>
-              </div>
-            </span>
-            @if (DisplayProperty) {
-              <div id="dropdown" #multiSelectDropdown>
-                <div class="multi-select-buttons">
-                  <app-button [ButtonType]="'main'" (FunctionCallBack)="selectAll()">Select All</app-button>
-                  &nbsp;
-                  <app-button [ButtonType]="'main'" (FunctionCallBack)="deselectAll()">Deselect All</app-button>
-                </div>
-                @for (obj of multiSelectModel; track obj; let i = $index) {
-                  <div class="multi-select-option">
-                    <input type="checkbox" id="{{ LabelID }}{{ i }}" [ngModel]="multiSelectModel[i]['checked']"
-                      (ngModelChange)="change($event, i)" [disabled]="Disabled" />
-                    <label for="{{ LabelID }}{{ i }}">
-                      {{ obj[DisplayProperty] }}
-                      {{
-                      DisplayProperty2
-                      ? obj[DisplayProperty2]
-                      ? " - " + obj[DisplayProperty2]
-                      : ""
-                      : ""
-                    }}</label>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-          @if (ResetFunction.observed) {
-            <div class="padding-left-1rem">
-              <app-button [ButtonType]="'reset'" (FunctionCallBack)="runResetFunction()"></app-button>
-            </div>
-          }
-        </div>
-      }
-      @case ('stopwatch') {
-        <div class="stopwatch">
-        <input #input type="text" class="form-control" id="{{ LabelID }}" placeholder="{{ Placeholder }}" [ngClass]="{
-            disabled: Disabled,
-            valid: isFormElementValid(),
-            invalid: isFormElementInvalid(),
-            required: isFormElementRequired()
-          }" [ngStyle]="{
-            width: 'calc(' + Width + ' - 0.64rem)',
-            'min-width': MinWidth,
-            'max-width': MaxWidth
-          }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
-            (focus)="focusIn()" (focusout)="focusOut()" />
-          <div class="flex justify-content-space-between">
-            <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()"
-            [Disabled]="Disabled">Start</app-button>
-            <app-button [ButtonType]="'main'" (FunctionCallBack)="stopwatchStop()" [Disabled]="Disabled">Stop</app-button>
-            <app-button [ButtonType]="'danger'" (FunctionCallBack)="stopwatchReset()"
-            [Disabled]="Disabled">Reset</app-button>
-          </div>
-        </div>
-      }
-      @case ('rating') {
-<div #input [ngClass]="{
-          disabled: Disabled,
-          valid: isFormElementValid(),
-          invalid: isFormElementInvalid(),
-          required: isFormElementRequired()
-        }" (focus)="focusIn()" (focusout)="focusOut()">
-          <span class="rating-star mdi mdi-{{ Model >= 1 ? 'star' : 'star-outline' }}" (click)="setRating(1)"></span>
-          <span class="rating-star mdi mdi-{{ Model >= 2 ? 'star' : 'star-outline' }}" (click)="setRating(2)"></span>
-          <span class="rating-star mdi mdi-{{ Model >= 3 ? 'star' : 'star-outline' }}" (click)="setRating(3)"></span>
-          <span class="rating-star mdi mdi-{{ Model >= 4 ? 'star' : 'star-outline' }}" (click)="setRating(4)"></span>
-          <span class="rating-star mdi mdi-{{ Model >= 5 ? 'star' : 'star-outline' }}" (click)="setRating(5)"></span>
-        </div>
-      }
-    }
+        }" [ngStyle]="{
+          width: 'calc(' + Width + ' - 0.64rem)',
+          'min-width': MinWidth,
+          'max-width': MaxWidth
+        }" [ngModel]="Model" (ngModelChange)="change($event)" maxlength="{{ FieldSize }}" [disabled]="Disabled"
+        (focus)="focusIn()" (focusout)="focusOut()" />
+      <div class="flex justify-content-space-between">
+        <app-button [ButtonType]="'success'" (FunctionCallBack)="stopwatchStart()"
+          [Disabled]="Disabled">Start</app-button>
+        <app-button [ButtonType]="'main'" (FunctionCallBack)="stopwatchStop()" [Disabled]="Disabled">Stop</app-button>
+        <app-button [ButtonType]="'danger'" (FunctionCallBack)="stopwatchReset()"
+          [Disabled]="Disabled">Reset</app-button>
+      </div>
+    </div>
+    } @case ('rating') {
+    <div #input [ngClass]="{
+        disabled: Disabled,
+        valid: isFormElementValid(),
+        invalid: isFormElementInvalid(),
+        required: isFormElementRequired()
+      }" (focus)="focusIn()" (focusout)="focusOut()">
+      <span class="rating-star mdi mdi-{{ Model >= 1 ? 'star' : 'star-outline' }}" (click)="setRating(1)"></span>
+      <span class="rating-star mdi mdi-{{ Model >= 2 ? 'star' : 'star-outline' }}" (click)="setRating(2)"></span>
+      <span class="rating-star mdi mdi-{{ Model >= 3 ? 'star' : 'star-outline' }}" (click)="setRating(3)"></span>
+      <span class="rating-star mdi mdi-{{ Model >= 4 ? 'star' : 'star-outline' }}" (click)="setRating(4)"></span>
+      <span class="rating-star mdi mdi-{{ Model >= 5 ? 'star' : 'star-outline' }}" (click)="setRating(5)"></span>
+    </div>
+    } }
   </div>
   @if (!Disabled && Required && !hasValue && Touched) {
-    <p class="invalid-message">
-      {{ ValidationMessage || "required" }}
-    </p>
-  } @else {
-    @if (!Disabled && !valid && Touched) {
-      <p class="invalid-message">
-        {{ ValidationMessage || "invalid" }}
-      </p>
-    }
-  }
+  <p class="invalid-message">
+    {{ ValidationMessage || "required" }}
+  </p>
+  } @else { @if (!Disabled && !valid && Touched) {
+  <p class="invalid-message">
+    {{ ValidationMessage || "invalid" }}
+  </p>
+  } }
 </div>
 
 <!--
