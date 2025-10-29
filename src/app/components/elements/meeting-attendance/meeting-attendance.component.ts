@@ -122,7 +122,7 @@ export class MeetingAttendanceComponent implements OnInit {
     if (this.user) {
       const a = attendance ? attendance : new Attendance();
 
-      if (Number.isNaN(a.user.id))
+      if (!a.user)
         a.user = this.user;
 
       if (meeting)
