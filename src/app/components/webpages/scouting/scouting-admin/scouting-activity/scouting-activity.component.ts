@@ -30,7 +30,8 @@ export class ScoutingActivityComponent implements OnInit {
     { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
     { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
-  userActivityTableButtons: TableButtonType[] = [{ ButtonType: 'main', Text: 'Mark Present', RecordCallBack: this.markScoutPresent.bind(this) },];
+  userActivityTableButtons: TableButtonType[] = [
+    new TableButtonType('main', this.markScoutPresent.bind(this), 'Mark Present')];
   userActivityModalVisible = false;
   triggerUserActivityTableUpdate = false;
 

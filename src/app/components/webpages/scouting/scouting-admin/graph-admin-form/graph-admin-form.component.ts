@@ -41,7 +41,7 @@ export class GraphAdminFormComponent implements OnInit {
     { PropertyName: 'y_scale_max', ColLabel: 'Y Scale Max' },
   ];
   graphTableButtons: TableButtonType[] = [
-    { ButtonType: 'copy', RecordCallBack: this.copyGraph.bind(this) }
+    new TableButtonType('copy', this.copyGraph.bind(this))
   ]
   graphModalVisible = false;
   activeGraph: Graph | undefined = undefined;
