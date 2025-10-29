@@ -215,7 +215,7 @@ export class TableComponent implements OnInit, OnChanges {
 
         this.TableDataButtons.forEach(btn => {
           if (btn.HideFunction) {
-            rec[btn.ButtonType + (btn.HideFunction?.name || '')] = btn.HideFunction(rec);
+            this.setRecordButtonHidden(rec, btn, btn.HideFunction(rec));
           }
         });
       });
@@ -322,6 +322,14 @@ export class TableComponent implements OnInit, OnChanges {
     return true;
   }
 
+  isRecordButtonHidden(rec: any, btn: TableButtonType): boolean {
+    return rec[btn.ButtonType + (btn.HideFunction?.name || '')];
+  }
+
+  setRecordButtonHidden(rec: any, btn: TableButtonType, b: boolean): void {
+    rec[btn.ButtonType + (btn.HideFunction?.name || '')] = b;
+  }
+
   ShowButtonColumn(): void {
     const buttonWidth = 3.6;
     let colWidth = 0;
@@ -346,11 +354,23 @@ export class TableComponent implements OnInit, OnChanges {
       colWidth += buttonWidth;
     }
 
+    this.TableDataButtons.forEach(btn => {
+      btn.setOneOfButtonTypeVisible(false);
+      this.TableData.forEach(rec => {
+        if (!btn.isOneOfButtonTypeVisible() &&
+          btn.HideFunction &&
+          !this.isRecordButtonHidden(rec, btn)) {
+          btn.setOneOfButtonTypeVisible(true);
+        }
+      })
+    });
+
     this.TableDataButtons.forEach(t => {
-      if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
-        colWidth += 6;
-      else
-        colWidth += buttonWidth;
+      if (t.isOneOfButtonTypeVisible())
+        if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
+          colWidth += 6;
+        else
+          colWidth += buttonWidth;
     });
 
     if (colWidth > 0) {
@@ -460,6 +480,7 @@ export class TableButtonType {
   Type?: string;
   Text?: string;
   HideFunction?: (arg: any) => boolean;
+  private oneOfButtonTypeIsVisible = false
 
   constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean) {
     this.ButtonType = ButtonType;
@@ -468,5 +489,13 @@ export class TableButtonType {
     this.Type = Type;
     this.Text = Text;
     this.HideFunction = HideFunction;
+  }
+
+  isOneOfButtonTypeVisible(): boolean {
+    return this.oneOfButtonTypeIsVisible;
+  }
+
+  setOneOfButtonTypeVisible(b: boolean): void {
+    this.oneOfButtonTypeIsVisible = b;
   }
 }

@@ -29,8 +29,8 @@ export class AllianceSelectionComponent implements OnInit {
     { PropertyName: 'note', ColLabel: 'Note', Type: 'area', Rows: 4 },
   ];
   allianceSelectionsTableButtons: TableButtonType[] = [
-    { ButtonType: 'minus', RecordCallBack: this.decrementOrder.bind(this), HideFunction: this.hideMinus },
-    { ButtonType: 'add', RecordCallBack: this.incrementOrder.bind(this), HideFunction: this.hidePlus.bind(this) },
+    new TableButtonType('minus', this.decrementOrder.bind(this), undefined, undefined, undefined, this.hideMinus),
+    new TableButtonType('add', this.incrementOrder.bind(this), undefined, undefined, undefined, this.hidePlus.bind(this)),
   ];
   triggerAllianceSelectionsTable = false;
 

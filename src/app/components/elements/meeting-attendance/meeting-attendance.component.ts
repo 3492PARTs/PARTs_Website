@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
@@ -12,7 +12,7 @@ import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours
 import { User } from '../../../models/user.models';
 import { APIService } from '../../../services/api.service';
 import { AuthService } from '../../../services/auth.service';
-import { GeneralService, RetMessage } from '../../../services/general.service';
+import { AppSize, GeneralService, RetMessage } from '../../../services/general.service';
 import { LocationService, LocationCheckResult } from '../../../services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '../../../services/user.service';
@@ -54,11 +54,7 @@ export class MeetingAttendanceComponent implements OnInit {
   triggerMeetingTableUpdate = false;
   meetingAttendance: Attendance[] = [];
   meetingAttendanceTableCols: TableColType[] = [
-    { PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'time_in', ColLabel: 'Time In' },
-    { PropertyName: 'time_out', ColLabel: 'Time Out' },
-    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
+
   ];
 
   attendanceReport: AttendanceReport[] = [];
@@ -113,8 +109,14 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (this.AdminInterface)
       this.attendanceFilterOption = 'unapp';
+
+    this.setAttendanceTableCols();
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.setAttendanceTableCols();
+  }
   // ATTENDANCE -----------------------------------------------------------
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
     if (this.user) {
@@ -302,6 +304,25 @@ export class MeetingAttendanceComponent implements OnInit {
     }
   }
 
+  setAttendanceTableCols(): void {
+    let cols: TableColType[] = [{ PropertyName: 'user.name', ColLabel: 'User' },
+    { PropertyName: 'time_in', ColLabel: 'Time In' },
+    { PropertyName: 'time_out', ColLabel: 'Time Out' }];
+
+    if (this.gs.getAppSize() >= AppSize.LG) {
+      cols = [
+        ...cols,
+        { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+      ];
+
+    }
+
+    this.attendanceTableCols = [
+      ...cols,
+      { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
+    ];
+  }
+
   // MEETING -----------------------------------------------------------
   getMeetings(): void | null {
     this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
@@ -427,3 +448,4 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
 }
+
