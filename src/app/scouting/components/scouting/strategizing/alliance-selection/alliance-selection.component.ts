@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { BoxComponent } from "../../../../atoms/box/box.component";
-import { AllianceSelection, Event, Team } from '../../../../../models/scouting.models';
-import { GeneralService } from '../../../../../services/general.service';
-import { ScoutingService } from '../../../../../services/scouting.service';
+import { BoxComponent } from "../../../../../shared/components/atoms/box/box.component";
+import { AllianceSelection, Event, Team } from '../../../../models/scouting.models';
+import { GeneralService } from '../../../../../core/services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
 import { TableButtonType, TableColType, TableComponent } from '../../../../../shared/components/atoms/table/table.component';
-import { ButtonRibbonComponent } from "../../../../atoms/button-ribbon/button-ribbon.component";
-import { ButtonComponent } from "../../../../atoms/button/button.component";
-import { FormElementGroupComponent } from "../../../../atoms/form-element-group/form-element-group.component";
+import { ButtonRibbonComponent } from "../../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
+import { ButtonComponent } from "../../../../../shared/components/atoms/button/button.component";
+import { FormElementGroupComponent } from "../../../../../shared/components/atoms/form-element-group/form-element-group.component";
 
 @Component({
   selector: 'app-alliance-selection',

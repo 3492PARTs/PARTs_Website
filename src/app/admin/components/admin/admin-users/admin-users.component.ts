@@ -11,7 +11,7 @@ import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
-import { HeaderComponent } from "../../../atoms/header/header.component";
+import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
 
 @Component({
   selector: 'app-admin-users',

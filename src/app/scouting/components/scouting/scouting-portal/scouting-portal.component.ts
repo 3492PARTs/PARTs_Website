@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, Schedule } from '../../../../models/scouting.models';
-import { User, AuthPermission } from '../../../../models/user.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { UserService } from '../../../../services/user.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
+import { ScoutFieldSchedule, Schedule } from '../../../models/scouting.models';
+import { User, AuthPermission } from '../../../../auth/models/user.models';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { ScoutingService } from '../../../services/scouting.service';
+import { UserService } from '../../../../user/services/user.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
 
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
 
 @Component({
   selector: 'app-scouting-portal',

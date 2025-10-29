@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MeetingAttendanceComponent } from "../../../elements/meeting-attendance/meeting-attendance.component";
+import { MeetingAttendanceComponent } from "../../../../shared/components/elements/meeting-attendance/meeting-attendance.component";
 
 @Component({
   selector: 'app-meetings',

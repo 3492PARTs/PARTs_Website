@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { APIService } from '../../../../services/api.service';
 import { Graph, GraphBin, GraphCategory, GraphCategoryAttribute, GraphQuestion, GraphQuestionType, GraphType, Question, QuestionAggregate, QuestionConditionType } from '../../../../models/form.models';
 import { AuthCallStates, AuthService } from '../../../../services/auth.service';
-import { BoxComponent } from "../../../atoms/box/box.component";
-import { FormElementComponent } from "../../../atoms/form-element/form-element.component";
-import { FormElementGroupComponent } from "../../../atoms/form-element-group/form-element-group.component";
-import { TableButtonType, TableColType, TableComponent } from "../../../atoms/table/table.component";
-import { ModalComponent } from "../../../atoms/modal/modal.component";
-import { FormComponent } from "../../../atoms/form/form.component";
+import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
+import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
+import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
+import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
+import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
+import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
 import { GeneralService } from '../../../../services/general.service';
-import { ButtonComponent } from "../../../atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
+import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
+import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-graph-admin-form',

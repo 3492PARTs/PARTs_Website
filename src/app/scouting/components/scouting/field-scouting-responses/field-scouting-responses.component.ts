@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '../../../../models/scouting.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { TableComponent } from '../../../atoms/table/table.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { PitResultDisplayComponent } from '../../../elements/pit-result-display/pit-result-display.component';
+import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '../../../models/scouting.models';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../core/services/general.service';
+import { ScoutingService } from '../../../services/scouting.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { TableComponent } from '../../../../shared/components/atoms/table/table.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { PitResultDisplayComponent } from '../../../../shared/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '../../../../pipes/date-to-str.pipe';
-import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
+import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-field-scouting-responses',

@@ -11,7 +11,7 @@ import { FormElementGroupComponent } from '../../../atoms/form-element-group/for
 import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
 import { FormComponent } from '../../../atoms/form/form.component';
 import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { DrawQuestionSvgComponent } from "../../../elements/draw-question-svg/draw-question-svg.component";
+import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 
 @Component({
   selector: 'app-manage-field-form',

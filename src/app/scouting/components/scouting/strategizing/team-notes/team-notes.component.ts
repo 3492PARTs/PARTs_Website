@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Team, TeamNote } from '../../../../../models/scouting.models';
-import { AuthService, AuthCallStates } from '../../../../../services/auth.service';
-import { GeneralService } from '../../../../../services/general.service';
-import { ScoutingService } from '../../../../../services/scouting.service';
+import { Team, TeamNote } from '../../../../models/scouting.models';
+import { AuthService, AuthCallStates } from '../../../../../auth/services/auth.service';
+import { GeneralService } from '../../../../../core/services/general.service';
+import { ScoutingService } from '../../../../services/scouting.service';
 import { BoxComponent } from '../../../../../shared/components/atoms/box/box.component';
 import { FormElementComponent } from '../../../../../shared/components/atoms/form-element/form-element.component';
 import { FormComponent } from '../../../../../shared/components/atoms/form/form.component';
@@ -10,8 +10,8 @@ import { ButtonComponent } from '../../../../../shared/components/atoms/button/b
 import { ButtonRibbonComponent } from '../../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
 import { FormElementGroupComponent } from '../../../../../shared/components/atoms/form-element-group/form-element-group.component';
 import { CommonModule } from '@angular/common';
-import { DateToStrPipe } from '../../../../../pipes/date-to-str.pipe';
-import { User } from '../../../../../models/user.models';
+import { DateToStrPipe } from '../../../../../shared/pipes/date-to-str.pipe';
+import { User } from '../../../../../auth/models/user.models';
 
 @Component({
   selector: 'app-team-notes',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BoxComponent } from "../../../atoms/box/box.component";
-import { FlowConditionAdminFormComponent } from "../../../elements/flow-condition-admin-form/flow-condition-admin-form.component";
+import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
+import { FlowConditionAdminFormComponent } from "../../../../shared/components/elements/flow-condition-admin-form/flow-condition-admin-form.component";
 
 @Component({
   selector: 'app-manage-field-flow-conditions',

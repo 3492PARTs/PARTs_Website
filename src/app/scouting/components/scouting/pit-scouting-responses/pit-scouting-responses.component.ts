@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Team, ScoutPitResponse } from '../../../../models/scouting.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService, AppSize } from '../../../../services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { Team, ScoutPitResponse } from '../../../models/scouting.models';
+import { APIService } from '../../../../core/services/api.service';
+import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
+import { GeneralService, AppSize } from '../../../../core/services/general.service';
+import { ScoutingService } from '../../../services/scouting.service';
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
 
-import { PitResultDisplayComponent } from "../../../elements/pit-result-display/pit-result-display.component";
+import { PitResultDisplayComponent } from "../../../../shared/components/elements/pit-result-display/pit-result-display.component";
 
 @Component({
   selector: 'app-pit-scouting-responses',

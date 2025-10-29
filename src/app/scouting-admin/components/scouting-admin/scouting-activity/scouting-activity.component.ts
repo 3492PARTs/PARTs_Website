@@ -10,9 +10,9 @@ import { TableButtonType, TableColType, TableComponent } from '../../../atoms/ta
 import { ModalComponent } from '../../../atoms/modal/modal.component';
 import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '../../../atoms/button/button.component';
-import { FormElementComponent } from "../../../atoms/form-element/form-element.component";
-import { FormComponent } from "../../../atoms/form/form.component";
-import { ButtonRibbonComponent } from "../../../atoms/button-ribbon/button-ribbon.component";
+import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
+import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
+import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 @Component({
   selector: 'app-scouting-activity',

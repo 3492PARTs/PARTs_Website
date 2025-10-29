@@ -12,7 +12,7 @@ import { FormElementGroupComponent } from '../../../atoms/form-element-group/for
 import { ButtonComponent } from '../../../atoms/button/button.component';
 import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
 
-import { QuestionDisplayFormComponent } from "../../../elements/question-display-form/question-display-form.component";
+import { QuestionDisplayFormComponent } from "../../../../shared/components/elements/question-display-form/question-display-form.component";
 
 @Component({
   selector: 'app-team-application',
