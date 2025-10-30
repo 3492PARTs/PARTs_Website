@@ -219,6 +219,53 @@ const mockAPIService = createMockAPIService();
 
 ## CI/CD Integration
 
+### Jenkins Pipeline (Current Approach)
+
+The PARTs Website uses Jenkins for CI/CD with the following approach for running tests:
+
+**UAT Branches (non-main branches):**
+- Tests run **natively on the Jenkins node** before Docker build
+- This approach avoids Docker/Chrome shared memory and permission issues
+- Requires Node.js and Chrome to be installed on the Jenkins agent
+
+```groovy
+stage('Run Tests') {
+    if (env.BRANCH_NAME != 'main') {
+        // Install dependencies and run tests natively on Jenkins node
+        sh '''
+            npm ci
+            npm run test:ci
+        '''
+    }
+}
+```
+
+**Main Branch:**
+- Tests run inside the Docker build process
+- Uses the production Dockerfile which includes Chrome installation
+- Tests must pass before the production image is built
+
+### Why Tests Run Natively (Not in Docker)
+
+**Previous Approach Issues:**
+- Running tests inside Docker containers caused numerous errors
+- Chrome headless mode in Docker required complex workarounds (`--shm-size`, `--no-sandbox`, etc.)
+- Permission issues and memory constraints were common
+
+**Current Approach Benefits:**
+- ✅ No Docker/Chrome compatibility issues
+- ✅ Faster test execution (no Docker overhead)
+- ✅ Simpler configuration
+- ✅ Easier to debug failures
+- ✅ Smaller, faster Docker images (no Chrome in UAT builds)
+
+### Requirements for Jenkins Agent
+
+For this approach to work, the Jenkins agent must have:
+1. **Node.js** (LTS version) - for running Angular CLI
+2. **Chrome/Chromium** - for Karma test runner
+3. **npm** - for dependency management
+
 ### GitHub Actions
 Add this to your workflow:
 
@@ -230,25 +277,6 @@ Add this to your workflow:
   uses: codecov/codecov-action@v3
   with:
     files: ./coverage/parts-website/lcov.info
-```
-
-### Jenkins
-```groovy
-stage('Test') {
-  steps {
-    sh 'npm run test:ci'
-  }
-}
-
-stage('Coverage') {
-  steps {
-    publishHTML([
-      reportDir: 'coverage/parts-website',
-      reportFiles: 'index.html',
-      reportName: 'Coverage Report'
-    ])
-  }
-}
 ```
 
 ## Best Practices
