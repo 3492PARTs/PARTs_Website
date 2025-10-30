@@ -7,6 +7,8 @@ import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SwPush, SwUpdate } from '@angular/service-worker';
+import { createMockSwPush, createMockSwUpdate, createMockAuthService, createMockGeneralService } from '../test-helpers';
 import { of, Subject } from 'rxjs';
 
 describe('AppComponent', () => {
@@ -31,13 +33,10 @@ describe('AppComponent', () => {
       }
     };
 
-    mockAuthService = {
-      previouslyAuthorized: jasmine.createSpy('previouslyAuthorized')
-    };
-
-    mockGeneralService = {
-      addSiteBanner: jasmine.createSpy('addSiteBanner')
-    };
+    mockAuthService = createMockAuthService();
+    mockAuthService.previouslyAuthorized = jasmine.createSpy('previouslyAuthorized');
+    
+    mockGeneralService = createMockGeneralService();
 
     mockActivatedRoute = {
       snapshot: {
@@ -53,7 +52,9 @@ describe('AppComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: AuthService, useValue: mockAuthService },
         { provide: GeneralService, useValue: mockGeneralService },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: SwPush, useValue: createMockSwPush() },
+        { provide: SwUpdate, useValue: createMockSwUpdate() }
       ]
     }).compileComponents();
   });

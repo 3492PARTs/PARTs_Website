@@ -70,7 +70,10 @@ export function createMockAPIService() {
  */
 export function createMockAuthService() {
   return {
-    user: { user_id: 1, username: 'testuser' },
+    user: of({ id: null, username: '', email: '', name: '', first_name: '', last_name: '', is_active: false, discord_user_id: '', phone: '', phone_type: '', groups: [], permissions: [], image: '', links: [] }),
+    userLinks: of([]),
+    userSections: of([]),
+    loggedIn: of(false),
     previouslyAuthorized: jasmine.createSpy('previouslyAuthorized'),
     login: jasmine.createSpy('login').and.returnValue(of({ success: true })),
     logout: jasmine.createSpy('logout').and.returnValue(of({ success: true })),
@@ -85,7 +88,13 @@ export function createMockGeneralService() {
   return {
     addSiteBanner: jasmine.createSpy('addSiteBanner'),
     removeSiteBanner: jasmine.createSpy('removeSiteBanner'),
-    banners: []
+    removeBanner: jasmine.createSpy('removeBanner'),
+    siteBanners: of([]),
+    currentOutstandingCalls: of(0),
+    banners: [],
+    getAppSize: jasmine.createSpy('getAppSize').and.returnValue(0),
+    cloneObject: jasmine.createSpy('cloneObject').and.callFake((obj: any) => JSON.parse(JSON.stringify(obj))),
+    arrayObjectIndexOf: jasmine.createSpy('arrayObjectIndexOf').and.returnValue(-1)
   };
 }
 
