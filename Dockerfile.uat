@@ -40,17 +40,13 @@ ENV CHROME_BIN=/usr/bin/google-chrome-stable
 # Add the source code to app
 COPY ./ /usr/local/app/
 
-# CRITICAL FIX: Ensure the final output directory for tests is created and writable by any user
-# The Angular CLI will try to create 'test-out' inside 'dist'
-RUN mkdir -p /usr/local/app/dist && chmod -R 777 /usr/local/app/dist
-
 # Install all the dependencies
 # The tests (npm run test:ci) have been REMOVED from this RUN step.
 # They will be run in Jenkins using an explicit docker run with --shm-size.
 RUN npm install \
     && npx ng build --configuration=uat
 
-# Stage 2: Serve app with nginx server6
+# Stage 2: Serve app with nginx server
 # Use official nginx image as the base image
 FROM nginx:latest AS runtime
 
