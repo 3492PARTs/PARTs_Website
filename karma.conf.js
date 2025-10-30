@@ -56,6 +56,11 @@ module.exports = function (config) {
         ]
       },
     },
-    browserNoActivityTimeout: 60000
+    // Increase the time Karma waits for a browser to launch (e.g., 5 minutes = 300000ms)
+    captureTimeout: 300000, 
+    // How many attempts Karma makes to reconnect (in case of a temporary blip)
+    browserDisconnectTolerance: 3, 
+    // How long Karma waits for activity from the browser (e.g., 5 minutes)
+    browserNoActivityTimeout: 300000,
   });
 };
