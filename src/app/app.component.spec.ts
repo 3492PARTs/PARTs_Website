@@ -5,6 +5,8 @@ import { AuthService } from './auth/services/auth.service';
 import { GeneralService } from './core/services/general.service';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of, Subject } from 'rxjs';
 
 describe('AppComponent', () => {
@@ -46,11 +48,12 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: Router, useValue: mockRouter },
         { provide: AuthService, useValue: mockAuthService },
         { provide: GeneralService, useValue: mockGeneralService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
-        // Note: Removed DOCUMENT provider - let Angular use the real document
       ]
     }).compileComponents();
   });
