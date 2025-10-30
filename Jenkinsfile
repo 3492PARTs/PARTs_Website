@@ -48,10 +48,13 @@ node {
         }
 
         stage('Run Tests') {
-            sh '''
-                npm ci
-                npm run test:ci
-            '''
+            // Run tests inside the built Docker container
+            app.inside {
+                sh '''
+                    npm ci
+                    npm run test:ci
+                '''
+            }
         }
 
         stage('Push image') {
