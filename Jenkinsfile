@@ -40,6 +40,30 @@ node {
             }
         }
 
+        stage('Cleanup Docker Images') {
+            steps {
+                script {
+                    echo "Starting Docker image cleanup..."
+                    
+                    // 1. Force remove the intermediate image used for testing
+                    // We only need it for the 'Run Tests' stage, not for subsequent stages.
+                    sh 'docker rmi -f parts-test-base || true' 
+                    
+                    // 2. Remove all dangling and unused layers/images
+                    // This reclaims the disk space from older, failed, or intermediate builds.
+                    sh 'docker image prune -f'
+                    
+                    // OPTIONAL: If your pipeline produces images that fail and are never tagged, 
+                    // you might also want to prune all containers:
+                    // sh 'docker container prune -f'
+                    
+                    echo "Docker images cleaned up."
+                }
+            }
+        }
+        // --- END NEW STAGE ---
+
+
         stage('Build image') {
             if (env.BRANCH_NAME == 'main') {
                 sh'''
