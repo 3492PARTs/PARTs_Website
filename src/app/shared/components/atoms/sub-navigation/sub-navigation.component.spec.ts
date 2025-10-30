@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminNavigationComponent } from './sub-navigation.component';
+import { SubNavigationComponent } from './sub-navigation.component';
 
-describe('AdminNavigationComponent', () => {
-  let component: AdminNavigationComponent;
-  let fixture: ComponentFixture<AdminNavigationComponent>;
+describe('SubNavigationComponent', () => {
+  let component: SubNavigationComponent;
+  let fixture: ComponentFixture<SubNavigationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AdminNavigationComponent]
+      imports: [SubNavigationComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(AdminNavigationComponent);
+    fixture = TestBed.createComponent(SubNavigationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

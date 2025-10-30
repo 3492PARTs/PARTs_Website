@@ -1,25 +1,30 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { CommunityOutreachComponent } from './community-outreach.component';
+import { MediaCommunityOutreachComponent } from './community-outreach.component';
 
-describe('CommunityOutreachComponent', () => {
-  let component: CommunityOutreachComponent;
-  let fixture: ComponentFixture<CommunityOutreachComponent>;
+describe('MediaCommunityOutreachComponent', () => {
+  let component: MediaCommunityOutreachComponent;
+  let fixture: ComponentFixture<MediaCommunityOutreachComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommunityOutreachComponent ]
+      imports: [ MediaCommunityOutreachComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CommunityOutreachComponent);
+    fixture = TestBed.createComponent(MediaCommunityOutreachComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have albums defined', () => {
+    expect(component.albums).toBeDefined();
+    expect(component.albums.length).toBeGreaterThan(0);
   });
 });

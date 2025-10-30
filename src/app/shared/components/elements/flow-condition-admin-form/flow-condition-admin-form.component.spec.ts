@@ -4,7 +4,7 @@ import { FlowConditionAdminFormComponent } from './flow-condition-admin-form.com
 
 describe('FlowConditionAdminFormComponent', () => {
   let component: FlowConditionAdminFormComponent;
-  let fixture: ComponentFixture<lowConditionAdminFormComponent>;
+  let fixture: ComponentFixture<FlowConditionAdminFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
