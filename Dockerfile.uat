@@ -6,43 +6,12 @@ FROM node:lts AS build
 # Set the working directory
 WORKDIR /usr/local/app
 
-# Install Chrome for running tests
-RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    ca-certificates \
-    # ESSENTIAL Dependencies for Headless Chrome
-    libnss3 \
-    libatk-bridge2.0-0 \
-    libcups2 \
-    libdrm2 \
-    libxcomposite1 \
-    libxrandr2 \
-    libgbm-dev \
-    libasound2 \
-    libfontconfig1 \
-    libgtk-3-0 \
-    --no-install-recommends \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set Chrome binary location for Karma
-ENV CHROME_BIN=/usr/bin/google-chrome-stable
-
-# --- Temporary Debug Steps (Optional, can remove now) ---
-# RUN ls -l /usr/bin/google-chrome-stable
-# RUN /usr/bin/google-chrome-stable --version
-# ---------------------------------------------------------
-
 # Add the source code to app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
 # The tests (npm run test:ci) have been REMOVED from this RUN step.
-# They will be run in Jenkins using an explicit docker run with --shm-size.
+# They are now run natively on the Jenkins node before the Docker build.
 RUN npm install \
     && npx ng build --configuration=uat
 
