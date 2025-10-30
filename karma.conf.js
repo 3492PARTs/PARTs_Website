@@ -42,31 +42,15 @@ module.exports = function (config) {
       }
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessCI'],
+    browsers: ['Chrome', 'ChromeHeadlessCI'],
     restartOnFileChange: true,
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
         flags: [
-          '--no-sandbox',
-          '--disable-gpu',
-          '--disable-dev-shm-usage',
-          '--disable-software-rasterizer',
-          '--disable-extensions'
+          '--no-sandbox'
         ]
       },
-    },
-    // For Angular 16+, configure ChromeHeadless directly
-    browserLaunchOptions: {
-      ChromeHeadless: {
-        flags: [
-          '--no-sandbox',
-          '--disable-gpu',
-          '--disable-dev-shm-usage',
-          '--disable-software-rasterizer',
-          '--disable-extensions'
-        ]
-      }
     },
     browserNoActivityTimeout: 60000
   });
