@@ -28,7 +28,7 @@ node {
             '''
         }
 
-        // --- NEW STAGE FOR TEST EXECUTION (with explicit binary path and directory fix) ---
+        // --- NEW STAGE FOR TEST EXECUTION (with explicit config fix) ---
         stage('Run Tests (with SHM fix)') {
             if (env.BRANCH_NAME != 'main') {
                 // 1. Prepare environment variables
@@ -41,11 +41,13 @@ node {
                 def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
 
                 // 3. Execute the tests inside a container with the memory fix and CD command
-                testImage.inside("--shm-size=2gb -u 0") { 
+                testImage.inside("--shm-size=2gb -u 0") { // Using '-u 0' (root) for maximum permission compatibility
                     sh '''
-                        # Change to the Dockerfile's WORKDIR before running the test executable
+                        # Change to the Dockerfile's WORKDIR
                         cd /usr/local/app && 
-                        CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox
+                        # Use '--karma-config' to explicitly load the configuration file 
+                        # that defines the 'ChromeNoSandbox' launcher.
+                        CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --karma-config=karma.conf.js --no-watch --code-coverage --browsers=ChromeNoSandbox
                     '''
                 }
             }
