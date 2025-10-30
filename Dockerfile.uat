@@ -19,11 +19,10 @@ RUN apt-get update && apt-get install -y \
     libxcomposite1 \
     libxrandr2 \
     libgbm-dev \
-    # The following are often necessary for font rendering
     libasound2 \
     libfontconfig1 \
     libgtk-3-0 \
-    # --- END ESSENTIAL Dependencies ---
+    --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
     && apt-get update \
@@ -33,18 +32,18 @@ RUN apt-get update && apt-get install -y \
 # Set Chrome binary location for Karma
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
-RUN ls -l /usr/bin/google-chrome-stable
-RUN /usr/bin/google-chrome-stable --version
+# --- Temporary Debug Steps (Optional, can remove now) ---
+# RUN ls -l /usr/bin/google-chrome-stable
+# RUN /usr/bin/google-chrome-stable --version
+# ---------------------------------------------------------
 
 # Add the source code to app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
-# Run tests to ensure code quality
-# Generate the build of the application
-
+# The tests (npm run test:ci) have been REMOVED from this RUN step.
+# They will be run in Jenkins using an explicit docker run with --shm-size.
 RUN npm install \
-    && npm run test:ci \
     && npx ng build --configuration=uat
 
 # Stage 2: Serve app with nginx server

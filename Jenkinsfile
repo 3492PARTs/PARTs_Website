@@ -28,20 +28,44 @@ node {
             '''
         }
 
+        // --- NEW STAGE FOR TEST EXECUTION ---
+        stage('Run Tests (with SHM fix)') {
+            if (env.BRANCH_NAME != 'main') {
+                // 1. Prepare environment variables
+                sh'''
+                sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
+                '''
+                
+                // 2. Build the image up to the 'npm install' step
+                // We use --target=build to stop BEFORE the final packaging
+                def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
+
+                // 3. Execute the tests inside a container with the memory fix
+                testImage.inside("--shm-size=2gb") { // <-- THIS IS THE CRITICAL FIX
+                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable npm run test:ci'
+                }
+            }
+        }
+        // --- END NEW STAGE ---
+
+
         stage('Build image') {  
             if (env.BRANCH_NAME == 'main') {
                 sh'''
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                 '''
                 
+                // The main branch Dockerfile does not require changes here
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile --target=runtime .")
             }
             else {
+                // The UAT build just compiles the final image (tests are complete)
                 sh'''
-                sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                sed -i "s/BRANCH/$FORMATted_BRANCH_NAME/g" src/environments/environment.uat.ts \
                 && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
-
+                // The original build command runs the final compile now
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile.uat .")
             }
         
