@@ -47,15 +47,12 @@ node {
         
         }
 
-        /*
-        stage('Test image') {
-    
-
-            app.inside {
-                sh 'echo "Tests passed"'
-            }
+        stage('Run Tests') {
+            sh '''
+                npm ci
+                npm run test:ci
+            '''
         }
-        */
 
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
