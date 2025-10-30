@@ -28,7 +28,7 @@ node {
             '''
         }
 
-        // --- NEW STAGE FOR TEST EXECUTION (with npx fix) ---
+        // --- NEW STAGE FOR TEST EXECUTION (with explicit binary path and directory fix) ---
         stage('Run Tests (with SHM fix)') {
             if (env.BRANCH_NAME != 'main') {
                 // 1. Prepare environment variables
@@ -38,17 +38,15 @@ node {
                 '''
                 
                 // 2. Build the image up to the 'npm install' step
-                // We use --target=build to stop BEFORE the final packaging
                 def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
 
-                // 3. Execute the tests inside a container with the memory fix
-                // Note: The CHROME_BIN is already set in the Dockerfile, 
-                // and we use 'npx' to run the local 'ng' command.
-                // 3. Execute the tests inside a container with the memory fix
+                // 3. Execute the tests inside a container with the memory fix and CD command
                 testImage.inside("--shm-size=2gb") { 
-                    // CRITICAL FIX: Run the Angular binary directly from node_modules/.bin/.
-                    // This bypasses 'npm run' and 'npx' path resolution issues.
-                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox' 
+                    sh '''
+                        # Change to the Dockerfile's WORKDIR before running the test executable
+                        cd /usr/local/app && 
+                        CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox
+                    '''
                 }
             }
         }
