@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { SecurityComponent } from './security.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('SecurityComponent', () => {
   let component: SecurityComponent;
@@ -8,7 +14,13 @@ describe('SecurityComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ SecurityComponent ]
+      imports: [ SecurityComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
+      ]
     });
     fixture = TestBed.createComponent(SecurityComponent);
     component = fixture.componentInstance;

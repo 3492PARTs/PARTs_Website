@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { ManagePitResponsesComponent } from './manage-pit-responses.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('ManagePitResponsesComponent', () => {
   let component: ManagePitResponsesComponent;
@@ -8,7 +14,13 @@ describe('ManagePitResponsesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ManagePitResponsesComponent ]
+      imports: [ ManagePitResponsesComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
+      ]
     });
     fixture = TestBed.createComponent(ManagePitResponsesComponent);
     component = fixture.componentInstance;

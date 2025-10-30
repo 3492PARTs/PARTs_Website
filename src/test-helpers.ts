@@ -114,7 +114,7 @@ export function createMockScoutingService() {
 /**
  * Common providers for testing components with HTTP and routing
  */
-export function getCommonTestProviders(): Provider[] {
+export function getCommonTestProviders() {
   return [
     provideHttpClient(),
     provideHttpClientTesting(),
@@ -141,5 +141,19 @@ export function createMockNavigationService() {
     navigate: jasmine.createSpy('navigate'),
     goBack: jasmine.createSpy('goBack'),
     getCurrentRoute: jasmine.createSpy('getCurrentRoute').and.returnValue('/')
+  };
+}
+
+/**
+ * Creates a mock SwPush (Service Worker Push) for testing
+ */
+export function createMockSwPush() {
+  return {
+    messages: of({}),
+    notificationClicks: of({}),
+    subscription: of(null),
+    isEnabled: false,
+    requestSubscription: jasmine.createSpy('requestSubscription').and.returnValue(Promise.resolve({} as any)),
+    unsubscribe: jasmine.createSpy('unsubscribe').and.returnValue(Promise.resolve())
   };
 }

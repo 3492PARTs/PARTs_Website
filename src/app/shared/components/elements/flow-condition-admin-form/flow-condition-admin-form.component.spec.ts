@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { FlowConditionAdminFormComponent } from './flow-condition-admin-form.component';
 
@@ -8,7 +12,12 @@ describe('FlowConditionAdminFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FlowConditionAdminFormComponent]
+      imports: [FlowConditionAdminFormComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
     })
       .compileComponents();
 

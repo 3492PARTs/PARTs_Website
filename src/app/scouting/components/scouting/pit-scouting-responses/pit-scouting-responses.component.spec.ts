@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { ScoutPitResponsesComponent } from './pit-scouting-responses.component';
 
@@ -8,7 +12,12 @@ describe('ScoutPitResultsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ ScoutPitResponsesComponent ]
+      imports: [ ScoutPitResponsesComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
     })
       .compileComponents();
   }));

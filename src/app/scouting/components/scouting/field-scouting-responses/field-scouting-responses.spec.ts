@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { FieldScoutingResponsesComponent } from './field-scouting-responses.component';
 
@@ -8,7 +12,12 @@ describe('ScoutFieldResultsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ FieldScoutingResponsesComponent ]
+      imports: [ FieldScoutingResponsesComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
     })
       .compileComponents();
   }));

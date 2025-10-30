@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { ManageSeasonComponent } from './manage-season.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('ManageSeasonComponent', () => {
   let component: ManageSeasonComponent;
@@ -8,7 +14,13 @@ describe('ManageSeasonComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ManageSeasonComponent ]
+      imports: [ ManageSeasonComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
+      ]
     });
     fixture = TestBed.createComponent(ManageSeasonComponent);
     component = fixture.componentInstance;

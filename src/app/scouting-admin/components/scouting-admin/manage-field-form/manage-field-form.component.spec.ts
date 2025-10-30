@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { ManageFieldFormComponent } from './manage-field-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('ManageFieldFormComponent', () => {
   let component: ManageFieldFormComponent;
@@ -8,7 +14,13 @@ describe('ManageFieldFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ManageFieldFormComponent]
+      imports: [ManageFieldFormComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
+      ]
     })
     .compileComponents();
 

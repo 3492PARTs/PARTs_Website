@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { SubNavigationComponent } from './sub-navigation.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('SubNavigationComponent', () => {
   let component: SubNavigationComponent;
@@ -8,7 +14,13 @@ describe('SubNavigationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubNavigationComponent]
+      imports: [SubNavigationComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
+      ]
     })
       .compileComponents();
 

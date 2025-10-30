@@ -1,4 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+
 
 import { QuestionFormElementComponent } from './question-form-element.component';
 
@@ -8,7 +12,12 @@ describe('QuestionFormElementComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ QuestionFormElementComponent ]
+      imports: [ QuestionFormElementComponent ],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([])
+      ]
     });
     fixture = TestBed.createComponent(QuestionFormElementComponent);
     component = fixture.componentInstance;
