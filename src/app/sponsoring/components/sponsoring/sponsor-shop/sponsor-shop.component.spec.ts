@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { SponsorShopComponent } from './sponsor-shop.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('SponsorShopComponent', () => {
   let component: SponsorShopComponent;
@@ -16,7 +18,8 @@ describe('SponsorShopComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
       .compileComponents();

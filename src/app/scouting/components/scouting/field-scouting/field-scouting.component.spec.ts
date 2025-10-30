@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { FieldScoutingComponent } from './field-scouting.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('FieldScoutingComponent', () => {
   let component: FieldScoutingComponent;
@@ -16,7 +18,8 @@ describe('FieldScoutingComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
       .compileComponents();

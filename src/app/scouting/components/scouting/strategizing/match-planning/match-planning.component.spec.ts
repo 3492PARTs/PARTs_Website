@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { MatchPlanningComponent } from './match-planning.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../../test-helpers';
 
 describe('MatchPlanningComponent', () => {
   let component: MatchPlanningComponent;
@@ -16,7 +18,8 @@ describe('MatchPlanningComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();

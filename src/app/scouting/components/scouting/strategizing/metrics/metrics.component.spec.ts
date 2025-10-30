@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { MetricsComponent } from './metrics.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../../test-helpers';
 
 describe('MetricsComponent', () => {
   let component: MetricsComponent;
@@ -16,7 +18,8 @@ describe('MetricsComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();

@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { QuestionConditionAdminFormComponent } from './question-condition-admin-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('QuestionConditionAdminFormComponent', () => {
   let component: QuestionConditionAdminFormComponent;
@@ -16,7 +18,8 @@ describe('QuestionConditionAdminFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     });
     fixture = TestBed.createComponent(QuestionConditionAdminFormComponent);

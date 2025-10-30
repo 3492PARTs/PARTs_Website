@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { MatchesComponent } from './matches.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../../test-helpers';
 
 describe('MatchesComponent', () => {
   let component: MatchesComponent;
@@ -16,7 +18,8 @@ describe('MatchesComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     });
     fixture = TestBed.createComponent(MatchesComponent);

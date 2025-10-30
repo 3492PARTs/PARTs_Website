@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { QuestionAggregateAdminFormComponent } from './question-aggregate-admin-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('QuestionAggregateAdminFormComponent', () => {
   let component: QuestionAggregateAdminFormComponent;
@@ -16,7 +18,8 @@ describe('QuestionAggregateAdminFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();

@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { FlowAdminFormComponent } from './flow-admin-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('FlowAdminFormComponent', () => {
   let component: FlowAdminFormComponent;
@@ -16,7 +18,8 @@ describe('FlowAdminFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();

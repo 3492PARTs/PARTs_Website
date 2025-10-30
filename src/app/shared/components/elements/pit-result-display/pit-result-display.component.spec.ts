@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { PitResultDisplayComponent } from './pit-result-display.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('PitResultDisplayComponent', () => {
   let component: PitResultDisplayComponent;
@@ -16,7 +18,8 @@ describe('PitResultDisplayComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     });
     fixture = TestBed.createComponent(PitResultDisplayComponent);

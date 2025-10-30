@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { GraphAdminFormComponent } from './graph-admin-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('GraphAdminFormComponent', () => {
   let component: GraphAdminFormComponent;
@@ -16,7 +18,8 @@ describe('GraphAdminFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();

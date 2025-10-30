@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { FormManagerComponent } from './form-manager.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('FormManagerComponent', () => {
   let component: FormManagerComponent;
@@ -16,7 +18,8 @@ describe('FormManagerComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     });
     fixture = TestBed.createComponent(FormManagerComponent);

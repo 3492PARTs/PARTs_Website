@@ -5,6 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { QuestionAdminFormComponent } from './question-admin-form.component';
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('QuestionAdminFormComponent', () => {
   let component: QuestionAdminFormComponent;
@@ -16,7 +18,8 @@ describe('QuestionAdminFormComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
     .compileComponents();
