@@ -44,8 +44,11 @@ node {
                 // 3. Execute the tests inside a container with the memory fix
                 // Note: The CHROME_BIN is already set in the Dockerfile, 
                 // and we use 'npx' to run the local 'ng' command.
-                testImage.inside("--shm-size=2gb") {
-                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox'                
+                // 3. Execute the tests inside a container with the memory fix
+                testImage.inside("--shm-size=2gb") { 
+                    // CRITICAL FIX: Run the Angular binary directly from node_modules/.bin/.
+                    // This bypasses 'npm run' and 'npx' path resolution issues.
+                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox' 
                 }
             }
         }
