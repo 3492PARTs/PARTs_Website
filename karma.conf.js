@@ -55,6 +55,19 @@ module.exports = function (config) {
           '--disable-extensions'
         ]
       }
-    }
+    },
+    // For Angular 16+, configure ChromeHeadless directly
+    browserLaunchOptions: {
+      ChromeHeadless: {
+        flags: [
+          '--no-sandbox',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--disable-software-rasterizer',
+          '--disable-extensions'
+        ]
+      }
+    },
+    browserNoActivityTimeout: 60000
   });
 };
