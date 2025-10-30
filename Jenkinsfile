@@ -39,9 +39,6 @@ node {
                 }
             }
         }
-        
-        // --- END NEW STAGE ---
-
 
         stage('Build image') {
             if (env.BRANCH_NAME == 'main') {
