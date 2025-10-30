@@ -262,9 +262,9 @@ stage('Run Tests') {
 ### Requirements for Jenkins Agent
 
 For this approach to work, the Jenkins agent must have:
-1. **Node.js** (LTS version) - for running Angular CLI
-2. **Chrome/Chromium** - for Karma test runner
-3. **npm** - for dependency management
+1. **Node.js** (v18.x or later, LTS recommended) - for running Angular CLI
+2. **Chrome/Chromium** (latest stable version) - for Karma test runner
+3. **npm** (v8.x or later) - for dependency management
 
 ### GitHub Actions
 Add this to your workflow:

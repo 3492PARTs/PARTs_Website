@@ -10,8 +10,7 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
-# The tests (npm run test:ci) have been REMOVED from this RUN step.
-# They are now run natively on the Jenkins node before the Docker build.
+# Tests are now run natively on the Jenkins node before the Docker build.
 RUN npm install \
     && npx ng build --configuration=uat
 
