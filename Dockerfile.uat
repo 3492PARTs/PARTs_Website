@@ -10,7 +10,19 @@ WORKDIR /usr/local/app
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
-    ca-certificates \
+    ca-certificates \# ESSENTIAL Dependencies for Headless Chrome
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxcomposite1 \
+    libxrandr2 \
+    libgbm-dev \
+    # The following are often necessary for font rendering
+    libasound2 \
+    libfontconfig1 \
+    libgtk-3-0 \
+    # --- END ESSENTIAL Dependencies ---
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
     && apt-get update \
