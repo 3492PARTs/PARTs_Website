@@ -41,7 +41,7 @@ node {
                 def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
 
                 // 3. Execute the tests inside a container with the memory fix and CD command
-                testImage.inside("--shm-size=2gb") { 
+                testImage.inside("--shm-size=2gb -u 0") { 
                     sh '''
                         # Change to the Dockerfile's WORKDIR before running the test executable
                         cd /usr/local/app && 
