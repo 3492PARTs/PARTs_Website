@@ -50,7 +50,7 @@ RUN mkdir -p /usr/local/app/dist && chmod -R 777 /usr/local/app/dist
 RUN npm install \
     && npx ng build --configuration=uat
 
-# Stage 2: Serve app with nginx server
+# Stage 2: Serve app with nginx server6
 # Use official nginx image as the base image
 FROM nginx:latest AS runtime
 
