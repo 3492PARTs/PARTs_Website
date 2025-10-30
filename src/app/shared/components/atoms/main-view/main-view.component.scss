@@ -1,0 +1,10 @@
+@use "abstracts/variables";
+
+main {
+  margin: 0 auto;
+  width: 90%;
+  /*MOBILE */
+  @media only screen and (max-width: variables.$screen-size-xlg) {
+    width: 100%;
+  }
+}
