@@ -157,3 +157,16 @@ export function createMockSwPush() {
     unsubscribe: jasmine.createSpy('unsubscribe').and.returnValue(Promise.resolve())
   };
 }
+
+/**
+ * Creates a mock SwUpdate (Service Worker Update) for testing
+ */
+export function createMockSwUpdate() {
+  return {
+    versionUpdates: of({}),
+    unrecoverable: of({}),
+    isEnabled: false,
+    checkForUpdate: jasmine.createSpy('checkForUpdate').and.returnValue(Promise.resolve(false)),
+    activateUpdate: jasmine.createSpy('activateUpdate').and.returnValue(Promise.resolve(true))
+  };
+}

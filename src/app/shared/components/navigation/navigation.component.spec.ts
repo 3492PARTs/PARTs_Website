@@ -5,8 +5,8 @@ import { provideRouter } from '@angular/router';
 
 
 import { NavigationComponent } from './navigation.component';
-import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../test-helpers';
+import { SwPush, SwUpdate } from '@angular/service-worker';
+import { createMockSwPush, createMockSwUpdate } from '../../../../test-helpers';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -19,7 +19,8 @@ describe('NavigationComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
+        { provide: SwPush, useValue: createMockSwPush() },
+        { provide: SwUpdate, useValue: createMockSwUpdate() }
       ]
     })
       .compileComponents();
