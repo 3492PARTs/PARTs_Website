@@ -39,24 +39,7 @@ node {
                 }
             }
         }
-
-        stage('Cleanup Docker Images') {
-                sh '''
-                    echo "Starting Docker image cleanup..."
-                    
-                    # 1. Force remove the intermediate image used for testing
-                    docker rmi -f parts-test-base || true
-                    
-                    # 2. Remove all dangling and unused layers/images
-                    docker image prune -f
-                    
-                    echo "Docker images cleaned up."
-                '''
-            }
-            // --- END CLEANUP STAGE ---
-
-            env.RESULT = 'success'
-        }
+        
         // --- END NEW STAGE ---
 
 
@@ -117,6 +100,19 @@ node {
             }
         }
 
+        stage('Cleanup Docker Images') {
+            sh '''
+                echo "Starting Docker image cleanup..."
+                
+                # 1. Force remove the intermediate image used for testing
+                docker rmi -f parts-test-base || true
+                
+                # 2. Remove all dangling and unused layers/images
+                docker image prune -f
+                
+                echo "Docker images cleaned up."
+            '''
+        }
         env.RESULT = 'success'
     }
     catch (e) {
