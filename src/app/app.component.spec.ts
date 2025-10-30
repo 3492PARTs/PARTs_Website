@@ -12,7 +12,6 @@ describe('AppComponent', () => {
   let mockRouter: any;
   let mockAuthService: any;
   let mockGeneralService: any;
-  let mockDocument: any;
   let mockActivatedRoute: any;
 
   beforeEach(async () => {
@@ -38,12 +37,6 @@ describe('AppComponent', () => {
       addSiteBanner: jasmine.createSpy('addSiteBanner')
     };
 
-    mockDocument = {
-      location: {
-        href: 'http://test.com'
-      }
-    };
-
     mockActivatedRoute = {
       snapshot: {
         data: {}
@@ -56,8 +49,8 @@ describe('AppComponent', () => {
         { provide: Router, useValue: mockRouter },
         { provide: AuthService, useValue: mockAuthService },
         { provide: GeneralService, useValue: mockGeneralService },
-        { provide: DOCUMENT, useValue: mockDocument },
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
+        // Note: Removed DOCUMENT provider - let Angular use the real document
       ]
     }).compileComponents();
   });
