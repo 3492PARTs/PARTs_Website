@@ -28,7 +28,7 @@ node {
             '''
         }
 
-        // --- NEW STAGE FOR TEST EXECUTION ---
+        // --- NEW STAGE FOR TEST EXECUTION (with npx fix) ---
         stage('Run Tests (with SHM fix)') {
             if (env.BRANCH_NAME != 'main') {
                 // 1. Prepare environment variables
@@ -42,8 +42,10 @@ node {
                 def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
 
                 // 3. Execute the tests inside a container with the memory fix
-                testImage.inside("--shm-size=2gb") { // <-- THIS IS THE CRITICAL FIX
-                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable npx npm run test:ci'
+                // Note: The CHROME_BIN is already set in the Dockerfile, 
+                // and we use 'npx' to run the local 'ng' command.
+                testImage.inside("--shm-size=2gb") {
+                    sh 'npx ng test --no-watch --code-coverage --browsers=ChromeNoSandbox' 
                 }
             }
         }
@@ -56,13 +58,12 @@ node {
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                 '''
                 
-                // The main branch Dockerfile does not require changes here
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile --target=runtime .")
             }
             else {
                 // The UAT build just compiles the final image (tests are complete)
                 sh'''
-                sed -i "s/BRANCH/$FORMATted_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
                 && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
                 // The original build command runs the final compile now
