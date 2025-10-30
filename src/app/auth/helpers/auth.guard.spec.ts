@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { authGuard } from './auth.guard';
 import { AuthService, AuthCallStates } from '../services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { of, BehaviorSubject } from 'rxjs';
+import { of, BehaviorSubject, Observable } from 'rxjs';
 
 describe('authGuard', () => {
   let mockAuthService: any;
@@ -43,17 +43,10 @@ describe('authGuard', () => {
 
     TestBed.runInInjectionContext(() => {
       const result = authGuard({} as any, {} as any);
-      if (result instanceof Promise) {
-        result.then(allowed => {
-          expect(allowed).toBe(true);
-          done();
-        });
-      } else {
-        result.subscribe(allowed => {
-          expect(allowed).toBe(true);
-          done();
-        });
-      }
+      (result as Observable<boolean>).subscribe((allowed: boolean) => {
+        expect(allowed).toBe(true);
+        done();
+      });
     });
   });
 
@@ -63,19 +56,11 @@ describe('authGuard', () => {
 
     TestBed.runInInjectionContext(() => {
       const result = authGuard({} as any, {} as any);
-      if (result instanceof Promise) {
-        result.then(allowed => {
-          expect(allowed).toBe(false);
-          expect(mockAuthService.logOut).toHaveBeenCalled();
-          done();
-        });
-      } else {
-        result.subscribe(allowed => {
-          expect(allowed).toBe(false);
-          expect(mockAuthService.logOut).toHaveBeenCalled();
-          done();
-        });
-      }
+      (result as Observable<boolean>).subscribe((allowed: boolean) => {
+        expect(allowed).toBe(false);
+        expect(mockAuthService.logOut).toHaveBeenCalled();
+        done();
+      });
     });
   });
 
@@ -84,19 +69,11 @@ describe('authGuard', () => {
 
     TestBed.runInInjectionContext(() => {
       const result = authGuard({} as any, {} as any);
-      if (result instanceof Promise) {
-        result.then(allowed => {
-          expect(allowed).toBe(false);
-          expect(mockAuthService.logOut).toHaveBeenCalled();
-          done();
-        });
-      } else {
-        result.subscribe(allowed => {
-          expect(allowed).toBe(false);
-          expect(mockAuthService.logOut).toHaveBeenCalled();
-          done();
-        });
-      }
+      (result as Observable<boolean>).subscribe((allowed: boolean) => {
+        expect(allowed).toBe(false);
+        expect(mockAuthService.logOut).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });
