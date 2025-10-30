@@ -44,7 +44,7 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     browsers: ['Chrome', 'ChromeHeadless', 'ChromeHeadlessCI'],
     restartOnFileChange: true,
-    /*customLaunchers: {
+    customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
         flags: [
@@ -54,8 +54,18 @@ module.exports = function (config) {
           '--disable-software-rasterizer',
           '--disable-extensions'
         ]
+      },
+      ChromeHeadless: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox',
+          '--disable-gpu',
+          '--disable-dev-shm-usage',
+          '--disable-software-rasterizer',
+          '--disable-extensions'
+        ]
       }
-    },*/
+    },
     // For Angular 16+, configure ChromeHeadless directly
     browserLaunchOptions: {
       ChromeHeadless: {
