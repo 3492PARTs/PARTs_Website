@@ -129,10 +129,14 @@ docker builder prune -f --filter "until=168h" || true
 ```nginx
 add_header X-Frame-Options "SAMEORIGIN" always;
 add_header X-Content-Type-Options "nosniff" always;
-add_header X-XSS-Protection "1; mode=block" always;
 add_header Referrer-Policy "no-referrer-when-downgrade" always;
+add_header Content-Security-Policy "default-src 'self'; ..." always;
 ```
-**Benefit:** Protects against clickjacking, MIME sniffing, and XSS attacks
+**Benefit:** 
+- Protects against clickjacking (X-Frame-Options)
+- Prevents MIME sniffing attacks (X-Content-Type-Options)
+- Controls referrer information (Referrer-Policy)
+- Modern XSS protection with Content Security Policy (replaces deprecated X-XSS-Protection)
 
 ### 2. Static Asset Caching
 **Added:**
@@ -178,6 +182,11 @@ healthcheck:
 ### 2. Resource Limits
 **Added:**
 ```yaml
+# Resource limits (for Docker Compose v3+ or Swarm mode)
+# For standalone Docker Compose, use these at the service level instead:
+#   cpus: '2'
+#   mem_limit: 1g
+#   mem_reservation: 256m
 deploy:
   resources:
     limits:
@@ -187,7 +196,7 @@ deploy:
       cpus: '0.5'
       memory: 256M
 ```
-**Note:** The `deploy` section is primarily for Docker Swarm mode. For standalone Docker Compose, these limits are applied when using `docker compose up` with the `--compatibility` flag, or you can use the alternative syntax `cpus: '2'` and `mem_limit: 1G` directly at the service level.
+**Note:** The `deploy` section is primarily for Docker Swarm mode. For standalone Docker Compose, the commented alternative syntax shows the equivalent configuration to use directly at the service level.
 
 **Benefit:** Prevents container from consuming all host resources
 

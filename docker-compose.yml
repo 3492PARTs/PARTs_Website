@@ -15,7 +15,10 @@ services:
       start_period: 5s
       retries: 3
     # Resource limits (for Docker Compose v3+ or Swarm mode)
-    # For standalone Docker Compose, you can also use: cpus: '2' and mem_limit: 1g
+    # For standalone Docker Compose, use these at the service level instead:
+    #   cpus: '2'
+    #   mem_limit: 1g
+    #   mem_reservation: 256m
     deploy:
       resources:
         limits:
