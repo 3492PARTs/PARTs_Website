@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { APIService } from './api.service';
-import { CacheService } from './cache.service';
 import { Event, Match, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutFieldResponsesReturn, Season, Team, ScoutPitResponsesReturn, ScoutPitResponse, Schedule, ScheduleType, IMatch, ITeam, TeamNote, ITeamNote, ISeason, IEvent, AllScoutInfo, CompetitionLevel, FieldFormForm as FieldFormForm, MatchStrategy, IMatchStrategy, AllianceSelection, IAllianceSelection, Col } from '../models/scouting.models';
 import { BehaviorSubject } from 'rxjs';
-import { GeneralService } from './general.service';
 import { PromiseExtended } from 'dexie';
-import { IFilterDelegate } from '../models/dexie.models';
-import { Banner } from '../models/api.models';
-import { Question } from '../models/form.models';
+import { IFilterDelegate } from '@app/core/models/dexie.models';
+import { Banner } from '@app/core/models/api.models';
+import { Question } from '@app/core/models/form.models';
+import { APIService } from '@app/core/services/api.service';
+import { CacheService } from '@app/core/services/cache.service';
+import { GeneralService } from '@app/core/services/general.service';
 
 @Injectable({
   providedIn: 'root'

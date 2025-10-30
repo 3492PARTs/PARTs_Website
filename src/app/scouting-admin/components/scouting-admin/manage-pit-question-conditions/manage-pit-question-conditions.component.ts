@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { QuestionConditionAdminFormComponent } from '../../../elements/question-condition-admin-form/question-condition-admin-form.component';
-import { BoxComponent } from '../../../atoms/box/box.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { QuestionConditionAdminFormComponent } from '@app/shared/components/elements/question-condition-admin-form/question-condition-admin-form.component';
 
 @Component({
     selector: 'app-manage-pit-question-conditions',

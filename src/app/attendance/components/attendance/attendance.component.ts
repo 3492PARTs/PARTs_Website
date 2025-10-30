@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { MeetingAttendanceComponent } from "../../elements/meeting-attendance/meeting-attendance.component";
+import { MeetingAttendanceComponent } from '@app/shared/components/elements/meeting-attendance/meeting-attendance.component';
 
 @Component({
   selector: 'app-attendance',
   imports: [MeetingAttendanceComponent],
   templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.scss'
+  styleUrls: ['./attendance.component.scss']
 })
 export class AttendanceComponent {
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ButtonComponent } from "../button/button.component";
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { FormElementGroupComponent } from "../form-element-group/form-element-group.component";
 import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
@@ -9,7 +9,7 @@ import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
   selector: 'app-whiteboard',
   imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
   templateUrl: './whiteboard.component.html',
-  styleUrl: './whiteboard.component.scss'
+  styleUrls: ['./whiteboard.component.scss']
 })
 export class WhiteboardComponent implements OnInit {
 

@@ -6,7 +6,7 @@ import { BoxComponent } from "../../../../shared/components/atoms/box/box.compon
   selector: 'app-manage-field-flows',
   imports: [FlowAdminFormComponent, BoxComponent],
   templateUrl: './manage-field-flows.component.html',
-  styleUrl: './manage-field-flows.component.scss'
+  styleUrls: ['./manage-field-flows.component.scss']
 })
 export class ManageFieldFlowsComponent {
   formType = 'field';

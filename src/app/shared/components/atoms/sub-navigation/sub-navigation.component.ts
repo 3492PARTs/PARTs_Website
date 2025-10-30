@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output } from '@angular/core';
-import { Link } from '../../../core/models/navigation.models';
-import { NavigationService } from '../../../core/services/navigation.service';
+import { Link } from '@app/core/models/navigation.models';
+import { NavigationService } from '@app/core/services/navigation.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-sub-navigation',
-    imports: [CommonModule, RouterLink],
-    templateUrl: './sub-navigation.component.html',
-    styleUrls: ['./sub-navigation.component.scss']
+  selector: 'app-sub-navigation',
+  imports: [CommonModule, RouterLink],
+  templateUrl: './sub-navigation.component.html',
+  styleUrls: ['./sub-navigation.component.scss']
 })
 export class SubNavigationComponent {
 

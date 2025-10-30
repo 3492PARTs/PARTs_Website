@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { APIStatus, Banner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AuthCallStates } from './auth.service';
 
 @Injectable({
   providedIn: 'root'

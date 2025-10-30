@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { BoxComponent } from '../../../shared/components/atoms/box/box.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-join',
-    imports: [BoxComponent, RouterLink],
-    templateUrl: './join.component.html',
-    styleUrls: ['./join.component.scss']
+  selector: 'app-join',
+  imports: [BoxComponent, RouterLink],
+  templateUrl: './join.component.html',
+  styleUrls: ['./join.component.scss']
 })
 export class JoinComponent implements AfterViewInit {
 

@@ -1,9 +1,9 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { environment } from "../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { GeneralService } from "../services/general.service";
-import { AuthService, Token } from "../services/auth.service";
 import { catchError, filter, finalize, Observable, switchMap, take, throwError } from "rxjs";
+import { AuthService, Token } from "@app/auth/services/auth.service";
 
 export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
     const gs = inject(GeneralService);

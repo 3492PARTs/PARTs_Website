@@ -1,10 +1,10 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { Graph } from '../../../core/models/form.models';
-import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardViewType, DashboardGraph } from '../../../scouting/models/scouting.models';
-import { APIService } from '../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
-import { ScoutingService } from '../../../scouting/services/scouting.service';
+import { Graph } from '@app/core/models/form.models';
+import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardViewType, DashboardGraph } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { BoxComponent } from "../../atoms/box/box.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-dashboard',
   imports: [CommonModule, BoxComponent, ButtonComponent, ButtonRibbonComponent, FormElementComponent, ModalComponent, FormComponent, HeaderComponent, LoadingComponent, ChartComponent],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
   @Input() DashViewType: string | undefined = undefined;

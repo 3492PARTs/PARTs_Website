@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 
 @Component({
-    selector: 'app-requested-items',
-    imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
-    templateUrl: './requested-items.component.html',
-    styleUrls: ['./requested-items.component.scss']
+  selector: 'app-requested-items',
+  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  templateUrl: './requested-items.component.html',
+  styleUrls: ['./requested-items.component.scss']
 })
 export class RequestedItemsComponent implements OnInit {
 

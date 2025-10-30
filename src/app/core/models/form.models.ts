@@ -1,4 +1,4 @@
-import { IScoutQuestion, ScoutQuestion } from "./scouting.models";
+import { IScoutQuestion, ScoutQuestion } from "@app/scouting/models/scouting.models";
 
 export interface IConditionalOnQuestion {
     conditional_on: number;

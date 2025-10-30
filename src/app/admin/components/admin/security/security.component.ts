@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthGroup, AuthPermission, User } from '../../../../models/user.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { UserService } from '../../../../services/user.service';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormComponent } from '../../../atoms/form/form.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { Link } from '../../../../models/navigation.models';
+import { AuthGroup, AuthPermission, User } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { UserService } from '@app/user/services/user.service';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { Link } from '@app/core/models/navigation.models';
 
 @Component({
   selector: 'app-security',

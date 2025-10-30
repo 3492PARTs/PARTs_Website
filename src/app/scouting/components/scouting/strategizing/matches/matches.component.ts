@@ -1,22 +1,22 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Match, MatchTeamData, MatchStrategy, ScoutPitResponse, Team, TeamNote } from '../../../../models/scouting.models';
-import { AuthService, AuthCallStates } from '../../../../../auth/services/auth.service';
-import { GeneralService, AppSize } from '../../../../../core/services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService, AppSize } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
-import { BoxComponent } from '../../../../../shared/components/atoms/box/box.component';
-import { FormElementGroupComponent } from '../../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { TableColType, TableComponent } from '../../../../../shared/components/atoms/table/table.component';
-import { ButtonComponent } from '../../../../../shared/components/atoms/button/button.component';
-import { TabContainerComponent } from '../../../../../shared/components/atoms/tab-container/tab-container.component';
-import { TabComponent } from '../../../../../shared/components/atoms/tab/tab.component';
-import { PitResultDisplayComponent } from '../../../../../shared/components/elements/pit-result-display/pit-result-display.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { TabContainerComponent } from '@app/shared/components/atoms/tab-container/tab-container.component';
+import { TabComponent } from '@app/shared/components/atoms/tab/tab.component';
+import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-result-display/pit-result-display.component';
 import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
-import { DateToStrPipe } from '../../../../../shared/pipes/date-to-str.pipe';
-import { User } from '../../../../../auth/models/user.models';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
+import { User } from '@app/auth/models/user.models';
 import { LoadingComponent } from "../../../../../shared/components/atoms/loading/loading.component";
 import { DashboardComponent } from "../../../../../shared/components/elements/dashboard/dashboard.component";
 import { HeaderComponent } from "../../../../../shared/components/atoms/header/header.component";
+import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote } from '@app/scouting/models/scouting.models';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 @Component({
   selector: 'app-plan-matches',

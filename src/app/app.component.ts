@@ -17,7 +17,7 @@ declare const gtag: Function;
   selector: 'app-root',
   imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 

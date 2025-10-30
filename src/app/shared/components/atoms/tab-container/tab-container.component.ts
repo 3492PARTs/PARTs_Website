@@ -1,13 +1,13 @@
 import { Component, Input, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 
 @Component({
-    selector: 'app-tab-container',
-    imports: [CommonModule],
-    templateUrl: './tab-container.component.html',
-    styleUrls: ['./tab-container.component.scss']
+  selector: 'app-tab-container',
+  imports: [CommonModule],
+  templateUrl: './tab-container.component.html',
+  styleUrls: ['./tab-container.component.scss']
 })
 export class TabContainerComponent implements AfterContentInit {
   @ContentChildren(TabComponent) tabContainerTabs: QueryList<TabComponent> = new QueryList<TabComponent>();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ReturnCardComponent } from '../../../elements/return-card/return-card.component';
-import { Album, AlbumsComponent } from '../../../elements/albums/albums.component';
+import { AlbumsComponent, Album } from '@app/shared/components/elements/albums/albums.component';
+import { ReturnCardComponent } from '@app/shared/components/elements/return-card/return-card.component';
 
 @Component({
   selector: 'app-competition',

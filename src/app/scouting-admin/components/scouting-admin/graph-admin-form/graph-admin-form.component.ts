@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { APIService } from '../../../../services/api.service';
-import { Graph, GraphBin, GraphCategory, GraphCategoryAttribute, GraphQuestion, GraphQuestionType, GraphType, Question, QuestionAggregate, QuestionConditionType } from '../../../../models/form.models';
-import { AuthCallStates, AuthService } from '../../../../services/auth.service';
+import { APIService } from '@app/core/services/api.service';
+import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
 import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
 import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
 import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
-import { GeneralService } from '../../../../services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
+import { Question, QuestionAggregate, Graph, GraphType, GraphQuestionType, QuestionConditionType, GraphCategory, GraphBin, GraphCategoryAttribute, GraphQuestion } from '@app/core/models/form.models';
 
 @Component({
   selector: 'app-graph-admin-form',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './graph-admin-form.component.html',
-  styleUrl: './graph-admin-form.component.scss'
+  styleUrls: ['./graph-admin-form.component.scss']
 })
 export class GraphAdminFormComponent implements OnInit {
   private FormTyp = 'field';

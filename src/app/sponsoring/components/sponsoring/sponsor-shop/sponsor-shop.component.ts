@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { Sponsor, Item } from '../../admin/requested-items/requested-items.component';
-import { Banner } from '../../../../models/api.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { MainViewComponent } from '../../../atoms/main-view/main-view.component';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { FormElementComponent } from '../../../atoms/form-element/form-element.component';
-import { FormElementGroupComponent } from '../../../atoms/form-element-group/form-element-group.component';
+import { Sponsor, Item } from '@app/admin/components/admin/requested-items/requested-items.component';
+import { Banner } from '@app/core/models/api.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { MainViewComponent } from '@app/shared/components/atoms/main-view/main-view.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 
-import { FormComponent } from '../../../atoms/form/form.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
 @Component({
-    selector: 'app-sponsor-shop',
-    imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
-    templateUrl: './sponsor-shop.component.html',
-    styleUrls: ['./sponsor-shop.component.scss']
+  selector: 'app-sponsor-shop',
+  imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
+  templateUrl: './sponsor-shop.component.html',
+  styleUrls: ['./sponsor-shop.component.scss']
 })
 export class SponsorShopComponent implements OnInit {
   sponsors: Sponsor[] = [];

@@ -5,7 +5,7 @@ import { MeetingAttendanceComponent } from "../../../../shared/components/elemen
   selector: 'app-meetings',
   imports: [MeetingAttendanceComponent],
   templateUrl: './meetings.component.html',
-  styleUrl: './meetings.component.scss'
+  styleUrls: ['./meetings.component.scss']
 })
 export class MeetingsComponent {
 

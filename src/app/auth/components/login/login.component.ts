@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
-import { UserData, RegisterUser, AuthService } from '../../../auth/services/auth.service';
-import { GeneralService } from '../../../core/services/general.service';
-import { BoxComponent } from '../../../shared/components/atoms/box/box.component';
-import { FormComponent } from '../../../shared/components/atoms/form/form.component';
-import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { UserData, RegisterUser, AuthService } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -16,12 +16,12 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';
-import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '../../../shared/pipes/ObjectWildcardFilter';
-import { DateToStrPipe } from '../../../shared/pipes/date-to-str.pipe';
+import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '@app/shared/pipes/ObjectWildcardFilter';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 
 //import * as $ from 'jquery';

@@ -1,16 +1,16 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '../../../core/models/form.models';
-import { APIService } from '../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
-import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
-import { FormComponent } from '../../../shared/components/atoms/form/form.component';
-import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
-import { TableComponent, TableColType } from '../../../shared/components/atoms/table/table.component';
+import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { TableComponent, TableColType } from '@app/shared/components/atoms/table/table.component';
 
-import { Banner } from '../../../core/models/api.models';
+import { Banner } from '@app/core/models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
 @Component({

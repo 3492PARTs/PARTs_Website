@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { DexieCrud } from '../classes/dexie-crud';
-import { IEvent, IMatch, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, Match, Event, Schedule, ScheduleType, ScoutFieldFormResponse, ScoutFieldSchedule, ScoutPitFormResponse, ScoutPitResponse, Season, Team, TeamNote, MatchStrategy, IMatchStrategy, FieldFormForm, IFieldFormForm, AllianceSelection, IAllianceSelection } from '../models/scouting.models';
 import { DatabaseService } from './database.service';
-import { AuthPermission, IAuthPermission, IUser, User } from '../models/user.models';
 import { LoadedStores } from '../models/idb.store.model';
 import { ILink, Link } from '../models/navigation.models';
 import { Banner } from '../models/api.models';
 import { IQuestion, Question } from '../models/form.models';
+import { User } from '@app/auth/models/user.models';
+import { Season, Event, Team, TeamNote, Match, MatchStrategy, AllianceSelection, FieldFormForm, ScoutFieldSchedule, ScoutFieldFormResponse, ScheduleType, Schedule, ScoutPitFormResponse, ScoutPitResponse, ISeason, IEvent, ITeam, ITeamNote, IMatch, IMatchStrategy, IAllianceSelection, IFieldFormForm, IScoutFieldSchedule, IScoutFieldFormResponse, IScheduleType, ISchedule, IScoutPitFormResponse, IScoutPitResponse } from '@app/scouting/models/scouting.models';
 
 @Injectable({
   providedIn: 'root'

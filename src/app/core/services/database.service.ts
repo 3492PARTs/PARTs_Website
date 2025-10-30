@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import Dexie from 'dexie';
-import { IAllianceSelection, IEvent, IFieldFormForm, IMatch, IMatchStrategy, ISchedule, IScheduleType, IScoutFieldFormResponse, IScoutFieldSchedule, IScoutPitFormResponse, IScoutPitResponse, ISeason, ITeam, ITeamNote, ScoutFieldFormResponse } from '../models/scouting.models';
 import { DBStores, LoadedStores } from '../models/idb.store.model';
-import { GeneralService } from './general.service';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
-import { IAuthPermission, IUser, User } from '../models/user.models';
 import { ILink } from '../models/navigation.models';
 import { IQuestion } from '../models/form.models';
 import { Banner } from '../models/api.models';
-import { BehaviorSubject } from 'rxjs';
+import { IAuthPermission, User } from '@app/auth/models/user.models';
+import { ISeason, IEvent, ITeam, ITeamNote, IMatch, IMatchStrategy, IAllianceSelection, IFieldFormForm, IScoutFieldSchedule, IScoutFieldFormResponse, IScheduleType, ISchedule, IScoutPitFormResponse, IScoutPitResponse } from '@app/scouting/models/scouting.models';
 
 @Injectable({
   providedIn: 'root'

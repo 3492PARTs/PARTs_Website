@@ -1,4 +1,4 @@
-import { AuthPermission, IAuthPermission } from "./user.models";
+import { IAuthPermission, AuthPermission } from "@app/auth/models/user.models";
 
 export interface ISubLink {
     id: number;

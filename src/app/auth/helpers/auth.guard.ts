@@ -1,8 +1,8 @@
 import { CanActivateFn } from '@angular/router';
 import { skipWhile, map } from 'rxjs';
 import { AuthCallStates, AuthService } from '../services/auth.service';
-import { GeneralService } from '../services/general.service';
 import { inject } from '@angular/core';
+import { GeneralService } from '@app/core/services/general.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
 

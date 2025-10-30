@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend } from 'chart.js';
 import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-import { BoxAndWhiskerPlot, TouchMap, Histogram, HistogramBin, Plot, Question } from '../../../core/models/form.models';
-import { GeneralService } from '../../../core/services/general.service';
+import { BoxAndWhiskerPlot, TouchMap, Histogram, HistogramBin, Plot, Question } from '@app/core/models/form.models';
+import { GeneralService } from '@app/core/services/general.service';
 import { HeaderComponent } from "../header/header.component";
 import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
-import { TooltipDirective } from '../../../shared/directives/tooltip/tooltip.directive';
+import { TooltipDirective } from '@app/shared/directives/tooltip/tooltip.directive';
 
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
@@ -14,7 +14,7 @@ Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, Lin
   selector: 'app-chart',
   imports: [HeaderComponent, CommonModule, DisplayQuestionSvgComponent, TooltipDirective],
   templateUrl: './chart.component.html',
-  styleUrl: './chart.component.scss'
+  styleUrls: ['./chart.component.scss']
 })
 export class ChartComponent implements OnInit {
   id = '';

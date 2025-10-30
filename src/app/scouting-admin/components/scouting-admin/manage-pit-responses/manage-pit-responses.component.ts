@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ScoutPitResponse } from '../../../../models/scouting.models';
-import { APIService } from '../../../../services/api.service';
-import { AuthService, AuthCallStates } from '../../../../services/auth.service';
-import { GeneralService } from '../../../../services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { BoxComponent } from '../../../atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../atoms/table/table.component';
-import { ModalComponent } from '../../../atoms/modal/modal.component';
-import { ButtonComponent } from '../../../atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../atoms/button-ribbon/button-ribbon.component';
+import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ScoutPicDisplayComponent } from '@app/shared/components/elements/scout-pic-display/scout-pic-display.component';
 
-import { ScoutPicDisplayComponent } from '../../../elements/scout-pic-display/scout-pic-display.component';
 
 @Component({
   selector: 'app-manage-pit-responses',

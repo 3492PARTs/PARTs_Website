@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2, ViewChild } from '@angular/core';
-import { Question } from '../../../core/models/form.models';
+import { Question } from '@app/core/models/form.models';
 import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 
 @Component({
   selector: 'app-display-question-svg',
   imports: [SafeHTMLPipe, CommonModule],
   templateUrl: './display-question-svg.component.html',
-  styleUrl: './display-question-svg.component.scss'
+  styleUrls: ['./display-question-svg.component.scss']
 })
 export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 

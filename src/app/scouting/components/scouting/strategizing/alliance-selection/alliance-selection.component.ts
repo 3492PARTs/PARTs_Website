@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { BoxComponent } from "../../../../../shared/components/atoms/box/box.component";
-import { AllianceSelection, Event, Team } from '../../../../models/scouting.models';
-import { GeneralService } from '../../../../../core/services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { TableButtonType, TableColType, TableComponent } from '../../../../../shared/components/atoms/table/table.component';
+import { GeneralService } from '@app/core/services/general.service';
+import { TableButtonType, TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ButtonRibbonComponent } from "../../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../../../../shared/components/atoms/button/button.component";
 import { FormElementGroupComponent } from "../../../../../shared/components/atoms/form-element-group/form-element-group.component";
+import { AllianceSelection, Team, Event } from '@app/scouting/models/scouting.models';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 @Component({
   selector: 'app-alliance-selection',
   imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './alliance-selection.component.html',
-  styleUrl: './alliance-selection.component.scss'
+  styleUrls: ['./alliance-selection.component.scss']
 })
 export class AllianceSelectionComponent implements OnInit {
 

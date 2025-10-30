@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { GeneralService } from '../../../core/services/general.service';
-import { APIService } from '../../../core/services/api.service';
-import { AuthCallStates, AuthService } from '../../../auth/services/auth.service';
-import { Flow, FormInitialization, Question, FlowQuestion } from '../../../core/models/form.models';
-import { TableColType, TableComponent } from '../../../shared/components/atoms/table/table.component';
+import { GeneralService } from '@app/core/services/general.service';
+import { APIService } from '@app/core/services/api.service';
+import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
+import { Flow, FormInitialization, Question, FlowQuestion } from '@app/core/models/form.models';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { FormComponent } from "../../atoms/form/form.component";
@@ -14,7 +14,7 @@ import { ButtonComponent } from "../../atoms/button/button.component";
   selector: 'app-flow-admin-form',
   imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
   templateUrl: './flow-admin-form.component.html',
-  styleUrl: './flow-admin-form.component.scss'
+  styleUrls: ['./flow-admin-form.component.scss']
 })
 export class FlowAdminFormComponent implements OnInit {
   @Input() FormType = '';

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
-import { GeneralService } from '../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { TableColType, TableComponent } from "../../atoms/table/table.component";
-import { Flow, FlowQuestion } from '../../../core/models/form.models';
+import { Flow, FlowQuestion } from '@app/core/models/form.models';
 import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from "../../atoms/button/button.component";
@@ -11,7 +11,7 @@ import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.c
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './draw-question-svg.component.html',
-  styleUrl: './draw-question-svg.component.scss'
+  styleUrls: ['./draw-question-svg.component.scss']
 })
 export class DrawQuestionSvgComponent implements AfterViewInit {
   @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;

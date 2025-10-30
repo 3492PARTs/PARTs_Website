@@ -1,8 +1,8 @@
 import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
-import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
-import { GeneralService } from '../../../core/services/general.service';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
-import { Question } from '../../../core/models/form.models';
+import { Question } from '@app/core/models/form.models';
 import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 
 @Component({
