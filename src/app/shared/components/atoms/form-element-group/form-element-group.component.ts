@@ -1,15 +1,15 @@
 import { Component, Input, ContentChildren, QueryList, AfterViewInit, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { FormComponent } from '../form/form.component';
-import { QuestionFormElementComponent } from '../../../shared/components/elements/question-form-element/question-form-element.component';
-import { GeneralService } from '../../../../core/services/general.service';
+import { QuestionFormElementComponent } from '@app/shared/components/elements/question-form-element/question-form-element.component';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-form-element-group',
-    imports: [CommonModule],
-    templateUrl: './form-element-group.component.html',
-    styleUrls: ['./form-element-group.component.scss']
+  selector: 'app-form-element-group',
+  imports: [CommonModule],
+  templateUrl: './form-element-group.component.html',
+  styleUrls: ['./form-element-group.component.scss']
 })
 export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() Inline = false;

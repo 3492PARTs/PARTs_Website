@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import saveAs from 'file-saver';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import LoadImg from 'blueimp-load-image';
 import $ from 'jquery';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Question, Flow, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
-import { TableColType } from '../components/atoms/table/table.component';
+import { TableColType } from '@app/shared/components/atoms/table/table.component';
 
 @Injectable({
   providedIn: 'root'

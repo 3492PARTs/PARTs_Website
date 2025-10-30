@@ -1,14 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Col, ScoutFieldResponsesReturn } from '../../../../models/scouting.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { GeneralService, AppSize } from '../../../../core/services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
-import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { Col, ScoutFieldResponsesReturn } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-manage-field-responses',

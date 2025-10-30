@@ -1,25 +1,24 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd, Event as NavigationEvent, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../environments/environment';
-import { Banner } from '../../core/models/api.models';
-import { Link, SubLink } from '../../core/models/navigation.models';
-import { User } from '../../auth/models/user.models';
-import { APIService } from '../../core/services/api.service';
-import { AuthService } from '../../auth/services/auth.service';
-import { CacheService } from '../../core/services/cache.service';
-import { GeneralService, AppSize } from '../../core/services/general.service';
-import { NavigationService, NavigationState } from '../../core/services/navigation.service';
-import { Alert, NotificationsService } from '../../core/services/notifications.service';
-import { PwaService } from '../../core/services/pwa.service';
-import { CompetitionInit } from '../../public/components/event-competition/event-competition.component';
+import { environment } from '../../../../environments/environment';
+import { Banner } from '@app/core/models/api.models';
+import { Link, SubLink } from '@app/core/models/navigation.models';
+import { User } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService } from '@app/auth/services/auth.service';
+import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
+import { Alert, NotificationsService } from '@app/core/services/notifications.service';
+import { PwaService } from '@app/core/services/pwa.service';
+import { CompetitionInit } from '@app/public/components/event-competition/event-competition.component';
 import { ButtonComponent } from '../atoms/button/button.component';
 import { FormElementComponent } from '../atoms/form-element/form-element.component';
 import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.component';
-import { ClickOutsideDirective } from '../../directives/click-outside/click-outside.directive';
-import { ClickInsideDirective } from '../../directives/click-inside/click-inside.directive';
-import { DateToStrPipe } from '../../pipes/date-to-str.pipe';
 import { LoadingComponent } from "../atoms/loading/loading.component";
+import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';
+import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 @Component({
   selector: 'app-navigation',

@@ -2,19 +2,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of, from } from 'rxjs';
 import { Router } from '@angular/router';
-import { GeneralService } from './general.service';
-import { map, skipWhile } from 'rxjs/operators';
-import { NotificationsService } from './notifications.service';
-import { AuthPermission, User } from '../models/user.models';
-import { CacheService } from './cache.service';
-import { Link } from '../models/navigation.models';
-import { DataService } from './data.service';
+import { map } from 'rxjs/operators';
 import Dexie from 'dexie';
-import { APIService } from './api.service';
-import { APIStatus, Banner } from '../models/api.models';
-import { ScoutingService } from './scouting.service';
-import { UserService } from './user.service';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
+import { APIStatus, Banner } from '@app/core/models/api.models';
+import { Link } from '@app/core/models/navigation.models';
+import { APIService } from '@app/core/services/api.service';
+import { CacheService } from '@app/core/services/cache.service';
+import { DataService } from '@app/core/services/data.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { NotificationsService } from '@app/core/services/notifications.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { UserService } from '@app/user/services/user.service';
+import { User } from '../models/user.models';
 
 @Injectable({
   providedIn: 'root'

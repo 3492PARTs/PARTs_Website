@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BoxComponent } from '../../../shared/components/atoms/box/box.component';
-import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
-import { APIService } from '../../../core/services/api.service';
-import { Season } from '../../../scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { Season } from '@app/scouting/models/scouting.models';
 
 @Component({
   selector: 'app-resources',

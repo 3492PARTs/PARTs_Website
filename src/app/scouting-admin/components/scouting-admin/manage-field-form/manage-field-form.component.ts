@@ -1,17 +1,17 @@
 
 import { Component, Renderer2 } from '@angular/core';
-import { FormInitialization, Flow, FormSubType } from '../../../../models/form.models';
-import { FieldForm } from '../../../../models/scouting.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
-import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { FieldForm } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
+import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
 @Component({
   selector: 'app-manage-field-form',

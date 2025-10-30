@@ -1,5 +1,5 @@
-import { Season } from "./scouting.models";
-import { User } from "./user.models";
+import { User } from "@app/auth/models/user.models";
+import { Season } from "@app/scouting/models/scouting.models";
 
 export class Meeting {
     id = NaN;

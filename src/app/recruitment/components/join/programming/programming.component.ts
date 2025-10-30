@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-programming',
-    imports: [BoxComponent, RouterLink],
-    templateUrl: './programming.component.html',
-    styleUrls: ['./programming.component.scss']
+  selector: 'app-programming',
+  imports: [BoxComponent, RouterLink],
+  templateUrl: './programming.component.html',
+  styleUrls: ['./programming.component.scss']
 })
 export class ProgrammingComponent implements AfterViewInit {
 

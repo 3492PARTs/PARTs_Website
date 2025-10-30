@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
-import { GeneralService } from '../../../../core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { TableColType, TableComponent } from "../../atoms/table/table.component";
-import { Flow, FlowQuestion } from '../../../../core/models/form.models';
+import { Flow, FlowQuestion } from '@app/core/models/form.models';
 import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from "../../atoms/button/button.component";

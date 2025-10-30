@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener, ElementRef } from '@angular/core';
-import { ModalService } from '../../../../core/services/modal.service';
+import { ModalService } from '@app/core/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
-import { AppSize, GeneralService } from '../../../../core/services/general.service';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
-import { ClickOutsideDirective } from '../../../shared/directives/click-outside/click-outside.directive';
+import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 
 @Component({
   selector: 'app-modal',

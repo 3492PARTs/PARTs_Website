@@ -1,12 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
 
 @Component({
-    selector: 'app-home',
-    imports: [CommonModule],
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss']
+  selector: 'app-home',
+  imports: [CommonModule],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   screenSize!: AppSize;

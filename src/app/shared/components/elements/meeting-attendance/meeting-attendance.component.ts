@@ -7,17 +7,17 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
-import { Banner } from '../../../../core/models/api.models';
-import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours } from '../../../attendance/models/attendance.models';
-import { User } from '../../../auth/models/user.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService } from '../../../auth/services/auth.service';
-import { AppSize, GeneralService, RetMessage } from '../../../../core/services/general.service';
-import { LocationService, LocationCheckResult } from '../../../../core/services/location.service';
+import { Banner } from '@app/core/models/api.models';
+import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours } from '@app/attendance/models/attendance.models';
+import { User } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService } from '@app/auth/services/auth.service';
+import { AppSize, GeneralService, RetMessage } from '@app/core/services/general.service';
+import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
-import { UserService } from '../../../user/services/user.service';
+import { UserService } from '@app/user/services/user.service';
 import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 
 @Component({

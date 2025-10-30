@@ -1,27 +1,27 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../../../auth/models/user.models';
-import { APIService } from '../../../../core/services/api.service';
-import { UserData, AuthService } from '../../../../auth/services/auth.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { Alert, NotificationsService } from '../../../../core/services/notifications.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
-import { TabComponent } from '../../../../shared/components/atoms/tab/tab.component';
-import { TabContainerComponent } from '../../../../shared/components/atoms/tab-container/tab-container.component';
-import { TableColType, TableComponent } from '../../../../shared/components/atoms/table/table.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { User } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { UserData, AuthService } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { Alert, NotificationsService } from '@app/core/services/notifications.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { TabComponent } from '@app/shared/components/atoms/tab/tab.component';
+import { TabContainerComponent } from '@app/shared/components/atoms/tab-container/tab-container.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { CommonModule } from '@angular/common';
-import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { DateToStrPipe } from '../../../../shared/pipes/date-to-str.pipe';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 @Component({
-    selector: 'app-profile',
-    imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
-    templateUrl: './profile.component.html',
-    styleUrls: ['./profile.component.scss']
+  selector: 'app-profile',
+  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
 

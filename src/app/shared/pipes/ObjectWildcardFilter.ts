@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GeneralService } from '../services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 
 @Pipe({ name: 'ObjectWildCardFilterPipe', standalone: true })
 export class ObjectWildCardFilterPipe implements PipeTransform {

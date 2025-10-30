@@ -1,17 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { CompetitionLevel, Match, Event } from '../../../scouting/models/scouting.models';
-import { APIService } from '../../../core/services/api.service';
-import { GeneralService } from '../../../core/services/general.service';
+import { CompetitionLevel, Match, Event } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
-import { BoxComponent } from '../../../shared/components/atoms/box/box.component';
-import { DateToStrPipe } from '../../../shared/pipes/date-to-str.pipe';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 @Component({
-    selector: 'app-event-competition',
-    imports: [CommonModule, BoxComponent, DateToStrPipe],
-    templateUrl: './event-competition.component.html',
-    styleUrls: ['./event-competition.component.scss']
+  selector: 'app-event-competition',
+  imports: [CommonModule, BoxComponent, DateToStrPipe],
+  templateUrl: './event-competition.component.html',
+  styleUrls: ['./event-competition.component.scss']
 })
 export class EventCompetitionComponent implements OnInit {
   competitionInfo: CompetitionInit = new CompetitionInit();

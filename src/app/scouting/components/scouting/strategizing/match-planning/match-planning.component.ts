@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FieldForm, Match, MatchStrategy, Team } from '../../../../models/scouting.models';
-import { AuthService, AuthCallStates } from '../../../../../auth/services/auth.service';
-import { GeneralService } from '../../../../../core/services/general.service';
-import { ScoutingService } from '../../../../services/scouting.service';
-import { User } from '../../../../../auth/models/user.models';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { User } from '@app/auth/models/user.models';
 import { BoxComponent } from "../../../../../shared/components/atoms/box/box.component";
 import { FormElementGroupComponent } from "../../../../../shared/components/atoms/form-element-group/form-element-group.component";
 import { FormElementComponent } from "../../../../../shared/components/atoms/form-element/form-element.component";
 import { WhiteboardComponent } from "../../../../../shared/components/atoms/whiteboard/whiteboard.component";
 import { ButtonComponent } from "../../../../../shared/components/atoms/button/button.component";
 import { FormComponent } from "../../../../../shared/components/atoms/form/form.component";
-import { Banner } from '../../../../../core/models/api.models';
 import { ButtonRibbonComponent } from "../../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 import { ModalComponent } from "../../../../../shared/components/atoms/modal/modal.component";
+import { FieldForm, Match, MatchStrategy, Team } from '@app/scouting/models/scouting.models';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 
 @Component({

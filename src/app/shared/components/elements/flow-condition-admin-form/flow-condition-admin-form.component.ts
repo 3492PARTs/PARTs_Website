@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question, QuestionCondition, QuestionConditionType, Flow, FlowCondition } from '../../../../core/models/form.models';
-import { TableColType, TableComponent } from '../../../shared/components/atoms/table/table.component';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../auth/services/auth.service';
-import { GeneralService } from '../../../../core/services/general.service';
+import { Question, QuestionCondition, QuestionConditionType, Flow, FlowCondition } from '@app/core/models/form.models';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
 import { FormComponent } from "../../atoms/form/form.component";

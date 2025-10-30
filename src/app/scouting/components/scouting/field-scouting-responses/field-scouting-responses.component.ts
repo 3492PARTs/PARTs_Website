@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '../../../models/scouting.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { ScoutingService } from '../../../services/scouting.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
-import { TableComponent } from '../../../../shared/components/atoms/table/table.component';
-import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
-import { PitResultDisplayComponent } from '../../../../shared/components/elements/pit-result-display/pit-result-display.component';
+import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '@app/scouting/models/scouting.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
-import { DateToStrPipe } from '../../../../shared/pipes/date-to-str.pipe';
+import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 @Component({

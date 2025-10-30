@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Question, QuestionCondition, QuestionConditionType } from '../../../../core/models/form.models';
-import { APIService } from '../../../../core/services/api.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { TableColType, TableComponent } from '../../../shared/components/atoms/table/table.component';
-import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
-import { FormElementComponent } from '../../../shared/components/atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../shared/components/atoms/button-ribbon/button-ribbon.component';
-import { FormComponent } from '../../../shared/components/atoms/form/form.component';
-import { AuthCallStates, AuthService } from '../../../auth/services/auth.service';
+import { Question, QuestionCondition, QuestionConditionType } from '@app/core/models/form.models';
+import { APIService } from '@app/core/services/api.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 
 @Component({
   selector: 'app-question-condition-admin-form',

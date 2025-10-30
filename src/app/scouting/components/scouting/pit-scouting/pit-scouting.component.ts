@@ -1,22 +1,22 @@
 import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
-import { APIStatus, Banner } from '../../../../core/models/api.models';
-import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '../../../models/scouting.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { CacheService } from '../../../../core/services/cache.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { ScoutingService } from '../../../services/scouting.service';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { APIStatus, Banner } from '@app/core/models/api.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { CacheService } from '@app/core/services/cache.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 
-import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { QuestionDisplayFormComponent } from '../../../../shared/components/elements/question-display-form/question-display-form.component';
-import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
-import { Question, Answer } from '../../../../core/models/form.models';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { Question, Answer } from '@app/core/models/form.models';
 import { WhiteboardComponent } from "../../../../shared/components/atoms/whiteboard/whiteboard.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
+import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scouting/models/scouting.models';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 @Component({
   selector: 'app-pit-scouting',

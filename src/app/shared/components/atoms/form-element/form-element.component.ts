@@ -14,12 +14,12 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { AppSize, GeneralService } from '../../../../core/services/general.service';
-import { NavigationService, NavigationState } from '../../../../core/services/navigation.service';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
-import { ClickInsideDirective } from '../../../shared/directives/click-inside/click-inside.directive';
-import { ClickOutsideDirective } from '../../../shared/directives/click-outside/click-outside.directive';
+import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';
+import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielmoncada/angular-datetime-picker';
 
 

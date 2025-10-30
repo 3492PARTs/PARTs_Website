@@ -1,4 +1,4 @@
-import { ILink, Link } from "./navigation.models";
+import { ILink, Link } from "@app/core/models/navigation.models";
 
 export interface IAuthPermission {
     id: number;

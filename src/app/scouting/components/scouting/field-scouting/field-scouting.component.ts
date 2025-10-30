@@ -1,25 +1,24 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { Banner } from '../../../../core/models/api.models';
-import { Question, Answer, Flow, FlowAnswer, FlowQuestion } from '../../../../core/models/form.models';
-import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm } from '../../../models/scouting.models';
-import { User } from '../../../../auth/models/user.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { CacheService } from '../../../../core/services/cache.service';
-import { GeneralService } from '../../../../core/services/general.service';
-import { ScoutingService } from '../../../services/scouting.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { Banner } from '@app/core/models/api.models';
+import { Question, Answer, Flow, FlowAnswer, FlowQuestion } from '@app/core/models/form.models';
+import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm } from '@app/scouting/models/scouting.models';
+import { User } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { CacheService } from '@app/core/services/cache.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { CommonModule } from '@angular/common';
-import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { QuestionDisplayFormComponent } from '../../../../shared/components/elements/question-display-form/question-display-form.component';
-import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
 import { QuestionFormElementComponent } from "../../../../shared/components/elements/question-form-element/question-form-element.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-field-scouting',

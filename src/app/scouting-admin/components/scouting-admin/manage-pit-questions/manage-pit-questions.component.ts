@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { QuestionAdminFormComponent } from '../../../elements/question-admin-form/question-admin-form.component';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { QuestionAdminFormComponent } from '@app/shared/components/elements/question-admin-form/question-admin-form.component';
 
 @Component({
   selector: 'app-manage-pit-questions',

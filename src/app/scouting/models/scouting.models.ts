@@ -1,5 +1,5 @@
-import { FormSubType, IFormSubType, IQuestion, Question, Answer, Flow, Graph } from "./form.models";
-import { User } from "./user.models";
+import { User } from "@app/auth/models/user.models";
+import { Answer, IFormSubType, IQuestion, Flow, FormSubType, Question, Graph } from "@app/core/models/form.models";
 
 export interface ISeason {
     id: number;

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { GeneralService, RetMessage } from '../../core/services/general.service';
-import { User, AuthGroup, AuthPermission } from '../../auth/models/user.models';
-import { APIService } from '../../core/services/api.service';
-import { PhoneType } from '../../auth/services/auth.service';
-import { Banner } from '../../core/models/api.models';
-import { Link } from '../../core/models/navigation.models';
+import { GeneralService, RetMessage } from '@app/core/services/general.service';
+import { User, AuthGroup, AuthPermission } from '@app/auth/models/user.models';
+import { APIService } from '@app/core/services/api.service';
+import { PhoneType } from '@app/auth/services/auth.service';
+import { Banner } from '@app/core/models/api.models';
+import { Link } from '@app/core/models/navigation.models';
 
 @Injectable({
   providedIn: 'root'

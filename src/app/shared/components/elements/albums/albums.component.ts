@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ClickOutsideElementDirective } from '../../../shared/directives/click-outside-element/click-outside-element.directive';
+import { ClickOutsideElementDirective } from '@app/shared/directives/click-outside-element/click-outside-element.directive';
 import { CommonModule } from '@angular/common';
 
 @Component({

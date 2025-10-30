@@ -1,18 +1,18 @@
 import { Component, OnInit, QueryList } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Banner } from '../../../../core/models/api.models';
-import { Question, Answer } from '../../../../models/form.models';
-import { APIService } from '../../../../core/services/api.service';
-import { AuthService, AuthCallStates } from '../../../../auth/services/auth.service';
-import { GeneralService, RetMessage } from '../../../../core/services/general.service';
-import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
-import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
-import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
-import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
-import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
-import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { Banner } from '@app/core/models/api.models';
+import { APIService } from '@app/core/services/api.service';
+import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
+import { GeneralService, RetMessage } from '@app/core/services/general.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 import { QuestionDisplayFormComponent } from "../../../../shared/components/elements/question-display-form/question-display-form.component";
+import { Answer, Question } from '@app/core/models/form.models';
 
 @Component({
   selector: 'app-team-application',

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page } from '../../../../core/services/general.service';
+import { Page } from '@app/core/services/general.service';
 
 @Component({
-    selector: 'app-pagination',
-    imports: [CommonModule],
-    templateUrl: './pagination.component.html',
-    styleUrls: ['./pagination.component.scss']
+  selector: 'app-pagination',
+  imports: [CommonModule],
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent implements OnInit {
 

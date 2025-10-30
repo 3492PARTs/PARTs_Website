@@ -1,8 +1,8 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { ScoutPitResponse } from '../../../scouting/models/scouting.models';
-import { AppSize, GeneralService } from '../../../../core/services/general.service';
+import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../../shared/components/atoms/header/header.component';
+import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';
 
 @Component({

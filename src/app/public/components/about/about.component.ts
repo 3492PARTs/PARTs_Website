@@ -1,10 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { BoxComponent } from '../../../shared/components/atoms/box/box.component';
-import { HeaderComponent } from '../../../shared/components/atoms/header/header.component';
-import { ModalComponent } from '../../../shared/components/atoms/modal/modal.component';
-import { AppSize, GeneralService } from '../../../core/services/general.service';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { AppSize, GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
-import { BlueBannersComponent } from '../../../shared/components/elements/blue-banners/blue-banners.component';
+import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 
 @Component({
   selector: 'app-about',
