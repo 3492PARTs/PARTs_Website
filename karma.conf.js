@@ -42,13 +42,17 @@ module.exports = function (config) {
       }
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['Chrome', 'ChromeHeadlessCI'],
+    browsers: ['ChromeNoSandbox'], // Use a clearer name
     restartOnFileChange: true,
     customLaunchers: {
-      ChromeHeadlessCI: {
+      ChromeNoSandbox: { // Change the name to ChromeNoSandbox or similar
         base: 'ChromeHeadless',
         flags: [
-          '--no-sandbox'
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-web-security',
+          '--disable-gpu',
+          '--disable-dev-shm-usage' // CRITICAL for Jenkins/Docker
         ]
       },
     },

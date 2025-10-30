@@ -33,6 +33,9 @@ RUN apt-get update && apt-get install -y \
 # Set Chrome binary location for Karma
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
+RUN ls -l /usr/bin/google-chrome-stable
+RUN /usr/bin/google-chrome-stable --version
+
 # Add the source code to app
 COPY ./ /usr/local/app/
 
