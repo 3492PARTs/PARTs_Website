@@ -45,7 +45,7 @@ node {
                 // Note: The CHROME_BIN is already set in the Dockerfile, 
                 // and we use 'npx' to run the local 'ng' command.
                 testImage.inside("--shm-size=2gb") {
-                    sh 'npx ng test --no-watch --code-coverage --browsers=ChromeNoSandbox' 
+                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeNoSandbox'                
                 }
             }
         }
