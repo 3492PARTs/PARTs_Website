@@ -64,13 +64,15 @@ describe('DateToStrPipe', () => {
   });
 
   it('should handle midnight correctly', () => {
-    const date = new Date('2024-03-18T00:00:00Z');
+    // Create a date at midnight in local time (not UTC)
+    const date = new Date('2024-03-18 00:00:00');
     const result = pipe.transform(date, true, false);
     expect(result).toContain('12:00 am');
   });
 
   it('should handle noon correctly', () => {
-    const date = new Date('2024-03-18T12:00:00Z');
+    // Create a date at noon in local time (not UTC)
+    const date = new Date('2024-03-18 12:00:00');
     const result = pipe.transform(date, true, false);
     expect(result).toContain('12:00 pm');
   });
