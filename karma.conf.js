@@ -4,17 +4,15 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    // Removed '@angular-devkit/build-angular' from frameworks
-    frameworks: ['jasmine'], 
+    // CRITICAL FIX: Add this back. This is what tells Karma to load the Angular plugin.
+    frameworks: ['jasmine', '@angular-devkit/build-angular'], 
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      // CRITICAL FIX: The old path is replaced by the necessary plugin line
-      // which is now part of the @angular/build package structure.
-      // This resolves the "Cannot find module '@angular-devkit/build-angular/plugins/karma'" error.
-      require('@angular/build/plugins/karma') 
+      // CRITICAL FIX: REMOVED the "require('...')" line entirely,
+      // as the module is now loaded implicitly via the 'frameworks' array.
     ],
     client: {
       jasmine: {
@@ -29,8 +27,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      // Changed 'parts-website' to 'test-out' to match the directory you had permission issues with, 
-      // ensuring all outputs go to a writable location.
+      // Adjusted path as per our previous step
       dir: require('path').join(__dirname, './dist/test-out'), 
       subdir: '.',
       reporters: [
@@ -52,7 +49,6 @@ module.exports = function (config) {
     restartOnFileChange: true,
     customLaunchers: {
       ChromeNoSandbox: {
-        // base: 'ChromeHeadless' is correct for CI
         base: 'ChromeHeadless', 
         flags: [
           '--no-sandbox',
@@ -60,7 +56,7 @@ module.exports = function (config) {
           '--disable-web-security',
           '--disable-gpu',
           '--disable-dev-shm-usage', // Critical fix for Docker/Jenkins
-          '--remote-debugging-port=9222' // Good flag to keep for debugging
+          '--remote-debugging-port=9222' 
         ]
       },
     },
