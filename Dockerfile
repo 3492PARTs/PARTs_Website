@@ -51,4 +51,4 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
 
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python3 -c "import os; exit(0 if os.path.exists('/usr/local/app/dist/parts-website/browser/index.html') else 1)"
+    CMD python3 -c "import os; exit(0 if os.path.exists('index.html') else 1)"

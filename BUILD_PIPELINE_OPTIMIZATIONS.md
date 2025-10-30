@@ -49,7 +49,7 @@ COPY . .
 **Added:**
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python3 -c "import os; exit(0 if os.path.exists('/usr/local/app/dist/parts-website/browser/index.html') else 1)"
+    CMD python3 -c "import os; exit(0 if os.path.exists('index.html') else 1)"
 ```
 **Benefit:** Container orchestration can monitor application health
 
@@ -62,8 +62,8 @@ Applied the same improvements as the production Dockerfile
 
 ### 2. Smaller Runtime Base Image
 **Before:** `FROM nginx:latest`  
-**After:** `FROM nginx:1.27-alpine`  
-**Benefit:** Alpine-based image is 80% smaller (~40MB vs ~190MB)
+**After:** `FROM nginx:1.27-alpine` with wget installed  
+**Benefit:** Alpine-based image is 80% smaller (~40MB vs ~190MB), wget added for health checks
 
 ### 3. Health Check for nginx
 **Added:**
@@ -86,8 +86,15 @@ env.BUILDKIT_PROGRESS = 'plain'
 **Benefit:** Enables parallel layer processing and improved caching (20-50% faster builds)
 
 ### 2. Build Cache Optimization
-**Added:** `--cache-from` flags to docker.build() calls  
-**Benefit:** Reuses layers from previous builds, significantly faster rebuilds
+**Added:** Cache pull before build and `--cache-from` flags to docker.build() calls  
+**Example:**
+```groovy
+sh 'docker pull bduke97/parts_website:latest || true'
+app = docker.build("bduke97/parts_website", 
+    "--cache-from bduke97/parts_website:latest " +
+    "-f ./Dockerfile --target=runtime .")
+```
+**Benefit:** Reuses layers from previous builds, significantly faster rebuilds. The `|| true` ensures builds don't fail if cache image doesn't exist.
 
 ### 3. Stage Timeouts
 **Added:** Timeout configurations for all stages:
@@ -149,8 +156,8 @@ add_header Cache-Control "no-cache, no-store, must-revalidate";
 **Benefit:** Ensures users always get the latest version of the app
 
 ### 4. Enhanced Gzip Configuration
-**Added:** `application/javascript` to gzip_types  
-**Benefit:** Better compression for modern JavaScript files
+**Added:** Modern MIME types, removed redundant `application/x-javascript`  
+**Benefit:** Better compression for modern JavaScript files, cleaner configuration
 
 ---
 
@@ -180,6 +187,8 @@ deploy:
       cpus: '0.5'
       memory: 256M
 ```
+**Note:** The `deploy` section is primarily for Docker Swarm mode. For standalone Docker Compose, these limits are applied when using `docker compose up` with the `--compatibility` flag, or you can use the alternative syntax `cpus: '2'` and `mem_limit: 1G` directly at the service level.
+
 **Benefit:** Prevents container from consuming all host resources
 
 ### 3. Log Rotation

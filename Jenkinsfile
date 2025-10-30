@@ -37,6 +37,9 @@ node {
                     '''
                     
                     // Use BuildKit cache mounts for faster builds
+                    // Pull cache image if it exists, ignore errors
+                    sh 'docker pull parts-test-base:latest || true'
+                    
                     def testImage = docker.build("parts-test-base", 
                         "--cache-from parts-test-base:latest " +
                         "-f ./Dockerfile.uat --target=build .")
@@ -58,6 +61,9 @@ node {
                     sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                     '''
                     
+                    // Pull cache image if it exists, ignore errors
+                    sh 'docker pull bduke97/parts_website:latest || true'
+                    
                     // Use BuildKit cache for faster builds
                     app = docker.build("bduke97/parts_website", 
                         "--cache-from bduke97/parts_website:latest " +
@@ -68,6 +74,9 @@ node {
                     sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
                     && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                     '''
+                    
+                    // Pull cache image if it exists, ignore errors
+                    sh "docker pull bduke97/parts_website:${env.FORMATTED_BRANCH_NAME} || true"
                     
                     // Use BuildKit cache for faster builds
                     app = docker.build("bduke97/parts_website", 
