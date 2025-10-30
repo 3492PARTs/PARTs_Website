@@ -8,7 +8,7 @@ describe('BuildSeasonComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BuildSeasonComponent ]
+      imports: [ BuildSeasonComponent ]
     })
     .compileComponents();
   }));

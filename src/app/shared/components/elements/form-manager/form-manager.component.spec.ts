@@ -8,7 +8,7 @@ describe('FormManagerComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FormManagerComponent]
+      imports: [ FormManagerComponent ]
     });
     fixture = TestBed.createComponent(FormManagerComponent);
     component = fixture.componentInstance;

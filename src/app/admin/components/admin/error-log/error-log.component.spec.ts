@@ -8,7 +8,7 @@ describe('ErrorLogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ErrorLogComponent]
+      imports: [ ErrorLogComponent ]
     });
     fixture = TestBed.createComponent(ErrorLogComponent);
     component = fixture.componentInstance;

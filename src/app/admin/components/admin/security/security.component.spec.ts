@@ -8,7 +8,7 @@ describe('SecurityComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SecurityComponent]
+      imports: [ SecurityComponent ]
     });
     fixture = TestBed.createComponent(SecurityComponent);
     component = fixture.componentInstance;

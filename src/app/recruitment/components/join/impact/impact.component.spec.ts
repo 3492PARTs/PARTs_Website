@@ -8,7 +8,7 @@ describe('CommunityOutreachComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ImpactComponent]
+      imports: [ ImpactComponent ]
     })
       .compileComponents();
   }));

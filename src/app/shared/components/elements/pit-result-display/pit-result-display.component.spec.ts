@@ -8,7 +8,7 @@ describe('PitResultDisplayComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PitResultDisplayComponent]
+      imports: [ PitResultDisplayComponent ]
     });
     fixture = TestBed.createComponent(PitResultDisplayComponent);
     component = fixture.componentInstance;

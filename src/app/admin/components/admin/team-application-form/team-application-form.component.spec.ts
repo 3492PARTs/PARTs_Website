@@ -8,7 +8,7 @@ describe('TeamApplicationFormComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TeamApplicationFormComponent]
+      imports: [ TeamApplicationFormComponent ]
     });
     fixture = TestBed.createComponent(TeamApplicationFormComponent);
     component = fixture.componentInstance;

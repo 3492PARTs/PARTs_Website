@@ -8,7 +8,7 @@ describe('JoinComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ JoinComponent ]
+      imports: [ JoinComponent ]
     })
     .compileComponents();
   }));

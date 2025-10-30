@@ -8,7 +8,7 @@ describe('CompetitionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EventCompetitionComponent]
+      imports: [ EventCompetitionComponent ]
     })
       .compileComponents();
   });

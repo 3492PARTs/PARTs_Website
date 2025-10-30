@@ -8,7 +8,7 @@ describe('QuestionConditionAdminFormComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [QuestionConditionAdminFormComponent]
+      imports: [ QuestionConditionAdminFormComponent ]
     });
     fixture = TestBed.createComponent(QuestionConditionAdminFormComponent);
     component = fixture.componentInstance;

@@ -8,7 +8,7 @@ describe('ManageSeasonComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ManageSeasonComponent]
+      imports: [ ManageSeasonComponent ]
     });
     fixture = TestBed.createComponent(ManageSeasonComponent);
     component = fixture.componentInstance;

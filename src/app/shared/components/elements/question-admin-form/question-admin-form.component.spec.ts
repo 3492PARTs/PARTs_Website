@@ -8,7 +8,7 @@ describe('QuestionAdminFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuestionAdminFormComponent ]
+      imports: [ QuestionAdminFormComponent ]
     })
     .compileComponents();
   }));

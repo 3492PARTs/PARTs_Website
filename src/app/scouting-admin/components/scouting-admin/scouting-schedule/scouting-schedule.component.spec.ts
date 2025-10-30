@@ -8,7 +8,7 @@ describe('ScoutingScheduleComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ScoutingScheduleComponent]
+      imports: [ ScoutingScheduleComponent ]
     });
     fixture = TestBed.createComponent(ScoutingScheduleComponent);
     component = fixture.componentInstance;

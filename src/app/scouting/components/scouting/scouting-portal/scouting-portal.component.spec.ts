@@ -8,7 +8,7 @@ describe('ScoutPortalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ScoutingPortalComponent]
+      imports: [ ScoutingPortalComponent ]
     })
       .compileComponents();
   }));

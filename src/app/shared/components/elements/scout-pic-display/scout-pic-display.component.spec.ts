@@ -8,7 +8,7 @@ describe('ScoutPicDisplayComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ScoutPicDisplayComponent]
+      imports: [ ScoutPicDisplayComponent ]
     });
     fixture = TestBed.createComponent(ScoutPicDisplayComponent);
     component = fixture.componentInstance;

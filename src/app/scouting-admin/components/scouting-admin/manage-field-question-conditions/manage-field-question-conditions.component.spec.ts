@@ -8,7 +8,7 @@ describe('ManageFieldQuestionConditionsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ManageFieldQuestionConditionsComponent]
+      imports: [ ManageFieldQuestionConditionsComponent ]
     });
     fixture = TestBed.createComponent(ManageFieldQuestionConditionsComponent);
     component = fixture.componentInstance;

@@ -8,7 +8,7 @@ describe('ScoutPitResultsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ScoutPitResponsesComponent]
+      imports: [ ScoutPitResponsesComponent ]
     })
       .compileComponents();
   }));

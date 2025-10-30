@@ -8,7 +8,7 @@ describe('TeamNotesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [TeamNotesComponent]
+      imports: [ TeamNotesComponent ]
     });
     fixture = TestBed.createComponent(TeamNotesComponent);
     component = fixture.componentInstance;

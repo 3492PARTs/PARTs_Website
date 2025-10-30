@@ -8,7 +8,7 @@ describe('WallpapersComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ WallpapersComponent ]
+      imports: [ WallpapersComponent ]
     })
     .compileComponents();
   }));
