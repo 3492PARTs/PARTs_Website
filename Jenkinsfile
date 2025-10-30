@@ -1,14 +1,8 @@
 node {
     def now = new Date()
-
-    // Format the date in YYYY-MM-DD format
     def formattedDate = now.format('yyyy.MM.dd')
-
-    // Set the environment variable 
     env.BUILD_DATE = formattedDate
-
     env.BUILD_NO = env.BUILD_DISPLAY_NAME
-
     env.FORMATTED_BRANCH_NAME = env.BRANCH_NAME.replaceAll("/", "-")
 
     try {
@@ -28,34 +22,25 @@ node {
             '''
         }
 
-        // --- NEW STAGE FOR TEST EXECUTION (with explicit config fix) ---
-        stage('Run Tests (with SHM fix)') {
+        stage('Run Tests') {
             if (env.BRANCH_NAME != 'main') {
-                // 1. Prepare environment variables
                 sh'''
                 sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
                 && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
                 
-                // 2. Build the image up to the 'npm install' step
-                def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .") 
+                def testImage = docker.build("parts-test-base", "-f ./Dockerfile.uat --target=build .")
 
-                // 3. Execute the tests inside a container with the memory fix and CD command
-                testImage.inside("--shm-size=2gb -u 0") { // Using '-u 0' (root) for maximum permission compatibility
+                testImage.inside("--shm-size=2gb -u 0") {
                     sh '''
-                        # Change to the Dockerfile's WORKDIR
                         cd /usr/local/app && 
-                        # Use '--karma-config' to explicitly load the configuration file 
-                        # that defines the 'ChromeNoSandbox' launcher.
                         CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --karma-config=karma.conf.js --no-watch --code-coverage --browsers=ChromeNoSandbox
                     '''
                 }
             }
         }
-        // --- END NEW STAGE ---
 
-
-        stage('Build image') {  
+        stage('Build image') {
             if (env.BRANCH_NAME == 'main') {
                 sh'''
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
@@ -64,24 +49,21 @@ node {
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile --target=runtime .")
             }
             else {
-                // The UAT build just compiles the final image (tests are complete)
                 sh'''
                 sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
                 && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
-                // The original build command runs the final compile now
+                
                 app = docker.build("bduke97/parts_website", "-f ./Dockerfile.uat .")
             }
-        
         }
 
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                     app.push("${env.FORMATTED_BRANCH_NAME}")
-                    //app.push("latest")
                 }
-            }  
+            }
         }
 
         stage('Deploy') {
@@ -112,27 +94,24 @@ node {
                 && TAG=$FORMATTED_BRANCH_NAME docker compose pull \
                 && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate"
                 '''
-            } 
+            }
         }
 
         env.RESULT = 'success'
     }
     catch (e) {
-        // error handling, if needed
-        // throw the exception to jenkins
         env.RESULT = 'error'
         throw e
-    } 
+    }
     finally {
-        // some common final reporting in all cases (success or failure)
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
-                env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-                sh '''
-                    curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
-                        -H "Authorization: token $PASSWORD" \
-                        -H "Content-Type: application/json" \
-                        -d '{"state":"'\$RESULT'", "description":"Build '\$BUILD_NO' '\$RESULT'", "context":"Jenkins Build"}'
-                '''
-            }
+            env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+            sh '''
+                curl -X POST https://api.github.com/repos/3492PARTs/PARTs_Website/statuses/$SHA \
+                    -H "Authorization: token $PASSWORD" \
+                    -H "Content-Type: application/json" \
+                    -d '{"state":"'\$RESULT'", "description":"Build '\$BUILD_NO' '\$RESULT'", "context":"Jenkins Build"}'
+            '''
+        }
     }
 }

@@ -4,15 +4,12 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    // CRITICAL FIX: Add this back. This is what tells Karma to load the Angular plugin.
-    frameworks: ['jasmine', '@angular-devkit/build-angular'], 
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      // CRITICAL FIX: REMOVED the "require('...')" line entirely,
-      // as the module is now loaded implicitly via the 'frameworks' array.
     ],
     client: {
       jasmine: {
@@ -27,8 +24,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      // Adjusted path as per our previous step
-      dir: require('path').join(__dirname, './dist/test-out'), 
+      dir: require('path').join(__dirname, './dist/test-out'),
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -49,20 +45,19 @@ module.exports = function (config) {
     restartOnFileChange: true,
     customLaunchers: {
       ChromeNoSandbox: {
-        base: 'ChromeHeadless', 
+        base: 'ChromeHeadless',
         flags: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-web-security',
           '--disable-gpu',
-          '--disable-dev-shm-usage', // Critical fix for Docker/Jenkins
-          '--remote-debugging-port=9222' 
+          '--disable-dev-shm-usage',
+          '--remote-debugging-port=9222'
         ]
       },
     },
-    // Increased timeouts from your original file (good for slow CI runners)
-    captureTimeout: 300000, 
-    browserDisconnectTolerance: 3, 
+    captureTimeout: 300000,
+    browserDisconnectTolerance: 3,
     browserNoActivityTimeout: 300000,
   });
 };
