@@ -4,13 +4,17 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    // Removed '@angular-devkit/build-angular' from frameworks
+    frameworks: ['jasmine'], 
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      // CRITICAL FIX: The old path is replaced by the necessary plugin line
+      // which is now part of the @angular/build package structure.
+      // This resolves the "Cannot find module '@angular-devkit/build-angular/plugins/karma'" error.
+      require('@angular/build/plugins/karma') 
     ],
     client: {
       jasmine: {
@@ -25,7 +29,9 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/parts-website'),
+      // Changed 'parts-website' to 'test-out' to match the directory you had permission issues with, 
+      // ensuring all outputs go to a writable location.
+      dir: require('path').join(__dirname, './dist/test-out'), 
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -42,25 +48,25 @@ module.exports = function (config) {
       }
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['ChromeNoSandbox'], // Use a clearer name
+    browsers: ['ChromeNoSandbox'],
     restartOnFileChange: true,
     customLaunchers: {
-      ChromeNoSandbox: { // Change the name to ChromeNoSandbox or similar
-        base: 'ChromeHeadless',
+      ChromeNoSandbox: {
+        // base: 'ChromeHeadless' is correct for CI
+        base: 'ChromeHeadless', 
         flags: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
           '--disable-web-security',
           '--disable-gpu',
-          '--disable-dev-shm-usage' // CRITICAL for Jenkins/Docker
+          '--disable-dev-shm-usage', // Critical fix for Docker/Jenkins
+          '--remote-debugging-port=9222' // Good flag to keep for debugging
         ]
       },
     },
-    // Increase the time Karma waits for a browser to launch (e.g., 5 minutes = 300000ms)
+    // Increased timeouts from your original file (good for slow CI runners)
     captureTimeout: 300000, 
-    // How many attempts Karma makes to reconnect (in case of a temporary blip)
     browserDisconnectTolerance: 3, 
-    // How long Karma waits for activity from the browser (e.g., 5 minutes)
     browserNoActivityTimeout: 300000,
   });
 };
