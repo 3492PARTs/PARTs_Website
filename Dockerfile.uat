@@ -10,7 +10,8 @@ WORKDIR /usr/local/app
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
-    ca-certificates \# ESSENTIAL Dependencies for Headless Chrome
+    ca-certificates \
+    # ESSENTIAL Dependencies for Headless Chrome
     libnss3 \
     libatk-bridge2.0-0 \
     libcups2 \
