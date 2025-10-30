@@ -43,7 +43,7 @@ node {
 
                 // 3. Execute the tests inside a container with the memory fix
                 testImage.inside("--shm-size=2gb") { // <-- THIS IS THE CRITICAL FIX
-                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable npm run test:ci'
+                    sh 'CHROME_BIN=/usr/bin/google-chrome-stable npx npm run test:ci'
                 }
             }
         }
