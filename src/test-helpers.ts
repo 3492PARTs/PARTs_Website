@@ -61,7 +61,9 @@ export function createMockAPIService() {
     post: jasmine.createSpy('post').and.returnValue(of({ data: {} })),
     put: jasmine.createSpy('put').and.returnValue(of({ data: {} })),
     delete: jasmine.createSpy('delete').and.returnValue(of({ data: {} })),
-    patch: jasmine.createSpy('patch').and.returnValue(of({ data: {} }))
+    patch: jasmine.createSpy('patch').and.returnValue(of({ data: {} })),
+    apiStatus: of({ status: 'ok', version: '1.0.0' }),
+    getAPIStatus: jasmine.createSpy('getAPIStatus').and.returnValue(Promise.resolve({ status: 'ok', version: '1.0.0' }))
   };
 }
 
@@ -74,6 +76,7 @@ export function createMockAuthService() {
     userLinks: of([]),
     userSections: of([]),
     loggedIn: of(false),
+    authInFlight: of('comp'),
     previouslyAuthorized: jasmine.createSpy('previouslyAuthorized'),
     login: jasmine.createSpy('login').and.returnValue(of({ success: true })),
     logout: jasmine.createSpy('logout').and.returnValue(of({ success: true })),
@@ -91,10 +94,13 @@ export function createMockGeneralService() {
     removeBanner: jasmine.createSpy('removeBanner'),
     siteBanners: of([]),
     currentOutstandingCalls: of(0),
-    banners: [],
+    scrollPosition$: of(0),
+    banners: of([]),
     getAppSize: jasmine.createSpy('getAppSize').and.returnValue(0),
     cloneObject: jasmine.createSpy('cloneObject').and.callFake((obj: any) => JSON.parse(JSON.stringify(obj))),
-    arrayObjectIndexOf: jasmine.createSpy('arrayObjectIndexOf').and.returnValue(-1)
+    arrayObjectIndexOf: jasmine.createSpy('arrayObjectIndexOf').and.returnValue(-1),
+    strNoE: jasmine.createSpy('strNoE').and.returnValue(false),
+    getNextGsId: jasmine.createSpy('getNextGsId').and.returnValue(1)
   };
 }
 
@@ -116,7 +122,8 @@ export function createMockCacheService() {
 export function createMockScoutingService() {
   return {
     currentSeason: of({ season_id: 1, year: 2024 }),
-    getCurrentSeason: jasmine.createSpy('getCurrentSeason').and.returnValue(of({ season_id: 1 }))
+    getCurrentSeason: jasmine.createSpy('getCurrentSeason').and.returnValue(of({ season_id: 1 })),
+    outstandingResponsesUploaded: of(true)
   };
 }
 

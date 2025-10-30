@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, provideRouter } from '@angular/router';
 import { AuthService } from './auth/services/auth.service';
 import { GeneralService } from './core/services/general.service';
 import { DOCUMENT } from '@angular/common';
@@ -12,47 +12,23 @@ import { createMockSwPush, createMockSwUpdate, createMockAuthService, createMock
 import { of, Subject } from 'rxjs';
 
 describe('AppComponent', () => {
-  let routerEventsSubject: Subject<any>;
-  let mockRouter: any;
   let mockAuthService: any;
   let mockGeneralService: any;
-  let mockActivatedRoute: any;
 
   beforeEach(async () => {
-    routerEventsSubject = new Subject();
-    
-    mockRouter = {
-      events: routerEventsSubject.asObservable(),
-      routerState: {
-        root: {
-          snapshot: {
-            data: {}
-          },
-          firstChild: null
-        }
-      }
-    };
-
     mockAuthService = createMockAuthService();
     mockAuthService.previouslyAuthorized = jasmine.createSpy('previouslyAuthorized');
     
     mockGeneralService = createMockGeneralService();
-
-    mockActivatedRoute = {
-      snapshot: {
-        data: {}
-      }
-    };
 
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: Router, useValue: mockRouter },
+        provideRouter([]),
         { provide: AuthService, useValue: mockAuthService },
         { provide: GeneralService, useValue: mockGeneralService },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: SwPush, useValue: createMockSwPush() },
         { provide: SwUpdate, useValue: createMockSwUpdate() }
       ]
@@ -74,7 +50,8 @@ describe('AppComponent', () => {
   it('should get title from router state', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    const title = app.getTitle(mockRouter.routerState, mockRouter.routerState.root);
+    const router = TestBed.inject(Router);
+    const title = app.getTitle(router.routerState, router.routerState.root);
     expect(title).toBeDefined();
     expect(Array.isArray(title)).toBe(true);
   });
