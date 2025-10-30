@@ -47,16 +47,6 @@ node {
         
         }
 
-        stage('Run Tests') {
-            // Run tests inside the built Docker container
-            app.inside {
-                sh '''
-                    npm ci
-                    npm run test:ci
-                '''
-            }
-        }
-
         stage('Push image') {
             if (env.BRANCH_NAME != 'main') {
                 docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {

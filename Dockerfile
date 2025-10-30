@@ -10,6 +10,7 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 RUN npm install \
+    && npm run test:ci \
     && npx ng build 
     
 # The runtime image, used to just run the code provided its virtual environment

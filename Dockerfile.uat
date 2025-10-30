@@ -10,9 +10,11 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
+# Run tests to ensure code quality
 # Generate the build of the application
 
 RUN npm install \
+    && npm run test:ci \
     && npx ng build --configuration=uat
 
 # Stage 2: Serve app with nginx server
