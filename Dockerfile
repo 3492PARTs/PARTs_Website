@@ -1,9 +1,6 @@
 # Stage 1: Compile and Build angular codebase
-
-# Use official node image as the base image
 FROM node:lts AS builder
 
-# Set the working directory
 WORKDIR /usr/local/app
 
 # Install Chrome for running tests
@@ -17,22 +14,19 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Chrome binary location for Karma
 ENV CHROME_BIN=/usr/bin/google-chrome-stable
 
-# Add the source code to app
 COPY ./ /usr/local/app/
 
 RUN npm install \
     && npm run test:ci \
-    && npx ng build 
-    
-# The runtime image, used to just run the code provided its virtual environment
+    && npx ng build
+
+# Stage 2: Runtime image
 FROM python:3.11-slim AS runtime
 
 WORKDIR /usr/local/app/dist/parts-website/browser/
 
-# Copy virtual env from previous step
 COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
 
 RUN  useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
