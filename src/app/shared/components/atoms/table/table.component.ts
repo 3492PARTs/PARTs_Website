@@ -21,7 +21,9 @@ import { Utils } from '@app/core/utils/utils';
 import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';
-import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '@app/shared/pipes/ObjectWildcardFilter';
+import { ObjectWildCardFilterPipe } from '@app/shared/pipes/object-wildcard-filter.pipe';
+import { OrderByPipe } from '@app/shared/pipes/order-by.pipe';
+import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 
