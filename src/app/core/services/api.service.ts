@@ -51,11 +51,11 @@ export class APIService {
           {
             next: (result: any) => {
               if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
-              if (result.hasOwnProperty('branch')) resolve(result['branch']);
+              if ('branch' in result) resolve(result['branch']);
               resolve('');
             },
             error: (err: any) => {
-              console.log('error', err);
+              console.error('API status check error:', err);
               if (this.apiStatusBS.value !== APIStatus.off) this.apiStatusBS.next(APIStatus.off);
               this.outstandingApiStatusCheck = null;
             }, complete: () => {
@@ -128,7 +128,7 @@ export class APIService {
   }
 
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
-    console.log(err);
+    console.error('API error:', err);
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
     // This means connection is down error, check

@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '@app/core/services/general.service';
+import { Utils } from '@app/core/utils/utils';
 import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';
@@ -311,11 +312,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   GetTableDisplayValue(rec: any, property: string) {
-    return GeneralService.getPropertyValue(rec, property);
+    return Utils.getPropertyValue(rec, property);
   }
 
   SetTableDisplayValue(rec: any, property: string, value: any) {
-    this.gs.setPropertyValue(rec, property, value);
+    Utils.setPropertyValue(rec, property, value);
   }
 
   IsPropertyInColumnSettings(PropertyName: any) {

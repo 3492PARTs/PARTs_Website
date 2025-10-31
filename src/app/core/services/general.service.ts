@@ -12,6 +12,7 @@ import { Question, Flow, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
+import { Utils } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -79,7 +80,7 @@ export class GeneralService {
   }
 
   removeBanner(b: Banner): void {
-    let banners = this.cloneObject(this.bannersBS.value);
+    let banners = Utils.cloneObject(this.bannersBS.value);
     let index = -1;
     for (let i = 0; i < banners.length; i++) {
       if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
@@ -155,10 +156,10 @@ export class GeneralService {
   triggerError(message: any) {
     this.showErrorModal = true;
 
-    if (message.hasOwnProperty('message')) {
+    if ('message' in message && message.message) {
       this.errorMessage = message.message;
     }
-    else if (message.hasOwnProperty('retMessage')) {
+    else if ('retMessage' in message && message.retMessage) {
       this.errorMessage = message.retMessage;
     }
     else
@@ -168,7 +169,7 @@ export class GeneralService {
   checkResponse(response: any): boolean {
     response = response as RetMessage;
     if (response.retMessage && response.error) {
-      this.addBanner(new Banner(0, response.errorMessage ? this.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
+      this.addBanner(new Banner(0, response.errorMessage ? Utils.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
       return false;
     }
     return true;
@@ -176,7 +177,7 @@ export class GeneralService {
 
   successfulResponseBanner(response: any) {
     const message = (response as RetMessage).retMessage;
-    if (!this.strNoE(message)) this.addBanner(new Banner(0, message, 3500));
+    if (!Utils.strNoE(message)) this.addBanner(new Banner(0, message, 3500));
   }
 
   handelHTTPError(error: HttpErrorResponse) {
@@ -229,16 +230,60 @@ export class GeneralService {
   }
 
   /* helper functions */
-  strNoE(s: any) {
+  strNoE(s: any): boolean {
+    return Utils.strNoE(s);
+  }
 
-    if (Number.isNaN(s)) return true;
+  cloneObject(o: any): any {
+    return Utils.cloneObject(o);
+  }
 
-    let type = typeof s;
-    if (s !== null && !['undefined', 'string'].includes(type)) {
-      s = s.toString();
-    }
+  formatDateString(s: string | Date): string {
+    return Utils.formatDateString(s);
+  }
 
-    return s === undefined || s === null || s.length === 0 || s.length === null || s.length === undefined || s.trim() === '';
+  propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
+    return Utils.propertyMap(arr, queryProperty, queryValue, findProperty);
+  }
+
+  arrayObjectIndexOf(arr: any[], property: string, searchTerm: any): number {
+    return Utils.arrayObjectIndexOf(arr, property, searchTerm);
+  }
+
+  updateObjectInArray(arr: any[], property: string, obj: any): void {
+    Utils.updateObjectInArray(arr, property, obj);
+  }
+
+  formatQuestionAnswer(answer: any): string {
+    return Utils.formatQuestionAnswer(answer);
+  }
+
+  decodeBoolean(b: boolean, values: { true: string, false: string }): string {
+    return Utils.decodeBoolean(b, values);
+  }
+
+  decodeSentBoolean(b: boolean): string {
+    return Utils.decodeSentBoolean(b);
+  }
+
+  decodeYesNoBoolean(b: boolean): string {
+    return Utils.decodeYesNoBoolean(b);
+  }
+
+  decodeYesNo(s: string): string {
+    return Utils.decodeYesNo(s);
+  }
+
+  objectToString(o: any): string {
+    return Utils.objectToString(o);
+  }
+
+  objectToFormData(o: any): FormData {
+    return Utils.objectToFormData(o);
+  }
+
+  isObject(o: any): boolean {
+    return Utils.isObject(o);
   }
 
   downloadFileAs(filename: string, data: any, MimeType: string) {
@@ -340,14 +385,9 @@ export class GeneralService {
 
   devConsoleLog(location: string, x?: any): void {
     if (!environment.production) {
-      //console.log(location);
       if (x) console.log(location + '\n', x);
       else console.log(location);
     }
-  }
-
-  cloneObject(o: any): any {
-    return JSON.parse(JSON.stringify(o));
   }
 
   triggerChange(tmpFx: () => void, timeoutMs = 0) {
@@ -356,53 +396,10 @@ export class GeneralService {
     }, timeoutMs);
   }
 
-  // For one given property and its value, get the value of another property in the same object
-  propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
-    for (let i = 0; i < arr.length; i++) {
-      if (Object.prototype.hasOwnProperty.call(arr[i], queryProperty) && arr[i][queryProperty] === queryValue) {
-        if (Object.prototype.hasOwnProperty.call(arr[i], findProperty)) {
-          return arr[i][findProperty];
-        }
-      }
-    }
-  }
-
-  arrayObjectIndexOf(arr: any[], property: string, searchTerm: any) {
-    for (let i = 0, len = arr.length; i < len; i++) {
-      if (typeof arr[i] !== 'undefined' && arr[i] !== null && arr[i][property] === searchTerm) { return i; }
-    }
-    return -1;
-  }
-
   updateTableSelectList(list: TableColType[], PropertyName: string, selectList: any[]): void {
     const l = list.find(l => l.PropertyName === PropertyName);
     if (l)
       l.SelectList = selectList;
-  }
-
-  updateObjectInArray(arr: any[], property: string, obj: any): void {
-    let i = this.arrayObjectIndexOf(arr, property, obj[property]);
-    arr[i] = obj;
-  }
-
-  formatDateString(s: string | Date): string {
-    let d = new Date(s);
-    let day = d.getDate();
-    let month = d.getMonth() + 1;
-    let year = d.getFullYear().toString().substring(2);
-    let hour = d.getHours();
-    let min = d.getMinutes();
-
-    // hours to am/pm
-    let amPm = hour > 12 ? 'PM' : 'AM';
-
-    if (hour > 12) hour -= 12;
-
-    //console.log('d: ' + day + ' m ' + month + ' y ' + year + ' h ' + hour + ' m ' + min + ' ' + amPm);
-    //8/28/21, 11:03 PM
-
-    return `${month}/${day}/${year} ${hour}:${min < 10 ? '0' + min : min.toString()} ${amPm}`;
-
   }
 
   getPageFromResponse(Response: any): Page {
@@ -457,23 +454,6 @@ export class GeneralService {
     );
   }
 
-  formatQuestionAnswer(answer: any): string {
-    if (Array.isArray(answer)) {
-      let str = '';
-      answer.forEach(opt => {
-        if (!this.strNoE(opt.checked) && opt.checked !== 'false')
-          if (opt.checked === 'true' || opt.checked === true)
-            str += opt.option + ', ';
-          else if (opt.checked !== false)
-            str += opt.checked + ', ';
-      });
-      str = str.substring(0, str.length - 2);
-      answer = str;
-    }
-
-    return !this.strNoE(answer) ? (this.isObject(answer) ? JSON.stringify(answer) : answer) : '';
-  }
-
   isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
     const condition = conditionalQuestion.conditional_on_questions.find(coq => coq.conditional_on === question.id);
     if (condition)
@@ -481,7 +461,7 @@ export class GeneralService {
         case 'equal':
           return (answer || '').toString().toLowerCase() === condition.condition_value.toLowerCase();
         case 'exist':
-          return !this.strNoE(answer)
+          return !Utils.strNoE(answer)
         case 'lt':
           return parseFloat(answer) < parseFloat(condition.condition_value);
         case 'lt-equal':
@@ -602,7 +582,7 @@ export class GeneralService {
 
     for (let i = 0; i < tableData.length; i++) {
       tableCols.forEach(element => {
-        csv += '"' + GeneralService.getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
+        csv += '"' + Utils.getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
       });
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
@@ -630,7 +610,7 @@ export class GeneralService {
   questionsToCSVBody(questions: Question[]): string {
     let body = '';
     questions.forEach(q => {
-      body += `"${this.formatQuestionAnswer(q.answer)}",`
+      body += `"${Utils.formatQuestionAnswer(q.answer)}",`
     });
     body = body.substring(0, body.length - 1);
     return body;
@@ -644,43 +624,6 @@ export class GeneralService {
       csv += `${this.questionsToCSVBody(r.questionanswer_set)},${r.time}\n`;
     });
     return csv;
-  }
-
-  static getPropertyValue(rec: any, property: string): any {
-    if (!property) {
-      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
-    }
-
-    let ret = '';
-
-    try {
-      const variable = `rec?.${property.replaceAll(".", "?.")}`;
-      const comand = `ret = ${variable};`;
-      eval(comand);
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-    return ret; // do not turn into a string this will bite objects in the butt
-  }
-
-  setPropertyValue(rec: any, property: string, value: any): void {
-    if (!property) {
-      throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
-    }
-
-    let ret = '';
-
-    try {
-      const variable = `rec.${property}`;
-      const comand = `${variable} = value;`;
-      eval(comand);
-    }
-    catch (err) {
-      console.log(err);
-    }
-
   }
 
   keepElementInView(elementId: string): { x: number, y: number } | undefined {
@@ -712,86 +655,6 @@ export class GeneralService {
     }
 
     return { x: xOffset, y: yOffset };
-  }
-
-  decodeBoolean(b: boolean, values: { true: string, false: string }): string {
-    return b ? values.true : values.false;
-  }
-
-  decodeSentBoolean(b: boolean): string {
-    return this.decodeBoolean(b, { true: 'Sent', false: 'Not Sent' });
-  }
-
-  decodeYesNoBoolean(b: boolean): string {
-    return this.decodeBoolean(b, { true: 'Yes', false: 'No' });
-  }
-
-  decodeYesNo(s: string): string {
-    return this.decodeBoolean(s === 'y', { true: 'Yes', false: 'No' });
-  }
-
-  objectToString(o: any): string {
-    //console.log(o);
-    let s = '';
-    if (this.isObject(o))
-      if (Object.keys(o).length > 0)
-        for (const [key, value] of Object.entries(o)) {
-          if (value instanceof Array) {
-            s += `${key}: `;
-            value.forEach(element => {
-              if (this.isObject(element))
-                if (Object.keys(element).length > 0)
-                  s += `${this.objectToString(element)}`;
-                else
-                  s += '';
-              else
-                s += `${element}, `;
-            });
-            s = `${s.substring(0, s.length - 2)}\n`;
-          }
-          else if (this.isObject(value)) {
-            if (Object.keys(value as Object).length > 0)
-              s += `${this.objectToString(value)}`;
-            else
-              s += '';
-            //s = s.substring(0, s.length - 2);
-          }
-          else s += `${key}: ${value}\n`;
-        }
-      else
-        return '';
-    else if (o instanceof Array) {
-      o.forEach(element => {
-        if (this.isObject(element))
-          if (Object.keys(element).length > 0)
-            s += `${this.objectToString(element)}`;
-          else
-            s += '';
-        else
-          s += `${element}, `;
-      });
-      //s = `${s.substring(0, s.length - 2)}\n`;
-    }
-    else
-      return o;
-    return s;
-  }
-
-  objectToFormData(o: any): FormData {
-    const formData = new FormData()
-
-    for (const [k, v] of Object.entries(o)) {
-      /*if (moment.isMoment(v)) {
-        formData.append(k, v.format('YYYY-MM-DD'));
-      }
-      else*/
-      formData.append(k, v as string | Blob);
-    }
-    return formData;
-  }
-
-  isObject(o: any) {
-    return o && typeof o === 'object' && o.constructor === Object;
   }
 }
 
