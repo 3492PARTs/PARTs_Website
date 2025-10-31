@@ -4,7 +4,6 @@ import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardView
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { BoxComponent } from "../../atoms/box/box.component";
 import { ButtonComponent } from "../../atoms/button/button.component";

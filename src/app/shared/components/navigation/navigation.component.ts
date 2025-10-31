@@ -8,7 +8,6 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { Alert, NotificationsService } from '@app/core/services/notifications.service';
 import { PwaService } from '@app/core/services/pwa.service';

@@ -3,7 +3,6 @@ import { ModalService } from '@app/core/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, strNoE } from '@app/core/utils/utils.functions';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';

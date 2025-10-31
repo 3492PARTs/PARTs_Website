@@ -3,7 +3,6 @@ import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormS
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';

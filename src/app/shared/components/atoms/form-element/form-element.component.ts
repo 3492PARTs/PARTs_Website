@@ -15,7 +15,6 @@ import {
   OnChanges
 } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, cloneObject, devConsoleLog, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';

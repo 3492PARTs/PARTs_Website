@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { Page, strNoE } from '@app/core/utils/utils.functions';
+import * as Utils from '@app/core/utils/utils.functions';
+
 @Component({
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
@@ -22,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   // Expose Utils to template
   Utils = Utils;
-
+  
   input: UserData = new UserData;
   returnUrl: string | null = '';
   page: string | null = 'login';

@@ -13,7 +13,6 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService, RetMessage } from '@app/core/services/general.service';
-import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';

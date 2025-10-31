@@ -3,7 +3,6 @@ import { inject } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { catchError, filter, finalize, Observable, switchMap, take, throwError } from "rxjs";
 import { AuthService, Token } from "@app/auth/services/auth.service";
-import { Utils } from "../utils/utils";
 
 import { devConsoleLog } from '@app/core/utils/utils.functions';
 export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {

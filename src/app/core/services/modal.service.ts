@@ -29,6 +29,11 @@ export class ModalService {
   private confirmFx: (() => void) | undefined | null;
   private rejectConfirmFx: (() => void) | undefined | null;
 
+  /* Modal Visibility Counter */
+  private modalVisibleCount = 0;
+  private currentModalVisibleBS = new BehaviorSubject<number>(0);
+  currentModalVisible = this.currentModalVisibleBS.asObservable();
+
   /**
    * Get current error modal visibility state
    */
@@ -176,5 +181,30 @@ export class ModalService {
 
     this.triggerError(errorText);
     if (decrementCallsFn) decrementCallsFn();
+  }
+
+  /**
+   * Increment the count of visible modals
+   */
+  incrementModalVisibleCount(): number {
+    this.modalVisibleCount++;
+    this.currentModalVisibleBS.next(this.modalVisibleCount);
+    return this.modalVisibleCount;
+  }
+
+  /**
+   * Decrement the count of visible modals
+   */
+  decrementModalVisibleCount(): number {
+    this.modalVisibleCount--;
+    this.currentModalVisibleBS.next(this.modalVisibleCount);
+    return this.modalVisibleCount;
+  }
+
+  /**
+   * Get the current count of visible modals
+   */
+  getModalVisibleCount(): number {
+    return this.modalVisibleCount;
   }
 }

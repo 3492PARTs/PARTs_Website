@@ -19,6 +19,8 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
+import * as Utils from '@app/core/utils/utils.functions';
+
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
@@ -29,7 +31,7 @@ export class ProfileComponent implements OnInit {
 
   // Expose Utils to template
   Utils = Utils;
-
+  
   user: User = new User();
   editUser: User = new User();
   userProfileImage!: File | null;

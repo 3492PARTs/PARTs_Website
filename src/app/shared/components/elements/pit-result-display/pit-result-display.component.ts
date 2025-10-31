@@ -1,7 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';

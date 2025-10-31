@@ -7,8 +7,6 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Question, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
-import { Utils, Page, AppSize } from '../utils/utils';
-import { ModalUtils } from '../utils/modal.utils';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
 
 import { ModalService } from '@app/core/services/modal.service';

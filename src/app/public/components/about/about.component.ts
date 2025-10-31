@@ -3,7 +3,6 @@ import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 import { CommonModule } from '@angular/common';
 import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 

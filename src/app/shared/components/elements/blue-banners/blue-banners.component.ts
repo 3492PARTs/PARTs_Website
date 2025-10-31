@@ -1,6 +1,5 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 
 import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
