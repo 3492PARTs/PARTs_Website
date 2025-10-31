@@ -74,7 +74,7 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       this.activeFlow.form_typ.form_typ = this.FormType;
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.activeFlow = new Flow();
         this.flowModalVisible = false;
         this.init();

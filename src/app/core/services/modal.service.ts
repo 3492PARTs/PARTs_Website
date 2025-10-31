@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Banner } from '../models/api.models';
 import { strNoE, objectToString } from '../utils/utils.functions';
+import { GeneralService } from './general.service';
 
 /**
  * ModalService - Service for managing modal dialogs, errors, and confirmations
@@ -11,6 +12,7 @@ import { strNoE, objectToString } from '../utils/utils.functions';
   providedIn: 'root'
 })
 export class ModalService {
+  constructor(private gs: GeneralService) {}
   /* Error Modal State */
   private showErrorModalBS = new BehaviorSubject<boolean>(false);
   showErrorModal$ = this.showErrorModalBS.asObservable();
@@ -76,10 +78,10 @@ export class ModalService {
   triggerError(message: any): void {
     this.showErrorModalBS.next(true);
 
-    if ('message' in message && message.message) {
+    if (typeof message === 'object' && message !== null && 'message' in message && message.message) {
       this.errorMessageBS.next(message.message);
     }
-    else if ('retMessage' in message && message.retMessage) {
+    else if (typeof message === 'object' && message !== null && 'retMessage' in message && message.retMessage) {
       this.errorMessageBS.next(message.retMessage);
     }
     else {
@@ -121,16 +123,15 @@ export class ModalService {
   /**
    * Check API response and show banner if error
    * @param response The API response to check
-   * @param addBannerFn Function to add a banner (from GeneralService)
    * @returns true if response is valid, false if error
    */
-  checkResponse(response: any, addBannerFn: (b: Banner) => void): boolean {
+  checkResponse(response: any): boolean {
     const retMessage = response as { retMessage?: string; error?: boolean; errorMessage?: string };
     if (retMessage.retMessage && retMessage.error) {
       const message = retMessage.errorMessage 
         ? objectToString(JSON.parse(retMessage.errorMessage)) 
         : retMessage.retMessage;
-      addBannerFn(new Banner(0, message, 5000));
+      this.gs.addBanner(new Banner(0, message, 5000));
       return false;
     }
     return true;
@@ -139,27 +140,25 @@ export class ModalService {
   /**
    * Show success banner from API response
    * @param response The API response
-   * @param addBannerFn Function to add a banner (from GeneralService)
    */
-  successfulResponseBanner(response: any, addBannerFn: (b: Banner) => void): void {
+  successfulResponseBanner(response: any): void {
     const message = (response as { retMessage?: string }).retMessage;
     if (!strNoE(message)) {
-      addBannerFn(new Banner(0, message!, 3500));
+      this.gs.addBanner(new Banner(0, message!, 3500));
     }
   }
 
   /**
    * Trigger form validation banner
    * @param invalidFields Array of invalid field names
-   * @param addBannerFn Function to add a banner (from GeneralService)
    */
-  triggerFormValidationBanner(invalidFields: string[], addBannerFn: (b: Banner) => void): void {
+  triggerFormValidationBanner(invalidFields: string[]): void {
     let ret = '';
     invalidFields.forEach(s => {
       ret += `&bull;  ${s} is invalid\n`;
     });
 
-    addBannerFn(new Banner(0, ret, 3500));
+    this.gs.addBanner(new Banner(0, ret, 3500));
   }
 
   /**

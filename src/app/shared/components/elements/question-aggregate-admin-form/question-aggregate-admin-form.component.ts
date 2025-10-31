@@ -60,7 +60,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: this.FormTyp
     }, (result: any) => {
-      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
+      if (this.modalService.checkResponse(result)) {
         this.questionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {
@@ -72,7 +72,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   getQuestionAggregateTypes(): void {
     this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
-      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         this.questionAggregateTypes = result as QuestionAggregateType[];
       }
@@ -83,7 +83,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   getQuestionConditionTypes(): void {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         //this.questionConditionTypes = result;
         updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
@@ -145,7 +145,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeQuestionAggregate, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionAggregate = new QuestionAggregate();
       this.questionAggregateModalVisible = false;
       this.getQuestionAggregates();

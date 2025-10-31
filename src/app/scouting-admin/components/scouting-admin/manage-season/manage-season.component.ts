@@ -158,7 +158,7 @@ export class ManageSeasonComponent implements OnInit {
       event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -201,7 +201,7 @@ export class ManageSeasonComponent implements OnInit {
 
   saveSeason(s: Season): void {
     this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.init();
       s = new Season();
       this.addSeasonModalVisible = false;
@@ -216,7 +216,7 @@ export class ManageSeasonComponent implements OnInit {
         this.api.delete(true, 'scouting/admin/season/', {
           season_id: this.delSeason?.toString() || ''
         }, (result: any) => {
-          this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+          this.modalService.successfulResponseBanner(result);
           this.init();
           this.delSeason = null;
           this.delEvent = null;
@@ -237,7 +237,7 @@ export class ManageSeasonComponent implements OnInit {
       event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
       this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.manageEventsModalVisible = false;
         this.init();
         this.newEvent = new Event();
@@ -260,7 +260,7 @@ export class ManageSeasonComponent implements OnInit {
         this.api.delete(true, 'scouting/admin/event/', {
           event_id: this.delEvent?.toString() || ''
         }, (result: any) => {
-          this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+          this.modalService.successfulResponseBanner(result);
           this.delEvent = null;
           this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();

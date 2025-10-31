@@ -52,8 +52,8 @@ export class APIService {
           {
             next: (result: any) => {
               if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
-              if ('branch' in result) resolve(result['branch']);
-              resolve('');
+              if (typeof result === 'object' && result !== null && 'branch' in result) resolve(result['branch']);
+              else resolve('');
             },
             error: (err: any) => {
               console.error('API status check error:', err);
@@ -121,7 +121,7 @@ export class APIService {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
+    if (this.modalService.checkResponse(result)) {
       if (onNext) onNext(result);
     }
     else

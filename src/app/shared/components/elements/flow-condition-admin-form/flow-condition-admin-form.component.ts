@@ -122,7 +122,7 @@ export class
 
   saveFlowCondition(): void {
     this.api.post(true, 'form/flow-condition/', this.activeFlowCondition, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.activeFlowCondition = new FlowCondition();
       this.flowConditionModalVisible = false;
       this.getFlows();

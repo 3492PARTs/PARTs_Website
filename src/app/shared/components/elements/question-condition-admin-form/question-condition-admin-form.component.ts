@@ -133,7 +133,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   saveQuestionCondition(): void {
     this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
       this.getQuestions();

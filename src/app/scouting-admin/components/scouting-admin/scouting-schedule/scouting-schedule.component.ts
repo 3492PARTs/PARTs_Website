@@ -133,7 +133,7 @@ export class ScoutingScheduleComponent implements OnInit {
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
 
     this.api.post(true, 'scouting/admin/scout-field-schedule/', sfs, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
       this.scoutScheduleModalVisible = false;
       this.init();
@@ -146,7 +146,7 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       scout_field_sch_id: scout_field_sch_id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -183,7 +183,7 @@ export class ScoutingScheduleComponent implements OnInit {
     let s = cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
     this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.currentSchedule = new Schedule();
       this.scheduleModalVisible = false;
       this.init();
@@ -196,7 +196,7 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       sch_id: sch_id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.scheduleModalVisible = false;
       this.init();
     }, (err: any) => {

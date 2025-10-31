@@ -240,7 +240,7 @@ export class SecurityComponent implements OnInit {
 
   saveScoutAuthGroups() {
     this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
     });

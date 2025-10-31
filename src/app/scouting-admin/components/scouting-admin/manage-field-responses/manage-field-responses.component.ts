@@ -77,7 +77,7 @@ export class ManageFieldResponsesComponent implements OnInit {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
         scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.getFieldResponses();
         this.activeScoutResult = null;
         this.scoutResultModalVisible = false;

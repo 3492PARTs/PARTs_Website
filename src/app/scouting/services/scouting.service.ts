@@ -628,7 +628,7 @@ export class ScoutingService {
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
@@ -860,7 +860,7 @@ export class ScoutingService {
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
 
         this.gs.incrementOutstandingCalls();
 
@@ -883,7 +883,7 @@ export class ScoutingService {
                     formData.append('img_title', pic.img_title);
 
                     this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+                      this.modalService.successfulResponseBanner(result);
                     }, (err: any) => {
                       this.modalService.triggerError(err);
                     });
@@ -1191,7 +1191,7 @@ export class ScoutingService {
       if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.removeTeamNoteResponseFromCache(id)
@@ -1297,7 +1297,7 @@ export class ScoutingService {
       fd.append('strategy', matchStrategy.strategy);
 
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.MatchStrategyResponse.RemoveAsync(id)
@@ -1391,7 +1391,7 @@ export class ScoutingService {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         resolve(true);
       }, (error) => {
         this.modalService.triggerError(error);

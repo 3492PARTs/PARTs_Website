@@ -181,7 +181,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.api.get(false, 'scouting/field/check-in/', {
         scout_field_sch_id: this.scoutFieldSchedule.id
       }, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
       });
   }
 

@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit {
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
     if (strNoE(dashboard_view.name)) {
-      this.modalService.triggerFormValidationBanner(['Name is required'], (b) => this.gs.addBanner(b));
+      this.modalService.triggerFormValidationBanner(['Name is required']);
     }
     else
       if (this.graphToAdd) {

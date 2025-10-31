@@ -108,7 +108,7 @@ export class ProfileComponent implements OnInit {
     form.append('email', this.editUser.email);
 
     this.api.put(true, 'user/profile/', form, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
 
       this.auth.getUserObject();
       this.userProfileImage = null;

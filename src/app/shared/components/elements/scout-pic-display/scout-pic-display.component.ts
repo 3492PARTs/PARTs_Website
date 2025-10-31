@@ -118,7 +118,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
       scout_pit_img_id: spi.id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {

@@ -237,9 +237,9 @@ export class ScoutingActivityComponent implements OnInit {
 
   saveUserInfo(): void {
     this.api.post(true, 'scouting/admin/scouting-user-info/', this.activeUserScoutingUserInfo, (result: any) => {
-      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
+      if (this.modalService.checkResponse(result)) {
         this.getUsersScoutingUserInfo();
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
       }
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -252,7 +252,7 @@ export class ScoutingActivityComponent implements OnInit {
         scout_field_sch_id: sfs.id,
         user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.getUsersScoutingUserInfo();
         this.ss.loadScoutingFieldSchedules().then(result => {
           this.activeUserScoutingFieldSchedule = [];

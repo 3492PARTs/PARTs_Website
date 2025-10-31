@@ -112,7 +112,7 @@ export class QuestionAdminFormComponent implements OnInit {
     }
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestion = new Question();
       this.questionModalVisible = false;
       this.questionInit();

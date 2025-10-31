@@ -68,7 +68,7 @@ export class ManageFieldFormComponent {
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.getFieldForm();
         this.previewUrl = '';
         this.uploadImageModalVisible = false;
@@ -110,7 +110,7 @@ export class ManageFieldFormComponent {
   saveFlow(): void {
     if (this.activeFlow)
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         //this.hideBox();
         if (this.activeFlow?.void_ind === 'y') {
           this.resetFlow();

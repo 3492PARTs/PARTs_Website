@@ -59,7 +59,7 @@ export class ManagePitResponsesComponent implements OnInit {
       this.api.delete(true, 'scouting/admin/delete-pit-result/', {
         scout_pit_id: this.activePitScoutResult.id
       }, (result: any) => {
-        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+        this.modalService.successfulResponseBanner(result);
         this.getPitResponses();
         this.activePitScoutResult = new ScoutPitResponse();
         this.scoutPitResultModalVisible = false;

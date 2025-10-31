@@ -62,7 +62,7 @@ export class UserService {
     this.api.delete(true, 'user/groups/', {
       group_id: group_id,
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
+      this.modalService.successfulResponseBanner(result);
       if (fn) fn();
     });
   }
