@@ -92,6 +92,7 @@ export function createMockGeneralService() {
     addSiteBanner: jasmine.createSpy('addSiteBanner'),
     removeSiteBanner: jasmine.createSpy('removeSiteBanner'),
     removeBanner: jasmine.createSpy('removeBanner'),
+    addBanner: jasmine.createSpy('addBanner'),
     siteBanners: of([]),
     currentOutstandingCalls: of(0),
     scrollPosition$: of(0),
