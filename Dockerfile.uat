@@ -37,7 +37,7 @@ RUN npm ci --prefer-offline --no-audit
 COPY . .
 
 # Build for UAT configuration
-RUN npx ng build --configuration=uat
+RUN npx ng build --configuration=uat --verbose
 
 # Stage 2: Serve app with nginx server
 FROM nginx:1.27-alpine AS runtime

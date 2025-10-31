@@ -21,7 +21,7 @@ ENV CHROME_BIN=/usr/bin/google-chrome-stable
 COPY package*.json ./
 
 # Install dependencies with clean install for reproducible builds
-RUN npm ci --prefer-offline --no-audit
+RUN npm ci --prefer-offline --no-audit --verbose
 
 # Copy application source
 COPY . .
