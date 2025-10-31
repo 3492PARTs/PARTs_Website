@@ -99,7 +99,7 @@ export class ScoutingPortalComponent implements OnInit {
             pos = 'blue three'
           }
 
-          if (!Utils.strNoE(pos)) {
+          if (!strNoE(pos)) {
             this.fieldSchedule.push({
               position: pos,
               st_time: new Date(fs.st_time),
@@ -116,10 +116,10 @@ export class ScoutingPortalComponent implements OnInit {
   }
 
   decodeSentBoolean(b: boolean): string {
-    return Utils.decodeSentBoolean(b);
+    return decodeSentBoolean(b);
   }
 
   decodeYesNoBoolean(b: boolean): string {
-    return Utils.decodeYesNoBoolean(b);
+    return decodeYesNoBoolean(b);
   }
 }

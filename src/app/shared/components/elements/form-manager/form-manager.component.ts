@@ -78,7 +78,7 @@ export class FormManagerComponent implements OnInit {
   }
 
   exportResponses(): void {
-    let csv = Utils.responsesToCSV(this.responses);
+    let csv = responsesToCSV(this.responses);
     let name = '';
     switch (this.FormTyp) {
       case 'team-cntct':
@@ -91,7 +91,7 @@ export class FormManagerComponent implements OnInit {
 
     name += this.archiveInd === 'y' ? '_Archived' : '';
 
-    if (!Utils.strNoE(csv)) Utils.downloadFileAs(`${name}.csv`, csv, 'text/csv');
+    if (!strNoE(csv)) downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
 
   switchArchiveInd(): void {

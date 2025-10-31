@@ -68,7 +68,7 @@ export class ManageFieldFormComponent {
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         this.getFieldForm();
         this.previewUrl = '';
         this.uploadImageModalVisible = false;
@@ -80,7 +80,7 @@ export class ManageFieldFormComponent {
 
   getFieldForm(): void {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
-      Utils.triggerChange(() => {
+      triggerChange(() => {
         this.fieldForm = result;
       });
     }, (err: any) => {
@@ -104,13 +104,13 @@ export class ManageFieldFormComponent {
   buildFlowOptions(): void {
     this.activeFlow = undefined;
     this.availableFlows = this.formMetadata.flows.filter(qf =>
-      (this.activeFormSubType && !Utils.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
+      (this.activeFormSubType && !strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
   saveFlow(): void {
     if (this.activeFlow)
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         //this.hideBox();
         if (this.activeFlow?.void_ind === 'y') {
           this.resetFlow();

@@ -15,7 +15,7 @@ import {
   OnChanges
 } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, cloneObject, devConsoleLog, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
@@ -135,7 +135,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     if (!this.FieldSize) this.FieldSize = 2000;
 
-    if (Utils.strNoE(this.Name) && !Utils.strNoE(this.LabelText))
+    if (strNoE(this.Name) && !strNoE(this.LabelText))
       this.Name = this.LabelText;
 
     if (this.Type === 'checkbox' && this.LabelText.toLocaleLowerCase() === 'other') {
@@ -144,7 +144,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     else if (this.Width === 'auto' && this.Type === 'number') {
       this.Width = '100px';
     }
-    //else if (this.Type === 'number' && Utils.strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
+    //else if (this.Type === 'number' && strNoE(this.Model) && this.MinValue !== null && this.MinValue !== undefined) {
     //window.setTimeout(() => { this.change(this.MinValue); }, 1);
     //}
     else if (this.Type === 'phone') {
@@ -152,7 +152,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (this.Type === 'text') {
       if (typeof this.Model === 'number' && isNaN(this.Model)) {
-        Utils.triggerChange(() => {
+        triggerChange(() => {
           this.change('');
         });
       }
@@ -228,18 +228,18 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.resizeFormElement();
 
-    Utils.triggerChange(() => this.setIndicatorPosition());
+    triggerChange(() => this.setIndicatorPosition());
   }
 
   setSelectList(sl: any): void {
     if (sl)
-      this._SelectList = Utils.cloneObject(sl);
+      this._SelectList = cloneObject(sl);
 
     if (['multiCheckbox', 'multiSelect'].includes(this.Type) && this._SelectList && this._SelectList.length > 0) {
-      let tmp = Utils.cloneObject(this._SelectList);
-      //Utils.devConsoleLog(tmp);
+      let tmp = cloneObject(this._SelectList);
+      //devConsoleLog(tmp);
       tmp.forEach((e: any) => {
-        e['checked'] = Utils.strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
+        e['checked'] = strNoE(e['checked']) ? (this.Type === 'multiSelect' ? false : '') : e['checked'];
         if (this.Model) {
           if (typeof this.Model === 'string') {
             if (e[this.DisplayProperty || ''] === 'Other') {
@@ -267,7 +267,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.multiSelectModel = tmp
     }
 
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       this.setElementPositions();
     });
   }
@@ -283,7 +283,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     }
     else if (this.Type == 'number') {
       this.Model = newValue;
-      if (!Utils.strNoE(this.Model)) {
+      if (!strNoE(this.Model)) {
         if (this.MinValue !== null && this.MinValue !== undefined) {
           this.Model = newValue >= this.MinValue ? newValue : this.MinValue;
         }
@@ -407,7 +407,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   setIndicatorPosition(): void {
-    //Utils.triggerChange(() => {
+    //triggerChange(() => {
     if (this.validationIndicator && this.validationIndicator.nativeElement) {
       if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
         if (this.label) {
@@ -492,7 +492,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           this.dropdown.nativeElement,
           'height', '0px'
         );
-        Utils.triggerChange(() => {
+        triggerChange(() => {
           if (this.dropdown)
             this.renderer.setStyle(
               this.dropdown.nativeElement,
@@ -531,7 +531,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         'height', '0px'
       );
 
-      Utils.triggerChange(() => {
+      triggerChange(() => {
         if (this.dropdown)
           this.renderer.setStyle(
             this.dropdown.nativeElement,
@@ -609,7 +609,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       */
 
       this.stopwatchSetValue();
-      Utils.triggerChange(this.stopwatchRunFunction.bind(this), 10);
+      triggerChange(this.stopwatchRunFunction.bind(this), 10);
     }
   }
 
@@ -637,7 +637,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   positionLabel(): void {
     if (this.label && this.label.nativeElement) {
-      //Utils.triggerChange(() => {
+      //triggerChange(() => {
       if (this.label && this.Type !== 'checkbox') {
         if (this.input) {
           if (this.Type === 'number') {
@@ -667,7 +667,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         if (this.formElement) {
           if (this.label.nativeElement.offsetHeight > (lineHeightParsed * amountOfLinesTilAdjust)) {
             //if (this.LabelText.includes('Lining up '))
-            //  Utils.devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            //  devConsoleLog('form element - positionLabel', 'your h1 now wrapped ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
             const labelOffset = this.label.nativeElement.offsetHeight - (lineHeightParsed / 2.0) - 3; //im hoping i can add this -2px offset to make it look a little beter 
             this.renderer.setStyle(
               this.label.nativeElement,
@@ -680,7 +680,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
           }
           else {
             //if (this.LabelText.includes('Lining up '))
-            //  Utils.devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
+            //  devConsoleLog('form element - positionLabel', 'your h1 on one line: ' + this.LabelText.substring(0, 10) + '\n' + 'offsetHeight: ' + this.label.nativeElement.offsetHeight + ' ' + lineHeightParsed);
             this.renderer.setStyle(
               this.label.nativeElement,
               'top', this.Type === 'rating' ? '-12px' : '-4px'
@@ -694,7 +694,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   strNoE(a: any): boolean {
-    return Utils.strNoE(a);
+    return strNoE(a);
   }
 
   formatPhone(value: string): string {
@@ -725,7 +725,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
     const prefix = phone.slice(3, 6);
     const suffix = phone.slice(6, 10);*/
 
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       /*this.phoneMaskModel = areaCode.length >= 1 ? '(' : '';
       this.phoneMaskModel += areaCode;
       this.phoneMaskModel += prefix.length > 0 ? ') ' : '';
@@ -733,27 +733,27 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.phoneMaskModel += suffix.length >= 1 ? '-' : '';
       this.phoneMaskModel += suffix;*/
       const val = this.formatPhone(value);
-      this.phoneMaskModel = !Utils.strNoE(val) ? val : null;
+      this.phoneMaskModel = !strNoE(val) ? val : null;
 
       if (!init) this.change(phone);
     });
   };
 
   increment(): void {
-    if (Utils.strNoE(this.Model)) this.Model = 0;
+    if (strNoE(this.Model)) this.Model = 0;
     this.Model++;
     this.change(this.Model);
   }
 
   decrement(): void {
-    if (Utils.strNoE(this.Model)) this.Model = 0;
+    if (strNoE(this.Model)) this.Model = 0;
     if (this.Model > 0) this.Model--;
     this.change(this.Model);
   }
 
   setDatePanel(): void {
     if (['date', 'datetime'].includes(this.Type))
-      if (this.PickerMode && !Utils.strNoE(this.PickerMode))
+      if (this.PickerMode && !strNoE(this.PickerMode))
         this._PickerMode = this.PickerMode;
       else
         if (this.gs.getAppSize() <= AppSize.SM)

@@ -3,7 +3,7 @@ import { Col, ScoutFieldResponsesReturn } from '@app/scouting/models/scouting.mo
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize  } from '@app/core/utils/utils.functions';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
@@ -77,7 +77,7 @@ export class ManageFieldResponsesComponent implements OnInit {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
         scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         this.getFieldResponses();
         this.activeScoutResult = null;
         this.scoutResultModalVisible = false;

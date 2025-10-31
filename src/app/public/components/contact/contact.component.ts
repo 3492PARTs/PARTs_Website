@@ -48,7 +48,7 @@ export class ContactComponent implements OnInit {
         if (r === AuthCallStates.comp) {
           let response = false;
           this.route.queryParamMap.subscribe(queryParams => {
-            if (!Utils.strNoE(queryParams.get('response_id'))) {
+            if (!strNoE(queryParams.get('response_id'))) {
               this.getResponse(queryParams.get('response_id') || '');
               response = true;
             }
@@ -61,12 +61,12 @@ export class ContactComponent implements OnInit {
   }
 
   save(): void | null {
-    this.questions.forEach(q => { q.answer = Utils.formatQuestionAnswer(q.answer) });
+    this.questions.forEach(q => { q.answer = formatQuestionAnswer(q.answer) });
     this.api.post(true, 'form/save-answers/',
       { question_answers: this.questions.map(q => new Answer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-        Utils.scrollTo(0);
+        scrollTo(0);
         this.contactInit();
       }, (err: any) => {
         this.modalService.triggerError(err);
@@ -85,7 +85,7 @@ export class ContactComponent implements OnInit {
   }
 
   export(): void {
-    Utils.downloadFileAs('TeamContact.csv', Utils.questionsToCSV(this.questions), 'text/csv');
+    downloadFileAs('TeamContact.csv', questionsToCSV(this.questions), 'text/csv');
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {

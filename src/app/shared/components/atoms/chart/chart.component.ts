@@ -24,7 +24,7 @@ export class ChartComponent implements OnInit {
   @Input() ChartType = '';
   @Input() set ChartImgUrl(s: string) {
     this.url = s;
-    Utils.triggerChange(() => this.adjustImage());
+    triggerChange(() => this.adjustImage());
   }
   @Input() XScaleMin: number | undefined = undefined;
   @Input() XScaleMax: number | undefined = undefined;
@@ -55,7 +55,7 @@ export class ChartComponent implements OnInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       this.datasetColors = {};
       let chartStatus = Chart.getChart(this.id); // <canvas> id
       if (chartStatus != undefined) {
@@ -416,7 +416,7 @@ export class ChartComponent implements OnInit {
 
     heatmaps.forEach(h => {
       if (!questions.find(q => h.question.id === q.id)) {
-        const question = Utils.cloneObject(h.question) as Question;
+        const question = cloneObject(h.question) as Question;
         question.question = question.question;
         questions.push(question);
       }

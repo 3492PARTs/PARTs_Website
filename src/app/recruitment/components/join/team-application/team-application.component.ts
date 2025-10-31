@@ -72,7 +72,7 @@ export class TeamApplicationComponent implements OnInit {
         if (r === AuthCallStates.comp) {
           let response = false;
           this.route.queryParamMap.subscribe(queryParams => {
-            if (!Utils.strNoE(queryParams.get('response_id'))) {
+            if (!strNoE(queryParams.get('response_id'))) {
               this.getResponse(queryParams.get('response_id') || '');
               response = true;
             }
@@ -85,20 +85,20 @@ export class TeamApplicationComponent implements OnInit {
   }
 
   save(): void | null {
-    let questions = Utils.cloneObject(this.questions) as FormSubTypeWrapper[];
+    let questions = cloneObject(this.questions) as FormSubTypeWrapper[];
 
     this.api.post(true, 'form/save-answers/',
       {
         question_answers: questions.map(subForm => {
           subForm.questions.forEach(q => {
-            q.answer = Utils.formatQuestionAnswer(q.answer);
+            q.answer = formatQuestionAnswer(q.answer);
           });
 
           return subForm.questions.map(q => new Answer(q.answer, q));
         }).flat(), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-        Utils.scrollTo(0);
+        scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
         this.modalService.triggerError(err);
@@ -117,7 +117,7 @@ export class TeamApplicationComponent implements OnInit {
         this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
-      Utils.devConsoleLog('team app - getResponse', this.questions);
+      devConsoleLog('team app - getResponse', this.questions);
       this.disabled = true;
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -127,7 +127,7 @@ export class TeamApplicationComponent implements OnInit {
   export(): void {
     let questions: Question[] = [];
     this.questions.forEach(fsw => fsw.questions.forEach(question => questions.push(question)));
-    Utils.downloadFileAs('TeamApplication.csv', Utils.questionsToCSV(questions), 'text/csv');
+    downloadFileAs('TeamApplication.csv', questionsToCSV(questions), 'text/csv');
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {

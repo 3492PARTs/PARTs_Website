@@ -7,7 +7,7 @@ export class RemovedFilterPipe implements PipeTransform {
     if (Property == null || !Enabled) { return ObjectArray; }
 
     return ObjectArray.filter((ObjectItem: { [x: string]: any; }) => {
-      const ret: boolean = Utils.getPropertyValue(ObjectItem, Property) === Value;
+      const ret: boolean = getPropertyValue(ObjectItem, Property) === Value;
       return ret;
     });
   }

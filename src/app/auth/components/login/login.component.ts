@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router, private modalService: ModalService) {
     /*this.route.queryParamMap.subscribe(queryParams => {
-      this.returnUrl = Utils.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.returnUrl = strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/
   }
 
@@ -46,11 +46,11 @@ export class LoginComponent implements OnInit {
     };
 
     this.route.queryParamMap.subscribe(queryParams => {
-      this.page = Utils.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
-      this.input.uuid = Utils.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
-      this.input.token = Utils.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
-      this.input.username = Utils.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
-      this.returnUrl = Utils.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.page = strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
+      this.input.uuid = strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
+      this.input.token = strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
+      this.input.username = strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
+      this.returnUrl = strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
 
     this.readRememberMe();
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword(): void | null {
-    if (Utils.strNoE(this.input.email)) {
+    if (strNoE(this.input.email)) {
       this.modalService.triggerError('Email not provided.');
       return null;
     } else {
@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit {
   }
 
   resendConfirmation() {
-    if (!Utils.strNoE(this.input.email)) {
+    if (!strNoE(this.input.email)) {
       this.authService.resendConfirmation(this.input);
       this.input = new UserData();
     } else {
@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgotUsername(): void | null {
-    if (Utils.strNoE(this.input.email)) {
+    if (strNoE(this.input.email)) {
       this.modalService.triggerError('Email not provided.');
       return null;
     } else {

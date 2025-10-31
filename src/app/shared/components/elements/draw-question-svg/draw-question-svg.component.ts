@@ -30,7 +30,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
 
   @Input() set ImageUrl(s: string) {
     this.url = s;
-    Utils.triggerChange(() => this.adjustImage(), 5);
+    triggerChange(() => this.adjustImage(), 5);
 
   }
 
@@ -247,7 +247,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   }
 
   ynToYesNo(s: string): string {
-    return Utils.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }
 

@@ -74,7 +74,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       if (result) {
         this.scoutResponseColumns = result;
 
-        this.showScoutFieldCols = Utils.cloneObject(this.scoutResponseColumns);
+        this.showScoutFieldCols = cloneObject(this.scoutResponseColumns);
 
         for (let i = 0; i < this.showScoutFieldCols.length; i++) {
           this.showScoutFieldCols[i]['checked'] = true;
@@ -82,7 +82,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
         this.showHideTableCols();
 
-        this.showScoutFieldColsList = Utils.cloneObject(this.scoutResponseColumns);
+        this.showScoutFieldColsList = cloneObject(this.scoutResponseColumns);
       }
 
       this.gs.decrementOutstandingCalls();
@@ -125,7 +125,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       csv += '\n';
     });
 
-    Utils.downloadFileAs('ScoutFieldResults.csv', csv, 'text/csv');
+    downloadFileAs('ScoutFieldResults.csv', csv, 'text/csv');
   }
 
   async getTeamInfo(row: any) {
@@ -149,7 +149,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
   }
 
   showHideTableCols(): void {
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       let tmp: object[] = [];
       for (let i = 0; i < this.showScoutFieldCols.length; i++) {
         if (this.showScoutFieldCols[i]['checked']) {
@@ -172,21 +172,21 @@ export class FieldScoutingResponsesComponent implements OnInit {
   filter(): void {
     let temp = this.scoutResponses.scoutAnswers;
 
-    if (!Utils.strNoE(this.filterTeam)) {
+    if (!strNoE(this.filterTeam)) {
       temp = temp.filter(r => r['team_id'].toString().includes(this.filterTeam));
     }
 
-    if (!Utils.strNoE(this.filterRank)) {
+    if (!strNoE(this.filterRank)) {
       for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
         temp = temp.filter(r => (this.filterAboveRank && r.rank <= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank >= (this.filterRank || 0)))
       }
     }
 
-    if (!Utils.strNoE(this.filterRankGTE)) { //get those in a range of ranks
+    if (!strNoE(this.filterRankGTE)) { //get those in a range of ranks
       temp = temp.filter(r => r.rank >= (this.filterRankGTE || 0))
     }
 
-    if (!Utils.strNoE(this.filterRankLTE)) { //get those in a range of ranks
+    if (!strNoE(this.filterRankLTE)) { //get those in a range of ranks
       temp = temp.filter(r => r.rank <= (this.filterRankLTE || 0))
     }
 

@@ -79,7 +79,7 @@ export class AuthService {
       const tmp = result as Token;
       this.tokenBS.next(tmp);
 
-      Utils.devConsoleLog('authorizeUser', 'login tokens below');
+      devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
       this.getTokenExp(tmp.refresh);
 
@@ -89,7 +89,7 @@ export class AuthService {
       await this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
-      if (Utils.strNoE(returnUrl)) {
+      if (strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       }
       else {
@@ -113,7 +113,7 @@ export class AuthService {
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
       this.refreshToken(async (result: Token) => {
-        Utils.devConsoleLog('previouslyAuthorized', 'new tokens below');
+        devConsoleLog('previouslyAuthorized', 'new tokens below');
         this.getTokenExp(result.access);
         this.getTokenExp(result.refresh);
         this.tokenBS.next(result);
@@ -151,7 +151,7 @@ export class AuthService {
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.api.post(true, 'user/profile/', userData, (result: any) => {
-      if (Utils.strNoE(returnUrl)) {
+      if (strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       } else {
         this.router.navigateByUrl(returnUrl || '');
@@ -257,21 +257,21 @@ export class AuthService {
     const d = new Date(0);
     let tokenLoad = this.getTokenLoad(tkn);
     d.setUTCSeconds(tokenLoad.exp);
-    Utils.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
+    devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
     return d;
   }
 
   isTokenExpired(tkn: string): boolean {
-    return Utils.strNoE(tkn) || this.getTokenExp(tkn) < new Date();
+    return strNoE(tkn) || this.getTokenExp(tkn) < new Date();
   }
 
   isAuthenticated(): boolean {
-    Utils.devConsoleLog('isAuthenticated', 'current access token below');
-    return !Utils.strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
+    devConsoleLog('isAuthenticated', 'current access token below');
+    return !strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
   }
 
   isSessionExpired(): boolean {
-    Utils.devConsoleLog('isSessionExpired', 'current refresh token below');
+    devConsoleLog('isSessionExpired', 'current refresh token below');
     return this.isTokenExpired(this.tokenBS.value?.refresh || '');
   }
 

@@ -74,7 +74,7 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       this.activeFlow.form_typ.form_typ = this.FormType;
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         this.activeFlow = new Flow();
         this.flowModalVisible = false;
         this.init();
@@ -91,7 +91,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   pushQuestion(): void {
-    if (this.activeFlow && !Utils.strNoE(this.question.id)) {
+    if (this.activeFlow && !strNoE(this.question.id)) {
       let qf = new FlowQuestion();
       qf.active = 'y';
       qf.flow_id = this.activeFlow.id;
@@ -121,7 +121,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   decodeBoolean(b: boolean): string {
-    return Utils.decodeYesNoBoolean(b);
+    return decodeYesNoBoolean(b);
   }
 
   decodeFlowQuestions(flowQuestions: FlowQuestion[]): string {

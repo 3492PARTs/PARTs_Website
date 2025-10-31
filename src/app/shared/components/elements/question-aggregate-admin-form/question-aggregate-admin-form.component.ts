@@ -60,7 +60,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: this.FormTyp
     }, (result: any) => {
-      if (this.modalService.checkResponse(result)) {
+      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
         this.questionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {
@@ -72,7 +72,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   getQuestionAggregateTypes(): void {
     this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
-      if (this.modalService.checkResponse(result)) {
+      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
         //console.log(result);
         this.questionAggregateTypes = result as QuestionAggregateType[];
       }
@@ -83,10 +83,10 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   getQuestionConditionTypes(): void {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      if (this.modalService.checkResponse(result)) {
+      if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
         //console.log(result);
         //this.questionConditionTypes = result;
-        Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
+        updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
       }
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -95,7 +95,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   showQuestionAggregateModal(qa?: QuestionAggregate) {
     this.questionAggregateModalVisible = true;
-    this.activeQuestionAggregate = Utils.cloneObject(qa ? qa : new QuestionAggregate());
+    this.activeQuestionAggregate = cloneObject(qa ? qa : new QuestionAggregate());
     //this.buildQuestionAggQuestionList();
   }
 
@@ -108,7 +108,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
       form_typ: this.FormTyp,
       active: 'y'
     }, (result: Question[]) => {
-      Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
+      updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
     });
   }
   /*
@@ -145,7 +145,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeQuestionAggregate, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.activeQuestionAggregate = new QuestionAggregate();
       this.questionAggregateModalVisible = false;
       this.getQuestionAggregates();
@@ -155,7 +155,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
   }
 
   decodeYesNo(s: string): string {
-    return Utils.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 
   decodeHorizontal(b: boolean): string {

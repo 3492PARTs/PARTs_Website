@@ -70,14 +70,14 @@ export class
 
   showFlowConditionModal(qc?: FlowCondition) {
     this.flowConditionModalVisible = true;
-    this.activeFlowCondition = qc ? Utils.cloneObject(qc) : new FlowCondition();
+    this.activeFlowCondition = qc ? cloneObject(qc) : new FlowCondition();
 
     this.buildFlowConditionFromLists();
     this.buildFlowConditionToLists();
   }
 
   buildFlowConditionFromLists(): void {
-    this.flowConditionQuestionFromList = Utils.cloneObject(this.flows);
+    this.flowConditionQuestionFromList = cloneObject(this.flows);
   }
 
   buildFlowConditionToLists(): void {
@@ -97,13 +97,13 @@ export class
 
       // Keep the question just selected as from out of the list
       if (this.activeFlowCondition.flow_from &&
-        !Utils.strNoE(this.activeFlowCondition.flow_from.id) &&
+        !strNoE(this.activeFlowCondition.flow_from.id) &&
         this.activeFlowCondition.flow_from.id === flow.id) {
         match = true;
       }
 
       if (this.activeFlowCondition.flow_to &&
-        !Utils.strNoE(this.activeFlowCondition.flow_to.id) &&
+        !strNoE(this.activeFlowCondition.flow_to.id) &&
         this.activeFlowCondition.flow_to.id === flow.id) {
         match = false;
       }
@@ -122,7 +122,7 @@ export class
 
   saveFlowCondition(): void {
     this.api.post(true, 'form/flow-condition/', this.activeFlowCondition, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.activeFlowCondition = new FlowCondition();
       this.flowConditionModalVisible = false;
       this.getFlows();
@@ -133,6 +133,6 @@ export class
   }
 
   decodeYesNo(s: string): string {
-    return Utils.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }

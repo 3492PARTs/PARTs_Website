@@ -15,7 +15,7 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 
   @Input() set Question(q: Question) {
     this.question = q;
-    Utils.triggerChange(() => this.setSvgAttributes());
+    triggerChange(() => this.setSvgAttributes());
   }
   @Output() QuestionChange = new EventEmitter<any>();
 

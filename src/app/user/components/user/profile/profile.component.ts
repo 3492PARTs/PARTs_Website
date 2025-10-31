@@ -70,7 +70,7 @@ export class ProfileComponent implements OnInit {
 
     this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = Utils.cloneObject(u) as User;
+      this.editUser = cloneObject(u) as User;
       console.log(this.editUser);
     });
 
@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit {
 
       form.append('image', imageFile, imageFile.name);
     }
-    else if (!Utils.strNoE(this.input.password)) {
+    else if (!strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {
@@ -106,7 +106,7 @@ export class ProfileComponent implements OnInit {
     form.append('email', this.editUser.email);
 
     this.api.put(true, 'user/profile/', form, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
 
       this.auth.getUserObject();
       this.userProfileImage = null;

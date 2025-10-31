@@ -46,7 +46,7 @@ export class NotificationsService {
       if (!this.swPush.subscription) this.requestSubscription();*/
 
       this.swPush.messages.subscribe(m => {
-        Utils.devConsoleLog('subscribeToNotifications - message', m);
+        devConsoleLog('subscribeToNotifications - message', m);
         this.getUserAlerts(false, 'notification');
       });
 
@@ -56,7 +56,7 @@ export class NotificationsService {
       });*/
 
       this.swPush.notificationClicks.subscribe(n => {
-        Utils.devConsoleLog('subscribeToNotifications - notificationClicks', n);
+        devConsoleLog('subscribeToNotifications - notificationClicks', n);
         if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
       });
     }
@@ -137,9 +137,9 @@ export class NotificationsService {
     this.api.get(true, 'alerts/dismiss/', {
       channel_send_id: a.channel_send_id.toString()
     }, (result: any) => {
-      let index = Utils.arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
+      let index = arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
       if (index >= 0) this.removeNotification(index);
-      index = Utils.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
+      index = arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
       this.getUserAlerts(true, 'notification');
       this.getUserAlerts(true, 'message');

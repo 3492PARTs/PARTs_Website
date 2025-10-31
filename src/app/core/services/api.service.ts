@@ -121,7 +121,7 @@ export class APIService {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (this.modalService.checkResponse(result)) {
+    if (this.modalService.checkResponse(result, (b) => this.gs.addBanner(b))) {
       if (onNext) onNext(result);
     }
     else

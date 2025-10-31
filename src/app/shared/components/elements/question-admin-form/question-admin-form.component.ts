@@ -3,7 +3,7 @@ import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormS
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -99,7 +99,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   showQuestionModal(q?: Question): void {
-    this.activeQuestion = q ? Utils.cloneObject(q) : new Question();
+    this.activeQuestion = q ? cloneObject(q) : new Question();
 
     this.questionModalVisible = true;
   }
@@ -113,7 +113,7 @@ export class QuestionAdminFormComponent implements OnInit {
     }
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.activeQuestion = new Question();
       this.questionModalVisible = false;
       this.questionInit();

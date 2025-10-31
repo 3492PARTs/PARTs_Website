@@ -4,7 +4,7 @@ import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardView
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { BoxComponent } from "../../atoms/box/box.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
@@ -141,7 +141,7 @@ export class DashboardComponent implements OnInit {
     this.dashboard.dashboard_views.forEach(dv => {
       if (dv.active == 'y' && (dv.teams.length > 0 || this.Teams.length > 0))
         dv.dashboard_graphs.forEach(dg => {
-          Utils.triggerChange(() => {
+          triggerChange(() => {
             this.graphTeam(dv, dg.graph_id);
           }, i * 500);
           i++;
@@ -178,15 +178,15 @@ export class DashboardComponent implements OnInit {
     this.dashboard.dashboard_views.push(dashboard_view)
     this.filterAvailableGraphs(dashboard_view);
     this.calcActiveViewCount();
-    if (!Utils.strNoE(dashboard_view.name)) {
+    if (!strNoE(dashboard_view.name)) {
       dashboard_view = undefined;
       this.saveDashboard();
     }
   }
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
-    if (Utils.strNoE(dashboard_view.name)) {
-      this.modalService.triggerFormValidationBanner(['Name is required']);
+    if (strNoE(dashboard_view.name)) {
+      this.modalService.triggerFormValidationBanner(['Name is required'], (b) => this.gs.addBanner(b));
     }
     else
       if (this.graphToAdd) {

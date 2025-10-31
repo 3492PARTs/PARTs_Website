@@ -67,7 +67,7 @@ export class GeneralService {
   }
 
   removeBanner(b: Banner): void {
-    let banners = Utils.cloneObject(this.bannersBS.value);
+    let banners = cloneObject(this.bannersBS.value);
     let index = -1;
     for (let i = 0; i < banners.length; i++) {
       if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
@@ -134,7 +134,7 @@ export class GeneralService {
   }
 
   getAppSize(): AppSize {
-    const size = Utils.getScreenSize();
+    const size = getScreenSize();
     const mobile = this.isMobile();
 
     if (!mobile)

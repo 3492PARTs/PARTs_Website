@@ -133,7 +133,7 @@ export class ScoutingScheduleComponent implements OnInit {
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
 
     this.api.post(true, 'scouting/admin/scout-field-schedule/', sfs, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
       this.scoutScheduleModalVisible = false;
       this.init();
@@ -146,7 +146,7 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       scout_field_sch_id: scout_field_sch_id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.init();
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -167,7 +167,7 @@ export class ScoutingScheduleComponent implements OnInit {
   showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
     if (s) {
       //"2020-01-01T01:00"
-      this.currentSchedule = Utils.cloneObject(s);
+      this.currentSchedule = cloneObject(s);
     }
     else {
       this.currentSchedule = new Schedule();
@@ -180,10 +180,10 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   saveScheduleEntry(): void {
-    let s = Utils.cloneObject(this.currentSchedule);
+    let s = cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
     this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.currentSchedule = new Schedule();
       this.scheduleModalVisible = false;
       this.init();
@@ -196,7 +196,7 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       sch_id: sch_id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.scheduleModalVisible = false;
       this.init();
     }, (err: any) => {
@@ -220,10 +220,10 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   decodeSentBoolean(b: boolean): string {
-    return Utils.decodeSentBoolean(b);
+    return decodeSentBoolean(b);
   }
 
   decodeYesNoBoolean(b: boolean): string {
-    return Utils.decodeYesNoBoolean(b);
+    return decodeYesNoBoolean(b);
   }
 }

@@ -83,7 +83,7 @@ export class AdminUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = Utils.cloneObject(u);
+    this.activeUser = cloneObject(u);
     this.buildAvailableUserGroups();
   }
 

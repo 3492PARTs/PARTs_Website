@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, openFullscreen } from '@app/core/utils/utils.functions';
 import { CommonModule } from '@angular/common';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
@@ -314,7 +314,7 @@ export class MatchesComponent implements OnInit {
   }
 
   openFullscreen(event: MouseEvent) {
-    Utils.openFullscreen(event);
+    openFullscreen(event);
   }
 
   toggleImageDisplay(i: number): void {

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 
 import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
   }
 
   private setScreenSize(): void {
-    this.screenSize = Utils.getScreenSize();
+    this.screenSize = getScreenSize();
   }
 
 }

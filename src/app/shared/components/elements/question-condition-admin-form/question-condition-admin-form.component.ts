@@ -81,14 +81,14 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   showQuestionConditionModal(qc?: QuestionCondition) {
     this.questionConditionModalVisible = true;
-    this.activeQuestionCondition = qc ? Utils.cloneObject(qc) : new QuestionCondition();
+    this.activeQuestionCondition = qc ? cloneObject(qc) : new QuestionCondition();
 
     this.buildQuestionConditionFromLists();
     this.buildQuestionConditionToLists();
   }
 
   buildQuestionConditionFromLists(): void {
-    this.questionConditionQuestionFromList = Utils.cloneObject(this.questions);
+    this.questionConditionQuestionFromList = cloneObject(this.questions);
   }
 
   buildQuestionConditionToLists(): void {
@@ -108,13 +108,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
       // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
-        !Utils.strNoE(this.activeQuestionCondition.question_from.id) &&
+        !strNoE(this.activeQuestionCondition.question_from.id) &&
         this.activeQuestionCondition.question_from.id === question.id) {
         match = true;
       }
 
       if (this.activeQuestionCondition.question_to &&
-        !Utils.strNoE(this.activeQuestionCondition.question_to.id) &&
+        !strNoE(this.activeQuestionCondition.question_to.id) &&
         this.activeQuestionCondition.question_to.id === question.id) {
         match = false;
       }
@@ -133,7 +133,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   saveQuestionCondition(): void {
     this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
       this.getQuestions();
@@ -144,6 +144,6 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   decodeYesNo(s: string): string {
-    return Utils.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }

@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
 
   return authService.authInFlight.pipe(skipWhile(val => val === AuthCallStates.prcs), map(val => {
-    Utils.devConsoleLog('Auth Guard is session expired below');
+    devConsoleLog('Auth Guard is session expired below');
     switch (val) {
       case AuthCallStates.comp:
         if (!authService.isSessionExpired())

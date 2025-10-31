@@ -85,7 +85,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategies(): void {
-    if (!this.activeMatchStrategy || !Utils.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy || !strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_key === this.match?.match_key);
     this.buildTeamList();
   }
@@ -98,7 +98,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategy(ms?: MatchStrategy): void {
-    this.activeMatchStrategy = ms ? Utils.cloneObject(ms) : new MatchStrategy();
+    this.activeMatchStrategy = ms ? cloneObject(ms) : new MatchStrategy();
   }
 
   setImage(f: File): void {
@@ -128,7 +128,7 @@ export class MatchPlanningComponent implements OnInit {
             if (result)
               this.matchStrategies = result;
             this.setMatchStrategies();
-            Utils.scrollTo(0);
+            scrollTo(0);
           });
         }
         this.populateOutstandingResponses();

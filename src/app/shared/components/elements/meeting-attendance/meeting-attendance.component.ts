@@ -13,7 +13,7 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService, RetMessage } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';
@@ -198,7 +198,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
-    this.attendanceEntry = attendance ? Utils.cloneObject(attendance) : new Attendance();
+    this.attendanceEntry = attendance ? cloneObject(attendance) : new Attendance();
 
     if (meeting)
       this.attendanceEntry.meeting = meeting;
@@ -361,7 +361,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showMeetingModal(meeting?: Meeting): void {
-    this.meeting = meeting ? Utils.cloneObject(meeting) : new Meeting();
+    this.meeting = meeting ? cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
 
     if (this.AdminInterface && meeting) {
@@ -444,7 +444,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   decodeYesNoBoolean(val: boolean): string {
-    return Utils.decodeYesNoBoolean(val);
+    return decodeYesNoBoolean(val);
   }
 
 }

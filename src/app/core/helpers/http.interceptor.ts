@@ -15,13 +15,13 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     const baseURL = environment.baseUrl;
 
     if (req.url.includes('user/token/refresh/')) {
-        Utils.devConsoleLog('http.interceptor.ts', 'if: refresh');
+        devConsoleLog('http.interceptor.ts', 'if: refresh');
         req = req.clone({
             url: baseURL + req.url,
         });
     }
     else if (user && token && token && !auth.isTokenExpired(token)) {
-        Utils.devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
+        devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
         req = req.clone({
             url: baseURL + req.url,
             setHeaders: {
@@ -30,7 +30,7 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
         });
     }
     else {
-        Utils.devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
+        devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
         let withCredentials = req.url.includes('user/token/refresh/');
         //console.log(req.url, withCredentials);
         req = req.clone({

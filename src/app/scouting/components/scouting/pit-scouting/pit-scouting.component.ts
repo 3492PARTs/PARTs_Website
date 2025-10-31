@@ -102,7 +102,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingForm().then(result => {
-      if (Utils.strNoE(this.scoutPitResponse.team_id)) {
+      if (strNoE(this.scoutPitResponse.team_id)) {
 
         if (result) {
           this.questions = result;
@@ -182,11 +182,11 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = Utils.cloneObject(this.questions) as Question[];
+    let scoutQuestions = cloneObject(this.questions) as Question[];
 
     scoutQuestions.forEach(el => {
-      let answer = Utils.formatQuestionAnswer(el.answer);
-      if (!Utils.strNoE(answer)) {
+      let answer = formatQuestionAnswer(el.answer);
+      if (!strNoE(answer)) {
         dirty = true;
       }
 
@@ -198,7 +198,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
           this.setNewTeam(load);
         },
         () => {
-          Utils.triggerChange(() => {
+          triggerChange(() => {
             this.scoutPitResponse.team_id = this.previouslySelectedTeam;
           });
         });
@@ -231,7 +231,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   addAutoPicture() {
     if (this.autoPic && this.autoPic.size > 0) {
-      if (!Utils.strNoE(this.autoTitle)) {
+      if (!strNoE(this.autoTitle)) {
         this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
         this.removeAutoPicture();
       }
@@ -253,17 +253,17 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   reset(): void {
     this.previouslySelectedTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
-    this.scoutPitResponse.answers = Utils.cloneObject(this.questions);
+    this.scoutPitResponse.answers = cloneObject(this.questions);
     this.formDisabled = false;
     this.previewImages = [];
-    Utils.scrollTo(0);
+    scrollTo(0);
     this.init();
   }
 
   save(spr?: ScoutPitFormResponse, id?: number): void | null {
     if (!spr) spr = this.scoutPitResponse;
 
-    if (Utils.strNoE(spr.team_id)) {
+    if (strNoE(spr.team_id)) {
       this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
       return null;
     }
@@ -279,8 +279,8 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     }
 
     this.questions.forEach(q => {
-      const quest = Utils.cloneObject(q);
-      quest.answer = Utils.formatQuestionAnswer(quest.answer);
+      const quest = cloneObject(q);
+      quest.answer = formatQuestionAnswer(quest.answer);
       spr.answers.push(new Answer(quest.answer, quest));
     }
     );
@@ -314,7 +314,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       this.formElements = fes;
     });
   }

@@ -50,7 +50,7 @@ export class PhoneTypesComponent implements OnInit {
 
   savePhoneType(): void {
     this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.getPhoneTypes();
       this.resetPhoneType();
     }, (err: any) => {

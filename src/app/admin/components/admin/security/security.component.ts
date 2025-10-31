@@ -104,15 +104,15 @@ export class SecurityComponent implements OnInit {
   }
 
   showGroupModal(group?: AuthGroup): void {
-    this.activeGroup = group ? Utils.cloneObject(group) : new AuthGroup();
+    this.activeGroup = group ? cloneObject(group) : new AuthGroup();
     this.activePermission = new AuthPermission();
     this.buildAvailablePermissions();
     this.groupModalVisible = true;
   }
 
   buildAvailablePermissions(): void {
-    let prmsns: AuthPermission[] = Utils.cloneObject(this.permissions);
-    let grpPrmsns: AuthPermission[] = Utils.cloneObject(this.activeGroup.permissions);
+    let prmsns: AuthPermission[] = cloneObject(this.permissions);
+    let grpPrmsns: AuthPermission[] = cloneObject(this.activeGroup.permissions);
 
     for (let i = 0; i < prmsns.length; i++) {
       for (let j = 0; j < grpPrmsns.length; j++) {
@@ -167,7 +167,7 @@ export class SecurityComponent implements OnInit {
   }
 
   showPermissionModal(permisson?: AuthPermission): void {
-    this.activePermission = permisson ? Utils.cloneObject(permisson) : new AuthPermission();
+    this.activePermission = permisson ? cloneObject(permisson) : new AuthPermission();
     this.permissionsModalVisible = true;
   }
 
@@ -240,14 +240,14 @@ export class SecurityComponent implements OnInit {
 
   saveScoutAuthGroups() {
     this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
     });
   }
 
   showLinkModal(link?: Link): void {
-    this.activeLink = link ? Utils.cloneObject(link) : new Link();
+    this.activeLink = link ? cloneObject(link) : new Link();
     this.linksModalVisible = true;
   }
 

@@ -128,7 +128,7 @@ export class TableComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.generateTableDisplayValues();
     this.ShowButtonColumn();
-    if (Utils.strNoE(this.TableName) && !Utils.strNoE(this.TableTitle))
+    if (strNoE(this.TableName) && !strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
     if (this.Width !== '' && this.Table) {
@@ -194,7 +194,7 @@ export class TableComponent implements OnInit, OnChanges {
   generateTableDisplayValues(): void {
     this.TableData.forEach(rec => {
       this.TableCols.forEach(col => {
-        if (Utils.strNoE(col.Type) && col.PropertyName?.includes('.')) {
+        if (strNoE(col.Type) && col.PropertyName?.includes('.')) {
           rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
         }
         else if (col.Type === 'function') {
@@ -311,11 +311,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   GetTableDisplayValue(rec: any, property: string) {
-    return Utils.getPropertyValue(rec, property);
+    return getPropertyValue(rec, property);
   }
 
   SetTableDisplayValue(rec: any, property: string, value: any) {
-    Utils.setPropertyValue(rec, property, value);
+    setPropertyValue(rec, property, value);
   }
 
   IsPropertyInColumnSettings(PropertyName: any) {
@@ -442,7 +442,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   strNoE(s: any): boolean {
-    return Utils.strNoE(s);
+    return strNoE(s);
   }
 }
 

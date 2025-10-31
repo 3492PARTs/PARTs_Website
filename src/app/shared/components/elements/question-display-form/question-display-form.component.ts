@@ -23,10 +23,10 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
     /*
     if (questions) {
       this.allQuestions = questions;
-      this.questionsWithConditions = questions.filter(q => Utils.strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
+      this.questionsWithConditions = questions.filter(q => strNoE(q.question_conditional_on)).map(q => new QuestionWithConditions(q));
 
       // Push questions into the one they are conditinoal on
-      questions.filter(q => !Utils.strNoE(q.question_conditional_on)).forEach(q => {
+      questions.filter(q => !strNoE(q.question_conditional_on)).forEach(q => {
         this.questionsWithConditions.find(qwc => qwc.question.id === q.question_conditional_on)?.conditionalQuestions.push(q);
       });
 
@@ -95,12 +95,12 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
           this.QuestionAnswers.forEach(qa => {
             // if answer is based on question
             if (qa.question) {
-              if (Utils.isQuestionConditionMet(qa.value, qa.question, q))
+              if (isQuestionConditionMet(qa.value, qa.question, q))
                 q.conditional_on_questions = [];
             }
             else
               qa.flow_answers.forEach(fa => {
-                if (fa.question && Utils.isQuestionConditionMet(fa.value, fa.question, q))
+                if (fa.question && isQuestionConditionMet(fa.value, fa.question, q))
                   q.conditional_on_questions = [];
               });
           });
@@ -149,7 +149,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
     if (qwcs) {
       let condQuests: Question[] = [];
       for (let i = 0; i < qwcs.conditionalQuestions.length; i++) {
-        if (Utils.isQuestionConditionMet(question.answer, question, qwcs.conditionalQuestions[i])) {
+        if (isQuestionConditionMet(question.answer, question, qwcs.conditionalQuestions[i])) {
           condQuests.push(qwcs.conditionalQuestions[i]);
         }
       }

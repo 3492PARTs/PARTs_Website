@@ -79,7 +79,7 @@ export class FormComponent implements OnInit {
     });*/
     let ret = this.validateAllFelids();
 
-    if (Utils.strNoE(ret)) {
+    if (strNoE(ret)) {
       this.SubmitFunction.emit();
       this.reset();
     }

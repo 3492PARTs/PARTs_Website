@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { ErrorLog, AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { Page } from '@app/core/utils/utils';
+import { Page  } from '@app/core/utils/utils.functions';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';

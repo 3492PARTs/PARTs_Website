@@ -142,7 +142,7 @@ export class ManageSeasonComponent implements OnInit {
   runScoutingReport(): void {
     this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
       //console.log(result);
-      Utils.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
+      downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
@@ -158,7 +158,7 @@ export class ManageSeasonComponent implements OnInit {
       event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.init();
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -201,7 +201,7 @@ export class ManageSeasonComponent implements OnInit {
 
   saveSeason(s: Season): void {
     this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.init();
       s = new Season();
       this.addSeasonModalVisible = false;
@@ -216,7 +216,7 @@ export class ManageSeasonComponent implements OnInit {
         this.api.delete(true, 'scouting/admin/season/', {
           season_id: this.delSeason?.toString() || ''
         }, (result: any) => {
-          this.modalService.successfulResponseBanner(result);
+          this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
           this.init();
           this.delSeason = null;
           this.delEvent = null;
@@ -231,13 +231,13 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   saveEvent(): void {
-    if (Utils.strNoE(this.newEvent.event_cd)) {
+    if (strNoE(this.newEvent.event_cd)) {
 
-      let event = Utils.cloneObject(this.newEvent);
+      let event = cloneObject(this.newEvent);
       event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
       this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         this.manageEventsModalVisible = false;
         this.init();
         this.newEvent = new Event();
@@ -260,7 +260,7 @@ export class ManageSeasonComponent implements OnInit {
         this.api.delete(true, 'scouting/admin/event/', {
           event_id: this.delEvent?.toString() || ''
         }, (result: any) => {
-          this.modalService.successfulResponseBanner(result);
+          this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
           this.delEvent = null;
           this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();
@@ -318,11 +318,11 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? Utils.cloneObject(this.removeTeamFromEventEvent.teams) : [];
+    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? cloneObject(this.removeTeamFromEventEvent.teams) : [];
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
-    let teamList = Utils.cloneObject(this.teams);
+    let teamList = cloneObject(this.teams);
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -384,6 +384,6 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getTeamsForNewMatch() {
-    this.newMatchTeams = Utils.cloneObject(this.newMatch.event.teams);
+    this.newMatchTeams = cloneObject(this.newMatch.event.teams);
   }
 }

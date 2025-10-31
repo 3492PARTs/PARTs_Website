@@ -47,7 +47,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   }
 
   setImages(): void {
-    this.ScoutPitImages = this.ScoutPitImages.filter(spi => Utils.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.ScoutPitImages = this.ScoutPitImages.filter(spi => strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
     this.preview();
   }
 
@@ -82,7 +82,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
           }
         }
 
-        if (Utils.strNoE(link)) {
+        if (strNoE(link)) {
           link = this.ScoutPitImages[0].img_url;
           this.displayPicIndex = 0;
         }
@@ -118,7 +118,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
       scout_pit_img_id: spi.id
     }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
       this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {

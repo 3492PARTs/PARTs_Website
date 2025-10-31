@@ -71,7 +71,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = Utils.cloneObject(u);
+    this.activeUser = cloneObject(u);
     this.buildAvailableUserGroups();
   }
 
@@ -110,7 +110,7 @@ export class ScoutingUsersComponent implements OnInit {
   saveUser(u?: User): void {
     if (u) this.activeUser = u;
 
-    if (Utils.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
+    if (strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
 
     this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;

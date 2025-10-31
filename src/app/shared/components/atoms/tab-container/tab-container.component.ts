@@ -45,7 +45,7 @@ export class TabContainerComponent implements AfterContentInit {
 
     window.setTimeout(() => {
       if (this.tabs.length > 0)
-        if (!Utils.strNoE(this.activeTabTitle)) this.setActiveTab(this.activeTabTitle);
+        if (!strNoE(this.activeTabTitle)) this.setActiveTab(this.activeTabTitle);
         else this.showTab(this.tabs[0]);
     }, 0);
   }

@@ -52,7 +52,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   }
 
   setFormGroup() {
-    Utils.triggerChange(() => {
+    triggerChange(() => {
       this.formElements.forEach(fe => {
         if (fe) {
           if (!this.InlineElements)

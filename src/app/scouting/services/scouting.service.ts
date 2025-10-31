@@ -628,7 +628,7 @@ export class ScoutingService {
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
 
         if (id) {
           await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
@@ -851,16 +851,16 @@ export class ScoutingService {
       spr.answers.forEach(a => {
         if (a.question) {
           a.question.answer = '';
-          a.value = Utils.formatQuestionAnswer(a.value);
+          a.value = formatQuestionAnswer(a.value);
         }
       })
       spr.form_typ = 'pit';
 
-      const sprPost = Utils.cloneObject(spr);
+      const sprPost = cloneObject(spr);
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
 
         this.gs.incrementOutstandingCalls();
 
@@ -874,7 +874,7 @@ export class ScoutingService {
               this.gs.incrementOutstandingCalls();
 
               if (pic.img)
-                Utils.resizeImageToMaxSize(pic.img).then(resizedPic => {
+                resizeImageToMaxSize(pic.img).then(resizedPic => {
                   if (resizedPic) {
                     const formData = new FormData();
                     formData.append('file', resizedPic);
@@ -883,7 +883,7 @@ export class ScoutingService {
                     formData.append('img_title', pic.img_title);
 
                     this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      this.modalService.successfulResponseBanner(result);
+                      this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
                     }, (err: any) => {
                       this.modalService.triggerError(err);
                     });
@@ -1191,7 +1191,7 @@ export class ScoutingService {
       if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
 
         if (id) {
           await this.removeTeamNoteResponseFromCache(id)
@@ -1289,7 +1289,7 @@ export class ScoutingService {
       const fd = new FormData();
       if (matchStrategy.img)
         fd.append('img', matchStrategy.img);
-      if (!Utils.strNoE(matchStrategy.id))
+      if (!strNoE(matchStrategy.id))
         fd.append('id', matchStrategy.id.toString());
 
       fd.append('match_key', matchStrategy.match?.match_key.toString() || '');
@@ -1297,7 +1297,7 @@ export class ScoutingService {
       fd.append('strategy', matchStrategy.strategy);
 
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
 
         if (id) {
           await this.cs.MatchStrategyResponse.RemoveAsync(id)
@@ -1391,7 +1391,7 @@ export class ScoutingService {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result, (b) => this.gs.addBanner(b));
         resolve(true);
       }, (error) => {
         this.modalService.triggerError(error);

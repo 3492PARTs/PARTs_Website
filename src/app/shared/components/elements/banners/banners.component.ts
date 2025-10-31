@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '@app/core/services/general.service';
-import { AppSize } from '@app/core/utils/utils';
+import { AppSize, strNoE } from '@app/core/utils/utils.functions';
 import $ from 'jquery';
 import { ModalService } from '@app/core/services/modal.service';
 import { Banner } from '@app/core/models/api.models';
@@ -80,7 +80,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   scrollEvents(scrollY: number, innerScrollElement = false): void {
     const header = document.getElementById('site-header') || new HTMLElement()
 
-    if (Utils.strNoE(this.scrollPosition.toString())) {
+    if (strNoE(this.scrollPosition.toString())) {
       // wasn't set yet
       this.scrollPosition = 0;
     }
