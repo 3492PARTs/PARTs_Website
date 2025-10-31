@@ -16,8 +16,8 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { devConsoleLog, strNoE } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -54,7 +54,7 @@ export class AuthService {
     private cs: CacheService,
     private ds: DataService,
     private ss: ScoutingService,
-    private us: UserService) {
+    private us: UserService, private modalService: ModalService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -100,7 +100,7 @@ export class AuthService {
     }, (err: any) => {
       console.log(err);
       this.authInFlightBS.next(AuthCallStates.err);
-      //ModalUtils.triggerError('Couldn\'t log in. Invalid username or password.');
+      //this.modalService.triggerError('Couldn\'t log in. Invalid username or password.');
     });
   }
 
@@ -157,7 +157,7 @@ export class AuthService {
         this.router.navigateByUrl(returnUrl || '');
       }
     }, (err: any) => {
-      ModalUtils.triggerError('Couldn\'t create user.');
+      this.modalService.triggerError('Couldn\'t create user.');
     });
   }
 
@@ -165,7 +165,7 @@ export class AuthService {
     this.api.post(true, 'user/confirm/resend/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=confirmationFinish');
     }, (err: any) => {
-      ModalUtils.triggerError('Couldn\'t request activation email.');
+      this.modalService.triggerError('Couldn\'t request activation email.');
     });
   }
 
@@ -173,7 +173,7 @@ export class AuthService {
     this.api.post(true, 'user/request-reset-password/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=resetFinish');
     }, (err: any) => {
-      ModalUtils.triggerError('Couldn\'t request password reset.');
+      this.modalService.triggerError('Couldn\'t request password reset.');
     });
   }
 
@@ -181,7 +181,7 @@ export class AuthService {
     this.api.post(true, 'user/request-username/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=forgotUsernameFinish');
     }, (err: any) => {
-      ModalUtils.triggerError('Couldn\'t request username reminder email.');
+      this.modalService.triggerError('Couldn\'t request username reminder email.');
     });
   }
 
@@ -191,7 +191,7 @@ export class AuthService {
         this.gs.addBanner(new Banner(0, 'Password reset successfully.', 10000, 3));
         this.router.navigateByUrl('login?page=login');
       }, (err: any) => {
-        ModalUtils.triggerError('Couldn\'t reset password.');
+        this.modalService.triggerError('Couldn\'t reset password.');
       }
     );
   }

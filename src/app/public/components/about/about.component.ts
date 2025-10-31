@@ -7,7 +7,7 @@ import { AppSize } from '@app/core/utils/utils';
 import { CommonModule } from '@angular/common';
 import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-about',
   imports: [

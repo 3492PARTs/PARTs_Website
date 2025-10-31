@@ -9,8 +9,8 @@ import { APIService } from '@app/core/services/api.service';
 import { CacheService } from '@app/core/services/cache.service';
 import { GeneralService } from '@app/core/services/general.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, formatQuestionAnswer, resizeImageToMaxSize, strNoE } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,7 +41,7 @@ export class ScoutingService {
 
   constructor(private api: APIService,
     private cs: CacheService,
-    private gs: GeneralService) { }
+    private gs: GeneralService, private modalService: ModalService) { }
 
   startUploadOutstandingResponsesTimeout(): void {
     if (this.outstandingResponsesTimeout != null) window.clearTimeout(this.outstandingResponsesTimeout);
@@ -83,7 +83,6 @@ export class ScoutingService {
             });
           }
         });
-
 
         if (pitUploaded) {
           if (!fieldUploaded) this.loadTeams();
@@ -629,7 +628,7 @@ export class ScoutingService {
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
@@ -644,7 +643,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          ModalUtils.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else {
@@ -682,7 +681,6 @@ export class ScoutingService {
         let page = 1;
         let count = 1;
         let ids: number[] = [];
-
 
         while (!done) {
 
@@ -862,7 +860,7 @@ export class ScoutingService {
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         this.gs.incrementOutstandingCalls();
 
@@ -885,9 +883,9 @@ export class ScoutingService {
                     formData.append('img_title', pic.img_title);
 
                     this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      ModalUtils.successfulResponseBanner(result);
+                      this.modalService.successfulResponseBanner(result);
                     }, (err: any) => {
-                      ModalUtils.triggerError(err);
+                      this.modalService.triggerError(err);
                     });
                   }
                 }).finally(() => {
@@ -1193,7 +1191,7 @@ export class ScoutingService {
       if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.removeTeamNoteResponseFromCache(id)
@@ -1208,7 +1206,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          ModalUtils.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else
@@ -1298,9 +1296,8 @@ export class ScoutingService {
       fd.append('user_id', matchStrategy.user?.id.toString() || '');
       fd.append('strategy', matchStrategy.strategy);
 
-
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.MatchStrategyResponse.RemoveAsync(id)
@@ -1315,7 +1312,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          ModalUtils.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else
@@ -1394,10 +1391,10 @@ export class ScoutingService {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         resolve(true);
       }, (error) => {
-        ModalUtils.triggerError(error);
+        this.modalService.triggerError(error);
         resolve(false);
       });
     });

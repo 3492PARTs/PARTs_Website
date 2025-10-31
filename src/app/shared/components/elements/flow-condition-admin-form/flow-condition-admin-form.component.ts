@@ -10,8 +10,8 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-flow-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
@@ -34,7 +34,7 @@ export class
   flowConditionQuestionFromList: Flow[] = [];
   flowConditionQuestionToList: Flow[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -54,7 +54,7 @@ export class
       this.buildFlowConditionFromLists();
       this.buildFlowConditionToLists();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -64,7 +64,7 @@ export class
     }, (result: any) => {
       this.flowConditions = result as FlowCondition[];
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -122,13 +122,13 @@ export class
 
   saveFlowCondition(): void {
     this.api.post(true, 'form/flow-condition/', this.activeFlowCondition, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeFlowCondition = new FlowCondition();
       this.flowConditionModalVisible = false;
       this.getFlows();
       this.getFlowConditions();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

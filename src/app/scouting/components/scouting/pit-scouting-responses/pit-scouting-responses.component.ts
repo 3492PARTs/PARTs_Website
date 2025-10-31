@@ -12,8 +12,8 @@ import { PitResultDisplayComponent } from "../../../../shared/components/element
 import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, downloadFileAs } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-pit-scouting-responses',
   imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, PitResultDisplayComponent],
@@ -29,7 +29,7 @@ export class ScoutPitResponsesComponent implements OnInit {
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService) { }
+    private ss: ScoutingService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
@@ -69,7 +69,7 @@ export class ScoutPitResponsesComponent implements OnInit {
     let export_file = this.scoutPitResults;
 
     if (export_file.length <= 0) {
-      ModalUtils.triggerError('Cannot export empty dataset. Please select some teams first.');
+      this.modalService.triggerError('Cannot export empty dataset. Please select some teams first.');
       return null;
     }
 

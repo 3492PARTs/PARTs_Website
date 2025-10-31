@@ -11,7 +11,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-manage-field-responses',
   imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
@@ -32,7 +32,7 @@ export class ManageFieldResponsesComponent implements OnInit {
 
   tableWidth = '200%';
 
-  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.setTableSize();
@@ -73,16 +73,16 @@ export class ManageFieldResponsesComponent implements OnInit {
   }
 
   deleteFieldResult(): void {
-    ModalUtils.triggerConfirm('Are you sure you want to delete this result?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
         scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.getFieldResponses();
         this.activeScoutResult = null;
         this.scoutResultModalVisible = false;
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }

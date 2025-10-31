@@ -12,8 +12,8 @@ import { ButtonComponent } from "../../../../shared/components/atoms/button/butt
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 import { Question, QuestionAggregate, Graph, GraphType, GraphQuestionType, QuestionConditionType, GraphCategory, GraphBin, GraphCategoryAttribute, GraphQuestion } from '@app/core/models/form.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, strNoE, updateTableSelectList } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-graph-admin-form',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
@@ -48,7 +48,6 @@ export class GraphAdminFormComponent implements OnInit {
   graphModalVisible = false;
   activeGraph: Graph | undefined = undefined;
 
-
   binTableCols: TableColType[] = [
     { PropertyName: 'bin', ColLabel: 'Bin', Type: 'number', Required: true },
     { PropertyName: 'width', ColLabel: 'Width', Type: 'number', Required: true },
@@ -77,7 +76,7 @@ export class GraphAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
-  constructor(private api: APIService, private authService: AuthService, private gs: GeneralService) { }
+  constructor(private api: APIService, private authService: AuthService, private gs: GeneralService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -136,7 +135,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeBin(bin: GraphBin): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(bin.id)) {
-        ModalUtils.triggerError('Can\'t delete saved bin, please mark inactive instead.');
+        this.modalService.triggerError('Can\'t delete saved bin, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -161,7 +160,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategory(category: GraphCategory): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(category.id)) {
-        ModalUtils.triggerError('Can\'t delete saved category, please mark inactive instead.');
+        this.modalService.triggerError('Can\'t delete saved category, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -190,7 +189,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategoryAttribute(category: GraphCategoryAttribute): void {
     if (this.activeCategory) {
       if (!Utils.strNoE(category.id)) {
-        ModalUtils.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
+        this.modalService.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -213,7 +212,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeGraphQuestion(graphQuestion: GraphQuestion): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(graphQuestion.id)) {
-        ModalUtils.triggerError('Can\'t delete saved question, please mark inactive instead.');
+        this.modalService.triggerError('Can\'t delete saved question, please mark inactive instead.');
       }
       else {
         let i = 0;

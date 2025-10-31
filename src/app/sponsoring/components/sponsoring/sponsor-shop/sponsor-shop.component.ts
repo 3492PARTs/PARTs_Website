@@ -15,7 +15,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
-import { Utils } from '@app/core/utils/utils';
+import { arrayObjectIndexOf, cloneObject, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-sponsor-shop',
   imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],

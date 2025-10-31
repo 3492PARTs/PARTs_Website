@@ -11,6 +11,8 @@ import { Utils, Page, AppSize } from '../utils/utils';
 import { ModalUtils } from '../utils/modal.utils';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, Page, cloneObject, getScreenSize } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -35,7 +37,6 @@ export class GeneralService {
   private gsId = 0;
 
   constructor(private router: Router, private deviceService: DeviceDetectorService, private cs: CacheService) { }
-
 
   /* Loading Screen */
   incrementOutstandingCalls() {
@@ -93,7 +94,6 @@ export class GeneralService {
       b.dismissed = true;
       this.cs.Banner.AddOrEditAsync(b);
     }
-
 
     let banners = this.siteBannersBS.value;
     let index = -1;

@@ -5,7 +5,7 @@ import { QuestionFormElementComponent } from '@app/shared/components/elements/qu
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 
-import { Utils } from '@app/core/utils/utils';
+import { triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form-element-group',
   imports: [CommonModule],

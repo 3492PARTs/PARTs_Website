@@ -7,8 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 import { APIService } from './api.service';
 import { Banner } from '../models/api.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { arrayObjectIndexOf, devConsoleLog } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -27,7 +27,7 @@ export class NotificationsService {
   constructor(private swPush: SwPush,
     private gs: GeneralService,
     private api: APIService,
-    private router: Router) { }
+    private router: Router, private modalService: ModalService) { }
 
   subscribeToNotifications() {
     if (this.swPush.isEnabled) {
@@ -144,7 +144,7 @@ export class NotificationsService {
       this.getUserAlerts(true, 'notification');
       this.getUserAlerts(true, 'message');
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 }

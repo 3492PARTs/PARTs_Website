@@ -23,7 +23,6 @@ export class SubNavigationComponent {
   page = '';
   @Input() navItems: Link[] = [];
 
-
   constructor(private ns: NavigationService) {
     this.ns.subPages.subscribe(sp => this.navItems = sp);
     this.ns.subPage.subscribe(p => this.page = p);

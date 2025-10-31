@@ -14,8 +14,8 @@ import { TableComponent, TableColType } from '@app/shared/components/atoms/table
 import { Banner } from '@app/core/models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent],
@@ -56,7 +56,7 @@ export class QuestionAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
@@ -76,7 +76,7 @@ export class QuestionAdminFormComponent implements OnInit {
       this.setQuestionTableCols();
       this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -113,12 +113,12 @@ export class QuestionAdminFormComponent implements OnInit {
     }
 
     this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestion = new Question();
       this.questionModalVisible = false;
       this.questionInit();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

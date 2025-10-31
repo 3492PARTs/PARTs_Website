@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Utils } from '@app/core/utils/utils';
 
+import { getPropertyValue } from '@app/core/utils/utils.functions';
 @Pipe({ name: 'RemovedFilterPipe', standalone: true })
 export class RemovedFilterPipe implements PipeTransform {
   transform(ObjectArray: any, Enabled: boolean = false, Property: string, Value: any = false): any {

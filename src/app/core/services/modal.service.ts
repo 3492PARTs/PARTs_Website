@@ -1,34 +1,180 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Banner } from '../models/api.models';
+import { strNoE, objectToString } from '../utils/utils.functions';
 
+/**
+ * ModalService - Service for managing modal dialogs, errors, and confirmations
+ * Following Angular best practices as an injectable service
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
+  /* Error Modal State */
+  private showErrorModalBS = new BehaviorSubject<boolean>(false);
+  showErrorModal$ = this.showErrorModalBS.asObservable();
+  private errorMessageBS = new BehaviorSubject<string>('');
+  errorMessage$ = this.errorMessageBS.asObservable();
+  errorButtonText = 'OK';
 
-  /* Modal Visible */
-  private modalVisible = new BehaviorSubject<boolean>(false);
-  currentModalVisible = this.modalVisible.asObservable();
+  /* Confirm Modal State */
+  private showConfirmModalBS = new BehaviorSubject<boolean>(false);
+  showConfirmModal$ = this.showConfirmModalBS.asObservable();
+  private confirmMessageBS = new BehaviorSubject<string>('');
+  confirmMessage$ = this.confirmMessageBS.asObservable();
+  confirmButtonText = 'OK';
+  confirmButtonCancelText = 'NO';
 
-  private modalVisibleCount = 0;
+  private confirmFx: (() => void) | undefined | null;
+  private rejectConfirmFx: (() => void) | undefined | null;
 
-  constructor() { }
-
-  setModalVisible(): void {
-    this.modalVisible.next(this.modalVisibleCount > 0);
+  /**
+   * Get current error modal visibility state
+   */
+  get showErrorModal(): boolean {
+    return this.showErrorModalBS.value;
   }
 
-  incrementModalVisibleCount(): void {
-    this.modalVisibleCount++;
-    this.setModalVisible();
+  /**
+   * Get current error message
+   */
+  get errorMessage(): string {
+    return this.errorMessageBS.value;
   }
 
-  decrementModalVisibleCount(): void {
-    if (this.modalVisibleCount > 0) this.modalVisibleCount--;
-    this.setModalVisible();
+  /**
+   * Get current confirm modal visibility state
+   */
+  get showConfirmModal(): boolean {
+    return this.showConfirmModalBS.value;
   }
 
-  getModalVisibleCount(): number {
-    return this.modalVisibleCount;
+  /**
+   * Get current confirm message
+   */
+  get confirmMessage(): string {
+    return this.confirmMessageBS.value;
+  }
+
+  /**
+   * Accept and close error modal
+   */
+  acceptError(): void {
+    this.showErrorModalBS.next(false);
+    this.errorMessageBS.next('');
+  }
+
+  /**
+   * Trigger an error modal with a message
+   */
+  triggerError(message: any): void {
+    this.showErrorModalBS.next(true);
+
+    if ('message' in message && message.message) {
+      this.errorMessageBS.next(message.message);
+    }
+    else if ('retMessage' in message && message.retMessage) {
+      this.errorMessageBS.next(message.retMessage);
+    }
+    else {
+      this.errorMessageBS.next(message);
+    }
+  }
+
+  /**
+   * Trigger a confirmation modal
+   */
+  triggerConfirm(message: string, tmpConfirmFx: () => void, tmpRejectConfirmFx?: () => void): void {
+    this.confirmMessageBS.next('');
+    this.confirmFx = null;
+    this.rejectConfirmFx = null;
+
+    this.showConfirmModalBS.next(true);
+    this.confirmMessageBS.next(message);
+
+    this.confirmFx = tmpConfirmFx;
+    this.rejectConfirmFx = tmpRejectConfirmFx;
+  }
+
+  /**
+   * Accept confirmation and execute callback
+   */
+  acceptConfirm(): void {
+    this.showConfirmModalBS.next(false);
+    if (this.confirmFx) this.confirmFx();
+  }
+
+  /**
+   * Reject confirmation and execute callback
+   */
+  rejectConfirm(): void {
+    this.showConfirmModalBS.next(false);
+    if (this.rejectConfirmFx) this.rejectConfirmFx();
+  }
+
+  /**
+   * Check API response and show banner if error
+   * @param response The API response to check
+   * @param addBannerFn Function to add a banner (from GeneralService)
+   * @returns true if response is valid, false if error
+   */
+  checkResponse(response: any, addBannerFn: (b: Banner) => void): boolean {
+    const retMessage = response as { retMessage?: string; error?: boolean; errorMessage?: string };
+    if (retMessage.retMessage && retMessage.error) {
+      const message = retMessage.errorMessage 
+        ? objectToString(JSON.parse(retMessage.errorMessage)) 
+        : retMessage.retMessage;
+      addBannerFn(new Banner(0, message, 5000));
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Show success banner from API response
+   * @param response The API response
+   * @param addBannerFn Function to add a banner (from GeneralService)
+   */
+  successfulResponseBanner(response: any, addBannerFn: (b: Banner) => void): void {
+    const message = (response as { retMessage?: string }).retMessage;
+    if (!strNoE(message)) {
+      addBannerFn(new Banner(0, message!, 3500));
+    }
+  }
+
+  /**
+   * Trigger form validation banner
+   * @param invalidFields Array of invalid field names
+   * @param addBannerFn Function to add a banner (from GeneralService)
+   */
+  triggerFormValidationBanner(invalidFields: string[], addBannerFn: (b: Banner) => void): void {
+    let ret = '';
+    invalidFields.forEach(s => {
+      ret += `&bull;  ${s} is invalid\n`;
+    });
+
+    addBannerFn(new Banner(0, ret, 3500));
+  }
+
+  /**
+   * Handle HTTP error and show error modal
+   * @param error The HTTP error
+   * @param decrementCallsFn Function to decrement outstanding calls (from GeneralService)
+   */
+  handleHTTPError(error: any, decrementCallsFn?: () => void): void {
+    let errorText = '';
+
+    if (typeof (error.error) === 'object') {
+      for (let [key, value] of Object.entries(error.error)) {
+        errorText += value + '\n';
+      }
+    }
+    else {
+      errorText = error.statusText;
+    }
+
+    this.triggerError(errorText);
+    if (decrementCallsFn) decrementCallsFn();
   }
 }

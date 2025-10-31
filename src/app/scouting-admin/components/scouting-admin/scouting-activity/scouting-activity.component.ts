@@ -14,8 +14,8 @@ import { FormElementComponent } from "../../../../shared/components/atoms/form-e
 import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeSentBoolean, formatDateString } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scouting-activity',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
@@ -57,7 +57,7 @@ export class ScoutingActivityComponent implements OnInit {
   activeUserScoutingScoutAnswers: any[] = [];
   userScoutActivityResultsTableWidth = '200%';
 
-  constructor(private api: APIService, private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) { }
+  constructor(private api: APIService, private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {
@@ -96,7 +96,7 @@ export class ScoutingActivityComponent implements OnInit {
         });
       }
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -237,22 +237,22 @@ export class ScoutingActivityComponent implements OnInit {
 
   saveUserInfo(): void {
     this.api.post(true, 'scouting/admin/scouting-user-info/', this.activeUserScoutingUserInfo, (result: any) => {
-      if (ModalUtils.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         this.getUsersScoutingUserInfo();
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
       }
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   markScoutPresent(sfs: ScoutFieldSchedule): void {
-    ModalUtils.triggerConfirm('Are you sure you want to mark this scout present?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to mark this scout present?', () => {
       this.api.get(true, 'scouting/admin/mark-scout-present/', {
         scout_field_sch_id: sfs.id,
         user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.getUsersScoutingUserInfo();
         this.ss.loadScoutingFieldSchedules().then(result => {
           this.activeUserScoutingFieldSchedule = [];
@@ -285,7 +285,7 @@ export class ScoutingActivityComponent implements OnInit {
           }
         });
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }

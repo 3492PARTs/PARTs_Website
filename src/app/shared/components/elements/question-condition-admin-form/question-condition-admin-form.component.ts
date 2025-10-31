@@ -10,8 +10,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
@@ -36,7 +36,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   questionConditionQuestionFromList: Question[] = [];
   questionConditionQuestionToList: Question[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -57,7 +57,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -67,7 +67,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     }, (result: any) => {
       this.questionConditions = result as QuestionCondition[];
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -75,7 +75,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
       this.questionConditionTypes = result;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -133,13 +133,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   saveQuestionCondition(): void {
     this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
       this.getQuestions();
       this.getQuestionConditions();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

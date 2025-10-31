@@ -20,8 +20,8 @@ import { HeaderComponent } from "../../../../shared/components/atoms/header/head
 import { QuestionFormElementComponent } from "../../../../shared/components/elements/question-form-element/question-form-element.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { arrayObjectIndexOf, cloneObject, formatQuestionAnswer, isQuestionConditionMet, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, QuestionFormElementComponent, ModalComponent],
@@ -68,7 +68,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2, private modalService: ModalService) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
@@ -167,7 +167,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   removeResult(): void {
-    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
@@ -181,7 +181,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.api.get(false, 'scouting/field/check-in/', {
         scout_field_sch_id: this.scoutFieldSchedule.id
       }, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
       });
   }
 
@@ -209,7 +209,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   setNoMatch() {
-    ModalUtils.triggerConfirm('Are you sure there is no match number?', () => {
+    this.modalService.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
       this.scoutFieldResponse.match = undefined;
       this.teams = [];
@@ -292,8 +292,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       });
 
-
-
       if (this.scoutFieldSchedule) {
         // set the selected team based on which user is assigned to which team
         if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
@@ -337,7 +335,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.init();
     };
 
-    if (confirm) ModalUtils.triggerConfirm('Do you want to reset the form?', fn);
+    if (confirm) this.modalService.triggerConfirm('Do you want to reset the form?', fn);
     else fn();
   }
 
@@ -346,7 +344,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
     if (!sfr) {
       if (Utils.strNoE(this.scoutFieldResponse.team_id)) {
-        ModalUtils.triggerError('Must select a team to scout!');
+        this.modalService.triggerError('Must select a team to scout!');
         return null;
       }
 
@@ -408,7 +406,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
 
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
-      ModalUtils.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
+      this.modalService.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
     else
       fn();
   }
@@ -439,7 +437,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // Hides current stage
       this.displayFlowStage(flow, flowQuestion.order, false);
-
 
       flow.flow_questions.sort((a, b) => {
         if (a.order > b.order) return 1;
@@ -682,7 +679,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
       else if (showFlow)
         scene = this.getFirstStage(flow.flow_questions);
-
 
       if (!Number.isNaN(scene))
         this.displayFlowStage(flow, scene, true);

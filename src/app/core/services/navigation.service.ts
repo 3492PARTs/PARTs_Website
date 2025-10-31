@@ -5,7 +5,7 @@ import { Link } from '../models/navigation.models';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
-import { Utils } from '@app/core/utils/utils';
+import { scrollTo } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })

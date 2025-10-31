@@ -13,8 +13,8 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { Link } from '@app/core/models/navigation.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-security',
   imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
@@ -63,7 +63,7 @@ export class SecurityComponent implements OnInit {
   links: Link[] = [];
   activeLink = new Link();
 
-  constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService) {
+  constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
@@ -159,7 +159,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deleteGroup(group: AuthGroup): void {
-    ModalUtils.triggerConfirm('Are you sure you would like to delete this group?', () => {
+    this.modalService.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deleteGroup(group.id, () => {
         this.resetGroup();
       });
@@ -184,7 +184,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deletePermission(prmsn: AuthPermission): void {
-    ModalUtils.triggerConfirm('Are you sure you would like to delete this group?', () => {
+    this.modalService.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deletePermission(prmsn.id, () => {
         this.resetPermission();
       });
@@ -225,7 +225,7 @@ export class SecurityComponent implements OnInit {
       this.buildAvailableScoutAuthGroups()
     }
     else
-      ModalUtils.triggerError('Cannot add empty group.');
+      this.modalService.triggerError('Cannot add empty group.');
   }
 
   removeScoutAuthGroup(ag: AuthGroup) {
@@ -240,7 +240,7 @@ export class SecurityComponent implements OnInit {
 
   saveScoutAuthGroups() {
     this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
     });
@@ -264,7 +264,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deleteLink(link: Link): void {
-    ModalUtils.triggerConfirm('Are you sure you would like to delete this link?', () => {
+    this.modalService.triggerConfirm('Are you sure you would like to delete this link?', () => {
       this.us.deleteLink(link.id, () => {
         this.resetLink();
       });

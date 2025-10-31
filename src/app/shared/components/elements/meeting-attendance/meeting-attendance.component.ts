@@ -20,9 +20,8 @@ import { UserService } from '@app/user/services/user.service';
 import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 import { environment } from '../../../../../environments/environment';
 
-
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
@@ -91,9 +90,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceModalVisible = false;
   attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
-
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
-
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService, private modalService: ModalService) {
 
   }
 
@@ -132,12 +129,12 @@ export class MeetingAttendanceComponent implements OnInit {
         a.meeting = meeting;
 
       if (this.isAttendanceApproved(a) && !a.time_out && !a.absent && a.void_ind !== 'y') {
-        ModalUtils.triggerError('Cannot approve if no time out.');
+        this.modalService.triggerError('Cannot approve if no time out.');
         return null;
       }
 
       if (a.time_out && a.time_out < a.time_out) {
-        ModalUtils.triggerError('You cannot check out before checking in.');
+        this.modalService.triggerError('You cannot check out before checking in.');
         return null;
       }
 
@@ -149,15 +146,15 @@ export class MeetingAttendanceComponent implements OnInit {
           if (a.meeting) this.getAttendance(a.meeting);
           this.attendanceModalVisible = false;
         }, (err: any) => {
-          ModalUtils.triggerError(err);
+          this.modalService.triggerError(err);
         });
     }
     else
-      ModalUtils.triggerError('No user, couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
   }
 
   removeAttendance(attendance: Attendance): void | null {
-    ModalUtils.triggerConfirm('Are you sure you want to remove this record?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
       attendance.void_ind = 'y';
       this.saveAttendance(attendance);
     });
@@ -170,7 +167,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (this.user)
         qp = { user_id: this.user.id }
       else {
-        ModalUtils.triggerError('No user, couldn\'t get attendance see a mentor.');
+        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
@@ -237,7 +234,7 @@ export class MeetingAttendanceComponent implements OnInit {
       //this.checkLocation(this.saveAttendance.bind(this, a));
     }
     else
-      ModalUtils.triggerError('Couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
   }
 
   markAbsent(meeting: Meeting): void | null {
@@ -249,7 +246,7 @@ export class MeetingAttendanceComponent implements OnInit {
       this.saveAttendance(a);
     }
     else
-      ModalUtils.triggerError('No user, couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
   }
 
   hideAbsentButton(attendance: Attendance): boolean {
@@ -338,7 +335,7 @@ export class MeetingAttendanceComponent implements OnInit {
   saveMeeting(meeting?: Meeting): void | null {
     const m = meeting ? meeting : this.meeting;
     if (m.end < m.start) {
-      ModalUtils.triggerError('Meeting end cannot be before start.');
+      this.modalService.triggerError('Meeting end cannot be before start.');
       return null;
     }
 
@@ -351,12 +348,12 @@ export class MeetingAttendanceComponent implements OnInit {
         this.getMeetings();
         this.getAttendance();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
   removeMeeting(meeting: Meeting): void | null {
-    ModalUtils.triggerConfirm('Are you sure you want to remove this record?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
       meeting.void_ind = 'y';
       this.saveMeeting(meeting);
     });
@@ -400,7 +397,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (this.user)
         qp = { user_id: this.user.id }
       else {
-        ModalUtils.triggerError('No user, couldn\'t get attendance see a mentor.');
+        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
@@ -435,7 +432,7 @@ export class MeetingAttendanceComponent implements OnInit {
         fn();
       }
       else {
-        ModalUtils.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
+        this.modalService.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
         console.log(result.errorMessage);
         this.getAttendance();
       }

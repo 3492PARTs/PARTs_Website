@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 import { AppSize } from '@app/core/utils/utils';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-home',
   imports: [CommonModule],

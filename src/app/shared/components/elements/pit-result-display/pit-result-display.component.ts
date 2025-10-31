@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-pit-result-display',
   imports: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],

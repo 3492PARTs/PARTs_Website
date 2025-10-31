@@ -13,8 +13,8 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-manage-field-form',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
@@ -45,7 +45,7 @@ export class ManageFieldFormComponent {
 
   isMobile = false;
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
@@ -68,12 +68,12 @@ export class ManageFieldFormComponent {
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.getFieldForm();
         this.previewUrl = '';
         this.uploadImageModalVisible = false;
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }
@@ -84,7 +84,7 @@ export class ManageFieldFormComponent {
         this.fieldForm = result;
       });
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
 
     this.formInit();
@@ -97,7 +97,7 @@ export class ManageFieldFormComponent {
       this.formMetadata = result;
       this.buildFlowOptions();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -110,7 +110,7 @@ export class ManageFieldFormComponent {
   saveFlow(): void {
     if (this.activeFlow)
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         //this.hideBox();
         if (this.activeFlow?.void_ind === 'y') {
           this.resetFlow();
@@ -119,7 +119,7 @@ export class ManageFieldFormComponent {
         else
           this.getFlow();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -129,7 +129,7 @@ export class ManageFieldFormComponent {
         this.resetFlow();
         this.activeFlow = result;
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }

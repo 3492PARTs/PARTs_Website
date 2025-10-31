@@ -5,7 +5,7 @@ import { FormElementGroupComponent } from "../form-element-group/form-element-gr
 import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-whiteboard',
   imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
@@ -54,7 +54,7 @@ export class WhiteboardComponent implements OnInit {
   private redoStack: ImageData[] = [];
   private currentStep = 0;
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d', { willReadFrequently: true })!;
@@ -246,7 +246,7 @@ export class WhiteboardComponent implements OnInit {
     };
 
     if (confirm)
-      ModalUtils.triggerConfirm('Are you sure you want to clear the canvas?', fn);
+      this.modalService.triggerConfirm('Are you sure you want to clear the canvas?', fn);
     else
       fn();
   }

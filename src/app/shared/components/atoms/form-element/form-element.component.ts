@@ -23,8 +23,7 @@ import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { OwlDateTimeModule, OwlNativeDateTimeModule, PickerMode } from '@danielmoncada/angular-datetime-picker';
 
-
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, cloneObject, devConsoleLog, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form-element',
   imports: [CommonModule, FormsModule, ButtonComponent, ClickInsideDirective, ClickOutsideDirective, OwlDateTimeModule, OwlNativeDateTimeModule],
@@ -272,7 +271,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
       this.setElementPositions();
     });
   }
-
 
   change(newValue: any, index = -1) {
     if (this.Type === 'checkbox' && this.LabelText.toLowerCase() !== 'other') {
@@ -657,7 +655,6 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
             );
           }
         }
-
 
         const { lineHeight } = getComputedStyle(this.label.nativeElement);
         const lineHeightParsed = parseFloat(lineHeight.split('px')[0]);

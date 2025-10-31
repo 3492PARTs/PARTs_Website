@@ -14,8 +14,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { QuestionDisplayFormComponent } from "../../../../shared/components/elements/question-display-form/question-display-form.component";
 import { Answer, Question } from '@app/core/models/form.models';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, devConsoleLog, downloadFileAs, formatQuestionAnswer, questionsToCSV, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-team-application',
   imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -49,7 +49,7 @@ export class TeamApplicationComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     this.applicationInit();
@@ -80,7 +80,7 @@ export class TeamApplicationComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -101,7 +101,7 @@ export class TeamApplicationComponent implements OnInit {
         Utils.scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -120,7 +120,7 @@ export class TeamApplicationComponent implements OnInit {
       Utils.devConsoleLog('team app - getResponse', this.questions);
       this.disabled = true;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

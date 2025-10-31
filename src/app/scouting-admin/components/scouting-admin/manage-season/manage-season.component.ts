@@ -13,8 +13,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { Page, cloneObject, downloadFileAs, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-manage-season',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
@@ -56,7 +56,6 @@ export class ManageSeasonComponent implements OnInit {
   linkTeamToEventModalVisible = false;
   removeTeamFromEventModalVisible = false;
 
-
   newMatchModalVisible = false;
   newMatch = new Match();
   newMatchSeason: Season | undefined = undefined;
@@ -65,7 +64,7 @@ export class ManageSeasonComponent implements OnInit {
 
   competitionLevels: CompetitionLevel[] = [new CompetitionLevel('qm', 'Qualifying Match'), new CompetitionLevel('qf', 'Quarter Finals'), new CompetitionLevel('sf', 'Semi Finals'), new CompetitionLevel('f', 'Finals')];
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService) { }
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -104,7 +103,7 @@ export class ManageSeasonComponent implements OnInit {
       this.syncSeasonResponse = result as RetMessage;
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -118,7 +117,7 @@ export class ManageSeasonComponent implements OnInit {
       this.init();
       this.newEvent = new Event();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -126,7 +125,7 @@ export class ManageSeasonComponent implements OnInit {
     this.api.get(true, 'tba/sync-matches/', undefined, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -136,7 +135,7 @@ export class ManageSeasonComponent implements OnInit {
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -145,13 +144,13 @@ export class ManageSeasonComponent implements OnInit {
       //console.log(result);
       Utils.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   setSeasonEvent(): void | null {
     if (!this.currentSeason.id || !this.currentEvent.id) {
-      ModalUtils.triggerError('No season or event selected.');
+      this.modalService.triggerError('No season or event selected.');
       return null;
     }
     this.api.get(true, 'scouting/admin/set-season-event/', {
@@ -159,10 +158,10 @@ export class ManageSeasonComponent implements OnInit {
       event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     }).then(() => this.saveSeason(this.currentSeason));
   }
 
@@ -202,32 +201,31 @@ export class ManageSeasonComponent implements OnInit {
 
   saveSeason(s: Season): void {
     this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.init();
       s = new Season();
       this.addSeasonModalVisible = false;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   deleteSeason(): void | null {
     if (this.delSeason) {
-      ModalUtils.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
+      this.modalService.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
         this.api.delete(true, 'scouting/admin/season/', {
           season_id: this.delSeason?.toString() || ''
         }, (result: any) => {
-          ModalUtils.successfulResponseBanner(result);
+          this.modalService.successfulResponseBanner(result);
           this.init();
           this.delSeason = null;
           this.delEvent = null;
           this.delEventList = [];
           this.removeSeasonEventModalVisible = false;
         }, (err: any) => {
-          ModalUtils.triggerError(err);
+          this.modalService.triggerError(err);
         });
       });
-
 
     }
   }
@@ -239,12 +237,12 @@ export class ManageSeasonComponent implements OnInit {
       event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
       this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.manageEventsModalVisible = false;
         this.init();
         this.newEvent = new Event();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
     else {
@@ -258,17 +256,17 @@ export class ManageSeasonComponent implements OnInit {
 
   deleteEvent(): void | null {
     if (this.delEvent)
-      ModalUtils.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
+      this.modalService.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
         this.api.delete(true, 'scouting/admin/event/', {
           event_id: this.delEvent?.toString() || ''
         }, (result: any) => {
-          ModalUtils.successfulResponseBanner(result);
+          this.modalService.successfulResponseBanner(result);
           this.delEvent = null;
           this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();
           this.init();
         }, (err: any) => {
-          ModalUtils.triggerError(err);
+          this.modalService.triggerError(err);
         });
       });
   }
@@ -287,7 +285,7 @@ export class ManageSeasonComponent implements OnInit {
       this.getAllTeams();
     }, (err: any) => {
       console.log('error', err);
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }
@@ -310,7 +308,7 @@ export class ManageSeasonComponent implements OnInit {
       this.linkTeamToEventTeams = [];
       this.eventToTeams = new EventToTeams();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -355,7 +353,7 @@ export class ManageSeasonComponent implements OnInit {
       this.removeTeamFromEventList = [];
       this.removeTeamFromEventTeams = [];
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -376,7 +374,7 @@ export class ManageSeasonComponent implements OnInit {
       this.newMatchModalVisible = false;
     }, (err: any) => {
       console.log('error', err);
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }

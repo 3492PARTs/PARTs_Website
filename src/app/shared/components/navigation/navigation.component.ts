@@ -21,7 +21,7 @@ import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-navigation',
   imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
@@ -443,7 +443,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   hideMessageModal(): void {
     this.showMessageModalVisible = false;
   }
-
 
   showUserModal(): void {
     if (this.showUserModalVisible) this.showUserModalVisible = false;

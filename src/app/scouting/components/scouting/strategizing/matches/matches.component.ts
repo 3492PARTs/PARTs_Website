@@ -19,8 +19,8 @@ import { HeaderComponent } from "../../../../../shared/components/atoms/header/h
 import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, openFullscreen } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-plan-matches',
   imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent, DashboardComponent, HeaderComponent],
@@ -58,7 +58,7 @@ export class MatchesComponent implements OnInit {
 
   initPromise: Promise<boolean> | undefined = undefined;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
     this.authService.user.subscribe(u => this.user = u);
   }
 
@@ -145,7 +145,6 @@ export class MatchesComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       });
 
-
       this.matchTeamsData = [];
       let tmp: MatchTeamData[] = [];
 
@@ -205,7 +204,7 @@ export class MatchesComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     }
     else
-      ModalUtils.triggerError('Data still loading, try again in a moment.');
+      this.modalService.triggerError('Data still loading, try again in a moment.');
   }
 
   clearResults(): void {

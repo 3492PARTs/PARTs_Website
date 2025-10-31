@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, Page, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-modal',
   imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],

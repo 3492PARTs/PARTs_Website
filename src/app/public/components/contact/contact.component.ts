@@ -12,9 +12,8 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 
-
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { downloadFileAs, formatQuestionAnswer, questionsToCSV, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-contact',
   imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -32,7 +31,7 @@ export class ContactComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     this.contactInit();
@@ -57,7 +56,7 @@ export class ContactComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -70,7 +69,7 @@ export class ContactComponent implements OnInit {
         Utils.scrollTo(0);
         this.contactInit();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -81,7 +80,7 @@ export class ContactComponent implements OnInit {
       this.questions = result as Question[];
       this.disabled = true;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

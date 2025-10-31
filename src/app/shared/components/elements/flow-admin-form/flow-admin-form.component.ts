@@ -10,8 +10,8 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { decodeBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-flow-admin-form',
   imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
@@ -41,12 +41,11 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'question.display_value', ColLabel: 'Question' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
   }
-
 
   private init(): void {
     this.api.get(true, 'form/form-editor/', {
@@ -54,7 +53,7 @@ export class FlowAdminFormComponent implements OnInit {
     }, (result: FormInitialization) => {
       this.FormMetadata = result;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
 
     this.getFlows();
@@ -67,7 +66,7 @@ export class FlowAdminFormComponent implements OnInit {
       this.flows = result;
       this.question = new Question();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -75,12 +74,12 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       this.activeFlow.form_typ.form_typ = this.FormType;
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.activeFlow = new Flow();
         this.flowModalVisible = false;
         this.init();
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }

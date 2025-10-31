@@ -3,7 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +14,7 @@ export class PwaService {
   private installEligibleBS = new BehaviorSubject<boolean>(this.installEligiblePriv);
   installEligible = this.installEligibleBS.asObservable();
 
-  constructor(private swUpdate: SwUpdate, private gs: GeneralService) {
+  constructor(private swUpdate: SwUpdate, private gs: GeneralService, private modalService: ModalService) {
     this.initPwaPrompt();
 
     if (this.swUpdate.isEnabled) {
@@ -34,7 +34,7 @@ export class PwaService {
           console.log(`Current app version: ${evt.currentVersion.hash}`);
           console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
 
-          ModalUtils.triggerConfirm('There is a new version of the site available. Would you like to refresh?', () => {
+          this.modalService.triggerConfirm('There is a new version of the site available. Would you like to refresh?', () => {
             // Reload the page to update to the latest version.
             document.location.reload();
           });

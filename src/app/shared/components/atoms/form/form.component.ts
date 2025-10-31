@@ -5,7 +5,8 @@ import { FormElementComponent } from '../form-element/form-element.component';
 import { Banner } from '@app/core/models/api.models';
 import { GeneralService } from '@app/core/services/general.service';
 import { TableComponent } from '../table/table.component';
-import { Utils } from '@app/core/utils/utils';
+
+import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form',
   imports: [FormsModule],

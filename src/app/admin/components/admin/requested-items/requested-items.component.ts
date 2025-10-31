@@ -10,7 +10,6 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
-
 @Component({
   selector: 'app-requested-items',
   imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],

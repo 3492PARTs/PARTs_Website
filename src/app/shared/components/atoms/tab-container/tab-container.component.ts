@@ -3,7 +3,7 @@ import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
-import { Utils } from '@app/core/utils/utils';
+import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-tab-container',
   imports: [CommonModule],
@@ -23,7 +23,6 @@ export class TabContainerComponent implements AfterContentInit {
     this.activeTabTitle = at;
   }
   private activeTabTitle = '';
-
 
   constructor(private gs: GeneralService) { }
 

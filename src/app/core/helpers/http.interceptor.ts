@@ -5,6 +5,7 @@ import { catchError, filter, finalize, Observable, switchMap, take, throwError }
 import { AuthService, Token } from "@app/auth/services/auth.service";
 import { Utils } from "../utils/utils";
 
+import { devConsoleLog } from '@app/core/utils/utils.functions';
 export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
     const auth = inject(AuthService);
 
@@ -12,7 +13,6 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     const user = auth.getUser();
 
     const baseURL = environment.baseUrl;
-
 
     if (req.url.includes('user/token/refresh/')) {
         Utils.devConsoleLog('http.interceptor.ts', 'if: refresh');

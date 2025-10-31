@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
 import { TooltipDirective } from '@app/shared/directives/tooltip/tooltip.directive';
 
-import { Utils } from '@app/core/utils/utils';
+import { cloneObject, triggerChange } from '@app/core/utils/utils.functions';
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
@@ -103,7 +103,6 @@ export class ChartComponent implements OnInit {
           break;
       }
 
-
       if (chartConfig)
         this.chart = new Chart(this.id, chartConfig);
     });
@@ -126,7 +125,6 @@ export class ChartComponent implements OnInit {
       this.adjustImage();
     }, 200);
   }
-
 
   private createHistogramChartConfig(histograms: Histogram[]): ChartConfiguration {
     const chartData: ChartData = {
@@ -423,7 +421,6 @@ export class ChartComponent implements OnInit {
         questions.push(question);
       }
     });
-
 
     return questions;
   }

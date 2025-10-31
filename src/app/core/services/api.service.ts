@@ -4,7 +4,7 @@ import { GeneralService } from './general.service';
 import { APIStatus, Banner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +18,7 @@ export class APIService {
 
   connectionErrorStatuses = [0, 504];
 
-  constructor(private http: HttpClient, private gs: GeneralService) {
+  constructor(private http: HttpClient, private gs: GeneralService, private modalService: ModalService) {
     this.gs.siteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
     // Bindings for app status to set banner
@@ -121,7 +121,7 @@ export class APIService {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (ModalUtils.checkResponse(result)) {
+    if (this.modalService.checkResponse(result)) {
       if (onNext) onNext(result);
     }
     else

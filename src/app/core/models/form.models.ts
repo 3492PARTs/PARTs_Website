@@ -170,12 +170,10 @@ export class FormSubType implements IFormSubType {
     order = NaN;
 }
 
-
 export class QuestionAggregateType {
     question_aggregate_typ = ''
     question_aggregate_nm = ''
 }
-
 
 export class QuestionAggregateQuestion {
     id = NaN;
@@ -317,7 +315,6 @@ export class GraphType {
     requires_graph_question_typs: GraphQuestionType[] = [];
 }
 
-
 export class GraphBin {
     id = NaN;
     graph_id = NaN;
@@ -336,7 +333,6 @@ export class GraphCategoryAttribute {
     active = 'y';
 }
 
-
 export class GraphCategory {
     id = NaN;
     graph_id = NaN;
@@ -345,7 +341,6 @@ export class GraphCategory {
     active = 'y';
     graphcategoryattribute_set: GraphCategoryAttribute[] = [];
 }
-
 
 export class GraphQuestionType {
     graph_question_typ = '';
@@ -361,7 +356,6 @@ export class GraphQuestion {
     active = 'y';
 }
 
-
 export class Graph {
     id = NaN;
     graph_typ: GraphType | undefined = undefined;
@@ -375,7 +369,6 @@ export class Graph {
     graphcategory_set: GraphCategory[] = [];
     graphquestion_set: GraphQuestion[] = [];
 }
-
 
 export class HistogramBin {
     bin = '';

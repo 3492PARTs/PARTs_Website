@@ -11,8 +11,8 @@ import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, updateTableSelectList } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-aggregate-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent],
@@ -43,7 +43,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -60,36 +60,36 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: this.FormTyp
     }, (result: any) => {
-      if (ModalUtils.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         this.questionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {
       console.log('error', err);
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }
 
   getQuestionAggregateTypes(): void {
     this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
-      if (ModalUtils.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         this.questionAggregateTypes = result as QuestionAggregateType[];
       }
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   getQuestionConditionTypes(): void {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      if (ModalUtils.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         //this.questionConditionTypes = result;
         Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
       }
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -145,12 +145,12 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeQuestionAggregate, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionAggregate = new QuestionAggregate();
       this.questionAggregateModalVisible = false;
       this.getQuestionAggregates();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

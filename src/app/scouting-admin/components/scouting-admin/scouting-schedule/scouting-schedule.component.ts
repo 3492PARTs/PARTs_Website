@@ -15,9 +15,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
-
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeSentBoolean, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scouting-schedule',
   imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent],
@@ -56,7 +55,7 @@ export class ScoutingScheduleComponent implements OnInit {
   currentSchedule = new Schedule();
   scheduleModalVisible = false;
 
-  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService, private us: UserService) { }
+  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService, private us: UserService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {
@@ -121,7 +120,7 @@ export class ScoutingScheduleComponent implements OnInit {
 
   saveScoutFieldScheduleEntry(): void | null {
     if (!this.currentEvent || this.currentEvent.id < 0) {
-      ModalUtils.triggerError('Event not set, can\'t schedule scouts.');
+      this.modalService.triggerError('Event not set, can\'t schedule scouts.');
       return null;
     }
     let sfs = JSON.parse(JSON.stringify(this.ActiveScoutFieldSchedule));
@@ -134,12 +133,12 @@ export class ScoutingScheduleComponent implements OnInit {
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
 
     this.api.post(true, 'scouting/admin/scout-field-schedule/', sfs, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
       this.scoutScheduleModalVisible = false;
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -147,10 +146,10 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       scout_field_sch_id: scout_field_sch_id
     }, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -184,12 +183,12 @@ export class ScoutingScheduleComponent implements OnInit {
     let s = Utils.cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
     this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.currentSchedule = new Schedule();
       this.scheduleModalVisible = false;
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -197,11 +196,11 @@ export class ScoutingScheduleComponent implements OnInit {
     this.api.get(true, 'scouting/admin/notify-user/', {
       sch_id: sch_id
     }, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.scheduleModalVisible = false;
       this.init();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

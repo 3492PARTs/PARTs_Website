@@ -18,8 +18,8 @@ import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.
 import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, formatQuestionAnswer, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-pit-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
@@ -59,7 +59,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     private gs: GeneralService,
     private authService: AuthService,
     private ss: ScoutingService,
-    private cs: CacheService) {
+    private cs: CacheService, private modalService: ModalService) {
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
@@ -126,7 +126,6 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
       const wasOutstanding = this.outstandingTeams.find(t => t.team_no == this.scoutPitResponse.team_id) ? true : false;
 
-
       this.outstandingTeams = teams?.filter(t => t.pit_result === 0) || [];
       if (amendWithOutstandingResponses) this.amendOutstandTeamsList();
 
@@ -134,7 +133,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
       if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
         const fn = () => { window.location.reload(); }
-        ModalUtils.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
+        this.modalService.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
       }
     }, 200);
 
@@ -172,7 +171,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   removeResult(): void {
-    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutPitFormResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
@@ -194,7 +193,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     });
 
     if (dirty) {
-      ModalUtils.triggerConfirm('Are you sure you want to clear and change teams?',
+      this.modalService.triggerConfirm('Are you sure you want to clear and change teams?',
         () => {
           this.setNewTeam(load);
         },
@@ -310,7 +309,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

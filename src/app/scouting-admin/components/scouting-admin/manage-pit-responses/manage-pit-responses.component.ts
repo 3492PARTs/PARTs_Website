@@ -11,8 +11,7 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { ScoutPicDisplayComponent } from '@app/shared/components/elements/scout-pic-display/scout-pic-display.component';
 
-
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-manage-pit-responses',
   imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
@@ -29,7 +28,7 @@ export class ManagePitResponsesComponent implements OnInit {
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResponse();
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private ss: ScoutingService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -56,16 +55,16 @@ export class ManagePitResponsesComponent implements OnInit {
   }
 
   deletePitResult(): void {
-    ModalUtils.triggerConfirm('Are you sure you want to delete this result?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-pit-result/', {
         scout_pit_id: this.activePitScoutResult.id
       }, (result: any) => {
-        ModalUtils.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.getPitResponses();
         this.activePitScoutResult = new ScoutPitResponse();
         this.scoutPitResultModalVisible = false;
       }, (err: any) => {
-        ModalUtils.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }

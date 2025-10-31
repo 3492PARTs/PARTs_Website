@@ -17,8 +17,8 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
     private api: APIService,
     private renderer: Renderer2,
     private ns: NotificationsService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private modalService: ModalService) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.activeTab = queryParams.get('tab') || '';
     });
@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {
-        ModalUtils.triggerError('Passwords do not match.');
+        this.modalService.triggerError('Passwords do not match.');
         return null;
       }
     }
@@ -105,15 +105,14 @@ export class ProfileComponent implements OnInit {
     form.append('last_name', this.editUser.last_name);
     form.append('email', this.editUser.email);
 
-
     this.api.put(true, 'user/profile/', form, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
 
       this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

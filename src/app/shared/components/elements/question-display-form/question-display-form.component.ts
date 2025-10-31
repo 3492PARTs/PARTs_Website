@@ -5,8 +5,7 @@ import { GeneralService } from '@app/core/services/general.service';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 import { QuestionFormElementComponent } from '../question-form-element/question-form-element.component';
 
-
-import { Utils } from '@app/core/utils/utils';
+import { isQuestionConditionMet, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-display-form',
   imports: [FormElementGroupComponent, QuestionFormElementComponent],
@@ -49,7 +48,6 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   @Output() QuestionsChange: EventEmitter<Question[]> = new EventEmitter();
   allQuestions: Question[] = [];
   questionsWithConditions: QuestionWithConditions[] = [];
-
 
   @Input() QuestionAnswers: Answer[] = [];
 

@@ -7,8 +7,8 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 
 import { HeaderComponent } from "../../atoms/header/header.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scout-pic-display',
   imports: [ButtonComponent, HeaderComponent],
@@ -26,7 +26,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
 
   elementId = '';
 
-  constructor(private gs: GeneralService, private api: APIService) { }
+  constructor(private gs: GeneralService, private api: APIService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.elementId = this.gs.getNextGsId();
@@ -88,7 +88,6 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
         }
       }
 
-
       LoadImg(
         link,
         (img: any) => {
@@ -119,11 +118,11 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
       scout_pit_img_id: spi.id
     }, (result: any) => {
-      ModalUtils.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {
-      ModalUtils.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 }

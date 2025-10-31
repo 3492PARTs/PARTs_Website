@@ -16,8 +16,8 @@ import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, downloadFileAs, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting-responses',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
@@ -50,7 +50,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService) { }
+    private ss: ScoutingService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
@@ -105,7 +105,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
     export_file = this.scoutResponses;
 
     if (export_file.scoutAnswers.length <= 0) {
-      ModalUtils.triggerError('Cannot export empty dataset.');
+      this.modalService.triggerError('Cannot export empty dataset.');
       return;
     }
 

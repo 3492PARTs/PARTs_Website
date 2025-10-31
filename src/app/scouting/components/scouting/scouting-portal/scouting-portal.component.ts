@@ -11,7 +11,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 import { ScoutFieldSchedule, Schedule } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-import { Utils } from '@app/core/utils/utils';
+import { decodeSentBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scouting-portal',
   imports: [BoxComponent, TableComponent, FormElementGroupComponent],
@@ -23,7 +23,6 @@ export class ScoutingPortalComponent implements OnInit {
   //userPermissions: AuthPermission[] = [];
 
   fullFieldSchedule: ScoutFieldSchedule[] = [];
-
 
   schedule: Schedule[] = [];
   fieldSchedule: {

@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 
-import { Utils } from '@app/core/utils/utils';
+import { AppSize, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-banners',
   imports: [CommonModule, ButtonComponent, BoxComponent],

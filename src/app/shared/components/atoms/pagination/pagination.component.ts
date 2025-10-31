@@ -27,8 +27,6 @@ export class PaginationComponent implements OnInit {
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 
-
-
   constructor() { }
 
   ngOnInit() {

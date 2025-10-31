@@ -10,8 +10,8 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
 
-import { Utils } from '@app/core/utils/utils';
-import { ModalUtils } from '@app/core/utils/modal.utils';
+import { ModalService } from '@app/core/services/modal.service';
+import { Page, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   newUser: RegisterUser = new RegisterUser();
   rememberMe = false;
 
-  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router) {
+  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router, private modalService: ModalService) {
     /*this.route.queryParamMap.subscribe(queryParams => {
       this.returnUrl = Utils.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
 
   resetPassword(): void | null {
     if (Utils.strNoE(this.input.email)) {
-      ModalUtils.triggerError('Email not provided.');
+      this.modalService.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.requestResetPassword(this.input);
@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit {
       this.authService.resetPassword(this.input);
       this.input = new UserData();
     } else {
-      ModalUtils.triggerError('Passwords do not match.');
+      this.modalService.triggerError('Passwords do not match.');
     }
   }
 
@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit {
       this.authService.resendConfirmation(this.input);
       this.input = new UserData();
     } else {
-      ModalUtils.triggerError('Email address is required.');
+      this.modalService.triggerError('Email address is required.');
     }
   }
 
@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit {
 
   forgotUsername(): void | null {
     if (Utils.strNoE(this.input.email)) {
-      ModalUtils.triggerError('Email not provided.');
+      this.modalService.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.forgotUsername(this.input);

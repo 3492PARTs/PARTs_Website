@@ -4,7 +4,7 @@ import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
-import { Utils } from '@app/core/utils/utils';
+import { triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-display-question-svg',
   imports: [SafeHTMLPipe, CommonModule],
