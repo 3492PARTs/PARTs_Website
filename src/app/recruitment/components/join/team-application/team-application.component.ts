@@ -15,6 +15,7 @@ import { QuestionDisplayFormComponent } from "../../../../shared/components/elem
 import { Answer, Question } from '@app/core/models/form.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-team-application',
   imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -79,7 +80,7 @@ export class TeamApplicationComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -100,7 +101,7 @@ export class TeamApplicationComponent implements OnInit {
         Utils.scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
   }
 
@@ -119,7 +120,7 @@ export class TeamApplicationComponent implements OnInit {
       Utils.devConsoleLog('team app - getResponse', this.questions);
       this.disabled = true;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

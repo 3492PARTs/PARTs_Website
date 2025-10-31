@@ -10,6 +10,7 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-phone-types',
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
@@ -50,23 +51,23 @@ export class PhoneTypesComponent implements OnInit {
 
   savePhoneType(): void {
     this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.getPhoneTypes();
       this.resetPhoneType();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
   deletePhoneType(): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this phone type?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to delete this phone type?', () => {
       this.api.delete(true, 'admin/phone-type/', {
         phone_type_id: this.activePhoneType.id
       }, (result: any) => {
         this.resetPhoneType();
         this.getPhoneTypes();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }

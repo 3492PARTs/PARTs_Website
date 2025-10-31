@@ -8,6 +8,7 @@ import { APIService } from './api.service';
 import { Banner } from '../models/api.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -143,7 +144,7 @@ export class NotificationsService {
       this.getUserAlerts(true, 'notification');
       this.getUserAlerts(true, 'message');
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 }

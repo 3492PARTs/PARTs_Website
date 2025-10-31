@@ -12,6 +12,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ScoutPicDisplayComponent } from '@app/shared/components/elements/scout-pic-display/scout-pic-display.component';
 
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-manage-pit-responses',
   imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
@@ -55,16 +56,16 @@ export class ManagePitResponsesComponent implements OnInit {
   }
 
   deletePitResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-pit-result/', {
         scout_pit_id: this.activePitScoutResult.id
       }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         this.getPitResponses();
         this.activePitScoutResult = new ScoutPitResponse();
         this.scoutPitResultModalVisible = false;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }

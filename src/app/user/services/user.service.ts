@@ -6,6 +6,7 @@ import { PhoneType } from '@app/auth/services/auth.service';
 import { Banner } from '@app/core/models/api.models';
 import { Link } from '@app/core/models/navigation.models';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -61,7 +62,7 @@ export class UserService {
     this.api.delete(true, 'user/groups/', {
       group_id: group_id,
     }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       if (fn) fn();
     });
   }

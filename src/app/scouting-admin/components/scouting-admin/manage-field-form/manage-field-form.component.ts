@@ -14,6 +14,7 @@ import { DrawQuestionSvgComponent } from "../../../../shared/components/elements
 import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-manage-field-form',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
@@ -67,12 +68,12 @@ export class ManageFieldFormComponent {
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         this.getFieldForm();
         this.previewUrl = '';
         this.uploadImageModalVisible = false;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     }
   }
@@ -83,7 +84,7 @@ export class ManageFieldFormComponent {
         this.fieldForm = result;
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
 
     this.formInit();
@@ -96,7 +97,7 @@ export class ManageFieldFormComponent {
       this.formMetadata = result;
       this.buildFlowOptions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -109,7 +110,7 @@ export class ManageFieldFormComponent {
   saveFlow(): void {
     if (this.activeFlow)
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         //this.hideBox();
         if (this.activeFlow?.void_ind === 'y') {
           this.resetFlow();
@@ -118,7 +119,7 @@ export class ManageFieldFormComponent {
         else
           this.getFlow();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
   }
 
@@ -128,7 +129,7 @@ export class ManageFieldFormComponent {
         this.resetFlow();
         this.activeFlow = result;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     }
   }

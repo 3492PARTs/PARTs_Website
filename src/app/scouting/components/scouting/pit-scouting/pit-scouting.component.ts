@@ -19,6 +19,7 @@ import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scout
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-pit-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
@@ -133,7 +134,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
       if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
         const fn = () => { window.location.reload(); }
-        this.gs.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
+        ModalUtils.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
       }
     }, 200);
 
@@ -171,7 +172,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutPitFormResponse.RemoveAsync(this.scoutPitResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
@@ -193,7 +194,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     });
 
     if (dirty) {
-      this.gs.triggerConfirm('Are you sure you want to clear and change teams?',
+      ModalUtils.triggerConfirm('Are you sure you want to clear and change teams?',
         () => {
           this.setNewTeam(load);
         },
@@ -309,7 +310,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.scoutPitResponse.response_id = result['response_id'] as number;
       this.previewImages = result['pics'] as ScoutPitImage[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

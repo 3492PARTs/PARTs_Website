@@ -21,6 +21,7 @@ import { QuestionFormElementComponent } from "../../../../shared/components/elem
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-field-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, QuestionFormElementComponent, ModalComponent],
@@ -166,7 +167,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
@@ -180,7 +181,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.api.get(false, 'scouting/field/check-in/', {
         scout_field_sch_id: this.scoutFieldSchedule.id
       }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
       });
   }
 
@@ -208,7 +209,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   setNoMatch() {
-    this.gs.triggerConfirm('Are you sure there is no match number?', () => {
+    ModalUtils.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
       this.scoutFieldResponse.match = undefined;
       this.teams = [];
@@ -336,7 +337,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.init();
     };
 
-    if (confirm) this.gs.triggerConfirm('Do you want to reset the form?', fn);
+    if (confirm) ModalUtils.triggerConfirm('Do you want to reset the form?', fn);
     else fn();
   }
 
@@ -345,7 +346,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
     if (!sfr) {
       if (Utils.strNoE(this.scoutFieldResponse.team_id)) {
-        this.gs.triggerError('Must select a team to scout!');
+        ModalUtils.triggerError('Must select a team to scout!');
         return null;
       }
 
@@ -407,7 +408,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
 
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
-      this.gs.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
+      ModalUtils.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
     else
       fn();
   }

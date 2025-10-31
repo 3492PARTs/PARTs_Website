@@ -4,6 +4,7 @@ import { GeneralService } from './general.service';
 import { APIStatus, Banner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -120,7 +121,7 @@ export class APIService {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (this.gs.checkResponse(result)) {
+    if (ModalUtils.checkResponse(result)) {
       if (onNext) onNext(result);
     }
     else

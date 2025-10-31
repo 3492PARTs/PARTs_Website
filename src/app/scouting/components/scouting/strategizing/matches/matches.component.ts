@@ -20,6 +20,7 @@ import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote }
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-plan-matches',
   imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent, DashboardComponent, HeaderComponent],
@@ -204,7 +205,7 @@ export class MatchesComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     }
     else
-      this.gs.triggerError('Data still loading, try again in a moment.');
+      ModalUtils.triggerError('Data still loading, try again in a moment.');
   }
 
   clearResults(): void {

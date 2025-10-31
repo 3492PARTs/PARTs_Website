@@ -8,6 +8,7 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
@@ -172,7 +173,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       </svg>
     `
     if (svg.length > 2000) {
-      this.gs.triggerError('Path too complicated, simplify please.');
+      ModalUtils.triggerError('Path too complicated, simplify please.');
       return '';
     }
     else

@@ -3,6 +3,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { BehaviorSubject } from 'rxjs';
 import { GeneralService } from './general.service';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +34,7 @@ export class PwaService {
           console.log(`Current app version: ${evt.currentVersion.hash}`);
           console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
 
-          this.gs.triggerConfirm('There is a new version of the site available. Would you like to refresh?', () => {
+          ModalUtils.triggerConfirm('There is a new version of the site available. Would you like to refresh?', () => {
             // Reload the page to update to the latest version.
             document.location.reload();
           });

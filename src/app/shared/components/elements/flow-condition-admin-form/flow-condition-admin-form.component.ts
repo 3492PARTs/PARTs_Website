@@ -11,6 +11,7 @@ import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.c
 import { ButtonComponent } from "../../atoms/button/button.component";
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-flow-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
@@ -53,7 +54,7 @@ export class
       this.buildFlowConditionFromLists();
       this.buildFlowConditionToLists();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -63,7 +64,7 @@ export class
     }, (result: any) => {
       this.flowConditions = result as FlowCondition[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -121,13 +122,13 @@ export class
 
   saveFlowCondition(): void {
     this.api.post(true, 'form/flow-condition/', this.activeFlowCondition, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.activeFlowCondition = new FlowCondition();
       this.flowConditionModalVisible = false;
       this.getFlows();
       this.getFlowConditions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

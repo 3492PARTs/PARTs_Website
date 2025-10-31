@@ -5,6 +5,7 @@ import { FormElementGroupComponent } from "../form-element-group/form-element-gr
 import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-whiteboard',
   imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
@@ -245,7 +246,7 @@ export class WhiteboardComponent implements OnInit {
     };
 
     if (confirm)
-      this.gs.triggerConfirm('Are you sure you want to clear the canvas?', fn);
+      ModalUtils.triggerConfirm('Are you sure you want to clear the canvas?', fn);
     else
       fn();
   }

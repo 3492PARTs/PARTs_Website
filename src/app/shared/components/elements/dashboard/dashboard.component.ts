@@ -18,6 +18,7 @@ import { ChartComponent } from "../../atoms/chart/chart.component";
 import { CommonModule } from '@angular/common';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, BoxComponent, ButtonComponent, ButtonRibbonComponent, FormElementComponent, ModalComponent, FormComponent, HeaderComponent, LoadingComponent, ChartComponent],
@@ -185,7 +186,7 @@ export class DashboardComponent implements OnInit {
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
     if (Utils.strNoE(dashboard_view.name)) {
-      this.gs.triggerFormValidationBanner(['Name is required']);
+      ModalUtils.triggerFormValidationBanner(['Name is required']);
     }
     else
       if (this.graphToAdd) {
@@ -245,7 +246,7 @@ export class DashboardComponent implements OnInit {
   }
 
   removeGraph(rec: DashboardGraph): void {
-    this.gs.triggerConfirm('Do you want to remove this chart?', () => {
+    ModalUtils.triggerConfirm('Do you want to remove this chart?', () => {
       rec.active = 'n';
       this.saveDashboard();
       this.getGraphs();
@@ -283,7 +284,7 @@ export class DashboardComponent implements OnInit {
   }
 
   removeView(rec: DashboardView): void {
-    this.gs.triggerConfirm('Do you want to remove this view?', () => {
+    ModalUtils.triggerConfirm('Do you want to remove this view?', () => {
       rec.active = 'n';
       this.saveDashboard();
       this.getGraphs();

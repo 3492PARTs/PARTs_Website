@@ -25,36 +25,6 @@ export class GeneralService {
   scrollPosition$ = this.scrollPosition.asObservable();
   private internalScrollPosition = 0;
 
-  /* Error Handling - delegated to ModalUtils */
-  get showErrorModal(): boolean {
-    return ModalUtils.showErrorModal;
-  }
-  
-  get errorMessage(): string {
-    return ModalUtils.errorMessage;
-  }
-  
-  get errorButtonText(): string {
-    return ModalUtils.errorButtonText;
-  }
-
-  /* Confirm Handling - delegated to ModalUtils */
-  get showConfirmModal(): boolean {
-    return ModalUtils.showConfirmModal;
-  }
-  
-  get confirmMessage(): string {
-    return ModalUtils.confirmMessage;
-  }
-  
-  get confirmButtonText(): string {
-    return ModalUtils.confirmButtonText;
-  }
-  
-  get confirmButtonCancelText(): string {
-    return ModalUtils.confirmButtonCancelText;
-  }
-
   /* Site Banners */
   private bannersBS = new BehaviorSubject<Banner[]>([]);
   banners = this.bannersBS.asObservable();
@@ -155,43 +125,6 @@ export class GeneralService {
     return await this.cs.Banner.getById(id)
   }
 
-  /* Error and Confirm dialogs - delegated to ModalUtils */
-  triggerFormValidationBanner(ss: string[]): void {
-    ModalUtils.triggerFormValidationBanner(ss, (b: Banner) => this.addBanner(b));
-  }
-
-  acceptError() {
-    ModalUtils.acceptError();
-  }
-
-  triggerError(message: any) {
-    ModalUtils.triggerError(message);
-  }
-
-  checkResponse(response: any): boolean {
-    return ModalUtils.checkResponse(response, (b: Banner) => this.addBanner(b));
-  }
-
-  successfulResponseBanner(response: any) {
-    ModalUtils.successfulResponseBanner(response, (b: Banner) => this.addBanner(b));
-  }
-
-  handelHTTPError(error: HttpErrorResponse) {
-    ModalUtils.handleHTTPError(error, () => this.decrementOutstandingCalls());
-  }
-
-  triggerConfirm(message: string, tmpConfirmFx: () => void, tmpRejectConfirmFx?: () => void) {
-    ModalUtils.triggerConfirm(message, tmpConfirmFx, tmpRejectConfirmFx);
-  }
-
-  acceptConfirm() {
-    ModalUtils.acceptConfirm();
-  }
-
-  rejectConfirm() {
-    ModalUtils.rejectConfirm();
-  }
-
   getNextGsId(): string {
     return 'gsID' + this.gsId++;
   }
@@ -254,10 +187,6 @@ export class GeneralService {
 
   navigateByUrl(s: string) {
     this.router.navigateByUrl(s);
-  }
-
-  tableToCSV(tableCols: any[], tableData: any[]): string {
-    return Utils.tableToCSV(tableCols, tableData, (msg: string) => this.triggerError(msg));
   }
 }
 

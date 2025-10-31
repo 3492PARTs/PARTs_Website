@@ -10,6 +10,7 @@ import { CacheService } from '@app/core/services/cache.service';
 import { GeneralService } from '@app/core/services/general.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -628,7 +629,7 @@ export class ScoutingService {
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
@@ -643,7 +644,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          ModalUtils.triggerError(reason);
           resolve(false);
         });
         else {
@@ -861,7 +862,7 @@ export class ScoutingService {
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
 
         this.gs.incrementOutstandingCalls();
 
@@ -884,9 +885,9 @@ export class ScoutingService {
                     formData.append('img_title', pic.img_title);
 
                     this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      this.gs.successfulResponseBanner(result);
+                      ModalUtils.successfulResponseBanner(result);
                     }, (err: any) => {
-                      this.gs.triggerError(err);
+                      ModalUtils.triggerError(err);
                     });
                   }
                 }).finally(() => {
@@ -1192,7 +1193,7 @@ export class ScoutingService {
       if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
 
         if (id) {
           await this.removeTeamNoteResponseFromCache(id)
@@ -1207,7 +1208,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          ModalUtils.triggerError(reason);
           resolve(false);
         });
         else
@@ -1299,7 +1300,7 @@ export class ScoutingService {
 
 
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.MatchStrategyResponse.RemoveAsync(id)
@@ -1314,7 +1315,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          ModalUtils.triggerError(reason);
           resolve(false);
         });
         else
@@ -1393,10 +1394,10 @@ export class ScoutingService {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         resolve(true);
       }, (error) => {
-        this.gs.triggerError(error);
+        ModalUtils.triggerError(error);
         resolve(false);
       });
     });

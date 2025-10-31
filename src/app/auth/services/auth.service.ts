@@ -17,6 +17,7 @@ import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -99,7 +100,7 @@ export class AuthService {
     }, (err: any) => {
       console.log(err);
       this.authInFlightBS.next(AuthCallStates.err);
-      //this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
+      //ModalUtils.triggerError('Couldn\'t log in. Invalid username or password.');
     });
   }
 
@@ -156,7 +157,7 @@ export class AuthService {
         this.router.navigateByUrl(returnUrl || '');
       }
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t create user.');
+      ModalUtils.triggerError('Couldn\'t create user.');
     });
   }
 
@@ -164,7 +165,7 @@ export class AuthService {
     this.api.post(true, 'user/confirm/resend/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=confirmationFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request activation email.');
+      ModalUtils.triggerError('Couldn\'t request activation email.');
     });
   }
 
@@ -172,7 +173,7 @@ export class AuthService {
     this.api.post(true, 'user/request-reset-password/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=resetFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request password reset.');
+      ModalUtils.triggerError('Couldn\'t request password reset.');
     });
   }
 
@@ -180,7 +181,7 @@ export class AuthService {
     this.api.post(true, 'user/request-username/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=forgotUsernameFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request username reminder email.');
+      ModalUtils.triggerError('Couldn\'t request username reminder email.');
     });
   }
 
@@ -190,7 +191,7 @@ export class AuthService {
         this.gs.addBanner(new Banner(0, 'Password reset successfully.', 10000, 3));
         this.router.navigateByUrl('login?page=login');
       }, (err: any) => {
-        this.gs.triggerError('Couldn\'t reset password.');
+        ModalUtils.triggerError('Couldn\'t reset password.');
       }
     );
   }

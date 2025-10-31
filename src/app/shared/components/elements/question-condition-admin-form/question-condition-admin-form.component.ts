@@ -11,6 +11,7 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-question-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
@@ -56,7 +57,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -66,7 +67,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     }, (result: any) => {
       this.questionConditions = result as QuestionCondition[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -74,7 +75,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
       this.questionConditionTypes = result;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -132,13 +133,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   saveQuestionCondition(): void {
     this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
       this.getQuestions();
       this.getQuestionConditions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

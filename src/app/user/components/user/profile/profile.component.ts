@@ -18,6 +18,7 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
@@ -96,7 +97,7 @@ export class ProfileComponent implements OnInit {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {
-        this.gs.triggerError('Passwords do not match.');
+        ModalUtils.triggerError('Passwords do not match.');
         return null;
       }
     }
@@ -106,13 +107,13 @@ export class ProfileComponent implements OnInit {
 
 
     this.api.put(true, 'user/profile/', form, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
 
       this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

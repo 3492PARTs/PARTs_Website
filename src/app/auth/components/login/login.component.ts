@@ -11,6 +11,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { CommonModule } from '@angular/common';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
@@ -75,7 +76,7 @@ export class LoginComponent implements OnInit {
 
   resetPassword(): void | null {
     if (Utils.strNoE(this.input.email)) {
-      this.gs.triggerError('Email not provided.');
+      ModalUtils.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.requestResetPassword(this.input);
@@ -90,7 +91,7 @@ export class LoginComponent implements OnInit {
       this.authService.resetPassword(this.input);
       this.input = new UserData();
     } else {
-      this.gs.triggerError('Passwords do not match.');
+      ModalUtils.triggerError('Passwords do not match.');
     }
   }
 
@@ -99,7 +100,7 @@ export class LoginComponent implements OnInit {
       this.authService.resendConfirmation(this.input);
       this.input = new UserData();
     } else {
-      this.gs.triggerError('Email address is required.');
+      ModalUtils.triggerError('Email address is required.');
     }
   }
 
@@ -110,7 +111,7 @@ export class LoginComponent implements OnInit {
 
   forgotUsername(): void | null {
     if (Utils.strNoE(this.input.email)) {
-      this.gs.triggerError('Email not provided.');
+      ModalUtils.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.forgotUsername(this.input);

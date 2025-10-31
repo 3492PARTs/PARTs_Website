@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from "../../../../shared/components/atoms/butto
 import { Question, QuestionAggregate, Graph, GraphType, GraphQuestionType, QuestionConditionType, GraphCategory, GraphBin, GraphCategoryAttribute, GraphQuestion } from '@app/core/models/form.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-graph-admin-form',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
@@ -135,7 +136,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeBin(bin: GraphBin): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(bin.id)) {
-        this.gs.triggerError('Can\'t delete saved bin, please mark inactive instead.');
+        ModalUtils.triggerError('Can\'t delete saved bin, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -160,7 +161,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategory(category: GraphCategory): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(category.id)) {
-        this.gs.triggerError('Can\'t delete saved category, please mark inactive instead.');
+        ModalUtils.triggerError('Can\'t delete saved category, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -189,7 +190,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategoryAttribute(category: GraphCategoryAttribute): void {
     if (this.activeCategory) {
       if (!Utils.strNoE(category.id)) {
-        this.gs.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
+        ModalUtils.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
       }
       else {
         let i = 0;
@@ -212,7 +213,7 @@ export class GraphAdminFormComponent implements OnInit {
   removeGraphQuestion(graphQuestion: GraphQuestion): void {
     if (this.activeGraph) {
       if (!Utils.strNoE(graphQuestion.id)) {
-        this.gs.triggerError('Can\'t delete saved question, please mark inactive instead.');
+        ModalUtils.triggerError('Can\'t delete saved question, please mark inactive instead.');
       }
       else {
         let i = 0;

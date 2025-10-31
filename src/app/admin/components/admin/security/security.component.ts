@@ -14,6 +14,7 @@ import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { Link } from '@app/core/models/navigation.models';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-security',
   imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
@@ -158,7 +159,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deleteGroup(group: AuthGroup): void {
-    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+    ModalUtils.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deleteGroup(group.id, () => {
         this.resetGroup();
       });
@@ -183,7 +184,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deletePermission(prmsn: AuthPermission): void {
-    this.gs.triggerConfirm('Are you sure you would like to delete this group?', () => {
+    ModalUtils.triggerConfirm('Are you sure you would like to delete this group?', () => {
       this.us.deletePermission(prmsn.id, () => {
         this.resetPermission();
       });
@@ -224,7 +225,7 @@ export class SecurityComponent implements OnInit {
       this.buildAvailableScoutAuthGroups()
     }
     else
-      this.gs.triggerError('Cannot add empty group.');
+      ModalUtils.triggerError('Cannot add empty group.');
   }
 
   removeScoutAuthGroup(ag: AuthGroup) {
@@ -239,7 +240,7 @@ export class SecurityComponent implements OnInit {
 
   saveScoutAuthGroups() {
     this.api.post(true, 'admin/scout-auth-groups/', this.scoutAuthGroups, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.selectedScoutAuthGroup = new AuthGroup();
       this.scoutAuthGroupsModalVisible = false;
     });
@@ -263,7 +264,7 @@ export class SecurityComponent implements OnInit {
   }
 
   deleteLink(link: Link): void {
-    this.gs.triggerConfirm('Are you sure you would like to delete this link?', () => {
+    ModalUtils.triggerConfirm('Are you sure you would like to delete this link?', () => {
       this.us.deleteLink(link.id, () => {
         this.resetLink();
       });

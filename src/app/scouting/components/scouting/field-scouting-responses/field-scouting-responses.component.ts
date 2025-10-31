@@ -17,6 +17,7 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-field-scouting-responses',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
@@ -104,7 +105,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
     export_file = this.scoutResponses;
 
     if (export_file.scoutAnswers.length <= 0) {
-      this.gs.triggerError('Cannot export empty dataset.');
+      ModalUtils.triggerError('Cannot export empty dataset.');
       return;
     }
 

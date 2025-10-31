@@ -13,6 +13,7 @@ import { User } from '@app/auth/models/user.models';
 import { Team, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-team-notes',
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
@@ -90,7 +91,7 @@ export class TeamNotesComponent implements OnInit {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
       if (this.currentTeamNote)
         this.ss.removeTeamNoteResponseFromCache(this.currentTeamNote.id || -1).then(() => {
           this.reset();

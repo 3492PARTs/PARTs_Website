@@ -14,6 +14,7 @@ import { QuestionDisplayFormComponent } from '@app/shared/components/elements/qu
 
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-contact',
   imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -56,7 +57,7 @@ export class ContactComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -69,7 +70,7 @@ export class ContactComponent implements OnInit {
         Utils.scrollTo(0);
         this.contactInit();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
   }
 
@@ -80,7 +81,7 @@ export class ContactComponent implements OnInit {
       this.questions = result as Question[];
       this.disabled = true;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

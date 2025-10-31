@@ -11,6 +11,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-manage-field-responses',
   imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
@@ -72,16 +73,16 @@ export class ManageFieldResponsesComponent implements OnInit {
   }
 
   deleteFieldResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this result?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to delete this result?', () => {
       this.api.delete(true, 'scouting/admin/delete-field-result/', {
         scout_field_id: this.activeScoutResult.id
       }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         this.getFieldResponses();
         this.activeScoutResult = null;
         this.scoutResultModalVisible = false;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }

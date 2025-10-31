@@ -15,6 +15,7 @@ import { FormComponent } from "../../../../shared/components/atoms/form/form.com
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-scouting-activity',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
@@ -95,7 +96,7 @@ export class ScoutingActivityComponent implements OnInit {
         });
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -236,22 +237,22 @@ export class ScoutingActivityComponent implements OnInit {
 
   saveUserInfo(): void {
     this.api.post(true, 'scouting/admin/scouting-user-info/', this.activeUserScoutingUserInfo, (result: any) => {
-      if (this.gs.checkResponse(result)) {
+      if (ModalUtils.checkResponse(result)) {
         this.getUsersScoutingUserInfo();
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
   markScoutPresent(sfs: ScoutFieldSchedule): void {
-    this.gs.triggerConfirm('Are you sure you want to mark this scout present?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to mark this scout present?', () => {
       this.api.get(true, 'scouting/admin/mark-scout-present/', {
         scout_field_sch_id: sfs.id,
         user_id: this.activeUserScoutingUserInfo.user.id
       }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         this.getUsersScoutingUserInfo();
         this.ss.loadScoutingFieldSchedules().then(result => {
           this.activeUserScoutingFieldSchedule = [];
@@ -284,7 +285,7 @@ export class ScoutingActivityComponent implements OnInit {
           }
         });
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }

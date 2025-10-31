@@ -14,6 +14,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-manage-season',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
@@ -103,7 +104,7 @@ export class ManageSeasonComponent implements OnInit {
       this.syncSeasonResponse = result as RetMessage;
       this.init();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -117,7 +118,7 @@ export class ManageSeasonComponent implements OnInit {
       this.init();
       this.newEvent = new Event();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -125,7 +126,7 @@ export class ManageSeasonComponent implements OnInit {
     this.api.get(true, 'tba/sync-matches/', undefined, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -135,7 +136,7 @@ export class ManageSeasonComponent implements OnInit {
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -144,13 +145,13 @@ export class ManageSeasonComponent implements OnInit {
       //console.log(result);
       Utils.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
   setSeasonEvent(): void | null {
     if (!this.currentSeason.id || !this.currentEvent.id) {
-      this.gs.triggerError('No season or event selected.');
+      ModalUtils.triggerError('No season or event selected.');
       return null;
     }
     this.api.get(true, 'scouting/admin/set-season-event/', {
@@ -158,10 +159,10 @@ export class ManageSeasonComponent implements OnInit {
       event_id: this.currentEvent.id.toString(),
       competition_page_active: this.currentEvent.competition_page_active
     }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.init();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     }).then(() => this.saveSeason(this.currentSeason));
   }
 
@@ -201,29 +202,29 @@ export class ManageSeasonComponent implements OnInit {
 
   saveSeason(s: Season): void {
     this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.init();
       s = new Season();
       this.addSeasonModalVisible = false;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
   deleteSeason(): void | null {
     if (this.delSeason) {
-      this.gs.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
+      ModalUtils.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
         this.api.delete(true, 'scouting/admin/season/', {
           season_id: this.delSeason?.toString() || ''
         }, (result: any) => {
-          this.gs.successfulResponseBanner(result);
+          ModalUtils.successfulResponseBanner(result);
           this.init();
           this.delSeason = null;
           this.delEvent = null;
           this.delEventList = [];
           this.removeSeasonEventModalVisible = false;
         }, (err: any) => {
-          this.gs.triggerError(err);
+          ModalUtils.triggerError(err);
         });
       });
 
@@ -238,12 +239,12 @@ export class ManageSeasonComponent implements OnInit {
       event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
       this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        ModalUtils.successfulResponseBanner(result);
         this.manageEventsModalVisible = false;
         this.init();
         this.newEvent = new Event();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     }
     else {
@@ -257,17 +258,17 @@ export class ManageSeasonComponent implements OnInit {
 
   deleteEvent(): void | null {
     if (this.delEvent)
-      this.gs.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
+      ModalUtils.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
         this.api.delete(true, 'scouting/admin/event/', {
           event_id: this.delEvent?.toString() || ''
         }, (result: any) => {
-          this.gs.successfulResponseBanner(result);
+          ModalUtils.successfulResponseBanner(result);
           this.delEvent = null;
           this.removeSeasonEventModalVisible = false;
           this.getEventsForDeleteEvent();
           this.init();
         }, (err: any) => {
-          this.gs.triggerError(err);
+          ModalUtils.triggerError(err);
         });
       });
   }
@@ -286,7 +287,7 @@ export class ManageSeasonComponent implements OnInit {
       this.getAllTeams();
     }, (err: any) => {
       console.log('error', err);
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }
@@ -309,7 +310,7 @@ export class ManageSeasonComponent implements OnInit {
       this.linkTeamToEventTeams = [];
       this.eventToTeams = new EventToTeams();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -354,7 +355,7 @@ export class ManageSeasonComponent implements OnInit {
       this.removeTeamFromEventList = [];
       this.removeTeamFromEventTeams = [];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -375,7 +376,7 @@ export class ManageSeasonComponent implements OnInit {
       this.newMatchModalVisible = false;
     }, (err: any) => {
       console.log('error', err);
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }

@@ -13,6 +13,7 @@ import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-pit-scouting-responses',
   imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, PitResultDisplayComponent],
@@ -68,7 +69,7 @@ export class ScoutPitResponsesComponent implements OnInit {
     let export_file = this.scoutPitResults;
 
     if (export_file.length <= 0) {
-      this.gs.triggerError('Cannot export empty dataset. Please select some teams first.');
+      ModalUtils.triggerError('Cannot export empty dataset. Please select some teams first.');
       return null;
     }
 

@@ -12,6 +12,7 @@ import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-question-aggregate-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent],
@@ -59,36 +60,36 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: this.FormTyp
     }, (result: any) => {
-      if (this.gs.checkResponse(result)) {
+      if (ModalUtils.checkResponse(result)) {
         this.questionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {
       console.log('error', err);
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }
 
   getQuestionAggregateTypes(): void {
     this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
-      if (this.gs.checkResponse(result)) {
+      if (ModalUtils.checkResponse(result)) {
         //console.log(result);
         this.questionAggregateTypes = result as QuestionAggregateType[];
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
   getQuestionConditionTypes(): void {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      if (this.gs.checkResponse(result)) {
+      if (ModalUtils.checkResponse(result)) {
         //console.log(result);
         //this.questionConditionTypes = result;
         Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -144,12 +145,12 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeQuestionAggregate, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      ModalUtils.successfulResponseBanner(result);
       this.activeQuestionAggregate = new QuestionAggregate();
       this.questionAggregateModalVisible = false;
       this.getQuestionAggregates();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 

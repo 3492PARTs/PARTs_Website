@@ -15,6 +15,7 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-match-planning',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
@@ -157,7 +158,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to remove this response?', () => {
       if (this.activeMatchStrategy)
         this.ss.removeMatchStrategyResponseFromCache(this.activeMatchStrategy.id || -1).then(() => {
           this.reset();

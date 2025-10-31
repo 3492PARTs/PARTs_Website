@@ -10,6 +10,7 @@ import { Response } from '@app/core/models/form.models';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
 import { Utils } from '@app/core/utils/utils';
+import { ModalUtils } from '@app/core/utils/modal.utils';
 @Component({
   selector: 'app-form-manager',
   imports: [ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, ModalComponent],
@@ -40,7 +41,7 @@ export class FormManagerComponent implements OnInit {
     }, (result: any) => {
       this.responses = result as Response[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      ModalUtils.triggerError(err);
     });
   }
 
@@ -52,26 +53,26 @@ export class FormManagerComponent implements OnInit {
   }
 
   archiveResponse(res: Response): void {
-    this.gs.triggerConfirm('Are you sure you want to archive this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to archive this response?', () => {
 
       res.archive_ind = 'y';
 
       this.api.post(true, 'form/response/', res, (result: any) => {
         this.getResponses();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }
 
   deleteResponse(res: Response): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this response?', () => {
+    ModalUtils.triggerConfirm('Are you sure you want to delete this response?', () => {
       this.api.delete(true, 'form/response/', {
         response_id: res.id
       }, (result: any) => {
         this.getResponses();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        ModalUtils.triggerError(err);
       });
     });
   }
