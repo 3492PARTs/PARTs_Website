@@ -7,6 +7,7 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 
 import { HeaderComponent } from "../../atoms/header/header.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-scout-pic-display',
   imports: [ButtonComponent, HeaderComponent],
@@ -45,7 +46,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   }
 
   setImages(): void {
-    this.ScoutPitImages = this.ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.ScoutPitImages = this.ScoutPitImages.filter(spi => Utils.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
     this.preview();
   }
 
@@ -80,7 +81,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
           }
         }
 
-        if (this.gs.strNoE(link)) {
+        if (Utils.strNoE(link)) {
           link = this.ScoutPitImages[0].img_url;
           this.displayPicIndex = 0;
         }

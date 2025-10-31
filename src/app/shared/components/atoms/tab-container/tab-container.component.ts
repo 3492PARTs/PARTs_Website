@@ -3,6 +3,7 @@ import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-tab-container',
   imports: [CommonModule],
@@ -45,7 +46,7 @@ export class TabContainerComponent implements AfterContentInit {
 
     window.setTimeout(() => {
       if (this.tabs.length > 0)
-        if (!this.gs.strNoE(this.activeTabTitle)) this.setActiveTab(this.activeTabTitle);
+        if (!Utils.strNoE(this.activeTabTitle)) this.setActiveTab(this.activeTabTitle);
         else this.showTab(this.tabs[0]);
     }, 0);
   }

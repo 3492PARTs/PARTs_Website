@@ -130,7 +130,7 @@ export class TableComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.generateTableDisplayValues();
     this.ShowButtonColumn();
-    if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
+    if (Utils.strNoE(this.TableName) && !Utils.strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
     if (this.Width !== '' && this.Table) {
@@ -197,7 +197,7 @@ export class TableComponent implements OnInit, OnChanges {
   generateTableDisplayValues(): void {
     this.TableData.forEach(rec => {
       this.TableCols.forEach(col => {
-        if (this.gs.strNoE(col.Type) && col.PropertyName?.includes('.')) {
+        if (Utils.strNoE(col.Type) && col.PropertyName?.includes('.')) {
           rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
         }
         else if (col.Type === 'function') {
@@ -445,7 +445,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   strNoE(s: any): boolean {
-    return this.gs.strNoE(s);
+    return Utils.strNoE(s);
   }
 }
 

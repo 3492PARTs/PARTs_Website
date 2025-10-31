@@ -16,6 +16,7 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
+import { Utils } from '@app/core/utils/utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -77,7 +78,7 @@ export class AuthService {
       const tmp = result as Token;
       this.tokenBS.next(tmp);
 
-      this.gs.devConsoleLog('authorizeUser', 'login tokens below');
+      Utils.devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
       this.getTokenExp(tmp.refresh);
 
@@ -87,7 +88,7 @@ export class AuthService {
       await this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
-      if (this.gs.strNoE(returnUrl)) {
+      if (Utils.strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       }
       else {
@@ -111,7 +112,7 @@ export class AuthService {
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
       this.refreshToken(async (result: Token) => {
-        this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+        Utils.devConsoleLog('previouslyAuthorized', 'new tokens below');
         this.getTokenExp(result.access);
         this.getTokenExp(result.refresh);
         this.tokenBS.next(result);
@@ -149,7 +150,7 @@ export class AuthService {
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.api.post(true, 'user/profile/', userData, (result: any) => {
-      if (this.gs.strNoE(returnUrl)) {
+      if (Utils.strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       } else {
         this.router.navigateByUrl(returnUrl || '');
@@ -255,21 +256,21 @@ export class AuthService {
     const d = new Date(0);
     let tokenLoad = this.getTokenLoad(tkn);
     d.setUTCSeconds(tokenLoad.exp);
-    this.gs.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
+    Utils.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
     return d;
   }
 
   isTokenExpired(tkn: string): boolean {
-    return this.gs.strNoE(tkn) || this.getTokenExp(tkn) < new Date();
+    return Utils.strNoE(tkn) || this.getTokenExp(tkn) < new Date();
   }
 
   isAuthenticated(): boolean {
-    this.gs.devConsoleLog('isAuthenticated', 'current access token below');
-    return !this.gs.strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
+    Utils.devConsoleLog('isAuthenticated', 'current access token below');
+    return !Utils.strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
   }
 
   isSessionExpired(): boolean {
-    this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
+    Utils.devConsoleLog('isSessionExpired', 'current refresh token below');
     return this.isTokenExpired(this.tokenBS.value?.refresh || '');
   }
 

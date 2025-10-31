@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-admin-users',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
@@ -83,7 +84,7 @@ export class AdminUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = this.gs.cloneObject(u);
+    this.activeUser = Utils.cloneObject(u);
     this.buildAvailableUserGroups();
   }
 

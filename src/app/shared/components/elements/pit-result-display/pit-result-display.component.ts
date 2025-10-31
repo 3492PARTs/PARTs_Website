@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-pit-result-display',
   imports: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],
@@ -23,13 +24,13 @@ export class PitResultDisplayComponent implements OnInit {
   constructor(private gs: GeneralService) { }
 
   ngOnInit() {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = Utils.getScreenSize();
     this.appSize = this.gs.getAppSize();
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = Utils.getScreenSize();
     this.appSize = this.gs.getAppSize();
   }
 

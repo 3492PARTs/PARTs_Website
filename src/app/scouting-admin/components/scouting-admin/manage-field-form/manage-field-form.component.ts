@@ -13,6 +13,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-manage-field-form',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
@@ -78,7 +79,7 @@ export class ManageFieldFormComponent {
 
   getFieldForm(): void {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
-      this.gs.triggerChange(() => {
+      Utils.triggerChange(() => {
         this.fieldForm = result;
       });
     }, (err: any) => {
@@ -102,7 +103,7 @@ export class ManageFieldFormComponent {
   buildFlowOptions(): void {
     this.activeFlow = undefined;
     this.availableFlows = this.formMetadata.flows.filter(qf =>
-      (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
+      (this.activeFormSubType && !Utils.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
   saveFlow(): void {

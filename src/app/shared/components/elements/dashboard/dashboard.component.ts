@@ -17,6 +17,7 @@ import { LoadingComponent } from "../../atoms/loading/loading.component";
 import { ChartComponent } from "../../atoms/chart/chart.component";
 import { CommonModule } from '@angular/common';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, BoxComponent, ButtonComponent, ButtonRibbonComponent, FormElementComponent, ModalComponent, FormComponent, HeaderComponent, LoadingComponent, ChartComponent],
@@ -139,7 +140,7 @@ export class DashboardComponent implements OnInit {
     this.dashboard.dashboard_views.forEach(dv => {
       if (dv.active == 'y' && (dv.teams.length > 0 || this.Teams.length > 0))
         dv.dashboard_graphs.forEach(dg => {
-          this.gs.triggerChange(() => {
+          Utils.triggerChange(() => {
             this.graphTeam(dv, dg.graph_id);
           }, i * 500);
           i++;
@@ -176,14 +177,14 @@ export class DashboardComponent implements OnInit {
     this.dashboard.dashboard_views.push(dashboard_view)
     this.filterAvailableGraphs(dashboard_view);
     this.calcActiveViewCount();
-    if (!this.gs.strNoE(dashboard_view.name)) {
+    if (!Utils.strNoE(dashboard_view.name)) {
       dashboard_view = undefined;
       this.saveDashboard();
     }
   }
 
   addGraphToDashboardView(dashboard_view: DashboardView): void {
-    if (this.gs.strNoE(dashboard_view.name)) {
+    if (Utils.strNoE(dashboard_view.name)) {
       this.gs.triggerFormValidationBanner(['Name is required']);
     }
     else

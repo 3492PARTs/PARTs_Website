@@ -16,6 +16,7 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-scouting-schedule',
   imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent],
@@ -166,7 +167,7 @@ export class ScoutingScheduleComponent implements OnInit {
   showScoutScheduleModal(sch_typ: ScheduleType, s?: Schedule): void {
     if (s) {
       //"2020-01-01T01:00"
-      this.currentSchedule = this.gs.cloneObject(s);
+      this.currentSchedule = Utils.cloneObject(s);
     }
     else {
       this.currentSchedule = new Schedule();
@@ -179,7 +180,7 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   saveScheduleEntry(): void {
-    let s = this.gs.cloneObject(this.currentSchedule);
+    let s = Utils.cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
     this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
       this.gs.successfulResponseBanner(result);
@@ -219,10 +220,10 @@ export class ScoutingScheduleComponent implements OnInit {
   }
 
   decodeSentBoolean(b: boolean): string {
-    return this.gs.decodeSentBoolean(b);
+    return Utils.decodeSentBoolean(b);
   }
 
   decodeYesNoBoolean(b: boolean): string {
-    return this.gs.decodeYesNoBoolean(b);
+    return Utils.decodeYesNoBoolean(b);
   }
 }

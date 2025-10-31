@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from "../../atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
@@ -28,7 +29,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
 
   @Input() set ImageUrl(s: string) {
     this.url = s;
-    this.gs.triggerChange(() => this.adjustImage(), 5);
+    Utils.triggerChange(() => this.adjustImage(), 5);
 
   }
 
@@ -247,7 +248,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   }
 
   ynToYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return Utils.decodeYesNo(s);
   }
 }
 

@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
@@ -24,6 +25,9 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+
+  // Expose Utils to template
+  Utils = Utils;
 
   user: User = new User();
   editUser: User = new User();
@@ -65,7 +69,7 @@ export class ProfileComponent implements OnInit {
 
     this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = this.gs.cloneObject(u) as User;
+      this.editUser = Utils.cloneObject(u) as User;
       console.log(this.editUser);
     });
 
@@ -88,7 +92,7 @@ export class ProfileComponent implements OnInit {
 
       form.append('image', imageFile, imageFile.name);
     }
-    else if (!this.gs.strNoE(this.input.password)) {
+    else if (!Utils.strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {

@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-manage-season',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
@@ -141,7 +142,7 @@ export class ManageSeasonComponent implements OnInit {
   runScoutingReport(): void {
     this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
       //console.log(result);
-      this.gs.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
+      Utils.downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
       this.gs.triggerError(err);
     });
@@ -231,9 +232,9 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   saveEvent(): void {
-    if (this.gs.strNoE(this.newEvent.event_cd)) {
+    if (Utils.strNoE(this.newEvent.event_cd)) {
 
-      let event = this.gs.cloneObject(this.newEvent);
+      let event = Utils.cloneObject(this.newEvent);
       event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
 
       this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
@@ -318,11 +319,11 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? this.gs.cloneObject(this.removeTeamFromEventEvent.teams) : [];
+    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? Utils.cloneObject(this.removeTeamFromEventEvent.teams) : [];
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
-    let teamList = this.gs.cloneObject(this.teams);
+    let teamList = Utils.cloneObject(this.teams);
 
     for (let i = 0; i < teamList.length; i++) {
       for (let j = 0; j < eventTeamList.length; j++) {
@@ -384,6 +385,6 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getTeamsForNewMatch() {
-    this.newMatchTeams = this.gs.cloneObject(this.newMatch.event.teams);
+    this.newMatchTeams = Utils.cloneObject(this.newMatch.event.teams);
   }
 }

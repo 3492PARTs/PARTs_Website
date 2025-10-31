@@ -10,6 +10,7 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-flow-admin-form',
   imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
@@ -90,7 +91,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   pushQuestion(): void {
-    if (this.activeFlow && !this.gs.strNoE(this.question.id)) {
+    if (this.activeFlow && !Utils.strNoE(this.question.id)) {
       let qf = new FlowQuestion();
       qf.active = 'y';
       qf.flow_id = this.activeFlow.id;
@@ -120,7 +121,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   decodeBoolean(b: boolean): string {
-    return this.gs.decodeYesNoBoolean(b);
+    return Utils.decodeYesNoBoolean(b);
   }
 
   decodeFlowQuestions(flowQuestions: FlowQuestion[]): string {

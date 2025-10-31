@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
 import { TooltipDirective } from '@app/shared/directives/tooltip/tooltip.directive';
 
+import { Utils } from '@app/core/utils/utils';
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
@@ -23,7 +24,7 @@ export class ChartComponent implements OnInit {
   @Input() ChartType = '';
   @Input() set ChartImgUrl(s: string) {
     this.url = s;
-    this.gs.triggerChange(() => this.adjustImage());
+    Utils.triggerChange(() => this.adjustImage());
   }
   @Input() XScaleMin: number | undefined = undefined;
   @Input() XScaleMax: number | undefined = undefined;
@@ -54,7 +55,7 @@ export class ChartComponent implements OnInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
-    this.gs.triggerChange(() => {
+    Utils.triggerChange(() => {
       this.datasetColors = {};
       let chartStatus = Chart.getChart(this.id); // <canvas> id
       if (chartStatus != undefined) {
@@ -417,7 +418,7 @@ export class ChartComponent implements OnInit {
 
     heatmaps.forEach(h => {
       if (!questions.find(q => h.question.id === q.id)) {
-        const question = this.gs.cloneObject(h.question) as Question;
+        const question = Utils.cloneObject(h.question) as Question;
         question.question = question.question;
         questions.push(question);
       }

@@ -18,6 +18,7 @@ import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.
 import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-pit-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
@@ -100,7 +101,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingForm().then(result => {
-      if (this.gs.strNoE(this.scoutPitResponse.team_id)) {
+      if (Utils.strNoE(this.scoutPitResponse.team_id)) {
 
         if (result) {
           this.questions = result;
@@ -181,11 +182,11 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   changeTeam(load = false): void {
     let dirty = false;
-    let scoutQuestions = this.gs.cloneObject(this.questions) as Question[];
+    let scoutQuestions = Utils.cloneObject(this.questions) as Question[];
 
     scoutQuestions.forEach(el => {
-      let answer = this.gs.formatQuestionAnswer(el.answer);
-      if (!this.gs.strNoE(answer)) {
+      let answer = Utils.formatQuestionAnswer(el.answer);
+      if (!Utils.strNoE(answer)) {
         dirty = true;
       }
 
@@ -197,7 +198,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
           this.setNewTeam(load);
         },
         () => {
-          this.gs.triggerChange(() => {
+          Utils.triggerChange(() => {
             this.scoutPitResponse.team_id = this.previouslySelectedTeam;
           });
         });
@@ -230,7 +231,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   addAutoPicture() {
     if (this.autoPic && this.autoPic.size > 0) {
-      if (!this.gs.strNoE(this.autoTitle)) {
+      if (!Utils.strNoE(this.autoTitle)) {
         this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
         this.removeAutoPicture();
       }
@@ -252,17 +253,17 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   reset(): void {
     this.previouslySelectedTeam = NaN;
     this.scoutPitResponse = new ScoutPitFormResponse();
-    this.scoutPitResponse.answers = this.gs.cloneObject(this.questions);
+    this.scoutPitResponse.answers = Utils.cloneObject(this.questions);
     this.formDisabled = false;
     this.previewImages = [];
-    this.gs.scrollTo(0);
+    Utils.scrollTo(0);
     this.init();
   }
 
   save(spr?: ScoutPitFormResponse, id?: number): void | null {
     if (!spr) spr = this.scoutPitResponse;
 
-    if (this.gs.strNoE(spr.team_id)) {
+    if (Utils.strNoE(spr.team_id)) {
       this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
       return null;
     }
@@ -278,8 +279,8 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     }
 
     this.questions.forEach(q => {
-      const quest = this.gs.cloneObject(q);
-      quest.answer = this.gs.formatQuestionAnswer(quest.answer);
+      const quest = Utils.cloneObject(q);
+      quest.answer = Utils.formatQuestionAnswer(quest.answer);
       spr.answers.push(new Answer(quest.answer, quest));
     }
     );
@@ -313,7 +314,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
-    this.gs.triggerChange(() => {
+    Utils.triggerChange(() => {
       this.formElements = fes;
     });
   }

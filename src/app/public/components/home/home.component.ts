@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 import { AppSize } from '@app/core/utils/utils';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-home',
   imports: [CommonModule],
@@ -55,7 +56,7 @@ export class HomeComponent implements OnInit {
   }
 
   private setScreenSize(): void {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = Utils.getScreenSize();
   }
 
 }

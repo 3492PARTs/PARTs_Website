@@ -14,6 +14,7 @@ import { FormElementComponent } from "../../../../shared/components/atoms/form-e
 import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-scouting-activity',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
@@ -90,7 +91,7 @@ export class ScoutingActivityComponent implements OnInit {
       if (this.activeUserScoutingUserInfo) {
         this.usersScoutingUserInfo.forEach(ua => {
           if (ua.user.id == this.activeUserScoutingUserInfo.user.id)
-            this.activeUserScoutingUserInfo = this.gs.cloneObject(ua);
+            this.activeUserScoutingUserInfo = Utils.cloneObject(ua);
         });
       }
     }, (err: any) => {
@@ -136,19 +137,19 @@ export class ScoutingActivityComponent implements OnInit {
     });
 
     schedules.forEach(s => {
-      schedule += `${this.gs.formatDateString(s.st_time)} - ${this.gs.formatDateString(s.end_time)} `;
+      schedule += `${Utils.formatDateString(s.st_time)} - ${Utils.formatDateString(s.end_time)} `;
       if (s.red_one_id && (s.red_one_id as User).id === user.id)
-        schedule += `[R1: ${s.red_one_check_in ? this.gs.formatDateString(s.red_one_check_in) : missing}]`;
+        schedule += `[R1: ${s.red_one_check_in ? Utils.formatDateString(s.red_one_check_in) : missing}]`;
       else if (s.red_two_id && (s.red_two_id as User).id === user.id)
-        schedule += `[R2: ${s.red_two_check_in ? this.gs.formatDateString(s.red_two_check_in) : missing}]`;
+        schedule += `[R2: ${s.red_two_check_in ? Utils.formatDateString(s.red_two_check_in) : missing}]`;
       else if (s.red_three_id && (s.red_three_id as User).id === user.id)
-        schedule += `[R3: ${s.red_three_check_in ? this.gs.formatDateString(s.red_three_check_in) : missing}]`;
+        schedule += `[R3: ${s.red_three_check_in ? Utils.formatDateString(s.red_three_check_in) : missing}]`;
       else if (s.blue_one_id && (s.blue_one_id as User).id === user.id)
-        schedule += `[B1: ${s.blue_one_check_in ? this.gs.formatDateString(s.blue_one_check_in) : missing}]`;
+        schedule += `[B1: ${s.blue_one_check_in ? Utils.formatDateString(s.blue_one_check_in) : missing}]`;
       else if (s.blue_two_id && (s.blue_two_id as User).id === user.id)
-        schedule += `[B2: ${s.blue_two_check_in ? this.gs.formatDateString(s.blue_two_check_in) : missing}]`;
+        schedule += `[B2: ${s.blue_two_check_in ? Utils.formatDateString(s.blue_two_check_in) : missing}]`;
       else if (s.blue_three_id && (s.blue_three_id as User).id === user.id)
-        schedule += `[B1: ${s.blue_three_check_in ? this.gs.formatDateString(s.blue_three_check_in) : missing}]`;
+        schedule += `[B1: ${s.blue_three_check_in ? Utils.formatDateString(s.blue_three_check_in) : missing}]`;
 
       schedule += '\n\n';
     });
@@ -184,12 +185,12 @@ export class ScoutingActivityComponent implements OnInit {
     if (sfs.blue_three_id)
       Object.assign(blue_three, sfs.blue_three_id);
 
-    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? this.gs.formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
-    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? this.gs.formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
-    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? this.gs.formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
-    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? this.gs.formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
-    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? this.gs.formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
-    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? this.gs.formatDateString(sfs.blue_three_check_in) : missing}` : '';
+    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? Utils.formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
+    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? Utils.formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
+    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? Utils.formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
+    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? Utils.formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
+    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? Utils.formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
+    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? Utils.formatDateString(sfs.blue_three_check_in) : missing}` : '';
     return str;
   }
 
@@ -289,6 +290,6 @@ export class ScoutingActivityComponent implements OnInit {
   }
 
   decodeSentBoolean(b: boolean): string {
-    return this.gs.decodeSentBoolean(b);
+    return Utils.decodeSentBoolean(b);
   }
 }

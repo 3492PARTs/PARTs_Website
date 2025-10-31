@@ -14,6 +14,7 @@ import { FieldForm, Match, MatchStrategy, Team } from '@app/scouting/models/scou
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-match-planning',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
@@ -84,7 +85,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategies(): void {
-    if (!this.activeMatchStrategy || !this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy || !Utils.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_key === this.match?.match_key);
     this.buildTeamList();
   }
@@ -97,7 +98,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategy(ms?: MatchStrategy): void {
-    this.activeMatchStrategy = ms ? this.gs.cloneObject(ms) : new MatchStrategy();
+    this.activeMatchStrategy = ms ? Utils.cloneObject(ms) : new MatchStrategy();
   }
 
   setImage(f: File): void {
@@ -127,7 +128,7 @@ export class MatchPlanningComponent implements OnInit {
             if (result)
               this.matchStrategies = result;
             this.setMatchStrategies();
-            this.gs.scrollTo(0);
+            Utils.scrollTo(0);
           });
         }
         this.populateOutstandingResponses();

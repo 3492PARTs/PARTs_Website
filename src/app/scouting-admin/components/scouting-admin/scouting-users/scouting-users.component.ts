@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-scouting-users',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
@@ -69,7 +70,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = this.gs.cloneObject(u);
+    this.activeUser = Utils.cloneObject(u);
     this.buildAvailableUserGroups();
   }
 
@@ -108,7 +109,7 @@ export class ScoutingUsersComponent implements OnInit {
   saveUser(u?: User): void {
     if (u) this.activeUser = u;
 
-    if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
+    if (Utils.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
 
     this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-modal',
   imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],
@@ -46,7 +47,7 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     this.setModalSize();
-    if (!this.gs.strNoE(this.ButtonText) && this.gs.strNoE(this.ButtonType)) this.ButtonType = 'main';
+    if (!Utils.strNoE(this.ButtonText) && Utils.strNoE(this.ButtonType)) this.ButtonType = 'main';
   }
 
   @HostListener('window:resize', ['$event'])
@@ -61,7 +62,7 @@ export class ModalComponent implements OnInit {
   }
 
   setModalSize(): void {
-    if (this.gs.strNoE(this.Width)) {
+    if (Utils.strNoE(this.Width)) {
       if (this.gs.getAppSize() >= AppSize._3XLG) {
         this._Width = '90%';
       }

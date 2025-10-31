@@ -12,6 +12,7 @@ import { PitResultDisplayComponent } from "../../../../shared/components/element
 import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-pit-scouting-responses',
   imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, PitResultDisplayComponent],
@@ -95,7 +96,7 @@ export class ScoutPitResponsesComponent implements OnInit {
       csv += '\n';
     });
 
-    this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
+    Utils.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
   }
 
   reset(): void {

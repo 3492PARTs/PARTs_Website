@@ -7,6 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 import { APIService } from './api.service';
 import { Banner } from '../models/api.models';
 
+import { Utils } from '@app/core/utils/utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -44,7 +45,7 @@ export class NotificationsService {
       if (!this.swPush.subscription) this.requestSubscription();*/
 
       this.swPush.messages.subscribe(m => {
-        this.gs.devConsoleLog('subscribeToNotifications - message', m);
+        Utils.devConsoleLog('subscribeToNotifications - message', m);
         this.getUserAlerts(false, 'notification');
       });
 
@@ -54,7 +55,7 @@ export class NotificationsService {
       });*/
 
       this.swPush.notificationClicks.subscribe(n => {
-        this.gs.devConsoleLog('subscribeToNotifications - notificationClicks', n);
+        Utils.devConsoleLog('subscribeToNotifications - notificationClicks', n);
         if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
       });
     }
@@ -135,9 +136,9 @@ export class NotificationsService {
     this.api.get(true, 'alerts/dismiss/', {
       channel_send_id: a.channel_send_id.toString()
     }, (result: any) => {
-      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
+      let index = Utils.arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
       if (index >= 0) this.removeNotification(index);
-      index = this.gs.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
+      index = Utils.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
       this.getUserAlerts(true, 'notification');
       this.getUserAlerts(true, 'message');

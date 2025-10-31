@@ -7,6 +7,7 @@ import { AppSize } from '@app/core/utils/utils';
 import { CommonModule } from '@angular/common';
 import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-about',
   imports: [
@@ -593,7 +594,7 @@ export class AboutComponent implements OnInit {
   }
 
   private setScreenSize(): void {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = Utils.getScreenSize();
   }
 
   public setVisible(bot: Bot, bool: boolean) {

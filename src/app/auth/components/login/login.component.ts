@@ -10,6 +10,7 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
@@ -17,6 +18,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+  // Expose Utils to template
+  Utils = Utils;
 
   input: UserData = new UserData;
   returnUrl: string | null = '';
@@ -26,7 +30,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router) {
     /*this.route.queryParamMap.subscribe(queryParams => {
-      this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.returnUrl = Utils.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/
   }
 
@@ -41,11 +45,11 @@ export class LoginComponent implements OnInit {
     };
 
     this.route.queryParamMap.subscribe(queryParams => {
-      this.page = this.gs.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
-      this.input.uuid = this.gs.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
-      this.input.token = this.gs.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
-      this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
-      this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.page = Utils.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
+      this.input.uuid = Utils.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
+      this.input.token = Utils.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
+      this.input.username = Utils.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
+      this.returnUrl = Utils.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
 
     this.readRememberMe();
@@ -70,7 +74,7 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword(): void | null {
-    if (this.gs.strNoE(this.input.email)) {
+    if (Utils.strNoE(this.input.email)) {
       this.gs.triggerError('Email not provided.');
       return null;
     } else {
@@ -91,7 +95,7 @@ export class LoginComponent implements OnInit {
   }
 
   resendConfirmation() {
-    if (!this.gs.strNoE(this.input.email)) {
+    if (!Utils.strNoE(this.input.email)) {
       this.authService.resendConfirmation(this.input);
       this.input = new UserData();
     } else {
@@ -105,7 +109,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgotUsername(): void | null {
-    if (this.gs.strNoE(this.input.email)) {
+    if (Utils.strNoE(this.input.email)) {
       this.gs.triggerError('Email not provided.');
       return null;
     } else {

@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-contact',
   imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -47,7 +48,7 @@ export class ContactComponent implements OnInit {
         if (r === AuthCallStates.comp) {
           let response = false;
           this.route.queryParamMap.subscribe(queryParams => {
-            if (!this.gs.strNoE(queryParams.get('response_id'))) {
+            if (!Utils.strNoE(queryParams.get('response_id'))) {
               this.getResponse(queryParams.get('response_id') || '');
               response = true;
             }
@@ -60,12 +61,12 @@ export class ContactComponent implements OnInit {
   }
 
   save(): void | null {
-    this.questions.forEach(q => { q.answer = this.gs.formatQuestionAnswer(q.answer) });
+    this.questions.forEach(q => { q.answer = Utils.formatQuestionAnswer(q.answer) });
     this.api.post(true, 'form/save-answers/',
       { question_answers: this.questions.map(q => new Answer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-        this.gs.scrollTo(0);
+        Utils.scrollTo(0);
         this.contactInit();
       }, (err: any) => {
         this.gs.triggerError(err);
@@ -84,7 +85,7 @@ export class ContactComponent implements OnInit {
   }
 
   export(): void {
-    this.gs.downloadFileAs('TeamContact.csv', this.gs.questionsToCSV(this.questions), 'text/csv');
+    Utils.downloadFileAs('TeamContact.csv', Utils.questionsToCSV(this.questions), 'text/csv');
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {

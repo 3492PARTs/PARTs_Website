@@ -225,78 +225,12 @@ export class GeneralService {
     return 'gsID' + this.gsId++;
   }
 
-  /* helper functions */
-  strNoE(s: any): boolean {
-    return Utils.strNoE(s);
-  }
-
-  cloneObject(o: any): any {
-    return Utils.cloneObject(o);
-  }
-
-  formatDateString(s: string | Date): string {
-    return Utils.formatDateString(s);
-  }
-
-  propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
-    return Utils.propertyMap(arr, queryProperty, queryValue, findProperty);
-  }
-
-  arrayObjectIndexOf(arr: any[], property: string, searchTerm: any): number {
-    return Utils.arrayObjectIndexOf(arr, property, searchTerm);
-  }
-
-  updateObjectInArray(arr: any[], property: string, obj: any): void {
-    Utils.updateObjectInArray(arr, property, obj);
-  }
-
-  formatQuestionAnswer(answer: any): string {
-    return Utils.formatQuestionAnswer(answer);
-  }
-
-  decodeBoolean(b: boolean, values: { true: string, false: string }): string {
-    return Utils.decodeBoolean(b, values);
-  }
-
-  decodeSentBoolean(b: boolean): string {
-    return Utils.decodeSentBoolean(b);
-  }
-
-  decodeYesNoBoolean(b: boolean): string {
-    return Utils.decodeYesNoBoolean(b);
-  }
-
-  decodeYesNo(s: string): string {
-    return Utils.decodeYesNo(s);
-  }
-
-  objectToString(o: any): string {
-    return Utils.objectToString(o);
-  }
-
-  objectToFormData(o: any): FormData {
-    return Utils.objectToFormData(o);
-  }
-
-  isObject(o: any): boolean {
-    return Utils.isObject(o);
-  }
-
-  downloadFileAs(filename: string, data: any, MimeType: string): void {
-    Utils.downloadFileAs(filename, data, MimeType);
-  }
-
-  getScreenSize(): AppSize {
-    return Utils.getScreenSize();
-  }
-
   isMobile(): boolean {
     return this.deviceService.isMobile();
   }
 
   getAppSize(): AppSize {
-    //return AppSize.SM;
-    const size = this.getScreenSize();
+    const size = Utils.getScreenSize();
     const mobile = this.isMobile();
 
     if (!mobile)
@@ -347,44 +281,8 @@ export class GeneralService {
     };
   }
 
-  devConsoleLog(location: string, x?: any): void {
-    Utils.devConsoleLog(location, x);
-  }
-
-  triggerChange(tmpFx: () => void, timeoutMs = 0): void {
-    Utils.triggerChange(tmpFx, timeoutMs);
-  }
-
-  updateTableSelectList(list: TableColType[], PropertyName: string, selectList: any[]): void {
-    Utils.updateTableSelectList(list, PropertyName, selectList);
-  }
-
-  getPageFromResponse(Response: any): Page {
-    return Utils.getPageFromResponse(Response);
-  }
-
-  openURL(url: string): void {
-    Utils.openURL(url);
-  }
-
   navigateByUrl(s: string) {
     this.router.navigateByUrl(s);
-  }
-
-  scrollTo(y: number | string): void {
-    Utils.scrollTo(y);
-  }
-
-  isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-    return Utils.isQuestionConditionMet(answer, question, conditionalQuestion);
-  }
-
-  resizeImageToMaxSize(file: File): Promise<File> {
-    return Utils.resizeImageToMaxSize(file);
-  }
-
-  openFullscreen(event: MouseEvent): void {
-    Utils.openFullscreen(event);
   }
 
   tableToCSV(tableCols: any[], tableData: any[]): string {
@@ -410,26 +308,6 @@ export class GeneralService {
     }
 
     return csv;
-  }
-
-  questionsToCSV(questions: Question[]): string {
-    return Utils.questionsToCSV(questions);
-  }
-
-  questionsToCSVHeader(questions: Question[]): string {
-    return Utils.questionsToCSVHeader(questions);
-  }
-
-  questionsToCSVBody(questions: Question[]): string {
-    return Utils.questionsToCSVBody(questions);
-  }
-
-  responsesToCSV(responses: Response[]): string {
-    return Utils.responsesToCSV(responses);
-  }
-
-  keepElementInView(elementId: string): { x: number, y: number } | undefined {
-    return Utils.keepElementInView(elementId);
   }
 }
 

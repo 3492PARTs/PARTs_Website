@@ -5,6 +5,7 @@ import { Link } from '../models/navigation.models';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
+import { Utils } from '@app/core/utils/utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -80,7 +81,7 @@ export class NavigationService {
 
   setSubPage(routerLink: string): void {
     if (this.subPageBS.value !== routerLink) {
-      //this.gs.scrollTo(0);
+      //Utils.scrollTo(0);
       this.subPageBS.next(routerLink);
     }
     //if (this.router.url !== routerLink && routerLink.includes('/'))

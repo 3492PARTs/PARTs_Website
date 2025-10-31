@@ -19,6 +19,7 @@ import { HeaderComponent } from "../../../../../shared/components/atoms/header/h
 import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-plan-matches',
   imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent, DashboardComponent, HeaderComponent],
@@ -313,7 +314,7 @@ export class MatchesComponent implements OnInit {
   }
 
   openFullscreen(event: MouseEvent) {
-    this.gs.openFullscreen(event);
+    Utils.openFullscreen(event);
   }
 
   toggleImageDisplay(i: number): void {

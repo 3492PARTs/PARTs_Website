@@ -14,6 +14,7 @@ import { TableComponent, TableColType } from '@app/shared/components/atoms/table
 import { Banner } from '@app/core/models/api.models';
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-question-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent],
@@ -97,7 +98,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   showQuestionModal(q?: Question): void {
-    this.activeQuestion = q ? this.gs.cloneObject(q) : new Question();
+    this.activeQuestion = q ? Utils.cloneObject(q) : new Question();
 
     this.questionModalVisible = true;
   }

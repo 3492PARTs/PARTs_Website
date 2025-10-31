@@ -15,6 +15,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-sponsor-shop',
   imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
@@ -69,7 +70,7 @@ export class SponsorShopComponent implements OnInit {
       });
 
       if (!match)
-        this.cart.push(this.gs.cloneObject(item));
+        this.cart.push(Utils.cloneObject(item));
 
       item.sponsor_quantity += item.cart_quantity;
       item.cart_quantity = 0;
@@ -81,17 +82,17 @@ export class SponsorShopComponent implements OnInit {
   }
 
   removeCartItem(item: Item): void {
-    this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
+    this.cart.splice(Utils.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
     this.addItemBack(item, item.cart_quantity);
   }
 
   removeEmptyCartItem(item: Item): void {
-    if (item.cart_quantity <= 0) this.cart.splice(this.gs.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
+    if (item.cart_quantity <= 0) this.cart.splice(Utils.arrayObjectIndexOf(this.cart, 'item_id', item.item_id), 1);
     //this.addItemBack(item, 1);
   }
 
   addItemBack(item: Item, quantity: number): void {
-    this.items[this.gs.arrayObjectIndexOf(this.items, 'item_id', item.item_id)].sponsor_quantity -= quantity;
+    this.items[Utils.arrayObjectIndexOf(this.items, 'item_id', item.item_id)].sponsor_quantity -= quantity;
   }
 
   saveSponsorOrder(): void {
@@ -105,7 +106,7 @@ export class SponsorShopComponent implements OnInit {
       return;
     }
 
-    if (this.gs.strNoE(this.activeSponsor.sponsor_nm) || this.gs.strNoE(this.activeSponsor.email) || this.gs.strNoE(this.activeSponsor.phone)) {
+    if (Utils.strNoE(this.activeSponsor.sponsor_nm) || Utils.strNoE(this.activeSponsor.email) || Utils.strNoE(this.activeSponsor.phone)) {
       this.gs.addBanner(new Banner(0, 'Please fill out all contact information.', 3500));
       return;
     }

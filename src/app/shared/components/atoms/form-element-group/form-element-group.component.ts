@@ -5,6 +5,7 @@ import { QuestionFormElementComponent } from '@app/shared/components/elements/qu
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-form-element-group',
   imports: [CommonModule],
@@ -51,7 +52,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   }
 
   setFormGroup() {
-    this.gs.triggerChange(() => {
+    Utils.triggerChange(() => {
       this.formElements.forEach(fe => {
         if (fe) {
           if (!this.InlineElements)

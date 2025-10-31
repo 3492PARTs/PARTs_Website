@@ -13,6 +13,7 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { Link } from '@app/core/models/navigation.models';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-security',
   imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
@@ -102,15 +103,15 @@ export class SecurityComponent implements OnInit {
   }
 
   showGroupModal(group?: AuthGroup): void {
-    this.activeGroup = group ? this.gs.cloneObject(group) : new AuthGroup();
+    this.activeGroup = group ? Utils.cloneObject(group) : new AuthGroup();
     this.activePermission = new AuthPermission();
     this.buildAvailablePermissions();
     this.groupModalVisible = true;
   }
 
   buildAvailablePermissions(): void {
-    let prmsns: AuthPermission[] = this.gs.cloneObject(this.permissions);
-    let grpPrmsns: AuthPermission[] = this.gs.cloneObject(this.activeGroup.permissions);
+    let prmsns: AuthPermission[] = Utils.cloneObject(this.permissions);
+    let grpPrmsns: AuthPermission[] = Utils.cloneObject(this.activeGroup.permissions);
 
     for (let i = 0; i < prmsns.length; i++) {
       for (let j = 0; j < grpPrmsns.length; j++) {
@@ -165,7 +166,7 @@ export class SecurityComponent implements OnInit {
   }
 
   showPermissionModal(permisson?: AuthPermission): void {
-    this.activePermission = permisson ? this.gs.cloneObject(permisson) : new AuthPermission();
+    this.activePermission = permisson ? Utils.cloneObject(permisson) : new AuthPermission();
     this.permissionsModalVisible = true;
   }
 
@@ -245,7 +246,7 @@ export class SecurityComponent implements OnInit {
   }
 
   showLinkModal(link?: Link): void {
-    this.activeLink = link ? this.gs.cloneObject(link) : new Link();
+    this.activeLink = link ? Utils.cloneObject(link) : new Link();
     this.linksModalVisible = true;
   }
 

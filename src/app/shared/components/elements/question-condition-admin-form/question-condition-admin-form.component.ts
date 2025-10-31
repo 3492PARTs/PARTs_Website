@@ -10,6 +10,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-question-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
@@ -79,14 +80,14 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   showQuestionConditionModal(qc?: QuestionCondition) {
     this.questionConditionModalVisible = true;
-    this.activeQuestionCondition = qc ? this.gs.cloneObject(qc) : new QuestionCondition();
+    this.activeQuestionCondition = qc ? Utils.cloneObject(qc) : new QuestionCondition();
 
     this.buildQuestionConditionFromLists();
     this.buildQuestionConditionToLists();
   }
 
   buildQuestionConditionFromLists(): void {
-    this.questionConditionQuestionFromList = this.gs.cloneObject(this.questions);
+    this.questionConditionQuestionFromList = Utils.cloneObject(this.questions);
   }
 
   buildQuestionConditionToLists(): void {
@@ -106,13 +107,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
       // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_from.id) &&
+        !Utils.strNoE(this.activeQuestionCondition.question_from.id) &&
         this.activeQuestionCondition.question_from.id === question.id) {
         match = true;
       }
 
       if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.id) &&
+        !Utils.strNoE(this.activeQuestionCondition.question_to.id) &&
         this.activeQuestionCondition.question_to.id === question.id) {
         match = false;
       }
@@ -142,6 +143,6 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return Utils.decodeYesNo(s);
   }
 }

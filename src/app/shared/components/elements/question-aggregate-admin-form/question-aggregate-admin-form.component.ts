@@ -11,6 +11,7 @@ import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-question-aggregate-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent],
@@ -84,7 +85,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
       if (this.gs.checkResponse(result)) {
         //console.log(result);
         //this.questionConditionTypes = result;
-        this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
+        Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
       }
     }, (err: any) => {
       this.gs.triggerError(err);
@@ -93,7 +94,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   showQuestionAggregateModal(qa?: QuestionAggregate) {
     this.questionAggregateModalVisible = true;
-    this.activeQuestionAggregate = this.gs.cloneObject(qa ? qa : new QuestionAggregate());
+    this.activeQuestionAggregate = Utils.cloneObject(qa ? qa : new QuestionAggregate());
     //this.buildQuestionAggQuestionList();
   }
 
@@ -106,7 +107,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
       form_typ: this.FormTyp,
       active: 'y'
     }, (result: Question[]) => {
-      this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
+      Utils.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
     });
   }
   /*
@@ -153,7 +154,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return Utils.decodeYesNo(s);
   }
 
   decodeHorizontal(b: boolean): string {

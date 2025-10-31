@@ -10,6 +10,7 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-flow-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
@@ -68,14 +69,14 @@ export class
 
   showFlowConditionModal(qc?: FlowCondition) {
     this.flowConditionModalVisible = true;
-    this.activeFlowCondition = qc ? this.gs.cloneObject(qc) : new FlowCondition();
+    this.activeFlowCondition = qc ? Utils.cloneObject(qc) : new FlowCondition();
 
     this.buildFlowConditionFromLists();
     this.buildFlowConditionToLists();
   }
 
   buildFlowConditionFromLists(): void {
-    this.flowConditionQuestionFromList = this.gs.cloneObject(this.flows);
+    this.flowConditionQuestionFromList = Utils.cloneObject(this.flows);
   }
 
   buildFlowConditionToLists(): void {
@@ -95,13 +96,13 @@ export class
 
       // Keep the question just selected as from out of the list
       if (this.activeFlowCondition.flow_from &&
-        !this.gs.strNoE(this.activeFlowCondition.flow_from.id) &&
+        !Utils.strNoE(this.activeFlowCondition.flow_from.id) &&
         this.activeFlowCondition.flow_from.id === flow.id) {
         match = true;
       }
 
       if (this.activeFlowCondition.flow_to &&
-        !this.gs.strNoE(this.activeFlowCondition.flow_to.id) &&
+        !Utils.strNoE(this.activeFlowCondition.flow_to.id) &&
         this.activeFlowCondition.flow_to.id === flow.id) {
         match = false;
       }
@@ -131,6 +132,6 @@ export class
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return Utils.decodeYesNo(s);
   }
 }

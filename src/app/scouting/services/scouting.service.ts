@@ -9,6 +9,7 @@ import { APIService } from '@app/core/services/api.service';
 import { CacheService } from '@app/core/services/cache.service';
 import { GeneralService } from '@app/core/services/general.service';
 
+import { Utils } from '@app/core/utils/utils';
 @Injectable({
   providedIn: 'root'
 })
@@ -851,12 +852,12 @@ export class ScoutingService {
       spr.answers.forEach(a => {
         if (a.question) {
           a.question.answer = '';
-          a.value = this.gs.formatQuestionAnswer(a.value);
+          a.value = Utils.formatQuestionAnswer(a.value);
         }
       })
       spr.form_typ = 'pit';
 
-      const sprPost = this.gs.cloneObject(spr);
+      const sprPost = Utils.cloneObject(spr);
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
@@ -874,7 +875,7 @@ export class ScoutingService {
               this.gs.incrementOutstandingCalls();
 
               if (pic.img)
-                this.gs.resizeImageToMaxSize(pic.img).then(resizedPic => {
+                Utils.resizeImageToMaxSize(pic.img).then(resizedPic => {
                   if (resizedPic) {
                     const formData = new FormData();
                     formData.append('file', resizedPic);
@@ -1289,7 +1290,7 @@ export class ScoutingService {
       const fd = new FormData();
       if (matchStrategy.img)
         fd.append('img', matchStrategy.img);
-      if (!this.gs.strNoE(matchStrategy.id))
+      if (!Utils.strNoE(matchStrategy.id))
         fd.append('id', matchStrategy.id.toString());
 
       fd.append('match_key', matchStrategy.match?.match_key.toString() || '');

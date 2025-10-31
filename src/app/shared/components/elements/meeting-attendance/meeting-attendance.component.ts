@@ -21,6 +21,7 @@ import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 import { environment } from '../../../../../environments/environment';
 
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
@@ -199,7 +200,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
-    this.attendanceEntry = attendance ? this.gs.cloneObject(attendance) : new Attendance();
+    this.attendanceEntry = attendance ? Utils.cloneObject(attendance) : new Attendance();
 
     if (meeting)
       this.attendanceEntry.meeting = meeting;
@@ -362,7 +363,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showMeetingModal(meeting?: Meeting): void {
-    this.meeting = meeting ? this.gs.cloneObject(meeting) : new Meeting();
+    this.meeting = meeting ? Utils.cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
 
     if (this.AdminInterface && meeting) {
@@ -445,7 +446,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   decodeYesNoBoolean(val: boolean): string {
-    return this.gs.decodeYesNoBoolean(val);
+    return Utils.decodeYesNoBoolean(val);
   }
 
 }

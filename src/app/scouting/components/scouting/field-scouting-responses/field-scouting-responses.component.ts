@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-field-scouting-responses',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
@@ -72,7 +73,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       if (result) {
         this.scoutResponseColumns = result;
 
-        this.showScoutFieldCols = this.gs.cloneObject(this.scoutResponseColumns);
+        this.showScoutFieldCols = Utils.cloneObject(this.scoutResponseColumns);
 
         for (let i = 0; i < this.showScoutFieldCols.length; i++) {
           this.showScoutFieldCols[i]['checked'] = true;
@@ -80,7 +81,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
         this.showHideTableCols();
 
-        this.showScoutFieldColsList = this.gs.cloneObject(this.scoutResponseColumns);
+        this.showScoutFieldColsList = Utils.cloneObject(this.scoutResponseColumns);
       }
 
       this.gs.decrementOutstandingCalls();
@@ -123,7 +124,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
       csv += '\n';
     });
 
-    this.gs.downloadFileAs('ScoutFieldResults.csv', csv, 'text/csv');
+    Utils.downloadFileAs('ScoutFieldResults.csv', csv, 'text/csv');
   }
 
   async getTeamInfo(row: any) {
@@ -147,7 +148,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
   }
 
   showHideTableCols(): void {
-    this.gs.triggerChange(() => {
+    Utils.triggerChange(() => {
       let tmp: object[] = [];
       for (let i = 0; i < this.showScoutFieldCols.length; i++) {
         if (this.showScoutFieldCols[i]['checked']) {
@@ -170,21 +171,21 @@ export class FieldScoutingResponsesComponent implements OnInit {
   filter(): void {
     let temp = this.scoutResponses.scoutAnswers;
 
-    if (!this.gs.strNoE(this.filterTeam)) {
+    if (!Utils.strNoE(this.filterTeam)) {
       temp = temp.filter(r => r['team_id'].toString().includes(this.filterTeam));
     }
 
-    if (!this.gs.strNoE(this.filterRank)) {
+    if (!Utils.strNoE(this.filterRank)) {
       for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
         temp = temp.filter(r => (this.filterAboveRank && r.rank <= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank >= (this.filterRank || 0)))
       }
     }
 
-    if (!this.gs.strNoE(this.filterRankGTE)) { //get those in a range of ranks
+    if (!Utils.strNoE(this.filterRankGTE)) { //get those in a range of ranks
       temp = temp.filter(r => r.rank >= (this.filterRankGTE || 0))
     }
 
-    if (!this.gs.strNoE(this.filterRankLTE)) { //get those in a range of ranks
+    if (!Utils.strNoE(this.filterRankLTE)) { //get those in a range of ranks
       temp = temp.filter(r => r.rank <= (this.filterRankLTE || 0))
     }
 

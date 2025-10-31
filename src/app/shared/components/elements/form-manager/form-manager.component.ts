@@ -9,6 +9,7 @@ import { QuestionAdminFormComponent } from '../question-admin-form/question-admi
 import { Response } from '@app/core/models/form.models';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-form-manager',
   imports: [ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, ModalComponent],
@@ -76,7 +77,7 @@ export class FormManagerComponent implements OnInit {
   }
 
   exportResponses(): void {
-    let csv = this.gs.responsesToCSV(this.responses);
+    let csv = Utils.responsesToCSV(this.responses);
     let name = '';
     switch (this.FormTyp) {
       case 'team-cntct':
@@ -89,7 +90,7 @@ export class FormManagerComponent implements OnInit {
 
     name += this.archiveInd === 'y' ? '_Archived' : '';
 
-    if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
+    if (!Utils.strNoE(csv)) Utils.downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
 
   switchArchiveInd(): void {

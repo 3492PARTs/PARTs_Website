@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 
+import { Utils } from '@app/core/utils/utils';
 @Component({
   selector: 'app-banners',
   imports: [CommonModule, ButtonComponent, BoxComponent],
@@ -79,7 +80,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   scrollEvents(scrollY: number, innerScrollElement = false): void {
     const header = document.getElementById('site-header') || new HTMLElement()
 
-    if (this.gs.strNoE(this.scrollPosition.toString())) {
+    if (Utils.strNoE(this.scrollPosition.toString())) {
       // wasn't set yet
       this.scrollPosition = 0;
     }
