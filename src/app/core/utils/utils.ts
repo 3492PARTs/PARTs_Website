@@ -556,4 +556,36 @@ export class Utils {
       else console.log(location);
     }
   }
+
+  /**
+   * Convert table data to CSV format
+   * @param tableCols Array of table column definitions
+   * @param tableData Array of data rows
+   * @param onEmptyError Optional callback for empty dataset error
+   * @returns CSV string
+   */
+  static tableToCSV(tableCols: any[], tableData: any[], onEmptyError?: (msg: string) => void): string {
+    if (tableData.length <= 0) {
+      if (onEmptyError) onEmptyError('Cannot export empty dataset.');
+      return '';
+    }
+
+    let csv = '';
+    tableCols.forEach(element => {
+      csv += '"' + element['ColLabel'] + '",';
+    });
+
+    csv = csv.substring(0, csv.length - 1);
+    csv += '\n';
+
+    for (let i = 0; i < tableData.length; i++) {
+      tableCols.forEach(element => {
+        csv += '"' + Utils.getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
+      });
+      csv = csv.substring(0, csv.length - 1);
+      csv += '\n';
+    }
+
+    return csv;
+  }
 }

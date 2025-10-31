@@ -8,6 +8,7 @@ import { Question, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
 import { Utils, Page, AppSize } from '../utils/utils';
+import { ModalUtils } from '../utils/modal.utils';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
 
 @Injectable({
@@ -24,16 +25,35 @@ export class GeneralService {
   scrollPosition$ = this.scrollPosition.asObservable();
   private internalScrollPosition = 0;
 
-  /* Error Handling */
-  showErrorModal = false;
-  errorMessage = '';
-  errorButtonText = 'OK';
+  /* Error Handling - delegated to ModalUtils */
+  get showErrorModal(): boolean {
+    return ModalUtils.showErrorModal;
+  }
+  
+  get errorMessage(): string {
+    return ModalUtils.errorMessage;
+  }
+  
+  get errorButtonText(): string {
+    return ModalUtils.errorButtonText;
+  }
 
-  /* Confirm Handling */
-  showConfirmModal = false;
-  confirmMessage = '';
-  confirmButtonText = 'OK';
-  confirmButtonCancelText = 'NO';
+  /* Confirm Handling - delegated to ModalUtils */
+  get showConfirmModal(): boolean {
+    return ModalUtils.showConfirmModal;
+  }
+  
+  get confirmMessage(): string {
+    return ModalUtils.confirmMessage;
+  }
+  
+  get confirmButtonText(): string {
+    return ModalUtils.confirmButtonText;
+  }
+  
+  get confirmButtonCancelText(): string {
+    return ModalUtils.confirmButtonCancelText;
+  }
 
   /* Site Banners */
   private bannersBS = new BehaviorSubject<Banner[]>([]);
@@ -135,90 +155,41 @@ export class GeneralService {
     return await this.cs.Banner.getById(id)
   }
 
+  /* Error and Confirm dialogs - delegated to ModalUtils */
   triggerFormValidationBanner(ss: string[]): void {
-    let ret = '';
-    ss.forEach(s => {
-      ret += `&bull;  ${s} is invalid\n`
-    });
-
-    this.addBanner(new Banner(0, ret, 3500));
+    ModalUtils.triggerFormValidationBanner(ss, (b: Banner) => this.addBanner(b));
   }
-  /* Error Service */
+
   acceptError() {
-    this.showErrorModal = false;
-    this.errorMessage = '';
+    ModalUtils.acceptError();
   }
 
   triggerError(message: any) {
-    this.showErrorModal = true;
-
-    if ('message' in message && message.message) {
-      this.errorMessage = message.message;
-    }
-    else if ('retMessage' in message && message.retMessage) {
-      this.errorMessage = message.retMessage;
-    }
-    else
-      this.errorMessage = message;
+    ModalUtils.triggerError(message);
   }
 
   checkResponse(response: any): boolean {
-    response = response as RetMessage;
-    if (response.retMessage && response.error) {
-      this.addBanner(new Banner(0, response.errorMessage ? Utils.objectToString(JSON.parse(response.errorMessage)) : response.retMessage, 5000));
-      return false;
-    }
-    return true;
+    return ModalUtils.checkResponse(response, (b: Banner) => this.addBanner(b));
   }
 
   successfulResponseBanner(response: any) {
-    const message = (response as RetMessage).retMessage;
-    if (!Utils.strNoE(message)) this.addBanner(new Banner(0, message, 3500));
+    ModalUtils.successfulResponseBanner(response, (b: Banner) => this.addBanner(b));
   }
 
   handelHTTPError(error: HttpErrorResponse) {
-    let errorText = '';
-
-    if (typeof (error.error) === 'object') {
-      for (let [key, value] of Object.entries(error.error)) {
-        errorText += value + '\n';
-      }
-    }
-    else {
-      errorText = error.statusText;
-    }
-
-    this.triggerError(errorText);
-    this.decrementOutstandingCalls();
+    ModalUtils.handleHTTPError(error, () => this.decrementOutstandingCalls());
   }
 
-  confirmFx: (() => void) | undefined | null;
-  rejectConfirmFx: (() => void) | undefined | null;
-  //input: any;
-
-  /* Custom Confirm */
   triggerConfirm(message: string, tmpConfirmFx: () => void, tmpRejectConfirmFx?: () => void) {
-    this.confirmMessage = '';
-    this.confirmFx = null;
-    this.rejectConfirmFx = null;
-    //this.input = null;
-
-    this.showConfirmModal = true;
-    this.confirmMessage = message;
-
-    this.confirmFx = tmpConfirmFx;
-    this.rejectConfirmFx = tmpRejectConfirmFx;
-    //this.input = tmpInput;
+    ModalUtils.triggerConfirm(message, tmpConfirmFx, tmpRejectConfirmFx);
   }
 
   acceptConfirm() {
-    this.showConfirmModal = false;
-    if (this.confirmFx) this.confirmFx();
+    ModalUtils.acceptConfirm();
   }
 
   rejectConfirm() {
-    this.showConfirmModal = false;
-    if (this.rejectConfirmFx) this.rejectConfirmFx();
+    ModalUtils.rejectConfirm();
   }
 
   getNextGsId(): string {
@@ -286,28 +257,7 @@ export class GeneralService {
   }
 
   tableToCSV(tableCols: any[], tableData: any[]): string {
-    if (tableData.length <= 0) {
-      this.triggerError('Cannot export empty dataset.');
-      return '';
-    }
-
-    let csv = '';
-    tableCols.forEach(element => {
-      csv += '"' + element['ColLabel'] + '",';
-    });
-
-    csv = csv.substring(0, csv.length - 1);
-    csv += '\n';
-
-    for (let i = 0; i < tableData.length; i++) {
-      tableCols.forEach(element => {
-        csv += '"' + Utils.getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
-      });
-      csv = csv.substring(0, csv.length - 1);
-      csv += '\n';
-    }
-
-    return csv;
+    return Utils.tableToCSV(tableCols, tableData, (msg: string) => this.triggerError(msg));
   }
 }
 
