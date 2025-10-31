@@ -146,7 +146,9 @@ export function createMockModalService() {
   return {
     open: jasmine.createSpy('open'),
     close: jasmine.createSpy('close'),
-    isOpen: false
+    isOpen: false,
+    triggerConfirm: jasmine.createSpy('triggerConfirm'),
+    triggerError: jasmine.createSpy('triggerError')
   };
 }
 
