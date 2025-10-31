@@ -63,17 +63,17 @@ describe('GeneralService', () => {
       service.incrementOutstandingCalls();
     });
 
-    it('should decrement outstanding calls', (done) => {
-      service.incrementOutstandingCalls();
-      let callCount = 0;
+    it('should decrement outstanding calls', () => {
+      let lastValue = 0;
       service.currentOutstandingCalls.subscribe(count => {
-        if (callCount === 2) {
-          expect(count).toBe(0);
-          done();
-        }
-        callCount++;
+        lastValue = count;
       });
+      
+      service.incrementOutstandingCalls();
+      expect(lastValue).toBe(1);
+      
       service.decrementOutstandingCalls();
+      expect(lastValue).toBe(0);
     });
 
     it('should not go below 0 when decrementing', (done) => {
@@ -84,17 +84,15 @@ describe('GeneralService', () => {
       });
     });
 
-    it('should handle multiple increments', (done) => {
-      service.incrementOutstandingCalls();
-      service.incrementOutstandingCalls();
-      let callCount = 0;
+    it('should handle multiple increments', () => {
+      let lastValue = 0;
       service.currentOutstandingCalls.subscribe(count => {
-        if (callCount === 2) {
-          expect(count).toBe(2);
-          done();
-        }
-        callCount++;
+        lastValue = count;
       });
+      
+      service.incrementOutstandingCalls();
+      service.incrementOutstandingCalls();
+      expect(lastValue).toBe(2);
     });
 
     it('should handle increment and decrement sequence', () => {
