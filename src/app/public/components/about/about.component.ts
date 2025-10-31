@@ -2,7 +2,8 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { CommonModule } from '@angular/common';
 import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 

@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import $ from 'jquery';
 import { ModalService } from '@app/core/services/modal.service';
 import { Banner } from '@app/core/models/api.models';

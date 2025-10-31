@@ -12,7 +12,8 @@ import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
-import { AppSize, GeneralService, RetMessage } from '@app/core/services/general.service';
+import { GeneralService, RetMessage } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';

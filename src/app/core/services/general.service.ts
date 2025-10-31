@@ -1,18 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import saveAs from 'file-saver';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import LoadImg from 'blueimp-load-image';
-import $ from 'jquery';
 import { Router } from '@angular/router';
-import imageCompression from 'browser-image-compression';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Question, Flow, Response } from '../models/form.models';
+import { Question, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
+import { Utils, Page, AppSize } from '../utils/utils';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
-import { Utils } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -286,44 +282,12 @@ export class GeneralService {
     return Utils.isObject(o);
   }
 
-  downloadFileAs(filename: string, data: any, MimeType: string) {
-    const blob = new Blob([data], { type: MimeType });
-    saveAs(blob, filename);
+  downloadFileAs(filename: string, data: any, MimeType: string): void {
+    Utils.downloadFileAs(filename, data, MimeType);
   }
 
   getScreenSize(): AppSize {
-    const width = window.innerWidth;
-
-    if (width >= AppSize._7XLG) {
-      return AppSize._7XLG;
-    }
-    else if (width >= AppSize._6XLG) {
-      return AppSize._6XLG;
-    }
-    else if (width >= AppSize._5XLG) {
-      return AppSize._5XLG;
-    }
-    else if (width >= AppSize._4XLG) {
-      return AppSize._4XLG;
-    }
-    else if (width >= AppSize._3XLG) {
-      return AppSize._3XLG;
-    }
-    else if (width >= AppSize._2XLG) {
-      return AppSize._2XLG;
-    }
-    else if (width >= AppSize.XLG) {
-      return AppSize.XLG;
-    }
-    else if (width >= AppSize.LG) {
-      return AppSize.LG;
-    }
-    else if (width >= AppSize.SM) {
-      return AppSize.SM;
-    }
-    else {
-      return AppSize.XS;
-    }
+    return Utils.getScreenSize();
   }
 
   isMobile(): boolean {
@@ -384,113 +348,43 @@ export class GeneralService {
   }
 
   devConsoleLog(location: string, x?: any): void {
-    if (!environment.production) {
-      if (x) console.log(location + '\n', x);
-      else console.log(location);
-    }
+    Utils.devConsoleLog(location, x);
   }
 
-  triggerChange(tmpFx: () => void, timeoutMs = 0) {
-    window.setTimeout(() => {
-      tmpFx();
-    }, timeoutMs);
+  triggerChange(tmpFx: () => void, timeoutMs = 0): void {
+    Utils.triggerChange(tmpFx, timeoutMs);
   }
 
   updateTableSelectList(list: TableColType[], PropertyName: string, selectList: any[]): void {
-    const l = list.find(l => l.PropertyName === PropertyName);
-    if (l)
-      l.SelectList = selectList;
+    Utils.updateTableSelectList(list, PropertyName, selectList);
   }
 
   getPageFromResponse(Response: any): Page {
-    let page = new Page();
-    // Next page
-    if (Response['next']) {
-      page.next = parseInt(Response['next'].split('page=')[1], 10);
-    } else {
-      page.next = null;
-    }
-
-    // Previous page
-    if (Response['previous']) {
-      if (Response['previous'].includes('page=')) {
-        page.previous = parseInt(Response['previous'].split('page=')[1], 10);
-      } else {
-        page.previous = 1;
-      }
-    } else {
-      page.previous = null;
-    }
-
-    // Number of pages
-    if (Response['count']) {
-      page.count = Math.ceil(Response['count'] / 10);
-
-      if (page.count === 1) {
-        page.count = -1;
-      }
-    }
-    else {
-      page.count = -1;
-    }
-    return page;
+    return Utils.getPageFromResponse(Response);
   }
 
   openURL(url: string): void {
-    window.open(url, 'noopener');
+    Utils.openURL(url);
   }
 
   navigateByUrl(s: string) {
     this.router.navigateByUrl(s);
   }
 
-  scrollTo(y: number | string) {
-    $('html, body').animate(
-      {
-        scrollTop: typeof y === 'number' ? y : ($('#' + y).offset()?.top || 0) - 200,
-      },
-      500,
-      'linear'
-    );
+  scrollTo(y: number | string): void {
+    Utils.scrollTo(y);
   }
 
   isQuestionConditionMet(answer: string, question: Question, conditionalQuestion: Question): boolean {
-    const condition = conditionalQuestion.conditional_on_questions.find(coq => coq.conditional_on === question.id);
-    if (condition)
-      switch (condition.question_condition_typ.question_condition_typ) {
-        case 'equal':
-          return (answer || '').toString().toLowerCase() === condition.condition_value.toLowerCase();
-        case 'exist':
-          return !Utils.strNoE(answer)
-        case 'lt':
-          return parseFloat(answer) < parseFloat(condition.condition_value);
-        case 'lt-equal':
-          return parseFloat(answer) <= parseFloat(condition.condition_value);
-        case 'gt':
-          return parseFloat(answer) > parseFloat(condition.condition_value);
-        case 'gt-equal':
-          return parseFloat(answer) >= parseFloat(condition.condition_value);
-      }
-    return false;
+    return Utils.isQuestionConditionMet(answer, question, conditionalQuestion);
   }
 
   resizeImageToMaxSize(file: File): Promise<File> {
-    var options = {
-      maxSizeMB: 10485760,
-      useWebWorker: true
-    }
-
-    return imageCompression(file, options);
+    return Utils.resizeImageToMaxSize(file);
   }
 
-  openFullscreen(event: MouseEvent) {
-    const img = event.target as HTMLImageElement;
-
-    if (img) {
-      if (img.requestFullscreen) {
-        img.requestFullscreen();
-      }
-    }
+  openFullscreen(event: MouseEvent): void {
+    Utils.openFullscreen(event);
   }
 
   tableToCSV(tableCols: any[], tableData: any[]): string {
@@ -519,69 +413,23 @@ export class GeneralService {
   }
 
   questionsToCSV(questions: Question[]): string {
-    let header = this.questionsToCSVHeader(questions);
-    let body = this.questionsToCSVBody(questions);
-
-    return `${header}\n${body}`;
+    return Utils.questionsToCSV(questions);
   }
 
   questionsToCSVHeader(questions: Question[]): string {
-    let header = '';
-    questions.forEach(q => {
-      header += `"${q.question}",`
-    });
-    header = header.substring(0, header.length - 1);
-    return header;
+    return Utils.questionsToCSVHeader(questions);
   }
 
   questionsToCSVBody(questions: Question[]): string {
-    let body = '';
-    questions.forEach(q => {
-      body += `"${Utils.formatQuestionAnswer(q.answer)}",`
-    });
-    body = body.substring(0, body.length - 1);
-    return body;
+    return Utils.questionsToCSVBody(questions);
   }
 
   responsesToCSV(responses: Response[]): string {
-    let csv = '';
-    if (responses[0])
-      csv += `${this.questionsToCSVHeader(responses[0].questionanswer_set)},Time\n`;
-    responses.forEach(r => {
-      csv += `${this.questionsToCSVBody(r.questionanswer_set)},${r.time}\n`;
-    });
-    return csv;
+    return Utils.responsesToCSV(responses);
   }
 
   keepElementInView(elementId: string): { x: number, y: number } | undefined {
-    const element = document.getElementById(elementId);
-
-    if (!element) {
-      console.error('Element not found');
-      return;
-    }
-
-    const rect = element.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    let xOffset = 0;
-    let yOffset = 0;
-    // Horizontal alignment
-    if (rect.right > viewportWidth) {
-      xOffset = rect.right - viewportWidth;
-    } else if (rect.left < 0) {
-      xOffset = rect.left;
-    }
-
-    // Vertical alignment
-    if (rect.bottom > viewportHeight) {
-      yOffset = rect.bottom - viewportHeight;
-    } else if (rect.top < 0) {
-      yOffset = rect.top;
-    }
-
-    return { x: xOffset, y: yOffset };
+    return Utils.keepElementInView(elementId);
   }
 }
 
@@ -589,23 +437,4 @@ export class RetMessage {
   retMessage!: string;
   error!: boolean;
   errorMessage!: string;
-}
-
-export class Page {
-  count = -1;
-  previous: number | null = null;
-  next: number | null = null;
-}
-
-export enum AppSize {
-  _7XLG = 3000,
-  _6XLG = 2650,
-  _5XLG = 2350,
-  _4XLG = 2000,
-  _3XLG = 1400,
-  _2XLG = 1200,
-  XLG = 922,
-  LG = 768,
-  SM = 767,
-  XS = 576,
 }

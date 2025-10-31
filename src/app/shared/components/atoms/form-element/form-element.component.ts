@@ -14,7 +14,8 @@ import {
   SimpleChanges,
   OnChanges
 } from '@angular/core';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';

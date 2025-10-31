@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 
 @Component({
   selector: 'app-blue-banners',

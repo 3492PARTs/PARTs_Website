@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';

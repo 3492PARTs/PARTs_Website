@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page } from '@app/core/services/general.service';
+import { Page } from '@app/core/utils/utils';
 
 @Component({
   selector: 'app-pagination',

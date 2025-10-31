@@ -2,7 +2,8 @@ import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@a
 import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';

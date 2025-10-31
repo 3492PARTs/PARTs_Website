@@ -2,7 +2,8 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Ren
 import { ModalService } from '@app/core/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
+import { AppSize } from '@app/core/utils/utils';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
