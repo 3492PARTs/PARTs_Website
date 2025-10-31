@@ -1,6 +1,7 @@
 import saveAs from 'file-saver';
 import imageCompression from 'browser-image-compression';
 import $ from 'jquery';
+import LoadImg from 'blueimp-load-image';
 import { environment } from '../../../environments/environment';
 import { Question, Response } from '../models/form.models';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
@@ -591,4 +592,30 @@ export function tableToCSV(tableCols: any[], tableData: any[], onEmptyError?: (m
   }
 
   return csv;
+}
+
+/**
+ * Preview an image from a URL using blueimp-load-image
+ * @param link - URL of the image to preview
+ * @param id - ID of the HTML element to append the image to
+ */
+export function previewImage(link: string, id: string): void {
+  LoadImg(
+    link,
+    (img: any) => {
+      if (img) {
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        document.getElementById(id)!.appendChild(img);
+      }
+    },
+    {
+      //maxWidth: 600,
+      //maxHeight: 300,
+      //minWidth: 100,
+      //minHeight: 50,
+      //canvas: true,
+      orientation: true
+    }
+  );
 }

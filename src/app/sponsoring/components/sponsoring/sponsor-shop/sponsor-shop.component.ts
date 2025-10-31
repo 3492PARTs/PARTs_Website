@@ -15,7 +15,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
-import { arrayObjectIndexOf, cloneObject, strNoE } from '@app/core/utils/utils.functions';
+import { arrayObjectIndexOf, cloneObject, strNoE, previewImage } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-sponsor-shop',
   imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
@@ -119,7 +119,7 @@ export class SponsorShopComponent implements OnInit {
     });
   }
 
-  previewImage(link: string, id: string): void {
-    this.gs.previewImage(link, id);
+  previewImageWrapper(link: string, id: string): void {
+    previewImage(link, id);
   }
 }

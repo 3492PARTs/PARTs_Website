@@ -1,16 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import LoadImg from 'blueimp-load-image';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Question, Response } from '../models/form.models';
 import { Banner } from '../models/api.models';
 import { CacheService } from './cache.service';
-import { TableColType } from '@app/shared/components/atoms/table/table.component';
-
-import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, Page, cloneObject, getScreenSize } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, getScreenSize } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -144,27 +138,6 @@ export class GeneralService {
       else {
         return size;
       }
-  }
-
-  previewImage(link: string, id: string) {
-    LoadImg(
-      link,
-      (img: any) => {
-        if (img) {
-          img.style.width = '100%';
-          img.style.height = 'auto';
-          document.getElementById(id)!.appendChild(img);
-        }
-      },
-      {
-        //maxWidth: 600,
-        //maxHeight: 300,
-        //minWidth: 100,
-        //minHeight: 50,
-        //canvas: true,
-        orientation: true
-      }
-    );
   }
 
   previewImageFile(image: File, onLoad: (ev: ProgressEvent<FileReader>) => any) {

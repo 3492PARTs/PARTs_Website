@@ -170,7 +170,7 @@
           }
           @case ('image') {
           <span [id]="'image' + i" appOnCreate (onCreate)="
-                  previewImage(rec[col.PropertyName || ''], 'image' + i)
+                  previewImageWrapper(rec[col.PropertyName || ''], 'image' + i)
                 ">
           </span>
           }

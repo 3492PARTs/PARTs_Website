@@ -26,7 +26,7 @@ import { OrderByPipe } from '@app/shared/pipes/order-by.pipe';
 import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-import { getPropertyValue, setPropertyValue, strNoE } from '@app/core/utils/utils.functions';
+import { getPropertyValue, setPropertyValue, strNoE, previewImage } from '@app/core/utils/utils.functions';
 //import * as $ from 'jquery';
 
 @Component({
@@ -437,8 +437,8 @@ export class TableComponent implements OnInit, OnChanges {
     this.FilterTextChange.emit(text);
   }
 
-  previewImage(link: string, id: string): void {
-    this.gs.previewImage(link, id);
+  previewImageWrapper(link: string, id: string): void {
+    previewImage(link, id);
   }
 
   strNoE(s: any): boolean {
