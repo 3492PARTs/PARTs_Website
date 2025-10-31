@@ -224,25 +224,46 @@ export class Utils {
 
   /**
    * Set a nested property value on an object using dot notation
+   * Protected against prototype pollution attacks
    */
   static setPropertyValue(rec: any, property: string, value: any): void {
     if (!property) {
       throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
     }
 
+    // Guard against prototype pollution
+    const dangerousProps = ['__proto__', 'constructor', 'prototype'];
+    const properties = property.split('.');
+    
+    // Check if any part of the path is a dangerous property
+    if (properties.some(prop => dangerousProps.includes(prop))) {
+      console.error('Attempting to set dangerous property:', property);
+      return;
+    }
+
     try {
       // Split property path and traverse the object to set the value
-      const properties = property.split('.');
       let current: any = rec;
       
       for (let i = 0; i < properties.length - 1; i++) {
-        if (current[properties[i]] == null) {
-          current[properties[i]] = {};
+        const prop = properties[i];
+        // Additional check at each level
+        if (dangerousProps.includes(prop)) {
+          console.error('Dangerous property detected in path:', property);
+          return;
         }
-        current = current[properties[i]];
+        
+        if (!Object.prototype.hasOwnProperty.call(current, prop) || current[prop] == null) {
+          current[prop] = {};
+        }
+        current = current[prop];
       }
       
-      current[properties[properties.length - 1]] = value;
+      const finalProp = properties[properties.length - 1];
+      // Final check before assignment
+      if (!dangerousProps.includes(finalProp) && current != null && typeof current === 'object') {
+        current[finalProp] = value;
+      }
     }
     catch (err) {
       console.error('Error setting property:', property, err);
