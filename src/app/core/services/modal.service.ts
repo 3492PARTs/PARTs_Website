@@ -44,10 +44,24 @@ export class ModalService {
   }
 
   /**
+   * Set error modal visibility state
+   */
+  set showErrorModal(value: boolean) {
+    this.showErrorModalBS.next(value);
+  }
+
+  /**
    * Get current error message
    */
   get errorMessage(): string {
     return this.errorMessageBS.value;
+  }
+
+  /**
+   * Set error message
+   */
+  set errorMessage(value: string) {
+    this.errorMessageBS.next(value);
   }
 
   /**
@@ -58,10 +72,24 @@ export class ModalService {
   }
 
   /**
+   * Set confirm modal visibility state
+   */
+  set showConfirmModal(value: boolean) {
+    this.showConfirmModalBS.next(value);
+  }
+
+  /**
    * Get current confirm message
    */
   get confirmMessage(): string {
     return this.confirmMessageBS.value;
+  }
+
+  /**
+   * Set confirm message
+   */
+  set confirmMessage(value: string) {
+    this.confirmMessageBS.next(value);
   }
 
   /**
