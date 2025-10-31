@@ -4,13 +4,13 @@ import { AuthCallStates, AuthService } from '../services/auth.service';
 import { inject } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
 
+import { devConsoleLog } from '@app/core/utils/utils.functions';
 export const authGuard: CanActivateFn = (route, state) => {
 
   const authService = inject(AuthService);
-  const gs = inject(GeneralService);
 
   return authService.authInFlight.pipe(skipWhile(val => val === AuthCallStates.prcs), map(val => {
-    gs.devConsoleLog('Auth Guard is session expired below');
+    devConsoleLog('Auth Guard is session expired below');
     switch (val) {
       case AuthCallStates.comp:
         if (!authService.isSessionExpired())

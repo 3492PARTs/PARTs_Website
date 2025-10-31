@@ -2,11 +2,12 @@ import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Ren
 import { ModalService } from '@app/core/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 
+import { AppSize, Page, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-modal',
   imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],
@@ -45,7 +46,7 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     this.setModalSize();
-    if (!this.gs.strNoE(this.ButtonText) && this.gs.strNoE(this.ButtonType)) this.ButtonType = 'main';
+    if (!strNoE(this.ButtonText) && strNoE(this.ButtonType)) this.ButtonType = 'main';
   }
 
   @HostListener('window:resize', ['$event'])
@@ -60,7 +61,7 @@ export class ModalComponent implements OnInit {
   }
 
   setModalSize(): void {
-    if (this.gs.strNoE(this.Width)) {
+    if (strNoE(this.Width)) {
       if (this.gs.getAppSize() >= AppSize._3XLG) {
         this._Width = '90%';
       }

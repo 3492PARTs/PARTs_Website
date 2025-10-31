@@ -9,7 +9,7 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
-
+import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-phone-types',
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
@@ -22,7 +22,7 @@ export class PhoneTypesComponent implements OnInit {
   newPhoneType = false;
   activePhoneType: PhoneType = new PhoneType();
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private us: UserService) { }
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private us: UserService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -50,23 +50,23 @@ export class PhoneTypesComponent implements OnInit {
 
   savePhoneType(): void {
     this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.getPhoneTypes();
       this.resetPhoneType();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   deletePhoneType(): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this phone type?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to delete this phone type?', () => {
       this.api.delete(true, 'admin/phone-type/', {
         phone_type_id: this.activePhoneType.id
       }, (result: any) => {
         this.resetPhoneType();
         this.getPhoneTypes();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }

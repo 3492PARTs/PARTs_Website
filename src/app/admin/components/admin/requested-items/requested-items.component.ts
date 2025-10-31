@@ -9,7 +9,7 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-
+import { previewImage } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-requested-items',
@@ -49,7 +49,7 @@ export class RequestedItemsComponent implements OnInit {
 
   editItem(i = new Item()): void {
     this.activeItem = i;
-    this.gs.previewImage(this.activeItem.img_url, 'item-image');
+    previewImage(this.activeItem.img_url, 'item-image');
     this.itemModalVisible = true;
   }
 
@@ -72,8 +72,8 @@ export class RequestedItemsComponent implements OnInit {
 
   }
 
-  previewImage(link: string, id: string): void {
-    this.gs.previewImage(link, id);
+  previewImageWrapper(link: string, id: string): void {
+    previewImage(link, id);
   }
 
   previewImageFile(): void {

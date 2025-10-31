@@ -17,6 +17,10 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
+import * as Utils from '@app/core/utils/utils.functions';
+
 @Component({
   selector: 'app-profile',
   imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
@@ -25,6 +29,9 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 })
 export class ProfileComponent implements OnInit {
 
+  // Expose Utils to template
+  Utils = Utils;
+  
   user: User = new User();
   editUser: User = new User();
   userProfileImage!: File | null;
@@ -58,14 +65,14 @@ export class ProfileComponent implements OnInit {
     private api: APIService,
     private renderer: Renderer2,
     private ns: NotificationsService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private modalService: ModalService) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.activeTab = queryParams.get('tab') || '';
     });
 
     this.auth.user.subscribe(u => {
       this.user = u;
-      this.editUser = this.gs.cloneObject(u) as User;
+      this.editUser = cloneObject(u) as User;
       console.log(this.editUser);
     });
 
@@ -88,11 +95,11 @@ export class ProfileComponent implements OnInit {
 
       form.append('image', imageFile, imageFile.name);
     }
-    else if (!this.gs.strNoE(this.input.password)) {
+    else if (!strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {
-        this.gs.triggerError('Passwords do not match.');
+        this.modalService.triggerError('Passwords do not match.');
         return null;
       }
     }
@@ -100,15 +107,14 @@ export class ProfileComponent implements OnInit {
     form.append('last_name', this.editUser.last_name);
     form.append('email', this.editUser.email);
 
-
     this.api.put(true, 'user/profile/', form, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
 
       this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 

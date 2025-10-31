@@ -7,7 +7,7 @@ import { Link, SubLink } from '@app/core/models/navigation.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
-import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
 import { Alert, NotificationsService } from '@app/core/services/notifications.service';
 import { PwaService } from '@app/core/services/pwa.service';
@@ -20,6 +20,7 @@ import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
+import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-navigation',
   imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
@@ -107,14 +108,14 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.auth.user.subscribe(u => this.user = u);
 
     this.auth.userLinks.subscribe((ul) => {
-      this.userLinks = this.gs.cloneObject(ul);
+      this.userLinks = cloneObject(ul);
 
       this.applicationMenu.forEach(mi => {
         if (mi.menu_name == 'Members') {
-          let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
+          let index = arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
           mi.menu_items = index !== -1 ? [...this.userLinks, new Link('Install', '')] : [...this.userLinks];
-          //if (!this.gs.strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
+          //if (!strNoE(this.user.id)) mi.menu_items.push(new SubLink('Logout', ''));
           //else mi.menu_items.push(new SubLink('Login', 'login'))
         }
       });
@@ -134,7 +135,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       window.setTimeout(() => {
         this.applicationMenu.forEach(mi => {
           if (mi.menu_name === 'Members') {
-            let index = this.gs.arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
+            let index = arrayObjectIndexOf(mi.menu_items, 'menu_name', 'Install');
 
             if (e && index === -1) {
               mi.menu_items.push(new Link('Install', ''));
@@ -151,7 +152,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       (event: NavigationEvent) => {
         if (event instanceof NavigationEnd) {
           if (this.urlEnd !== event.url)
-            this.gs.scrollTo(0);
+            scrollTo(0);
 
           this.urlEnd = event.url;
 
@@ -169,7 +170,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     //this.navigationService.subPages.subscribe(s => this.subPages = s);
 
     this.navigationService.subPage.subscribe(s => {
-      if (this.subPage !== s || this.gs.strNoE(s)) {
+      if (this.subPage !== s || strNoE(s)) {
         let isFirst = false;
         this.navigationService.allSubPages.forEach(spg => {
           if (spg[0] && spg[0].routerlink === s) {
@@ -210,7 +211,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.frontendEnv = environment.environment;
 
-    if (!this.gs.strNoE(this.frontendEnv)) this.api.getAPIStatus().then(result => {
+    if (!strNoE(this.frontendEnv)) this.api.getAPIStatus().then(result => {
       this.backendEnv = result;
     });
 
@@ -229,7 +230,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     // Check if comp page is available
     this.api.get(false, 'public/competition/init/', undefined, (result: any) => {
       if ((result as CompetitionInit).event) {
-        this.gs.triggerChange(() => {
+        triggerChange(() => {
           this.applicationMenu.unshift(new Link('Competition', 'competition', 'robot-excited-outline'));
         });
       }
@@ -240,7 +241,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     let token = localStorage.getItem(this.tokenString) || '';
     let loggedInBefore = localStorage.getItem(environment.loggedInHereBefore) || '';
 
-    if (this.gs.strNoE(token) && this.gs.strNoE(loggedInBefore) && !this.hideNavExpander) {
+    if (strNoE(token) && strNoE(loggedInBefore) && !this.hideNavExpander) {
       this.removeHeader = true;
     }
   }
@@ -285,7 +286,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
       //if (!environment.production) console.log('scroll pos: ' + this.scrollPosition);
 
-      if (this.gs.strNoE(this.scrollPosition.toString())) {
+      if (strNoE(this.scrollPosition.toString())) {
         // wasn't set yet
         this.scrollPosition = 0;
       }
@@ -338,7 +339,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   openSubNav(pgID: string, elemID: string): void {
-    if (this.gs.strNoE(this.subNav) || this.subNav !== elemID) {
+    if (strNoE(this.subNav) || this.subNav !== elemID) {
       this.closeSubNav();
 
       const parent = document.getElementById(pgID);
@@ -366,8 +367,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   closeSubNav(resetNames = false): void {
-    if (!this.gs.strNoE(this.subNav)) {
-      this.gs.devConsoleLog('navigation.component/closeSubNav', this.subNav);
+    if (!strNoE(this.subNav)) {
+      devConsoleLog('navigation.component/closeSubNav', this.subNav);
       const id = this.subNav.substring(0, this.subNav.length - 2);
       const parent = document.getElementById(id);
       if (parent) parent.style.height = '6.8rem';
@@ -442,7 +443,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     this.showMessageModalVisible = false;
   }
 
-
   showUserModal(): void {
     if (this.showUserModalVisible) this.showUserModalVisible = false;
     else this.showUserModalVisible = true;
@@ -488,7 +488,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   checkActiveMenuItem(urlEnd: string, mi: Link, mii: SubLink): void {
-    if (!this.gs.strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
+    if (!strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
   }
 
   setActiveMenuSubmenuAndItem(parent: Link, child: SubLink, routerLink: string): void {
@@ -513,18 +513,18 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   isActiveMenuItem(): boolean {
     let active = false;
-    this.applicationMenu.forEach(mi => { active = active || !this.gs.strNoE(mi.menu_name_active_item) });
+    this.applicationMenu.forEach(mi => { active = active || !strNoE(mi.menu_name_active_item) });
     return active;
   }
 
   getActiveMenuItemName(): string {
     let active = '';
-    this.applicationMenu.forEach(mi => { if (!this.gs.strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
+    this.applicationMenu.forEach(mi => { if (!strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
     return active;
   }
 
   openURL(url: string): void {
-    this.gs.openURL(url);
+    openURL(url);
   }
 
   dismissSiteBanner(b: Banner): void {

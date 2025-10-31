@@ -9,6 +9,8 @@ import { QuestionAdminFormComponent } from '../question-admin-form/question-admi
 import { Response } from '@app/core/models/form.models';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { downloadFileAs, responsesToCSV, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form-manager',
   imports: [ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, ModalComponent],
@@ -22,7 +24,7 @@ export class FormManagerComponent implements OnInit {
   responses: Response[] = [];
   archiveInd = 'n'
 
-  constructor(private authService: AuthService, private api: APIService, private gs: GeneralService) { }
+  constructor(private authService: AuthService, private api: APIService, private gs: GeneralService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -39,7 +41,7 @@ export class FormManagerComponent implements OnInit {
     }, (result: any) => {
       this.responses = result as Response[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -51,32 +53,32 @@ export class FormManagerComponent implements OnInit {
   }
 
   archiveResponse(res: Response): void {
-    this.gs.triggerConfirm('Are you sure you want to archive this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to archive this response?', () => {
 
       res.archive_ind = 'y';
 
       this.api.post(true, 'form/response/', res, (result: any) => {
         this.getResponses();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }
 
   deleteResponse(res: Response): void {
-    this.gs.triggerConfirm('Are you sure you want to delete this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to delete this response?', () => {
       this.api.delete(true, 'form/response/', {
         response_id: res.id
       }, (result: any) => {
         this.getResponses();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     });
   }
 
   exportResponses(): void {
-    let csv = this.gs.responsesToCSV(this.responses);
+    let csv = responsesToCSV(this.responses);
     let name = '';
     switch (this.FormTyp) {
       case 'team-cntct':
@@ -89,7 +91,7 @@ export class FormManagerComponent implements OnInit {
 
     name += this.archiveInd === 'y' ? '_Archived' : '';
 
-    if (!this.gs.strNoE(csv)) this.gs.downloadFileAs(`${name}.csv`, csv, 'text/csv');
+    if (!strNoE(csv)) downloadFileAs(`${name}.csv`, csv, 'text/csv');
   }
 
   switchArchiveInd(): void {

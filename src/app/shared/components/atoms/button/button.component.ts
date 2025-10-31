@@ -27,7 +27,6 @@ export class ButtonComponent implements OnInit {
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 
-
   constructor() { }
 
   ngOnInit() { }

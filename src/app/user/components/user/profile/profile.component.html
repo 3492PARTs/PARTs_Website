@@ -159,7 +159,7 @@
                     class="do-not-match"
                 [ngClass]="{
                   hide:
-                    gs.strNoE(input.password) ||
+                    Utils.strNoE(input.password) ||
                     input.password === input.passwordConfirm
                 }"
                     >passwords do not match</span
@@ -169,7 +169,7 @@
                 [ngClass]="{
                   hide:
                     input.password !== input.passwordConfirm ||
-                    gs.strNoE(input.password)
+                    Utils.strNoE(input.password)
                 }"
                       >passwords match</span
                       >

@@ -13,7 +13,8 @@ import { ModalComponent } from "../../../../../shared/components/atoms/modal/mod
 import { FieldForm, Match, MatchStrategy, Team } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
-
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-match-planning',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
@@ -37,7 +38,7 @@ export class MatchPlanningComponent implements OnInit {
   outstandingResponses: { id: number, match: number }[] = [];
   formDisabled = false;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
@@ -84,7 +85,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategies(): void {
-    if (!this.activeMatchStrategy || !this.gs.strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy || !strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_key === this.match?.match_key);
     this.buildTeamList();
   }
@@ -97,7 +98,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setMatchStrategy(ms?: MatchStrategy): void {
-    this.activeMatchStrategy = ms ? this.gs.cloneObject(ms) : new MatchStrategy();
+    this.activeMatchStrategy = ms ? cloneObject(ms) : new MatchStrategy();
   }
 
   setImage(f: File): void {
@@ -127,7 +128,7 @@ export class MatchPlanningComponent implements OnInit {
             if (result)
               this.matchStrategies = result;
             this.setMatchStrategies();
-            this.gs.scrollTo(0);
+            scrollTo(0);
           });
         }
         this.populateOutstandingResponses();
@@ -156,7 +157,7 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this response?', () => {
       if (this.activeMatchStrategy)
         this.ss.removeMatchStrategyResponseFromCache(this.activeMatchStrategy.id || -1).then(() => {
           this.reset();

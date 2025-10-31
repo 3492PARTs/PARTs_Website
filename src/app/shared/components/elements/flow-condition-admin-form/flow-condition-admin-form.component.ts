@@ -10,6 +10,8 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-flow-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, FormComponent, ButtonRibbonComponent, ButtonComponent],
@@ -32,7 +34,7 @@ export class
   flowConditionQuestionFromList: Flow[] = [];
   flowConditionQuestionToList: Flow[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -52,7 +54,7 @@ export class
       this.buildFlowConditionFromLists();
       this.buildFlowConditionToLists();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -62,20 +64,20 @@ export class
     }, (result: any) => {
       this.flowConditions = result as FlowCondition[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   showFlowConditionModal(qc?: FlowCondition) {
     this.flowConditionModalVisible = true;
-    this.activeFlowCondition = qc ? this.gs.cloneObject(qc) : new FlowCondition();
+    this.activeFlowCondition = qc ? cloneObject(qc) : new FlowCondition();
 
     this.buildFlowConditionFromLists();
     this.buildFlowConditionToLists();
   }
 
   buildFlowConditionFromLists(): void {
-    this.flowConditionQuestionFromList = this.gs.cloneObject(this.flows);
+    this.flowConditionQuestionFromList = cloneObject(this.flows);
   }
 
   buildFlowConditionToLists(): void {
@@ -95,13 +97,13 @@ export class
 
       // Keep the question just selected as from out of the list
       if (this.activeFlowCondition.flow_from &&
-        !this.gs.strNoE(this.activeFlowCondition.flow_from.id) &&
+        !strNoE(this.activeFlowCondition.flow_from.id) &&
         this.activeFlowCondition.flow_from.id === flow.id) {
         match = true;
       }
 
       if (this.activeFlowCondition.flow_to &&
-        !this.gs.strNoE(this.activeFlowCondition.flow_to.id) &&
+        !strNoE(this.activeFlowCondition.flow_to.id) &&
         this.activeFlowCondition.flow_to.id === flow.id) {
         match = false;
       }
@@ -120,17 +122,17 @@ export class
 
   saveFlowCondition(): void {
     this.api.post(true, 'form/flow-condition/', this.activeFlowCondition, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeFlowCondition = new FlowCondition();
       this.flowConditionModalVisible = false;
       this.getFlows();
       this.getFlowConditions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }

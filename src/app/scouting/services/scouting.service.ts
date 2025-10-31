@@ -9,6 +9,8 @@ import { APIService } from '@app/core/services/api.service';
 import { CacheService } from '@app/core/services/cache.service';
 import { GeneralService } from '@app/core/services/general.service';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, formatQuestionAnswer, resizeImageToMaxSize, strNoE } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +41,7 @@ export class ScoutingService {
 
   constructor(private api: APIService,
     private cs: CacheService,
-    private gs: GeneralService) { }
+    private gs: GeneralService, private modalService: ModalService) { }
 
   startUploadOutstandingResponsesTimeout(): void {
     if (this.outstandingResponsesTimeout != null) window.clearTimeout(this.outstandingResponsesTimeout);
@@ -81,7 +83,6 @@ export class ScoutingService {
             });
           }
         });
-
 
         if (pitUploaded) {
           if (!fieldUploaded) this.loadTeams();
@@ -627,7 +628,7 @@ export class ScoutingService {
       });
 
       this.api.post(loadingScreen, 'form/save-answers/', { answers: sfr.answers, team_id: sfr.team_id, match_key: sfr.match?.match_key, form_typ: sfr.form_typ }, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.ScoutFieldFormResponse.RemoveAsync(id);
@@ -642,7 +643,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else {
@@ -680,7 +681,6 @@ export class ScoutingService {
         let page = 1;
         let count = 1;
         let ids: number[] = [];
-
 
         while (!done) {
 
@@ -851,16 +851,16 @@ export class ScoutingService {
       spr.answers.forEach(a => {
         if (a.question) {
           a.question.answer = '';
-          a.value = this.gs.formatQuestionAnswer(a.value);
+          a.value = formatQuestionAnswer(a.value);
         }
       })
       spr.form_typ = 'pit';
 
-      const sprPost = this.gs.cloneObject(spr);
+      const sprPost = cloneObject(spr);
       sprPost.robotPics = []; // we don't want to upload the images here
 
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         this.gs.incrementOutstandingCalls();
 
@@ -874,7 +874,7 @@ export class ScoutingService {
               this.gs.incrementOutstandingCalls();
 
               if (pic.img)
-                this.gs.resizeImageToMaxSize(pic.img).then(resizedPic => {
+                resizeImageToMaxSize(pic.img).then(resizedPic => {
                   if (resizedPic) {
                     const formData = new FormData();
                     formData.append('file', resizedPic);
@@ -883,9 +883,9 @@ export class ScoutingService {
                     formData.append('img_title', pic.img_title);
 
                     this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      this.gs.successfulResponseBanner(result);
+                      this.modalService.successfulResponseBanner(result);
                     }, (err: any) => {
-                      this.gs.triggerError(err);
+                      this.modalService.triggerError(err);
                     });
                   }
                 }).finally(() => {
@@ -1191,7 +1191,7 @@ export class ScoutingService {
       if (id) teamNote.id = NaN;
 
       this.api.post(loadingScreen, 'scouting/strategizing/team-notes/', teamNote, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.removeTeamNoteResponseFromCache(id)
@@ -1206,7 +1206,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else
@@ -1289,16 +1289,15 @@ export class ScoutingService {
       const fd = new FormData();
       if (matchStrategy.img)
         fd.append('img', matchStrategy.img);
-      if (!this.gs.strNoE(matchStrategy.id))
+      if (!strNoE(matchStrategy.id))
         fd.append('id', matchStrategy.id.toString());
 
       fd.append('match_key', matchStrategy.match?.match_key.toString() || '');
       fd.append('user_id', matchStrategy.user?.id.toString() || '');
       fd.append('strategy', matchStrategy.strategy);
 
-
       this.api.post(loadingScreen, 'scouting/strategizing/match-strategy/', fd, async (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
 
         if (id) {
           await this.cs.MatchStrategyResponse.RemoveAsync(id)
@@ -1313,7 +1312,7 @@ export class ScoutingService {
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
-          this.gs.triggerError(reason);
+          this.modalService.triggerError(reason);
           resolve(false);
         });
         else
@@ -1392,10 +1391,10 @@ export class ScoutingService {
     return new Promise(resolve => {
 
       this.api.post(loadingScreen, 'scouting/strategizing/alliance-selection/', selections, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         resolve(true);
       }, (error) => {
-        this.gs.triggerError(error);
+        this.modalService.triggerError(error);
         resolve(false);
       });
     });

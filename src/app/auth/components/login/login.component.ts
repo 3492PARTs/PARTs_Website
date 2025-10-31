@@ -10,6 +10,10 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { CommonModule } from '@angular/common';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { Page, strNoE } from '@app/core/utils/utils.functions';
+import * as Utils from '@app/core/utils/utils.functions';
+
 @Component({
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
@@ -18,15 +22,18 @@ import { CommonModule } from '@angular/common';
 })
 export class LoginComponent implements OnInit {
 
+  // Expose Utils to template
+  Utils = Utils;
+  
   input: UserData = new UserData;
   returnUrl: string | null = '';
   page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
   rememberMe = false;
 
-  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router) {
+  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router, private modalService: ModalService) {
     /*this.route.queryParamMap.subscribe(queryParams => {
-      this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.returnUrl = strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/
   }
 
@@ -41,11 +48,11 @@ export class LoginComponent implements OnInit {
     };
 
     this.route.queryParamMap.subscribe(queryParams => {
-      this.page = this.gs.strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
-      this.input.uuid = this.gs.strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
-      this.input.token = this.gs.strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
-      this.input.username = this.gs.strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
-      this.returnUrl = this.gs.strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
+      this.page = strNoE(queryParams.get('page')) ? 'login' : queryParams.get('page');
+      this.input.uuid = strNoE(queryParams.get('uuid')) ? '' : queryParams.get('uuid');
+      this.input.token = strNoE(queryParams.get('token')) ? '' : queryParams.get('token');
+      this.input.username = strNoE(queryParams.get('user')) ? '' : queryParams.get('user') || '';
+      this.returnUrl = strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });
 
     this.readRememberMe();
@@ -70,8 +77,8 @@ export class LoginComponent implements OnInit {
   }
 
   resetPassword(): void | null {
-    if (this.gs.strNoE(this.input.email)) {
-      this.gs.triggerError('Email not provided.');
+    if (strNoE(this.input.email)) {
+      this.modalService.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.requestResetPassword(this.input);
@@ -86,16 +93,16 @@ export class LoginComponent implements OnInit {
       this.authService.resetPassword(this.input);
       this.input = new UserData();
     } else {
-      this.gs.triggerError('Passwords do not match.');
+      this.modalService.triggerError('Passwords do not match.');
     }
   }
 
   resendConfirmation() {
-    if (!this.gs.strNoE(this.input.email)) {
+    if (!strNoE(this.input.email)) {
       this.authService.resendConfirmation(this.input);
       this.input = new UserData();
     } else {
-      this.gs.triggerError('Email address is required.');
+      this.modalService.triggerError('Email address is required.');
     }
   }
 
@@ -105,8 +112,8 @@ export class LoginComponent implements OnInit {
   }
 
   forgotUsername(): void | null {
-    if (this.gs.strNoE(this.input.email)) {
-      this.gs.triggerError('Email not provided.');
+    if (strNoE(this.input.email)) {
+      this.modalService.triggerError('Email not provided.');
       return null;
     } else {
       this.authService.forgotUsername(this.input);

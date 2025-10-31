@@ -11,6 +11,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 import { ScoutFieldSchedule, Schedule } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { decodeSentBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scouting-portal',
   imports: [BoxComponent, TableComponent, FormElementGroupComponent],
@@ -22,7 +23,6 @@ export class ScoutingPortalComponent implements OnInit {
   //userPermissions: AuthPermission[] = [];
 
   fullFieldSchedule: ScoutFieldSchedule[] = [];
-
 
   schedule: Schedule[] = [];
   fieldSchedule: {
@@ -99,7 +99,7 @@ export class ScoutingPortalComponent implements OnInit {
             pos = 'blue three'
           }
 
-          if (!this.gs.strNoE(pos)) {
+          if (!strNoE(pos)) {
             this.fieldSchedule.push({
               position: pos,
               st_time: new Date(fs.st_time),
@@ -116,10 +116,10 @@ export class ScoutingPortalComponent implements OnInit {
   }
 
   decodeSentBoolean(b: boolean): string {
-    return this.gs.decodeSentBoolean(b);
+    return decodeSentBoolean(b);
   }
 
   decodeYesNoBoolean(b: boolean): string {
-    return this.gs.decodeYesNoBoolean(b);
+    return decodeYesNoBoolean(b);
   }
 }

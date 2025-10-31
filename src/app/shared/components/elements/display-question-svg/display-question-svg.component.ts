@@ -4,6 +4,7 @@ import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
+import { triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-display-question-svg',
   imports: [SafeHTMLPipe, CommonModule],
@@ -14,7 +15,7 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 
   @Input() set Question(q: Question) {
     this.question = q;
-    this.gs.triggerChange(() => this.setSvgAttributes());
+    triggerChange(() => this.setSvgAttributes());
   }
   @Output() QuestionChange = new EventEmitter<any>();
 

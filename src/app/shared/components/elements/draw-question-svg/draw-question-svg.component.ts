@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from "../../atoms/button/button.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 
+import { ModalService } from '@app/core/services/modal.service';
+import { decodeYesNo, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
@@ -28,7 +30,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
 
   @Input() set ImageUrl(s: string) {
     this.url = s;
-    this.gs.triggerChange(() => this.adjustImage(), 5);
+    triggerChange(() => this.adjustImage(), 5);
 
   }
 
@@ -66,7 +68,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   @Output() FlowQuestionsChange: EventEmitter<FlowQuestion[]> = new EventEmitter<FlowQuestion[]>();
   activeFlowQuestion: FlowQuestion | undefined = undefined;
 
-  constructor(private renderer: Renderer2, private gs: GeneralService) { }
+  constructor(private renderer: Renderer2, private gs: GeneralService, private modalService: ModalService) { }
 
   ngAfterViewInit() {
     // It's crucial to get the SVG and path elements after the view is initialized.
@@ -83,7 +85,6 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       this.adjustImage();
     }, 200);
   }
-
 
   handleMouseDown(event: MouseEvent) {
     if (!this.isDragging) {
@@ -116,7 +117,6 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       console.log('Shape Tapped!');
     }
   }
-
 
   addPoint(x: number, y: number) {
     this.points.push({ x, y });
@@ -171,7 +171,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       </svg>
     `
     if (svg.length > 2000) {
-      this.gs.triggerError('Path too complicated, simplify please.');
+      this.modalService.triggerError('Path too complicated, simplify please.');
       return '';
     }
     else
@@ -247,7 +247,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   }
 
   ynToYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }
 

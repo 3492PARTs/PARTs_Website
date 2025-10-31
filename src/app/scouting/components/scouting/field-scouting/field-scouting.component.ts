@@ -20,6 +20,8 @@ import { HeaderComponent } from "../../../../shared/components/atoms/header/head
 import { QuestionFormElementComponent } from "../../../../shared/components/elements/question-form-element/question-form-element.component";
 import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
 
+import { ModalService } from '@app/core/services/modal.service';
+import { arrayObjectIndexOf, cloneObject, formatQuestionAnswer, isQuestionConditionMet, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting',
   imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, QuestionFormElementComponent, ModalComponent],
@@ -66,7 +68,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2) {
+  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2, private modalService: ModalService) {
     this.authService.user.subscribe(u => this.user = u);
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
@@ -92,9 +94,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.formSubTypeForms = result.field_form_form.form_sub_types;
 
         this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
-        this.gs.triggerChange(() => {
+        triggerChange(() => {
           this.activeFormSubTypeForm?.flows.forEach(qf => {
-            if (!this.gs.strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
+            if (!strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
               this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
               qf.flow_conditional_on = NaN;
             }
@@ -165,7 +167,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this response?', () => {
       this.cs.ScoutFieldFormResponse.RemoveAsync(this.scoutFieldResponse.id || -1).then(() => {
         this.reset();
         this.populateOutstandingResponses();
@@ -179,7 +181,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.api.get(false, 'scouting/field/check-in/', {
         scout_field_sch_id: this.scoutFieldSchedule.id
       }, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
       });
   }
 
@@ -207,7 +209,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   setNoMatch() {
-    this.gs.triggerConfirm('Are you sure there is no match number?', () => {
+    this.modalService.triggerConfirm('Are you sure there is no match number?', () => {
       this.noMatch = true;
       this.scoutFieldResponse.match = undefined;
       this.teams = [];
@@ -220,7 +222,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   amendMatchList(): void {
     this.cs.ScoutFieldFormResponse.getAll().then((sfrc: ScoutFieldFormResponse[]) => {
       sfrc.forEach((s: ScoutFieldFormResponse) => {
-        const index = this.gs.arrayObjectIndexOf(this.matches, 'match_key', s.match?.match_key);
+        const index = arrayObjectIndexOf(this.matches, 'match_key', s.match?.match_key);
 
         if (index !== -1) {
           let match = this.matches[index];
@@ -290,8 +292,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       });
 
-
-
       if (this.scoutFieldSchedule) {
         // set the selected team based on which user is assigned to which team
         if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
@@ -331,11 +331,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.formDisabled = false;
       this.stopwatchStop();
       this.stopwatchReset();
-      this.gs.scrollTo(0);
+      scrollTo(0);
       this.init();
     };
 
-    if (confirm) this.gs.triggerConfirm('Do you want to reset the form?', fn);
+    if (confirm) this.modalService.triggerConfirm('Do you want to reset the form?', fn);
     else fn();
   }
 
@@ -343,8 +343,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     if (!this.isQuestionDisplayFormValid()) return;
 
     if (!sfr) {
-      if (this.gs.strNoE(this.scoutFieldResponse.team_id)) {
-        this.gs.triggerError('Must select a team to scout!');
+      if (strNoE(this.scoutFieldResponse.team_id)) {
+        this.modalService.triggerError('Must select a team to scout!');
         return null;
       }
 
@@ -368,7 +368,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
 
     let fn = () => {
-      this.gs.scrollTo(0);
+      scrollTo(0);
 
       let i = 0;
       for (; this.formSubTypeForms.length; i++) {
@@ -393,10 +393,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.scoutFieldResponse.answers = this.scoutFieldResponse.answers.concat(answers);
 
       // advance to next form sub type
-      this.gs.triggerChange(() => {
+      triggerChange(() => {
         this.activeFormSubTypeForm = this.formSubTypeForms[i];
         // Display the first stage of each flow for this sub type
-        this.gs.triggerChange(() => {
+        triggerChange(() => {
           this.setFullScreen(false);
           this.activeFormSubTypeForm?.flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.flow_questions)));
         });
@@ -406,7 +406,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
 
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
-      this.gs.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
+      this.modalService.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
     else
       fn();
   }
@@ -425,9 +425,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       // Create new Question Answer to hold the flow answers
-      if (!flow.question_answer) flow.question_answer = new Answer("", undefined, this.gs.cloneObject(flow));
+      if (!flow.question_answer) flow.question_answer = new Answer("", undefined, cloneObject(flow));
 
-      question.answer = this.gs.formatQuestionAnswer(question.answer);
+      question.answer = formatQuestionAnswer(question.answer);
 
       // Add Flows stage answer
       flow.question_answer.flow_answers.push(new FlowAnswer(question, question.answer));
@@ -437,7 +437,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // Hides current stage
       this.displayFlowStage(flow, flowQuestion.order, false);
-
 
       flow.flow_questions.sort((a, b) => {
         if (a.order > b.order) return 1;
@@ -453,7 +452,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         flow.question_answer = undefined;
 
         // check if any flows in the form sub type that weren't met are now met. 
-        const condQF = this.activeFormSubTypeForm?.flows.filter(qf => !this.gs.strNoE(qf.flow_conditional_on));
+        const condQF = this.activeFormSubTypeForm?.flows.filter(qf => !strNoE(qf.flow_conditional_on));
         if (condQF && condQF.length > 0) {
           condQF.forEach(qf => {
             if (this.isConditionalFlowMet(qf)) {
@@ -478,7 +477,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   displayFlowStage(flow: Flow, stage: number, show = true): void {
     if (!Number.isNaN(stage)) {
       if (show) {
-        if (!this.gs.strNoE(flow.flow_conditional_on) && !this.isConditionalFlowMet(flow)) {
+        if (!strNoE(flow.flow_conditional_on) && !this.isConditionalFlowMet(flow)) {
           return;
         }
 
@@ -511,21 +510,21 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     const qf = this.activeFormSubTypeForm?.flows.filter(qf => qf.id === flow.id).pop();
     if (qf && qf.question_answer?.flow_answers) {
       qf.question_answer.flow_answers.forEach(qfa => {
-        if (qfa.question && this.gs.isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
+        if (qfa.question && isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
           sceneFound = true;
         }
       });
     }
 
     this.scoutFieldResponse.answers.forEach(a => {
-      if (a.question && !this.gs.strNoE(a.question.id)) {
-        if (this.gs.isQuestionConditionMet(a.value, a.question, conditionalQuestion)) {
+      if (a.question && !strNoE(a.question.id)) {
+        if (isQuestionConditionMet(a.value, a.question, conditionalQuestion)) {
           sceneFound = true;
         }
       }
       else {
         a.flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ).forEach(qfa => {
-          if (qfa.question && this.gs.isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
+          if (qfa.question && isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
             sceneFound = true;
           }
         })
@@ -547,13 +546,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     let answers: Answer[] = [];
     if (this.activeFormSubTypeForm) {
       answers = this.activeFormSubTypeForm.questions.map(q => {
-        q.answer = this.gs.formatQuestionAnswer(q.answer);
+        q.answer = formatQuestionAnswer(q.answer);
         return new Answer(q.answer, q);
       });
 
       /*TODO
       answers = answers.concat(this.activeFormSubTypeForm.questions.map(q => q.conditions.map(c => c.question_to)).flat().map(q => {
-        q.answer = this.gs.formatQuestionAnswer(q.answer);
+        q.answer = formatQuestionAnswer(q.answer);
         return new QuestionAnswer(q.answer, q);
       }));*/
     }
@@ -578,7 +577,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   isQuestionDisplayFormValid(): boolean {
     if (this.form) {
       let ret = this.form.validateAllFelids();
-      if (!this.gs.strNoE(ret)) {
+      if (!strNoE(ret)) {
         this.gs.addBanner(new Banner(0, ret, 3500));
         return false;
       }
@@ -625,10 +624,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     const question = flowQuestion.question;
     const box = this.getFlowQuestionBox(flow, flowQuestion);
     if (box &&
-      !this.gs.strNoE(question.x) &&
-      !this.gs.strNoE(question.y) &&
-      !this.gs.strNoE(question.width) &&
-      !this.gs.strNoE(question.height) &&
+      !strNoE(question.x) &&
+      !strNoE(question.y) &&
+      !strNoE(question.width) &&
+      !strNoE(question.height) &&
       box) {
       let width = question.width;
       let height = question.height;
@@ -666,7 +665,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.activeFormSubTypeForm?.flows.forEach(flow => {
       let scene = NaN;
       let showFlow = false;
-      if (!this.gs.strNoE(flow.flow_conditional_on) && this.isConditionalFlowMet(flow)) {
+      if (!strNoE(flow.flow_conditional_on) && this.isConditionalFlowMet(flow)) {
         showFlow = true;
         flow.flow_conditional_on = NaN;
       }
@@ -680,7 +679,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
       else if (showFlow)
         scene = this.getFirstStage(flow.flow_questions);
-
 
       if (!Number.isNaN(scene))
         this.displayFlowStage(flow, scene, true);
@@ -793,7 +791,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
           flow.question_answer = questionAnswer;
           flow.flow_questions.forEach(q => {
-            q.question.answer = this.gs.formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value)
+            q.question.answer = formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value)
           });
         }
       }

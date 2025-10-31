@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { DisplayQuestionSvgComponent } from "../../elements/display-question-svg/display-question-svg.component";
 import { TooltipDirective } from '@app/shared/directives/tooltip/tooltip.directive';
 
+import { cloneObject, triggerChange } from '@app/core/utils/utils.functions';
 Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale, LineController, LineElement, PointElement, ScatterController, BarController, BarElement, Tooltip, Legend);
 
 @Component({
@@ -23,7 +24,7 @@ export class ChartComponent implements OnInit {
   @Input() ChartType = '';
   @Input() set ChartImgUrl(s: string) {
     this.url = s;
-    this.gs.triggerChange(() => this.adjustImage());
+    triggerChange(() => this.adjustImage());
   }
   @Input() XScaleMin: number | undefined = undefined;
   @Input() XScaleMax: number | undefined = undefined;
@@ -54,7 +55,7 @@ export class ChartComponent implements OnInit {
   @ViewChild('backgroundImage', { static: false }) image!: ElementRef<HTMLImageElement>; // For image
 
   @Input() set Data(d: any) {
-    this.gs.triggerChange(() => {
+    triggerChange(() => {
       this.datasetColors = {};
       let chartStatus = Chart.getChart(this.id); // <canvas> id
       if (chartStatus != undefined) {
@@ -102,7 +103,6 @@ export class ChartComponent implements OnInit {
           break;
       }
 
-
       if (chartConfig)
         this.chart = new Chart(this.id, chartConfig);
     });
@@ -125,7 +125,6 @@ export class ChartComponent implements OnInit {
       this.adjustImage();
     }, 200);
   }
-
 
   private createHistogramChartConfig(histograms: Histogram[]): ChartConfiguration {
     const chartData: ChartData = {
@@ -417,12 +416,11 @@ export class ChartComponent implements OnInit {
 
     heatmaps.forEach(h => {
       if (!questions.find(q => h.question.id === q.id)) {
-        const question = this.gs.cloneObject(h.question) as Question;
+        const question = cloneObject(h.question) as Question;
         question.question = question.question;
         questions.push(question);
       }
     });
-
 
     return questions;
   }

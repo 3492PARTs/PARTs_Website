@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-blue-banners',
   imports: [],
@@ -32,6 +33,6 @@ export class BlueBannersComponent implements OnInit {
   }
 
   private setScreenSize(): void {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = getScreenSize();
   }
 }

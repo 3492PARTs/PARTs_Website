@@ -13,6 +13,7 @@ import { User } from '@app/auth/models/user.models';
 import { Team, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-team-notes',
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
@@ -31,7 +32,7 @@ export class TeamNotesComponent implements OnInit {
   outstandingResponses: { id: number, team_id: number }[] = [];
   formDisabled = false;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
@@ -52,7 +53,6 @@ export class TeamNotesComponent implements OnInit {
     this.ss.loadTeams(true, (result: Team[]) => {
       this.teams = result;
     })
-
 
     this.ss.loadTeamNotes();
 
@@ -90,7 +90,7 @@ export class TeamNotesComponent implements OnInit {
   }
 
   removeResult(): void {
-    this.gs.triggerConfirm('Are you sure you want to remove this response?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this response?', () => {
       if (this.currentTeamNote)
         this.ss.removeTeamNoteResponseFromCache(this.currentTeamNote.id || -1).then(() => {
           this.reset();

@@ -4,7 +4,6 @@ import { Banner } from "./api.models";
 import { Question } from "./form.models";
 import { Link } from "./navigation.models";
 
-
 export class LoadedStores {
     Id: number;
     User!: Date;

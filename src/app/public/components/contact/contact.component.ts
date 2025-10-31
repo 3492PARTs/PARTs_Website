@@ -12,7 +12,8 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 
-
+import { ModalService } from '@app/core/services/modal.service';
+import { downloadFileAs, formatQuestionAnswer, questionsToCSV, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-contact',
   imports: [BoxComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -30,7 +31,7 @@ export class ContactComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     this.contactInit();
@@ -47,7 +48,7 @@ export class ContactComponent implements OnInit {
         if (r === AuthCallStates.comp) {
           let response = false;
           this.route.queryParamMap.subscribe(queryParams => {
-            if (!this.gs.strNoE(queryParams.get('response_id'))) {
+            if (!strNoE(queryParams.get('response_id'))) {
               this.getResponse(queryParams.get('response_id') || '');
               response = true;
             }
@@ -55,20 +56,20 @@ export class ContactComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   save(): void | null {
-    this.questions.forEach(q => { q.answer = this.gs.formatQuestionAnswer(q.answer) });
+    this.questions.forEach(q => { q.answer = formatQuestionAnswer(q.answer) });
     this.api.post(true, 'form/save-answers/',
       { question_answers: this.questions.map(q => new Answer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-        this.gs.scrollTo(0);
+        scrollTo(0);
         this.contactInit();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -79,12 +80,12 @@ export class ContactComponent implements OnInit {
       this.questions = result as Question[];
       this.disabled = true;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   export(): void {
-    this.gs.downloadFileAs('TeamContact.csv', this.gs.questionsToCSV(this.questions), 'text/csv');
+    downloadFileAs('TeamContact.csv', questionsToCSV(this.questions), 'text/csv');
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {

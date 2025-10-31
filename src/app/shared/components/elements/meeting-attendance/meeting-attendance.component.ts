@@ -12,14 +12,15 @@ import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
-import { AppSize, GeneralService, RetMessage } from '@app/core/services/general.service';
+import { GeneralService, RetMessage } from '@app/core/services/general.service';
 import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';
 import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 import { environment } from '../../../../../environments/environment';
 
-
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
@@ -88,9 +89,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceModalVisible = false;
   attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
-
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService) {
-
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService, private modalService: ModalService) {
 
   }
 
@@ -129,12 +128,12 @@ export class MeetingAttendanceComponent implements OnInit {
         a.meeting = meeting;
 
       if (this.isAttendanceApproved(a) && !a.time_out && !a.absent && a.void_ind !== 'y') {
-        this.gs.triggerError('Cannot approve if no time out.');
+        this.modalService.triggerError('Cannot approve if no time out.');
         return null;
       }
 
       if (a.time_out && a.time_out < a.time_out) {
-        this.gs.triggerError('You cannot check out before checking in.');
+        this.modalService.triggerError('You cannot check out before checking in.');
         return null;
       }
 
@@ -146,15 +145,15 @@ export class MeetingAttendanceComponent implements OnInit {
           if (a.meeting) this.getAttendance(a.meeting);
           this.attendanceModalVisible = false;
         }, (err: any) => {
-          this.gs.triggerError(err);
+          this.modalService.triggerError(err);
         });
     }
     else
-      this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
   }
 
   removeAttendance(attendance: Attendance): void | null {
-    this.gs.triggerConfirm('Are you sure you want to remove this record?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
       attendance.void_ind = 'y';
       this.saveAttendance(attendance);
     });
@@ -167,7 +166,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (this.user)
         qp = { user_id: this.user.id }
       else {
-        this.gs.triggerError('No user, couldn\'t get attendance see a mentor.');
+        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
@@ -198,7 +197,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
-    this.attendanceEntry = attendance ? this.gs.cloneObject(attendance) : new Attendance();
+    this.attendanceEntry = attendance ? cloneObject(attendance) : new Attendance();
 
     if (meeting)
       this.attendanceEntry.meeting = meeting;
@@ -234,7 +233,7 @@ export class MeetingAttendanceComponent implements OnInit {
       //this.checkLocation(this.saveAttendance.bind(this, a));
     }
     else
-      this.gs.triggerError('Couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
   }
 
   markAbsent(meeting: Meeting): void | null {
@@ -246,7 +245,7 @@ export class MeetingAttendanceComponent implements OnInit {
       this.saveAttendance(a);
     }
     else
-      this.gs.triggerError('No user, couldn\'t take attendance see a mentor.');
+      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
   }
 
   hideAbsentButton(attendance: Attendance): boolean {
@@ -335,7 +334,7 @@ export class MeetingAttendanceComponent implements OnInit {
   saveMeeting(meeting?: Meeting): void | null {
     const m = meeting ? meeting : this.meeting;
     if (m.end < m.start) {
-      this.gs.triggerError('Meeting end cannot be before start.');
+      this.modalService.triggerError('Meeting end cannot be before start.');
       return null;
     }
 
@@ -348,12 +347,12 @@ export class MeetingAttendanceComponent implements OnInit {
         this.getMeetings();
         this.getAttendance();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
   removeMeeting(meeting: Meeting): void | null {
-    this.gs.triggerConfirm('Are you sure you want to remove this record?', () => {
+    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
       meeting.void_ind = 'y';
       this.saveMeeting(meeting);
     });
@@ -361,7 +360,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   showMeetingModal(meeting?: Meeting): void {
-    this.meeting = meeting ? this.gs.cloneObject(meeting) : new Meeting();
+    this.meeting = meeting ? cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
 
     if (this.AdminInterface && meeting) {
@@ -397,7 +396,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (this.user)
         qp = { user_id: this.user.id }
       else {
-        this.gs.triggerError('No user, couldn\'t get attendance see a mentor.');
+        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
@@ -432,7 +431,7 @@ export class MeetingAttendanceComponent implements OnInit {
         fn();
       }
       else {
-        this.gs.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
+        this.modalService.triggerError(`Cannot determine location, cannot take attendance.\n${result.errorMessage}`);
         console.log(result.errorMessage);
         this.getAttendance();
       }
@@ -444,7 +443,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   decodeYesNoBoolean(val: boolean): string {
-    return this.gs.decodeYesNoBoolean(val);
+    return decodeYesNoBoolean(val);
   }
 
 }

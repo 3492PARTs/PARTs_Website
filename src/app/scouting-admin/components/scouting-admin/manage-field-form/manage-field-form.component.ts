@@ -13,6 +13,8 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-manage-field-form',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
@@ -43,7 +45,7 @@ export class ManageFieldFormComponent {
 
   isMobile = false;
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private renderer: Renderer2, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.getFieldForm() : null);
@@ -66,23 +68,23 @@ export class ManageFieldFormComponent {
       formData.append('id', (this.fieldForm.id || '').toString());
 
       this.api.post(true, 'scouting/admin/field-form/', formData, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.getFieldForm();
         this.previewUrl = '';
         this.uploadImageModalVisible = false;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }
 
   getFieldForm(): void {
     this.api.get(true, 'scouting/admin/field-form/', undefined, (result: FieldForm) => {
-      this.gs.triggerChange(() => {
+      triggerChange(() => {
         this.fieldForm = result;
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
 
     this.formInit();
@@ -95,20 +97,20 @@ export class ManageFieldFormComponent {
       this.formMetadata = result;
       this.buildFlowOptions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   buildFlowOptions(): void {
     this.activeFlow = undefined;
     this.availableFlows = this.formMetadata.flows.filter(qf =>
-      (this.activeFormSubType && !this.gs.strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
+      (this.activeFormSubType && !strNoE(this.activeFormSubType.form_sub_typ) && qf.form_sub_typ) ? qf.form_sub_typ.form_sub_typ === this.activeFormSubType.form_sub_typ : false);
   }
 
   saveFlow(): void {
     if (this.activeFlow)
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         //this.hideBox();
         if (this.activeFlow?.void_ind === 'y') {
           this.resetFlow();
@@ -117,7 +119,7 @@ export class ManageFieldFormComponent {
         else
           this.getFlow();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -127,7 +129,7 @@ export class ManageFieldFormComponent {
         this.resetFlow();
         this.activeFlow = result;
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }

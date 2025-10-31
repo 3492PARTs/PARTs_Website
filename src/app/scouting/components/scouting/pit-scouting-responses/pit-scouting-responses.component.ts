@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
@@ -11,6 +11,8 @@ import { PitResultDisplayComponent } from "../../../../shared/components/element
 import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, downloadFileAs } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-pit-scouting-responses',
   imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, PitResultDisplayComponent],
@@ -26,7 +28,7 @@ export class ScoutPitResponsesComponent implements OnInit {
   constructor(private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService) { }
+    private ss: ScoutingService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
@@ -66,7 +68,7 @@ export class ScoutPitResponsesComponent implements OnInit {
     let export_file = this.scoutPitResults;
 
     if (export_file.length <= 0) {
-      this.gs.triggerError('Cannot export empty dataset. Please select some teams first.');
+      this.modalService.triggerError('Cannot export empty dataset. Please select some teams first.');
       return null;
     }
 
@@ -94,7 +96,7 @@ export class ScoutPitResponsesComponent implements OnInit {
       csv += '\n';
     });
 
-    this.gs.downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
+    downloadFileAs('ScoutPitResults.csv', csv, 'text/csv');
   }
 
   reset(): void {

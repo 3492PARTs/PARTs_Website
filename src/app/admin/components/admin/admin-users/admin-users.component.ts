@@ -13,6 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
 
+import { cloneObject } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-admin-users',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
@@ -51,7 +52,6 @@ export class AdminUsersComponent implements OnInit {
   constructor(private us: UserService, private authService: AuthService, private gs: GeneralService) {
   }
 
-
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
@@ -83,7 +83,7 @@ export class AdminUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = this.gs.cloneObject(u);
+    this.activeUser = cloneObject(u);
     this.buildAvailableUserGroups();
   }
 

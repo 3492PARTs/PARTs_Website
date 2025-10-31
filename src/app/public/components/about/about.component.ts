@@ -2,10 +2,11 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
-import { AppSize, GeneralService } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { BlueBannersComponent } from '@app/shared/components/elements/blue-banners/blue-banners.component';
 
+import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-about',
   imports: [
@@ -592,7 +593,7 @@ export class AboutComponent implements OnInit {
   }
 
   private setScreenSize(): void {
-    this.screenSize = this.gs.getScreenSize();
+    this.screenSize = getScreenSize();
   }
 
   public setVisible(bot: Bot, bool: boolean) {

@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { GeneralService, AppSize } from '@app/core/services/general.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
@@ -18,6 +18,8 @@ import { HeaderComponent } from "../../../../../shared/components/atoms/header/h
 import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { AppSize, openFullscreen } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-plan-matches',
   imports: [CommonModule, BoxComponent, FormElementGroupComponent, TableComponent, ButtonComponent, TabContainerComponent, TabComponent, PitResultDisplayComponent, DateToStrPipe, LoadingComponent, DashboardComponent, HeaderComponent],
@@ -55,7 +57,7 @@ export class MatchesComponent implements OnInit {
 
   initPromise: Promise<boolean> | undefined = undefined;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService) {
+  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
     this.authService.user.subscribe(u => this.user = u);
   }
 
@@ -142,7 +144,6 @@ export class MatchesComponent implements OnInit {
         this.gs.decrementOutstandingCalls();
       });
 
-
       this.matchTeamsData = [];
       let tmp: MatchTeamData[] = [];
 
@@ -202,7 +203,7 @@ export class MatchesComponent implements OnInit {
       this.gs.decrementOutstandingCalls();
     }
     else
-      this.gs.triggerError('Data still loading, try again in a moment.');
+      this.modalService.triggerError('Data still loading, try again in a moment.');
   }
 
   clearResults(): void {
@@ -312,7 +313,7 @@ export class MatchesComponent implements OnInit {
   }
 
   openFullscreen(event: MouseEvent) {
-    this.gs.openFullscreen(event);
+    openFullscreen(event);
   }
 
   toggleImageDisplay(i: number): void {

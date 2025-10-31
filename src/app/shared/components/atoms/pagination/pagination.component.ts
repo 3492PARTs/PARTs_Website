@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page } from '@app/core/services/general.service';
+import { Page  } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-pagination',
@@ -26,8 +26,6 @@ export class PaginationComponent implements OnInit {
   pages: number[] = [];
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
-
-
 
   constructor() { }
 

@@ -42,7 +42,6 @@ export class DateToStrPipe implements PipeTransform {
       return strDate;
     }
 
-
     return elem;
   }
 

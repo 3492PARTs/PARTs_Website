@@ -16,6 +16,8 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { devConsoleLog, strNoE } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -52,7 +54,7 @@ export class AuthService {
     private cs: CacheService,
     private ds: DataService,
     private ss: ScoutingService,
-    private us: UserService) {
+    private us: UserService, private modalService: ModalService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -77,7 +79,7 @@ export class AuthService {
       const tmp = result as Token;
       this.tokenBS.next(tmp);
 
-      this.gs.devConsoleLog('authorizeUser', 'login tokens below');
+      devConsoleLog('authorizeUser', 'login tokens below');
       this.getTokenExp(tmp.access);
       this.getTokenExp(tmp.refresh);
 
@@ -87,7 +89,7 @@ export class AuthService {
       await this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
-      if (this.gs.strNoE(returnUrl)) {
+      if (strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       }
       else {
@@ -98,7 +100,7 @@ export class AuthService {
     }, (err: any) => {
       console.log(err);
       this.authInFlightBS.next(AuthCallStates.err);
-      //this.gs.triggerError('Couldn\'t log in. Invalid username or password.');
+      //this.modalService.triggerError('Couldn\'t log in. Invalid username or password.');
     });
   }
 
@@ -111,7 +113,7 @@ export class AuthService {
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
       this.refreshToken(async (result: Token) => {
-        this.gs.devConsoleLog('previouslyAuthorized', 'new tokens below');
+        devConsoleLog('previouslyAuthorized', 'new tokens below');
         this.getTokenExp(result.access);
         this.getTokenExp(result.refresh);
         this.tokenBS.next(result);
@@ -149,13 +151,13 @@ export class AuthService {
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
     this.api.post(true, 'user/profile/', userData, (result: any) => {
-      if (this.gs.strNoE(returnUrl)) {
+      if (strNoE(returnUrl)) {
         this.router.navigateByUrl('');
       } else {
         this.router.navigateByUrl(returnUrl || '');
       }
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t create user.');
+      this.modalService.triggerError('Couldn\'t create user.');
     });
   }
 
@@ -163,7 +165,7 @@ export class AuthService {
     this.api.post(true, 'user/confirm/resend/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=confirmationFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request activation email.');
+      this.modalService.triggerError('Couldn\'t request activation email.');
     });
   }
 
@@ -171,7 +173,7 @@ export class AuthService {
     this.api.post(true, 'user/request-reset-password/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=resetFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request password reset.');
+      this.modalService.triggerError('Couldn\'t request password reset.');
     });
   }
 
@@ -179,7 +181,7 @@ export class AuthService {
     this.api.post(true, 'user/request-username/', { email: input.email }, (result: any) => {
       this.router.navigateByUrl('login?page=forgotUsernameFinish');
     }, (err: any) => {
-      this.gs.triggerError('Couldn\'t request username reminder email.');
+      this.modalService.triggerError('Couldn\'t request username reminder email.');
     });
   }
 
@@ -189,7 +191,7 @@ export class AuthService {
         this.gs.addBanner(new Banner(0, 'Password reset successfully.', 10000, 3));
         this.router.navigateByUrl('login?page=login');
       }, (err: any) => {
-        this.gs.triggerError('Couldn\'t reset password.');
+        this.modalService.triggerError('Couldn\'t reset password.');
       }
     );
   }
@@ -255,21 +257,21 @@ export class AuthService {
     const d = new Date(0);
     let tokenLoad = this.getTokenLoad(tkn);
     d.setUTCSeconds(tokenLoad.exp);
-    this.gs.devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
+    devConsoleLog(`getTokenExp: token type {${tokenLoad.token_type}} expr:`, d);
     return d;
   }
 
   isTokenExpired(tkn: string): boolean {
-    return this.gs.strNoE(tkn) || this.getTokenExp(tkn) < new Date();
+    return strNoE(tkn) || this.getTokenExp(tkn) < new Date();
   }
 
   isAuthenticated(): boolean {
-    this.gs.devConsoleLog('isAuthenticated', 'current access token below');
-    return !this.gs.strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
+    devConsoleLog('isAuthenticated', 'current access token below');
+    return !strNoE(this.tokenBS.value?.access) && !this.isTokenExpired(this.tokenBS.value?.access || '');
   }
 
   isSessionExpired(): boolean {
-    this.gs.devConsoleLog('isSessionExpired', 'current refresh token below');
+    devConsoleLog('isSessionExpired', 'current refresh token below');
     return this.isTokenExpired(this.tokenBS.value?.refresh || '');
   }
 

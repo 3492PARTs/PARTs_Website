@@ -7,6 +7,7 @@ import { environment } from '../environments/environment';
 import { Banner } from './core/models/api.models';
 import { AuthService } from './auth/services/auth.service';
 import { GeneralService } from './core/services/general.service';
+import { ModalService } from './core/services/modal.service';
 import { ButtonRibbonComponent } from './shared/components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from './shared/components/atoms/button/button.component';
 import { NavigationComponent } from './shared/components/navigation/navigation.component';
@@ -21,7 +22,7 @@ declare const gtag: Function;
 })
 export class AppComponent implements OnInit {
 
-  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, @Inject(DOCUMENT) private document: Document, private route: ActivatedRoute) {
+  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, public modalService: ModalService, @Inject(DOCUMENT) private document: Document, private route: ActivatedRoute) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
       if (environment.production && event instanceof NavigationEnd) {

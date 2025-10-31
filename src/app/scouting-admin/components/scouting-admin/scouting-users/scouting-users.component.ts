@@ -13,6 +13,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scouting-users',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, HeaderComponent],
@@ -43,7 +45,7 @@ export class ScoutingUsersComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Name' }
   ];
 
-  constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService) { }
+  constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {
@@ -61,7 +63,7 @@ export class ScoutingUsersComponent implements OnInit {
     this.api.get(true, 'scouting/admin/scout-auth-group/', undefined, (result: AuthGroup[]) => {
       this.userGroups = result;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
 
     this.getPhoneTypes();
@@ -69,7 +71,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   showManageUserModal(u: User): void {
     this.manageUserModalVisible = true;
-    this.activeUser = this.gs.cloneObject(u);
+    this.activeUser = cloneObject(u);
     this.buildAvailableUserGroups();
   }
 
@@ -81,7 +83,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   addUserGroup(): void | null {
     if (this.newAuthGroup.name === 'Lead Scout') {
-      this.gs.triggerConfirm('Are you sure you want to add another lead scout? This can only be undone by an admin.', () => {
+      this.modalService.triggerConfirm('Are you sure you want to add another lead scout? This can only be undone by an admin.', () => {
         this.pushUserGroup();
       });
     }
@@ -98,7 +100,7 @@ export class ScoutingUsersComponent implements OnInit {
 
   removeUserGroup(ug: AuthGroup): void {
     if (ug.name === 'Lead Scout') {
-      this.gs.triggerError('Can\'t remove lead scouts, see an admin.');
+      this.modalService.triggerError('Can\'t remove lead scouts, see an admin.');
     } else {
       this.activeUser.groups.splice(this.activeUser.groups.lastIndexOf(ug), 1);
       this.buildAvailableUserGroups();
@@ -108,7 +110,7 @@ export class ScoutingUsersComponent implements OnInit {
   saveUser(u?: User): void {
     if (u) this.activeUser = u;
 
-    if (this.gs.strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
+    if (strNoE(this.activeUser.phone_type_id)) this.activeUser.phone_type_id = null;
 
     this.us.saveUser(this.activeUser, () => {
       this.manageUserModalVisible = false;
@@ -131,7 +133,7 @@ export class ScoutingUsersComponent implements OnInit {
     this.api.get(true, 'admin/phone-type/', undefined, (result: PhoneType[]) => {
       this.phoneTypes = result;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 }

@@ -10,6 +10,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-condition-admin-form',
   imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
@@ -34,7 +36,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   questionConditionQuestionFromList: Question[] = [];
   questionConditionQuestionToList: Question[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -55,7 +57,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       this.buildQuestionConditionFromLists();
       this.buildQuestionConditionToLists();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -65,7 +67,7 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     }, (result: any) => {
       this.questionConditions = result as QuestionCondition[];
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -73,20 +75,20 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
       this.questionConditionTypes = result;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   showQuestionConditionModal(qc?: QuestionCondition) {
     this.questionConditionModalVisible = true;
-    this.activeQuestionCondition = qc ? this.gs.cloneObject(qc) : new QuestionCondition();
+    this.activeQuestionCondition = qc ? cloneObject(qc) : new QuestionCondition();
 
     this.buildQuestionConditionFromLists();
     this.buildQuestionConditionToLists();
   }
 
   buildQuestionConditionFromLists(): void {
-    this.questionConditionQuestionFromList = this.gs.cloneObject(this.questions);
+    this.questionConditionQuestionFromList = cloneObject(this.questions);
   }
 
   buildQuestionConditionToLists(): void {
@@ -106,13 +108,13 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
       // Keep the question just selected as from out of the list
       if (this.activeQuestionCondition.question_from &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_from.id) &&
+        !strNoE(this.activeQuestionCondition.question_from.id) &&
         this.activeQuestionCondition.question_from.id === question.id) {
         match = true;
       }
 
       if (this.activeQuestionCondition.question_to &&
-        !this.gs.strNoE(this.activeQuestionCondition.question_to.id) &&
+        !strNoE(this.activeQuestionCondition.question_to.id) &&
         this.activeQuestionCondition.question_to.id === question.id) {
         match = false;
       }
@@ -131,17 +133,17 @@ export class QuestionConditionAdminFormComponent implements OnInit {
 
   saveQuestionCondition(): void {
     this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionCondition = new QuestionCondition();
       this.questionConditionModalVisible = false;
       this.getQuestions();
       this.getQuestionConditions();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 }

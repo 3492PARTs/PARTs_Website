@@ -14,6 +14,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { QuestionDisplayFormComponent } from "../../../../shared/components/elements/question-display-form/question-display-form.component";
 import { Answer, Question } from '@app/core/models/form.models';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, devConsoleLog, downloadFileAs, formatQuestionAnswer, questionsToCSV, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-team-application',
   imports: [BoxComponent, FormComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, RouterLink, QuestionDisplayFormComponent],
@@ -47,7 +49,7 @@ export class TeamApplicationComponent implements OnInit {
   constructor(private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute, private modalService: ModalService) { }
 
   ngOnInit() {
     this.applicationInit();
@@ -70,7 +72,7 @@ export class TeamApplicationComponent implements OnInit {
         if (r === AuthCallStates.comp) {
           let response = false;
           this.route.queryParamMap.subscribe(queryParams => {
-            if (!this.gs.strNoE(queryParams.get('response_id'))) {
+            if (!strNoE(queryParams.get('response_id'))) {
               this.getResponse(queryParams.get('response_id') || '');
               response = true;
             }
@@ -78,28 +80,28 @@ export class TeamApplicationComponent implements OnInit {
         }
       });
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   save(): void | null {
-    let questions = this.gs.cloneObject(this.questions) as FormSubTypeWrapper[];
+    let questions = cloneObject(this.questions) as FormSubTypeWrapper[];
 
     this.api.post(true, 'form/save-answers/',
       {
         question_answers: questions.map(subForm => {
           subForm.questions.forEach(q => {
-            q.answer = this.gs.formatQuestionAnswer(q.answer);
+            q.answer = formatQuestionAnswer(q.answer);
           });
 
           return subForm.questions.map(q => new Answer(q.answer, q));
         }).flat(), form_typ: 'team-app'
       }, (result: any) => {
         this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-        this.gs.scrollTo(0);
+        scrollTo(0);
         this.applicationInit();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
   }
 
@@ -115,17 +117,17 @@ export class TeamApplicationComponent implements OnInit {
         this.questions.push(new FormSubTypeWrapper(fst, qs.filter(q => q.form_sub_typ.form_sub_nm === fst)))
       });
 
-      this.gs.devConsoleLog('team app - getResponse', this.questions);
+      devConsoleLog('team app - getResponse', this.questions);
       this.disabled = true;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   export(): void {
     let questions: Question[] = [];
     this.questions.forEach(fsw => fsw.questions.forEach(question => questions.push(question)));
-    this.gs.downloadFileAs('TeamApplication.csv', this.gs.questionsToCSV(questions), 'text/csv');
+    downloadFileAs('TeamApplication.csv', questionsToCSV(questions), 'text/csv');
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {

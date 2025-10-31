@@ -10,6 +10,8 @@ import { FormComponent } from "../../atoms/form/form.component";
 import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
 import { ButtonComponent } from "../../atoms/button/button.component";
 
+import { ModalService } from '@app/core/services/modal.service';
+import { decodeBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-flow-admin-form',
   imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
@@ -39,12 +41,11 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'question.display_value', ColLabel: 'Question' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
   }
-
 
   private init(): void {
     this.api.get(true, 'form/form-editor/', {
@@ -52,7 +53,7 @@ export class FlowAdminFormComponent implements OnInit {
     }, (result: FormInitialization) => {
       this.FormMetadata = result;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
 
     this.getFlows();
@@ -65,7 +66,7 @@ export class FlowAdminFormComponent implements OnInit {
       this.flows = result;
       this.question = new Question();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
@@ -73,12 +74,12 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       this.activeFlow.form_typ.form_typ = this.FormType;
       this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.gs.successfulResponseBanner(result);
+        this.modalService.successfulResponseBanner(result);
         this.activeFlow = new Flow();
         this.flowModalVisible = false;
         this.init();
       }, (err: any) => {
-        this.gs.triggerError(err);
+        this.modalService.triggerError(err);
       });
     }
   }
@@ -90,7 +91,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   pushQuestion(): void {
-    if (this.activeFlow && !this.gs.strNoE(this.question.id)) {
+    if (this.activeFlow && !strNoE(this.question.id)) {
       let qf = new FlowQuestion();
       qf.active = 'y';
       qf.flow_id = this.activeFlow.id;
@@ -120,7 +121,7 @@ export class FlowAdminFormComponent implements OnInit {
   }
 
   decodeBoolean(b: boolean): string {
-    return this.gs.decodeYesNoBoolean(b);
+    return decodeYesNoBoolean(b);
   }
 
   decodeFlowQuestions(flowQuestions: FlowQuestion[]): string {

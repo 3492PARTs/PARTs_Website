@@ -5,6 +5,8 @@ import { FormElementComponent } from '../form-element/form-element.component';
 import { Banner } from '@app/core/models/api.models';
 import { GeneralService } from '@app/core/services/general.service';
 import { TableComponent } from '../table/table.component';
+
+import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form',
   imports: [FormsModule],
@@ -77,7 +79,7 @@ export class FormComponent implements OnInit {
     });*/
     let ret = this.validateAllFelids();
 
-    if (this.gs.strNoE(ret)) {
+    if (strNoE(ret)) {
       this.SubmitFunction.emit();
       this.reset();
     }

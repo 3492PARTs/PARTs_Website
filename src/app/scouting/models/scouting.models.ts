@@ -9,7 +9,6 @@ export interface ISeason {
     manual: string;
 }
 
-
 export class Season implements ISeason {
     id = NaN;
     season = '';
@@ -330,7 +329,6 @@ export class ScoutPitImageType {
     pit_image_nm = '';
 }
 
-
 export interface IScoutPitImage {
     id: number;
     img: File | undefined;
@@ -523,7 +521,6 @@ export interface IFieldFormForm {
     field_form: FieldForm;
     form_sub_types: IFormSubTypeForm[];
 }
-
 
 export class FieldFormForm implements IFieldFormForm {
     id = NaN;

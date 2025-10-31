@@ -17,13 +17,16 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '@app/core/services/general.service';
+
 import { HeaderComponent } from '../header/header.component';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { ButtonComponent } from '../button/button.component';
-import { ObjectWildCardFilterPipe, OrderByPipe, RemovedFilterPipe } from '@app/shared/pipes/ObjectWildcardFilter';
+import { ObjectWildCardFilterPipe } from '@app/shared/pipes/object-wildcard-filter.pipe';
+import { OrderByPipe } from '@app/shared/pipes/order-by.pipe';
+import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-
+import { getPropertyValue, setPropertyValue, strNoE, previewImage } from '@app/core/utils/utils.functions';
 //import * as $ from 'jquery';
 
 @Component({
@@ -64,7 +67,6 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() ArchiveRecordCallBack: EventEmitter<any> = new EventEmitter();
   @Input() ShowArchiveButton = false;
 
-
   @Output() RecordClickCallBack: EventEmitter<any> = new EventEmitter();
   @Output() DblClkRecordClickCallBack: EventEmitter<any> = new EventEmitter();
 
@@ -90,7 +92,6 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() StrikeThroughFn: ((rec: any) => boolean) | null = null;
 
   @Input() Width = '';
-
 
   @Input() FilterText = '';
   @Output() FilterTextChange = new EventEmitter();
@@ -127,7 +128,7 @@ export class TableComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.generateTableDisplayValues();
     this.ShowButtonColumn();
-    if (this.gs.strNoE(this.TableName) && !this.gs.strNoE(this.TableTitle))
+    if (strNoE(this.TableName) && !strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
     if (this.Width !== '' && this.Table) {
@@ -148,7 +149,6 @@ export class TableComponent implements OnInit, OnChanges {
         this.ScrollHeight
       );
     }
-
 
   }
 
@@ -194,7 +194,7 @@ export class TableComponent implements OnInit, OnChanges {
   generateTableDisplayValues(): void {
     this.TableData.forEach(rec => {
       this.TableCols.forEach(col => {
-        if (this.gs.strNoE(col.Type) && col.PropertyName?.includes('.')) {
+        if (strNoE(col.Type) && col.PropertyName?.includes('.')) {
           rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
         }
         else if (col.Type === 'function') {
@@ -311,11 +311,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   GetTableDisplayValue(rec: any, property: string) {
-    return GeneralService.getPropertyValue(rec, property);
+    return getPropertyValue(rec, property);
   }
 
   SetTableDisplayValue(rec: any, property: string, value: any) {
-    this.gs.setPropertyValue(rec, property, value);
+    setPropertyValue(rec, property, value);
   }
 
   IsPropertyInColumnSettings(PropertyName: any) {
@@ -437,12 +437,12 @@ export class TableComponent implements OnInit, OnChanges {
     this.FilterTextChange.emit(text);
   }
 
-  previewImage(link: string, id: string): void {
-    this.gs.previewImage(link, id);
+  previewImageWrapper(link: string, id: string): void {
+    previewImage(link, id);
   }
 
   strNoE(s: any): boolean {
-    return this.gs.strNoE(s);
+    return strNoE(s);
   }
 }
 

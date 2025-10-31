@@ -4,6 +4,7 @@ import { GeneralService } from './general.service';
 import { APIStatus, Banner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { ModalService } from '@app/core/services/modal.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +18,7 @@ export class APIService {
 
   connectionErrorStatuses = [0, 504];
 
-  constructor(private http: HttpClient, private gs: GeneralService) {
+  constructor(private http: HttpClient, private gs: GeneralService, private modalService: ModalService) {
     this.gs.siteBanners.subscribe(psb => this.persistentSiteBanners = psb);
 
     // Bindings for app status to set banner
@@ -51,11 +52,11 @@ export class APIService {
           {
             next: (result: any) => {
               if (this.apiStatusBS.value !== APIStatus.on) this.apiStatusBS.next(APIStatus.on);
-              if (result.hasOwnProperty('branch')) resolve(result['branch']);
-              resolve('');
+              if (typeof result === 'object' && result !== null && 'branch' in result) resolve(result['branch']);
+              else resolve('');
             },
             error: (err: any) => {
-              console.log('error', err);
+              console.error('API status check error:', err);
               if (this.apiStatusBS.value !== APIStatus.off) this.apiStatusBS.next(APIStatus.off);
               this.outstandingApiStatusCheck = null;
             }, complete: () => {
@@ -120,7 +121,7 @@ export class APIService {
       this.apiStatusBS.next(APIStatus.on);
     }
 
-    if (this.gs.checkResponse(result)) {
+    if (this.modalService.checkResponse(result)) {
       if (onNext) onNext(result);
     }
     else
@@ -128,7 +129,7 @@ export class APIService {
   }
 
   private onError(loadingScreen: boolean, err: any, onError?: (error: any) => void): void {
-    console.log(err);
+    console.error('API error:', err);
     if (loadingScreen) this.gs.decrementOutstandingCalls();
 
     // This means connection is down error, check

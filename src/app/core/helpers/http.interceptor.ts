@@ -1,12 +1,11 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { environment } from "../../../environments/environment";
-import { GeneralService } from "../services/general.service";
 import { catchError, filter, finalize, Observable, switchMap, take, throwError } from "rxjs";
 import { AuthService, Token } from "@app/auth/services/auth.service";
 
+import { devConsoleLog } from '@app/core/utils/utils.functions';
 export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-    const gs = inject(GeneralService);
     const auth = inject(AuthService);
 
     const token = auth.getAccessToken();
@@ -14,15 +13,14 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
 
     const baseURL = environment.baseUrl;
 
-
     if (req.url.includes('user/token/refresh/')) {
-        gs.devConsoleLog('http.interceptor.ts', 'if: refresh');
+        devConsoleLog('http.interceptor.ts', 'if: refresh');
         req = req.clone({
             url: baseURL + req.url,
         });
     }
     else if (user && token && token && !auth.isTokenExpired(token)) {
-        gs.devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
+        devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
         req = req.clone({
             url: baseURL + req.url,
             setHeaders: {
@@ -31,7 +29,7 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
         });
     }
     else {
-        gs.devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
+        devConsoleLog('http.interceptor.ts', `else: ${req.url}`);
         let withCredentials = req.url.includes('user/token/refresh/');
         //console.log(req.url, withCredentials);
         req = req.clone({

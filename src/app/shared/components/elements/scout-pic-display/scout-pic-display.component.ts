@@ -7,6 +7,8 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 
 import { HeaderComponent } from "../../atoms/header/header.component";
 
+import { ModalService } from '@app/core/services/modal.service';
+import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-scout-pic-display',
   imports: [ButtonComponent, HeaderComponent],
@@ -24,7 +26,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
 
   elementId = '';
 
-  constructor(private gs: GeneralService, private api: APIService) { }
+  constructor(private gs: GeneralService, private api: APIService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.elementId = this.gs.getNextGsId();
@@ -45,7 +47,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   }
 
   setImages(): void {
-    this.ScoutPitImages = this.ScoutPitImages.filter(spi => this.gs.strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.ScoutPitImages = this.ScoutPitImages.filter(spi => strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
     this.preview();
   }
 
@@ -80,12 +82,11 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
           }
         }
 
-        if (this.gs.strNoE(link)) {
+        if (strNoE(link)) {
           link = this.ScoutPitImages[0].img_url;
           this.displayPicIndex = 0;
         }
       }
-
 
       LoadImg(
         link,
@@ -117,11 +118,11 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
     this.api.get(true, 'scouting/pit/set-default-pit-image/', {
       scout_pit_img_id: spi.id
     }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.ScoutPitImages.forEach(p => p.default = false);
       spi.default = true;
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 }

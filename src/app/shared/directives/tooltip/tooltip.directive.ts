@@ -40,8 +40,6 @@ export class TooltipDirective {
 
   }
 
-
-
   private setPosition() {
     if (!this.tooltipElement) return;
 
@@ -73,8 +71,6 @@ export class TooltipDirective {
         left = hostRect.left + (hostRect.width / 2) - (tooltipRect.width / 2);
     }
 
-
-
     // Keep in viewport logic
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
@@ -91,15 +87,12 @@ export class TooltipDirective {
       top = viewportHeight - tooltipRect.height; // or adjust as needed
     }
 
-
     this.renderer.setStyle(this.tooltipElement, 'top', `${top}px`);
     this.renderer.setStyle(this.tooltipElement, 'left', `${left}px`);
     this.renderer.setStyle(this.tooltipElement, 'position', 'fixed'); // Important!
     this.renderer.setStyle(this.tooltipElement, 'z-index', '1000'); // Ensure it's on top
 
   }
-
-
 
   private hideTooltip() {
     if (this.tooltipElement) {

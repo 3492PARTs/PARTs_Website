@@ -6,12 +6,13 @@ import { PhoneType } from '@app/auth/services/auth.service';
 import { Banner } from '@app/core/models/api.models';
 import { Link } from '@app/core/models/navigation.models';
 
+import { ModalService } from '@app/core/services/modal.service';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private api: APIService, private gs: GeneralService) { }
+  constructor(private api: APIService, private gs: GeneralService, private modalService: ModalService) { }
 
   getUsers(is_active = 0, is_admin = 0): Promise<User[] | null> {
     return new Promise<User[] | null>(resolve => {
@@ -61,7 +62,7 @@ export class UserService {
     this.api.delete(true, 'user/groups/', {
       group_id: group_id,
     }, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       if (fn) fn();
     });
   }

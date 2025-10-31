@@ -7,6 +7,8 @@ import { BehaviorSubject } from 'rxjs';
 import { APIService } from './api.service';
 import { Banner } from '../models/api.models';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { arrayObjectIndexOf, devConsoleLog } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -25,7 +27,7 @@ export class NotificationsService {
   constructor(private swPush: SwPush,
     private gs: GeneralService,
     private api: APIService,
-    private router: Router) { }
+    private router: Router, private modalService: ModalService) { }
 
   subscribeToNotifications() {
     if (this.swPush.isEnabled) {
@@ -44,7 +46,7 @@ export class NotificationsService {
       if (!this.swPush.subscription) this.requestSubscription();*/
 
       this.swPush.messages.subscribe(m => {
-        this.gs.devConsoleLog('subscribeToNotifications - message', m);
+        devConsoleLog('subscribeToNotifications - message', m);
         this.getUserAlerts(false, 'notification');
       });
 
@@ -54,7 +56,7 @@ export class NotificationsService {
       });*/
 
       this.swPush.notificationClicks.subscribe(n => {
-        this.gs.devConsoleLog('subscribeToNotifications - notificationClicks', n);
+        devConsoleLog('subscribeToNotifications - notificationClicks', n);
         if (n.action === 'field-scouting') this.router.navigateByUrl('scout/scout-field');
       });
     }
@@ -135,14 +137,14 @@ export class NotificationsService {
     this.api.get(true, 'alerts/dismiss/', {
       channel_send_id: a.channel_send_id.toString()
     }, (result: any) => {
-      let index = this.gs.arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
+      let index = arrayObjectIndexOf(this.notifications_, 'channel_send_id', a.channel_send_id);
       if (index >= 0) this.removeNotification(index);
-      index = this.gs.arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
+      index = arrayObjectIndexOf(this.messages_, 'channel_send_id', a.channel_send_id)
       if (index >= 0) this.removeMessage(index);
       this.getUserAlerts(true, 'notification');
       this.getUserAlerts(true, 'message');
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 }

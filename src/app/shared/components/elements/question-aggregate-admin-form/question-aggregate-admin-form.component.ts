@@ -11,6 +11,8 @@ import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
+import { ModalService } from '@app/core/services/modal.service';
+import { cloneObject, decodeYesNo, updateTableSelectList } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-aggregate-admin-form',
   imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent],
@@ -41,7 +43,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -58,42 +60,42 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
     this.api.get(true, 'form/question-aggregate/', {
       form_typ: this.FormTyp
     }, (result: any) => {
-      if (this.gs.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         this.questionAggregates = result as QuestionAggregate[];
       }
     }, (err: any) => {
       console.log('error', err);
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
       this.gs.decrementOutstandingCalls();
     });
   }
 
   getQuestionAggregateTypes(): void {
     this.api.get(true, 'form/question-aggregate-types/', undefined, (result: any) => {
-      if (this.gs.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         this.questionAggregateTypes = result as QuestionAggregateType[];
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   getQuestionConditionTypes(): void {
     this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      if (this.gs.checkResponse(result)) {
+      if (this.modalService.checkResponse(result)) {
         //console.log(result);
         //this.questionConditionTypes = result;
-        this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
+        updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question_condition_typ', result);
       }
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   showQuestionAggregateModal(qa?: QuestionAggregate) {
     this.questionAggregateModalVisible = true;
-    this.activeQuestionAggregate = this.gs.cloneObject(qa ? qa : new QuestionAggregate());
+    this.activeQuestionAggregate = cloneObject(qa ? qa : new QuestionAggregate());
     //this.buildQuestionAggQuestionList();
   }
 
@@ -106,7 +108,7 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
       form_typ: this.FormTyp,
       active: 'y'
     }, (result: Question[]) => {
-      this.gs.updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
+      updateTableSelectList(this.questionAggregateQuestionsTableCols, 'question', result);
     });
   }
   /*
@@ -143,17 +145,17 @@ export class QuestionAggregateAdminFormComponent implements OnInit {
 
   saveQuestionAggregate(): void {
     this.api.post(true, 'form/question-aggregate/', this.activeQuestionAggregate, (result: any) => {
-      this.gs.successfulResponseBanner(result);
+      this.modalService.successfulResponseBanner(result);
       this.activeQuestionAggregate = new QuestionAggregate();
       this.questionAggregateModalVisible = false;
       this.getQuestionAggregates();
     }, (err: any) => {
-      this.gs.triggerError(err);
+      this.modalService.triggerError(err);
     });
   }
 
   decodeYesNo(s: string): string {
-    return this.gs.decodeYesNo(s);
+    return decodeYesNo(s);
   }
 
   decodeHorizontal(b: boolean): string {
