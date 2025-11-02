@@ -276,6 +276,14 @@ describe('PwaService', () => {
 
     it('should handle service worker enabled with periodic updates', () => {
       mockSwUpdate.isEnabled = true;
+      
+      // Ensure clock is not already installed before installing
+      try {
+        jasmine.clock().uninstall();
+      } catch (e) {
+        // Clock wasn't installed, that's fine
+      }
+      
       jasmine.clock().install();
       
       const newService = new PwaService(mockSwUpdate, mockGeneralService, mockModalService);
