@@ -63,22 +63,55 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
     }
   }
 
+  /**
+   * Calculate and set the height of the navigation container
+   * 
+   * This method calculates the total height of all child elements including their margins
+   * and sets it as the container height. This ensures the container properly encompasses
+   * all navigation items when not collapsed.
+   * 
+   * Uses native DOM APIs instead of jQuery's outerHeight(true) for better performance.
+   * The calculation includes: element height + top margin + bottom margin
+   * 
+   * @private
+   */
   private checkHeight() {
     if (!this.collapsed && this.navContainer) {
       let height = 0;
+      
+      // Iterate through all child elements to calculate total height
       for (let i = 0; i < this.navContainer.nativeElement.children.length; i++) {
         const element = this.navContainer.nativeElement.children[i] as HTMLElement;
+        
+        // Get computed styles to access margin values
         const computedStyle = window.getComputedStyle(element);
         const marginTop = parseFloat(computedStyle.marginTop);
         const marginBottom = parseFloat(computedStyle.marginBottom);
+        
+        // Add element height plus vertical margins (equivalent to jQuery's outerHeight(true))
         height += element.offsetHeight + marginTop + marginBottom;
       }
+      
+      // Set the calculated height on the container
       this.renderer.setStyle(this.navContainer.nativeElement, 'height', height + 'px');
     }
   }
 
+  /**
+   * Handle window scroll events to position the side navigation
+   * 
+   * This method calculates the appropriate top offset for the side navigation
+   * based on the current scroll position. It ensures the side nav stays properly
+   * positioned relative to the fixed header as the user scrolls.
+   * 
+   * Uses native window.scrollY instead of jQuery's $(window).scrollTop() for
+   * better performance and no external dependencies.
+   * 
+   * @param event - The scroll event (not currently used)
+   */
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: any) {
+    // Get current scroll position using native APIs (replaces jQuery)
     const windowTop = window.scrollY || window.pageYOffset || 0;
 
     const navSpace = (5 * 16) - 16 + 3; // 5 x 16 for nav - 16 for side nav top margin + 3 for top nav underline

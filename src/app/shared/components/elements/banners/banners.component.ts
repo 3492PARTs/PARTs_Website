@@ -63,12 +63,25 @@ export class BannersComponent implements OnInit, AfterViewInit {
     this.positionBannerWrapper();
   }
 
+  /**
+   * Position the banner wrapper based on scroll position and header height
+   * 
+   * This method calculates the appropriate top position for the banner wrapper
+   * to keep it positioned correctly below the header as the user scrolls. The
+   * banners should appear below the fixed header and adjust dynamically.
+   * 
+   * Uses native window.scrollY instead of jQuery's $(window).scrollTop() for
+   * better performance and eliminates the jQuery dependency.
+   */
   positionBannerWrapper(): void {
     this.mobile = this.gs.getAppSize() === AppSize.XS;
 
+    // Get current scroll position using native APIs (replaces jQuery)
     const windowTop = window.scrollY || window.pageYOffset || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const navSpace = appHeader.offsetHeight;
+    
+    // Calculate offset to position banner below header
     let offset = navSpace - windowTop;
     offset = offset <= 0 ? 0 : offset > navSpace ? offset : navSpace;
 

@@ -2,6 +2,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Renderer2, ElementRef } from '@angular/core';
 import { SideNavComponent } from './side-nav.component';
 
+/**
+ * Test suite for SideNavComponent
+ * 
+ * This suite verifies the side navigation component's functionality including:
+ * - Component initialization and configuration
+ * - Responsive behavior for wide and narrow screens
+ * - Collapse/expand functionality
+ * - Window resize handling with debouncing
+ * - Input property handling (Width, HideSideNav, Title)
+ * - Initial state validation
+ * 
+ * The component provides a responsive side navigation that adapts to screen size
+ * and user interactions. Tests ensure proper DOM manipulation and state management.
+ */
 describe('SideNavComponent', () => {
   let component: SideNavComponent;
   let fixture: ComponentFixture<SideNavComponent>;

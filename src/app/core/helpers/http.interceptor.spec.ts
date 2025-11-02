@@ -5,6 +5,20 @@ import { httpInterceptor } from './http.interceptor';
 import { AuthService } from '@app/auth/services/auth.service';
 import { environment } from '../../../environments/environment';
 
+/**
+ * Test suite for the HTTP interceptor
+ * 
+ * This suite verifies the HTTP interceptor's functionality including:
+ * - Adding base URL to all requests
+ * - Adding authorization headers for authenticated users
+ * - Handling expired tokens and refreshing them automatically
+ * - Proper error handling for 401, 403, and 400 status codes
+ * - Token refresh flow with concurrent request handling
+ * - Logout behavior on authentication failures
+ * 
+ * The interceptor is critical for maintaining authentication state and
+ * ensuring all API requests are properly configured.
+ */
 describe('httpInterceptor', () => {
   let mockAuthService: jasmine.SpyObj<AuthService>;
   let mockNext: jasmine.Spy<HttpHandlerFn>;

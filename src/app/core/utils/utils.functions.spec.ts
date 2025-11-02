@@ -36,6 +36,55 @@ import {
 import { Question, QuestionConditionType, Response } from '../models/form.models';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
 
+/**
+ * Comprehensive test suite for utility functions
+ * 
+ * This suite contains 91 tests covering all pure utility functions including:
+ * 
+ * **String & Validation:**
+ * - strNoE: String null/empty checks
+ * - formatDateString: Date formatting to MM/DD/YY HH:MM AM/PM
+ * 
+ * **Object Manipulation:**
+ * - cloneObject: Deep cloning via JSON
+ * - isObject: Plain object type checking
+ * - objectToString: Object to formatted string conversion
+ * - objectToFormData: Object to FormData conversion
+ * 
+ * **Property Access (with Security Tests):**
+ * - getPropertyValue: Nested property access with dot notation
+ * - setPropertyValue: Nested property setting with prototype pollution prevention
+ * - Security tests validate protection against __proto__, constructor, prototype injection
+ * 
+ * **Array Utilities:**
+ * - propertyMap: Find property value in array by matching another property
+ * - arrayObjectIndexOf: Find object index by property value
+ * - updateObjectInArray: Update object in array by property match
+ * 
+ * **Data Transformation:**
+ * - formatQuestionAnswer: Format question answers (arrays, objects, primitives)
+ * - questionsToCSV: Convert questions to CSV format
+ * - responsesToCSV: Convert response data to CSV
+ * - tableToCSV: Convert table data to CSV with proper escaping
+ * 
+ * **Encoding/Decoding:**
+ * - decodeBoolean: Boolean to custom string values
+ * - decodeSentBoolean: Boolean to "Sent"/"Not Sent"
+ * - decodeYesNoBoolean: Boolean to "Yes"/"No"
+ * - decodeYesNo: 'y'/'n' string to "Yes"/"No"
+ * 
+ * **UI Utilities:**
+ * - getScreenSize: Determine screen size category (XS, SM, LG, etc.)
+ * - scrollTo: Smooth scroll to position or element (jQuery replacement)
+ * - keepElementInView: Calculate offsets to keep element visible
+ * 
+ * **Other:**
+ * - getPageFromResponse: Extract pagination info from API responses
+ * - isQuestionConditionMet: Evaluate conditional question logic
+ * - downloadFileAs: Trigger file download with Blob
+ * - triggerChange: Execute function after timeout
+ * - devConsoleLog: Conditional console logging for development
+ */
 describe('Utils Functions', () => {
   describe('strNoE', () => {
     it('should return true for null', () => {

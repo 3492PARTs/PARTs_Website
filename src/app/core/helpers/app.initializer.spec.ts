@@ -2,6 +2,16 @@ import { TestBed } from '@angular/core/testing';
 import { appInitializer } from './app.initializer';
 import { AuthService } from '@app/auth/services/auth.service';
 
+/**
+ * Test suite for the application initializer function
+ * 
+ * This suite verifies that the app initializer:
+ * - Returns a properly structured initializer function
+ * - Returns a Promise that resolves correctly
+ * - Completes initialization without errors
+ * 
+ * The initializer is used during app bootstrap to perform pre-startup tasks.
+ */
 describe('appInitializer', () => {
   let mockAuthService: jasmine.SpyObj<AuthService>;
 

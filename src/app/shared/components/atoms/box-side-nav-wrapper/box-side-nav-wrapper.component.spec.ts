@@ -4,6 +4,22 @@ import { BoxSideNavWrapperComponent } from './box-side-nav-wrapper.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { BoxComponent } from '../box/box.component';
 
+/**
+ * Test suite for BoxSideNavWrapperComponent
+ * 
+ * This suite verifies the layout wrapper component's functionality including:
+ * - ShowSideNavigation input property handling
+ * - Content projection and child component management (SideNav and Box components)
+ * - Responsive layout behavior for wide screens (side-by-side layout)
+ * - Responsive layout behavior for narrow screens (stacked layout)
+ * - Window resize handling with debounced recalculation
+ * - Box width and positioning calculations based on side nav visibility
+ * - AfterContentInit lifecycle hook and change detection
+ * 
+ * The component manages the responsive layout of boxes and side navigation,
+ * adapting between side-by-side and stacked layouts based on screen width.
+ * Tests ensure proper DOM manipulation and responsive behavior.
+ */
 describe('BoxSideNavWrapperComponent', () => {
   let component: BoxSideNavWrapperComponent;
   let fixture: ComponentFixture<BoxSideNavWrapperComponent>;
