@@ -1,6 +1,5 @@
 import saveAs from 'file-saver';
 import imageCompression from 'browser-image-compression';
-import $ from 'jquery';
 import LoadImg from 'blueimp-load-image';
 import { environment } from '../../../environments/environment';
 import { Question, Response } from '../models/form.models';
@@ -359,13 +358,14 @@ export function openURL(url: string): void {
  * Scroll to a specific position or element
  */
 export function scrollTo(y: number | string): void {
-  $('html, body').animate(
-    {
-      scrollTop: typeof y === 'number' ? y : ($('#' + y).offset()?.top || 0) - 200,
-    },
-    500,
-    'linear'
-  );
+  const targetPosition = typeof y === 'number' 
+    ? y 
+    : (document.getElementById(y)?.getBoundingClientRect().top || 0) + window.scrollY - 200;
+  
+  window.scrollTo({
+    top: targetPosition,
+    behavior: 'smooth'
+  });
 }
 
 /**

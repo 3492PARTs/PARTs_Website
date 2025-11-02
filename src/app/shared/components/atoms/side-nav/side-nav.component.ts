@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, Renderer2, AfterViewInit, AfterViewChecked } from '@angular/core';
-import $ from 'jquery';
 
 @Component({
   selector: 'app-side-nav',
@@ -69,7 +68,10 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
       let height = 0;
       for (let i = 0; i < this.navContainer.nativeElement.children.length; i++) {
         const element = this.navContainer.nativeElement.children[i] as HTMLElement;
-        height += $(element).outerHeight(true) || 0;
+        const computedStyle = window.getComputedStyle(element);
+        const marginTop = parseFloat(computedStyle.marginTop);
+        const marginBottom = parseFloat(computedStyle.marginBottom);
+        height += element.offsetHeight + marginTop + marginBottom;
       }
       this.renderer.setStyle(this.navContainer.nativeElement, 'height', height + 'px');
     }
@@ -77,7 +79,7 @@ export class SideNavComponent implements OnInit, AfterViewInit, AfterViewChecked
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll(event: any) {
-    const windowTop = $(window).scrollTop() || 0;
+    const windowTop = window.scrollY || window.pageYOffset || 0;
 
     const navSpace = (5 * 16) - 16 + 3; // 5 x 16 for nav - 16 for side nav top margin + 3 for top nav underline
     let offset = navSpace - windowTop;

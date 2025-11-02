@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '@app/core/services/general.service';
-import $ from 'jquery';
 import { ModalService } from '@app/core/services/modal.service';
 import { Banner } from '@app/core/models/api.models';
 import { CommonModule } from '@angular/common';
@@ -67,7 +66,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   positionBannerWrapper(): void {
     this.mobile = this.gs.getAppSize() === AppSize.XS;
 
-    const windowTop = $(window).scrollTop() || 0;
+    const windowTop = window.scrollY || window.pageYOffset || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const navSpace = appHeader.offsetHeight;
     let offset = navSpace - windowTop;
