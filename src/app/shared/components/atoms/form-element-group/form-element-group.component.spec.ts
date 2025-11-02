@@ -62,8 +62,8 @@ describe('FormElementGroupComponent', () => {
 
   describe('ngOnInit', () => {
     it('should set FormGroupInline on form elements when InlineElements is true', () => {
-      const mockFormElement1 = jasmine.createSpyObj('FormElementComponent', [], { FormGroupInline: false });
-      const mockFormElement2 = jasmine.createSpyObj('FormElementComponent', [], { FormGroupInline: false });
+      const mockFormElement1: any = { FormGroupInline: false };
+      const mockFormElement2: any = { FormGroupInline: false };
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement1, mockFormElement2];
@@ -76,7 +76,7 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should set FormGroupInline on question form elements when InlineElements is true', () => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { FormGroupInline: false });
+      const mockFormElement: any = { FormGroupInline: false };
       const mockQuestionFormElement = { formElement: mockFormElement } as QuestionFormElementComponent;
       
       component.questionFormElements = new QueryList<QuestionFormElementComponent>();
@@ -89,7 +89,7 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should not set FormGroupInline when InlineElements is false', () => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { FormGroupInline: false });
+      const mockFormElement: any = { FormGroupInline: false };
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement];
@@ -103,10 +103,10 @@ describe('FormElementGroupComponent', () => {
 
   describe('setFormGroup', () => {
     it('should set FormGroup to true on form elements when InlineElements is false', (done) => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { 
+      const mockFormElement: any = { 
         FormGroup: false,
         FormGroupInline: false
-      });
+      };
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement];
@@ -121,10 +121,10 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should set FormGroupInline to true on form elements when InlineElements is true', (done) => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { 
+      const mockFormElement: any = { 
         FormGroup: false,
         FormGroupInline: false
-      });
+      };
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement];
@@ -139,10 +139,10 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should set FormGroup on question form element form elements when InlineElements is false', (done) => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { 
+      const mockFormElement: any = { 
         FormGroup: false,
         FormGroupInline: false
-      });
+      };
       const mockQuestionFormElement = { formElement: mockFormElement } as QuestionFormElementComponent;
       
       component.questionFormElements = new QueryList<QuestionFormElementComponent>();
@@ -158,10 +158,10 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should set FormGroupInline on question form element form elements when InlineElements is true', (done) => {
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', [], { 
+      const mockFormElement: any = { 
         FormGroup: false,
         FormGroupInline: false
-      });
+      };
       const mockQuestionFormElement = { formElement: mockFormElement } as QuestionFormElementComponent;
       
       component.questionFormElements = new QueryList<QuestionFormElementComponent>();
@@ -179,8 +179,8 @@ describe('FormElementGroupComponent', () => {
 
   describe('setFormElements', () => {
     it('should reset FormElements with form elements only', () => {
-      const mockFormElement1 = jasmine.createSpyObj('FormElementComponent', []);
-      const mockFormElement2 = jasmine.createSpyObj('FormElementComponent', []);
+      const mockFormElement1: any = {};
+      const mockFormElement2: any = {};
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement1, mockFormElement2];
@@ -193,8 +193,8 @@ describe('FormElementGroupComponent', () => {
     });
 
     it('should reset FormElements with question form elements included', () => {
-      const mockFormElement1 = jasmine.createSpyObj('FormElementComponent', []);
-      const mockFormElement2 = jasmine.createSpyObj('FormElementComponent', []);
+      const mockFormElement1: any = {};
+      const mockFormElement2: any = {};
       const mockQuestionFormElement = { formElement: mockFormElement2 } as QuestionFormElementComponent;
       
       component.formElements = new QueryList<FormElementComponent>();
@@ -210,7 +210,7 @@ describe('FormElementGroupComponent', () => {
 
     it('should emit FormElementsChange event', () => {
       spyOn(component.FormElementsChange, 'emit');
-      const mockFormElement = jasmine.createSpyObj('FormElementComponent', []);
+      const mockFormElement: any = {};
       
       component.formElements = new QueryList<FormElementComponent>();
       (component.formElements as any)._results = [mockFormElement];
