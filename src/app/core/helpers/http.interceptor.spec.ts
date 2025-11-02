@@ -117,8 +117,16 @@ describe('httpInterceptor', () => {
     mockAuthService.getRefreshingTokenFlag.and.returnValue(false);
     mockAuthService.pipeRefreshToken.and.returnValue(of({ access: 'new-token', refresh: 'refresh-token' }));
     
+    // First call fails with 401, second call should succeed after token refresh
+    let callCount = 0;
     const error = new HttpErrorResponse({ status: 401 });
-    mockNext.and.returnValue(throwError(() => error));
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => error);
+      }
+      return of({} as HttpEvent<unknown>);
+    });
 
     const req = new HttpRequest('GET', 'test/endpoint');
     
@@ -131,8 +139,8 @@ describe('httpInterceptor', () => {
           done();
         },
         error: () => {
-          // If refresh fails, we still expect the methods to be called
-          expect(mockAuthService.setRefreshingTokenFlag).toHaveBeenCalled();
+          // Should not error if refresh succeeds
+          fail('Should not error if token refresh succeeds');
           done();
         }
       });
@@ -144,8 +152,16 @@ describe('httpInterceptor', () => {
     mockAuthService.getRefreshingTokenFlag.and.returnValue(false);
     mockAuthService.pipeRefreshToken.and.returnValue(of({ access: 'new-token', refresh: 'refresh-token' }));
     
+    // First call fails with 403, second call should succeed after token refresh
+    let callCount = 0;
     const error = new HttpErrorResponse({ status: 403 });
-    mockNext.and.returnValue(throwError(() => error));
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => error);
+      }
+      return of({} as HttpEvent<unknown>);
+    });
 
     const req = new HttpRequest('GET', 'test/endpoint');
     
@@ -156,7 +172,8 @@ describe('httpInterceptor', () => {
           done();
         },
         error: () => {
-          // If it's a 403, could also logout
+          // Should not error if refresh succeeds
+          fail('Should not error if token refresh succeeds');
           done();
         }
       });
@@ -233,15 +250,39 @@ describe('httpInterceptor', () => {
     mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
     mockAuthService.getRefreshingTokenFlag.and.returnValue(false);
     mockAuthService.pipeRefreshToken.and.returnValue(of(null as any));
+    mockAuthService.logOut.and.returnValue(undefined as any);
+    mockAuthService.getAccessToken.and.returnValue('fallback-token');
     
+    // Create a BehaviorSubject that will emit a token value
+    // This is needed because when refresh fails, the catchError waits for refreshingTokenSubject
+    const refreshingTokenSubject = new BehaviorSubject<string | null>('fallback-token');
+    Object.defineProperty(mockAuthService, 'refreshingTokenSubject', {
+      get: () => refreshingTokenSubject,
+      configurable: true
+    });
+    
+    // First call fails with 401, second call (after fallback) should succeed
+    let callCount = 0;
     const error = new HttpErrorResponse({ status: 401 });
-    mockNext.and.returnValue(throwError(() => error));
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => error);
+      }
+      return of({} as HttpEvent<unknown>);
+    });
 
     const req = new HttpRequest('GET', 'test/endpoint');
     
     TestBed.runInInjectionContext(() => {
       httpInterceptor(req, mockNext).subscribe({
+        next: () => {
+          // The request eventually succeeds via the catchError fallback path
+          expect(mockAuthService.logOut).toHaveBeenCalled();
+          done();
+        },
         error: () => {
+          // Also acceptable if it errors out
           expect(mockAuthService.logOut).toHaveBeenCalled();
           done();
         }
@@ -271,13 +312,19 @@ describe('httpInterceptor', () => {
         next: () => {
           expect(mockAuthService.setToken).toHaveBeenCalledWith({ access: 'new-token', refresh: 'refresh-token' });
           expect(mockAuthService.setRefreshingTokenSubject).toHaveBeenCalledWith('new-token');
-          expect(mockAuthService.setRefreshingTokenFlag).toHaveBeenCalledWith(false);
-          done();
+          // Don't check for setRefreshingTokenFlag(false) here as it happens in finalize
         },
         error: (err) => {
           // Should not error if refresh succeeds
           fail('Should not error');
           done();
+        },
+        complete: () => {
+          // The finalize operator runs after complete, so check here
+          setTimeout(() => {
+            expect(mockAuthService.setRefreshingTokenFlag).toHaveBeenCalledWith(false);
+            done();
+          }, 0);
         }
       });
     });

@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, Renderer2, AfterViewInit, AfterViewChecked } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-side-nav',
+  standalone: true,
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.scss']
 })
