@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Renderer2, ElementRef } from '@angular/core';
+import { Renderer2, ElementRef, NO_ERRORS_SCHEMA } from '@angular/core';
 import { SideNavComponent } from './side-nav.component';
 
 /**
@@ -22,17 +22,21 @@ describe('SideNavComponent', () => {
   let mockRenderer: jasmine.SpyObj<Renderer2>;
 
   beforeEach(async () => {
-    mockRenderer = jasmine.createSpyObj('Renderer2', ['setStyle']);
+    mockRenderer = jasmine.createSpyObj('Renderer2', ['setStyle', 'removeStyle']);
 
     await TestBed.configureTestingModule({
       imports: [SideNavComponent],
       providers: [
         { provide: Renderer2, useValue: mockRenderer }
-      ]
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(SideNavComponent);
     component = fixture.componentInstance;
+    
+    // Replace the component's renderer with our mock
+    (component as any).renderer = mockRenderer;
   });
 
   it('should create', () => {

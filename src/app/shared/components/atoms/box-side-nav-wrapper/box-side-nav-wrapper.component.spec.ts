@@ -37,6 +37,13 @@ describe('BoxSideNavWrapperComponent', () => {
 
     fixture = TestBed.createComponent(BoxSideNavWrapperComponent);
     component = fixture.componentInstance;
+    
+    // Replace the component's renderer with our mock
+    (component as any).renderer = mockRenderer;
+  });
+
+  afterEach(() => {
+    mockRenderer.setStyle.calls.reset();
   });
 
   it('should create', () => {
@@ -95,14 +102,6 @@ describe('BoxSideNavWrapperComponent', () => {
   });
 
   describe('onResize', () => {
-    beforeEach(() => {
-      jasmine.clock().install();
-    });
-
-    afterEach(() => {
-      jasmine.clock().uninstall();
-    });
-
     it('should clear existing resize timer', () => {
       spyOn(window, 'clearTimeout');
       component['resizeTimer'] = 123;
@@ -112,19 +111,23 @@ describe('BoxSideNavWrapperComponent', () => {
       expect(window.clearTimeout).toHaveBeenCalledWith(123);
     });
 
-    it('should call checkBoxes after timeout', () => {
+    it('should call checkBoxes after timeout', (done) => {
       spyOn<any>(component, 'checkBoxes');
       
       component.onResize(null);
-      jasmine.clock().tick(250);
       
-      expect(component['checkBoxes']).toHaveBeenCalled();
+      // Wait for the timeout (200ms) plus a bit extra
+      setTimeout(() => {
+        expect(component['checkBoxes']).toHaveBeenCalled();
+        done();
+      }, 250);
     });
   });
 
   describe('shrinkBoxes for wide screen', () => {
     beforeEach(() => {
-      spyOnProperty(window, 'innerWidth').and.returnValue(1200);
+      spyOnProperty(window, 'innerWidth', 'get').and.returnValue(1200);
+      mockRenderer.setStyle.calls.reset();
     });
 
     it('should style sideNav for wide screen', () => {
@@ -155,9 +158,15 @@ describe('BoxSideNavWrapperComponent', () => {
         box: new ElementRef(mockElement)
       } as any;
       
+      // Properly create a QueryList that can be iterated
       const mockQueryList = new QueryList<BoxComponent>();
-      (mockQueryList as any)._results = [mockBox];
-      (mockQueryList as any)._emitDistinctChangesOnly = false;
+      Object.defineProperty(mockQueryList, 'length', { value: 1, writable: true });
+      Object.defineProperty(mockQueryList, 'first', { value: mockBox, writable: true });
+      Object.defineProperty(mockQueryList, 'last', { value: mockBox, writable: true });
+      // Override the forEach method to work with our mock
+      mockQueryList.forEach = (fn: (value: BoxComponent, index: number, array: BoxComponent[]) => void) => {
+        fn(mockBox, 0, [mockBox]);
+      };
       
       component.sideNav = mockSideNav;
       component.boxes = mockQueryList;
@@ -186,9 +195,15 @@ describe('BoxSideNavWrapperComponent', () => {
         box: new ElementRef(mockElement)
       } as any;
       
+      // Properly create a QueryList that can be iterated
       const mockQueryList = new QueryList<BoxComponent>();
-      (mockQueryList as any)._results = [mockBox];
-      (mockQueryList as any)._emitDistinctChangesOnly = false;
+      Object.defineProperty(mockQueryList, 'length', { value: 1, writable: true });
+      Object.defineProperty(mockQueryList, 'first', { value: mockBox, writable: true });
+      Object.defineProperty(mockQueryList, 'last', { value: mockBox, writable: true });
+      // Override the forEach method to work with our mock
+      mockQueryList.forEach = (fn: (value: BoxComponent, index: number, array: BoxComponent[]) => void) => {
+        fn(mockBox, 0, [mockBox]);
+      };
       
       component.sideNav = mockSideNav;
       component.boxes = mockQueryList;
@@ -204,7 +219,8 @@ describe('BoxSideNavWrapperComponent', () => {
 
   describe('expandBoxes for narrow screen', () => {
     beforeEach(() => {
-      spyOnProperty(window, 'innerWidth').and.returnValue(800);
+      spyOnProperty(window, 'innerWidth', 'get').and.returnValue(800);
+      mockRenderer.setStyle.calls.reset();
     });
 
     it('should style boxes for narrow screen', () => {
@@ -213,9 +229,15 @@ describe('BoxSideNavWrapperComponent', () => {
         box: new ElementRef(mockElement)
       } as any;
       
+      // Properly create a QueryList that can be iterated
       const mockQueryList = new QueryList<BoxComponent>();
-      (mockQueryList as any)._results = [mockBox];
-      (mockQueryList as any)._emitDistinctChangesOnly = false;
+      Object.defineProperty(mockQueryList, 'length', { value: 1, writable: true });
+      Object.defineProperty(mockQueryList, 'first', { value: mockBox, writable: true });
+      Object.defineProperty(mockQueryList, 'last', { value: mockBox, writable: true });
+      // Override the forEach method to work with our mock
+      mockQueryList.forEach = (fn: (value: BoxComponent, index: number, array: BoxComponent[]) => void) => {
+        fn(mockBox, 0, [mockBox]);
+      };
       
       component.boxes = mockQueryList;
       
