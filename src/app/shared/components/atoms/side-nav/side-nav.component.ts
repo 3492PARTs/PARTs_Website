@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, HostListener, Renderer2, AfterViewInit, AfterViewChecked } from '@angular/core';
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-side-nav',
