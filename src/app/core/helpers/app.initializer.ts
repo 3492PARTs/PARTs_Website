@@ -1,4 +1,4 @@
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '@app/auth/services/auth.service';
 
 export function appInitializer(auth: AuthService) {
   return () => new Promise(resolve => {
