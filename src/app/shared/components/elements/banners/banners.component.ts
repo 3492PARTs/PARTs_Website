@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '@app/core/services/general.service';
-import $ from 'jquery';
 import { ModalService } from '@app/core/services/modal.service';
 import { Banner } from '@app/core/models/api.models';
 import { CommonModule } from '@angular/common';
@@ -64,12 +63,25 @@ export class BannersComponent implements OnInit, AfterViewInit {
     this.positionBannerWrapper();
   }
 
+  /**
+   * Position the banner wrapper based on scroll position and header height
+   * 
+   * This method calculates the appropriate top position for the banner wrapper
+   * to keep it positioned correctly below the header as the user scrolls. The
+   * banners should appear below the fixed header and adjust dynamically.
+   * 
+   * Uses native window.scrollY instead of jQuery's $(window).scrollTop() for
+   * better performance and eliminates the jQuery dependency.
+   */
   positionBannerWrapper(): void {
     this.mobile = this.gs.getAppSize() === AppSize.XS;
 
-    const windowTop = $(window).scrollTop() || 0;
+    // Get current scroll position using native APIs (replaces jQuery)
+    const windowTop = window.scrollY || window.pageYOffset || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const navSpace = appHeader.offsetHeight;
+    
+    // Calculate offset to position banner below header
     let offset = navSpace - windowTop;
     offset = offset <= 0 ? 0 : offset > navSpace ? offset : navSpace;
 

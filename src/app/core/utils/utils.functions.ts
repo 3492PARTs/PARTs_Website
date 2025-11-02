@@ -1,6 +1,5 @@
 import saveAs from 'file-saver';
 import imageCompression from 'browser-image-compression';
-import $ from 'jquery';
 import LoadImg from 'blueimp-load-image';
 import { environment } from '../../../environments/environment';
 import { Question, Response } from '../models/form.models';
@@ -356,16 +355,36 @@ export function openURL(url: string): void {
 }
 
 /**
- * Scroll to a specific position or element
+ * Scroll to a specific position or element on the page
+ * 
+ * This function provides smooth scrolling behavior to either a specific
+ * vertical position or to an element identified by its ID. When scrolling
+ * to an element, it accounts for a 200px offset (typically for fixed headers).
+ * 
+ * Replaces jQuery's $('html, body').animate() with native smooth scrolling.
+ * 
+ * @param y - Either a number representing the vertical scroll position in pixels,
+ *            or a string representing the ID of an element to scroll to (without the '#')
+ * 
+ * @example
+ * // Scroll to a specific position
+ * scrollTo(500);
+ * 
+ * @example
+ * // Scroll to an element with ID "my-section"
+ * scrollTo('my-section');
  */
 export function scrollTo(y: number | string): void {
-  $('html, body').animate(
-    {
-      scrollTop: typeof y === 'number' ? y : ($('#' + y).offset()?.top || 0) - 200,
-    },
-    500,
-    'linear'
-  );
+  // Calculate target scroll position
+  const targetPosition = typeof y === 'number' 
+    ? y 
+    : (document.getElementById(y)?.getBoundingClientRect().top || 0) + window.scrollY - 200;
+  
+  // Perform smooth scroll using native Web API
+  window.scrollTo({
+    top: targetPosition,
+    behavior: 'smooth'
+  });
 }
 
 /**
