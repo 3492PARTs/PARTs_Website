@@ -4,6 +4,7 @@ import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-side-nav',
+  standalone: true,
   imports: [CommonModule, ButtonComponent],
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.scss']
