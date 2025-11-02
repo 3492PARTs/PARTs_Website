@@ -92,6 +92,7 @@ export function createMockGeneralService() {
     addSiteBanner: jasmine.createSpy('addSiteBanner'),
     removeSiteBanner: jasmine.createSpy('removeSiteBanner'),
     removeBanner: jasmine.createSpy('removeBanner'),
+    addBanner: jasmine.createSpy('addBanner'),
     siteBanners: of([]),
     currentOutstandingCalls: of(0),
     scrollPosition$: of(0),
@@ -145,7 +146,9 @@ export function createMockModalService() {
   return {
     open: jasmine.createSpy('open'),
     close: jasmine.createSpy('close'),
-    isOpen: false
+    isOpen: false,
+    triggerConfirm: jasmine.createSpy('triggerConfirm'),
+    triggerError: jasmine.createSpy('triggerError')
   };
 }
 
@@ -164,13 +167,17 @@ export function createMockNavigationService() {
  * Creates a mock SwPush (Service Worker Push) for testing
  */
 export function createMockSwPush() {
+  const messagesSubject = new Subject();
+  const notificationClicksSubject = new Subject();
   return {
-    messages: of({}),
-    notificationClicks: of({}),
+    messages: messagesSubject.asObservable(),
+    notificationClicks: notificationClicksSubject.asObservable(),
     subscription: of(null),
     isEnabled: false,
     requestSubscription: jasmine.createSpy('requestSubscription').and.returnValue(Promise.resolve({} as any)),
-    unsubscribe: jasmine.createSpy('unsubscribe').and.returnValue(Promise.resolve())
+    unsubscribe: jasmine.createSpy('unsubscribe').and.returnValue(Promise.resolve()),
+    _messagesSubject: messagesSubject,
+    _notificationClicksSubject: notificationClicksSubject
   };
 }
 
