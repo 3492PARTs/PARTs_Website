@@ -48,7 +48,7 @@ RUN if [ "$BUILD_CONFIGURATION" = "production" ]; then \
     fi
 
 # Stage 2a: Python runtime image (for production deployment)
-FROM python:3.11-slim AS runtime-python
+FROM python:3.11-slim AS runtime-production
 
 WORKDIR /usr/local/app/dist/parts-website/browser/
 
@@ -72,7 +72,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python3 -c "import os; exit(0 if os.path.exists('index.html') else 1)"
 
 # Stage 2b: Nginx runtime image (for UAT/static serving)
-FROM nginx:1.27-alpine AS runtime-nginx
+FROM nginx:1.27-alpine AS runtime-uat
 
 # Install wget for health check
 RUN apk add --no-cache wget

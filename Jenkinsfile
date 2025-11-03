@@ -36,7 +36,7 @@ node {
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                 '''
                 env.BUILD_CONFIGURATION = 'production'
-                env.RUNTIME_TARGET = 'runtime-python'
+                env.RUNTIME_TARGET = 'runtime-production'
             }
             else {
                 sh'''
@@ -45,7 +45,7 @@ node {
                 '''
 
                 env.BUILD_CONFIGURATION = 'uat'
-                env.RUNTIME_TARGET = 'runtime-nginx'
+                env.RUNTIME_TARGET = 'runtime-uat'
             }
         }
 
