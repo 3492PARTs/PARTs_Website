@@ -12,7 +12,7 @@ node {
     try {
         def app
         def buildImage
-        
+        /*
         stage('Clone repository') {
             timeout(time: 5, unit: 'MINUTES') {
                 checkout scm
@@ -130,30 +130,20 @@ node {
                     }
                 }
                 else {
-                   sh """
-                    ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website; \\
-                    git fetch --prune; \\
-                    git switch ${BRANCH_NAME}; \\
-                    git pull; \\
-                    TAG=${FORMATTED_BRANCH_NAME} docker compose pull; \\
-                    TAG=${FORMATTED_BRANCH_NAME} docker compose up -d --force-recreate; \\
-                    \\
-                    # --- Corrected Branch Cleanup Logic on Remote Server --- \\
-                    # We need FOUR backslashes to pass ONE literal backslash to the remote shell, \\
-                    # ensuring the remote shell executes the command substitution. \\
-                    GONE_BRANCHES=\\\$(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/);\\
-                    \\
-                    # Note the required semicolons before 'then', 'else', and 'fi' for single-line bash syntax \\
-                    if [ -n \"\$GONE_BRANCHES\" ]; then \\
-                        echo \"Deleting local branches on remote server: \n\$GONE_BRANCHES\"; \\
-                        echo \"\$GONE_BRANCHES\" | xargs git branch --delete; \\
-                    else \\
-                        echo \"No local branches tracking gone remote branches found for deletion.\"; \\
-                    fi"
-                """
+                   sh '''
+                    ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website \
+                    && git fetch \
+                    && git switch $BRANCH_NAME \
+                    && git pull \
+                    && TAG=$FORMATTED_BRANCH_NAME docker compose pull \
+                    && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate"
+                    '''
+
+                    sh '''ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "git fetch --prune && git branch --delete $(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/)"
+                    '''
                 }
             }
-        }
+        }*/
 
         stage('Cleanup Docker Images') {
             sh '''
