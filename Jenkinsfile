@@ -136,9 +136,10 @@ node {
                     && git switch $BRANCH_NAME \
                     && git pull \
                     && TAG=$FORMATTED_BRANCH_NAME docker compose pull \
-                    && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate" \
-                    && git fetch --prune && git branch --delete $(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/)
+                    && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate"
                     '''
+
+                    sh "git fetch --prune && git branch --delete $(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/)"
                 }
             }
         }
