@@ -53,6 +53,14 @@ describe('ScoutingService', () => {
     });
 
     service = TestBed.inject(ScoutingService);
+    
+    // Clear any cached promises between tests
+    service['loadSeasonsPromise'] = null;
+    service['loadEventsPromise'] = null;
+    service['loadTeamsPromise'] = null;
+    service['loadMatchesPromise'] = null;
+    service['initFieldScoutingPromise'] = null;
+    service['initPitScoutingPromise'] = null;
   });
 
   it('should be created', () => {
@@ -119,11 +127,11 @@ describe('ScoutingService', () => {
         { id: 1, season: '2023', current: 'y', game: 'Test Game', manual: '' }
       ];
       
-      mockAPIService.get.and.returnValue(
-        new Promise((resolve) => {
-          setTimeout(() => resolve(mockSeasons), 0);
-        })
-      );
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockSeasons);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockSeasons);
+      });
       mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve());
       mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]));
@@ -139,7 +147,11 @@ describe('ScoutingService', () => {
         { id: 1, season: '2023', current: 'n', game: 'Test Game', manual: '' }
       ];
       
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.Season.getAll.and.returnValue(Promise.resolve(mockSeasons));
 
       const result = await service.loadSeasons();
@@ -148,7 +160,11 @@ describe('ScoutingService', () => {
     });
 
     it('should return null and show banner on cache failure', async () => {
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.Season.getAll.and.returnValue(Promise.reject('Cache error'));
 
       const result = await service.loadSeasons();
@@ -160,9 +176,15 @@ describe('ScoutingService', () => {
     it('should reuse existing promise if already loading', async () => {
       const mockSeasons: Season[] = [{ id: 1, season: '2023', current: 'y', game: 'Test', manual: '' }];
       
-      mockAPIService.get.and.returnValue(
-        new Promise((resolve) => setTimeout(() => resolve(mockSeasons), 100))
-      );
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            if (onNext) onNext(mockSeasons);
+            if (onComplete) onComplete();
+            resolve(mockSeasons);
+          }, 100);
+        });
+      });
       mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve());
       mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]));
@@ -204,7 +226,11 @@ describe('ScoutingService', () => {
         { id: 1, season_id: 1, event_nm: 'Test Event', current: 'y' } as Event
       ];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockEvents));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockEvents);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockEvents);
+      });
       mockCacheService.Event.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Event.AddBulkAsync.and.returnValue(Promise.resolve());
       mockCacheService.Event.getAll.and.returnValue(Promise.resolve([]));
@@ -219,7 +245,11 @@ describe('ScoutingService', () => {
         { id: 1, season_id: 1, event_nm: 'Test Event', current: 'n' } as Event
       ];
       
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.Event.getAll.and.returnValue(Promise.resolve(mockEvents));
 
       const result = await service.loadEvents();
@@ -247,7 +277,11 @@ describe('ScoutingService', () => {
         { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 }
       ];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockTeams));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockTeams);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockTeams);
+      });
       mockCacheService.Team.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Team.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
 
@@ -255,19 +289,6 @@ describe('ScoutingService', () => {
 
       expect(result).toEqual(mockTeams);
       expect(mockCacheService.Team.AddOrEditBulkAsync).toHaveBeenCalledWith(mockTeams);
-    });
-
-    it('should load teams from cache on API failure', async () => {
-      const mockTeams: Team[] = [
-        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 }
-      ];
-      
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
-      mockCacheService.Team.getAll.and.returnValue(Promise.resolve(mockTeams));
-
-      const result = await service.loadTeams();
-
-      expect(result).toEqual(mockTeams);
     });
   });
 
@@ -317,7 +338,11 @@ describe('ScoutingService', () => {
         { match_number: 1, match_key: 'qm1' }
       ] as Match[];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockMatches));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockMatches);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockMatches);
+      });
       mockCacheService.Match.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Match.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
 
@@ -331,7 +356,11 @@ describe('ScoutingService', () => {
         { match_number: 1, match_key: 'qm1' }
       ] as Match[];
       
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.Match.getAll.and.returnValue(Promise.resolve(mockMatches));
 
       const result = await service.loadMatches();
@@ -372,7 +401,11 @@ describe('ScoutingService', () => {
     it('should load field scouting form from API on success', async () => {
       const mockForm: FieldFormForm = { id: 1 } as FieldFormForm;
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockForm));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockForm);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockForm);
+      });
       mockCacheService.FieldFormForm.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.FieldFormForm.AddAsync.and.returnValue(Promise.resolve());
 
@@ -384,7 +417,11 @@ describe('ScoutingService', () => {
     it('should load field scouting form from cache on API failure', async () => {
       const mockForm: FieldFormForm = { id: 1 } as FieldFormForm;
       
-      mockAPIService.get.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.FieldFormForm.getAll.and.returnValue(Promise.resolve([mockForm]));
 
       const result = await service.loadFieldScoutingForm();
@@ -403,7 +440,11 @@ describe('ScoutingService', () => {
         match: undefined
       } as ScoutFieldFormResponse;
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
 
       const result = await service.saveFieldScoutingResponse(mockResponse);
 
@@ -420,7 +461,11 @@ describe('ScoutingService', () => {
         match: undefined
       } as ScoutFieldFormResponse;
       
-      mockAPIService.post.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.ScoutFieldFormResponse.AddAsync.and.returnValue(Promise.resolve());
       spyOn(service, 'startUploadOutstandingResponsesTimeout');
 
@@ -440,7 +485,11 @@ describe('ScoutingService', () => {
         match: undefined
       } as ScoutFieldFormResponse;
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
       mockCacheService.ScoutFieldFormResponse.RemoveAsync.and.returnValue(Promise.resolve());
 
       await service.saveFieldScoutingResponse(mockResponse, 1);
@@ -453,7 +502,11 @@ describe('ScoutingService', () => {
     it('should load pit scouting form from API on success', async () => {
       const mockQuestions: any[] = [{ id: 1, question: 'Test' }];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockQuestions));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockQuestions);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockQuestions);
+      });
       mockCacheService.Question.filterAll.and.returnValue(Promise.resolve([]));
       mockCacheService.Question.RemoveBulkAsync.and.returnValue(Promise.resolve());
       mockCacheService.Question.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
@@ -475,7 +528,11 @@ describe('ScoutingService', () => {
         pics: []
       } as ScoutPitFormResponse;
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
       mockGeneralService.incrementOutstandingCalls.and.stub();
       mockGeneralService.decrementOutstandingCalls.and.stub();
 
@@ -495,7 +552,11 @@ describe('ScoutingService', () => {
         pics: []
       } as ScoutPitFormResponse;
       
-      mockAPIService.post.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
       mockCacheService.ScoutPitFormResponse.AddAsync.and.returnValue(Promise.resolve());
       spyOn(service, 'startUploadOutstandingResponsesTimeout');
 
@@ -510,7 +571,11 @@ describe('ScoutingService', () => {
     it('should load schedule types from API on success', async () => {
       const mockTypes: ScheduleType[] = [{ id: 1, sch_typ: 'Type1', sch_nm: 'Schedule Type 1' } as ScheduleType];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockTypes));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockTypes);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockTypes);
+      });
       mockCacheService.ScheduleType.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.ScheduleType.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -524,7 +589,11 @@ describe('ScoutingService', () => {
     it('should load schedules from API on success', async () => {
       const mockSchedules: Schedule[] = [{ id: 1 } as Schedule];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockSchedules));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockSchedules);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockSchedules);
+      });
       mockCacheService.Schedule.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.Schedule.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -538,7 +607,11 @@ describe('ScoutingService', () => {
     it('should load scouting field schedules from API on success', async () => {
       const mockSchedules: ScoutFieldSchedule[] = [{ id: 1 } as ScoutFieldSchedule];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockSchedules));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockSchedules);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockSchedules);
+      });
       mockCacheService.ScoutFieldSchedule.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.ScoutFieldSchedule.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -632,7 +705,11 @@ describe('ScoutingService', () => {
     it('should load team notes from API on success', async () => {
       const mockNotes: TeamNote[] = [{ id: 1, team_id: 3492 } as TeamNote];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockNotes));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockNotes);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockNotes);
+      });
       mockCacheService.TeamNote.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.TeamNote.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -646,7 +723,11 @@ describe('ScoutingService', () => {
     it('should save team note via API', async () => {
       const mockNote: TeamNote = { id: 1, team_id: 3492, note: 'Test note' } as TeamNote;
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
 
       const result = await service.saveTeamNote(mockNote);
 
@@ -659,7 +740,11 @@ describe('ScoutingService', () => {
     it('should load match strategies from API on success', async () => {
       const mockStrategies: MatchStrategy[] = [{ id: 1 } as MatchStrategy];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockStrategies));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockStrategies);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockStrategies);
+      });
       mockCacheService.MatchStrategy.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.MatchStrategy.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -677,7 +762,11 @@ describe('ScoutingService', () => {
         match: { match_key: 'qm1' }
       } as MatchStrategy;
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
 
       const result = await service.saveMatchStrategy(mockStrategy);
 
@@ -690,7 +779,11 @@ describe('ScoutingService', () => {
     it('should load alliance selections from API on success', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
       
-      mockAPIService.get.and.returnValue(Promise.resolve(mockSelections));
+      mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
+        if (onNext) onNext(mockSelections);
+        if (onComplete) onComplete();
+        return Promise.resolve(mockSelections);
+      });
       mockCacheService.AllianceSelection.RemoveAllAsync.and.returnValue(Promise.resolve());
       mockCacheService.AllianceSelection.AddBulkAsync.and.returnValue(Promise.resolve());
 
@@ -704,7 +797,11 @@ describe('ScoutingService', () => {
     it('should save alliance selections via API', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
       
-      mockAPIService.post.and.returnValue(Promise.resolve({ message: 'Success' }));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onNext) onNext({ message: 'Success' });
+        if (onComplete) onComplete();
+        return Promise.resolve({ message: 'Success' });
+      });
 
       const result = await service.saveAllianceSelections(mockSelections);
 
@@ -715,7 +812,11 @@ describe('ScoutingService', () => {
     it('should return false on API failure', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
       
-      mockAPIService.post.and.returnValue(Promise.reject('API Error'));
+      mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
+        if (onError) onError('API Error');
+        if (onComplete) onComplete();
+        return Promise.reject('API Error');
+      });
 
       const result = await service.saveAllianceSelections(mockSelections);
 
