@@ -35,7 +35,8 @@ node {
                 sh'''
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
                 '''
-                env.DOCKERFILE = 'Dockerfile'
+                env.BUILD_CONFIGURATION = 'production'
+                env.RUNTIME_TARGET = 'runtime-production'
             }
             else {
                 sh'''
@@ -43,7 +44,8 @@ node {
                 && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
                 '''
 
-                env.DOCKERFILE = 'Dockerfile.uat'
+                env.BUILD_CONFIGURATION = 'uat'
+                env.RUNTIME_TARGET = 'runtime-uat'
             }
         }
 
@@ -55,7 +57,8 @@ node {
                 
                 buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
                     "--cache-from parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest " +
-                    "-f ./${env.DOCKERFILE} --target=build .")
+                    "--build-arg BUILD_CONFIGURATION=${env.BUILD_CONFIGURATION} " +
+                    "-f ./Dockerfile --target=build .")
                     
             }
         }
@@ -78,7 +81,8 @@ node {
                     // Use BuildKit cache for faster builds
                     app = docker.build("bduke97/parts_website", 
                         "--cache-from bduke97/parts_website:latest " +
-                        "-f ./Dockerfile --target=runtime .")
+                        "--build-arg BUILD_CONFIGURATION=${env.BUILD_CONFIGURATION} " +
+                        "-f ./Dockerfile --target=${env.RUNTIME_TARGET} .")
                 }
                 else {
                     // Pull cache image if it exists, ignore errors
@@ -87,7 +91,8 @@ node {
                     // Use BuildKit cache for faster builds
                     app = docker.build("bduke97/parts_website", 
                         "--cache-from bduke97/parts_website:${env.FORMATTED_BRANCH_NAME} " +
-                        "-f ./Dockerfile.uat .")
+                        "--build-arg BUILD_CONFIGURATION=${env.BUILD_CONFIGURATION} " +
+                        "-f ./Dockerfile --target=${env.RUNTIME_TARGET} .")
                 }
             }
         }
@@ -125,13 +130,22 @@ node {
                     }
                 }
                 else {
-                    sh '''
+                   sh '''
                     ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website \
                     && git fetch \
                     && git switch $BRANCH_NAME \
                     && git pull \
                     && TAG=$FORMATTED_BRANCH_NAME docker compose pull \
                     && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate"
+                    '''
+
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "
+                            cd /home/brandon/PARTs_Website && 
+                            git fetch --prune &&
+                            git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/ | 
+                            xargs -r git branch --delete
+                        "
                     '''
                 }
             }
