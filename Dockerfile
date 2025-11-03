@@ -40,12 +40,7 @@ RUN npm ci --prefer-offline --no-audit --verbose
 COPY . .
 
 # Build with the specified configuration
-# Use conditional logic: if BUILD_CONFIGURATION is "production", don't add --configuration flag
-RUN if [ "$BUILD_CONFIGURATION" = "production" ]; then \
-        npx ng build --verbose; \
-    else \
-        npx ng build --configuration=$BUILD_CONFIGURATION --verbose; \
-    fi
+RUN npx ng build --configuration=$BUILD_CONFIGURATION --verbose
 
 # Stage 2a: Python runtime image (for production deployment)
 FROM python:3.11-slim AS runtime-production

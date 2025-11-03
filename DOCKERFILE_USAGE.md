@@ -39,11 +39,6 @@ docker build \
   .
 ```
 
-Or using the default values:
-```bash
-docker build --target runtime-python -t parts-website:prod .
-```
-
 ### Building for UAT (Nginx runtime)
 ```bash
 docker build \
