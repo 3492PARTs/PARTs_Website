@@ -29,7 +29,7 @@ node {
                     -d '{"state":"pending", "description":"Build '\$BUILD_NO' pending", "context":"Jenkins Build"}'
             '''
         }
-/*
+
         stage('Set Variables') {
             if (env.BRANCH_NAME == 'main') {
                 sh'''
@@ -107,7 +107,7 @@ node {
                     }
                 
             }
-        }*/
+        }
 
         stage('Deploy') {
             timeout(time: 15, unit: 'MINUTES') {
