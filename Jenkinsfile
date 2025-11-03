@@ -30,7 +30,7 @@ node {
             '''
         }
 
-        stage('Set Variables') {
+        stage('Set variables') {
             if (env.BRANCH_NAME == 'main') {
                 sh'''
                 sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
@@ -49,7 +49,7 @@ node {
             }
         }
 
-        stage('Build Image') {
+        stage('Build image') {
             timeout(time: 15, unit: 'MINUTES') {
                 // Use BuildKit cache mounts for faster builds
                 // Pull cache image if it exists, ignore errors
@@ -63,7 +63,7 @@ node {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run tests') {
             buildImage.inside("--shm-size=2gb -u 0") {
                 sh '''
                     cd /usr/local/app && 
@@ -72,7 +72,7 @@ node {
             }
         }
 
-        stage('Build Runtime Image') {
+        stage('Build runtime image') {
             timeout(time: 5, unit: 'MINUTES') {
                 if (env.BRANCH_NAME == 'main') {
                     // Pull cache image if it exists, ignore errors
@@ -151,12 +151,12 @@ node {
             }
         }
 
-        stage('Cleanup Docker Images') {
+        stage('Cleanup docker images') {
             sh '''
                 echo "Starting Docker image cleanup..."
                 
                 # 1. Force remove the intermediate image used for testing
-                docker rmi -f parts-test-base || true
+                docker rmi -f parts-website-build-${env.FORMATTED_BRANCH_NAME} || true
                 
                 # 2. Remove all dangling images (untagged)
                 docker image prune -f
