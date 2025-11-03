@@ -130,7 +130,7 @@ node {
                     }
                 }
                 else {
-                    sh """
+                   sh """
                     ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website; \\
                     git fetch --prune; \\
                     git switch ${BRANCH_NAME}; \\
@@ -139,10 +139,11 @@ node {
                     TAG=${FORMATTED_BRANCH_NAME} docker compose up -d --force-recreate; \\
                     \\
                     # --- Corrected Branch Cleanup Logic on Remote Server --- \\
-                    # Jenkins (Groovy) reads the four backslashes and passes a literal '\\$(' to the shell. \\
+                    # We need FOUR backslashes to pass ONE literal backslash to the remote shell, \\
+                    # ensuring the remote shell executes the command substitution. \\
                     GONE_BRANCHES=\\\$(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/);\\
                     \\
-                    # Note the required semicolons before 'then', 'else', and 'fi' \\
+                    # Note the required semicolons before 'then', 'else', and 'fi' for single-line bash syntax \\
                     if [ -n \"\$GONE_BRANCHES\" ]; then \\
                         echo \"Deleting local branches on remote server: \n\$GONE_BRANCHES\"; \\
                         echo \"\$GONE_BRANCHES\" | xargs git branch --delete; \\
