@@ -50,7 +50,7 @@ node {
             timeout(time: 15, unit: 'MINUTES') {
                 // Use BuildKit cache mounts for faster builds
                 // Pull cache image if it exists, ignore errors
-                sh 'docker pull parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest || true'
+                sh "docker pull parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest || true"
                 
                 def buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
                     "--cache-from parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest " +
@@ -102,7 +102,7 @@ node {
                 
             }
         }
-        
+
         stage('Deploy') {
             timeout(time: 15, unit: 'MINUTES') {
                 if (env.BRANCH_NAME == 'main') {
