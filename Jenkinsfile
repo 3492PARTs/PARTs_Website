@@ -12,7 +12,7 @@ node {
     try {
         def app
         def buildImage
-        /*
+        
         stage('Clone repository') {
             timeout(time: 5, unit: 'MINUTES') {
                 checkout scm
@@ -29,7 +29,7 @@ node {
                     -d '{"state":"pending", "description":"Build '\$BUILD_NO' pending", "context":"Jenkins Build"}'
             '''
         }
-
+/*
         stage('Set Variables') {
             if (env.BRANCH_NAME == 'main') {
                 sh'''
