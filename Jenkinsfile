@@ -11,6 +11,7 @@ node {
 
     try {
         def app
+        def buildImage
         
         stage('Clone repository') {
             timeout(time: 5, unit: 'MINUTES') {
@@ -52,7 +53,7 @@ node {
                 // Pull cache image if it exists, ignore errors
                 sh "docker pull parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest || true"
                 
-                def buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
+                buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
                     "--cache-from parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest " +
                     "-f ./${env.DOCKERFILE} --target=build .")
                     
