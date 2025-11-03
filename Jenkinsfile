@@ -18,6 +18,7 @@ node {
             }
         }
         
+        // Set build status on github
         withCredentials([string(credentialsId: 'github-status', variable: 'PASSWORD')]) {
             env.SHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
             sh '''
@@ -28,39 +29,48 @@ node {
             '''
         }
 
-        stage('Run Tests') {
-            if (env.BRANCH_NAME != 'main') {
-                timeout(time: 15, unit: 'MINUTES') {
-                    sh'''
-                    sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
-                    && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
-                    '''
-                    
-                    // Use BuildKit cache mounts for faster builds
-                    // Pull cache image if it exists, ignore errors
-                    sh 'docker pull parts-test-base:latest || true'
-                    
-                    def testImage = docker.build("parts-test-base", 
-                        "--cache-from parts-test-base:latest " +
-                        "-f ./Dockerfile.uat --target=build .")
+        stage('Set Variables') {
+            if (env.BRANCH_NAME == 'main') {
+                sh'''
+                sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
+                '''
+                env.DOCKERFILE = 'Dockerfile'
+            }
+            else {
+                sh'''
+                sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
+                && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
+                '''
 
-                    testImage.inside("--shm-size=2gb -u 0") {
-                        sh '''
-                            cd /usr/local/app && 
-                            CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --karma-config=karma.conf.js --no-watch --code-coverage --browsers=ChromeNoSandbox
-                        '''
-                    }
-                }
+                env.DOCKERFILE = 'Dockerfile.uat'
             }
         }
 
-        stage('Build image') {
-            timeout(time: 20, unit: 'MINUTES') {
-                if (env.BRANCH_NAME == 'main') {
-                    sh'''
-                    sed -i "s/VERSION/$SHA/g" src/environments/environment.ts
-                    '''
+        stage('Build Image') {
+            timeout(time: 15, unit: 'MINUTES') {
+                // Use BuildKit cache mounts for faster builds
+                // Pull cache image if it exists, ignore errors
+                sh 'docker pull parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest || true'
+                
+                def buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
+                    "--cache-from parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest " +
+                    "-f ./${env.DOCKERFILE} --target=build .")
                     
+            }
+        }
+
+        stage('Run Tests') {
+            buildImage.inside("--shm-size=2gb -u 0") {
+                sh '''
+                    cd /usr/local/app && 
+                    CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --karma-config=karma.conf.js --no-watch --code-coverage --browsers=ChromeNoSandbox
+                '''
+            }
+        }
+
+        stage('Build Runtime Image') {
+            timeout(time: 5, unit: 'MINUTES') {
+                if (env.BRANCH_NAME == 'main') {
                     // Pull cache image if it exists, ignore errors
                     sh 'docker pull bduke97/parts_website:latest || true'
                     
@@ -70,11 +80,6 @@ node {
                         "-f ./Dockerfile --target=runtime .")
                 }
                 else {
-                    sh'''
-                    sed -i "s/BRANCH/$FORMATTED_BRANCH_NAME/g" src/environments/environment.uat.ts \
-                    && sed -i "s/VERSION/$SHA/g" src/environments/environment.uat.ts
-                    '''
-                    
                     // Pull cache image if it exists, ignore errors
                     sh "docker pull bduke97/parts_website:${env.FORMATTED_BRANCH_NAME} || true"
                     
@@ -86,16 +91,18 @@ node {
             }
         }
 
-        stage('Push image') {
-            if (env.BRANCH_NAME != 'main') {
-                timeout(time: 10, unit: 'MINUTES') {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        app.push("${env.FORMATTED_BRANCH_NAME}")
+        if (env.BRANCH_NAME != 'main') {
+            stage('Push image') {
+                
+                    timeout(time: 10, unit: 'MINUTES') {
+                        docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                            app.push("${env.FORMATTED_BRANCH_NAME}")
+                        }
                     }
-                }
+                
             }
         }
-
+        
         stage('Deploy') {
             timeout(time: 15, unit: 'MINUTES') {
                 if (env.BRANCH_NAME == 'main') {
