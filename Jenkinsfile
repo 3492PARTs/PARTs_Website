@@ -130,28 +130,24 @@ node {
                     }
                 }
                 else {
-                    sh '''
-                    # NOTE: All commands inside the double quotes are executed on the remote server (192.168.1.41)
-                    ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website \\
-                    && git fetch --prune \\
-                    && git switch $BRANCH_NAME \\
-                    && git pull \\
-                    && TAG=$FORMATTED_BRANCH_NAME docker compose pull \\
-                    && TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate \\
-                    
-                    # --- Start Branch Cleanup Logic on Remote Server ---
-                    # Find and store the list of local branches tracking gone remote branches
-                    && GONE_BRANCHES=\$(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/) \\
-                    
-                    # Check if the list is NOT empty (-n)
-                    && if [ -n \"\$GONE_BRANCHES\" ]; then \\
-                        echo \"Deleting local branches on remote server: \n\$GONE_BRANCHES\" \\
-                        && echo \"\$GONE_BRANCHES\" | xargs git branch --delete \\
-                    # If the list IS empty, echo a message
-                    else \\
-                        echo \"No local branches tracking gone remote branches found for deletion.\" \\
+                    sh """
+                    ssh -o StrictHostKeyChecking=no brandon@192.168.1.41 "cd /home/brandon/PARTs_Website; \
+                    git fetch --prune; \
+                    git switch $BRANCH_NAME; \
+                    git pull; \
+                    TAG=$FORMATTED_BRANCH_NAME docker compose pull; \
+                    TAG=$FORMATTED_BRANCH_NAME docker compose up -d --force-recreate; \
+                    \
+                    # --- Start Branch Cleanup Logic on Remote Server (using semicolons) --- \
+                    GONE_BRANCHES=\$(git for-each-ref --format '%(if:equals=gone)%(upstream:track,nobracket)%(then)%(refname:short)%(end)' refs/heads/);\
+                    \
+                    if [ -n \"\$GONE_BRANCHES\" ]; then \
+                        echo \"Deleting local branches on remote server: \n\$GONE_BRANCHES\"; \
+                        echo \"\$GONE_BRANCHES\" | xargs git branch --delete; \
+                    else \
+                        echo \"No local branches tracking gone remote branches found for deletion.\"; \
                     fi"
-                '''
+                    """
                 }
             }
         }
