@@ -1,6 +1,9 @@
 # Stage 1: Compile and Build angular codebase
 FROM node:20-bullseye AS build
 
+# Build argument for Angular configuration (production, uat, development)
+ARG BUILD_CONFIGURATION=production
+
 WORKDIR /usr/local/app
 
 # Install Chrome for running tests using modern GPG method
@@ -36,15 +39,20 @@ RUN npm ci --prefer-offline --no-audit --verbose
 # Copy application source
 COPY . .
 
-# Build
-RUN npx ng build --verbose
+# Build with the specified configuration
+# Use conditional logic: if BUILD_CONFIGURATION is "production", don't add --configuration flag
+RUN if [ "$BUILD_CONFIGURATION" = "production" ]; then \
+        npx ng build --verbose; \
+    else \
+        npx ng build --configuration=$BUILD_CONFIGURATION --verbose; \
+    fi
 
-# Stage 2: Runtime image
-FROM python:3.11-slim AS runtime
+# Stage 2a: Python runtime image (for production deployment)
+FROM python:3.11-slim AS runtime-python
 
 WORKDIR /usr/local/app/dist/parts-website/browser/
 
-COPY --from=builder /usr/local/app/dist/parts-website/browser/ ./
+COPY --from=build /usr/local/app/dist/parts-website/browser/ ./
 
 # Create user and install dependencies in one layer to reduce image size
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
@@ -62,3 +70,21 @@ RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
 # Add health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python3 -c "import os; exit(0 if os.path.exists('index.html') else 1)"
+
+# Stage 2b: Nginx runtime image (for UAT/static serving)
+FROM nginx:1.27-alpine AS runtime-nginx
+
+# Install wget for health check
+RUN apk add --no-cache wget
+
+# Copy custom nginx configuration
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built application
+COPY --from=build /usr/local/app/dist/parts-website/browser /usr/share/nginx/html
+
+# Add health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
+
+EXPOSE 80

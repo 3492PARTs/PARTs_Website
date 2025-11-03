@@ -14,6 +14,22 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+## Docker Builds
+
+This project uses a unified Dockerfile with build arguments for different environments. See [DOCKERFILE_USAGE.md](DOCKERFILE_USAGE.md) for detailed instructions.
+
+### Quick Start
+
+**Production build (Python runtime):**
+```bash
+docker build --build-arg BUILD_CONFIGURATION=production --target runtime-python -t parts-website:prod .
+```
+
+**UAT build (Nginx runtime):**
+```bash
+docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-nginx -t parts-website:uat .
+```
+
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).

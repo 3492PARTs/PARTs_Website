@@ -13,7 +13,27 @@ The build pipeline has been optimized for:
 
 ---
 
-## Dockerfile Optimizations (Production)
+## Dockerfile Optimizations
+
+### Unified Dockerfile Architecture
+**Before:** Separate `Dockerfile` (production) and `Dockerfile.uat` with duplicated build stages  
+**After:** Single unified `Dockerfile` with build arguments and multiple runtime targets  
+**Benefit:** 
+- Eliminates code duplication in build stages
+- Single source of truth for dependencies and build steps
+- Easier maintenance and consistency across environments
+- Flexible configuration through build arguments
+
+### Build Arguments
+The unified Dockerfile uses `BUILD_CONFIGURATION` argument to specify the Angular build configuration:
+- `production` (default): Production build
+- `uat`: User Acceptance Testing build
+- `development`: Development build
+
+### Runtime Targets
+Two runtime targets are available using Docker's `--target` flag:
+- `runtime-python`: Python-based runtime for production deployments with SSH/SFTP capabilities
+- `runtime-nginx`: Nginx-based runtime for UAT and static file serving
 
 ### 1. Specific Node.js Version
 **Before:** `FROM node:lts`  
@@ -48,30 +68,39 @@ COPY . .
 ### 6. Health Check
 **Added:**
 ```dockerfile
+# Python runtime
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python3 -c "import os; exit(0 if os.path.exists('index.html') else 1)"
-```
-**Benefit:** Container orchestration can monitor application health
 
----
-
-## Dockerfile.uat Optimizations (UAT/Testing)
-
-### 1. All Production Optimizations
-Applied the same improvements as the production Dockerfile
-
-### 2. Smaller Runtime Base Image
-**Before:** `FROM nginx:latest`  
-**After:** `FROM nginx:1.27-alpine` with wget installed  
-**Benefit:** Alpine-based image is 80% smaller (~40MB vs ~190MB), wget added for health checks
-
-### 3. Health Check for nginx
-**Added:**
-```dockerfile
+# Nginx runtime
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
 ```
-**Benefit:** Monitors nginx availability
+**Benefit:** Container orchestration can monitor application health for both runtime types
+
+---
+
+## Unified Dockerfile Usage
+
+### Building for Production (Python runtime)
+```bash
+docker build \
+  --build-arg BUILD_CONFIGURATION=production \
+  --target runtime-python \
+  -t parts-website:prod \
+  .
+```
+
+### Building for UAT (Nginx runtime)
+```bash
+docker build \
+  --build-arg BUILD_CONFIGURATION=uat \
+  --target runtime-nginx \
+  -t parts-website:uat \
+  .
+```
+
+For detailed usage instructions, see [DOCKERFILE_USAGE.md](DOCKERFILE_USAGE.md)
 
 ---
 
@@ -85,18 +114,30 @@ env.BUILDKIT_PROGRESS = 'plain'
 ```
 **Benefit:** Enables parallel layer processing and improved caching (20-50% faster builds)
 
-### 2. Build Cache Optimization
+### 2. Build Arguments for Flexibility
+**Added:** Build arguments to specify Angular configuration and runtime target  
+**Example:**
+```groovy
+buildImage = docker.build("parts-website-build-${env.FORMATTED_BRANCH_NAME}", 
+    "--cache-from parts-website-build-${env.FORMATTED_BRANCH_NAME}:latest " +
+    "--build-arg BUILD_CONFIGURATION=${env.BUILD_CONFIGURATION} " +
+    "-f ./Dockerfile --target=build .")
+```
+**Benefit:** Single Dockerfile for all environments, eliminates duplication
+
+### 3. Build Cache Optimization
 **Added:** Cache pull before build and `--cache-from` flags to docker.build() calls  
 **Example:**
 ```groovy
 sh 'docker pull bduke97/parts_website:latest || true'
 app = docker.build("bduke97/parts_website", 
     "--cache-from bduke97/parts_website:latest " +
-    "-f ./Dockerfile --target=runtime .")
+    "--build-arg BUILD_CONFIGURATION=${env.BUILD_CONFIGURATION} " +
+    "-f ./Dockerfile --target=${env.RUNTIME_TARGET} .")
 ```
 **Benefit:** Reuses layers from previous builds, significantly faster rebuilds. The `|| true` ensures builds don't fail if cache image doesn't exist.
 
-### 3. Stage Timeouts
+### 4. Stage Timeouts
 **Added:** Timeout configurations for all stages:
 - Clone: 5 minutes
 - Tests: 15 minutes
@@ -106,7 +147,7 @@ app = docker.build("bduke97/parts_website",
 
 **Benefit:** Prevents hanging builds and provides faster feedback
 
-### 4. Enhanced Cleanup
+### 5. Enhanced Cleanup
 **Before:** Only prune dangling images  
 **After:** 
 ```bash
@@ -116,7 +157,7 @@ docker builder prune -f --filter "until=168h" || true
 ```
 **Benefit:** Manages disk space better by removing old build cache
 
-### 5. Better Error Handling
+### 6. Better Error Handling
 **Added:** `currentBuild.result = 'FAILURE'` in catch block  
 **Benefit:** Properly marks failed builds in Jenkins UI
 
