@@ -32,8 +32,8 @@ The unified Dockerfile uses `BUILD_CONFIGURATION` argument to specify the Angula
 
 ### Runtime Targets
 Two runtime targets are available using Docker's `--target` flag:
-- `runtime-python`: Python-based runtime for production deployments with SSH/SFTP capabilities
-- `runtime-nginx`: Nginx-based runtime for UAT and static file serving
+- `runtime-production`: Python-based runtime for production deployments with SSH/SFTP capabilities
+- `runtime-uat`: Nginx-based runtime for UAT and static file serving
 
 ### 1. Specific Node.js Version
 **Before:** `FROM node:lts`  
@@ -86,7 +86,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 ```bash
 docker build \
   --build-arg BUILD_CONFIGURATION=production \
-  --target runtime-python \
+  --target runtime-production \
   -t parts-website:prod \
   .
 ```
@@ -95,7 +95,7 @@ docker build \
 ```bash
 docker build \
   --build-arg BUILD_CONFIGURATION=uat \
-  --target runtime-nginx \
+  --target runtime-uat \
   -t parts-website:uat \
   .
 ```

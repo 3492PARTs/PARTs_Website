@@ -16,13 +16,13 @@ Specifies which Angular build configuration to use:
 
 The Dockerfile includes multiple runtime stages that can be selected using the `--target` flag:
 
-### runtime-python
+### runtime-production
 Python-based runtime for production deployment with SSH/SFTP capabilities.
 - Base image: `python:3.11-slim`
 - Includes: paramiko, pysftp, deployment scripts
 - Use case: Production deployments requiring file transfer capabilities
 
-### runtime-nginx  
+### runtime-uat  
 Nginx-based runtime for serving static files.
 - Base image: `nginx:1.27-alpine`
 - Includes: Custom nginx configuration
@@ -34,7 +34,7 @@ Nginx-based runtime for serving static files.
 ```bash
 docker build \
   --build-arg BUILD_CONFIGURATION=production \
-  --target runtime-python \
+  --target runtime-production \
   -t parts-website:prod \
   .
 ```
@@ -43,7 +43,7 @@ docker build \
 ```bash
 docker build \
   --build-arg BUILD_CONFIGURATION=uat \
-  --target runtime-nginx \
+  --target runtime-uat \
   -t parts-website:uat \
   .
 ```
@@ -52,7 +52,7 @@ docker build \
 ```bash
 docker build \
   --build-arg BUILD_CONFIGURATION=development \
-  --target runtime-nginx \
+  --target runtime-uat \
   -t parts-website:dev \
   .
 ```
@@ -69,7 +69,7 @@ services:
       dockerfile: Dockerfile
       args:
         BUILD_CONFIGURATION: production
-      target: runtime-python
+      target: runtime-production
     # ... other configuration
 
   parts_website_uat:
@@ -78,7 +78,7 @@ services:
       dockerfile: Dockerfile
       args:
         BUILD_CONFIGURATION: uat
-      target: runtime-nginx
+      target: runtime-uat
     # ... other configuration
 ```
 
@@ -90,7 +90,7 @@ services:
 docker build -f Dockerfile -t parts-website:prod .
 
 # New way
-docker build --build-arg BUILD_CONFIGURATION=production --target runtime-python -t parts-website:prod .
+docker build --build-arg BUILD_CONFIGURATION=production --target runtime-production -t parts-website:prod .
 ```
 
 ### Old Dockerfile.uat → New Dockerfile
@@ -99,7 +99,7 @@ docker build --build-arg BUILD_CONFIGURATION=production --target runtime-python 
 docker build -f Dockerfile.uat -t parts-website:uat .
 
 # New way
-docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-nginx -t parts-website:uat .
+docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-uat -t parts-website:uat .
 ```
 
 ## Benefits
@@ -143,8 +143,8 @@ Ensure the `BUILD_CONFIGURATION` value matches one of the configurations in `ang
 
 ### Wrong runtime stage selected
 Make sure you specify the correct `--target` flag:
-- Use `runtime-python` for production deployments
-- Use `runtime-nginx` for UAT and static serving
+- Use `runtime-production` for production deployments
+- Use `runtime-uat` for UAT and static serving
 
 ### nginx.conf not found
-The `runtime-nginx` target requires `nginx.conf` to be present in the repository root.
+The `runtime-uat` target requires `nginx.conf` to be present in the repository root.

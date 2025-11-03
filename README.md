@@ -22,12 +22,12 @@ This project uses a unified Dockerfile with build arguments for different enviro
 
 **Production build (Python runtime):**
 ```bash
-docker build --build-arg BUILD_CONFIGURATION=production --target runtime-python -t parts-website:prod .
+docker build --build-arg BUILD_CONFIGURATION=production --target runtime-production -t parts-website:prod .
 ```
 
 **UAT build (Nginx runtime):**
 ```bash
-docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-nginx -t parts-website:uat .
+docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-uat -t parts-website:uat .
 ```
 
 ## Running unit tests
