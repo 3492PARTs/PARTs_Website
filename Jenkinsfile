@@ -107,7 +107,7 @@ node {
                     }
                 
             }
-        }
+        }*/
 
         stage('Deploy') {
             timeout(time: 15, unit: 'MINUTES') {
@@ -143,7 +143,7 @@ node {
                     '''
                 }
             }
-        }*/
+        }
 
         stage('Cleanup Docker Images') {
             sh '''
