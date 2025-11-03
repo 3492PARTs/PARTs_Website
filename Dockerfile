@@ -42,6 +42,13 @@ COPY . .
 # Build with the specified configuration
 RUN npx ng build --configuration=$BUILD_CONFIGURATION --verbose
 
+# incase above does not work in prod 
+#RUN if [ "$BUILD_CONFIGURATION" = "production" ]; then \
+#        npx ng build --verbose; \
+#    else \
+#        npx ng build --configuration=$BUILD_CONFIGURATION --verbose; \
+#    fi
+
 # Stage 2a: Python runtime image (for production deployment)
 FROM python:3.11-slim AS runtime-production
 
