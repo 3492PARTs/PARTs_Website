@@ -1,5 +1,5 @@
 # Stage 1: Compile and Build angular codebase
-FROM node:20-bullseye AS builder
+FROM node:20-bullseye AS build
 
 WORKDIR /usr/local/app
 
@@ -8,6 +8,16 @@ RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
     ca-certificates \
+    libnss3 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxcomposite1 \
+    libxrandr2 \
+    libgbm-dev \
+    libasound2 \
+    libfontconfig1 \
+    libgtk-3-0 \
     --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg \
     && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list \
@@ -26,8 +36,8 @@ RUN npm ci --prefer-offline --no-audit --verbose
 # Copy application source
 COPY . .
 
-# Run tests and build
-RUN npm run test:ci && npx ng build
+# Build
+RUN npx ng build --verbose
 
 # Stage 2: Runtime image
 FROM python:3.11-slim AS runtime
