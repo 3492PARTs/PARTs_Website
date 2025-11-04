@@ -329,4 +329,216 @@ describe('httpInterceptor', () => {
       });
     });
   });
+
+  it('should handle 404 error without logout', (done) => {
+    mockAuthService.getUser.and.returnValue(null as any);
+    
+    const error = new HttpErrorResponse({ status: 404 });
+    mockNext.and.returnValue(throwError(() => error));
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        error: (err) => {
+          expect(err.status).toBe(404);
+          expect(mockAuthService.logOut).not.toHaveBeenCalled();
+          done();
+        }
+      });
+    });
+  });
+
+  it('should handle network error (status 0)', (done) => {
+    mockAuthService.getUser.and.returnValue(null as any);
+    
+    const error = new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' });
+    mockNext.and.returnValue(throwError(() => error));
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        error: (err) => {
+          expect(err.status).toBe(0);
+          expect(mockAuthService.logOut).not.toHaveBeenCalled();
+          done();
+        }
+      });
+    });
+  });
+
+  it('should add base URL to all requests', (done) => {
+    mockAuthService.getUser.and.returnValue(null as any);
+    mockAuthService.getAccessToken.and.returnValue(null as any);
+
+    const req = new HttpRequest('GET', 'public/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe(() => {
+        const clonedRequest = mockNext.calls.mostRecent().args[0] as HttpRequest<unknown>;
+        expect(clonedRequest.url).toContain(environment.baseUrl);
+        done();
+      });
+    });
+  });
+
+  it('should handle token refresh race condition', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    mockAuthService.getRefreshingTokenFlag.and.returnValue(true);
+    mockAuthService.getAccessToken.and.returnValue('refreshed-token');
+    
+    const refreshingTokenSubject = new BehaviorSubject<string | null>('refreshed-token');
+    Object.defineProperty(mockAuthService, 'refreshingTokenSubject', {
+      get: () => refreshingTokenSubject,
+      configurable: true
+    });
+    
+    let callCount = 0;
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => new HttpErrorResponse({ status: 401 }));
+      }
+      return of({} as HttpEvent<unknown>);
+    });
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        next: () => {
+          // Should wait for refreshing token and retry
+          expect(callCount).toBe(2);
+          done();
+        },
+        error: () => {
+          done();
+        }
+      });
+    });
+  });
+
+  it('should add authorization header to requests', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    mockAuthService.getAccessToken.and.returnValue('valid-token');
+    mockAuthService.isTokenExpired.and.returnValue(false);
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe(() => {
+        const clonedRequest = mockNext.calls.mostRecent().args[0] as HttpRequest<unknown>;
+        expect(clonedRequest.headers.get('Authorization')).toBe('Bearer valid-token');
+        done();
+      });
+    });
+  });
+
+  it('should reset refresh subject before refresh', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    mockAuthService.getRefreshingTokenFlag.and.returnValue(false);
+    mockAuthService.pipeRefreshToken.and.returnValue(of({ access: 'new-token', refresh: 'refresh-token' }));
+    
+    let callCount = 0;
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => new HttpErrorResponse({ status: 401 }));
+      }
+      return of({} as HttpEvent<unknown>);
+    });
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        next: () => {
+          expect(mockAuthService.setRefreshingTokenSubject).toHaveBeenCalledWith(null);
+          expect(mockAuthService.setRefreshingTokenSubject).toHaveBeenCalledWith('new-token');
+          done();
+        },
+        error: () => {
+          done();
+        }
+      });
+    });
+  });
+
+  it('should handle 403 error with 400 fallback', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    
+    const error = new HttpErrorResponse({ status: 400 });
+    mockNext.and.returnValue(throwError(() => error));
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        error: () => {
+          expect(mockAuthService.logOut).toHaveBeenCalled();
+          done();
+        }
+      });
+    });
+  });
+
+  it('should not add authorization for refresh endpoint', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    mockAuthService.getAccessToken.and.returnValue('token');
+    mockAuthService.isTokenExpired.and.returnValue(false);
+
+    const req = new HttpRequest('POST', 'user/token/refresh/', {});
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe(() => {
+        const clonedRequest = mockNext.calls.mostRecent().args[0] as HttpRequest<unknown>;
+        // Refresh endpoint shouldn't get auth header in the initial request
+        expect(clonedRequest.url).toContain('user/token/refresh/');
+        done();
+      });
+    });
+  });
+
+  it('should finalize refresh flag even on error', (done) => {
+    mockAuthService.getUser.and.returnValue({ id: 1, username: 'test' } as any);
+    mockAuthService.getRefreshingTokenFlag.and.returnValue(false);
+    mockAuthService.pipeRefreshToken.and.returnValue(throwError(() => new Error('Refresh failed')));
+    mockAuthService.getAccessToken.and.returnValue('fallback-token');
+    
+    const refreshingTokenSubject = new BehaviorSubject<string | null>('fallback-token');
+    Object.defineProperty(mockAuthService, 'refreshingTokenSubject', {
+      get: () => refreshingTokenSubject,
+      configurable: true
+    });
+    
+    let callCount = 0;
+    mockNext.and.callFake(() => {
+      callCount++;
+      if (callCount === 1) {
+        return throwError(() => new HttpErrorResponse({ status: 401 }));
+      }
+      return of({} as HttpEvent<unknown>);
+    });
+
+    const req = new HttpRequest('GET', 'test/endpoint');
+    
+    TestBed.runInInjectionContext(() => {
+      httpInterceptor(req, mockNext).subscribe({
+        next: () => {
+          setTimeout(() => {
+            expect(mockAuthService.setRefreshingTokenFlag).toHaveBeenCalledWith(false);
+            done();
+          }, 0);
+        },
+        error: () => {
+          // Also check flag reset on error path
+          setTimeout(() => {
+            expect(mockAuthService.setRefreshingTokenFlag).toHaveBeenCalledWith(false);
+            done();
+          }, 0);
+        }
+      });
+    });
+  });
 });

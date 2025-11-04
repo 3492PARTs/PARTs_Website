@@ -328,5 +328,192 @@ describe('LocationService', () => {
         done();
       });
     });
+
+    it('should include error message in failed result', (done) => {
+      const mockError = {
+        code: 1,
+        message: 'User denied permission',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
+        error(mockError);
+      });
+
+      spyOn(window, 'fetch').and.returnValue(
+        Promise.reject(new Error('IP lookup failed'))
+      );
+
+      service.getCurrentLocation().subscribe(result => {
+        expect(result.success).toBe(false);
+        expect(result.errorMessage).toBeTruthy();
+        expect(result.errorMessage.length).toBeGreaterThan(0);
+        done();
+      });
+    });
+
+    it('should handle unknown geolocation error code', (done) => {
+      const mockError = {
+        code: 999,
+        message: 'Unknown error',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
+        error(mockError);
+      });
+
+      spyOn(window, 'fetch').and.returnValue(
+        Promise.reject(new Error('Network error'))
+      );
+
+      service.getCurrentLocation().subscribe(result => {
+        expect(result.success).toBe(false);
+        done();
+      });
+    });
+
+    it('should handle IP geolocation HTTP error', (done) => {
+      const mockError = {
+        code: 1,
+        message: 'Permission denied',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
+        error(mockError);
+      });
+
+      spyOn(window, 'fetch').and.returnValue(
+        Promise.resolve({
+          ok: false,
+          status: 500,
+          statusText: 'Server Error'
+        } as Response)
+      );
+
+      service.getCurrentLocation().subscribe(result => {
+        expect(result.success).toBe(false);
+        expect(result.errorMessage).toContain('IP Geolocation lookup failed');
+        done();
+      });
+    });
+
+    it('should handle malformed IP geolocation response', (done) => {
+      const mockError = {
+        code: 1,
+        message: 'Permission denied',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
+        error(mockError);
+      });
+
+      spyOn(window, 'fetch').and.returnValue(
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ invalid: 'data' })
+        } as Response)
+      );
+
+      service.getCurrentLocation().subscribe(result => {
+        // Should handle missing latitude/longitude gracefully
+        expect(result.latitude).toBeNull();
+        expect(result.longitude).toBeNull();
+        done();
+      });
+    });
+  });
+
+  describe('distance calculations', () => {
+    it('should correctly determine locations within small radius', (done) => {
+      // Very close to target
+      const mockPosition: GeolocationPosition = {
+        coords: {
+          latitude: 38.5352,
+          longitude: -81.8891,
+          accuracy: 10,
+          altitude: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+          toJSON: () => ({})
+        },
+        timestamp: Date.now(),
+        toJSON: () => ({})
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
+        success(mockPosition);
+      });
+
+      service.checkLocation().subscribe(result => {
+        expect(result.isAllowed).toBe(true);
+        done();
+      });
+    });
+
+    it('should correctly determine locations far outside radius', (done) => {
+      // Very far from target
+      const mockPosition: GeolocationPosition = {
+        coords: {
+          latitude: 0,
+          longitude: 0,
+          accuracy: 10,
+          altitude: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+          toJSON: () => ({})
+        },
+        timestamp: Date.now(),
+        toJSON: () => ({})
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
+        success(mockPosition);
+      });
+
+      service.checkLocation().subscribe(result => {
+        expect(result.isAllowed).toBe(false);
+        expect(result.errorMessage).toContain('must be within');
+        done();
+      });
+    });
+
+    it('should work with high accuracy coordinates', (done) => {
+      const mockPosition: GeolocationPosition = {
+        coords: {
+          latitude: 38.53523730001,
+          longitude: -81.88906430001,
+          accuracy: 1,
+          altitude: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
+          toJSON: () => ({})
+        },
+        timestamp: Date.now(),
+        toJSON: () => ({})
+      };
+
+      mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
+        success(mockPosition);
+      });
+
+      service.checkLocation().subscribe(result => {
+        expect(result.isAllowed).toBe(true);
+        done();
+      });
+    });
   });
 });
