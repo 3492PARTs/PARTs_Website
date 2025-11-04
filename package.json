@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:ci": "CHROME_BIN=/usr/bin/google-chrome-stable ng test --no-watch --code-coverage --browsers=ChromeNoSandbox",
-    "test:coverage": "ng test --no-watch --code-coverage --browsers=ChromeNoSandbox"
+    "test:ci": "CHROME_BIN=/usr/bin/google-chrome-stable ng test --no-watch --code-coverage --browsers=ChromeHeadless",
+    "test:coverage": "ng test --no-watch --code-coverage --browsers=ChromeHeadless"
   },
   "private": true,
   "dependencies": {
