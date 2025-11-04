@@ -41,7 +41,7 @@ module.exports = function (config) {
       }
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['ChromeNoSandbox'],
+    browsers: ['ChromeHeadless'],
     restartOnFileChange: true,
     customLaunchers: {
       ChromeNoSandbox: {

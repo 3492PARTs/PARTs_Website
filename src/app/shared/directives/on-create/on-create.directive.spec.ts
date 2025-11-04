@@ -77,4 +77,65 @@ describe('OnCreateDirective', () => {
     
     fixture.detectChanges(); // Triggers ngOnInit
   });
+
+  it('should allow multiple subscriptions to onCreate event', () => {
+    let subscription1Called = false;
+    let subscription2Called = false;
+
+    directive.onCreate.subscribe(() => {
+      subscription1Called = true;
+    });
+
+    directive.onCreate.subscribe(() => {
+      subscription2Called = true;
+    });
+
+    fixture.detectChanges();
+
+    expect(subscription1Called).toBe(true);
+    expect(subscription2Called).toBe(true);
+  });
+
+  it('should emit onCreate without any arguments', (done) => {
+    directive.onCreate.subscribe((data: any) => {
+      expect(data).toBeUndefined();
+      done();
+    });
+
+    fixture.detectChanges();
+  });
+
+  it('should work with multiple directive instances', () => {
+    @Component({
+      standalone: true,
+      imports: [OnCreateDirective],
+      template: `
+        <div appOnCreate (onCreate)="onFirstCreate()"></div>
+        <div appOnCreate (onCreate)="onSecondCreate()"></div>
+      `
+    })
+    class MultipleDirectivesComponent {
+      firstCreated = false;
+      secondCreated = false;
+
+      onFirstCreate(): void {
+        this.firstCreated = true;
+      }
+
+      onSecondCreate(): void {
+        this.secondCreated = true;
+      }
+    }
+
+    const multiFixture = TestBed.createComponent(MultipleDirectivesComponent);
+    const multiComponent = multiFixture.componentInstance;
+
+    expect(multiComponent.firstCreated).toBe(false);
+    expect(multiComponent.secondCreated).toBe(false);
+
+    multiFixture.detectChanges();
+
+    expect(multiComponent.firstCreated).toBe(true);
+    expect(multiComponent.secondCreated).toBe(true);
+  });
 });

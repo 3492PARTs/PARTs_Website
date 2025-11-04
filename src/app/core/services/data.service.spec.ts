@@ -233,5 +233,149 @@ describe('DataService', () => {
       expect(onComplete).toHaveBeenCalled();
       expect(onError).not.toHaveBeenCalled();
     });
+
+    it('should handle API success with empty data', async () => {
+      const emptyData: any[] = [];
+      const onNext = jasmine.createSpy('onNext');
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any) => {
+        successCallback(emptyData);
+        return of(emptyData);
+      });
+
+      await service.get(true, '/api/test', undefined, 'TestRepo', undefined, onNext);
+
+      expect(onNext).toHaveBeenCalledWith(emptyData);
+    });
+
+    it('should handle cache returning undefined', async () => {
+      const onNext = jasmine.createSpy('onNext');
+      const onError = jasmine.createSpy('onError');
+
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve(undefined));
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
+        errorCallback(new Error('API Error'));
+        return throwError(() => new Error('API Error'));
+      });
+
+      await service.get(true, '/api/test', undefined, 'TestRepo', undefined, onNext, onError);
+
+      // Wait for async operations
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(onError).toHaveBeenCalled();
+    });
+
+    it('should prioritize API data over cache', async () => {
+      const apiData = [{ id: 1, source: 'api' }];
+      const cachedData = [{ id: 1, source: 'cache' }];
+      const onNext = jasmine.createSpy('onNext');
+
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve(cachedData));
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any) => {
+        successCallback(apiData);
+        return of(apiData);
+      });
+
+      await service.get(true, '/api/test', undefined, 'TestRepo', undefined, onNext);
+
+      // Should call onNext with API data, not cached data
+      expect(onNext).toHaveBeenCalledWith(apiData);
+    });
+
+    it('should handle API error with specific error object', async () => {
+      const specificError = { message: 'Specific API error', code: 500 };
+      const onError = jasmine.createSpy('onError');
+
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]));
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
+        errorCallback(specificError);
+        return throwError(() => specificError);
+      });
+
+      await service.get(true, '/api/test', undefined, 'TestRepo', undefined, undefined, onError);
+
+      // Wait for async operations
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(onError).toHaveBeenCalledWith('No cached user');
+    });
+
+    it('should work with multiple parallel requests', async () => {
+      const testData1 = [{ id: 1 }];
+      const testData2 = [{ id: 2 }];
+      const onNext1 = jasmine.createSpy('onNext1');
+      const onNext2 = jasmine.createSpy('onNext2');
+
+      let callCount = 0;
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any) => {
+        callCount++;
+        successCallback(callCount === 1 ? testData1 : testData2);
+        return of(callCount === 1 ? testData1 : testData2);
+      });
+
+      await Promise.all([
+        service.get(true, '/api/test1', undefined, 'TestRepo', undefined, onNext1),
+        service.get(true, '/api/test2', undefined, 'TestRepo', undefined, onNext2)
+      ]);
+
+      expect(onNext1).toHaveBeenCalledWith(testData1);
+      expect(onNext2).toHaveBeenCalledWith(testData2);
+    });
+
+    it('should handle filtered cache results', async () => {
+      const cachedData = [
+        { id: 1, active: true },
+        { id: 2, active: false },
+        { id: 3, active: true }
+      ];
+      const onNext = jasmine.createSpy('onNext');
+      const filterDelegate = jasmine.createSpy('filterDelegate').and.returnValue([cachedData[0], cachedData[2]]);
+
+      mockCacheService.TestRepo.getAll.and.callFake((filter: any) => {
+        if (filter) {
+          return Promise.resolve(filter());
+        }
+        return Promise.resolve(cachedData);
+      });
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
+        errorCallback(new Error('API Error'));
+        return throwError(() => new Error('API Error'));
+      });
+
+      await service.get(true, '/api/test', undefined, 'TestRepo', filterDelegate, onNext);
+
+      // Wait for async operations
+      await new Promise(resolve => setTimeout(resolve, 10));
+
+      expect(mockCacheService.TestRepo.getAll).toHaveBeenCalledWith(filterDelegate);
+    });
+
+    it('should handle complex query parameters', async () => {
+      const complexParams = {
+        page: 1,
+        limit: 10,
+        sort: 'name',
+        filters: ['active', 'verified'],
+        includeDeleted: false
+      };
+      const testData = [{ id: 1 }];
+      const onNext = jasmine.createSpy('onNext');
+
+      mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any) => {
+        successCallback(testData);
+        return of(testData);
+      });
+
+      await service.get(true, '/api/test', complexParams, 'TestRepo', undefined, onNext);
+
+      expect(mockAPIService.get).toHaveBeenCalled();
+      const callArgs = mockAPIService.get.calls.mostRecent().args;
+      expect(callArgs[2]).toEqual(complexParams);
+    });
   });
 });
