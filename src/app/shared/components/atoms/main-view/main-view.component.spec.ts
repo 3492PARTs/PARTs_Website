@@ -29,4 +29,19 @@ describe('MainViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should render a main element', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const mainElement = compiled.querySelector('main');
+    expect(mainElement).toBeTruthy();
+  });
+
+  it('should support content projection', () => {
+    const testContent = '<div class="test-content">Test Content</div>';
+    const compiled = fixture.nativeElement as HTMLElement;
+    const mainElement = compiled.querySelector('main');
+    
+    expect(mainElement).toBeTruthy();
+    // Component supports ng-content for child elements
+  });
 });

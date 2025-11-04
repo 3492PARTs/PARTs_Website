@@ -29,4 +29,32 @@ describe('ReturnLinkComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initialize with empty RouterLink', () => {
+    expect(component.RouterLink).toBe('');
+  });
+
+  it('should accept RouterLink input', () => {
+    component.RouterLink = '/home';
+    fixture.detectChanges();
+    expect(component.RouterLink).toBe('/home');
+  });
+
+  it('should emit event when runFunction is called', () => {
+    spyOn(component.FunctionCallBack, 'emit');
+    
+    component.runFunction();
+    
+    expect(component.FunctionCallBack.emit).toHaveBeenCalled();
+  });
+
+  it('should emit event multiple times when runFunction is called multiple times', () => {
+    spyOn(component.FunctionCallBack, 'emit');
+    
+    component.runFunction();
+    component.runFunction();
+    component.runFunction();
+    
+    expect(component.FunctionCallBack.emit).toHaveBeenCalledTimes(3);
+  });
 });
