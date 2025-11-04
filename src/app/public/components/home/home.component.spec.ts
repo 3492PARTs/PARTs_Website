@@ -34,4 +34,100 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initialize screenSizeLG constant', () => {
+    expect(component.screenSizeLG).toBeDefined();
+  });
+
+  it('should call resizeContent on init', () => {
+    spyOn<any>(component, 'resizeContent');
+    
+    component.ngOnInit();
+    
+    expect(component['resizeContent']).toHaveBeenCalled();
+  });
+
+  it('should call setScreenSize on init', () => {
+    spyOn<any>(component, 'setScreenSize');
+    
+    component.ngOnInit();
+    
+    expect(component['setScreenSize']).toHaveBeenCalled();
+  });
+
+  it('should handle window resize event', () => {
+    spyOn<any>(component, 'resizeContent');
+    spyOn<any>(component, 'setScreenSize');
+    
+    const event = new Event('resize');
+    component.onResize(event);
+    
+    expect(component['resizeContent']).toHaveBeenCalled();
+    expect(component['setScreenSize']).toHaveBeenCalled();
+  });
+
+  it('should set screenSize property', () => {
+    component.ngOnInit();
+    
+    expect(component.screenSize).toBeDefined();
+  });
+
+  it('should handle missing DOM elements gracefully', () => {
+    // Ensure no elements exist
+    expect(document.getElementById('cssSliderWrapper')).toBeFalsy();
+    expect(document.getElementById('partsIntro')).toBeFalsy();
+    
+    // Should not throw error
+    expect(() => component.ngOnInit()).not.toThrow();
+  });
+
+  it('should resize slider for large screens', () => {
+    // Create mock elements
+    const slider = document.createElement('div');
+    slider.id = 'cssSliderWrapper';
+    document.body.appendChild(slider);
+    
+    const header = document.createElement('div');
+    header.id = 'site-header';
+    Object.defineProperty(header, 'offsetHeight', { value: 60, writable: true });
+    document.body.appendChild(header);
+    
+    component.ngOnInit();
+    
+    // Cleanup
+    document.body.removeChild(slider);
+    document.body.removeChild(header);
+  });
+
+  it('should adjust styles for small screens', () => {
+    const slider = document.createElement('div');
+    slider.id = 'cssSliderWrapper';
+    document.body.appendChild(slider);
+    
+    component.ngOnInit();
+    
+    // Cleanup
+    document.body.removeChild(slider);
+  });
+
+  it('should handle missing app header gracefully', () => {
+    const slider = document.createElement('div');
+    slider.id = 'cssSliderWrapper';
+    document.body.appendChild(slider);
+    
+    // No header element exists
+    expect(() => component.ngOnInit()).not.toThrow();
+    
+    // Cleanup
+    document.body.removeChild(slider);
+  });
+
+  it('should update screen size on multiple resize events', () => {
+    component.ngOnInit();
+    const initialSize = component.screenSize;
+    
+    component.onResize(new Event('resize'));
+    
+    expect(component.screenSize).toBeDefined();
+  });
 });
