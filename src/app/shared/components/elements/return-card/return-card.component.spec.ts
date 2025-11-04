@@ -27,4 +27,33 @@ describe('ReturnCardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initialize with empty Title', () => {
+    expect(component.Title).toBe('');
+  });
+
+  it('should initialize with empty RouterLink', () => {
+    expect(component.RouterLink).toBe('');
+  });
+
+  it('should accept Title input', () => {
+    component.Title = 'Test Title';
+    fixture.detectChanges();
+    expect(component.Title).toBe('Test Title');
+  });
+
+  it('should accept RouterLink input', () => {
+    component.RouterLink = '/test/path';
+    fixture.detectChanges();
+    expect(component.RouterLink).toBe('/test/path');
+  });
+
+  it('should update both Title and RouterLink together', () => {
+    component.Title = 'Dashboard';
+    component.RouterLink = '/dashboard';
+    fixture.detectChanges();
+    
+    expect(component.Title).toBe('Dashboard');
+    expect(component.RouterLink).toBe('/dashboard');
+  });
 });
