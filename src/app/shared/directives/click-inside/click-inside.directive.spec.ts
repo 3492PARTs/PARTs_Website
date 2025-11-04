@@ -58,5 +58,65 @@ describe('ClickInsideDirective', () => {
     
     expect(directive).toBeTruthy();
   });
+
+  it('should emit event when clicking inside the directive element', () => {
+    const targetEl = fixture.debugElement.query(By.css('.target'));
+    
+    component.clickedInside = false;
+    targetEl.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.clickedInside).toBe(true);
+  });
+
+  it('should emit event when clicking on child elements inside', () => {
+    const innerEl = fixture.debugElement.query(By.css('.inner'));
+    
+    component.clickedInside = false;
+    innerEl.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.clickedInside).toBe(true);
+  });
+
+  it('should not emit event when clicking outside the directive element', () => {
+    const outsideEl = fixture.debugElement.query(By.css('.outside'));
+    
+    component.clickedInside = false;
+    outsideEl.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.clickedInside).toBe(false);
+  });
+
+  it('should pass the event object to the handler', () => {
+    const targetEl = fixture.debugElement.query(By.css('.target'));
+    
+    component.lastEvent = null;
+    targetEl.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.lastEvent).toBeTruthy();
+    expect(component.lastEvent).toBeInstanceOf(Event);
+  });
+
+  it('should emit event multiple times for multiple clicks inside', () => {
+    const targetEl = fixture.debugElement.query(By.css('.target'));
+    let clickCount = 0;
+    
+    const directiveEl = fixture.debugElement.query(By.directive(ClickInsideDirective));
+    const directive = directiveEl.injector.get(ClickInsideDirective);
+    
+    directive.appClickInside.subscribe(() => {
+      clickCount++;
+    });
+
+    targetEl.nativeElement.click();
+    targetEl.nativeElement.click();
+    targetEl.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(clickCount).toBe(3);
+  });
 });
 
