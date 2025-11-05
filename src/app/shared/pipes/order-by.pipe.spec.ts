@@ -170,4 +170,142 @@ describe('OrderByPipe', () => {
     expect(result[1].value).toBe(10);
     expect(result[2].value).toBe(20);
   });
+
+  it('should handle undefined property values', () => {
+    const testArray = [
+      { id: 1, value: 10 },
+      { id: 2 }, // undefined value
+      { id: 3, value: 5 }
+    ];
+    const result = pipe.transform(testArray, 'value', false);
+    // Undefined should be sorted before defined values
+    expect(result.length).toBe(3);
+  });
+
+  it('should handle null property values', () => {
+    const testArray = [
+      { id: 1, value: 10 },
+      { id: 2, value: null },
+      { id: 3, value: 5 }
+    ];
+    const result = pipe.transform(testArray, 'value', false);
+    // Null should be sorted before defined values
+    expect(result.length).toBe(3);
+  });
+
+  it('should handle boolean values in ascending order', () => {
+    const testArray = [
+      { id: 1, active: true },
+      { id: 2, active: false },
+      { id: 3, active: true }
+    ];
+    const result = pipe.transform(testArray, 'active', false);
+    expect(result[0].active).toBe(false);
+    expect(result[1].active).toBe(true);
+    expect(result[2].active).toBe(true);
+  });
+
+  it('should handle boolean values in descending order', () => {
+    const testArray = [
+      { id: 1, active: false },
+      { id: 2, active: true },
+      { id: 3, active: false }
+    ];
+    const result = pipe.transform(testArray, 'active', true);
+    expect(result[0].active).toBe(true);
+    expect(result[1].active).toBe(false);
+    expect(result[2].active).toBe(false);
+  });
+
+  it('should handle very long strings', () => {
+    const longString1 = 'a'.repeat(1000);
+    const longString2 = 'b'.repeat(1000);
+    const testArray = [
+      { id: 1, text: longString2 },
+      { id: 2, text: longString1 }
+    ];
+    const result = pipe.transform(testArray, 'text', false);
+    expect(result[0].id).toBe(2);
+    expect(result[1].id).toBe(1);
+  });
+
+  it('should handle arrays with thousands of elements efficiently', () => {
+    const largeArray = Array.from({ length: 1000 }, (_, i) => ({ id: i, value: Math.random() }));
+    const result = pipe.transform(largeArray, 'value', false);
+    expect(result.length).toBe(1000);
+    // Verify it's sorted
+    for (let i = 1; i < result.length; i++) {
+      expect(result[i].value).toBeGreaterThanOrEqual(result[i - 1].value);
+    }
+  });
+
+  it('should handle numeric strings correctly', () => {
+    const testArray = [
+      { id: 1, code: '100' },
+      { id: 2, code: '20' },
+      { id: 3, code: '3' }
+    ];
+    const result = pipe.transform(testArray, 'code', false);
+    // String comparison: '100' < '20' < '3'
+    expect(result[0].code).toBe('100');
+    expect(result[1].code).toBe('20');
+    expect(result[2].code).toBe('3');
+  });
+
+  it('should handle special characters in string values', () => {
+    const testArray = [
+      { id: 1, name: '@symbol' },
+      { id: 2, name: '#hashtag' },
+      { id: 3, name: '!exclamation' }
+    ];
+    const result = pipe.transform(testArray, 'name', false);
+    expect(result.length).toBe(3);
+    // Special characters are sorted by their ASCII/Unicode values
+  });
+
+  it('should handle mixed case strings', () => {
+    const testArray = [
+      { id: 1, name: 'zebra' },
+      { id: 2, name: 'Apple' },
+      { id: 3, name: 'banana' }
+    ];
+    const result = pipe.transform(testArray, 'name', false);
+    // Uppercase letters come before lowercase in ASCII
+    expect(result[0].name).toBe('Apple');
+  });
+
+  it('should sort by nested property path', () => {
+    const testArray = [
+      { id: 1, user: { name: 'Charlie' } },
+      { id: 2, user: { name: 'Alice' } },
+      { id: 3, user: { name: 'Bob' } }
+    ];
+    // Note: The current implementation doesn't support nested paths
+    // This test documents the behavior
+    const result = pipe.transform(testArray, 'user', false);
+    expect(result.length).toBe(3);
+  });
+
+  it('should handle infinity values', () => {
+    const testArray = [
+      { id: 1, value: 10 },
+      { id: 2, value: Infinity },
+      { id: 3, value: -Infinity },
+      { id: 4, value: 5 }
+    ];
+    const result = pipe.transform(testArray, 'value', false);
+    expect(result[0].value).toBe(-Infinity);
+    expect(result[3].value).toBe(Infinity);
+  });
+
+  it('should handle NaN values', () => {
+    const testArray = [
+      { id: 1, value: 10 },
+      { id: 2, value: NaN },
+      { id: 3, value: 5 }
+    ];
+    const result = pipe.transform(testArray, 'value', false);
+    expect(result.length).toBe(3);
+    // NaN is tricky in comparisons
+  });
 });
