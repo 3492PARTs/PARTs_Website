@@ -870,4 +870,115 @@ describe('Utils Functions', () => {
       expect(csv).toContain('He said ""hello""');
     });
   });
+
+  describe('scrollTo', () => {
+    let scrollToSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      scrollToSpy = jasmine.createSpy('scrollTo');
+      (window as any).scrollTo = scrollToSpy;
+    });
+
+    it('should be defined', () => {
+      expect(scrollTo).toBeDefined();
+    });
+
+    it('should call window.scrollTo with numeric input', () => {
+      scrollTo(500);
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.top).toBe(500);
+      expect(callArgs.behavior).toBe('smooth');
+    });
+
+    it('should handle zero position', () => {
+      scrollTo(0);
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.top).toBe(0);
+      expect(callArgs.behavior).toBe('smooth');
+    });
+
+    it('should handle negative position', () => {
+      scrollTo(-100);
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.top).toBe(-100);
+      expect(callArgs.behavior).toBe('smooth');
+    });
+
+    it('should handle large position values', () => {
+      scrollTo(10000);
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.top).toBe(10000);
+      expect(callArgs.behavior).toBe('smooth');
+    });
+
+    it('should handle string element ID when element exists', () => {
+      const mockElement = document.createElement('div');
+      mockElement.id = 'test-element';
+      document.body.appendChild(mockElement);
+      
+      spyOn(mockElement, 'getBoundingClientRect').and.returnValue({
+        top: 300,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({})
+      });
+      
+      scrollTo('test-element');
+      
+      expect(scrollToSpy).toHaveBeenCalled();
+      
+      document.body.removeChild(mockElement);
+    });
+
+    it('should handle string element ID when element does not exist', () => {
+      scrollTo('non-existent-element');
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.behavior).toBe('smooth');
+    });
+
+    it('should account for 200px offset when scrolling to element', () => {
+      const mockElement = document.createElement('div');
+      mockElement.id = 'offset-test';
+      document.body.appendChild(mockElement);
+      
+      spyOn(mockElement, 'getBoundingClientRect').and.returnValue({
+        top: 500,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({})
+      });
+      
+      // Mock window.scrollY
+      Object.defineProperty(window, 'scrollY', {
+        writable: true,
+        configurable: true,
+        value: 100
+      });
+      
+      scrollTo('offset-test');
+      
+      // Should be: element.top (500) + window.scrollY (100) - 200 offset = 400
+      expect(scrollToSpy).toHaveBeenCalled();
+      const callArgs = scrollToSpy.calls.mostRecent().args[0];
+      expect(callArgs.top).toBe(400);
+      expect(callArgs.behavior).toBe('smooth');
+      
+      document.body.removeChild(mockElement);
+    });
+  });
 });
