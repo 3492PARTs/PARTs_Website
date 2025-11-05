@@ -18,6 +18,7 @@
 
     <app-header [h]="2">Attendance Report</app-header>
     <p>Meeting Hours Available: {{totalMeetingHours.hours || 0}}</p>
+    <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
     <p>Bonus Meeting Hours Available:
         {{totalMeetingHours.bonus_hours || 0}}</p>
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
@@ -73,8 +74,9 @@
                 [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="meeting.end"
                 [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
-            <app-form-element [LabelText]="'Bonus'" [Type]="'checkbox'" [(Model)]="meeting.bonus"
-                [Disabled]="!AdminInterface"></app-form-element>
+            <app-form-element [LabelText]="'Type'" [Type]="'select'" [(Model)]="meeting.meeting_typ"
+                [SelectList]="meetingTypeOptions" [DisplayProperty]="'meeting_nm'" [Disabled]="!AdminInterface"
+                [Required]="true"></app-form-element>
 
             @if (AdminInterface) {
             <app-button-ribbon>
@@ -107,7 +109,7 @@
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
                 [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
             <app-form-element [LabelText]="'Approval'" [Type]="'select'" [(Model)]="attendanceEntry.approval_typ"
-                [SelectList]="attendanceApprovalOptions" [DisplayProperty]="'approval_nm'"
+                [SelectList]="attendanceApprovalTypeOptions" [DisplayProperty]="'approval_nm'"
                 [Disabled]="!AdminInterface"></app-form-element>
 
             @if (attendanceEntry.meeting && !meetingModalVisible) {
@@ -121,6 +123,9 @@
                     [Disabled]="true" [FormGroupInline]="true"></app-form-element>
                 <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="attendanceEntry.meeting.end"
                     [Disabled]="true" [FormGroupInline]="true"></app-form-element>
+                <app-form-element [LabelText]="'Type'" [Type]="'select'" [(Model)]="attendanceEntry.meeting.meeting_typ"
+                    [SelectList]="meetingTypeOptions" [DisplayProperty]="'meeting_nm'"
+                    [Disabled]="true"></app-form-element>
             </app-form-element-group>
 
             }

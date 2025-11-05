@@ -8,7 +8,7 @@ import { FormElementGroupComponent } from "../../atoms/form-element-group/form-e
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
 import { Banner } from '@app/core/models/api.models';
-import { Attendance, AttendanceApproval, AttendanceReport, Meeting, MeetingHours } from '@app/attendance/models/attendance.models';
+import { Attendance, AttendanceApprovalType, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
@@ -38,12 +38,13 @@ export class MeetingAttendanceComponent implements OnInit {
   meetingFilterOption = 'future';
   today = new Date();
 
+  meetingTypeOptions: MeetingType[] = [{ meeting_typ: 'reg', meeting_nm: 'Regular' }, { meeting_typ: 'evnt', meeting_nm: 'Event' }, { meeting_typ: 'bns', meeting_nm: 'Bonus' }];
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
     { PropertyName: 'title', ColLabel: 'Title' },
     { PropertyName: 'start', ColLabel: 'Start' },
     { PropertyName: 'end', ColLabel: 'End' },
-    { PropertyName: 'bonus', ColLabel: 'Bonus', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    { PropertyName: 'meeting_typ.meeting_nm', ColLabel: 'Type' },
   ];
   meetingsTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this)),
@@ -61,8 +62,10 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceReport: AttendanceReport[] = [];
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'time', ColLabel: 'Hours' },
-    { PropertyName: 'percentage', ColLabel: 'Percentage', Type: 'percent' },
+    { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
+    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours Percentage', Type: 'percent' },
+    { PropertyName: 'event_time', ColLabel: 'Event Hours' },
+    { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours Percentage', Type: 'percent' },
   ];
 
   totalMeetingHours = new MeetingHours();
@@ -72,14 +75,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
-  attendanceTableCols: TableColType[] = [
-    { PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
-    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-    { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
-    { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
-  ];
+  attendanceTableCols: TableColType[] = [];
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
     new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
@@ -87,7 +83,7 @@ export class MeetingAttendanceComponent implements OnInit {
     new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
   ];
   attendanceModalVisible = false;
-  attendanceApprovalOptions: AttendanceApproval[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
+  attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService, private modalService: ModalService) {
 
@@ -305,6 +301,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   setAttendanceTableCols(): void {
     let cols: TableColType[] = [{ PropertyName: 'user.name', ColLabel: 'User' },
+    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
     { PropertyName: 'time_in', ColLabel: 'Time In' },
     { PropertyName: 'time_out', ColLabel: 'Time Out' }];
 
