@@ -156,7 +156,7 @@ node {
                 echo "Starting Docker image cleanup..."
                 
                 # 1. Force remove the intermediate image used for testing
-                docker rmi -f parts-website-build-${env.FORMATTED_BRANCH_NAME} || true
+                # docker rmi -f parts-website-build-${env.FORMATTED_BRANCH_NAME} || true
                 
                 # 2. Remove all dangling images (untagged)
                 docker image prune -f

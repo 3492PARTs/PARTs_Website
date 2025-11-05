@@ -100,4 +100,152 @@ describe('SafeHTMLPipe', () => {
     const result = pipe.transform(whitespace);
     expect(result).toBeTruthy();
   });
+
+  it('should handle null input gracefully', () => {
+    const result = pipe.transform(null as any);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle undefined input gracefully', () => {
+    const result = pipe.transform(undefined as any);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle very long HTML strings', () => {
+    const longHtml = '<div>' + 'a'.repeat(10000) + '</div>';
+    const result = pipe.transform(longHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with comments', () => {
+    const htmlWithComments = '<div><!-- This is a comment --><p>Content</p></div>';
+    const result = pipe.transform(htmlWithComments);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with CDATA sections', () => {
+    const htmlWithCDATA = '<div><![CDATA[Some data]]></div>';
+    const result = pipe.transform(htmlWithCDATA);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML entities', () => {
+    const entities = '<div>&nbsp;&copy;&reg;&trade;</div>';
+    const result = pipe.transform(entities);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with iframe elements', () => {
+    const iframeHtml = '<iframe src="https://example.com"></iframe>';
+    const result = pipe.transform(iframeHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with object and embed tags', () => {
+    const objectHtml = '<object data="file.pdf"></object>';
+    const result = pipe.transform(objectHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with meta tags', () => {
+    const metaHtml = '<meta charset="UTF-8"><meta name="description" content="Test">';
+    const result = pipe.transform(metaHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with doctype', () => {
+    const doctypeHtml = '<!DOCTYPE html><html><body>Content</body></html>';
+    const result = pipe.transform(doctypeHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML tables', () => {
+    const tableHtml = '<table><tr><td>Cell 1</td><td>Cell 2</td></tr></table>';
+    const result = pipe.transform(tableHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with multiple script tags', () => {
+    const multipleScripts = '<script>code1()</script><div>Content</div><script>code2()</script>';
+    const result = pipe.transform(multipleScripts);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with CSS style tags', () => {
+    const styleTag = '<style>.class { color: red; }</style><div class="class">Text</div>';
+    const result = pipe.transform(styleTag);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with link tags', () => {
+    const linkTag = '<link rel="stylesheet" href="style.css">';
+    const result = pipe.transform(linkTag);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with base64 encoded images', () => {
+    const base64Img = '<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4=">';
+    const result = pipe.transform(base64Img);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with video elements', () => {
+    const videoHtml = '<video controls><source src="video.mp4" type="video/mp4"></video>';
+    const result = pipe.transform(videoHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with audio elements', () => {
+    const audioHtml = '<audio controls><source src="audio.mp3" type="audio/mpeg"></audio>';
+    const result = pipe.transform(audioHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with canvas elements', () => {
+    const canvasHtml = '<canvas id="myCanvas" width="200" height="100"></canvas>';
+    const result = pipe.transform(canvasHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle plain text without HTML tags', () => {
+    const plainText = 'This is just plain text without any HTML tags';
+    const result = pipe.transform(plainText);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle text with angle brackets that are not HTML', () => {
+    const text = 'Math expression: 5 < 10 and 20 > 15';
+    const result = pipe.transform(text);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with template tags', () => {
+    const templateHtml = '<template><div>Template content</div></template>';
+    const result = pipe.transform(templateHtml);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with custom elements', () => {
+    const customElement = '<my-custom-element data-value="test">Content</my-custom-element>';
+    const result = pipe.transform(customElement);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle HTML with multiple attributes', () => {
+    const multiAttr = '<div id="test" class="container" data-value="123" aria-label="description">Content</div>';
+    const result = pipe.transform(multiAttr);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle self-closing tags', () => {
+    const selfClosing = '<br/><hr/><img src="test.png"/>';
+    const result = pipe.transform(selfClosing);
+    expect(result).toBeTruthy();
+  });
+
+  it('should handle mixed case HTML tags', () => {
+    const mixedCase = '<DIV><P>Mixed Case Tags</P></DIV>';
+    const result = pipe.transform(mixedCase);
+    expect(result).toBeTruthy();
+  });
 });
