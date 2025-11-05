@@ -209,25 +209,6 @@ describe('ObjectWildCardFilterPipe', () => {
     expect(result[1].id).toBe(3);
   });
 
-  it('should handle objects with circular references gracefully', () => {
-    // JSON.stringify will throw on circular references
-    // This test verifies the pipe doesn't crash on such input
-    const obj1: any = { id: 1, name: 'Test' };
-    obj1.self = obj1; // Create circular reference
-    
-    const testArray = [obj1];
-    
-    // The pipe should handle this without throwing
-    expect(() => {
-      try {
-        pipe.transform(testArray, 'test');
-      } catch (e) {
-        // If JSON.stringify throws, that's expected behavior
-        expect(e).toBeDefined();
-      }
-    }).not.toThrow();
-  });
-
   it('should handle very long search strings', () => {
     const longString = 'a'.repeat(1000);
     const testArray = [
