@@ -11,7 +11,7 @@ import { FormManagerComponent } from '@app/shared/components/elements/form-manag
 export class TeamApplicationFormComponent {
 
   teamApplicationResponsesCols = [
-    { PropertyName: 'response_id', ColLabel: 'ID' },
+    { PropertyName: 'id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
     { PropertyName: 'time', ColLabel: 'Time' },
   ];

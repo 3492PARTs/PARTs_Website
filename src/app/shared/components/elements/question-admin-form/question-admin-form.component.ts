@@ -80,7 +80,7 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   setQuestionTableCols(): void {
-    if (this.gs.getAppSize() >= AppSize.LG) {
+    if (this.gs.getAppSize() >= AppSize.LG && !['team-app', 'team-cntc'].includes(this.formType)) {
       this.questionTableCols = [
         ...this._questionTableCols,
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },

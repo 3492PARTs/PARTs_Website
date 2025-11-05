@@ -12,7 +12,7 @@ import { FormManagerComponent } from '@app/shared/components/elements/form-manag
 export class TeamContactFormComponent {
 
   teamContactResponsesCols: TableColType[] = [
-    { PropertyName: 'response_id', ColLabel: 'ID' },
+    { PropertyName: 'id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
     { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message', Type: 'function', ColValueFunction: this.truncateMessage },
     { PropertyName: 'time', ColLabel: 'Time' },

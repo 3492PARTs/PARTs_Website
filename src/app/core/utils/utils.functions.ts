@@ -226,28 +226,55 @@ export function objectToFormData(o: any): FormData {
 }
 
 /**
- * Get a nested property value from an object using dot notation
+ * Get a nested property value from an object using dot notation, 
+ * including support for array indexing (e.g., 'questionanswer_set[0].answer').
+ * * @param rec The object to traverse.
+ * @param property The nested property path string.
+ * @returns The value of the property, or an empty string if not found or an error occurs.
  */
 export function getPropertyValue(rec: any, property: string): any {
   if (!property) {
     throw new Error('NO DISPLAY PROPERTY PROVIDED FOR ONE OF THE TABLE COMPONENT COLUMNS');
   }
 
+  // Use regex to split the path, handling both dot and bracket notation.
+  // This regex splits on '.' but includes segments like '[0]' separately.
+  // It handles: 'a.b[0].c' -> ['a', 'b', '[0]', 'c']
+  const properties = property
+    .split(/\.|(?=\[[^\]]+\])/) // Split by '.' OR before '[' if it's followed by content and ']'
+    .filter(segment => segment.length > 0) // Remove any empty strings from splitting
+
+  let result: any = rec;
+
   try {
-    // Split property path and traverse the object safely
-    const properties = property.split('.');
-    let result: any = rec;
-    
     for (const prop of properties) {
       if (result == null) {
-        return '';
+        return ''; // Return early if any parent property is null or undefined
       }
-      result = result[prop];
+
+      // 1. Check if the segment is an array index (e.g., '[0]' or '["key"]')
+      const arrayMatch = prop.match(/^\[(.*?)\]$/);
+
+      if (arrayMatch) {
+        // If it's an array index, the key is the content inside the brackets (e.g., '0' or '"key"')
+        let key = arrayMatch[1];
+
+        // Handle numeric index (e.g., '0') and string index (e.g., '"key"')
+        if (key.startsWith('"') && key.endsWith('"')) {
+          key = key.slice(1, -1); // Remove quotes for string keys (e.g., JSON notation)
+        }
+
+        result = result[key];
+      } else {
+        // 2. If it's not an array index, treat it as a standard object key
+        result = result[prop];
+      }
     }
-    
+
+    // Use nullish coalescing to return empty string if the final result is null or undefined
     return result ?? '';
-  }
-  catch (err) {
+  } catch (err) {
+    // Catch errors like accessing a property on a non-object/array
     console.error('Error accessing property:', property, err);
     return '';
   }
@@ -265,7 +292,7 @@ export function setPropertyValue(rec: any, property: string, value: any): void {
   // Guard against prototype pollution
   const dangerousProps = ['__proto__', 'constructor', 'prototype'];
   const properties = property.split('.');
-  
+
   // Check if any part of the path is a dangerous property
   if (properties.some(prop => dangerousProps.includes(prop))) {
     console.error('Attempting to set dangerous property:', property);
@@ -275,7 +302,7 @@ export function setPropertyValue(rec: any, property: string, value: any): void {
   try {
     // Split property path and traverse the object to set the value
     let current: any = rec;
-    
+
     for (let i = 0; i < properties.length - 1; i++) {
       const prop = properties[i];
       // Additional check at each level
@@ -283,13 +310,13 @@ export function setPropertyValue(rec: any, property: string, value: any): void {
         console.error('Dangerous property detected in path:', property);
         return;
       }
-      
+
       if (!Object.prototype.hasOwnProperty.call(current, prop) || current[prop] == null) {
         current[prop] = {};
       }
       current = current[prop];
     }
-    
+
     const finalProp = properties[properties.length - 1];
     // Final check before assignment
     if (!dangerousProps.includes(finalProp) && current != null && typeof current === 'object') {
@@ -376,10 +403,10 @@ export function openURL(url: string): void {
  */
 export function scrollTo(y: number | string): void {
   // Calculate target scroll position
-  const targetPosition = typeof y === 'number' 
-    ? y 
+  const targetPosition = typeof y === 'number'
+    ? y
     : (document.getElementById(y)?.getBoundingClientRect().top || 0) + window.scrollY - 200;
-  
+
   // Perform smooth scroll using native Web API
   window.scrollTo({
     top: targetPosition,
