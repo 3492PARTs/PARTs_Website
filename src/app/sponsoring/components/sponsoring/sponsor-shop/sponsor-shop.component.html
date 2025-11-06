@@ -1,0 +1,107 @@
+<app-main-view>
+  <app-box [Title]="'Welcome to the PARTs Sponsor Shop!'">
+    <p>
+      Help up by sponsoring some parts, choose some parts, give us your
+      information and well contact you for your donation. Use this shop as a way
+      to know exactly what we need and donate towards specific items. We greatly
+      appreciate all parts donated!
+    </p>
+    <p>
+      Select a quantity of each item to donate and add it to your cart then
+      check out and supply your information. Your cart count will reflect the
+      amount of unique items selected, also you can donate more than the
+      requested amount of an item below.
+    </p>
+    <app-button-ribbon>
+      <app-button (FunctionCallBack)="openCartModal()">
+        <span id="checkout">
+          <span
+            class="mdi icon mdi-{{ cart.length > 0 ? 'cart' : 'cart-outline' }}"
+          ></span>
+          {{ cart.length }}
+        </span>
+      </app-button>
+    </app-button-ribbon>
+  </app-box>
+
+  <app-modal [Title]="'Cart'" [(Visible)]="cartModalVisible">
+    <app-table
+      [TableCols]="cartTableCols"
+      [TableData]="cart"
+      [Scrollable]="true"
+      [Responsive]="true"
+      [ScrollHeight]="'50rem'"
+      [ShowRemoveButton]="true"
+      (RemoveRecordCallBack)="removeCartItem($event)"
+      >
+    </app-table>
+
+    <app-form (SubmitFunction)="saveSponsorOrder()">
+      <app-form-element-group [LabelText]="'Information'">
+        <app-form-element
+          [Type]="'text'"
+          [LabelText]="'Name'"
+          [(Model)]="activeSponsor.sponsor_nm"
+          [FormGroupInline]="true"
+          >
+        </app-form-element>
+        <app-form-element
+          [Type]="'email'"
+          [LabelText]="'Email'"
+          [(Model)]="activeSponsor.email"
+          [FormGroupInline]="true"
+        ></app-form-element>
+        <app-form-element
+          [Type]="'phone'"
+          [LabelText]="'Phone'"
+          [(Model)]="activeSponsor.phone"
+          [FormGroupInline]="true"
+        ></app-form-element>
+        <app-button-ribbon>
+          <app-button [ButtonType]="'main'" [Type]="'submit'"
+            >Submit Order</app-button
+            >
+          </app-button-ribbon>
+        </app-form-element-group>
+      </app-form>
+    </app-modal>
+
+    <div id="item-grid">
+      @for (item of items; track item) {
+        <div class="item-grid-item">
+          <app-box [Title]="item.item_nm" [Height]="'calc(100% - 2em)'">
+            <div class="item-info">
+              <div>
+                <div class="item-pic">
+                  <div
+                    class="item-pic-img"
+                    [id]="'item' + item.item_id"
+                    appOnCreate
+                    (onCreate)="previewImageWrapper(item.img_url, 'item' + item.item_id)"
+                  ></div>
+                </div>
+                <div class="item-desc">
+                  <p>Requested: {{ item.quantity - item.sponsor_quantity }}</p>
+                  <p>{{ item.item_desc }}</p>
+                </div>
+              </div>
+              <div class="item-quantity">
+                <app-form-element
+                  [Type]="'number'"
+                  [LabelText]="'Quantity'"
+                  [(Model)]="item.cart_quantity"
+                  [MinValue]="0"
+                  [FormGroupInline]="true"
+                  >
+                </app-form-element>
+                <app-button
+                  [ButtonType]="'cart-plus'"
+                  (FunctionCallBack)="addItemToCart(item)"
+                ></app-button>
+              </div>
+            </div>
+          </app-box>
+        </div>
+      }
+    </div>
+  </app-main-view>

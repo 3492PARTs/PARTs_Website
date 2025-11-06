@@ -1,25 +1,25 @@
 <app-banners></app-banners>
 
-<app-modal [(Visible)]="gs.showErrorModal" [Title]="'Error'" [zIndex]="103">
+<app-modal [(Visible)]="modalService.showErrorModal" [Title]="'Error'" [zIndex]="103">
   <p>
-    {{ gs.errorMessage }}
+    {{ modalService.errorMessage }}
   </p>
 
   <app-button-ribbon>
-    <app-button [ButtonType]="'main'" (FunctionCallBack)="gs.acceptError()">{{
-      gs.errorButtonText
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="modalService.acceptError()">{{
+      modalService.errorButtonText
       }}</app-button>
   </app-button-ribbon>
 </app-modal>
 
-<app-modal [(Visible)]="gs.showConfirmModal" [Title]="'Confirm'" [zIndex]="102">
+<app-modal [(Visible)]="modalService.showConfirmModal" [Title]="'Confirm'" [zIndex]="102">
   <p>
-    {{ gs.confirmMessage }}
+    {{ modalService.confirmMessage }}
   </p>
 
   <app-button-ribbon>
-    <app-button [ButtonType]="'danger'" (FunctionCallBack)="gs.acceptConfirm()">{{ gs.confirmButtonText }}</app-button>
-    <app-button [ButtonType]="'warning'" (FunctionCallBack)="gs.rejectConfirm()">{{ gs.confirmButtonCancelText }}
+    <app-button [ButtonType]="'danger'" (FunctionCallBack)="modalService.acceptConfirm()">{{ modalService.confirmButtonText }}</app-button>
+    <app-button [ButtonType]="'warning'" (FunctionCallBack)="modalService.rejectConfirm()">{{ modalService.confirmButtonCancelText }}
     </app-button>
   </app-button-ribbon>
 </app-modal>

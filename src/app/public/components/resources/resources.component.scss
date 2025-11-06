@@ -1,0 +1,29 @@
+@use "abstracts/variables";
+
+.mdi-icon {
+  color: variables.$gray;
+
+  &::before {
+    font-size: 7rem;
+  }
+}
+
+.icon {
+  width: 10rem;
+  display: block;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+h4 {
+  text-align: center;
+}
+
+#resources {
+  gap: 2rem 2rem; /* row-gap column gap */
+  padding: 1rem;
+
+  .resource {
+    width: 30rem;
+  }
+}

@@ -1,15 +1,16 @@
 import { Component, Inject, OnInit, DOCUMENT } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet, RouterState } from '@angular/router';
-import { BannersComponent } from './components/elements/banners/banners.component';
-import { ModalComponent } from './components/atoms/modal/modal.component';
+import { BannersComponent } from './shared/components/elements/banners/banners.component';
+import { ModalComponent } from './shared/components/atoms/modal/modal.component';
 
 import { environment } from '../environments/environment';
-import { Banner } from './models/api.models';
-import { AuthService } from './services/auth.service';
-import { GeneralService } from './services/general.service';
-import { ButtonRibbonComponent } from './components/atoms/button-ribbon/button-ribbon.component';
-import { ButtonComponent } from './components/atoms/button/button.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
+import { Banner } from './core/models/api.models';
+import { AuthService } from './auth/services/auth.service';
+import { GeneralService } from './core/services/general.service';
+import { ModalService } from './core/services/modal.service';
+import { ButtonRibbonComponent } from './shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ButtonComponent } from './shared/components/atoms/button/button.component';
+import { NavigationComponent } from './shared/components/navigation/navigation.component';
 
 declare const gtag: Function;
 
@@ -17,11 +18,11 @@ declare const gtag: Function;
   selector: 'app-root',
   imports: [RouterOutlet, BannersComponent, ModalComponent, ButtonRibbonComponent, ButtonComponent, NavigationComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
-  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, @Inject(DOCUMENT) private document: Document, private route: ActivatedRoute) {
+  constructor(private authService: AuthService, public router: Router, public gs: GeneralService, public modalService: ModalService, @Inject(DOCUMENT) private document: Document, private route: ActivatedRoute) {
     // subscribe to router events and send page views to Google Analytics
     this.router.events.subscribe(event => {
       if (environment.production && event instanceof NavigationEnd) {

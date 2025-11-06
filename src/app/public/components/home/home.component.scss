@@ -1,0 +1,278 @@
+//@import '../../../scss/_helpers/variables';
+//@import '../../../scss/_vendors/_cssSliderScss/cssSlider';
+//@import '../../../scss/_pages/join';
+@use "abstracts/variables";
+@use "../../../../scss/vendors/_cssSliderScss/_cssSlider";
+
+/*#cssSlider {
+  //max-height: calc(100vh - 7rem);
+}
+/*HOME*/
+#content {
+  margin-bottom: -1.6rem;
+}
+
+#mainHome {
+  width: 100%;
+}
+
+#cssSliderWrapper {
+  position: relative;
+  width: 100%;
+
+  #cssSlider {
+    position: absolute;
+  }
+}
+
+/*intro*/
+#partsIntro {
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 1rem;
+
+  position: relative;
+  overflow: hidden;
+
+  h1,
+  h2,
+  em {
+    font-weight: 500;
+  }
+
+  #gears1 {
+    position: absolute;
+    right: -54rem;
+    bottom: -23rem;
+    transform: scaleY(-1);
+    rotate: -35deg;
+    height: 140rem;
+    width: 140rem;
+
+    fill: rgba(variables.$accent_color, 0.6);
+  }
+}
+
+#partsIntro-inner {
+  //margin: auto;
+  z-index: 5;
+  /*SCREEN SIZE:WIDE SCREEN*/
+  @media only screen and (min-width: 1001px) {
+    width: 70%;
+  }
+  /*SCREEN SIZE:NARROW SCREEN*/
+  @media only screen and (max-width: 1000px) {
+    width: 90%;
+  }
+}
+
+#joinHomeCover {
+  background-image: url(https://i.imgur.com/HBLDqAX.jpeg);
+}
+
+#homeJoin {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* home join*/
+.joinCover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: brightness(40%);
+  -webkit-filter: brightness(40%);
+  width: 100%;
+  height: 100%;
+}
+
+#joinText {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+}
+
+#joinH1 {
+  text-align: center;
+  color: variables.$main_color;
+  text-shadow: rgba(variables.$accent_color, 0.9) 0px 0px 25px;
+  font-family: GearBox;
+}
+
+/*JOIN:WIDE SCREEN*/
+
+@media only screen and (min-width: 1001px) {
+  #joinH1 {
+    font-size: 4.6em;
+  }
+}
+
+/*JOIN:NARROW SCREEN*/
+
+@media only screen and (max-width: 1000px) {
+  #joinH1 {
+    font-size: 3.3em;
+  }
+}
+
+/*JOIN:EVEN NARROWER SCREEN*/
+
+@media (max-width: 280px) {
+  #joinH1 {
+    font-size: 2rem;
+  }
+}
+
+#homeJoin > .joinCover,
+#homeJoin > #joinText > #joinH1 {
+  transition: 1s ease-in-out;
+}
+
+#homeJoin-wrapper:hover > #homeJoin > .joinCover {
+  filter: brightness(100%);
+  -webkit-filter: brightness(100%);
+}
+
+#homeJoin-wrapper:hover > #homeJoin > #joinText > #joinH1 {
+  color: variables.$accent_color;
+  text-shadow: 0 6px 6px rgba(0, 0, 0, 0.5);
+}
+
+/*TEXT*/
+
+#partsIntro h1,
+#partsIntro h2,
+#partsIntro h3 {
+  text-align: center;
+}
+
+#partsIntro p:nth-child(4) {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/*SOCIAL IMAGES*/
+
+.social > div > a > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.social > div {
+  transition: 0.3s linear;
+}
+
+.social > div:hover {
+  transform: rotate(360deg);
+}
+
+.social svg path {
+  fill: #000000;
+  transition: 0.3s linear;
+}
+
+.facebook:hover svg path {
+  fill: #3c5b9b !important;
+}
+
+// Tried purple (962fbf) but it looked like github so it's pink instead.
+.insta:hover svg path {
+  fill: #d62976 !important;
+}
+
+.youtube:hover svg path {
+  fill: #cc181e !important;
+}
+
+.github:hover svg path {
+  fill: purple !important;
+}
+
+.email:hover svg path {
+  fill: #669c41 !important;
+}
+
+#mainHome > #partsIntro > .social {
+  align-self: flex-start;
+  height: 3.5em;
+  //padding-top: 2em;
+  //padding-bottom: 4em;
+  //argin: auto;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /*social:WIDE SCREEN*/
+  @media only screen and (min-width: 1001px) {
+    width: 50%;
+  }
+  /*social:NARROW SCREEN*/
+  @media only screen and (max-width: 1000px) {
+    width: 90%;
+  }
+}
+
+#mainHome > #partsIntro > .social > div {
+  height: 3.5em;
+  width: 3.5em;
+}
+
+.social > div > a > svg {
+  width: 100%;
+  height: 100%;
+}
+
+#homeMedia {
+  min-height: 100vh;
+  padding: 2rem 0;
+  width: 100%;
+  //gap: 8.6rem 1rem;
+  gap: 2rem 2rem;
+
+  overflow: hidden;
+  position: relative;
+
+  .video {
+    z-index: 5;
+    position: relative;
+    padding-bottom: calc(720 / 1280 * 60%); // aspect ration Multiply by width
+    /* 16:9 RATIO*/
+    height: 0;
+    width: 60%;
+
+    &.smaller-width {
+      width: 100%;
+      padding-bottom: calc(720 / 1280 * 100%);
+    }
+  }
+
+  .video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #gears2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    top: -24rem;
+    left: -50rem;
+    transform: scaleX(-1);
+    rotate: -35deg;
+    height: 140rem;
+    width: 140rem;
+
+    fill: rgba(variables.$accent_color, 0.6);
+  }
+}

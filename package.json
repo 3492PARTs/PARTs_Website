@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "CHROME_BIN=/usr/bin/google-chrome-stable ng test --no-watch --code-coverage --browsers=ChromeHeadless",
+    "test:coverage": "ng test --no-watch --code-coverage --browsers=ChromeHeadless"
   },
   "private": true,
   "dependencies": {
@@ -28,7 +30,6 @@
     "chart.js": "4.5.0",
     "dexie": "4.2.0",
     "file-saver": "2.0.5",
-    "jquery": "3.7.1",
     "ngx-device-detector": "10.1.0",
     "rxjs": "7.8.0",
     "tslib": "2.3.0",
@@ -36,12 +37,12 @@
   },
   "devDependencies": {
     "@angular/build": "20.3.1",
+    "@angular/cdk": "^20.2.10",
     "@angular/cli": "20.3.1",
     "@angular/compiler-cli": "20.3.0",
     "@types/blueimp-load-image": "5.14.4",
     "@types/file-saver": "2.0.5",
     "@types/jasmine": "5.1.9",
-    "@types/jquery": "3.5.33",
     "jasmine-core": "5.9.0",
     "karma": "6.4.0",
     "karma-chrome-launcher": "3.2.0",

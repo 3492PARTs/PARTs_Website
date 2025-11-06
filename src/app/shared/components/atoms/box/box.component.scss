@@ -1,0 +1,64 @@
+@use "abstracts/variables";
+
+.box-padding {
+  padding: 1rem 0;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+}
+.box {
+  width: 100%;
+  height: 100%;
+  max-width: 1300px;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+  transition: height 0.2s ease-in-out;
+  background-color: #fff;
+  margin: 0 auto;
+  box-sizing: border-box;
+  // z-index: 0;
+  //min-height: calc(100vh - 7em);
+  border-radius: 0.35em;
+  position: relative;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.box-content {
+  transition: 0.2s ease-in-out;
+  overflow: hidden;
+  width: 100%;
+  //height: calc(100% - (0.75em * 2) - 4rem);
+  padding: 2rem;
+  flex-grow: 2;
+}
+
+#box-header {
+  position: relative;
+  padding: 0.75em 1.25em;
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+  border-top-left-radius: 0.35em;
+  border-top-right-radius: 0.35em;
+  h2 {
+    color: variables.$main_color;
+    font-size: 1.8rem;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  span {
+    color: variables.$main_color;
+  }
+}
+
+.collapse {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.HeaderWithCollapse {
+  margin-left: calc(1.25em + 34px);
+}

@@ -1,0 +1,139 @@
+<app-box>
+    <app-header [h]="2">Meetings</app-header>
+
+    <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="meetingFilterOptions"
+        [(Model)]="meetingFilterOption" [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+
+    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings | dateFilter
+    : meetingFilterOption !== 'all'
+    : 'end'
+    : today
+    : meetingFilterOption === 'future' ? 'gte' : 'lt'" [ShowAddButton]="AdminInterface"
+        (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
+        (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
+        [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
+        (RemoveRecordCallBack)="removeMeeting($event)" [ShowViewButton]="!AdminInterface"
+        (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'30vh'"
+        [Stripes]="true"></app-table>
+
+    <app-header [h]="2">Attendance Report</app-header>
+    <p>Meeting Hours Available: {{totalMeetingHours.hours || 0}}</p>
+    <p>Bonus Meeting Hours Available:
+        {{totalMeetingHours.bonus_hours || 0}} (Does not affect event hours)</p>
+    <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
+    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
+        [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
+
+    <app-header [h]="2">Attendance</app-header>
+    @if (AdminInterface) {
+    <app-form-element-group [LabelText]="'Legend'">
+        <div id="legend" class="flex flex-wrap justify-content-space-between">
+            <div class="flex align-items-center">
+                <div class="box ten"></div>
+                <p>Early</p>
+            </div>
+            <div class="flex align-items-center">
+                <div class="box fifteen"></div>
+                <p> &#60; 5min late </p>
+            </div>
+            <div class="flex align-items-center">
+                <div class="box twenty"></div>
+                <p> &#60; 30min late </p>
+            </div>
+            <div class="flex align-items-center">
+                <div class="box thirty"></div>
+                <p> &#62; 30min late</p>
+            </div>
+
+            <div class="flex align-items-center">
+                <div class="box leftover"></div>
+                <p>No meeting</p>
+            </div>
+        </div>
+    </app-form-element-group>
+
+    <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
+        [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
+        [BindingProperty]="'value'"></app-form-element>
+    }
+    <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
+        (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
+        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
+        [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
+        [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'30vh'"
+        [Stripes]="true"></app-table>
+
+    <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
+        <app-form (SubmitFunction)="saveMeeting()">
+            <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="meeting.title" [FieldSize]="2000"
+                [Disabled]="!AdminInterface" [Required]="true"></app-form-element>
+            <app-form-element [LabelText]="'Description'" [Type]="'area'" [(Model)]="meeting.description"
+                [FieldSize]="4000" [Rows]="5" [Width]="'100%'" [Disabled]="!AdminInterface"></app-form-element>
+            <app-form-element [LabelText]="'Start'" [Type]="'datetime'" [(Model)]="meeting.start"
+                [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
+            <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="meeting.end"
+                [Disabled]="!AdminInterface" [FormGroupInline]="true" [Required]="true"></app-form-element>
+            <app-form-element [LabelText]="'Type'" [Type]="'select'" [(Model)]="meeting.meeting_typ"
+                [SelectList]="meetingTypeOptions" [DisplayProperty]="'meeting_nm'" [Disabled]="!AdminInterface"
+                [Required]="true"></app-form-element>
+
+            @if (AdminInterface) {
+            <app-button-ribbon>
+                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+            </app-button-ribbon>
+
+            <app-table [TableTitle]="'Attendance'" [TableCols]="meetingAttendanceTableCols"
+                [TableData]="meetingAttendance" [ShowAddButton]="true"
+                (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
+                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
+                [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
+                (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
+                [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
+            }
+        </app-form>
+    </app-modal>
+
+    <app-modal [(Visible)]="attendanceModalVisible" [Title]="'Attendance'">
+        <app-form (SubmitFunction)="saveAttendance(attendanceEntry)">
+            @if (AdminInterface) {
+            <app-form-element [LabelText]="'User'" [Type]="'select'" [(Model)]="attendanceEntry.user"
+                [Disabled]="isAttendanceApproved(attendanceEntry)" [SelectList]="users" [DisplayProperty]="'name'"
+                [SelectComparatorFunction]="compareUserObjects.bind(this)" [Required]="true"></app-form-element>
+            }
+            <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
+                [Disabled]="isAttendanceApproved(attendanceEntry)" [FormGroupInline]="true"
+                [Required]="true"></app-form-element>
+            <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
+                [Disabled]="isAttendanceApproved(attendanceEntry)" [FormGroupInline]="true"></app-form-element>
+            <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
+                [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
+            <app-form-element [LabelText]="'Approval'" [Type]="'select'" [(Model)]="attendanceEntry.approval_typ"
+                [SelectList]="attendanceApprovalTypeOptions" [DisplayProperty]="'approval_nm'"
+                [Disabled]="!AdminInterface"></app-form-element>
+
+            @if (attendanceEntry.meeting && !meetingModalVisible) {
+            <app-form-element-group [LabelText]="'Meeting Information'">
+                <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="attendanceEntry.meeting.title"
+                    [Disabled]="true"></app-form-element>
+                <app-form-element [LabelText]="'Description'" [Type]="'area'"
+                    [(Model)]="attendanceEntry.meeting.description" [Disabled]="true" [Rows]="5"
+                    [Width]="'100%'"></app-form-element>
+                <app-form-element [LabelText]="'Start'" [Type]="'datetime'" [(Model)]="attendanceEntry.meeting.start"
+                    [Disabled]="true" [FormGroupInline]="true"></app-form-element>
+                <app-form-element [LabelText]="'End'" [Type]="'datetime'" [(Model)]="attendanceEntry.meeting.end"
+                    [Disabled]="true" [FormGroupInline]="true"></app-form-element>
+                <app-form-element [LabelText]="'Type'" [Type]="'select'" [(Model)]="attendanceEntry.meeting.meeting_typ"
+                    [SelectList]="meetingTypeOptions" [DisplayProperty]="'meeting_nm'"
+                    [Disabled]="true"></app-form-element>
+            </app-form-element-group>
+
+            }
+            @if (AdminInterface || !isAttendanceApproved(attendanceEntry)) {
+            <app-button-ribbon>
+                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+            </app-button-ribbon>
+            }
+        </app-form>
+    </app-modal>
+</app-box>

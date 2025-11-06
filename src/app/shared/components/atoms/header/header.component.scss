@@ -1,0 +1,38 @@
+@use "abstracts/variables";
+
+.underlined {
+  border-bottom: 2px solid variables.$main_color;
+}
+
+.underlined-teal {
+  border-bottom: 2px solid variables.$accent_color;
+}
+
+h1,
+h2,
+h4,
+h4,
+h5,
+h6 {
+  margin-bottom: 4px;
+
+  &.no-margin-bottom {
+    margin-bottom: 0;
+  }
+
+  &.no-margin-top {
+    margin-top: 0;
+  }
+}
+
+h1 {
+  color: variables.$accent_color;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: variables.$main_color;
+}

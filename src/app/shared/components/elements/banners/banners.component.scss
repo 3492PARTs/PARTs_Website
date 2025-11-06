@@ -1,0 +1,50 @@
+@use "abstracts/variables";
+
+#banner-wrapper {
+  position: fixed;
+  //top: 5em;
+  right: 0;
+  //z-index: 15;
+  width: 40rem;
+  max-width: calc(100% - (1.6rem * 2));
+
+  @media only screen and (max-width: variables.$screen-size-xs) {
+    max-width: 100%;
+  }
+
+  .banner {
+    width: 100%;
+
+    .banner-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      align-content: flex-start;
+      //padding-top: 1.6rem;
+
+      & > p {
+        padding-right: 1.6rem;
+        font-weight: bold;
+        margin-bottom: 0;
+        margin-top: 0;
+        white-space: pre-line;
+      }
+    }
+  }
+}
+
+.top-zero {
+  top: 0 !important;
+  right: 0 !important;
+}
+
+.sticky {
+  position: sticky;
+  top: 1.6rem;
+  z-index: 1;
+
+  /*MOBILE NAV*/
+  @media only screen and (max-width: variables.$screen-size-xlg-lower-range) {
+    top: 3em;
+  }
+}
