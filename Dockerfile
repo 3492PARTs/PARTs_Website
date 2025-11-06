@@ -60,7 +60,7 @@ COPY --from=build /usr/local/app/dist/parts-website/browser/ ./
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -g root -G sudo -u 1000 ubuntu \
     && apt-get update \
     && apt-get upgrade -y \
-    && apt-get install -y curl sshpass wget --no-install-recommends \
+    && apt-get install -y curl openssh-client sshpass wget --no-install-recommends \
     && pip install --no-cache-dir paramiko==3.5.1 pysftp \
     && mkdir /scripts/ \
     && cd /scripts \
