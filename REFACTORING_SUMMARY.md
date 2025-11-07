@@ -335,20 +335,51 @@ Before merging to production, consider:
    - Block PRs that fail quality checks
    - Automated testing on all branches
 
-3. **Dependency Management**:
+3. **Import Path Cleanup**:
+   - Replace remaining relative imports with @app/* aliases
+   - Update ~20 files with 4-level deep relative imports
+   - Use barrel exports consistently across codebase
+
+4. **Dependency Management**:
    - Add Renovate or Dependabot
    - Automated dependency updates
    - Security vulnerability scanning
 
-4. **Component Documentation**:
+5. **Component Documentation**:
    - Consider adding Storybook
    - Visual component documentation
    - Interactive component playground
 
-5. **Performance Monitoring**:
+6. **Performance Monitoring**:
    - Add bundle size tracking
    - Monitor build performance
    - Track runtime performance metrics
+
+## Known Issues and Notes
+
+### Import Paths
+Some files still use relative imports (e.g., `../../../../shared/...`) instead of the new barrel exports or path aliases. While the flattened structure reduces nesting, approximately 20 files could benefit from converting these to use `@app/*` path aliases. This is a low-priority improvement that can be done incrementally:
+
+```typescript
+// Current (still valid)
+import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
+
+// Preferred
+import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
+// or
+import { HeaderComponent } from '@app/shared';
+```
+
+Files with relative imports that could be updated:
+- `admin/components/admin-users/admin-users.component.ts`
+- `admin/components/meetings/meetings.component.ts`
+- Multiple files in `scouting-admin/components/`
+- `recruitment/components/join/team-application/team-application.component.ts`
+
+**Impact**: Low - existing imports work fine, this is purely a style/consistency improvement.
+
+### Environment Interface
+The Environment interface is correctly defined and all environment files implement it properly. TypeScript compilation succeeds without issues.
 
 ## Migration Guide for Team
 

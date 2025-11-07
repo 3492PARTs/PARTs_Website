@@ -10,9 +10,9 @@ import { TableButtonType, TableColType, TableComponent } from '@app/shared/compo
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
-import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
-import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
-import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, decodeSentBoolean, formatDateString } from '@app/core/utils/utils.functions';
