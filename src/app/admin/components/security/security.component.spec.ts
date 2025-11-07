@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { SecurityComponent } from './security.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('SecurityComponent', () => {
   let component: SecurityComponent;

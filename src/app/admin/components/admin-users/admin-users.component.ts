@@ -11,7 +11,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
-import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
+import { HeaderComponent } from "../../../shared/components/atoms/header/header.component";
 
 import { cloneObject } from '@app/core/utils/utils.functions';
 @Component({

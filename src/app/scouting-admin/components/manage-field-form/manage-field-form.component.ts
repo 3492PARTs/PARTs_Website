@@ -10,7 +10,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
-import { DrawQuestionSvgComponent } from "../../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
+import { DrawQuestionSvgComponent } from "../../../shared/components/elements/draw-question-svg/draw-question-svg.component";
 import { FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
 
 import { ModalService } from '@app/core/services/modal.service';

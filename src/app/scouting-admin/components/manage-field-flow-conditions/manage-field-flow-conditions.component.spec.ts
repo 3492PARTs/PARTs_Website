@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { ManageFieldFlowConditionsComponent } from './manage-field-flow-conditions.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ManageFieldFlowConditionsComponent', () => {
   let component: ManageFieldFlowConditionsComponent;

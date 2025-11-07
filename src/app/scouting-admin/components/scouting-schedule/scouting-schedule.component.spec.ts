@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { ScoutingScheduleComponent } from './scouting-schedule.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ScoutingScheduleComponent', () => {
   let component: ScoutingScheduleComponent;

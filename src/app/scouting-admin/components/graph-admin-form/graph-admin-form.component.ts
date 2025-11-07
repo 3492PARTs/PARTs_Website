@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
-import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
-import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
-import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
-import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
-import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
-import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
+import { BoxComponent } from "../../../shared/components/atoms/box/box.component";
+import { FormElementComponent } from "../../../shared/components/atoms/form-element/form-element.component";
+import { FormElementGroupComponent } from "../../../shared/components/atoms/form-element-group/form-element-group.component";
+import { TableButtonType, TableColType, TableComponent } from "../../../shared/components/atoms/table/table.component";
+import { ModalComponent } from "../../../shared/components/atoms/modal/modal.component";
+import { FormComponent } from "../../../shared/components/atoms/form/form.component";
 import { GeneralService } from '@app/core/services/general.service';
-import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
+import { ButtonComponent } from "../../../shared/components/atoms/button/button.component";
+import { ButtonRibbonComponent } from "../../../shared/components/atoms/button-ribbon/button-ribbon.component";
 import { Question, QuestionAggregate, Graph, GraphType, GraphQuestionType, QuestionConditionType, GraphCategory, GraphBin, GraphCategoryAttribute, GraphQuestion } from '@app/core/models/form.models';
 
 import { ModalService } from '@app/core/services/modal.service';

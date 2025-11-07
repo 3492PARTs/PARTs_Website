@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { ManagePitQuestionConditionsComponent } from './manage-pit-question-conditions.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ManagePitQuestionConditionsComponent', () => {
   let component: ManagePitQuestionConditionsComponent;

@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { ManageFieldQuestionsComponent } from './manage-field-questions.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ManageFieldQuestionsComponent', () => {
   let component: ManageFieldQuestionsComponent;

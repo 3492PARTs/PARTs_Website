@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { TeamContactFormComponent } from './team-contact-form.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('TeamContactFormComponent', () => {
   let component: TeamContactFormComponent;

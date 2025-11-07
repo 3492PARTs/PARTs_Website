@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { GraphAdminFormComponent } from './graph-admin-form.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('GraphAdminFormComponent', () => {
   let component: GraphAdminFormComponent;

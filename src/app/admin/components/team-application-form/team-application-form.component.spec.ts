@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { TeamApplicationFormComponent } from './team-application-form.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('TeamApplicationFormComponent', () => {
   let component: TeamApplicationFormComponent;
