@@ -2,9 +2,41 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
 
+## Architecture
+
+This project follows Angular best practices with a **domain-driven architecture**. See [ANGULAR_BEST_PRACTICES.md](ANGULAR_BEST_PRACTICES.md) for detailed guidelines and [DOMAIN_STRUCTURE.md](DOMAIN_STRUCTURE.md) for the project structure.
+
+### Key Features
+- Domain/feature-based folder structure
+- Barrel exports for cleaner imports
+- ESLint and Prettier for code quality
+- TypeScript strict mode
+- Standalone components (Angular 14+)
+- Lazy-loaded routes for optimal performance
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+## Code Quality
+
+### Linting
+```bash
+# Check for linting errors
+npm run lint
+
+# Auto-fix linting errors
+npm run lint:fix
+```
+
+### Formatting
+```bash
+# Check code formatting
+npm run format:check
+
+# Auto-format code
+npm run format
+```
 
 ## Code scaffolding
 
