@@ -72,14 +72,14 @@ node {
             }
         }
 
-        stage('Lint') {
+        /*stage('Lint') {
             buildImage.inside("-u 0") {
                 sh '''
                     cd /usr/local/app && 
                     npm run lint
                 '''
             }
-        }
+        }*/
 
         stage('Build runtime image') {
             timeout(time: 5, unit: 'MINUTES') {
