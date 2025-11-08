@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
     production: false,
     version: "VERSION",
     baseUrl: 'https://partsuat.bduke.dev/',

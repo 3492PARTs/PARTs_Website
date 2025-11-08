@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
     production: false,
     version: 'local',
     baseUrl: 'http://127.0.0.1:8000/',

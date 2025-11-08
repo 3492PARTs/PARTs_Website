@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Sponsor, Item } from '@app/admin/components/admin/requested-items/requested-items.component';
+import { Sponsor, Item } from '@app/admin/components/requested-items/requested-items.component';
 import { Banner } from '@app/core/models/api.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
