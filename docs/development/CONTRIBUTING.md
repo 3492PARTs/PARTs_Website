@@ -66,7 +66,7 @@ src/app/
 ├── [feature]/      # Feature-specific code
 ```
 
-See [ANGULAR_BEST_PRACTICES.md](ANGULAR_BEST_PRACTICES.md) and [DOMAIN_STRUCTURE.md](DOMAIN_STRUCTURE.md) for details.
+See [ANGULAR_BEST_PRACTICES.md](../architecture/ANGULAR_BEST_PRACTICES.md) and [DOMAIN_STRUCTURE.md](../architecture/DOMAIN_STRUCTURE.md) for details.
 
 ## Adding New Features
 
