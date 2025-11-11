@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TableColType } from '@app/shared';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormManagerComponent } from '@app/shared/components/elements/form-manager/form-manager.component';
 
@@ -10,7 +11,7 @@ import { FormManagerComponent } from '@app/shared/components/elements/form-manag
 })
 export class TeamApplicationFormComponent {
 
-  teamApplicationResponsesCols = [
+  teamApplicationResponsesCols: TableColType[] = [
     { PropertyName: 'id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
     { PropertyName: 'time', ColLabel: 'Time' },

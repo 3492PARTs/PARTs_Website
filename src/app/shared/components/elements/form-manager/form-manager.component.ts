@@ -4,7 +4,7 @@ import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-import { TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { QuestionAdminFormComponent } from '../question-admin-form/question-admin-form.component';
 import { Response } from '@app/core/models/form.models';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
@@ -20,7 +20,7 @@ import { downloadFileAs, responsesToCSV, strNoE } from '@app/core/utils/utils.fu
 export class FormManagerComponent implements OnInit {
 
   @Input() FormTyp = '';
-  @Input() ResponsesCols: any[] = [];
+  @Input() ResponsesCols: TableColType[] = [];
   responses: Response[] = [];
   archiveInd = 'n'
 
