@@ -44,6 +44,7 @@ export class QuestionAdminFormComponent implements OnInit {
   questionTableTriggerUpdate = false;
   questionTableCols: TableColType[] = [];
   private _questionTableCols: TableColType[] = [
+    { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Sub Type' },
     { PropertyName: 'order', ColLabel: 'Order' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo },
     { PropertyName: 'question', ColLabel: 'Question' },
