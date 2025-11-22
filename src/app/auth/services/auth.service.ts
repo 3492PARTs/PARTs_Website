@@ -62,11 +62,6 @@ export class AuthService {
       if (this.apiStatus != apis)
         switch (apis) {
           case APIStatus.on:
-            console.log('iss');
-            if (this.tokenBS.value) {
-              this.getTokenExp(this.tokenBS.value.access);
-              this.getTokenExp(this.tokenBS.value.refresh);
-            }
             this.getLoggedInUserData();
             break;
           case APIStatus.off:

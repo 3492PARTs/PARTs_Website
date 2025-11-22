@@ -602,7 +602,7 @@ export function triggerChange(tmpFx: () => void, timeoutMs = 0): void {
  * Log to console in development mode only
  */
 export function devConsoleLog(location: string, x?: any): void {
-  if (!environment.production || true) {
+  if (!environment.production) {
     if (x) console.log(location + '\n', x);
     else console.log(location);
   }
