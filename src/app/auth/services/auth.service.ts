@@ -262,7 +262,9 @@ export class AuthService {
   }
 
   isTokenExpired(tkn: string): boolean {
-    return strNoE(tkn) || this.getTokenExp(tkn) < new Date();
+    const b = strNoE(tkn) || this.getTokenExp(tkn) < new Date();
+    devConsoleLog('isTokenExpired', b);
+    return b;
   }
 
   isAuthenticated(): boolean {
