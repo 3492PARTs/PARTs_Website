@@ -20,7 +20,7 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
         });
     }
     else if (user && token && token && !auth.isTokenExpired(token)) {
-        devConsoleLog('http.interceptor.ts', `has access token: ${req.url}`);
+        devConsoleLog('http.interceptor.ts', `else if: has access token: ${req.url}`);
         req = req.clone({
             url: baseURL + req.url,
             setHeaders: {
