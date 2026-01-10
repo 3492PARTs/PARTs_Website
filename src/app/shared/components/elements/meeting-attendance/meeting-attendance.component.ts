@@ -202,7 +202,9 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   checkIn(): void | null {
-    this.saveAttendance();
+    this.modalService.triggerConfirm('Are you sure you meant to check in without selecting a meeting?', () => {
+      this.saveAttendance();
+    });
     //this.checkLocation(this.saveAttendance.bind(this));
   }
 
