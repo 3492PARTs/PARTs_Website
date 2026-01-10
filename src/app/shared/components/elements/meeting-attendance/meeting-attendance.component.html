@@ -112,6 +112,12 @@
                 [SelectList]="attendanceApprovalTypeOptions" [DisplayProperty]="'approval_nm'"
                 [Disabled]="!AdminInterface"></app-form-element>
 
+            @if (AdminInterface) {
+            <app-form-element [LabelText]="'Meeting'" [Type]="'select'" [(Model)]="attendanceEntry.meeting"
+                [SelectList]="meetings" [DisplayProperty]="'title'"></app-form-element>
+            }
+
+
             @if (attendanceEntry.meeting && !meetingModalVisible) {
             <app-form-element-group [LabelText]="'Meeting Information'">
                 <app-form-element [LabelText]="'Title'" [Type]="'text'" [(Model)]="attendanceEntry.meeting.title"

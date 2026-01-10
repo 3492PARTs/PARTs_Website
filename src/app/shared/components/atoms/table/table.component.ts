@@ -479,16 +479,22 @@ export class TableButtonType {
   Title?: string;
   Type?: string;
   Text?: string;
+  Color = "";
+  BackgroundColor = "";
+  Class = "";
   HideFunction?: (arg: any) => boolean;
   private oneOfButtonTypeIsVisible = false
 
-  constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean) {
+  constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean, Color = "", BackgroundColor = "", Class = "") {
     this.ButtonType = ButtonType;
     this.RecordCallBack = RecordCallBack;
     this.Title = Title;
     this.Type = Type;
     this.Text = Text;
     this.HideFunction = HideFunction;
+    this.Color = Color;
+    this.BackgroundColor = BackgroundColor;
+    this.Class = Class;
   }
 
   isOneOfButtonTypeVisible(): boolean {

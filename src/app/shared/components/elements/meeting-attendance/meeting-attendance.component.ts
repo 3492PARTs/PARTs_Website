@@ -47,9 +47,9 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'meeting_typ.meeting_nm', ColLabel: 'Type' },
   ];
   meetingsTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this)),
-    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), 'Check In', undefined, undefined, this.hasAttendedMeeting.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), 'Check Out', undefined, undefined, this.hasLeftMeeting.bind(this)),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this), '', '', 'danger'),
+    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), 'Check In', undefined, undefined, this.hasAttendedMeeting.bind(this), '', '', 'success'),
+    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), 'Check Out', undefined, undefined, this.hasLeftMeeting.bind(this), '', '', 'warning'),
   ];
   meetingModalVisible = false;
   meeting = new Meeting();
@@ -78,7 +78,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceTableCols: TableColType[] = [];
   attendanceTableButtons: TableButtonType[] = [
     new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this)),
+    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this), '', '', 'warning'),
     new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
     new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this)),
   ];
@@ -317,6 +317,7 @@ export class MeetingAttendanceComponent implements OnInit {
       ...cols,
       { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
     ];
+    this.meetingAttendanceTableCols = this.attendanceTableCols;
   }
 
   // MEETING -----------------------------------------------------------
@@ -372,7 +373,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   hasLeftMeeting(meeting: Meeting): boolean {
     if (!this.isDayToTakeAttendance(meeting)) return true;
-    return this.AdminInterface || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
+    return this.AdminInterface || !this.attendance.find(a => (a.meeting?.id === meeting.id)) || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasAttendance(meeting: Meeting): boolean {

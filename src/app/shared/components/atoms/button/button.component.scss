@@ -58,7 +58,8 @@ button:disabled {
 
 .btn-success,
 .add,
-.search {
+.search,
+.success {
   color: #fff !important;
   background-color: #28a745 !important;
   border-color: #28a745 !important;
@@ -70,7 +71,8 @@ button:disabled {
 
 .btn-danger,
 .delete,
-.reset {
+.reset,
+.danger {
   color: #fff !important;
   background-color: #dc3545 !important;
   border-color: #dc3545 !important;
@@ -84,7 +86,8 @@ button:disabled {
 .minus,
 .edit,
 .archive,
-.refresh {
+.refresh,
+.warning {
   color: #212529 !important;
   background-color: #ffc107 !important;
   border-color: #ffc107 !important;

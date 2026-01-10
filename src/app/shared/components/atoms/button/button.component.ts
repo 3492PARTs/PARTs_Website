@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
-    selector: 'app-button',
-    imports: [CommonModule,],
-    templateUrl: './button.component.html',
-    styleUrls: ['./button.component.scss']
+  selector: 'app-button',
+  imports: [CommonModule,],
+  templateUrl: './button.component.html',
+  styleUrls: ['./button.component.scss']
 })
 export class ButtonComponent implements OnInit {
   @Input() ButtonType = 'main';
@@ -24,6 +24,7 @@ export class ButtonComponent implements OnInit {
   @Input() Color = '';
   @Input() Opacity = '';
   @Input() BoxShadow = '';
+  @Input() Class = '';
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 

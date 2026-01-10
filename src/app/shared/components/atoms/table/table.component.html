@@ -117,7 +117,8 @@
             : true
             ) {
             <app-button [ButtonType]="btn.ButtonType" [SymbolSize]="'3rem'" (FunctionCallBack)="btn.RecordCallBack(rec)"
-              [Title]="btn.Title || ''" [Type]="btn.Type || ''">{{ btn.Text }}
+              [Title]="btn.Title || ''" [Type]="btn.Type || ''" [Color]="btn.Color"
+              [BackgroundColor]="btn.BackgroundColor" [Class]="btn.Class">{{ btn.Text }}
             </app-button>
             }
             }
