@@ -38,7 +38,8 @@ describe('FieldScoutingResponsesComponent', () => {
       'incrementOutstandingCalls',
       'decrementOutstandingCalls',
       'getNextGsId',
-      'getAppSize'
+      'getAppSize',
+      'isMobile'
     ]);
 
     // Setup getNextGsId to return unique IDs
