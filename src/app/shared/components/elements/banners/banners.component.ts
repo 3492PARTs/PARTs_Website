@@ -49,6 +49,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
 
   dismissBanner(b: Banner): void {
     this.gs.removeBanner(b);
+    b.fn();
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -80,7 +81,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
     const windowTop = window.scrollY || window.pageYOffset || 0;
     const appHeader = document.getElementById('site-header') || new HTMLElement();
     const navSpace = appHeader.offsetHeight;
-    
+
     // Calculate offset to position banner below header
     let offset = navSpace - windowTop;
     offset = offset <= 0 ? 0 : offset > navSpace ? offset : navSpace;

@@ -11,6 +11,7 @@ export interface IBanner {
     time: number; // time in ms to show banner, 0 means until dismissed
     timeout: number | null | undefined;
     dismissed: boolean;
+    fn: () => void;
 }
 
 export class Banner implements IBanner {
@@ -20,11 +21,13 @@ export class Banner implements IBanner {
     time = -1; // time in ms to show banner, 0 means until dismissed
     timeout: number | null | undefined;
     dismissed = false;
+    fn = () => { };
 
-    constructor(id = 0, message = '', time = -1, severity = 3) {
+    constructor(id = 0, message = '', time = -1, severity = 3, fn = () => { }) {
         this.id = id;
         this.message = message;
         this.time = time;
         this.severity = severity;
+        this.fn = fn;
     }
 }

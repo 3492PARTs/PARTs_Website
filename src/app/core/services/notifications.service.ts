@@ -85,7 +85,7 @@ export class NotificationsService {
 
   pushNotification(n: Alert): void {
     this.notifications_.push(n);
-    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.subject}`, 3500, 3, this.dismissAlert.bind(this, n)));
     this.notificationsBS.next(this.notifications_);
   }
 
@@ -96,7 +96,7 @@ export class NotificationsService {
 
   pushMessage(m: Alert): void {
     this.messages_.push(m);
-    this.gs.addBanner(new Banner(0, `New Message:\n${m.subject}`, 3500));
+    this.gs.addBanner(new Banner(0, `New Message:\n${m.subject}`, 3500, 3, this.dismissAlert.bind(this, m)));
     this.messagesBS.next(this.messages_);
   }
 
