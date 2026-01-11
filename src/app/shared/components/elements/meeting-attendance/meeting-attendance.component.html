@@ -12,12 +12,12 @@
         (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
-        (RemoveRecordCallBack)="removeMeeting($event)" [ShowViewButton]="!AdminInterface"
-        (ViewRecordCallBack)="showMeetingModal($event)" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'30vh'"
-        [Stripes]="true"></app-table>
+        (RemoveRecordCallBack)="removeMeeting($event)" (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'"
+        [Scrollable]="true" [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
-    <p>Meeting Hours Available: {{totalMeetingHours.hours || 0}}</p>
+    <p>Completed Meeting Hours: {{totalMeetingHours.hours || 0}}</p>
+    <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
     <p>Bonus Meeting Hours Available:
         {{totalMeetingHours.bonus_hours || 0}} (Does not affect event hours)</p>
     <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>

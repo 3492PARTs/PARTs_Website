@@ -39,6 +39,7 @@ export class AttendanceReport {
 
 export class MeetingHours {
     hours = NaN;
+    hours_future = NaN;
     bonus_hours = NaN;
     event_hours = NaN;
 }

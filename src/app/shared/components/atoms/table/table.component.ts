@@ -123,9 +123,12 @@ export class TableComponent implements OnInit, OnChanges {
 
   tableTextTypes = ['percent'];
 
+  @Input() SymbolSize = '3.5rem';
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.setSymbolSizeForButtons();
     this.generateTableDisplayValues();
     this.ShowButtonColumn();
     if (strNoE(this.TableName) && !strNoE(this.TableTitle))
@@ -186,9 +189,15 @@ export class TableComponent implements OnInit, OnChanges {
       window.clearTimeout(this.resizeTimer);
     }
 
+    this.setSymbolSizeForButtons();
+
     this.resizeTimer = window.setTimeout(() => {
       this.SetTableContainerWidth();
     }, 200);
+  }
+
+  private setSymbolSizeForButtons() {
+    this.SymbolSize = this.gs.isMobile() ? '3.5rem' : '3rem';
   }
 
   generateTableDisplayValues(): void {
@@ -331,7 +340,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn(): void {
-    const buttonWidth = 3.6;
+    const buttonWidth = parseFloat(this.SymbolSize.replace('rem', '')) + .1;
     let colWidth = 0;
 
     if (this.ShowAddButton) {

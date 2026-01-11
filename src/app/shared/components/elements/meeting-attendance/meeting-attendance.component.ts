@@ -90,6 +90,8 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.today.setHours(0, 0, 0, 0);
+
     this.auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
       if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
