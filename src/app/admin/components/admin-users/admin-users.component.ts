@@ -121,4 +121,8 @@ export class AdminUsersComponent implements OnInit {
 
     return '';
   }
+
+  simulateUser(user: User): void {
+    this.authService.simulateUser(user);
+  }
 }

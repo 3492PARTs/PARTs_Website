@@ -25,6 +25,8 @@ export class AuthService {
   private authInFlightBS = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
   authInFlight = this.authInFlightBS.asObservable();
 
+  private userToken: Token | null = null;
+
   private tokenBS = new BehaviorSubject<Token | null>(null);
   token = this.tokenBS.asObservable();
 
@@ -75,18 +77,12 @@ export class AuthService {
     this.authInFlightBS.next(AuthCallStates.prcs);
     userData.username = userData.username.toLocaleLowerCase();
 
-    this.api.post(true, 'user/token/', userData, async (result: any) => {
-      const tmp = result as Token;
-      this.tokenBS.next(tmp);
+    this.api.post(true, 'user/token/', userData, async (result: Token) => {
+      await this.setUserToken(result);
 
-      devConsoleLog('authorizeUser', 'login tokens below');
-      this.getTokenExp(tmp.access);
-      this.getTokenExp(tmp.refresh);
-
-      localStorage.setItem(this.tokenStringLocalStorage, tmp.refresh);
+      localStorage.setItem(this.tokenStringLocalStorage, result.refresh);
       localStorage.setItem(environment.loggedInHereBefore, 'hi');
 
-      await this.getLoggedInUserData();
       this.ps.subscribeToNotifications();
 
       if (strNoE(returnUrl)) {
@@ -95,7 +91,6 @@ export class AuthService {
       else {
         this.router.navigateByUrl(returnUrl || '');
       }
-
       this.authInFlightBS.next(AuthCallStates.comp);
     }, (err: any) => {
       console.log(err);
@@ -104,11 +99,32 @@ export class AuthService {
     });
   }
 
+  simulateUser(user: User): void {
+    if (this.userToken) {
+      this.setToken(this.userToken);
+    }
+
+    this.api.get(true, 'user/simulate/', { user_id: user.id }, async (result: Token) => {
+      this.userToken = this.tokenBS.value;
+      await this.setUserToken(result);
+    });
+  }
+
+  private async setUserToken(result: Token): Promise<void> {
+    this.setToken(result);
+
+    devConsoleLog('authorizeUser', 'login tokens below');
+    this.getTokenExp(result.access);
+    this.getTokenExp(result.refresh);
+
+    await this.getLoggedInUserData();
+  }
+
   previouslyAuthorized(): void {
     this.authInFlightBS.next(AuthCallStates.prcs);
 
     const tmpTkn = { access: '', refresh: localStorage.getItem(this.tokenStringLocalStorage) || '' };
-    this.tokenBS.next(tmpTkn);
+    this.setToken(tmpTkn);
 
     if (this.tokenBS.value && this.tokenBS.value.refresh) {
       //this.http.post('user/token/refresh/', { refresh: this.tokenBS.value.refresh })
@@ -116,7 +132,7 @@ export class AuthService {
         devConsoleLog('previouslyAuthorized', 'new tokens below');
         this.getTokenExp(result.access);
         this.getTokenExp(result.refresh);
-        this.tokenBS.next(result);
+        this.setToken(result);
         localStorage.setItem(this.tokenStringLocalStorage, result.refresh);
 
         await this.getLoggedInUserData();
@@ -140,7 +156,7 @@ export class AuthService {
   }
 
   logOut(): void {
-    this.tokenBS.next(new Token());
+    this.setToken(new Token());
     this.userBS.next(new User());
     this.userLinksBS.next([]);
     localStorage.removeItem(this.tokenStringLocalStorage);
@@ -209,7 +225,7 @@ export class AuthService {
         this.getTokenExp(token.access);
         this.getTokenExp(token.refresh);
 
-        this.tokenBS.next(token);
+        this.setToken(token);
         localStorage.setItem(this.tokenStringLocalStorage, token.refresh);
 
         return token;

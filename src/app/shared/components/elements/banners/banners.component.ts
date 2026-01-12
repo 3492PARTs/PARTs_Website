@@ -47,9 +47,9 @@ export class BannersComponent implements OnInit, AfterViewInit {
     this.positionBannerWrapper();
   }
 
-  dismissBanner(b: Banner): void {
+  dismissBanner(b: Banner, runFn = false): void {
     this.gs.removeBanner(b);
-    b.fn();
+    if (runFn) b.fn();
   }
 
   @HostListener('window:scroll', ['$event'])
