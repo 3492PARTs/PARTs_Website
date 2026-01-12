@@ -13,7 +13,7 @@
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
         (RemoveRecordCallBack)="removeMeeting($event)" (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'"
-        [Scrollable]="true" [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
+        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
     <p>Completed Meeting Hours: {{totalMeetingHours.hours || 0}}</p>
@@ -22,7 +22,7 @@
         {{totalMeetingHours.bonus_hours || 0}} (Does not affect event hours)</p>
     <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
-        [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
+        [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
 
     <app-header [h]="2">Attendance</app-header>
     @if (AdminInterface) {
@@ -61,7 +61,7 @@
         (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
         [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
-        [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'30vh'"
+        [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
         [Stripes]="true"></app-table>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
@@ -80,6 +80,7 @@
 
             @if (AdminInterface) {
             <app-button-ribbon>
+                <app-button [ButtonType]="'danger'" (FunctionCallBack)="endMeeting(meeting)">End</app-button>
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>
 
@@ -89,7 +90,7 @@
                 [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
                 [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
                 (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
-                [ScrollHeight]="'30vh'" [Stripes]="true"></app-table>
+                [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
             }
         </app-form>
     </app-modal>

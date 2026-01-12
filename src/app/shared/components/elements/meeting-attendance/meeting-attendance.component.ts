@@ -179,7 +179,7 @@ export class MeetingAttendanceComponent implements OnInit {
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
 
-    this.getAttendanceReport();
+    if (!meeting) this.getAttendanceReport();
   }
 
   isAttendanceUnapproved(attendance: Attendance): boolean {
@@ -286,10 +286,11 @@ export class MeetingAttendanceComponent implements OnInit {
 
   attendanceOutlierColor(start: Date, end: Date): string {
     const timeDifferenceMs = end.getTime() - start.getTime();
-    const fiveMinutesMs = 5 * 60 * 1000;
+    const oneMinuteMs = 60 * 1000;
+    const fiveMinutesMs = 5 * oneMinuteMs;
     const thirtyMinutesMs = fiveMinutesMs * 6;
 
-    if (timeDifferenceMs < 0) {
+    if (timeDifferenceMs < -oneMinuteMs) {
       return 'green';
     }
     else if (timeDifferenceMs < fiveMinutesMs) {
@@ -306,8 +307,8 @@ export class MeetingAttendanceComponent implements OnInit {
   setAttendanceTableCols(): void {
     let cols: TableColType[] = [{ PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
-    { PropertyName: 'time_in', ColLabel: 'Time In' },
-    { PropertyName: 'time_out', ColLabel: 'Time Out' }];
+    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
+    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true }];
 
     if (this.gs.getAppSize() >= AppSize.LG) {
       cols = [
@@ -330,6 +331,12 @@ export class MeetingAttendanceComponent implements OnInit {
       this.meetings = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       this.getMeetingHours();
+    });
+  }
+
+  endMeeting(meeting: Meeting): void | null {
+    this.modalService.triggerConfirm('Are you sure you want to end this meeting?', () => {
+      this.api.get(true, 'attendance/end-meeting/', { meeting_id: meeting.id }).then(() => this.getAttendance(meeting));
     });
   }
 

@@ -128,6 +128,7 @@ export class TableComponent implements OnInit, OnChanges {
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
+    if (this.RecordClickCallBack.observed || this.DblClkRecordClickCallBack.observed) this.CursorPointer = true;
     this.setSymbolSizeForButtons();
     this.generateTableDisplayValues();
     this.ShowButtonColumn();
