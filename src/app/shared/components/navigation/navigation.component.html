@@ -346,9 +346,9 @@
             <p>{{ user.first_name }} {{ user.last_name }}</p>
             <div id="profile-picture">
               <img [src]="
-                  user.image
+                  !Utils.strNoE(user.image)
                     ? user.image
-                    : '../../../assets/appIcons/BeanieBot40x40.png'
+                    : '/appIcons/icon-48x48.png'
                 " />
             </div>
           </div>

@@ -19,6 +19,7 @@ import { LoadingComponent } from "../atoms/loading/loading.component";
 import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
+import * as Utils from '@app/core/utils/utils.functions';
 
 import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
@@ -28,6 +29,9 @@ import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrol
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
+  // Expose Utils to template
+  Utils = Utils;
+
   loading = false;
 
   private resizeTimeout: any;
