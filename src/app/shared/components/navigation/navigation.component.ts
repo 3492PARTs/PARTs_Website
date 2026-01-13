@@ -168,6 +168,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
               this.checkActiveMenuItem(this.urlEnd, mi, mii);
             });
           });
+
+          if (event.url.split('/').length <= 2) {
+            this.setNavCollapsedHidden(false);
+          }
         }
       });
 
