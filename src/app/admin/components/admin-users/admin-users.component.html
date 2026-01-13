@@ -10,7 +10,8 @@
 
   <app-table [(FilterText)]="filterText" [TableCols]="userTableCols" [TableData]="users" [Scrollable]="true"
     [ShowEditButton]="true" (EditRecordCallBack)="showManageUserModal($event)" [ShowViewButton]="true"
-    (ViewRecordCallBack)="simulateUser($event)" [ScrollHeight]="'50rem'">
+    (ViewRecordCallBack)="simulateUser($event)" (RecordClickCallBack)="navigateToUserProfile($event)"
+    [ScrollHeight]="'50rem'">
   </app-table>
 
   <app-modal [Title]="'Manage User'" [(Visible)]="manageUserModalVisible">

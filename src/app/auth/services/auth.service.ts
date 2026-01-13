@@ -422,6 +422,11 @@ export class AuthService {
   getRefreshingTokenSubject(): BehaviorSubject<string | null> {
     return this.refreshingTokenSubject;
   }
+
+  isAdmin(): boolean {
+    const user = this.userBS.value;
+    return user.permissions.find(p => p.codename === 'admin') !== undefined;
+  }
 }
 
 export class Token {

@@ -170,7 +170,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
           });
 
           if (event.url.split('/').length <= 2) {
-            this.setNavCollapsedHidden(false);
+            if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
           }
         }
       });

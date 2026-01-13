@@ -125,4 +125,8 @@ export class AdminUsersComponent implements OnInit {
   simulateUser(user: User): void {
     this.authService.simulateUser(user);
   }
+
+  navigateToUserProfile(user: User): void {
+    this.gs.navigateByUrl(`/user/profile/${user.id}`);
+  }
 }

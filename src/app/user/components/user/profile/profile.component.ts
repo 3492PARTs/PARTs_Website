@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { UserData, AuthService } from '@app/auth/services/auth.service';
@@ -20,10 +21,11 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 import * as Utils from '@app/core/utils/utils.functions';
+import { UserService } from '@app/user/services/user.service';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe],
+  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe, ImageCropperComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
@@ -31,7 +33,8 @@ export class ProfileComponent implements OnInit {
 
   // Expose Utils to template
   Utils = Utils;
-  
+
+  isAdmin = false;
   user: User = new User();
   editUser: User = new User();
   userProfileImage!: File | null;
@@ -42,7 +45,7 @@ export class ProfileComponent implements OnInit {
   @ViewChild('EditProfileImageModalCropper', { read: ElementRef, static: false }) editProfileImageModalCropper!: ElementRef;
 
   imageChangedEvent: any = '';
-  croppedImage: any = '';
+  croppedImage: Blob | undefined | null = undefined;
 
   input: UserData = new UserData();
 
@@ -65,22 +68,41 @@ export class ProfileComponent implements OnInit {
     private api: APIService,
     private renderer: Renderer2,
     private ns: NotificationsService,
-    private route: ActivatedRoute, private modalService: ModalService) {
+    private route: ActivatedRoute, private modalService: ModalService, private us: UserService) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.activeTab = queryParams.get('tab') || '';
     });
 
-    this.auth.user.subscribe(u => {
-      this.user = u;
-      this.editUser = cloneObject(u) as User;
-      console.log(this.editUser);
-    });
-
     this.ns.notifications.subscribe(ns => this.notifications = ns);
     this.ns.messages.subscribe(ms => this.messages = ms);
+
+    this.auth.user.subscribe(u => {
+      this.isAdmin = this.auth.isAdmin();
+    });
   }
 
   ngOnInit(): void {
+    const userId = this.route.snapshot.paramMap.get('id');
+
+    if (Utils.strNoE(userId)) {
+      this.auth.user.subscribe(u => {
+        this.user = u;
+        this.editUser = cloneObject(u) as User;
+        //console.log(this.editUser);
+      });
+    }
+    else {
+      this.us.getUsers().then(u => {
+        if (u) {
+          const usr = u.find(usr => usr.id === parseInt(userId!));
+          if (usr) {
+            this.user = usr;
+            this.editUser = cloneObject(usr) as User;
+          }
+          else this.modalService.triggerError('User not found.');
+        }
+      });
+    }
   }
 
   saveProfile(): null | undefined | void {
@@ -89,9 +111,7 @@ export class ProfileComponent implements OnInit {
 
     if (this.croppedImage) {
       const imageName = 'name.png';
-      const imgStr = this.croppedImage.split(',')[1];
-      const imageBlob = this.dataURItoBlob(imgStr);
-      const imageFile = new File([imageBlob], imageName, { type: 'image/png' });
+      const imageFile = new File([this.croppedImage], imageName, { type: this.croppedImage.type });
 
       form.append('image', imageFile, imageFile.name);
     }
@@ -106,6 +126,7 @@ export class ProfileComponent implements OnInit {
     form.append('first_name', this.editUser.first_name);
     form.append('last_name', this.editUser.last_name);
     form.append('email', this.editUser.email);
+    form.append('id', this.editUser.id.toString());
 
     this.api.put(true, 'user/profile/', form, (result: any) => {
       this.modalService.successfulResponseBanner(result);
@@ -126,9 +147,9 @@ export class ProfileComponent implements OnInit {
     this.adjustProfileImageEditorSize();
   }
 
-  /*imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
-  }*/
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.blob;
+  }
 
   imageLoaded() {
     // show cropper
