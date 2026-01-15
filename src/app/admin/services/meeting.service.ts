@@ -6,14 +6,11 @@ import { ModalService, GeneralService, APIService, Banner, RetMessage } from '@a
   providedIn: 'root'
 })
 export class MeetingService {
-  meetings: Meeting[] = [];
-
-  totalMeetingHours = new MeetingHours();
 
   constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) { }
 
-  getMeetings(): void | null {
-    this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
+  getMeetings(): Promise<Meeting[]> {
+    return this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
       this.meetings = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       this.getMeetingHours();

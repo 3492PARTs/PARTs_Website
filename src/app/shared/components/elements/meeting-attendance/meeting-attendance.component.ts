@@ -7,7 +7,6 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
-import { Banner } from '@app/core/models/api.models';
 import { Attendance, AttendanceApprovalType, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
@@ -21,6 +20,8 @@ import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
+import { AttendanceService } from '@app/attendance/services/attendance.service';
+import { MeetingService } from '@app/admin/services/meeting.service';
 @Component({
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
@@ -30,6 +31,8 @@ import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.
 export class MeetingAttendanceComponent implements OnInit {
 
   @Input() AdminInterface = false;
+
+  private user: User | undefined = undefined;
 
   users: User[] = [];
 
@@ -84,8 +87,12 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceModalVisible = false;
   attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService, private modalService: ModalService) {
-
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
+    this.auth.user.subscribe(u => {
+      this.user = !Number.isNaN(u.id) ? u : undefined;
+      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
+    }
+    );
   }
 
   ngOnInit(): void {
@@ -108,6 +115,9 @@ export class MeetingAttendanceComponent implements OnInit {
     this.setAttendanceTableCols();
   }
   // ATTENDANCE -----------------------------------------------------------
+  saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
+    this.attendanceService.saveAttendance(attendance, meeting).then(saveAttendance);
+  }
   removeAttendance(attendance: Attendance): void | null {
     this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
       attendance.void_ind = 'y';

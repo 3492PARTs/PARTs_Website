@@ -1,53 +1,37 @@
 import { Injectable } from '@angular/core';
 import { APIService, Banner, GeneralService, ModalService, RetMessage } from '@app/core';
 import { Attendance, AttendanceReport, Meeting } from '../models/attendance.models';
-import { User } from '@app/auth/models/user.models';
-import { AuthService } from '@app/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttendanceService {
-  private user: User | undefined = undefined;
 
-  attendance: Attendance[] = [];
-
-  attendanceReport: AttendanceReport[] = [];
-
-  constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService, private auth: AuthService) {
-    this.auth.user.subscribe(u => {
-      this.user = !Number.isNaN(u.id) ? u : undefined;
-      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
-    }
-    );
+  constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) {
   }
 
-  saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
-    if (this.user) {
-      const a = attendance ? attendance : new Attendance();
-
-      if (!a.user)
-        a.user = this.user;
+  saveAttendance(attendance: Attendance, meeting?: Meeting): void | null {
+    if (attendance.user) {
 
       if (meeting)
-        a.meeting = meeting;
+        attendance.meeting = meeting;
 
-      if (this.isAttendanceApproved(a) && !a.time_out && !a.absent && a.void_ind !== 'y') {
+      if (this.isAttendanceApproved(attendance) && !attendance.time_out && !attendance.absent && attendance.void_ind !== 'y') {
         this.modalService.triggerError('Cannot approve if no time out.');
         return null;
       }
 
-      if (a.time_out && a.time_out < a.time_out) {
+      if (attendance.time_out && attendance.time_out < attendance.time_out) {
         this.modalService.triggerError('You cannot check out before checking in.');
         return null;
       }
 
       this.api.post(true, 'attendance/attendance/',
-        a,
+        attendance,
         (result: any) => {
           this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
           this.getAttendance();
-          if (a.meeting) this.getAttendance(a.meeting);
+          if (attendance.meeting) this.getAttendance(attendance.meeting);
           this.attendanceModalVisible = false;
         }, (err: any) => {
           this.modalService.triggerError(err);
