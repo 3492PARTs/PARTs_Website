@@ -78,12 +78,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [];
-  attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
-    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
-    new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
-  ];
+  attendanceTableButtons: TableButtonType[] = [];
   attendanceModalVisible = false;
   attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
@@ -96,6 +91,13 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.attendanceTableButtons = [
+      new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
+      new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
+      new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance, 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
+      new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind, 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
+    ];
+
     this.today.setHours(0, 0, 0, 0);
 
     if (this.AdminInterface) {
@@ -185,6 +187,21 @@ export class MeetingAttendanceComponent implements OnInit {
     //this.checkLocation(this.saveAttendance.bind(this, attendance));
   }
 
+  attendMeeting(meeting: Meeting): void | null {
+    this.attendanceService.attendMeeting(this.user!, meeting);
+  }
+
+  leaveMeeting(meeting: Meeting): void | null {
+    this.attendanceService.leaveMeeting(this.attendance, meeting);
+  }
+
+  markAbsent(meeting: Meeting): void | null {
+    const a = new Attendance();
+    a.absent = true;
+    a.meeting = meeting;
+    this.saveAttendance(a);
+  }
+
   hideAbsentButton(attendance: Attendance): boolean {
     return attendance.absent || this.attendanceService.isAttendanceApproved(attendance) || attendance.meeting !== undefined;
   }
@@ -257,27 +274,56 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   // MEETING -----------------------------------------------------------
+  getMeetings(): void | null {
+    this.meetingService.getMeetings().then((result) => {
+      if (result) this.meetings = result;
+      this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
+      this.getMeetingHours();
+    });
+  }
+
+  endMeeting(meeting: Meeting): void | null {
+    this.meetingService.endMeeting(meeting).then(() => this.getAttendance(meeting));
+  }
+
+  saveMeeting(meeting?: Meeting): void | null {
+    const m = meeting ? meeting : this.meeting;
+    if (m.end < m.start) {
+      this.modalService.triggerError('Meeting end cannot be before start.');
+      return null;
+    }
+
+    this.meetingService.saveMeeting(m).then(success => {
+      if (success) {
+        this.meetingModalVisible = false;
+        this.meeting = new Meeting();
+        this.getMeetings();
+        this.getAttendance();
+      }
+    });
+  }
+
   showMeetingModal(meeting?: Meeting): void {
     this.meeting = meeting ? cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
 
     if (this.AdminInterface && meeting) {
-      this.attendanceService.getAttendance(meeting);
+      this.attendanceService.getAttendance(undefined, meeting);
     }
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasLeftMeeting(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || !this.attendance.find(a => (a.meeting?.id === meeting.id)) || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasAttendance(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
@@ -294,6 +340,13 @@ export class MeetingAttendanceComponent implements OnInit {
 
     this.attendanceService.getAttendanceReport(u, meeting).then((result: AttendanceReport[] | null) => {
       if (result) this.attendanceReport = result;
+    });
+  }
+
+  // MEETING HOURS -----------------------------------------------------------
+  getMeetingHours(): void | null {
+    this.meetingService.getMeetingHours().then((result: MeetingHours | null) => {
+      if (result) this.totalMeetingHours = result;
     });
   }
 
