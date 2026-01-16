@@ -85,7 +85,7 @@ export class MeetingAttendanceComponent implements OnInit {
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
     this.auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
-      if (!this.AdminInterface && this.user !== undefined) this.attendanceService.getAttendance();
+      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
     }
     );
   }
@@ -94,14 +94,14 @@ export class MeetingAttendanceComponent implements OnInit {
     this.attendanceTableButtons = [
       new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
       new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
-      new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance, 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
-      new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind, 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
+      new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
+      new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
     ];
 
     this.today.setHours(0, 0, 0, 0);
 
     if (this.AdminInterface) {
-      this.attendanceService.getAttendance();
+      this.getAttendance();
       this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []);
     }
     this.getMeetings();
@@ -188,11 +188,11 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendMeeting(meeting: Meeting): void | null {
-    this.attendanceService.attendMeeting(this.user!, meeting);
+    this.attendanceService.attendMeeting(this.user!, meeting).then(() => this.getAttendance());
   }
 
   leaveMeeting(meeting: Meeting): void | null {
-    this.attendanceService.leaveMeeting(this.attendance, meeting);
+    this.attendanceService.leaveMeeting(this.attendance, meeting).then(() => this.getAttendance());
   }
 
   markAbsent(meeting: Meeting): void | null {
@@ -273,6 +273,10 @@ export class MeetingAttendanceComponent implements OnInit {
     this.meetingAttendanceTableCols = this.attendanceTableCols;
   }
 
+  isAttendanceApproved(attendance: Attendance): boolean {
+    return this.attendanceService.isAttendanceApproved(attendance);
+  }
+
   // MEETING -----------------------------------------------------------
   getMeetings(): void | null {
     this.meetingService.getMeetings().then((result) => {
@@ -308,8 +312,12 @@ export class MeetingAttendanceComponent implements OnInit {
     this.meetingModalVisible = true;
 
     if (this.AdminInterface && meeting) {
-      this.attendanceService.getAttendance(undefined, meeting);
+      this.getAttendance(meeting);
     }
+  }
+
+  removeMeeting(meeting: Meeting): void | null {
+    this.meetingService.removeMeeting(meeting).then(() => { this.getMeetings(); this.getAttendance(); });
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {

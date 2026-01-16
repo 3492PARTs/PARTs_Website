@@ -38,12 +38,13 @@ export class MeetingService {
     });
   }
 
-  removeMeeting(meeting: Meeting): void | null {
-    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
-      meeting.void_ind = 'y';
-      this.saveMeeting(meeting);
+  removeMeeting(meeting: Meeting): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
+        meeting.void_ind = 'y';
+        this.saveMeeting(meeting).then((result) => resolve(result));
+      }, () => resolve(false));
     });
-
   }
 
   isDayToTakeAttendance(meeting: Meeting): boolean {

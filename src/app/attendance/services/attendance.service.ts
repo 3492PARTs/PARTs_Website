@@ -34,9 +34,10 @@ export class AttendanceService {
             resolve(false);
           });
       }
-      else
+      else {
         this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
-      resolve(false);
+        resolve(false);
+      }
     });
   }
 
@@ -67,23 +68,25 @@ export class AttendanceService {
     return attendance.time_out !== null || attendance.absent;
   }
 
-  attendMeeting(user: User, meeting: Meeting): void | null {
+  attendMeeting(user: User, meeting: Meeting): Promise<boolean | null> {
     const a = new Attendance();
     a.user = user;
     a.meeting = meeting;
-    this.saveAttendance(a);
+    return this.saveAttendance(a);
     //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
   }
 
-  leaveMeeting(attendance: Attendance[], meeting: Meeting): void | null {
+  leaveMeeting(attendance: Attendance[], meeting: Meeting): Promise<boolean | null> {
     const a = attendance.find(a => a.meeting?.id === meeting.id);
     if (a) {
       a.time_out = new Date();
-      this.saveAttendance(a);
+      return this.saveAttendance(a);
       //this.checkLocation(this.saveAttendance.bind(this, a));
     }
-    else
+    else {
       this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
+      return Promise.resolve(null);
+    }
   }
 
   markAbsent(user: User, meeting: Meeting): void | null {
