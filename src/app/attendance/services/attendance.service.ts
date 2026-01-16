@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService, Banner, GeneralService, ModalService, RetMessage } from '@app/core';
 import { Attendance, AttendanceReport, Meeting } from '../models/attendance.models';
+import { User } from '@app/auth/models/user.models';
 
 @Injectable({
   providedIn: 'root'
@@ -10,59 +11,44 @@ export class AttendanceService {
   constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) {
   }
 
-  saveAttendance(attendance: Attendance, meeting?: Meeting): void | null {
-    if (attendance.user) {
+  saveAttendance(attendance: Attendance): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (attendance.user) {
+        if (this.isAttendanceApproved(attendance) && !attendance.time_out && !attendance.absent && attendance.void_ind !== 'y') {
+          this.modalService.triggerError('Cannot approve if no time out.');
+          resolve(false);
+        }
 
-      if (meeting)
-        attendance.meeting = meeting;
+        if (attendance.time_out && attendance.time_out < attendance.time_out) {
+          this.modalService.triggerError('You cannot check out before checking in.');
+          resolve(false);
+        }
 
-      if (this.isAttendanceApproved(attendance) && !attendance.time_out && !attendance.absent && attendance.void_ind !== 'y') {
-        this.modalService.triggerError('Cannot approve if no time out.');
-        return null;
+        this.api.post(true, 'attendance/attendance/',
+          attendance,
+          (result: any) => {
+            this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+            resolve(true);
+          }, (err: any) => {
+            this.modalService.triggerError(err);
+            resolve(false);
+          });
       }
-
-      if (attendance.time_out && attendance.time_out < attendance.time_out) {
-        this.modalService.triggerError('You cannot check out before checking in.');
-        return null;
-      }
-
-      this.api.post(true, 'attendance/attendance/',
-        attendance,
-        (result: any) => {
-          this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-          this.getAttendance();
-          if (attendance.meeting) this.getAttendance(attendance.meeting);
-          this.attendanceModalVisible = false;
-        }, (err: any) => {
-          this.modalService.triggerError(err);
-        });
-    }
-    else
-      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
+      else
+        this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
+      resolve(false);
+    });
   }
 
-  getAttendance(meeting?: Meeting): void | null {
+  getAttendance(user?: User, meeting?: Meeting): Promise<Attendance[]> {
     let qp = {};
-    if (!this.AdminInterface)
-      if (this.user)
-        qp = { user_id: this.user.id }
-      else {
-        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
-        return null;
-      }
+    if (user)
+      qp = { user_id: user.id }
 
     if (meeting)
       qp = { meeting_id: meeting.id }
 
-    this.api.get(true, 'attendance/attendance/', qp, (result: Attendance[]) => {
-      if (meeting)
-        this.meetingAttendance = result;
-      else
-        this.attendance = result;
-      this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
-    });
-
-    if (!meeting) this.getAttendanceReport();
+    return this.api.get(true, 'attendance/attendance/', qp);
   }
 
   isAttendanceUnapproved(attendance: Attendance): boolean {
@@ -78,16 +64,19 @@ export class AttendanceService {
   }
 
   hasCheckedOut(attendance: Attendance): boolean {
-    return this.AdminInterface || attendance.time_out !== null || attendance.absent;
+    return attendance.time_out !== null || attendance.absent;
   }
 
-  attendMeeting(meeting: Meeting): void | null {
-    this.saveAttendance(undefined, meeting);
+  attendMeeting(user: User, meeting: Meeting): void | null {
+    const a = new Attendance();
+    a.user = user;
+    a.meeting = meeting;
+    this.saveAttendance(a);
     //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
   }
 
-  leaveMeeting(meeting: Meeting): void | null {
-    const a = this.attendance.find(a => a.meeting?.id === meeting.id);
+  leaveMeeting(attendance: Attendance[], meeting: Meeting): void | null {
+    const a = attendance.find(a => a.meeting?.id === meeting.id);
     if (a) {
       a.time_out = new Date();
       this.saveAttendance(a);
@@ -97,16 +86,12 @@ export class AttendanceService {
       this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
   }
 
-  markAbsent(meeting: Meeting): void | null {
+  markAbsent(user: User, meeting: Meeting): void | null {
     const a = new Attendance();
     a.absent = true;
     a.meeting = meeting;
-    if (this.user) {
-      a.user = this.user;
-      this.saveAttendance(a);
-    }
-    else
-      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
+    a.user = user;
+    this.saveAttendance(a);
   }
 
   approveAttendance(attendance: Attendance): void | null {
@@ -120,21 +105,14 @@ export class AttendanceService {
   }
 
   // ATTENDANCE REPORT -----------------------------------------------------------
-  getAttendanceReport(meeting?: Meeting): void | null {
+  getAttendanceReport(user?: User, meeting?: Meeting): Promise<AttendanceReport[] | null> {
     let qp = {};
-    if (!this.AdminInterface)
-      if (this.user)
-        qp = { user_id: this.user.id }
-      else {
-        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
-        return null;
-      }
+    if (user)
+      qp = { user_id: user.id }
 
     if (meeting)
       qp = { meeting_id: meeting.id }
 
-    this.api.get(true, 'attendance/attendance-report/', qp, (result: AttendanceReport[]) => {
-      this.attendanceReport = result;
-    });
+    return this.api.get(true, 'attendance/attendance-report/', qp);
   }
 }
