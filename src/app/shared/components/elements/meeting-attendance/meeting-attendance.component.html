@@ -119,6 +119,11 @@
                 [SelectComparatorFunction]="compareMeetingObjects"></app-form-element>
             }
 
+            @if (AdminInterface || !isAttendanceApproved(attendanceEntry)) {
+            <app-button-ribbon>
+                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
+            </app-button-ribbon>
+            }
 
             @if (attendanceEntry.meeting && !meetingModalVisible) {
             <app-form-element-group [LabelText]="'Meeting Information'">
@@ -137,11 +142,7 @@
             </app-form-element-group>
 
             }
-            @if (AdminInterface || !isAttendanceApproved(attendanceEntry)) {
-            <app-button-ribbon>
-                <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
-            </app-button-ribbon>
-            }
+
         </app-form>
     </app-modal>
 </app-box>
