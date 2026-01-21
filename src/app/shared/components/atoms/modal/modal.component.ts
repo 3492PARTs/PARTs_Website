@@ -96,7 +96,8 @@ export class ModalComponent implements OnInit {
   }
 
   clickOutsideClose() {
-    if (this.openTime && this.modalNumber == this.ms.getModalVisibleCount()) {
+    // causing issue on meetings where you open a meeting then attendance then close attendance and it closes both
+    /*if (this.openTime && this.modalNumber == this.ms.getModalVisibleCount()) {
       var delta = Date.now() - this.openTime; // milliseconds elapsed since start
 
       if (delta > 10 &&
@@ -104,7 +105,7 @@ export class ModalComponent implements OnInit {
         document.getElementsByClassName('owl-dialog-container').length <= 0) {
         window.setTimeout(() => this.close(), 10);
       }
-    }
+    }*/
   }
 
   setPageScrolling(): void {
