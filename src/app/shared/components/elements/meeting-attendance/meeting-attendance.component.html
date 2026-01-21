@@ -115,7 +115,8 @@
 
             @if (AdminInterface) {
             <app-form-element [LabelText]="'Meeting'" [Type]="'select'" [(Model)]="attendanceEntry.meeting"
-                [SelectList]="meetings" [DisplayProperty]="'title'"></app-form-element>
+                [SelectList]="meetings" [DisplayProperty]="'title'"
+                [SelectComparatorFunction]="compareMeetingObjects"></app-form-element>
             }
 
 

@@ -336,6 +336,10 @@ export class MeetingAttendanceComponent implements OnInit {
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
+  compareMeetingObjects(m1: Meeting, m2: Meeting): boolean {
+    return m1.id === m2.id;
+  }
+
   // ATTENDANCE REPORT -----------------------------------------------------------
   getAttendanceReport(meeting?: Meeting): void | null {
     let u: User | undefined = undefined;
