@@ -7,7 +7,6 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
-import { Banner } from '@app/core/models/api.models';
 import { Attendance, AttendanceApprovalType, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
@@ -21,6 +20,8 @@ import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
+import { AttendanceService } from '@app/attendance/services/attendance.service';
+import { MeetingService } from '@app/admin/services/meeting.service';
 @Component({
   selector: 'app-meeting-attendance',
   imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
@@ -32,6 +33,7 @@ export class MeetingAttendanceComponent implements OnInit {
   @Input() AdminInterface = false;
 
   private user: User | undefined = undefined;
+
   users: User[] = [];
 
   meetingFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Future', value: 'future' }, { property: 'Past', value: 'past' }];
@@ -76,27 +78,27 @@ export class MeetingAttendanceComponent implements OnInit {
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [];
-  attendanceTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
-    new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hasCheckedOut.bind(this), '', '', 'warning'),
-    new TableButtonType('check-decagram-outline', this.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
-    new TableButtonType('alert-decagram-outline', this.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
-  ];
+  attendanceTableButtons: TableButtonType[] = [];
   attendanceModalVisible = false;
   attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private locationService: LocationService, private userService: UserService, private modalService: ModalService) {
-
-  }
-
-  ngOnInit(): void {
-    this.today.setHours(0, 0, 0, 0);
-
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
     this.auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
       if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
     }
     );
+  }
+
+  ngOnInit(): void {
+    this.attendanceTableButtons = [
+      new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
+      new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
+      new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
+      new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
+    ];
+
+    this.today.setHours(0, 0, 0, 0);
 
     if (this.AdminInterface) {
       this.getAttendance();
@@ -116,62 +118,35 @@ export class MeetingAttendanceComponent implements OnInit {
   }
   // ATTENDANCE -----------------------------------------------------------
   saveAttendance(attendance?: Attendance, meeting?: Meeting): void | null {
-    if (this.user) {
-      const a = attendance ? attendance : new Attendance();
-
-      if (!a.user)
-        a.user = this.user;
-
-      if (meeting)
-        a.meeting = meeting;
-
-      if (this.isAttendanceApproved(a) && !a.time_out && !a.absent && a.void_ind !== 'y') {
-        this.modalService.triggerError('Cannot approve if no time out.');
-        return null;
-      }
-
-      if (a.time_out && a.time_out < a.time_out) {
-        this.modalService.triggerError('You cannot check out before checking in.');
-        return null;
-      }
-
-      this.api.post(true, 'attendance/attendance/',
-        a,
-        (result: any) => {
-          this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
-          this.getAttendance();
-          if (a.meeting) this.getAttendance(a.meeting);
-          this.attendanceModalVisible = false;
-        }, (err: any) => {
-          this.modalService.triggerError(err);
-        });
+    let a = new Attendance();
+    if (attendance) a = attendance;
+    else if (this.user) {
+      a.user = this.user;
     }
-    else
-      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
-  }
 
-  removeAttendance(attendance: Attendance): void | null {
-    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
-      attendance.void_ind = 'y';
-      this.saveAttendance(attendance);
-    });
+    if (meeting) a.meeting = meeting;
 
+    this.attendanceService.saveAttendance(a).then((success => {
+      if (success) {
+        this.attendanceModalVisible = false;
+        attendance = new Attendance();
+        this.getAttendance();
+        if (a.meeting) this.getAttendance(a.meeting);
+      }
+    }));
   }
 
   getAttendance(meeting?: Meeting): void | null {
-    let qp = {};
+    let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
-        qp = { user_id: this.user.id }
+        u = this.user;
       else {
         this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
-    if (meeting)
-      qp = { meeting_id: meeting.id }
-
-    this.api.get(true, 'attendance/attendance/', qp, (result: Attendance[]) => {
+    this.attendanceService.getAttendance(u, meeting).then((result: Attendance[]) => {
       if (meeting)
         this.meetingAttendance = result;
       else
@@ -182,16 +157,12 @@ export class MeetingAttendanceComponent implements OnInit {
     if (!meeting) this.getAttendanceReport();
   }
 
-  isAttendanceUnapproved(attendance: Attendance): boolean {
-    return attendance.approval_typ.approval_typ === 'unapp';
-  }
+  removeAttendance(attendance: Attendance): void | null {
+    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
+      attendance.void_ind = 'y';
+      this.saveAttendance(attendance);
+    });
 
-  isAttendanceApproved(attendance: Attendance): boolean {
-    return attendance.approval_typ.approval_typ === 'app';
-  }
-
-  isAttendanceRejected(attendance: Attendance): boolean {
-    return attendance.approval_typ.approval_typ === 'rej';
   }
 
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
@@ -216,58 +187,31 @@ export class MeetingAttendanceComponent implements OnInit {
     //this.checkLocation(this.saveAttendance.bind(this, attendance));
   }
 
-  hasCheckedOut(attendance: Attendance): boolean {
-    return this.AdminInterface || attendance.time_out !== null || attendance.absent;
-  }
-
   attendMeeting(meeting: Meeting): void | null {
-    this.saveAttendance(undefined, meeting);
-    //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
+    this.attendanceService.attendMeeting(this.user!, meeting).then(() => this.getAttendance());
   }
 
   leaveMeeting(meeting: Meeting): void | null {
-    const a = this.attendance.find(a => a.meeting?.id === meeting.id);
-    if (a) {
-      a.time_out = new Date();
-      this.saveAttendance(a);
-      //this.checkLocation(this.saveAttendance.bind(this, a));
-    }
-    else
-      this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
+    this.attendanceService.leaveMeeting(this.attendance, meeting).then(() => this.getAttendance());
   }
 
   markAbsent(meeting: Meeting): void | null {
     const a = new Attendance();
     a.absent = true;
     a.meeting = meeting;
-    if (this.user) {
-      a.user = this.user;
-      this.saveAttendance(a);
-    }
-    else
-      this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
+    this.saveAttendance(a);
   }
 
   hideAbsentButton(attendance: Attendance): boolean {
-    return attendance.absent || this.isAttendanceApproved(attendance) || attendance.meeting !== undefined;
-  }
-
-  approveAttendance(attendance: Attendance): void | null {
-    attendance.approval_typ.approval_typ = 'app';
-    this.saveAttendance(attendance);
-  }
-
-  rejectAttendance(attendance: Attendance): void | null {
-    attendance.approval_typ.approval_typ = 'rej';
-    this.saveAttendance(attendance);
+    return attendance.absent || this.attendanceService.isAttendanceApproved(attendance) || attendance.meeting !== undefined;
   }
 
   hideApproveRejectAttendance(attendance: Attendance): boolean {
-    return !this.AdminInterface || this.isAttendanceApproved(attendance) || this.isAttendanceRejected(attendance) || !attendance.time_out;
+    return !this.AdminInterface || this.attendanceService.isAttendanceApproved(attendance) || this.attendanceService.isAttendanceRejected(attendance) || !attendance.time_out;
   }
 
   attendanceStartOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && this.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting) {
+    if (this.AdminInterface && this.attendanceService.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
     }
 
@@ -275,8 +219,12 @@ export class MeetingAttendanceComponent implements OnInit {
 
   }
 
+  hideCheckOutButton(attendance: Attendance): boolean {
+    return this.AdminInterface || this.attendanceService.hasCheckedOut(attendance);
+  }
+
   attendanceEndOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && this.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
+    if (this.AdminInterface && this.attendanceService.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
     }
 
@@ -325,19 +273,21 @@ export class MeetingAttendanceComponent implements OnInit {
     this.meetingAttendanceTableCols = this.attendanceTableCols;
   }
 
+  isAttendanceApproved(attendance: Attendance): boolean {
+    return this.attendanceService.isAttendanceApproved(attendance);
+  }
+
   // MEETING -----------------------------------------------------------
   getMeetings(): void | null {
-    this.api.get(true, 'attendance/meetings/', undefined, (result: Meeting[]) => {
-      this.meetings = result;
+    this.meetingService.getMeetings().then((result) => {
+      if (result) this.meetings = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       this.getMeetingHours();
     });
   }
 
   endMeeting(meeting: Meeting): void | null {
-    this.modalService.triggerConfirm('Are you sure you want to end this meeting?', () => {
-      this.api.get(true, 'attendance/end-meeting/', { meeting_id: meeting.id }).then(() => this.getAttendance(meeting));
-    });
+    this.meetingService.endMeeting(meeting).then(() => this.getAttendance(meeting));
   }
 
   saveMeeting(meeting?: Meeting): void | null {
@@ -347,80 +297,69 @@ export class MeetingAttendanceComponent implements OnInit {
       return null;
     }
 
-    this.api.post(true, 'attendance/meetings/',
-      m,
-      (result: any) => {
-        this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+    this.meetingService.saveMeeting(m).then(success => {
+      if (success) {
         this.meetingModalVisible = false;
         this.meeting = new Meeting();
         this.getMeetings();
         this.getAttendance();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
-  }
-
-  removeMeeting(meeting: Meeting): void | null {
-    this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
-      meeting.void_ind = 'y';
-      this.saveMeeting(meeting);
+      }
     });
-
   }
 
   showMeetingModal(meeting?: Meeting): void {
     this.meeting = meeting ? cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
+    this.meetingAttendance = [];
 
     if (this.AdminInterface && meeting) {
       this.getAttendance(meeting);
     }
   }
 
+  removeMeeting(meeting: Meeting): void | null {
+    this.meetingService.removeMeeting(meeting).then(() => { this.getMeetings(); this.getAttendance(); });
+  }
+
   hasAttendedMeeting(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasLeftMeeting(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || !this.attendance.find(a => (a.meeting?.id === meeting.id)) || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
   }
 
   hasAttendance(meeting: Meeting): boolean {
-    if (!this.isDayToTakeAttendance(meeting)) return true;
+    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
-  isDayToTakeAttendance(meeting: Meeting): boolean {
-    const time = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
-    const start = new Date(new Date(meeting.start).setHours(0, 0, 0, 0)).getTime();
-    const end = new Date(new Date(meeting.end).setHours(0, 0, 0, 0)).getTime();
-    return start === time || end === time;
+  compareMeetingObjects(m1: Meeting, m2: Meeting): boolean {
+    return m1.id === m2.id;
   }
+
   // ATTENDANCE REPORT -----------------------------------------------------------
   getAttendanceReport(meeting?: Meeting): void | null {
-    let qp = {};
+    let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
-        qp = { user_id: this.user.id }
+        u = this.user;
       else {
         this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
         return null;
       }
 
-    if (meeting)
-      qp = { meeting_id: meeting.id }
-
-    this.api.get(true, 'attendance/attendance-report/', qp, (result: AttendanceReport[]) => {
-      this.attendanceReport = result;
+    this.attendanceService.getAttendanceReport(u, meeting).then((result: AttendanceReport[] | null) => {
+      if (result) this.attendanceReport = result;
     });
   }
 
   // MEETING HOURS -----------------------------------------------------------
   getMeetingHours(): void | null {
-    this.api.get(true, 'attendance/meeting-hours/', undefined, (result: MeetingHours) => {
-      this.totalMeetingHours = result;
+    this.meetingService.getMeetingHours().then((result: MeetingHours | null) => {
+      if (result) this.totalMeetingHours = result;
     });
   }
 

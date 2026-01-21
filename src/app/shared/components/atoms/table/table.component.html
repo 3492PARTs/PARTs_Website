@@ -117,7 +117,7 @@
             : true
             ) {
             <app-button [ButtonType]="btn.ButtonType" [SymbolSize]="SymbolSize"
-              (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title || ''" [Type]="btn.Type || ''"
+              (FunctionCallBack)="btn.RecordCallBack(rec)" [Title]="btn.Title || ''" [Type]="btn.Type || 'button'"
               [Color]="btn.Color" [BackgroundColor]="btn.BackgroundColor" [Class]="btn.Class">{{ btn.Text }}
             </app-button>
             }

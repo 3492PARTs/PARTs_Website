@@ -231,14 +231,14 @@
       <input type="radio" name="Radio{{ LabelID }}" id="{{LabelID}}radio{{ i }}" [value]="obj[BindingProperty]"
         [ngModel]="Model" (ngModelChange)="change($event)" [checked]="obj[BindingProperty] === Model"
         (focus)="focusIn()" (focusout)="focusOut()" [disabled]="Disabled" />
-      <label for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
+      <label class="radio-label" for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
         obj[DisplayProperty]
         }}</label>
       } @if (BindingProperty === '' && DisplayProperty === '') {
       <input type="radio" name="Radio{{ LabelID }}" id="{{LabelID}}radio{{ i }}" [value]="obj" [ngModel]="Model"
         (ngModelChange)="change($event)" [checked]="obj === Model" (focus)="focusIn()" (focusout)="focusOut()"
         [disabled]="Disabled" />
-      <label for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
+      <label class="radio-label" for="{{LabelID}}radio{{ i }}" (focus)="focusIn()" (focusout)="focusOut()">{{
         obj
         }}</label>
       }
