@@ -98,6 +98,9 @@
     <app-modal [(Visible)]="attendanceModalVisible" [Title]="'Attendance'">
         <app-form (SubmitFunction)="saveAttendance(attendanceEntry)">
             @if (AdminInterface) {
+            <app-form-element [LabelText]="'Meeting'" [Type]="'select'" [(Model)]="attendanceEntry.meeting"
+                [SelectList]="meetings" [DisplayProperty]="'title'" [SelectComparatorFunction]="compareMeetingObjects"
+                [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
             <app-form-element [LabelText]="'User'" [Type]="'select'" [(Model)]="attendanceEntry.user"
                 [Disabled]="isAttendanceApproved(attendanceEntry)" [SelectList]="users" [DisplayProperty]="'name'"
                 [SelectComparatorFunction]="compareUserObjects.bind(this)" [Required]="true"></app-form-element>
@@ -107,17 +110,17 @@
                 [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
                 [Disabled]="isAttendanceApproved(attendanceEntry)" [FormGroupInline]="true"></app-form-element>
+
+
+
+
+
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
                 [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
+
             <app-form-element [LabelText]="'Approval'" [Type]="'select'" [(Model)]="attendanceEntry.approval_typ"
                 [SelectList]="attendanceApprovalTypeOptions" [DisplayProperty]="'approval_nm'"
                 [Disabled]="!AdminInterface"></app-form-element>
-
-            @if (AdminInterface) {
-            <app-form-element [LabelText]="'Meeting'" [Type]="'select'" [(Model)]="attendanceEntry.meeting"
-                [SelectList]="meetings" [DisplayProperty]="'title'"
-                [SelectComparatorFunction]="compareMeetingObjects"></app-form-element>
-            }
 
             @if (AdminInterface || !isAttendanceApproved(attendanceEntry)) {
             <app-button-ribbon>
