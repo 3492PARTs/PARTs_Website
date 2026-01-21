@@ -310,6 +310,7 @@ export class MeetingAttendanceComponent implements OnInit {
   showMeetingModal(meeting?: Meeting): void {
     this.meeting = meeting ? cloneObject(meeting) : new Meeting();
     this.meetingModalVisible = true;
+    this.meetingAttendance = [];
 
     if (this.AdminInterface && meeting) {
       this.getAttendance(meeting);
