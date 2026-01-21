@@ -1,4 +1,4 @@
-@use "abstracts/variables";
+@use 'abstracts/variables';
 
 :host {
   max-width: 100%;
@@ -112,7 +112,9 @@
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.4rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   margin: 0.32rem 0.25rem;
   max-width: calc(100% - (2 * 0.32rem));
 
@@ -483,4 +485,8 @@ textarea.form-control {
   font-size: 3.5rem;
   cursor: pointer;
   color: variables.$gray;
+}
+
+.radio-label {
+  cursor: pointer;
 }
