@@ -22,9 +22,10 @@ import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe, CommonModule],
   templateUrl: './meeting-attendance.component.html',
   styleUrls: ['./meeting-attendance.component.scss']
 })
@@ -65,7 +66,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
-    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours Percentage', Type: 'percent' },
+    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours Percentage', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
     { PropertyName: 'event_time', ColLabel: 'Event Hours' },
     { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours Percentage', Type: 'percent' },
   ];
@@ -354,6 +355,19 @@ export class MeetingAttendanceComponent implements OnInit {
     this.attendanceService.getAttendanceReport(u, meeting).then((result: AttendanceReport[] | null) => {
       if (result) this.attendanceReport = result;
     });
+  }
+
+  attendanceReportBelowThresholdColor(value: number): string {
+
+    if (this.isNotAdminInterface()) {
+      return 'initial';
+    }
+    else if (value >= 80) {
+      return 'green';
+    }
+    else {
+      return 'red'
+    }
   }
 
   // MEETING HOURS -----------------------------------------------------------

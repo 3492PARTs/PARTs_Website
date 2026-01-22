@@ -24,33 +24,38 @@
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
 
-    <app-header [h]="2">Attendance</app-header>
-    @if (AdminInterface) {
-    <app-form-element-group [LabelText]="'Legend'">
-        <div id="legend" class="flex flex-wrap justify-content-space-between">
-            <div class="flex align-items-center">
-                <div class="box ten"></div>
-                <p>Early</p>
-            </div>
-            <div class="flex align-items-center">
-                <div class="box fifteen"></div>
-                <p> &#60; 5min late </p>
-            </div>
-            <div class="flex align-items-center">
-                <div class="box twenty"></div>
-                <p> &#60; 30min late </p>
-            </div>
-            <div class="flex align-items-center">
-                <div class="box thirty"></div>
-                <p> &#62; 30min late</p>
-            </div>
+    <ng-template #attendanceLegend>
+        <app-header [h]="2">Attendance</app-header>
+        <app-form-element-group [LabelText]="'Legend'">
+            <div id="legend" class="flex flex-wrap justify-content-space-between">
+                <div class="flex align-items-center">
+                    <div class="box ten"></div>
+                    <p>Early</p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box fifteen"></div>
+                    <p> &#60; 5min late </p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box twenty"></div>
+                    <p> &#60; 30min late </p>
+                </div>
+                <div class="flex align-items-center">
+                    <div class="box thirty"></div>
+                    <p> &#62; 30min late</p>
+                </div>
 
-            <div class="flex align-items-center">
-                <div class="box leftover"></div>
-                <p>No meeting</p>
+                <div class="flex align-items-center">
+                    <div class="box leftover"></div>
+                    <p>No meeting</p>
+                </div>
             </div>
-        </div>
-    </app-form-element-group>
+        </app-form-element-group>
+    </ng-template>
+
+    @if (AdminInterface) {
+    <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
+
 
     <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
         [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
@@ -84,8 +89,9 @@
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>
 
-            <app-table [TableTitle]="'Attendance'" [TableCols]="meetingAttendanceTableCols"
-                [TableData]="meetingAttendance" [ShowAddButton]="true"
+            <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
+
+            <app-table [TableCols]="meetingAttendanceTableCols" [TableData]="meetingAttendance" [ShowAddButton]="true"
                 (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
                 [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
                 [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
