@@ -23,7 +23,7 @@
     <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
-        (RecordClickCallBack)="showAttendanceReportModal($event)"></app-table>
+        (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"></app-table>
 
     <ng-template #attendanceLegend>
         <app-header [h]="2">Attendance</app-header>
