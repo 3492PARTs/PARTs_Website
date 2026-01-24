@@ -16,11 +16,15 @@
         [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
-    <p>Completed Meeting Hours: {{totalMeetingHours.hours || 0}}</p>
-    <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
-    <p>Bonus Meeting Hours Available:
-        {{totalMeetingHours.bonus_hours || 0}} (Does not affect event hours)</p>
-    <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
+
+    <div class="grid two-column-grid">
+        <p>Completed Meeting Hours: {{totalMeetingHours.hours || 0}}</p>
+        <p>Bonus Meeting Hours Available:
+            {{totalMeetingHours.bonus_hours || 0}}</p>
+        <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
+        <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
+    </div>
+
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
         (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"></app-table>
@@ -71,7 +75,7 @@
         [Stripes]="true"></app-table>
 
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
-        <div class="grid two-column-grid column-gap-1rem">
+        <div class="grid two-column-grid">
             <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
             <p>Completed Event Hours: {{attendanceReport.event_time}}</p>
             <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
