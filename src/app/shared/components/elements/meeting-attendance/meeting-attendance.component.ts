@@ -62,13 +62,20 @@ export class MeetingAttendanceComponent implements OnInit {
 
   ];
 
-  attendanceReport: AttendanceReport[] = [];
+  attendanceReport = new AttendanceReport();
+  attendanceReports: AttendanceReport[] = [];
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
     { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours Percentage', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
     { PropertyName: 'event_time', ColLabel: 'Event Hours' },
     { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours Percentage', Type: 'percent' },
+  ];
+
+  reportAttendanceModalVisible = false;
+  reportAttendance: Attendance[] = [];
+  reportAttendanceTableCols: TableColType[] = [
+
   ];
 
   totalMeetingHours = new MeetingHours();
@@ -133,11 +140,12 @@ export class MeetingAttendanceComponent implements OnInit {
         attendance = new Attendance();
         this.getAttendance();
         if (a.meeting) this.getAttendance(a.meeting);
+        this.getAttendance(undefined, a.user);
       }
     }));
   }
 
-  getAttendance(meeting?: Meeting): void | null {
+  getAttendance(meeting?: Meeting, user?: User): void | null {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
@@ -147,9 +155,13 @@ export class MeetingAttendanceComponent implements OnInit {
         return null;
       }
 
+    if (user) u = user;
+
     this.attendanceService.getAttendance(u, meeting).then((result: Attendance[]) => {
       if (meeting)
         this.meetingAttendance = result;
+      else if (user)
+        this.reportAttendance = result;
       else
         this.attendance = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
@@ -272,6 +284,7 @@ export class MeetingAttendanceComponent implements OnInit {
       { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
     ];
     this.meetingAttendanceTableCols = this.attendanceTableCols;
+    this.reportAttendanceTableCols = this.attendanceTableCols;
   }
 
   isAttendanceApproved(attendance: Attendance): boolean {
@@ -353,8 +366,18 @@ export class MeetingAttendanceComponent implements OnInit {
       }
 
     this.attendanceService.getAttendanceReport(u, meeting).then((result: AttendanceReport[] | null) => {
-      if (result) this.attendanceReport = result;
+      if (result) this.attendanceReports = result;
     });
+  }
+
+  showAttendanceReportModal(report: AttendanceReport): void | null {
+    if (this.AdminInterface) {
+      this.attendanceReport = report;
+      this.reportAttendanceModalVisible = true;
+      this.attendanceService.getAttendance(report.user).then((result: Attendance[]) => {
+        this.reportAttendance = result;
+      });
+    }
   }
 
   attendanceReportBelowThresholdColor(value: number): string {

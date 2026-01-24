@@ -21,8 +21,9 @@
     <p>Bonus Meeting Hours Available:
         {{totalMeetingHours.bonus_hours || 0}} (Does not affect event hours)</p>
     <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
-    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReport" [Width]="'100%'"
-        [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
+    <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
+        [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
+        (RecordClickCallBack)="showAttendanceReportModal($event)"></app-table>
 
     <ng-template #attendanceLegend>
         <app-header [h]="2">Attendance</app-header>
@@ -68,6 +69,25 @@
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
         [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
         [Stripes]="true"></app-table>
+
+    <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
+        <div class="grid two-column-grid column-gap-1rem">
+            <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
+            <p>Completed Event Hours: {{attendanceReport.event_time}}</p>
+            <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
+            <p>Event Hours Percentage: {{attendanceReport.event_time_percentage}}%</p>
+        </div>
+
+
+        <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
+
+        <app-table [TableCols]="reportAttendanceTableCols" [TableData]="reportAttendance" [ShowAddButton]="true"
+            (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
+            [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
+            [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
+            (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
+            [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
+    </app-modal>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
         <app-form (SubmitFunction)="saveMeeting()">
@@ -154,4 +174,5 @@
 
         </app-form>
     </app-modal>
+
 </app-box>
