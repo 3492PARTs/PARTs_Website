@@ -1,6 +1,8 @@
 <app-box>
     <app-header [h]="2">Meetings</app-header>
 
+    <div class="padding-top-1rem"></div>
+
     <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="meetingFilterOptions"
         [(Model)]="meetingFilterOption" [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
 
@@ -27,7 +29,8 @@
 
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
-        (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"></app-table>
+        (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"
+        [OrderByProperty]="'reg_time_percentage'" [OrderByReverse]="true"></app-table>
 
     <ng-template #attendanceLegend>
         <app-header [h]="2">Attendance</app-header>
@@ -61,6 +64,7 @@
     @if (AdminInterface) {
     <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
 
+    <div class="padding-top-1rem"></div>
 
     <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
         [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
@@ -72,7 +76,7 @@
         [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
         [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
-        [Stripes]="true"></app-table>
+        [Stripes]="true" [EnableFilter]="isAdminInterface()"></app-table>
 
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
         <div class="grid two-column-grid">

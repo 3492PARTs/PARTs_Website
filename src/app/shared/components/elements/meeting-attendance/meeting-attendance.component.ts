@@ -67,9 +67,9 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceReportTableCols: TableColType[] = [
     { PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
-    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours Percentage', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
+    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours %', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
     { PropertyName: 'event_time', ColLabel: 'Event Hours' },
-    { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours Percentage', Type: 'percent' },
+    { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
   ];
 
   reportAttendanceModalVisible = false;
