@@ -79,11 +79,11 @@
       @for (
       rec of TableData
       | ObjectWildCardFilterPipe : FilterText
-      | OrderBy : OrderByProperty : OrderByReverse
       | RemovedFilterPipe
       : EnableRemovedFilter
       : RemovedFilterProperty
-      : RemovedFilterPropertyValue; track
+      : RemovedFilterPropertyValue
+      | OrderBy : OrderByProperty : OrderByReverse; track
       $index; let i = $index) {
       <tr [ngClass]="{
           ActiveRow: rec == ActiveRec,
