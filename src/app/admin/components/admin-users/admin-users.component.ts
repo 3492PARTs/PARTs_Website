@@ -14,6 +14,7 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { HeaderComponent } from "../../../shared/components/atoms/header/header.component";
 
 import { cloneObject } from '@app/core/utils/utils.functions';
+import { ModalService } from '@app/core';
 @Component({
   selector: 'app-admin-users',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonRibbonComponent, ButtonComponent, HeaderComponent],
@@ -49,7 +50,7 @@ export class AdminUsersComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'Name' }
   ];
 
-  constructor(private us: UserService, private authService: AuthService, private gs: GeneralService) {
+  constructor(private us: UserService, private authService: AuthService, private gs: GeneralService, private modalService: ModalService) {
   }
 
   ngOnInit(): void {
@@ -123,7 +124,7 @@ export class AdminUsersComponent implements OnInit {
   }
 
   simulateUser(user: User): void {
-    this.authService.simulateUser(user);
+    this.modalService.triggerConfirm(`Are you sure you want to simulate the user "${user.name}"? You will be logged out of your current session.`, () => this.authService.simulateUser(user));
   }
 
   navigateToUserProfile(user: User): void {
