@@ -2,6 +2,10 @@
 @use '../../scss/abstracts/mixins';
 @use 'sass:color';
 
+// penetrate into inner Html
+:host ::ng-deep a {
+  color: white;
+}
 //f* {
 //-webkit-touch-callout: none;
 //-webkit-user-select: none;
