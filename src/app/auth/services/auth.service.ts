@@ -17,7 +17,7 @@ import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { devConsoleLog, strNoE, formatDateString } from '@app/core/utils/utils.functions';
+import { devConsoleLog, strNoE, formatTimeString } from '@app/core/utils/utils.functions';
 import { MeetingService } from '@app/admin/services/meeting.service';
 
 @Injectable({
@@ -391,7 +391,7 @@ export class AuthService {
             case 'Attendance':
               this.meetingService.getActiveMeeting().then((result) => {
                 if (result) {
-                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatDateString(result.start)} to ${formatDateString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
+                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
                 }
               });
               break;

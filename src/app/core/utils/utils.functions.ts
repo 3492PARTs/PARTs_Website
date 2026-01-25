@@ -76,6 +76,14 @@ export function formatDateString(s: string | Date): string {
 }
 
 /**
+ * Format a date string to HH:MM AM/PM format
+ */
+export function formatTimeString(s: string | Date): string {
+  let string = formatDateString(s);
+  return string.split(' ')[1] + ' ' + string.split(' ')[2];
+}
+
+/**
  * Get a property value from an array of objects by matching another property
  */
 export function propertyMap(arr: any[], queryProperty: string, queryValue: any, findProperty: string): any {
