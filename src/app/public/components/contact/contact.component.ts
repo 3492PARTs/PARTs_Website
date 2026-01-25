@@ -65,7 +65,7 @@ export class ContactComponent implements OnInit {
     this.api.post(true, 'form/save-answers/',
       { question_answers: this.questions.map(q => new Answer(q.answer, q)), form_typ: 'team-cntct' },
       (result: any) => {
-        this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+        this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
         scrollTo(0);
         this.contactInit();
       }, (err: any) => {

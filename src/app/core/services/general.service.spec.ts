@@ -68,10 +68,10 @@ describe('GeneralService', () => {
       service.currentOutstandingCalls.subscribe(count => {
         lastValue = count;
       });
-      
+
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(1);
-      
+
       service.decrementOutstandingCalls();
       expect(lastValue).toBe(0);
     });
@@ -89,7 +89,7 @@ describe('GeneralService', () => {
       service.currentOutstandingCalls.subscribe(count => {
         lastValue = count;
       });
-      
+
       service.incrementOutstandingCalls();
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(2);
@@ -103,13 +103,13 @@ describe('GeneralService', () => {
 
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(1);
-      
+
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(2);
-      
+
       service.decrementOutstandingCalls();
       expect(lastValue).toBe(1);
-      
+
       service.decrementOutstandingCalls();
       expect(lastValue).toBe(0);
     });
@@ -143,10 +143,10 @@ describe('GeneralService', () => {
 
       service.changeScrollPosition(50);
       expect(lastValue).toBe(50);
-      
+
       service.changeScrollPosition(150);
       expect(lastValue).toBe(150);
-      
+
       service.changeScrollPosition(0);
       expect(lastValue).toBe(0);
     });
@@ -177,10 +177,10 @@ describe('GeneralService', () => {
     it('should add multiple banners', () => {
       const banner1 = new Banner(1, 'Message 1', 3000);
       const banner2 = new Banner(2, 'Message 2', 3000);
-      
+
       service.addBanner(banner1);
       service.addBanner(banner2);
-      
+
       const banners = service.getBanners();
       expect(banners.length).toBe(2);
     });
@@ -188,7 +188,7 @@ describe('GeneralService', () => {
     it('should get banners', () => {
       const banner = new Banner(1, 'Test', 3000);
       service.addBanner(banner);
-      
+
       const banners = service.getBanners();
       expect(banners.length).toBe(1);
       expect(banners[0].message).toBe('Test');
@@ -197,9 +197,9 @@ describe('GeneralService', () => {
     it('should remove a banner', () => {
       const banner = new Banner(1, 'Test', 3000);
       service.addBanner(banner);
-      
+
       service.removeBanner(banner);
-      
+
       const banners = service.getBanners();
       expect(banners.length).toBe(0);
     });
@@ -207,12 +207,12 @@ describe('GeneralService', () => {
     it('should only remove matching banner', () => {
       const banner1 = new Banner(1, 'Message 1', 3000);
       const banner2 = new Banner(2, 'Message 2', 4000);
-      
+
       service.addBanner(banner1);
       service.addBanner(banner2);
-      
+
       service.removeBanner(banner1);
-      
+
       const banners = service.getBanners();
       expect(banners.length).toBe(1);
       expect(banners[0].message).toBe('Message 2');
@@ -221,10 +221,10 @@ describe('GeneralService', () => {
     it('should handle removing non-existent banner', () => {
       const banner1 = new Banner(1, 'Message 1', 3000);
       const banner2 = new Banner(2, 'Message 2', 3000);
-      
+
       service.addBanner(banner1);
       service.removeBanner(banner2);
-      
+
       const banners = service.getBanners();
       expect(banners.length).toBe(1);
     });
@@ -241,7 +241,7 @@ describe('GeneralService', () => {
     it('should add site banner with id 0', async () => {
       const banner = new Banner(0, 'Site message', 3000);
       await service.addSiteBanner(banner);
-      
+
       service.siteBanners.subscribe(banners => {
         expect(banners.length).toBe(1);
       });
@@ -250,9 +250,9 @@ describe('GeneralService', () => {
     it('should add site banner that has not been dismissed', async () => {
       mockCacheService.Banner.getById.and.returnValue(Promise.resolve(undefined));
       const banner = new Banner(1, 'Site message', 3000);
-      
+
       await service.addSiteBanner(banner);
-      
+
       service.siteBanners.subscribe(banners => {
         expect(banners.length).toBeGreaterThan(0);
       });
@@ -261,9 +261,9 @@ describe('GeneralService', () => {
     it('should remove site banner', () => {
       const banner = new Banner(0, 'Test', 3000);
       service['siteBannersBS'].next([banner]);
-      
+
       service.removeSiteBanner(banner);
-      
+
       service.siteBanners.subscribe(banners => {
         expect(banners.length).toBe(0);
       });
@@ -272,9 +272,9 @@ describe('GeneralService', () => {
     it('should mark banner as dismissed when removing', () => {
       const banner = new Banner(1, 'Test', 3000);
       service['siteBannersBS'].next([banner]);
-      
+
       service.removeSiteBanner(banner);
-      
+
       expect(mockCacheService.Banner.AddOrEditAsync).toHaveBeenCalled();
     });
   });
@@ -284,24 +284,24 @@ describe('GeneralService', () => {
       const cachedBanner = new Banner(1, 'Test', 3000);
       cachedBanner.dismissed = true;
       mockCacheService.Banner.getById.and.returnValue(Promise.resolve(cachedBanner));
-      
-      const result = await service.bannerHasBeenDismissed(cachedBanner);
+
+      const result = await service.siteBannerHasBeenDismissed(cachedBanner);
       expect(result).toBe(true);
     });
 
     it('should return false if banner not in cache', async () => {
       mockCacheService.Banner.getById.and.returnValue(Promise.resolve(undefined));
       const banner = new Banner(1, 'Test', 3000);
-      
-      const result = await service.bannerHasBeenDismissed(banner);
+
+      const result = await service.siteBannerHasBeenDismissed(banner);
       expect(result).toBe(false);
     });
 
     it('should get banner from cache', async () => {
       const cachedBanner = new Banner(1, 'Test', 3000);
       mockCacheService.Banner.getById.and.returnValue(Promise.resolve(cachedBanner));
-      
-      const result = await service.getBanner(1);
+
+      const result = await service.getSiteBanner(1);
       expect(result).toBe(cachedBanner);
     });
   });
@@ -311,7 +311,7 @@ describe('GeneralService', () => {
       const id1 = service.getNextGsId();
       const id2 = service.getNextGsId();
       const id3 = service.getNextGsId();
-      
+
       expect(id1).toBe('gsID0');
       expect(id2).toBe('gsID1');
       expect(id3).toBe('gsID2');
@@ -361,7 +361,7 @@ describe('GeneralService', () => {
       service.navigateByUrl('/page1');
       service.navigateByUrl('/page2');
       service.navigateByUrl('/page3');
-      
+
       expect(mockRouter.navigateByUrl).toHaveBeenCalledTimes(3);
     });
   });
@@ -370,23 +370,23 @@ describe('GeneralService', () => {
     it('should increment outstanding calls', () => {
       const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
       let callCount = 0;
-      
+
       service.currentOutstandingCalls.subscribe(count => {
         if (callCount === 1) {
           expect(count).toBe(1);
         }
         callCount++;
       });
-      
-      service.previewImageFile(mockFile, () => {});
+
+      service.previewImageFile(mockFile, () => { });
     });
 
     it('should not process non-image files', () => {
       const mockFile = new File([''], 'test.txt', { type: 'text/plain' });
       spyOn(service, 'incrementOutstandingCalls');
-      
-      service.previewImageFile(mockFile, () => {});
-      
+
+      service.previewImageFile(mockFile, () => { });
+
       // Should still increment for non-image
       expect(service.incrementOutstandingCalls).toHaveBeenCalled();
     });
@@ -397,16 +397,16 @@ describe('GeneralService', () => {
       const banner1 = new Banner(1, 'Message 1', 3000);
       const banner2 = new Banner(2, 'Message 2', 3000);
       const banner3 = new Banner(3, 'Message 3', 3000);
-      
+
       service.addBanner(banner1);
       service.addBanner(banner2);
       service.addBanner(banner3);
-      
+
       expect(service.getBanners().length).toBe(3);
-      
+
       service.removeBanner(banner2);
       expect(service.getBanners().length).toBe(2);
-      
+
       service.removeBanner(banner1);
       service.removeBanner(banner3);
       expect(service.getBanners().length).toBe(0);
@@ -422,13 +422,13 @@ describe('GeneralService', () => {
       service.incrementOutstandingCalls();
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(3);
-      
+
       service.decrementOutstandingCalls();
       expect(lastValue).toBe(2);
-      
+
       service.incrementOutstandingCalls();
       expect(lastValue).toBe(3);
-      
+
       service.decrementOutstandingCalls();
       service.decrementOutstandingCalls();
       service.decrementOutstandingCalls();

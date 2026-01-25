@@ -4,7 +4,7 @@ import { DBStores, LoadedStores } from '../models/idb.store.model';
 import { ITableSchema, IDexieTableSchema } from '../models/dexie.models';
 import { ILink } from '../models/navigation.models';
 import { IQuestion } from '../models/form.models';
-import { Banner } from '../models/api.models';
+import { SiteBanner } from '../models/api.models';
 import { IAuthPermission, User } from '@app/auth/models/user.models';
 import { ISeason, IEvent, ITeam, ITeamNote, IMatch, IMatchStrategy, IAllianceSelection, IFieldFormForm, IScoutFieldSchedule, IScoutFieldFormResponse, IScheduleType, ISchedule, IScoutPitFormResponse, IScoutPitResponse } from '@app/scouting/models/scouting.models';
 
@@ -44,9 +44,9 @@ export class DatabaseService extends Dexie {
 
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
-  BannerTable!: Dexie.Table<Banner, number>;
+  SiteBannerTable!: Dexie.Table<SiteBanner, number>;
 
-  versionNumber: number = 4;
+  versionNumber: number = 5;
 
   private dbName: string = 'index-db-parts-app';
   constructor() {
@@ -100,7 +100,7 @@ export class DatabaseService extends Dexie {
 
     this.LoadedStoresTable = this.table(DBStores.LoadedStores.TableName);
 
-    this.BannerTable = this.table(DBStores.Banner.TableName);
+    this.SiteBannerTable = this.table(DBStores.SiteBanner.TableName);
   }
 
   private setTablesSchema() {

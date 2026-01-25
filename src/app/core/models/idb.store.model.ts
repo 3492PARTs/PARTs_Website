@@ -1,6 +1,6 @@
 import { User, AuthPermission } from "@app/auth/models/user.models";
 import { Season, Event, Team, TeamNote, Match, MatchStrategy, AllianceSelection, FieldFormForm, ScoutFieldSchedule, ScoutPitResponse, ScheduleType, Schedule } from "@app/scouting/models/scouting.models";
-import { Banner } from "./api.models";
+import { SiteBanner } from "./api.models";
 import { Question } from "./form.models";
 import { Link } from "./navigation.models";
 
@@ -39,7 +39,7 @@ const scheduleInstance = new Schedule();
 
 const loadedStoresInstance = new LoadedStores();
 
-const bannerInstance = new Banner();
+const siteBannerInstance = new SiteBanner();
 
 export const DBStores = {
     User: {
@@ -134,8 +134,8 @@ export const DBStores = {
         TableName: 'LoadedStores',
         Columns: generateColumns(loadedStoresInstance),
     },
-    Banner: {
-        TableName: 'Banner',
-        Columns: generateColumns(bannerInstance),
+    SiteBanner: {
+        TableName: 'SiteBanner',
+        Columns: generateColumns(siteBannerInstance),
     },
 };

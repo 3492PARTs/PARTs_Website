@@ -27,7 +27,7 @@ export class AttendanceService {
         this.api.post(true, 'attendance/attendance/',
           attendance,
           (result: any) => {
-            this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
             resolve(true);
           }, (err: any) => {
             this.modalService.triggerError(err);

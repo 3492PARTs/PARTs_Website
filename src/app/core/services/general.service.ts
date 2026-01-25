@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
-import { Banner } from '../models/api.models';
+import { Banner, SiteBanner } from '../models/api.models';
 import { CacheService } from './cache.service';
 import { AppSize, cloneObject, getScreenSize } from '@app/core/utils/utils.functions';
 @Injectable({
@@ -23,7 +23,7 @@ export class GeneralService {
   private bannersBS = new BehaviorSubject<Banner[]>([]);
   banners = this.bannersBS.asObservable();
 
-  private siteBannersBS = new BehaviorSubject<Banner[]>([]);
+  private siteBannersBS = new BehaviorSubject<SiteBanner[]>([]);
   siteBanners = this.siteBannersBS.asObservable();
 
   private gsId = 0;
@@ -59,32 +59,31 @@ export class GeneralService {
   }
 
   removeBanner(b: Banner): void {
-    let banners = cloneObject(this.bannersBS.value);
+    let banners: Banner[] = cloneObject(this.bannersBS.value);
     let index = -1;
     for (let i = 0; i < banners.length; i++) {
-      if (banners[i].id === b.id && banners[i].message === b.message && banners[i].time === b.time) {
+      if (banners[i].message === b.message && banners[i].time === b.time) {
         index = i;
         break;
       }
     }
 
     if (index !== -1) {
-      if (banners[index].timeout)
-        window.clearTimeout(banners[index].timeout);
+      window.clearTimeout(banners[index].timeout);
       banners.splice(index, 1);
       this.bannersBS.next(banners);
     }
   }
 
-  async addSiteBanner(b: Banner) {
-    if (b.id === 0 || (b.id !== 0 && ! await this.bannerHasBeenDismissed(b)))
+  async addSiteBanner(b: SiteBanner) {
+    if (b.id === DefinedSiteBanners.API_OFFLINE || (b.id !== DefinedSiteBanners.API_OFFLINE && ! await this.siteBannerHasBeenDismissed(b)))
       this.siteBannersBS.next(this.siteBannersBS.value.concat([b]));
   }
 
-  removeSiteBanner(b: Banner): void {
-    if (b.id !== 0) {
+  removeSiteBanner(b: SiteBanner): void {
+    if (b.id !== DefinedSiteBanners.API_OFFLINE) {
       b.dismissed = true;
-      this.cs.Banner.AddOrEditAsync(b);
+      this.cs.SiteBanner.AddOrEditAsync(b);
     }
 
     let banners = this.siteBannersBS.value;
@@ -103,18 +102,23 @@ export class GeneralService {
     }
   }
 
-  async bannerHasBeenDismissed(b: Banner): Promise<boolean> {
-    let cb = await this.getBanner(b.id);
+  async siteBannerHasBeenDismissed(b: SiteBanner): Promise<boolean> {
+    let cb = await this.getSiteBanner(b.id);
+
+
 
     if (cb && cb.id > 0) return cb.dismissed;
     else {
-      this.cs.Banner.AddOrEditAsync(b);
+      await this.cs.SiteBanner.AddOrEditAsync(b);
+      const b2 = await this.cs.SiteBanner.getAll();
+      console.log('Banners in cache:', b2);
+
       return false;
     }
   }
 
-  async getBanner(id: number): Promise<Banner | undefined> {
-    return await this.cs.Banner.getById(id)
+  async getSiteBanner(id: number): Promise<SiteBanner | undefined> {
+    return await this.cs.SiteBanner.getById(id)
   }
 
   getNextGsId(): string {
@@ -165,4 +169,12 @@ export class RetMessage {
   retMessage!: string;
   error!: boolean;
   errorMessage!: string;
+}
+
+export enum DefinedSiteBanners {
+  // These are site banners that are defined in code to prevent duplicates
+  API_OFFLINE = 0,
+  SUMMER_PROGRAMMING = 1,
+  TEAM_APPLICATIONS = 2,
+  ACTIVE_MEETING = 3,
 }

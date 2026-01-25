@@ -108,7 +108,7 @@ export class QuestionAdminFormComponent implements OnInit {
     this.activeQuestion.form_typ.form_typ = this.formType;
 
     if (this.activeQuestion.question_typ.is_list === 'y' && this.activeQuestion.questionoption_set.filter(qo => qo.active === 'y').length <= 0) {
-      this.gs.addBanner(new Banner(0, `Must have one active option for list element.\n`, 3500));
+      this.gs.addBanner(new Banner(`Must have one active option for list element.\n`, 3500));
       return;
     }
 

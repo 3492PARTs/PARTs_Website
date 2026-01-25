@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, Afte
 import { Router, NavigationEnd, Event as NavigationEvent, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
-import { Banner } from '@app/core/models/api.models';
+import { Banner, SiteBanner } from '@app/core/models/api.models';
 import { Link, SubLink } from '@app/core/models/navigation.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
@@ -71,7 +71,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   siteHeaderHeight = 7;
   siteBannerHeight = '0px';
-  siteBanners: Banner[] = [];
+  siteBanners: SiteBanner[] = [];
 
   removeHeader = false;
 
@@ -547,7 +547,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     openURL(url);
   }
 
-  dismissSiteBanner(b: Banner): void {
+  dismissSiteBanner(b: SiteBanner): void {
     this.gs.removeSiteBanner(b);
   }
 }

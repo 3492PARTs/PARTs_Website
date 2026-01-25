@@ -29,7 +29,7 @@ export class MeetingService {
       this.api.post(true, 'attendance/meetings/',
         meeting,
         (result: any) => {
-          this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+          this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
           resolve(true);
         }, (err: any) => {
           this.modalService.triggerError(err);
@@ -51,7 +51,7 @@ export class MeetingService {
     const time = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
     const start = new Date(new Date(meeting.start).setHours(0, 0, 0, 0)).getTime();
     const end = new Date(new Date(meeting.end).setHours(0, 0, 0, 0)).getTime();
-    return start === time || end === time;
+    return time >= start && time <= end;
   }
 
   getActiveMeeting(meetings?: Meeting[]): Promise<Meeting | null> {

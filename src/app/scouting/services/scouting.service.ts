@@ -239,7 +239,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading all scouting info from cache.'));
+            this.gs.addBanner(new Banner('Error loading all scouting info from cache.'));
             resolve(null);
           }
           else
@@ -282,7 +282,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading seasons from cache.'));
+            this.gs.addBanner(new Banner('Error loading seasons from cache.'));
             resolve(null);
           }
           else
@@ -370,7 +370,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading events from cache.'));
+            this.gs.addBanner(new Banner('Error loading events from cache.'));
             resolve(null);
           }
           else
@@ -487,7 +487,7 @@ export class ScoutingService {
         });
 
         if (!allLoaded) {
-          this.gs.addBanner(new Banner(0, 'Error loading teams from cache.'));
+          this.gs.addBanner(new Banner('Error loading teams from cache.'));
           resolve(null);
         }
         else
@@ -546,7 +546,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading matches from cache.'));
+            this.gs.addBanner(new Banner('Error loading matches from cache.'));
             resolve(null);
           }
           else
@@ -605,7 +605,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading field scouting form from cache.'));
+            this.gs.addBanner(new Banner('Error loading field scouting form from cache.'));
             resolve(null);
           }
           else
@@ -639,7 +639,7 @@ export class ScoutingService {
         this.startUploadOutstandingResponsesTimeout();
         //sfr.id = 1;
         if (!id) this.cs.ScoutFieldFormResponse.AddAsync(sfr).then(() => {
-          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
@@ -706,7 +706,7 @@ export class ScoutingService {
         await this.getFieldResponseFromCache(frrs => frrs.orderBy('time').reverse()).then(frrs => {
           result.scoutAnswers = frrs;
         }).catch(reason => {
-          this.gs.addBanner(new Banner(0, 'Error loading field scouting responses from cache.'));
+          this.gs.addBanner(new Banner('Error loading field scouting responses from cache.'));
           console.log(reason);
         });
 
@@ -744,7 +744,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading field scouting response columns from cache.'));
+            this.gs.addBanner(new Banner('Error loading field scouting response columns from cache.'));
             resolve(null);
           }
           else
@@ -830,7 +830,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading pit scouting form from cache.'));
+            this.gs.addBanner(new Banner('Error loading pit scouting form from cache.'));
             resolve(null);
           }
           else
@@ -905,7 +905,7 @@ export class ScoutingService {
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
         if (!id) this.cs.ScoutPitFormResponse.AddAsync(spr).then(() => {
-          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
 
           resolve(true);
         }).catch((reason: any) => {
@@ -941,7 +941,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading pit scouting responses from cache.'));
+            this.gs.addBanner(new Banner('Error loading pit scouting responses from cache.'));
             resolve(null);
           }
           else
@@ -998,7 +998,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading field schedules from cache.'));
+            this.gs.addBanner(new Banner('Error loading field schedules from cache.'));
             resolve(null);
           }
           else
@@ -1060,7 +1060,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading schedules from cache.'));
+            this.gs.addBanner(new Banner('Error loading schedules from cache.'));
             resolve(null);
           }
           else
@@ -1116,7 +1116,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading schedule types from cache.'));
+            this.gs.addBanner(new Banner('Error loading schedule types from cache.'));
             resolve(null);
           }
           else
@@ -1169,7 +1169,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading team notes form from cache.'));
+            this.gs.addBanner(new Banner('Error loading team notes form from cache.'));
             resolve(null);
           }
           else
@@ -1202,7 +1202,7 @@ export class ScoutingService {
         this.startUploadOutstandingResponsesTimeout();
 
         if (!id) this.cs.TeamNoteResponse.AddAsync(teamNote).then(() => {
-          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
@@ -1265,7 +1265,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading match strategies form from cache.'));
+            this.gs.addBanner(new Banner('Error loading match strategies form from cache.'));
             resolve(null);
           }
           else
@@ -1308,7 +1308,7 @@ export class ScoutingService {
         this.startUploadOutstandingResponsesTimeout();
 
         if (!id) this.cs.MatchStrategyResponse.AddAsync(matchStrategy).then(() => {
-          this.gs.addBanner(new Banner(0, 'Failed to save, will try again later.', 3500));
+          this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
           resolve(true);
         }).catch((reason: any) => {
           console.log(reason);
@@ -1371,7 +1371,7 @@ export class ScoutingService {
           });
 
           if (!allLoaded) {
-            this.gs.addBanner(new Banner(0, 'Error loading alliance selections form from cache.'));
+            this.gs.addBanner(new Banner('Error loading alliance selections form from cache.'));
             resolve(null);
           }
           else
