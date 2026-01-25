@@ -13,7 +13,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { HeaderComponent } from "../../../shared/components/atoms/header/header.component";
 
-import { cloneObject } from '@app/core/utils/utils.functions';
+import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 import { ModalService } from '@app/core';
 @Component({
   selector: 'app-admin-users',
@@ -31,7 +31,7 @@ export class AdminUsersComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'User' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'discord_user_id', ColLabel: 'Discord' },
+    { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'function', ColValueFunction: this.hasDiscordId.bind(this) },
     { PropertyName: 'phone', ColLabel: 'Phone' },
     { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
   ];
@@ -129,5 +129,9 @@ export class AdminUsersComponent implements OnInit {
 
   navigateToUserProfile(user: User): void {
     this.gs.navigateByUrl(`/user/profile/${user.id}`);
+  }
+
+  hasDiscordId(s?: string): string {
+    return !strNoE(s) ? 'Yes' : 'No';
   }
 }
