@@ -48,10 +48,11 @@ export class AppComponent implements OnInit {
         if (date < new Date('07/14/2024')) {
           this.gs.addSiteBanner(new Banner(DefinedSiteBanners.SUMMER_PROGRAMMING, "<a style=\"color: white\" href=\"join/programming\">Sign up for our summer programming class.</a>"));
         }
-    */
+    
     if (date < new Date('08/01/2024')) {
       this.gs.addSiteBanner(new SiteBanner(DefinedSiteBanners.TEAM_APPLICATIONS, "<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
     }
+    */
   }
 
   getTitle(state: RouterState, parent: ActivatedRoute): string[] {
