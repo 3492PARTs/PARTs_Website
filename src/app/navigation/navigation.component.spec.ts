@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { NavigationComponent } from './navigation.component';
 import { SwPush, SwUpdate } from '@angular/service-worker';
-import { createMockSwPush, createMockSwUpdate } from '../../../../test-helpers';
+import { createMockSwPush, createMockSwUpdate } from '../../test-helpers';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -14,7 +14,7 @@ describe('NavigationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ NavigationComponent ],
+      imports: [NavigationComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
