@@ -30,7 +30,7 @@ export class Banner implements IBanner {
 }
 
 export interface ISiteBanner {
-    id: number;
+    id: string;
     message: string; //
     time: number; // time in ms to show banner, 0 means until dismissed
     timeout: number | null | undefined;
@@ -38,13 +38,13 @@ export interface ISiteBanner {
 }
 
 export class SiteBanner implements ISiteBanner {
-    id = 0;
+    id = '';
     message!: string; //
     time = -1; // time in ms to show banner, 0 means until dismissed
     timeout: number | null | undefined;
     dismissed = false;
 
-    constructor(id = 0, message = '', time = -1) {
+    constructor(id = '', message = '', time = -1) {
         this.id = id;
         this.message = message;
         this.time = time;

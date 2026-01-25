@@ -44,7 +44,7 @@ export class DatabaseService extends Dexie {
 
   LoadedStoresTable!: Dexie.Table<LoadedStores, number>;
 
-  SiteBannerTable!: Dexie.Table<SiteBanner, number>;
+  SiteBannerTable!: Dexie.Table<SiteBanner, string>;
 
   versionNumber: number = 5;
 

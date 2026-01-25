@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Banner, SiteBanner } from '../models/api.models';
 import { CacheService } from './cache.service';
-import { AppSize, cloneObject, getScreenSize } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, getScreenSize, strNoE } from '@app/core/utils/utils.functions';
 @Injectable({
   providedIn: 'root'
 })
@@ -105,19 +105,17 @@ export class GeneralService {
   async siteBannerHasBeenDismissed(b: SiteBanner): Promise<boolean> {
     let cb = await this.getSiteBanner(b.id);
 
+    const b2 = await this.cs.SiteBanner.getAll();
+    console.log('Banners in cache:', b2);
 
-
-    if (cb && cb.id > 0) return cb.dismissed;
+    if (cb && !strNoE(cb.id)) return cb.dismissed;
     else {
       await this.cs.SiteBanner.AddOrEditAsync(b);
-      const b2 = await this.cs.SiteBanner.getAll();
-      console.log('Banners in cache:', b2);
-
       return false;
     }
   }
 
-  async getSiteBanner(id: number): Promise<SiteBanner | undefined> {
+  async getSiteBanner(id: string): Promise<SiteBanner | undefined> {
     return await this.cs.SiteBanner.getById(id)
   }
 
@@ -173,8 +171,8 @@ export class RetMessage {
 
 export enum DefinedSiteBanners {
   // These are site banners that are defined in code to prevent duplicates
-  API_OFFLINE = 0,
-  SUMMER_PROGRAMMING = 1,
-  TEAM_APPLICATIONS = 2,
-  ACTIVE_MEETING = 3,
+  API_OFFLINE = 'api_offline',
+  SUMMER_PROGRAMMING = 'summer_programming',
+  TEAM_APPLICATIONS = 'team_applications',
+  ACTIVE_MEETING = 'active_meeting',
 }

@@ -42,7 +42,7 @@ export class CacheService {
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
-  SiteBanner!: DexieCrud<SiteBanner, number>;
+  SiteBanner!: DexieCrud<SiteBanner, string>;
 
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<User, number>(this.dbs.UserTable);
@@ -74,6 +74,6 @@ export class CacheService {
 
     this.LoadedStores = new DexieCrud<LoadedStores, number>(this.dbs.LoadedStoresTable);
 
-    this.SiteBanner = new DexieCrud<SiteBanner, number>(this.dbs.SiteBannerTable);
+    this.SiteBanner = new DexieCrud<SiteBanner, string>(this.dbs.SiteBannerTable);
   }
 }
