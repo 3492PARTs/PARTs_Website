@@ -351,6 +351,21 @@ export class AuthService {
         this.userLinksBS.next(links);
         this.refreshUserLinksInCache(this.userLinksBS.value);
 
+        // Add links that require additional api calls to get data for use
+        const additionalCallLinks = this.userLinksBS.value.filter(ul => additionalCallsMenuNames.includes(ul.menu_name));
+
+        additionalCallLinks.forEach(ol => {
+          switch (ol.menu_name) {
+            case 'Attendance':
+              this.meetingService.getActiveMeeting().then((result) => {
+                if (result) {
+                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
+                }
+              });
+              break;
+          }
+        });
+
         // Cache data for endpoints we want to use offline.
         const offlineLinks = this.userLinksBS.value.filter(ul => offlineMenuNames.includes(ul.menu_name));
         const offlineCalls: any[] = [];
@@ -382,22 +397,6 @@ export class AuthService {
         }
 
         //await Promise.all(offlineCalls);
-
-        // Add links that require additional api calls to get data for use
-        const additionalCallLinks = this.userLinksBS.value.filter(ul => additionalCallsMenuNames.includes(ul.menu_name));
-
-        additionalCallLinks.forEach(ol => {
-          switch (ol.menu_name) {
-            case 'Attendance':
-              this.meetingService.getActiveMeeting().then((result) => {
-                if (result) {
-                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
-                }
-              });
-              break;
-          }
-        });
-
         break;
 
       case APIStatus.off:
