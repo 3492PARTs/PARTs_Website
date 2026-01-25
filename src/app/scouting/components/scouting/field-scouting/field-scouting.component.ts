@@ -419,7 +419,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       if (question.question_typ.question_typ !== 'mnt-psh-btn') {
         const qfe = this.getQuestionFormElement(question);
         if (qfe && !qfe.formElement.valid) {
-          this.gs.addBanner(new Banner(0, `&bull;  ${qfe.formElement.Name} is invalid\n`, 3500));
+          this.gs.addBanner(new Banner(`&bull;  ${qfe.formElement.Name} is invalid\n`, 3500));
           return;
         }
       }
@@ -578,7 +578,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     if (this.form) {
       let ret = this.form.validateAllFelids();
       if (!strNoE(ret)) {
-        this.gs.addBanner(new Banner(0, ret, 3500));
+        this.gs.addBanner(new Banner(ret, 3500));
         return false;
       }
     }

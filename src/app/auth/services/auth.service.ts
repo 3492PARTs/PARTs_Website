@@ -5,19 +5,19 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import Dexie from 'dexie';
 import { environment } from '../../../environments/environment';
-import { APIStatus, Banner } from '@app/core/models/api.models';
+import { APIStatus, Banner, SiteBanner } from '@app/core/models/api.models';
 import { Link } from '@app/core/models/navigation.models';
 import { APIService } from '@app/core/services/api.service';
 import { CacheService } from '@app/core/services/cache.service';
 import { DataService } from '@app/core/services/data.service';
-import { GeneralService } from '@app/core/services/general.service';
+import { DefinedSiteBanners, GeneralService } from '@app/core/services/general.service';
 import { NotificationsService } from '@app/core/services/notifications.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { devConsoleLog, strNoE, formatTimeString } from '@app/core/utils/utils.functions';
+import { devConsoleLog, strNoE, formatDateString } from '@app/core/utils/utils.functions';
 import { MeetingService } from '@app/admin/services/meeting.service';
 
 @Injectable({
@@ -207,7 +207,7 @@ export class AuthService {
   resetPassword(input: UserData): void {
     this.api.post(true, 'user/reset-password/', { uuid: input.uuid, token: input.token, password: input.password },
       (result: any) => {
-        this.gs.addBanner(new Banner(0, 'Password reset successfully.', 10000, 3));
+        this.gs.addBanner(new Banner('Password reset successfully.', 10000, 3));
         this.router.navigateByUrl('login?page=login');
       }, (err: any) => {
         this.modalService.triggerError('Couldn\'t reset password.');
@@ -359,7 +359,7 @@ export class AuthService {
             case 'Attendance':
               this.meetingService.getActiveMeeting().then((result) => {
                 if (result) {
-                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
+                  this.gs.addSiteBanner(new SiteBanner(`${DefinedSiteBanners.ACTIVE_MEETING}${result.id}`, `There is an active meeting today from ${formatDateString(result.start)} to ${formatDateString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
                 }
               });
               break;

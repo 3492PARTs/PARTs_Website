@@ -102,17 +102,17 @@ export class SponsorShopComponent implements OnInit {
     });
 
     if (!hasItem) {
-      this.gs.addBanner(new Banner(0, 'Must have items to submit an order.', 3500));
+      this.gs.addBanner(new Banner('Must have items to submit an order.', 3500));
       return;
     }
 
     if (strNoE(this.activeSponsor.sponsor_nm) || strNoE(this.activeSponsor.email) || strNoE(this.activeSponsor.phone)) {
-      this.gs.addBanner(new Banner(0, 'Please fill out all contact information.', 3500));
+      this.gs.addBanner(new Banner('Please fill out all contact information.', 3500));
       return;
     }
 
     this.api.post(true, 'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }, (result: any) => {
-      this.gs.addBanner(new Banner(0, 'Thank you for your donation!.', 5000));
+      this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
       this.cart = [];
       this.activeSponsor = new Sponsor();
       this.initSponsorShop();

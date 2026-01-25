@@ -3,7 +3,7 @@ import { DexieCrud } from '../classes/dexie-crud';
 import { DatabaseService } from './database.service';
 import { LoadedStores } from '../models/idb.store.model';
 import { ILink, Link } from '../models/navigation.models';
-import { Banner } from '../models/api.models';
+import { SiteBanner } from '../models/api.models';
 import { IQuestion, Question } from '../models/form.models';
 import { User } from '@app/auth/models/user.models';
 import { Season, Event, Team, TeamNote, Match, MatchStrategy, AllianceSelection, FieldFormForm, ScoutFieldSchedule, ScoutFieldFormResponse, ScheduleType, Schedule, ScoutPitFormResponse, ScoutPitResponse, ISeason, IEvent, ITeam, ITeamNote, IMatch, IMatchStrategy, IAllianceSelection, IFieldFormForm, IScoutFieldSchedule, IScoutFieldFormResponse, IScheduleType, ISchedule, IScoutPitFormResponse, IScoutPitResponse } from '@app/scouting/models/scouting.models';
@@ -42,7 +42,7 @@ export class CacheService {
 
   LoadedStores!: DexieCrud<LoadedStores, number>;
 
-  Banner!: DexieCrud<Banner, number>;
+  SiteBanner!: DexieCrud<SiteBanner, string>;
 
   constructor(private dbs: DatabaseService) {
     this.User = new DexieCrud<User, number>(this.dbs.UserTable);
@@ -74,6 +74,6 @@ export class CacheService {
 
     this.LoadedStores = new DexieCrud<LoadedStores, number>(this.dbs.LoadedStoresTable);
 
-    this.Banner = new DexieCrud<Banner, number>(this.dbs.BannerTable);
+    this.SiteBanner = new DexieCrud<SiteBanner, string>(this.dbs.SiteBannerTable);
   }
 }

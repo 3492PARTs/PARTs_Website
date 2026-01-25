@@ -4,9 +4,9 @@ import { BannersComponent } from './shared/components/elements/banners/banners.c
 import { ModalComponent } from './shared/components/atoms/modal/modal.component';
 
 import { environment } from '../environments/environment';
-import { Banner } from './core/models/api.models';
+import { Banner, SiteBanner } from './core/models/api.models';
 import { AuthService } from './auth/services/auth.service';
-import { GeneralService } from './core/services/general.service';
+import { DefinedSiteBanners, GeneralService } from './core/services/general.service';
 import { ModalService } from './core/services/modal.service';
 import { ButtonRibbonComponent } from './shared/components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from './shared/components/atoms/button/button.component';
@@ -46,12 +46,13 @@ export class AppComponent implements OnInit {
     const date = new Date();
     /*
         if (date < new Date('07/14/2024')) {
-          this.gs.addSiteBanner(new Banner(1, "<a style=\"color: white\" href=\"join/programming\">Sign up for our summer programming class.</a>"));
+          this.gs.addSiteBanner(new Banner(DefinedSiteBanners.SUMMER_PROGRAMMING, "<a style=\"color: white\" href=\"join/programming\">Sign up for our summer programming class.</a>"));
         }
-    */
+    
     if (date < new Date('08/01/2024')) {
-      this.gs.addSiteBanner(new Banner(2, "<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
+      this.gs.addSiteBanner(new SiteBanner(DefinedSiteBanners.TEAM_APPLICATIONS, "<a style=\"color: white\" href=\"join/team-application\">Team applications now open.</a>"));
     }
+    */
   }
 
   getTitle(state: RouterState, parent: ActivatedRoute): string[] {

@@ -77,7 +77,7 @@ export class NotificationsService {
         };
 
         this.api.post(true, 'user/webpush-save/', data, undefined, (err: any) => {
-          this.gs.addBanner(new Banner(0, 'Couldn\'t subscribe to push notifications.', 0));
+          this.gs.addBanner(new Banner('Couldn\'t subscribe to push notifications.', 0));
         });
       })
       .catch(err => console.error("Could not subscribe to notifications", err));
@@ -85,7 +85,7 @@ export class NotificationsService {
 
   pushNotification(n: Alert): void {
     this.notifications_.push(n);
-    this.gs.addBanner(new Banner(0, `New Notificaiton:\n${n.subject}`, 3500, 3, this.dismissAlert.bind(this, n)));
+    this.gs.addBanner(new Banner(`New Notificaiton:\n${n.subject}`, 3500, 3, this.dismissAlert.bind(this, n)));
     this.notificationsBS.next(this.notifications_);
   }
 
@@ -96,7 +96,7 @@ export class NotificationsService {
 
   pushMessage(m: Alert): void {
     this.messages_.push(m);
-    this.gs.addBanner(new Banner(0, `New Message:\n${m.subject}`, 3500, 3, this.dismissAlert.bind(this, m)));
+    this.gs.addBanner(new Banner(`New Message:\n${m.subject}`, 3500, 3, this.dismissAlert.bind(this, m)));
     this.messagesBS.next(this.messages_);
   }
 

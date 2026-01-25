@@ -154,7 +154,7 @@ describe('CacheService', () => {
     });
 
     it('should initialize Banner store', () => {
-      expect(service.Banner).toBeInstanceOf(DexieCrud);
+      expect(service.SiteBanner).toBeInstanceOf(DexieCrud);
     });
   });
 
@@ -183,7 +183,7 @@ describe('CacheService', () => {
         service.ScoutPitResponse,
         service.Question,
         service.LoadedStores,
-        service.Banner
+        service.SiteBanner
       ];
 
       expect(stores.length).toBe(23);

@@ -97,7 +97,7 @@ export class TeamApplicationComponent implements OnInit {
           return subForm.questions.map(q => new Answer(q.answer, q));
         }).flat(), form_typ: 'team-app'
       }, (result: any) => {
-        this.gs.addBanner(new Banner(0, (result as RetMessage).retMessage, 3500));
+        this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
         scrollTo(0);
         this.applicationInit();
       }, (err: any) => {

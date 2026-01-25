@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GeneralService } from './general.service';
-import { APIStatus, Banner } from '../models/api.models';
+import { DefinedSiteBanners, GeneralService } from './general.service';
+import { APIStatus, Banner, SiteBanner } from '../models/api.models';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ModalService } from '@app/core/services/modal.service';
@@ -12,7 +12,7 @@ export class APIService {
   private apiStatusBS = new BehaviorSubject<APIStatus>(APIStatus.on);
   apiStatus = this.apiStatusBS.asObservable();
 
-  private persistentSiteBanners: Banner[] = [];
+  private persistentSiteBanners: SiteBanner[] = [];
 
   private outstandingApiStatusCheck: Promise<string> | null = null;
 
@@ -27,16 +27,16 @@ export class APIService {
 
       switch (s) {
         case APIStatus.on:
-          this.gs.removeSiteBanner(new Banner(0, message));
+          this.gs.removeSiteBanner(new SiteBanner(DefinedSiteBanners.API_OFFLINE, message));
           break;
         case APIStatus.off:
           let found = false;
-          this.persistentSiteBanners.forEach((b: Banner) => {
+          this.persistentSiteBanners.forEach((b: SiteBanner) => {
             if (b.message === message) found = true;
           });
 
           if (!found) {
-            this.gs.addSiteBanner(new Banner(0, message));
+            this.gs.addSiteBanner(new SiteBanner(DefinedSiteBanners.API_OFFLINE, message));
           }
           break;
       }

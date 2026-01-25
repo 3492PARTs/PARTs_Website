@@ -84,7 +84,7 @@ export class FormComponent implements OnInit {
       this.reset();
     }
     else {
-      this.gs.addBanner(new Banner(0, ret, 3500));
+      this.gs.addBanner(new Banner(ret, 3500));
     }
   }
 }

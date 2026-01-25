@@ -12,7 +12,7 @@ import { GeneralService } from './general.service';
   providedIn: 'root'
 })
 export class ModalService {
-  constructor(private gs: GeneralService) {}
+  constructor(private gs: GeneralService) { }
   /* Error Modal State */
   private showErrorModalBS = new BehaviorSubject<boolean>(false);
   showErrorModal$ = this.showErrorModalBS.asObservable();
@@ -156,10 +156,10 @@ export class ModalService {
   checkResponse(response: any): boolean {
     const retMessage = response as { retMessage?: string; error?: boolean; errorMessage?: string };
     if (retMessage.retMessage && retMessage.error) {
-      const message = retMessage.errorMessage 
-        ? objectToString(JSON.parse(retMessage.errorMessage)) 
+      const message = retMessage.errorMessage
+        ? objectToString(JSON.parse(retMessage.errorMessage))
         : retMessage.retMessage;
-      this.gs.addBanner(new Banner(0, message, 5000));
+      this.gs.addBanner(new Banner(message, 5000));
       return false;
     }
     return true;
@@ -172,7 +172,7 @@ export class ModalService {
   successfulResponseBanner(response: any): void {
     const message = (response as { retMessage?: string }).retMessage;
     if (!strNoE(message)) {
-      this.gs.addBanner(new Banner(0, message!, 3500));
+      this.gs.addBanner(new Banner(message!, 3500));
     }
   }
 
@@ -186,7 +186,7 @@ export class ModalService {
       ret += `&bull;  ${s} is invalid\n`;
     });
 
-    this.gs.addBanner(new Banner(0, ret, 3500));
+    this.gs.addBanner(new Banner(ret, 3500));
   }
 
   /**

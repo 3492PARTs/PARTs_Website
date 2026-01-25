@@ -9,7 +9,7 @@ describe('DatabaseService', () => {
     TestBed.configureTestingModule({
       providers: [DatabaseService]
     });
-    
+
     service = TestBed.inject(DatabaseService);
   });
 
@@ -138,8 +138,8 @@ describe('DatabaseService', () => {
     });
 
     it('should create BannerTable', () => {
-      expect(service.BannerTable).toBeDefined();
-      expect(service.BannerTable.name).toBe(DBStores.Banner.TableName);
+      expect(service.SiteBannerTable).toBeDefined();
+      expect(service.SiteBannerTable.name).toBe(DBStores.SiteBanner.TableName);
     });
 
     it('should have all tables available', () => {
@@ -165,14 +165,14 @@ describe('DatabaseService', () => {
 
     it('should have all expected stores in schema', () => {
       const tableNames = service.tables.map(t => t.name);
-      
+
       expect(tableNames).toContain(DBStores.User.TableName);
       expect(tableNames).toContain(DBStores.UserPermissions.TableName);
       expect(tableNames).toContain(DBStores.Season.TableName);
       expect(tableNames).toContain(DBStores.Event.TableName);
       expect(tableNames).toContain(DBStores.Team.TableName);
       expect(tableNames).toContain(DBStores.Match.TableName);
-      expect(tableNames).toContain(DBStores.Banner.TableName);
+      expect(tableNames).toContain(DBStores.SiteBanner.TableName);
     });
   });
 
@@ -187,7 +187,7 @@ describe('DatabaseService', () => {
     it('should provide access to all tables', () => {
       const tables = service.tables;
       expect(tables.length).toBeGreaterThanOrEqual(23);
-      
+
       const tableNames = tables.map(t => t.name);
       expect(tableNames).toContain('User');
       expect(tableNames).toContain('Event');

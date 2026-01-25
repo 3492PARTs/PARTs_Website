@@ -236,7 +236,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         this.removeAutoPicture();
       }
       else
-        this.gs.addBanner(new Banner(0, "Must add title to auto path.", 3500));
+        this.gs.addBanner(new Banner("Must add title to auto path.", 3500));
     }
   }
 
@@ -264,17 +264,17 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     if (!spr) spr = this.scoutPitResponse;
 
     if (strNoE(spr.team_id)) {
-      this.gs.addBanner(new Banner(0, "Must select a team.", 3500));
+      this.gs.addBanner(new Banner("Must select a team.", 3500));
       return null;
     }
 
     if (this.robotPic && this.robotPic.size > 0) {
-      this.gs.addBanner(new Banner(0, "Must add or remove staged image.", 3500));
+      this.gs.addBanner(new Banner("Must add or remove staged image.", 3500));
       return null;
     }
 
     if (this.autoPic && this.autoPic.size > 0) {
-      this.gs.addBanner(new Banner(0, "Must add or clear drawn path.", 3500));
+      this.gs.addBanner(new Banner("Must add or clear drawn path.", 3500));
       return null;
     }
 
