@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { APIService } from './api.service';
 import { GeneralService } from './general.service';
 import { ModalService } from './modal.service';
-import { APIStatus, Banner } from '../models/api.models';
+import { APIStatus, Banner, SiteBanner } from '../models/api.models';
 import { BehaviorSubject } from 'rxjs';
 
 describe('APIService', () => {
@@ -11,11 +11,11 @@ describe('APIService', () => {
   let httpMock: HttpTestingController;
   let generalServiceSpy: jasmine.SpyObj<GeneralService>;
   let modalServiceSpy: jasmine.SpyObj<ModalService>;
-  let siteBannersSubject: BehaviorSubject<Banner[]>;
+  let siteBannersSubject: BehaviorSubject<SiteBanner[]>;
 
   beforeEach(() => {
-    siteBannersSubject = new BehaviorSubject<Banner[]>([]);
-    
+    siteBannersSubject = new BehaviorSubject<SiteBanner[]>([]);
+
     const gsSpy = jasmine.createSpyObj('GeneralService', [
       'incrementOutstandingCalls',
       'decrementOutstandingCalls',
@@ -96,7 +96,7 @@ describe('APIService', () => {
     });
 
     it('should not add duplicate offline banner', (done) => {
-      siteBannersSubject.next([new Banner(0, 'Application is running in offline mode.')]);
+      siteBannersSubject.next([new SiteBanner('0', 'Application is running in offline mode.')]);
 
       service.getAPIStatus();
       const req = httpMock.expectOne('public/api-status/');
@@ -134,7 +134,7 @@ describe('APIService', () => {
       req.flush({ branch: 'main' });
 
       await new Promise(resolve => setTimeout(resolve, 10));
-      
+
       let currentStatus: APIStatus = APIStatus.off;
       service.apiStatus.subscribe(status => currentStatus = status);
       expect(currentStatus).toBe(APIStatus.on);
@@ -156,9 +156,9 @@ describe('APIService', () => {
     it('should reuse outstanding API status check', () => {
       const promise1 = service.getAPIStatus();
       const promise2 = service.getAPIStatus();
-      
+
       expect(promise1).toBe(promise2);
-      
+
       const req = httpMock.expectOne('public/api-status/');
       req.flush({ branch: 'main' });
     });
@@ -172,7 +172,7 @@ describe('APIService', () => {
       const promise2 = service.getAPIStatus();
       const req2 = httpMock.expectOne('public/api-status/');
       req2.flush({ branch: 'develop' });
-      
+
       expect(promise1).not.toBe(promise2);
     });
   });
@@ -190,9 +190,9 @@ describe('APIService', () => {
 
     it('should make GET request with loading screen', async () => {
       const promise = service.get(true, 'test/endpoint');
-      
+
       expect(generalServiceSpy.incrementOutstandingCalls).toHaveBeenCalled();
-      
+
       const req = httpMock.expectOne('test/endpoint');
       req.flush({ data: 'test' });
 
@@ -203,7 +203,7 @@ describe('APIService', () => {
     it('should make GET request with query params', async () => {
       const params = { id: 123, filter: 'active' };
       service.get(false, 'test/endpoint', params);
-      
+
       const req = httpMock.expectOne(r => r.url === 'test/endpoint' && r.params.get('id') === '123');
       expect(req.request.params.get('filter')).toBe('active');
       req.flush({});
@@ -212,7 +212,7 @@ describe('APIService', () => {
     it('should call onNext callback on success', async () => {
       const onNextSpy = jasmine.createSpy('onNext');
       const testData = { data: 'test' };
-      
+
       service.get(false, 'test/endpoint', undefined, onNextSpy);
       const req = httpMock.expectOne('test/endpoint');
       req.flush(testData);
@@ -225,7 +225,7 @@ describe('APIService', () => {
       modalServiceSpy.checkResponse.and.returnValue(false);
       const onErrorSpy = jasmine.createSpy('onError');
       const testData = { error: 'test' };
-      
+
       service.get(false, 'test/endpoint', undefined, undefined, onErrorSpy);
       const req = httpMock.expectOne('test/endpoint');
       req.flush(testData);
@@ -236,7 +236,7 @@ describe('APIService', () => {
 
     it('should call onComplete callback', async () => {
       const onCompleteSpy = jasmine.createSpy('onComplete');
-      
+
       service.get(true, 'test/endpoint', undefined, undefined, undefined, onCompleteSpy);
       const req = httpMock.expectOne('test/endpoint');
       req.flush({});
@@ -247,7 +247,7 @@ describe('APIService', () => {
 
     it('should handle HTTP error', async () => {
       const onErrorSpy = jasmine.createSpy('onError');
-      
+
       service.get(true, 'test/endpoint', undefined, undefined, onErrorSpy);
       const req = httpMock.expectOne('test/endpoint');
       req.error(new ProgressEvent('error'), { status: 500 });
@@ -259,7 +259,7 @@ describe('APIService', () => {
 
     it('should trigger API status check on connection error', async () => {
       spyOn(service, 'getAPIStatus');
-      
+
       service.get(false, 'test/endpoint');
       const req = httpMock.expectOne('test/endpoint');
       req.error(new ProgressEvent('error'), { status: 0 });
@@ -304,9 +304,9 @@ describe('APIService', () => {
     it('should make POST request with loading screen', async () => {
       const postData = { name: 'test' };
       service.post(true, 'test/endpoint', postData);
-      
+
       expect(generalServiceSpy.incrementOutstandingCalls).toHaveBeenCalled();
-      
+
       const req = httpMock.expectOne('test/endpoint');
       req.flush({ success: true });
 
@@ -319,7 +319,7 @@ describe('APIService', () => {
     it('should make PUT request', async () => {
       const putData = { id: 1, name: 'updated' };
       service.put(false, 'test/endpoint', putData);
-      
+
       const req = httpMock.expectOne('test/endpoint');
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(putData);
@@ -328,9 +328,9 @@ describe('APIService', () => {
 
     it('should make PUT request with loading screen', async () => {
       service.put(true, 'test/endpoint', {});
-      
+
       expect(generalServiceSpy.incrementOutstandingCalls).toHaveBeenCalled();
-      
+
       const req = httpMock.expectOne('test/endpoint');
       req.flush({});
 
@@ -342,7 +342,7 @@ describe('APIService', () => {
   describe('DELETE requests', () => {
     it('should make DELETE request without params', async () => {
       service.delete(false, 'test/endpoint');
-      
+
       const req = httpMock.expectOne('test/endpoint');
       expect(req.request.method).toBe('DELETE');
       req.flush({ success: true });
@@ -351,7 +351,7 @@ describe('APIService', () => {
     it('should make DELETE request with params', async () => {
       const params = { id: 456 };
       service.delete(false, 'test/endpoint', params);
-      
+
       const req = httpMock.expectOne(r => r.url === 'test/endpoint' && r.params.get('id') === '456');
       expect(req.request.method).toBe('DELETE');
       req.flush({});
@@ -359,9 +359,9 @@ describe('APIService', () => {
 
     it('should make DELETE request with loading screen', async () => {
       service.delete(true, 'test/endpoint');
-      
+
       expect(generalServiceSpy.incrementOutstandingCalls).toHaveBeenCalled();
-      
+
       const req = httpMock.expectOne('test/endpoint');
       req.flush({});
 
@@ -373,7 +373,7 @@ describe('APIService', () => {
   describe('Connection error handling', () => {
     it('should recognize status 0 as connection error', async () => {
       spyOn(service, 'getAPIStatus');
-      
+
       service.get(false, 'test/endpoint');
       const req = httpMock.expectOne('test/endpoint');
       req.error(new ProgressEvent('error'), { status: 0 });
@@ -384,7 +384,7 @@ describe('APIService', () => {
 
     it('should recognize status 504 as connection error', async () => {
       spyOn(service, 'getAPIStatus');
-      
+
       service.post(false, 'test/endpoint', {});
       const req = httpMock.expectOne('test/endpoint');
       req.error(new ProgressEvent('error'), { status: 504 });
@@ -395,7 +395,7 @@ describe('APIService', () => {
 
     it('should not trigger API check for non-connection errors', async () => {
       spyOn(service, 'getAPIStatus');
-      
+
       service.get(false, 'test/endpoint');
       const req = httpMock.expectOne('test/endpoint');
       req.error(new ProgressEvent('error'), { status: 404 });

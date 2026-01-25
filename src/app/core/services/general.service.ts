@@ -105,9 +105,6 @@ export class GeneralService {
   async siteBannerHasBeenDismissed(b: SiteBanner): Promise<boolean> {
     let cb = await this.getSiteBanner(b.id);
 
-    const b2 = await this.cs.SiteBanner.getAll();
-    console.log('Banners in cache:', b2);
-
     if (cb && !strNoE(cb.id)) return cb.dismissed;
     else {
       await this.cs.SiteBanner.AddOrEditAsync(b);

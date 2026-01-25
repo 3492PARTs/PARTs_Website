@@ -19,7 +19,7 @@ describe('DatabaseService', () => {
 
   describe('Database Initialization', () => {
     it('should initialize with correct version number', () => {
-      expect(service.versionNumber).toBe(4);
+      expect(service.versionNumber).toBe(5);
     });
 
     it('should create UserTable', () => {

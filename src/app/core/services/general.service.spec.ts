@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { GeneralService, RetMessage } from './general.service';
 import { CacheService } from './cache.service';
-import { Banner } from '../models/api.models';
+import { Banner, SiteBanner } from '../models/api.models';
 import { AppSize } from '@app/core/utils/utils.functions';
 
 describe('GeneralService', () => {
@@ -22,9 +22,11 @@ describe('GeneralService', () => {
     };
 
     mockCacheService = {
-      Banner: {
+      SiteBanner: {
+        GetAll: jasmine.createSpy('GetAll').and.returnValue(Promise.resolve()),
         AddOrEditAsync: jasmine.createSpy('AddOrEditAsync').and.returnValue(Promise.resolve()),
-        getById: jasmine.createSpy('getById').and.returnValue(Promise.resolve(undefined))
+        getById: jasmine.createSpy('getById').and.returnValue(Promise.resolve(undefined)),
+        //GetById: jasmine.createSpy('GetById').and.returnValue(Promise.resolve(undefined))
       }
     };
 
@@ -161,7 +163,7 @@ describe('GeneralService', () => {
     });
 
     it('should add a banner', (done) => {
-      const banner = new Banner(1, 'Test message', 3000);
+      const banner = new Banner('Test message', 3000);
       let callCount = 0;
       service.banners.subscribe(banners => {
         if (callCount === 1) {
@@ -175,8 +177,8 @@ describe('GeneralService', () => {
     });
 
     it('should add multiple banners', () => {
-      const banner1 = new Banner(1, 'Message 1', 3000);
-      const banner2 = new Banner(2, 'Message 2', 3000);
+      const banner1 = new Banner('Message 1', 3000);
+      const banner2 = new Banner('Message 2', 3000);
 
       service.addBanner(banner1);
       service.addBanner(banner2);
@@ -186,7 +188,7 @@ describe('GeneralService', () => {
     });
 
     it('should get banners', () => {
-      const banner = new Banner(1, 'Test', 3000);
+      const banner = new Banner('Test', 3000);
       service.addBanner(banner);
 
       const banners = service.getBanners();
@@ -195,7 +197,7 @@ describe('GeneralService', () => {
     });
 
     it('should remove a banner', () => {
-      const banner = new Banner(1, 'Test', 3000);
+      const banner = new Banner('Test', 3000);
       service.addBanner(banner);
 
       service.removeBanner(banner);
@@ -205,8 +207,8 @@ describe('GeneralService', () => {
     });
 
     it('should only remove matching banner', () => {
-      const banner1 = new Banner(1, 'Message 1', 3000);
-      const banner2 = new Banner(2, 'Message 2', 4000);
+      const banner1 = new Banner('Message 1', 3000);
+      const banner2 = new Banner('Message 2', 4000);
 
       service.addBanner(banner1);
       service.addBanner(banner2);
@@ -219,8 +221,8 @@ describe('GeneralService', () => {
     });
 
     it('should handle removing non-existent banner', () => {
-      const banner1 = new Banner(1, 'Message 1', 3000);
-      const banner2 = new Banner(2, 'Message 2', 3000);
+      const banner1 = new Banner('Message 1', 3000);
+      const banner2 = new Banner('Message 2', 3000);
 
       service.addBanner(banner1);
       service.removeBanner(banner2);
@@ -239,7 +241,7 @@ describe('GeneralService', () => {
     });
 
     it('should add site banner with id 0', async () => {
-      const banner = new Banner(0, 'Site message', 3000);
+      const banner = new SiteBanner('0', 'Site message', 3000);
       await service.addSiteBanner(banner);
 
       service.siteBanners.subscribe(banners => {
@@ -248,8 +250,8 @@ describe('GeneralService', () => {
     });
 
     it('should add site banner that has not been dismissed', async () => {
-      mockCacheService.Banner.getById.and.returnValue(Promise.resolve(undefined));
-      const banner = new Banner(1, 'Site message', 3000);
+      mockCacheService.SiteBanner.getById.and.returnValue(Promise.resolve(undefined));
+      const banner = new SiteBanner('1', 'Site message', 3000);
 
       await service.addSiteBanner(banner);
 
@@ -259,7 +261,7 @@ describe('GeneralService', () => {
     });
 
     it('should remove site banner', () => {
-      const banner = new Banner(0, 'Test', 3000);
+      const banner = new SiteBanner('0', 'Test', 3000);
       service['siteBannersBS'].next([banner]);
 
       service.removeSiteBanner(banner);
@@ -270,38 +272,38 @@ describe('GeneralService', () => {
     });
 
     it('should mark banner as dismissed when removing', () => {
-      const banner = new Banner(1, 'Test', 3000);
+      const banner = new SiteBanner('1', 'Test', 3000);
       service['siteBannersBS'].next([banner]);
 
       service.removeSiteBanner(banner);
 
-      expect(mockCacheService.Banner.AddOrEditAsync).toHaveBeenCalled();
+      expect(mockCacheService.SiteBanner.AddOrEditAsync).toHaveBeenCalled();
     });
   });
 
   describe('Banner Cache Operations', () => {
     it('should check if banner has been dismissed', async () => {
-      const cachedBanner = new Banner(1, 'Test', 3000);
+      const cachedBanner = new SiteBanner('1', 'Test', 3000);
       cachedBanner.dismissed = true;
-      mockCacheService.Banner.getById.and.returnValue(Promise.resolve(cachedBanner));
+      mockCacheService.SiteBanner.getById.and.returnValue(Promise.resolve(cachedBanner));
 
       const result = await service.siteBannerHasBeenDismissed(cachedBanner);
       expect(result).toBe(true);
     });
 
     it('should return false if banner not in cache', async () => {
-      mockCacheService.Banner.getById.and.returnValue(Promise.resolve(undefined));
-      const banner = new Banner(1, 'Test', 3000);
+      mockCacheService.SiteBanner.getById.and.returnValue(Promise.resolve(undefined));
+      const banner = new SiteBanner('1', 'Test', 3000);
 
       const result = await service.siteBannerHasBeenDismissed(banner);
       expect(result).toBe(false);
     });
 
     it('should get banner from cache', async () => {
-      const cachedBanner = new Banner(1, 'Test', 3000);
-      mockCacheService.Banner.getById.and.returnValue(Promise.resolve(cachedBanner));
+      const cachedBanner = new SiteBanner('1', 'Test', 3000);
+      mockCacheService.SiteBanner.getById.and.returnValue(Promise.resolve(cachedBanner));
 
-      const result = await service.getSiteBanner(1);
+      const result = await service.getSiteBanner('1');
       expect(result).toBe(cachedBanner);
     });
   });
@@ -394,9 +396,9 @@ describe('GeneralService', () => {
 
   describe('Integration scenarios', () => {
     it('should handle multiple banner operations', () => {
-      const banner1 = new Banner(1, 'Message 1', 3000);
-      const banner2 = new Banner(2, 'Message 2', 3000);
-      const banner3 = new Banner(3, 'Message 3', 3000);
+      const banner1 = new Banner('Message 1', 3000);
+      const banner2 = new Banner('Message 2', 3000);
+      const banner3 = new Banner('Message 3', 3000);
 
       service.addBanner(banner1);
       service.addBanner(banner2);
