@@ -9,29 +9,31 @@
                 : '/appIcons/icon-192x192.png'
             " />
           @if (isAdmin) {
-          <div id="profile-edit-btn">
-            <app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>
-          </div>
+            <div id="profile-edit-btn">
+              <app-button [ButtonType]="'edit'" (FunctionCallBack)="openEditProfileImageModal()"></app-button>
+            </div>
           }
         </div>
       </div>
 
       <app-modal [Title]="'Edit Profile Image'" [(Visible)]="editProfileImageModalVisible">
         @if (!showCropper) {
-        <app-form-element [Type]="'image'" [LabelText]="'Profile Image'"
-          [ImageChangeEvent]="fileChangeEvent.bind(this)">
-        </app-form-element>
+          <app-form-element [Type]="'image'" [LabelText]="'Profile Image'"
+            [ImageChangeEvent]="fileChangeEvent.bind(this)">
+          </app-form-element>
         }
 
         <div id="cropper-wrapper">
           @if (editProfileImageModalVisible) {
-          <div id="cropper-size" #EditProfileImageModalCropper>
-            <image-cropper *ngIf="showCropper" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
-              [aspectRatio]="1 / 1" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
-              (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [roundCropper]="true"
-              [imageQuality]="60">
-            </image-cropper>
-          </div>
+            <div id="cropper-size" #EditProfileImageModalCropper>
+              @if (showCropper) {
+                <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                  [aspectRatio]="1 / 1" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+                  (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()" [roundCropper]="true"
+                  [imageQuality]="60">
+                </image-cropper>
+              }
+            </div>
           }
 
           <app-button-ribbon [ngStyle]="{ visibility: showCropper ? 'visible' : 'hidden' }"
@@ -48,16 +50,16 @@
       <app-tab-container [ActiveTab]="activeTab">
         <app-tab [TabName]="'Notifications'">
           <app-table [TableCols]="alertTableCols" [TableData]="notifications" [ShowRemoveButton]="true"
-            (RemoveRecordCallBack)="dismissAlert($event)" [Width]="'100%'"></app-table>
+          (RemoveRecordCallBack)="dismissAlert($event)" [Width]="'100%'"></app-table>
         </app-tab>
 
         <app-tab [TabName]="'Messages'">
           <app-table [TableCols]="alertTableCols" [TableData]="messages" [ShowViewButton]="true"
-            (ViewRecordCallBack)="viewAlert($event)" [Width]="'100%'"></app-table>
+          (ViewRecordCallBack)="viewAlert($event)" [Width]="'100%'"></app-table>
 
           <app-modal [Title]="activeAlert.subject" [(Visible)]="alertModalVisible">
             <app-form-element [Type]="'area'" [LabelText]="(activeAlert.staged_time | dateToStr) || ''"
-              [(Model)]="activeAlert.body" [Disabled]="true" [Width]="'100%'" [Rows]="5"></app-form-element>
+            [(Model)]="activeAlert.body" [Disabled]="true" [Width]="'100%'" [Rows]="5"></app-form-element>
 
             <app-button-ribbon>
               <app-button [ButtonType]="'danger'" (FunctionCallBack)="dismissAlert(activeAlert)">Delete</app-button>
