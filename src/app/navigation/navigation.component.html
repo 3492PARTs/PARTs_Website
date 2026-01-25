@@ -5,8 +5,8 @@
 }
 
 @if (siteBanners.length > 0) {
-<div id="site-banner" class="flex flex-wrap align-items-center" [ngStyle]="{ height: siteBannerHeight + 'rem' }"
-  [ngClass]="{
+<div #thisSiteBanners id="site-banner" class="flex flex-wrap align-items-center"
+  [ngStyle]="{ height: siteBannerHeight }" [ngClass]="{
     expanded: navExpanded,
     hideNav: !showNav,
     'right-hand-nav': rightHandNav
@@ -227,7 +227,7 @@
       'remove-header': removeHeader
     }" [ngStyle]="{
       height: siteHeaderHeight + 'rem',
-      'margin-top': siteBannerHeight + 'rem'
+      'margin-top': siteBannerHeight
     }">
     <!--narrow screen nav expander-->
     @if (hideNavExpander) {
@@ -410,7 +410,7 @@
         xsm: screenXs
       }">
       @if (siteBanners.length > 0) {
-      <div [ngStyle]="{ width: '100%', height: siteBannerHeight + 'rem' }"></div>
+      <div [ngStyle]="{ width: '100%', height: siteBannerHeight }"></div>
       }
       <ng-content> </ng-content>
     </main>

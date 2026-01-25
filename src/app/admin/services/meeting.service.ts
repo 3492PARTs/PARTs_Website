@@ -54,6 +54,20 @@ export class MeetingService {
     return start === time || end === time;
   }
 
+  getActiveMeeting(meetings?: Meeting[]): Promise<Meeting | null> {
+    return new Promise(async (resolve) => {
+      meetings = meetings ?? await this.getMeetings() ?? undefined;
+
+      if (meetings !== undefined) {
+        const activeMeeting = meetings.find(m => this.isDayToTakeAttendance(m));
+        resolve(activeMeeting !== undefined ? activeMeeting : null);
+      }
+      else {
+        resolve(null);
+      }
+    });
+  }
+
   // MEETING HOURS -----------------------------------------------------------
   getMeetingHours(): Promise<MeetingHours | null> {
     return this.api.get(true, 'attendance/meeting-hours/');

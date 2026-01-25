@@ -17,7 +17,9 @@ import { UserService } from '@app/user/services/user.service';
 import { User } from '../models/user.models';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { devConsoleLog, strNoE } from '@app/core/utils/utils.functions';
+import { devConsoleLog, strNoE, formatDateString } from '@app/core/utils/utils.functions';
+import { MeetingService } from '@app/admin/services/meeting.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -56,7 +58,8 @@ export class AuthService {
     private cs: CacheService,
     private ds: DataService,
     private ss: ScoutingService,
-    private us: UserService, private modalService: ModalService) {
+    private modalService: ModalService,
+    private meetingService: MeetingService) {
     this.tokenStringLocalStorage = environment.tokenString;
 
     // When the api goes online/offline change the list of links the user can access
@@ -340,6 +343,8 @@ export class AuthService {
 
   private populateAppLinks(links: Link[]): void {
     const offlineMenuNames = ['Field Scouting', 'Pit Scouting', 'Field Responses', 'Pit Responses', 'Portal', 'Strategizing'];
+    const additionalCallsMenuNames = ['Attendance'];
+
 
     switch (this.apiStatus) {
       case APIStatus.on:
@@ -377,6 +382,21 @@ export class AuthService {
         }
 
         //await Promise.all(offlineCalls);
+
+        // Add links that require additional api calls to get data for use
+        const additionalCallLinks = this.userLinksBS.value.filter(ul => additionalCallsMenuNames.includes(ul.menu_name));
+
+        additionalCallLinks.forEach(ol => {
+          switch (ol.menu_name) {
+            case 'Attendance':
+              this.meetingService.getActiveMeeting().then((result) => {
+                if (result) {
+                  this.gs.addSiteBanner(new Banner(0, `There is an active meeting today from ${formatDateString(result.start)} to ${formatDateString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
+                }
+              });
+              break;
+          }
+        });
 
         break;
 

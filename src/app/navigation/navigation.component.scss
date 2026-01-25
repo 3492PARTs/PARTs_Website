@@ -1,6 +1,6 @@
-@use "../../../../scss/abstracts/variables";
-@use "../../../../scss/abstracts/mixins";
-@use "sass:color";
+@use '../../scss/abstracts/variables';
+@use '../../scss/abstracts/mixins';
+@use 'sass:color';
 
 //f* {
 //-webkit-touch-callout: none;
@@ -153,7 +153,7 @@ nav {
       color: #fff !important;
 
       span {
-        font-family: "" !important;
+        font-family: '' !important;
       }
 
       .icon,
@@ -286,10 +286,11 @@ nav {
       animation-name: growIn;
       -webkit-animation-duration: 0.2s;
       animation-duration: 0.2s;
-      -webkit-animation-timing-function: transform
-          cubic-bezier(0.18, 1.25, 0.4, 1),
+      -webkit-animation-timing-function:
+        transform cubic-bezier(0.18, 1.25, 0.4, 1),
         opacity cubic-bezier(0, 1, 0.4, 1);
-      animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1),
+      animation-timing-function:
+        transform cubic-bezier(0.18, 1.25, 0.4, 1),
         opacity cubic-bezier(0, 1, 0.4, 1);
     }
   }
@@ -401,7 +402,9 @@ nav {
 #site-banner,
 header,
 footer {
-  transition: width 0.15s ease, top 0.15s linear;
+  transition:
+    width 0.15s ease,
+    top 0.15s linear;
   width: calc(100% - 10.4rem);
 
   &.expanded {
@@ -503,10 +506,11 @@ header {
           animation-name: growIn;
           -webkit-animation-duration: 0.2s;
           animation-duration: 0.2s;
-          -webkit-animation-timing-function: transform
-              cubic-bezier(0.18, 1.25, 0.4, 1),
+          -webkit-animation-timing-function:
+            transform cubic-bezier(0.18, 1.25, 0.4, 1),
             opacity cubic-bezier(0, 1, 0.4, 1);
-          animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1),
+          animation-timing-function:
+            transform cubic-bezier(0.18, 1.25, 0.4, 1),
             opacity cubic-bezier(0, 1, 0.4, 1);
         }
 
@@ -697,10 +701,7 @@ header {
         padding: 2em 0;
         display: grid;
         grid-template-columns: calc(50% - 0.5rem) calc(50% - 0.5rem);
-        grid-template-rows: repeat(
-          6,
-          calc((100% / 6) - 2rem)
-        ); //25% 25% 25% 25%;
+        grid-template-rows: repeat(6, calc((100% / 6) - 2rem)); //25% 25% 25% 25%;
         column-gap: 2rem;
         row-gap: 2rem;
         justify-items: center;
@@ -938,9 +939,11 @@ header {
   animation-name: growIn;
   -webkit-animation-duration: 0.2s;
   animation-duration: 0.2s;
-  -webkit-animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1),
+  -webkit-animation-timing-function:
+    transform cubic-bezier(0.18, 1.25, 0.4, 1),
     opacity cubic-bezier(0, 1, 0.4, 1);
-  animation-timing-function: transform cubic-bezier(0.18, 1.25, 0.4, 1),
+  animation-timing-function:
+    transform cubic-bezier(0.18, 1.25, 0.4, 1),
     opacity cubic-bezier(0, 1, 0.4, 1);
 }
 

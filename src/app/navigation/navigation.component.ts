@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd, Event as NavigationEvent, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../environments/environment';
 import { Banner } from '@app/core/models/api.models';
 import { Link, SubLink } from '@app/core/models/navigation.models';
 import { User } from '@app/auth/models/user.models';
@@ -12,10 +12,10 @@ import { NavigationService, NavigationState } from '@app/core/services/navigatio
 import { Alert, NotificationsService } from '@app/core/services/notifications.service';
 import { PwaService } from '@app/core/services/pwa.service';
 import { CompetitionInit } from '@app/public/components/event-competition/event-competition.component';
-import { ButtonComponent } from '../atoms/button/button.component';
-import { FormElementComponent } from '../atoms/form-element/form-element.component';
-import { SubNavigationComponent } from '../atoms/sub-navigation/sub-navigation.component';
-import { LoadingComponent } from "../atoms/loading/loading.component";
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { SubNavigationComponent } from '@app/shared/components/atoms/sub-navigation/sub-navigation.component';
+import { LoadingComponent } from "@app/shared/components/atoms/loading/loading.component";
 import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
@@ -46,6 +46,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   @ViewChild('thisHeader', { read: ElementRef, static: true }) header!: ElementRef;
   @ViewChild('thisMain', { read: ElementRef, static: true }) main!: ElementRef;
   @ViewChild('thisWrapper', { read: ElementRef, static: true }) wrapper!: ElementRef;
+  @ViewChild('thisSiteBanners', { read: ElementRef, static: false }) siteBannersElementRef!: ElementRef;
 
   subNav = '';
   pageIDs: any = {};
@@ -69,7 +70,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   userLinks: Link[] = [];
 
   siteHeaderHeight = 7;
-  siteBannerHeight = 0;
+  siteBannerHeight = '0px';
   siteBanners: Banner[] = [];
 
   removeHeader = false;
@@ -208,12 +209,22 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.gs.siteBanners.subscribe(psb => {
       this.siteBanners = psb;
-      this.siteBannerHeight = 4 * this.siteBanners.length;
+
+      triggerChange(() => {
+        this.setSiteBannerHeight();
+      });
     });
 
     this.gs.scrollPosition$.subscribe(scrollY => {
       this.scrollEvents(scrollY, true);
     });
+  }
+
+  setSiteBannerHeight(): void {
+    if (this.siteBannersElementRef) {
+      const height = this.siteBannersElementRef.nativeElement.scrollHeight;
+      this.siteBannerHeight = height + 'px';
+    }
   }
 
   ngOnInit(): void {
@@ -256,6 +267,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.scrollPosition = window.scrollY;
+    this.setSiteBannerHeight();
   }
 
   @HostListener('window:scroll', ['$event']) // for window scroll events

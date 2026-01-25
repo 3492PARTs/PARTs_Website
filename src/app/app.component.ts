@@ -10,7 +10,7 @@ import { GeneralService } from './core/services/general.service';
 import { ModalService } from './core/services/modal.service';
 import { ButtonRibbonComponent } from './shared/components/atoms/button-ribbon/button-ribbon.component';
 import { ButtonComponent } from './shared/components/atoms/button/button.component';
-import { NavigationComponent } from './shared/components/navigation/navigation.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 declare const gtag: Function;
 

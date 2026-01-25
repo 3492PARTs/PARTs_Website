@@ -5,3 +5,4 @@ export * from './click-outside-element/click-outside-element.directive';
 export * from './full-screen/full-screen.directive';
 export * from './on-create/on-create.directive';
 export * from './tooltip/tooltip.directive';
+export * from './linkify/linkify.directive';
