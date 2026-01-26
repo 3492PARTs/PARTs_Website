@@ -1,8 +1,8 @@
-@use "abstracts/variables";
+@use 'abstracts/variables';
 
-[type="button"]:not(:disabled),
-[type="reset"]:not(:disabled),
-[type="submit"]:not(:disabled),
+[type='button']:not(:disabled),
+[type='reset']:not(:disabled),
+[type='submit']:not(:disabled),
 button:not(:disabled) {
   cursor: pointer;
 }
@@ -31,8 +31,11 @@ button:disabled {
   font-size: 1.6rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   margin: 0.2rem;
 }
 
@@ -200,4 +203,11 @@ button:disabled {
   color: variables.$gray;
   background-color: transparent;
   font-size: 2.2rem;
+
+  &.btn-symbol {
+    &:hover {
+      box-shadow: none !important;
+      background-color: transparent;
+    }
+  }
 }
