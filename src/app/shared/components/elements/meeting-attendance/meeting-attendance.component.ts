@@ -268,6 +268,7 @@ export class MeetingAttendanceComponent implements OnInit {
   setAttendanceTableCols(): void {
     let cols: TableColType[] = [{ PropertyName: 'user.name', ColLabel: 'User' },
     { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
+    { PropertyName: 'meeting.meeting_typ.meeting_nm', ColLabel: 'Type' },
     { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
     { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true }];
 
