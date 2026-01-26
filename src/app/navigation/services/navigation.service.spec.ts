@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { NavigationService, NavigationState } from '../../core/services/navigation.service';
+import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
 import { GeneralService } from '../../core/services/general.service';
 import { createMockGeneralService, createMockRouter } from '../../../test-helpers';
 import { Link } from '../../core/models/navigation.models';
@@ -131,10 +131,10 @@ describe('NavigationService', () => {
     });
 
     it('should set active sub page to matching route', () => {
-      service.setSubPages('/admin/users');
+      service.setSubPages(service.allSubPages[0][1].routerlink);
       service.subPage.subscribe(page => {
         if (page !== '') {
-          expect(page).toBe('/admin/admin-users');
+          expect(page).toBe(service.allSubPages[0][1].routerlink);
         }
       });
     });
@@ -148,7 +148,7 @@ describe('NavigationService', () => {
       service.setSubPages('/admin/nonexistent');
       service.subPage.subscribe(page => {
         if (page !== '') {
-          expect(page).toBe('/admin/admin-users');
+          expect(page).toBe(service.allSubPages[0][0].routerlink); // First admin sub page
         }
       });
     });
