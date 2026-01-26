@@ -95,7 +95,7 @@
             [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
             [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
             (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
-            [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
+            [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'time_in'" [OrderByReverse]="true"></app-table>
     </app-modal>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
