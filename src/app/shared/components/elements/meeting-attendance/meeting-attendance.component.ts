@@ -19,7 +19,7 @@ import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, decodeYesNoBoolean, formatDateString } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
@@ -274,6 +274,7 @@ export class MeetingAttendanceComponent implements OnInit {
     if (this.gs.getAppSize() >= AppSize.LG) {
       cols = [
         ...cols,
+        { ColLabel: 'Duration', Type: 'function', ColValueFunction: this.computeAttendanceDuration.bind(this), ColorFunctionRecAsParam: true },
         { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
       ];
 
@@ -289,6 +290,10 @@ export class MeetingAttendanceComponent implements OnInit {
 
   isAttendanceApproved(attendance: Attendance): boolean {
     return this.attendanceService.isAttendanceApproved(attendance);
+  }
+
+  computeAttendanceDuration(attendance: Attendance): string {
+    return this.attendanceService.computeAttendanceDuration(attendance);
   }
 
   // MEETING -----------------------------------------------------------

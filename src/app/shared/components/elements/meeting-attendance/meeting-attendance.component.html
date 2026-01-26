@@ -15,7 +15,7 @@
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
         (RemoveRecordCallBack)="removeMeeting($event)" (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'"
-        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
+        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'start'"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
 
@@ -55,7 +55,7 @@
 
                 <div class="flex align-items-center">
                     <div class="box leftover"></div>
-                    <p>No meeting</p>
+                    <p>Approved/No meeting</p>
                 </div>
             </div>
         </app-form-element-group>
@@ -76,7 +76,8 @@
         [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
         [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
-        [Stripes]="true" [EnableFilter]="isAdminInterface()"></app-table>
+        [Stripes]="true" [EnableFilter]="isAdminInterface()" [OrderByProperty]="'time_in'"
+        [OrderByReverse]="true"></app-table>
 
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
         <div class="grid two-column-grid">
@@ -124,7 +125,7 @@
                 [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
                 [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
                 (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
-                [ScrollHeight]="'50vh'" [Stripes]="true"></app-table>
+                [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'time_in'"></app-table>
             }
         </app-form>
     </app-modal>

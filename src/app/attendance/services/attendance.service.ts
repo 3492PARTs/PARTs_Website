@@ -107,6 +107,31 @@ export class AttendanceService {
     this.saveAttendance(attendance);
   }
 
+  computeAttendanceDuration(attendance: Attendance): string {
+    if (!attendance.time_in || attendance.absent) {
+      return '0m';
+    }
+
+    let endTime = new Date();
+    if (attendance.time_out) {
+      endTime = new Date(attendance.time_out);
+    }
+
+    const diffMs = endTime.getTime() - new Date(attendance.time_in).getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+
+    const hours = Math.floor(diffMins / 60);
+    const minutes = diffMins % 60;
+
+    let durationStr = '';
+    if (hours > 0) {
+      durationStr += `${hours}h `;
+    }
+    durationStr += `${minutes}m`;
+
+    return durationStr.trim();
+  }
+
   // ATTENDANCE REPORT -----------------------------------------------------------
   getAttendanceReport(user?: User, meeting?: Meeting): Promise<AttendanceReport[] | null> {
     let qp = {};
