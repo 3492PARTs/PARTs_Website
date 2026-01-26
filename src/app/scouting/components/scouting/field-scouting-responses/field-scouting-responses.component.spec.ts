@@ -7,7 +7,7 @@ import { APIService } from '@app/core/services/api.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { ModalService } from '@app/core/services/modal.service';
-import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
+import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
 import { AppSize } from '@app/core/utils/utils.functions';
 import { BehaviorSubject, of } from 'rxjs';
 import { ScoutFieldResponsesReturn, ScoutPitResponsesReturn, TeamNote, ScoutPitResponse } from '@app/scouting/models/scouting.models';

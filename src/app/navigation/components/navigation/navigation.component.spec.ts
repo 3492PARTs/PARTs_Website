@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { NavigationComponent } from './navigation.component';
 import { SwPush, SwUpdate } from '@angular/service-worker';
-import { createMockSwPush, createMockSwUpdate } from '../../test-helpers';
+import { createMockSwPush, createMockSwUpdate } from '../../../../test-helpers';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;

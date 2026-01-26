@@ -15,7 +15,7 @@ import {
   OnChanges
 } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
-import { NavigationService, NavigationState } from '@app/core/services/navigation.service';
+import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';

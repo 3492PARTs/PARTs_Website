@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { NavigationService, NavigationState } from './navigation.service';
-import { GeneralService } from './general.service';
+import { NavigationService, NavigationState } from '../../core/services/navigation.service';
+import { GeneralService } from '../../core/services/general.service';
 import { createMockGeneralService, createMockRouter } from '../../../test-helpers';
-import { Link } from '../models/navigation.models';
+import { Link } from '../../core/models/navigation.models';
 
 describe('NavigationService', () => {
   let service: NavigationService;

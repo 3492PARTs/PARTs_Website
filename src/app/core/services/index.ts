@@ -6,6 +6,6 @@ export * from './database.service';
 export * from './general.service';
 export * from './location.service';
 export * from './modal.service';
-export * from './navigation.service';
+export * from '../../navigation/services/navigation.service';
 export * from './notifications.service';
 export * from './pwa.service';

@@ -7,7 +7,7 @@ import { createMockSwPush } from '../../../../../test-helpers';
 
 import { FormElementComponent } from './form-element.component';
 import { GeneralService } from '@app/core/services/general.service';
-import { NavigationService } from '@app/core/services/navigation.service';
+import { NavigationService } from '@app/navigation/services/navigation.service';
 
 describe('FormElementComponent', () => {
   let component: FormElementComponent;
@@ -122,7 +122,7 @@ describe('FormElementComponent', () => {
       component.Type = 'checkbox';
       component.TrueValue = 'yes';
       component.FalseValue = 'no';
-      
+
       const event = { target: { checked: true } };
       component.change(event);
       expect(component.ModelChange.emit).toHaveBeenCalledWith('yes');
@@ -133,7 +133,7 @@ describe('FormElementComponent', () => {
       component.Type = 'checkbox';
       component.TrueValue = 'yes';
       component.FalseValue = 'no';
-      
+
       const event = { target: { checked: false } };
       component.change(event);
       expect(component.ModelChange.emit).toHaveBeenCalledWith('no');
@@ -143,7 +143,7 @@ describe('FormElementComponent', () => {
       component.Type = 'number';
       component.MinValue = 10;
       component.Model = 15;
-      
+
       component.change(5);
       // The component applies MinValue constraint
       expect(component.Model).toBeGreaterThanOrEqual(10);
@@ -153,7 +153,7 @@ describe('FormElementComponent', () => {
       component.Type = 'number';
       component.MaxValue = 100;
       component.Model = 50;
-      
+
       component.change(150);
       // The component applies MaxValue constraint
       expect(component.Model).toBeLessThanOrEqual(100);
@@ -164,10 +164,10 @@ describe('FormElementComponent', () => {
       component.MinValue = 10;
       component.MaxValue = 100;
       component.Model = 50;
-      
+
       component.change(50);
       expect(component.Model).toBe(50);
-      
+
       component.change(75);
       expect(component.Model).toBe(75);
     });
@@ -178,7 +178,7 @@ describe('FormElementComponent', () => {
       component.Required = true;
       component.Touched = true;
       component.Model = '';
-      
+
       const invalid = component.isInvalid();
       expect(invalid).toBe(true);
       expect(component.valid).toBe(false);
@@ -188,7 +188,7 @@ describe('FormElementComponent', () => {
       component.Required = true;
       component.Touched = true;
       component.Model = 'test value';
-      
+
       const invalid = component.isInvalid();
       expect(invalid).toBe(false);
       expect(component.valid).toBe(true);
@@ -197,10 +197,10 @@ describe('FormElementComponent', () => {
     it('should validate email format', () => {
       component.Type = 'email';
       component.Touched = true;
-      
+
       component.Model = 'invalid-email';
       expect(component.isInvalid()).toBe(true);
-      
+
       component.Model = 'valid@email.com';
       expect(component.isInvalid()).toBe(false);
     });
@@ -208,10 +208,10 @@ describe('FormElementComponent', () => {
     it('should validate phone number length', () => {
       component.Type = 'phone';
       component.Touched = true;
-      
+
       component.Model = '123456789'; // 9 digits
       expect(component.isInvalid()).toBe(true);
-      
+
       component.Model = '1234567890'; // 10 digits
       expect(component.isInvalid()).toBe(false);
     });
@@ -219,7 +219,7 @@ describe('FormElementComponent', () => {
     it('should use custom ValidityFunction when provided', () => {
       component.Touched = true;
       component.ValidityFunction = jasmine.createSpy('validity').and.returnValue(false);
-      
+
       const invalid = component.isInvalid();
       expect(invalid).toBe(true);
       expect(component.ValidityFunction).toHaveBeenCalled();
@@ -230,7 +230,7 @@ describe('FormElementComponent', () => {
       component.Required = true;
       component.Touched = true;
       component.Model = '';
-      
+
       const invalid = component.isInvalid();
       expect(invalid).toBe(false);
     });
@@ -324,10 +324,10 @@ describe('FormElementComponent', () => {
         { id: 2, name: 'Item 2', checked: false }
       ];
       component.Model = [];
-      
+
       spyOn(component, 'change');
       component.selectAll();
-      
+
       expect(component.change).toHaveBeenCalledTimes(2);
       expect(component.change).toHaveBeenCalledWith(true, 0);
       expect(component.change).toHaveBeenCalledWith(true, 1);
@@ -339,10 +339,10 @@ describe('FormElementComponent', () => {
         { id: 2, name: 'Item 2', checked: true }
       ];
       component.Model = [];
-      
+
       spyOn(component, 'change');
       component.deselectAll();
-      
+
       expect(component.change).toHaveBeenCalledTimes(2);
       expect(component.change).toHaveBeenCalledWith(false, 0);
       expect(component.change).toHaveBeenCalledWith(false, 1);
@@ -362,10 +362,10 @@ describe('FormElementComponent', () => {
           files: [mockFile]
         }
       };
-      
+
       spyOn(component, 'change');
       component.fileProgress(event);
-      
+
       expect(component.fileName).toBe('test.txt');
       expect(component.change).toHaveBeenCalledWith(mockFile);
     });
@@ -377,7 +377,7 @@ describe('FormElementComponent', () => {
           files: [mockFile]
         }
       };
-      
+
       component.fileProgress(event);
       expect(component.fileName).toContain('....');
       expect(component.fileName).toContain('txt');
@@ -389,7 +389,7 @@ describe('FormElementComponent', () => {
       component.Type = 'rating';
       component.Disabled = false;
       spyOn(component, 'change');
-      
+
       component.setRating(4);
       expect(component.change).toHaveBeenCalledWith(4);
     });
@@ -398,7 +398,7 @@ describe('FormElementComponent', () => {
       component.Type = 'rating';
       component.Disabled = true;
       spyOn(component, 'change');
-      
+
       component.setRating(4);
       expect(component.change).not.toHaveBeenCalled();
     });
@@ -420,9 +420,9 @@ describe('FormElementComponent', () => {
       component['stopwatchHour'] = 1;
       component['stopwatchMinute'] = 30;
       component['stopwatchSecond'] = 45;
-      
+
       component.stopwatchReset();
-      
+
       expect(component['stopwatchHour']).toBe(0);
       expect(component['stopwatchMinute']).toBe(0);
       expect(component['stopwatchSecond']).toBe(0);

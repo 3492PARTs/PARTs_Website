@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GeneralService } from './general.service';
-import { Link } from '../models/navigation.models';
+import { GeneralService } from '../../core/services/general.service';
+import { Link } from '../../core/models/navigation.models';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
@@ -34,8 +34,8 @@ export class NavigationService {
   ];
 
   readonly allSubPages = [[
-    new Link('Users', '/admin/admin-users', 'account-group'),
     new Link('Meetings', '/admin/meetings', 'calendar-account-outline'),
+    new Link('Users', '/admin/admin-users', 'account-group'),
     new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
     new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
     new Link('Security', '/admin/security', 'security'),
