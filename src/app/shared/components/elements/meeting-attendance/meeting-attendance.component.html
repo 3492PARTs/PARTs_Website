@@ -20,19 +20,35 @@
 
     <app-header [h]="2">Attendance Report</app-header>
 
-    <div class="grid two-column-grid">
-        <p>Completed Meeting Hours: {{totalMeetingHours.hours || 0}}</p>
-        <p>Bonus Meeting Hours Available:
-            {{totalMeetingHours.bonus_hours || 0}}</p>
-        <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
-        <p>Event Hours Available: {{totalMeetingHours.event_hours || 0}}</p>
-    </div>
+    <app-form-element-group [LabelText]="'Team Hours Summary'">
+        <div class="grid two-column-grid">
+            <p>Meeting Hours Required: {{totalMeetingHours.hours}}</p>
+            <p>Bonus Meeting Hours: {{totalMeetingHours.bonus_hours || 0}}</p>
+            <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
+            <p>Total Event Hours Required: {{totalMeetingHours.event_hours}}</p>
+        </div>
 
+    </app-form-element-group>
+
+    @if (isAdminInterface()) {
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
         (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"
         [OrderByProperty]="'reg_time_percentage'" [OrderByReverse]="true"
         [ShowDownloadButton]="isAdminInterface()"></app-table>
+    }
+    @else if (attendanceReports.length > 0) {
+    <app-form-element-group [LabelText]="'My Hours Summary'">
+        <div class="grid two-column-grid">
+            <p>Completed Meeting Hours: {{attendanceReports[0].reg_time}}</p>
+            <p>Completed Event Hours: {{attendanceReports[0].event_time}}</p>
+            <p>Meeting Hours Percentage: {{attendanceReports[0].reg_time_percentage}}%</p>
+            <p>Event Hours Percentage: {{attendanceReports[0].event_time_percentage}}%</p>
+        </div>
+
+    </app-form-element-group>
+    }
+
 
     <ng-template #attendanceLegend>
         <app-header [h]="2">Attendance</app-header>
@@ -81,13 +97,15 @@
         [ShowDownloadButton]="true"></app-table>
 
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
-        <div class="grid two-column-grid">
-            <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
-            <p>Completed Event Hours: {{attendanceReport.event_time}}</p>
-            <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
-            <p>Event Hours Percentage: {{attendanceReport.event_time_percentage}}%</p>
-        </div>
+        <app-form-element-group [LabelText]="'Hours Summary'">
+            <div class="grid two-column-grid">
+                <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
+                <p>Completed Event Hours: {{attendanceReport.event_time}}</p>
+                <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
+                <p>Event Hours Percentage: {{attendanceReport.event_time_percentage}}%</p>
+            </div>
 
+        </app-form-element-group>
 
         <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
 

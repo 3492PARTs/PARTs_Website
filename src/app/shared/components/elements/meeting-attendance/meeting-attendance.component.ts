@@ -65,13 +65,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   attendanceReport = new AttendanceReport();
   attendanceReports: AttendanceReport[] = [];
-  attendanceReportTableCols: TableColType[] = [
-    { PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
-    { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours %', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
-    { PropertyName: 'event_time', ColLabel: 'Event Hours' },
-    { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
-  ];
+  attendanceReportTableCols: TableColType[] = [];
 
   reportAttendanceModalVisible = false;
   reportAttendance: Attendance[] = [];
@@ -101,8 +95,8 @@ export class MeetingAttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.attendanceTableButtons = [
-      new TableButtonType('edit', this.showAttendanceModal.bind(this), 'Edit'),
-      new TableButtonType('delete', this.removeAttendance.bind(this), 'Delete', undefined, undefined, this.hideAttendanceDeleteButton.bind(this)),
+      new TableButtonType('edit', this.showAttendanceModal.bind(this), 'Edit', undefined, undefined, this.hideAttendanceEditDeleteButton.bind(this)),
+      new TableButtonType('delete', this.removeAttendance.bind(this), 'Delete', undefined, undefined, this.hideAttendanceEditDeleteButton.bind(this)),
 
 
       new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
@@ -110,6 +104,20 @@ export class MeetingAttendanceComponent implements OnInit {
       new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
       new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
     ];
+
+    this.attendanceReportTableCols = [
+      { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
+      { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours %', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
+      { PropertyName: 'event_time', ColLabel: 'Event Hours' },
+      { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
+    ];
+
+    if (this.isAdminInterface()) {
+      this.attendanceReportTableCols = [
+        { PropertyName: 'user.name', ColLabel: 'User' },
+        ...this.attendanceReportTableCols
+      ];
+    }
 
     this.today.setHours(0, 0, 0, 0);
 
@@ -237,7 +245,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   }
 
-  hideAttendanceDeleteButton(attendance: Attendance): boolean {
+  hideAttendanceEditDeleteButton(attendance: Attendance): boolean {
     return !this.isAdminInterface() && this.attendanceService.isAttendanceApproved(attendance);
   }
 
@@ -275,11 +283,18 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   setAttendanceTableCols(): void {
-    let cols: TableColType[] = [{ PropertyName: 'user.name', ColLabel: 'User' },
-    { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
-    { PropertyName: 'meeting.meeting_typ.meeting_nm', ColLabel: 'Type' },
-    { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-    { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true }];
+    let cols: TableColType[] = [
+      { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
+      { PropertyName: 'meeting.meeting_typ.meeting_nm', ColLabel: 'Type' },
+      { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
+      { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true }
+    ];
+
+    if (this.isAdminInterface())
+      cols = [
+        { PropertyName: 'user.name', ColLabel: 'User' },
+        ...cols
+      ];
 
     if (this.gs.getAppSize() >= AppSize.LG) {
       cols = [
