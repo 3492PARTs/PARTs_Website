@@ -47,6 +47,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'title', ColLabel: 'Title' },
     { PropertyName: 'start', ColLabel: 'Start' },
     { PropertyName: 'end', ColLabel: 'End' },
+    { ColLabel: 'Duration', Type: 'function', ColValueFunction: this.computeMeetingDuration.bind(this) },
     { PropertyName: 'meeting_typ.meeting_nm', ColLabel: 'Type' },
   ];
   meetingsTableButtons: TableButtonType[] = [
@@ -283,7 +284,7 @@ export class MeetingAttendanceComponent implements OnInit {
     if (this.gs.getAppSize() >= AppSize.LG) {
       cols = [
         ...cols,
-        { ColLabel: 'Duration', Type: 'function', ColValueFunction: this.computeAttendanceDuration.bind(this), ColorFunctionRecAsParam: true },
+        { ColLabel: 'Duration', Type: 'function', ColValueFunction: this.computeAttendanceDuration.bind(this) },
         { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
       ];
 
@@ -343,6 +344,10 @@ export class MeetingAttendanceComponent implements OnInit {
     if (this.AdminInterface && meeting) {
       this.getAttendance(meeting);
     }
+  }
+
+  computeMeetingDuration(meeting: Meeting): string {
+    return this.meetingService.computeMeetingDuration(meeting);
   }
 
   removeMeeting(meeting: Meeting): void | null {

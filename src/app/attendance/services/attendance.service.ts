@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { APIService, Banner, GeneralService, ModalService, RetMessage } from '@app/core';
 import { Attendance, AttendanceReport, Meeting } from '../models/attendance.models';
 import { User } from '@app/auth/models/user.models';
+import { getDateDuration } from '@app/core/utils/utils.functions';
 
 @Injectable({
   providedIn: 'root'
@@ -117,19 +118,7 @@ export class AttendanceService {
       endTime = new Date(attendance.time_out);
     }
 
-    const diffMs = endTime.getTime() - new Date(attendance.time_in).getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-
-    const hours = Math.floor(diffMins / 60);
-    const minutes = diffMins % 60;
-
-    let durationStr = '';
-    if (hours > 0) {
-      durationStr += `${hours}h `;
-    }
-    durationStr += `${minutes}m`;
-
-    return durationStr.trim();
+    return getDateDuration(new Date(attendance.time_in), endTime);
   }
 
   // ATTENDANCE REPORT -----------------------------------------------------------

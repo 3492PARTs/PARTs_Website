@@ -83,6 +83,22 @@ export function formatTimeString(s: string | Date): string {
   return string.split(' ')[1] + ' ' + string.split(' ')[2];
 }
 
+export function getDateDuration(startTime: Date, endTime: Date): string {
+  const diffMs = endTime.getTime() - startTime.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+
+  const hours = Math.floor(diffMins / 60);
+  const minutes = diffMins % 60;
+
+  let durationStr = '';
+  if (hours > 0) {
+    durationStr += `${hours}h `;
+  }
+  durationStr += `${minutes}m`;
+
+  return durationStr.trim();
+}
+
 /**
  * Get a property value from an array of objects by matching another property
  */

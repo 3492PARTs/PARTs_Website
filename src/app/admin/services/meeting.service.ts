@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Meeting, MeetingHours } from '@app/attendance/models/attendance.models';
 import { ModalService, GeneralService, APIService, Banner, RetMessage } from '@app/core';
+import { getDateDuration } from '@app/core/utils/utils.functions';
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +67,10 @@ export class MeetingService {
         resolve(null);
       }
     });
+  }
+
+  computeMeetingDuration(meeting: Meeting): string {
+    return getDateDuration(new Date(meeting.start), new Date(meeting.end));
   }
 
   // MEETING HOURS -----------------------------------------------------------
