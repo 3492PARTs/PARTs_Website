@@ -118,8 +118,8 @@ export class MeetingAttendanceComponent implements OnInit {
     }
     this.getMeetings();
 
-    //if (this.AdminInterface)
-    //this.attendanceFilterOption = 'unapp';
+    if (this.AdminInterface)
+      this.attendanceFilterOption = 'unapp';
 
     this.setAttendanceTableCols();
   }
