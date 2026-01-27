@@ -125,13 +125,14 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Input() SymbolSize = '3.5rem';
 
+  buttonWidth = 0;
+
   constructor(private gs: GeneralService, private renderer: Renderer2) { }
 
   ngOnInit() {
     if (this.RecordClickCallBack.observed || this.DblClkRecordClickCallBack.observed) this.CursorPointer = true;
     this.setSymbolSizeForButtons();
     this.generateTableDisplayValues();
-    this.ShowButtonColumn();
     if (strNoE(this.TableName) && !strNoE(this.TableTitle))
       this.TableName = this.TableTitle;
 
@@ -173,11 +174,9 @@ export class TableComponent implements OnInit, OnChanges {
             break;
           case 'TableDataButtons':
             this.generateTableDisplayValues();
-            this.ShowButtonColumn();
             break;
           case 'TriggerUpdate':
             this.generateTableDisplayValues();
-            this.ShowButtonColumn();
             break;
         }
       }
@@ -230,6 +229,7 @@ export class TableComponent implements OnInit, OnChanges {
         });
       });
     });
+    this.ShowButtonColumn();
   }
 
   private toType() {
@@ -341,50 +341,51 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn(): void {
-    const buttonWidth = parseFloat(this.SymbolSize.replace('rem', '')) + .1;
+    this.buttonWidth = parseFloat(this.SymbolSize.replace('rem', '')) + .5;
     let colWidth = 0;
 
-    if (this.ShowAddButton) {
-      colWidth += buttonWidth;
-    }
-
     if (this.ShowEditButton) {
-      colWidth += buttonWidth;
+      colWidth += this.buttonWidth;
     }
 
     if (this.ShowRemoveButton) {
-      colWidth += buttonWidth;
+      colWidth += this.buttonWidth;
     }
 
     if (this.ShowViewButton) {
-      colWidth += buttonWidth;
+      colWidth += this.buttonWidth;
     }
 
     if (this.ShowArchiveButton) {
-      colWidth += buttonWidth;
+      colWidth += this.buttonWidth;
     }
 
-    this.TableDataButtons.forEach(btn => {
+    for (let i = 0; i < this.TableDataButtons.length; i++) {
+      const btn = this.TableDataButtons[i];
       btn.setOneOfButtonTypeVisible(false);
-      this.TableData.forEach(rec => {
-        if (!btn.isOneOfButtonTypeVisible() &&
-          btn.HideFunction &&
-          !this.isRecordButtonHidden(rec, btn)) {
+
+      for (let j = 0; j < this.TableData.length; j++) {
+        const rec = this.TableData[j];
+        if (!btn.HideFunction || !this.isRecordButtonHidden(rec, btn)) {
           btn.setOneOfButtonTypeVisible(true);
+          break;
         }
-      })
-    });
+      }
+    }
 
     this.TableDataButtons.forEach(t => {
       if (t.isOneOfButtonTypeVisible())
         if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
           colWidth += 6;
         else
-          colWidth += buttonWidth;
+          colWidth += this.buttonWidth;
     });
 
     if (colWidth > 0) {
       this.buttonCellWidth = colWidth + 1 + 'rem';
+    }
+    else if (this.ShowAddButton) { // only need to account for add button if no other buttons
+      colWidth += this.buttonWidth;
     }
 
     if (

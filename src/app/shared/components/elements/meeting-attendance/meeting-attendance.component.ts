@@ -100,6 +100,10 @@ export class MeetingAttendanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.attendanceTableButtons = [
+      new TableButtonType('edit', this.showAttendanceModal.bind(this), 'Edit'),
+      new TableButtonType('delete', this.removeAttendance.bind(this), 'Delete', undefined, undefined, this.hideAttendanceDeleteButton.bind(this)),
+
+
       new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
       new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
       new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
@@ -114,8 +118,8 @@ export class MeetingAttendanceComponent implements OnInit {
     }
     this.getMeetings();
 
-    if (this.AdminInterface)
-      this.attendanceFilterOption = 'unapp';
+    //if (this.AdminInterface)
+    //this.attendanceFilterOption = 'unapp';
 
     this.setAttendanceTableCols();
   }
@@ -230,6 +234,10 @@ export class MeetingAttendanceComponent implements OnInit {
 
     return 'initial'
 
+  }
+
+  hideAttendanceDeleteButton(attendance: Attendance): boolean {
+    return !this.isAdminInterface() && this.attendanceService.isAttendanceApproved(attendance);
   }
 
   hideCheckOutButton(attendance: Attendance): boolean {

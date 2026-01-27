@@ -71,9 +71,8 @@
         [BindingProperty]="'value'"></app-form-element>
     }
     <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
-        (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()" [ShowRemoveButton]="true"
-        (RemoveRecordCallBack)="removeAttendance($event)" [TableDataButtons]="attendanceTableButtons"
-        [ShowEditButton]="true" (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'"
+        (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()"
+        [TableDataButtons]="attendanceTableButtons" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
         [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
         [Stripes]="true" [EnableFilter]="isAdminInterface()" [OrderByProperty]="'time_in'"
