@@ -69,7 +69,8 @@ export class GeneralService {
     }
 
     if (index !== -1) {
-      window.clearTimeout(banners[index].timeout);
+      if (banners[index].timeout !== null)
+        window.clearTimeout(banners[index].timeout);
       banners.splice(index, 1);
       this.bannersBS.next(banners);
     }
