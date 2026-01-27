@@ -359,7 +359,7 @@ export class AuthService {
             case 'Attendance':
               this.meetingService.getActiveMeeting().then((result) => {
                 if (result) {
-                  this.gs.addSiteBanner(new SiteBanner(`${DefinedSiteBanners.ACTIVE_MEETING}${result.id}`, `There is an active meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
+                  this.gs.addSiteBanner(new SiteBanner(`${DefinedSiteBanners.ACTIVE_MEETING}${result.id}`, `There is a meeting today from ${formatTimeString(result.start)} to ${formatTimeString(result.end)}. Please remember to take <a href='attendance'>attendance</a>!`));
                 }
               });
               break;

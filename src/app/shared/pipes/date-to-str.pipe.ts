@@ -1,24 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { returnIfValidDate } from '@app/core/utils/utils.functions';
 @Pipe({
   name: 'dateToStr', standalone: true
 })
 export class DateToStrPipe implements PipeTransform {
 
   transform(elem: any, time = true, month = false): any {
-    let date = null;
+    let date = returnIfValidDate(elem);
     const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const regex1 = /1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-9] ((AM)|(PM))/g;
-    const regex2 = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](.[0-9]*)?Z/g;
-    //console.log(elem + ' elem typ reg 1:' + regex1.test(elem) + ' reg2: ' + regex2.test(elem));
-    if (regex1.test(elem) || regex2.test(elem)) {
-      //console.log('hello');
-      //elem = elem.replace('Z', '');
-      //console.log(elem);
-      date = new Date(elem);
-      //console.log(ret);
-    }
-
-    if (elem instanceof Date) date = elem;
 
     if (date != null) {
       const mm = date.getMonth() + 1; // getMonth() is zero-based

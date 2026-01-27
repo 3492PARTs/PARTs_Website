@@ -17,14 +17,22 @@
       'table-normal': !Resizable
     }">
     <thead class="thead">
+      <ng-template #tableHeadButtons>
+        @if (ShowAddButton) {
+        <app-button [ButtonType]="'add'" [SymbolSize]="SymbolSize" (FunctionCallBack)="Add()">
+        </app-button>
+        }
+
+        @if (ShowDownloadButton) {
+        <app-button [ButtonType]="'download'" [SymbolSize]="SymbolSize" (FunctionCallBack)="Download()">
+        </app-button>
+        }
+      </ng-template>
       <tr [ngClass]="{ 'resize-lines': Resizable }">
         @if (showButtonColumn && ButtonsFirstCol) {
         <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
           <!--Table buttons as first column-->
-          @if (ShowAddButton) {
-          <app-button [ButtonType]="'add'" [SymbolSize]="SymbolSize" (FunctionCallBack)="Add()">
-          </app-button>
-          }
+          <ng-container *ngTemplateOutlet="tableHeadButtons"></ng-container>
         </th>
         }
         @for (col of TableCols; track col) {
@@ -64,10 +72,7 @@
         @if (showButtonColumn && !ButtonsFirstCol) {
         <th class="btn-add-col" [ngStyle]="{ width: buttonCellWidth }">
           <!--Table buttons as last column-->
-          @if (ShowAddButton) {
-          <app-button [ButtonType]="'add'" [SymbolSize]="SymbolSize" (FunctionCallBack)="Add()" [Title]="'Add'">
-          </app-button>
-          }
+          <ng-container *ngTemplateOutlet="tableHeadButtons"></ng-container>
         </th>
         }
         @if (Scrollable) {

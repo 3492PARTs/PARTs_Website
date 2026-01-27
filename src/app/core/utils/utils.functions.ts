@@ -56,6 +56,27 @@ export function cloneObject(o: any): any {
 }
 
 /**
+ * Return a Date object if the input is a valid date string or Date
+ */
+export function returnIfValidDate(elem: any): Date | null {
+  let date: Date | null = null;
+  const regex1 = /1*[0-9]\/1*[0-9]\/[0-9][0-9][0-9][0-9] 1*[0-9]:[0-9]*[0-9] ((AM)|(PM))/g;
+  const regex2 = /[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9](.[0-9]*)?Z/g;
+  //console.log(elem + ' elem typ reg 1:' + regex1.test(elem) + ' reg2: ' + regex2.test(elem));
+  if (regex1.test(elem) || regex2.test(elem)) {
+    //console.log('hello');
+    //elem = elem.replace('Z', '');
+    //console.log(elem);
+    date = new Date(elem);
+    //console.log(ret);
+  }
+
+  if (elem instanceof Date) date = elem;
+
+  return date;
+}
+
+/**
  * Format a date string to MM/DD/YY HH:MM AM/PM format
  */
 export function formatDateString(s: string | Date): string {
@@ -83,6 +104,9 @@ export function formatTimeString(s: string | Date): string {
   return string.split(' ')[1] + ' ' + string.split(' ')[2];
 }
 
+/** 
+ * Get the duration between two dates as a formatted string
+ */
 export function getDateDuration(startTime: Date, endTime: Date): string {
   const diffMs = endTime.getTime() - startTime.getTime();
   const diffMins = Math.floor(diffMs / 60000);
@@ -654,8 +678,13 @@ export function tableToCSV(tableCols: any[], tableData: any[], onEmptyError?: (m
   csv += '\n';
 
   for (let i = 0; i < tableData.length; i++) {
-    tableCols.forEach(element => {
-      csv += '"' + getPropertyValue(tableData[i], element['PropertyName']).toString().replaceAll('"', '""') + '",';
+    tableCols.forEach(col => {
+      let value = getPropertyValue(tableData[i], (col['PropertyName'] || '') + (col.ColValueFunction?.name || '')).toString().replaceAll('"', '""');
+      const date = returnIfValidDate(value);
+      if (date != null)
+        value = formatDateString(date);
+
+      csv += `"${value}",`;
     });
     csv = csv.substring(0, csv.length - 1);
     csv += '\n';

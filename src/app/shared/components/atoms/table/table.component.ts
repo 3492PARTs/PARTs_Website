@@ -26,7 +26,7 @@ import { OrderByPipe } from '@app/shared/pipes/order-by.pipe';
 import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-import { getPropertyValue, setPropertyValue, strNoE, previewImage } from '@app/core/utils/utils.functions';
+import { getPropertyValue, setPropertyValue, strNoE, previewImage, tableToCSV, downloadFileAs } from '@app/core/utils/utils.functions';
 //import * as $ from 'jquery';
 
 @Component({
@@ -63,6 +63,8 @@ export class TableComponent implements OnInit, OnChanges {
 
   @Output() AddRecordCallBack: EventEmitter<any> = new EventEmitter();
   @Input() ShowAddButton = false;
+
+  @Input() ShowDownloadButton = false;
 
   @Output() ArchiveRecordCallBack: EventEmitter<any> = new EventEmitter();
   @Input() ShowArchiveButton = false;
@@ -381,12 +383,20 @@ export class TableComponent implements OnInit, OnChanges {
           colWidth += this.buttonWidth;
     });
 
+    // only need to account for header buttons if no other buttons or other is smaller than header buttons
+    let headerColWidth = 0;
+    if (this.ShowAddButton)
+      headerColWidth += this.buttonWidth;
+    if (this.ShowDownloadButton)
+      headerColWidth += this.buttonWidth;
+
+    if (headerColWidth > colWidth)
+      colWidth = headerColWidth;
+
     if (colWidth > 0) {
       this.buttonCellWidth = colWidth + 1 + 'rem';
     }
-    else if (this.ShowAddButton) { // only need to account for add button if no other buttons
-      colWidth += this.buttonWidth;
-    }
+
 
     if (
       this.ShowAddButton ||
@@ -416,6 +426,11 @@ export class TableComponent implements OnInit, OnChanges {
 
   Add() {
     this.AddRecordCallBack.emit();
+  }
+
+  Download() {
+    const csv = tableToCSV(this.TableCols, this.TableData);
+    downloadFileAs(`${(this.TableName || 'Export')}.csv`, csv, 'text/csv');
   }
 
   Archive(rec: any) {

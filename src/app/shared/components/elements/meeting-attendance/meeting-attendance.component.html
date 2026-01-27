@@ -15,7 +15,8 @@
         (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
         [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
         (RemoveRecordCallBack)="removeMeeting($event)" (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'"
-        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'start'"></app-table>
+        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'start'"
+        [ShowDownloadButton]="true"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
 
@@ -30,7 +31,8 @@
     <app-table [TableCols]="attendanceReportTableCols" [TableData]="attendanceReports" [Width]="'100%'"
         [EnableFilter]="AdminInterface" [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true"
         (ViewRecordCallBack)="showAttendanceReportModal($event)" [ShowViewButton]="isAdminInterface()"
-        [OrderByProperty]="'reg_time_percentage'" [OrderByReverse]="true"></app-table>
+        [OrderByProperty]="'reg_time_percentage'" [OrderByReverse]="true"
+        [ShowDownloadButton]="isAdminInterface()"></app-table>
 
     <ng-template #attendanceLegend>
         <app-header [h]="2">Attendance</app-header>
@@ -75,8 +77,8 @@
         [TableDataButtons]="attendanceTableButtons" [Width]="'100%'"
         [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
         [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
-        [Stripes]="true" [EnableFilter]="isAdminInterface()" [OrderByProperty]="'time_in'"
-        [OrderByReverse]="true"></app-table>
+        [Stripes]="true" [EnableFilter]="isAdminInterface()" [OrderByProperty]="'time_in'" [OrderByReverse]="true"
+        [ShowDownloadButton]="true"></app-table>
 
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
         <div class="grid two-column-grid">
@@ -91,10 +93,9 @@
 
         <app-table [TableCols]="reportAttendanceTableCols" [TableData]="reportAttendance" [ShowAddButton]="true"
             (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
-            [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
-            [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
-            (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
-            [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'time_in'" [OrderByReverse]="true"></app-table>
+            [TableDataButtons]="attendanceTableButtons" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'50vh'"
+            [Stripes]="true" [OrderByProperty]="'time_in'" [OrderByReverse]="true"
+            [ShowDownloadButton]="true"></app-table>
     </app-modal>
 
     <app-modal [(Visible)]="meetingModalVisible" [Title]="'Meeting'">
@@ -121,10 +122,8 @@
 
             <app-table [TableCols]="meetingAttendanceTableCols" [TableData]="meetingAttendance" [ShowAddButton]="true"
                 (AddRecordCallBack)="AdminInterface ? showAttendanceModal(undefined, meeting) : checkIn()"
-                [ShowRemoveButton]="true" (RemoveRecordCallBack)="removeAttendance($event)"
-                [TableDataButtons]="attendanceTableButtons" [ShowEditButton]="true"
-                (EditRecordCallBack)="showAttendanceModal($event)" [Width]="'100%'" [Scrollable]="true"
-                [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'time_in'"></app-table>
+                [TableDataButtons]="attendanceTableButtons" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'50vh'"
+                [Stripes]="true" [OrderByProperty]="'time_in'" [ShowDownloadButton]="true"></app-table>
             }
         </app-form>
     </app-modal>
