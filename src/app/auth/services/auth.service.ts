@@ -81,7 +81,7 @@ export class AuthService {
     userData.username = userData.username.toLocaleLowerCase();
 
     this.api.post(true, 'user/token/', userData, async (result: Token) => {
-      await this.setUserToken(result);
+      await this.setTokenGetUserData(result);
 
       localStorage.setItem(this.tokenStringLocalStorage, result.refresh);
       localStorage.setItem(environment.loggedInHereBefore, 'hi');
@@ -108,12 +108,16 @@ export class AuthService {
     }
 
     this.api.get(true, 'user/simulate/', { user_id: user.id }, async (result: Token) => {
+      // save the original user authentication token for later use
       this.userToken = this.tokenBS.value;
-      await this.setUserToken(result);
+
+      // set the new token and get the user data for the simulated user
+      this.router.navigateByUrl('');
+      await this.setTokenGetUserData(result);
     });
   }
 
-  private async setUserToken(result: Token): Promise<void> {
+  private async setTokenGetUserData(result: Token): Promise<void> {
     this.setToken(result);
 
     devConsoleLog('authorizeUser', 'login tokens below');

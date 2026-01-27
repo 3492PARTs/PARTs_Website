@@ -22,10 +22,10 @@
 
     <app-form-element-group [LabelText]="'Team Hours Summary'">
         <div class="grid two-column-grid">
-            <p>Meeting Hours Required: {{totalMeetingHours.hours}}</p>
+            <p>Meeting Hours Required: {{totalMeetingHours.hours || 0}}</p>
             <p>Bonus Meeting Hours: {{totalMeetingHours.bonus_hours || 0}}</p>
             <p>Future Meeting Hours: {{totalMeetingHours.hours_future || 0}}</p>
-            <p>Total Event Hours Required: {{totalMeetingHours.event_hours}}</p>
+            <p>Event Hours Required: {{totalMeetingHours.event_hours || 0}}</p>
         </div>
 
     </app-form-element-group>
