@@ -11,11 +11,11 @@ import { MechanicalComponent } from './recruitment/components/join/mechanical/me
 import { ProgrammingComponent } from './recruitment/components/join/programming/programming.component';
 import { TeamApplicationComponent } from './recruitment/components/join/team-application/team-application.component';
 import { LoginComponent } from './auth/components/login/login.component';
-import { BuildSeasonComponent } from './media/components/media/build-season/build-season.component';
-import { MediaCommunityOutreachComponent } from './media/components/media/community-outreach/community-outreach.component';
-import { CompetitionComponent } from './media/components/media/competition/competition.component';
+import { BuildSeasonComponent } from './media/components/build-season/build-season.component';
+import { MediaCommunityOutreachComponent } from './media/components/community-outreach/community-outreach.component';
+import { CompetitionComponent } from './media/components/competition/competition.component';
 import { MediaComponent } from './media/components/media/media.component';
-import { WallpapersComponent } from './media/components/media/wallpapers/wallpapers.component';
+import { WallpapersComponent } from './media/components/wallpapers/wallpapers.component';
 import { ResourcesComponent } from './public/components/resources/resources.component';
 import { SponsorShopComponent } from './sponsoring/components/sponsoring/sponsor-shop/sponsor-shop.component';
 import { SponsoringComponent } from './sponsoring/components/sponsoring/sponsoring.component';

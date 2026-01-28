@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlbumsComponent, Album } from '@app/shared/components/elements/albums/albums.component';
+import { AlbumsComponent, Album } from '@app/media/components/elements/albums/albums.component';
 import { ReturnCardComponent } from '@app/shared/components/elements/return-card/return-card.component';
 
 @Component({
   selector: 'app-media-community-outreach',
   imports: [ReturnCardComponent, AlbumsComponent],
   templateUrl: './community-outreach.component.html',
-  styleUrls: ['../media.component.scss']
+  styleUrls: ['../media/media.component.scss']
 })
 export class MediaCommunityOutreachComponent implements OnInit {
 
