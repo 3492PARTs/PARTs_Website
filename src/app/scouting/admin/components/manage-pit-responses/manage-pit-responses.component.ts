@@ -9,7 +9,7 @@ import { TableColType, TableComponent } from '@app/shared/components/atoms/table
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-import { ScoutPicDisplayComponent } from '@app/shared/components/elements/scout-pic-display/scout-pic-display.component';
+import { ScoutPicDisplayComponent } from '@app/scouting/components/elements/scout-pic-display/scout-pic-display.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 @Component({

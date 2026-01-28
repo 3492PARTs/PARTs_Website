@@ -5,7 +5,7 @@ import { APIService } from '@app/core/services/api.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 
-import { HeaderComponent } from "../../atoms/header/header.component";
+import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
 
 import { ModalService } from '@app/core/services/modal.service';
 import { strNoE } from '@app/core/utils/utils.functions';
