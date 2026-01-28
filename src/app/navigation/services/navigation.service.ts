@@ -42,21 +42,21 @@ export class NavigationService {
     new Link('Phone Types', '/admin/phone-types', 'phone'),
     new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
   ], [
-    new Link('Scouting Activity', '/scouting-admin/activity', 'account-reactivate'),
-    new Link('Schedule', '/scouting-admin/schedule', 'clipboard-text-clock'),
-    new Link('Season', '/scouting-admin/manage-season', 'card-bulleted-settings-outline'),
-    new Link('Field: Questions', '/scouting-admin/manage-field-questions', 'chat-question-outline'),
-    new Link('Field: Question Conditions', '/scouting-admin/manage-field-question-conditions', 'code-equal'),
-    new Link('Field Question Aggregates', '/scouting-admin/manage-field-question-aggregates', 'sigma'),
-    new Link('Field: Flows', '/scouting-admin/manage-field-flows', 'clipboard-flow-outline'),
-    new Link('Field: Flow Conditions', '/scouting-admin/manage-field-flow-conditions', 'code-equal'),
-    new Link('Field: Form', '/scouting-admin/manage-field-form', 'form-select'),
-    new Link('Field: Graphs', '/scouting-admin/graph-admin-form', 'chart-box-outline'),
-    new Link('Field: Responses', '/scouting-admin/manage-field-responses', 'table-edit'),
-    new Link('Pit: Questions', '/scouting-admin/manage-pit-questions', 'chat-question-outline'),
-    new Link('Pit: Question Conditions', '/scouting-admin/manage-pit-question-conditions', 'code-equal'),
-    new Link('Pit: Responses', '/scouting-admin/manage-pit-responses', 'table-edit'),
-    new Link('Users', '/scouting-admin/scouting-users', 'account-group'),
+    new Link('Scouting Activity', '/scouting/admin/activity', 'account-reactivate'),
+    new Link('Schedule', '/scouting/admin/schedule', 'clipboard-text-clock'),
+    new Link('Season', '/scouting/admin/manage-season', 'card-bulleted-settings-outline'),
+    new Link('Field: Questions', '/scouting/admin/manage-field-questions', 'chat-question-outline'),
+    new Link('Field: Question Conditions', '/scouting/admin/manage-field-question-conditions', 'code-equal'),
+    new Link('Field Question Aggregates', '/scouting/admin/manage-field-question-aggregates', 'sigma'),
+    new Link('Field: Flows', '/scouting/admin/manage-field-flows', 'clipboard-flow-outline'),
+    new Link('Field: Flow Conditions', '/scouting/admin/manage-field-flow-conditions', 'code-equal'),
+    new Link('Field: Form', '/scouting/admin/manage-field-form', 'form-select'),
+    new Link('Field: Graphs', '/scouting/admin/graph-admin-form', 'chart-box-outline'),
+    new Link('Field: Responses', '/scouting/admin/manage-field-responses', 'table-edit'),
+    new Link('Pit: Questions', '/scouting/admin/manage-pit-questions', 'chat-question-outline'),
+    new Link('Pit: Question Conditions', '/scouting/admin/manage-pit-question-conditions', 'code-equal'),
+    new Link('Pit: Responses', '/scouting/admin/manage-pit-responses', 'table-edit'),
+    new Link('Users', '/scouting/admin/users', 'account-group'),
   ], [
     new Link('Matches', '/scouting/strategizing/matches', 'soccer-field'),
     new Link('Metrics', '/scouting/strategizing/metrics', 'chart-box-outline'),
@@ -96,12 +96,9 @@ export class NavigationService {
         subPages = this.allSubPages[0];
         if (!environment.production && !subPages.find(sp => sp.routerlink === '/admin/requested-items')) subPages.push(new Link('Requested Items', '/admin/requested-items', 'view-grid-plus'));
         break;
-      case 'scouting-admin':
-        subPages = this.allSubPages[1];
-        break;
       case 'scouting':
         switch (area[2]) {
-          case 'scouting-admin':
+          case 'admin':
             subPages = this.allSubPages[1];
             break;
           case 'strategizing':
