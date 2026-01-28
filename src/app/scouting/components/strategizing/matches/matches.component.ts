@@ -8,7 +8,7 @@ import { TableColType, TableComponent } from '@app/shared/components/atoms/table
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { TabContainerComponent } from '@app/shared/components/atoms/tab-container/tab-container.component';
 import { TabComponent } from '@app/shared/components/atoms/tab/tab.component';
-import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-result-display/pit-result-display.component';
+import { PitResultDisplayComponent } from '@app/scouting/components/elements/pit-result-display/pit-result-display.component';
 import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { User } from '@app/auth/models/user.models';

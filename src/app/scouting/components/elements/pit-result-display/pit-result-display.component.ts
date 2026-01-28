@@ -3,7 +3,7 @@ import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
-import { ScoutPicDisplayComponent } from '../../../../scouting/components/elements/scout-pic-display/scout-pic-display.component';
+import { ScoutPicDisplayComponent } from '../scout-pic-display/scout-pic-display.component';
 
 import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({

@@ -11,7 +11,7 @@ import { FormElementGroupComponent } from '@app/shared/components/atoms/form-ele
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
-import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-result-display/pit-result-display.component';
+import { PitResultDisplayComponent } from '@app/scouting/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
