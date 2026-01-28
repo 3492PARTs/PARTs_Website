@@ -55,6 +55,8 @@ export class ManageUsersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.adminOption = this.isAdminInterface() ? 1 : 0;
+
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
         this.getUsers();
@@ -62,8 +64,6 @@ export class ManageUsersComponent implements OnInit {
         this.getPhoneTypes();
       }
     });
-
-    this.adminOption = this.isAdminInterface() ? 1 : 0;
   }
 
   getUsers(): void {
