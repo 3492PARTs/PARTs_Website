@@ -508,7 +508,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   checkActiveMenuItem(urlEnd: string, mi: Link, mii: SubLink): void {
-    if (!strNoE(mii.routerlink) && urlEnd.includes(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
+    if (!strNoE(mii.routerlink) && urlEnd.startsWith(mii.routerlink))
+      this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
   }
 
   setActiveMenuSubmenuAndItem(parent: Link, child: SubLink, routerLink: string): void {
