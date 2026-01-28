@@ -35,7 +35,7 @@ export class NavigationService {
 
   readonly allSubPages = [[
     new Link('Meetings', '/admin/meetings', 'calendar-account-outline'),
-    new Link('Users', '/admin/admin-users', 'account-group'),
+    new Link('Users', '/admin/users', 'account-group'),
     new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
     new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
     new Link('Security', '/admin/security', 'security'),

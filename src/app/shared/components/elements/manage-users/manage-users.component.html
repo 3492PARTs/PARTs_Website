@@ -3,7 +3,7 @@
         <div class="flex justify-content-space-between">
             <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
 
-            @if(isAdminInterface()) {<app-form-element [Type]="'radio'" [LabelText]="'Active'"
+            @if(isAdminInterface()) {<app-form-element [Type]="'radio'" [LabelText]="'Status'"
                 [SelectList]="userOptions" [(Model)]="userOption" [DisplayProperty]="'property'"
                 [BindingProperty]="'value'" (FunctionCallBack)="getUsers()"></app-form-element>}
         </div>

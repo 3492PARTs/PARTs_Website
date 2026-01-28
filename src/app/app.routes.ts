@@ -195,9 +195,9 @@ export const routes: Routes = [
         canActivate: [authGuard],
         children: [
             {
-                path: 'admin-users',
+                path: 'users',
                 title: 'Admin Users',
-                loadComponent: () => import('./admin/components/admin-users/admin-users.component').then(mod => mod.AdminUsersComponent),
+                loadComponent: () => import('./admin/components/users/users.component').then(mod => mod.UsersComponent),
             },
             {
                 path: 'meetings',
