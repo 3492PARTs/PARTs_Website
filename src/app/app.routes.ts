@@ -116,7 +116,7 @@ export const routes: Routes = [
             {
                 path: 'admin/schedule',
                 title: 'Scout Admin Schedule',
-                loadComponent: () => import('./scouting/admin/components/scouting-schedule/scouting-schedule.component').then(mod => mod.ScoutingScheduleComponent),
+                loadComponent: () => import('./scouting/admin/components/schedule/schedule.component').then(mod => mod.ScheduleComponent),
             },
             {
                 path: 'admin/activity',

@@ -18,12 +18,12 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, decodeSentBoolean, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 @Component({
-  selector: 'app-scouting-schedule',
+  selector: 'app-schedule',
   imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent],
-  templateUrl: './scouting-schedule.component.html',
-  styleUrls: ['./scouting-schedule.component.scss']
+  templateUrl: './schedule.component.html',
+  styleUrls: ['./schedule.component.scss']
 })
-export class ScoutingScheduleComponent implements OnInit {
+export class ScheduleComponent implements OnInit {
   currentEvent = new Event();
 
   users: User[] = [];
