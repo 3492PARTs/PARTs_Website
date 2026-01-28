@@ -4,17 +4,17 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 
 
-import { ScoutingUsersComponent } from './scouting-users.component';
+import { UsersComponent } from './users.component';
 import { SwPush } from '@angular/service-worker';
 import { createMockSwPush } from '../../../../../test-helpers';
 
-describe('ScoutingUsersComponent', () => {
-  let component: ScoutingUsersComponent;
-  let fixture: ComponentFixture<ScoutingUsersComponent>;
+describe('UsersComponent', () => {
+  let component: UsersComponent;
+  let fixture: ComponentFixture<UsersComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ScoutingUsersComponent],
+      imports: [UsersComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -22,7 +22,7 @@ describe('ScoutingUsersComponent', () => {
         { provide: SwPush, useValue: createMockSwPush() }
       ]
     });
-    fixture = TestBed.createComponent(ScoutingUsersComponent);
+    fixture = TestBed.createComponent(UsersComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

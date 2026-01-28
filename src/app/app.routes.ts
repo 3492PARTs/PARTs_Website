@@ -106,7 +106,7 @@ export const routes: Routes = [
             {
                 path: 'admin/users',
                 title: 'Scout Admin Users',
-                loadComponent: () => import('./scouting/admin/components/scouting-users/scouting-users.component').then(mod => mod.ScoutingUsersComponent),
+                loadComponent: () => import('./scouting/admin/components/users/users.component').then(mod => mod.UsersComponent),
             },
             {
                 path: 'admin/manage-season',
