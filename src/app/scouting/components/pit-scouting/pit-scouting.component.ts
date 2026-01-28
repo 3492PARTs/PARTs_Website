@@ -13,8 +13,8 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { Question, Answer } from '@app/core/models/form.models';
-import { WhiteboardComponent } from "../../../../shared/components/atoms/whiteboard/whiteboard.component";
-import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
+import { WhiteboardComponent } from "@app/shared/components/atoms/whiteboard/whiteboard.component";
+import { ModalComponent } from "@app/shared/components/atoms/modal/modal.component";
 import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 

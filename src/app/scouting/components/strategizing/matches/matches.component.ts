@@ -12,9 +12,9 @@ import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-r
 import { Chart, ChartDataset, Point, BubbleDataPoint } from 'chart.js';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { User } from '@app/auth/models/user.models';
-import { LoadingComponent } from "../../../../../shared/components/atoms/loading/loading.component";
-import { DashboardComponent } from "../../../../../shared/components/elements/dashboard/dashboard.component";
-import { HeaderComponent } from "../../../../../shared/components/atoms/header/header.component";
+import { LoadingComponent } from "@app/shared/components/atoms/loading/loading.component";
+import { DashboardComponent } from "../../elements/dashboard/dashboard.component";
+import { HeaderComponent } from "@app/shared/components/atoms/header/header.component";
 import { Match, Team, MatchStrategy, MatchTeamData, ScoutPitResponse, TeamNote } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 

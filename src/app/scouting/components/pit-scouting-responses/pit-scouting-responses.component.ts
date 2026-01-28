@@ -7,7 +7,7 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
-import { PitResultDisplayComponent } from "../../../../shared/components/elements/pit-result-display/pit-result-display.component";
+import { PitResultDisplayComponent } from "@app/shared/components/elements/pit-result-display/pit-result-display.component";
 import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 

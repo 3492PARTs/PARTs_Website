@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BoxComponent } from "../../../../../shared/components/atoms/box/box.component";
+import { BoxComponent } from "@app/shared/components/atoms/box/box.component";
 import { GeneralService } from '@app/core/services/general.service';
 import { TableButtonType, TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
-import { ButtonRibbonComponent } from "../../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
-import { ButtonComponent } from "../../../../../shared/components/atoms/button/button.component";
-import { FormElementGroupComponent } from "../../../../../shared/components/atoms/form-element-group/form-element-group.component";
+import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
+import { ButtonComponent } from "@app/shared/components/atoms/button/button.component";
+import { FormElementGroupComponent } from "@app/shared/components/atoms/form-element-group/form-element-group.component";
 import { AllianceSelection, Team, Event } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 

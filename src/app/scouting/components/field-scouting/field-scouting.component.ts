@@ -16,9 +16,9 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
-import { QuestionFormElementComponent } from "../../../../shared/components/elements/question-form-element/question-form-element.component";
-import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
+import { HeaderComponent } from "@app/shared/components/atoms/header/header.component";
+import { QuestionFormElementComponent } from "@app/shared/components/elements/question-form-element/question-form-element.component";
+import { ModalComponent } from "@app/shared/components/atoms/modal/modal.component";
 
 import { ModalService } from '@app/core/services/modal.service';
 import { arrayObjectIndexOf, cloneObject, formatQuestionAnswer, isQuestionConditionMet, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';

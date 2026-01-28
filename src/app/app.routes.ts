@@ -56,52 +56,52 @@ export const routes: Routes = [
             {
                 path: 'field',
                 title: 'Field Scouting',
-                loadComponent: () => import('./scouting/components/scouting/field-scouting/field-scouting.component').then(mod => mod.FieldScoutingComponent),
+                loadComponent: () => import('./scouting/components/field-scouting/field-scouting.component').then(mod => mod.FieldScoutingComponent),
             },
             {
                 path: 'pit',
                 title: 'Pit Scouting',
-                loadComponent: () => import('./scouting/components/scouting/pit-scouting/pit-scouting.component').then(mod => mod.PitScoutingComponent),
+                loadComponent: () => import('./scouting/components/pit-scouting/pit-scouting.component').then(mod => mod.PitScoutingComponent),
             },
             {
                 path: 'field-responses',
                 title: 'Field Responses',
-                loadComponent: () => import('./scouting/components/scouting/field-scouting-responses/field-scouting-responses.component').then(mod => mod.FieldScoutingResponsesComponent),
+                loadComponent: () => import('./scouting/components/field-scouting-responses/field-scouting-responses.component').then(mod => mod.FieldScoutingResponsesComponent),
             },
             {
                 path: 'pit-responses',
                 title: 'Pit Responses',
-                loadComponent: () => import('./scouting/components/scouting/pit-scouting-responses/pit-scouting-responses.component').then(mod => mod.ScoutPitResponsesComponent),
+                loadComponent: () => import('./scouting/components/pit-scouting-responses/pit-scouting-responses.component').then(mod => mod.ScoutPitResponsesComponent),
             },
             {
                 path: 'portal',
                 title: 'Scout Portal',
-                loadComponent: () => import('./scouting/components/scouting/scouting-portal/scouting-portal.component').then(mod => mod.ScoutingPortalComponent),
+                loadComponent: () => import('./scouting/components/scouting-portal/scouting-portal.component').then(mod => mod.ScoutingPortalComponent),
             },
             {
                 path: 'strategizing/matches',
                 title: 'Matches',
-                loadComponent: () => import('./scouting/components/scouting/strategizing/matches/matches.component').then(mod => mod.MatchesComponent),
+                loadComponent: () => import('./scouting/components/strategizing/matches/matches.component').then(mod => mod.MatchesComponent),
             },
             {
                 path: 'strategizing/team-notes',
                 title: 'Team Notes',
-                loadComponent: () => import('./scouting/components/scouting/strategizing/team-notes/team-notes.component').then(mod => mod.TeamNotesComponent),
+                loadComponent: () => import('./scouting/components/strategizing/team-notes/team-notes.component').then(mod => mod.TeamNotesComponent),
             },
             {
                 path: 'strategizing/alliance-selection',
                 title: 'Alliance Selection',
-                loadComponent: () => import('./scouting/components/scouting/strategizing/alliance-selection/alliance-selection.component').then(mod => mod.AllianceSelectionComponent),
+                loadComponent: () => import('./scouting/components/strategizing/alliance-selection/alliance-selection.component').then(mod => mod.AllianceSelectionComponent),
             },
             {
                 path: 'strategizing/metrics',
                 title: 'Metrics',
-                loadComponent: () => import('./scouting/components/scouting/strategizing/metrics/metrics.component').then(mod => mod.MetricsComponent),
+                loadComponent: () => import('./scouting/components/strategizing/metrics/metrics.component').then(mod => mod.MetricsComponent),
             },
             {
                 path: 'strategizing/match-planning',
                 title: 'Match Planning',
-                loadComponent: () => import('./scouting/components/scouting/strategizing/match-planning/match-planning.component').then(mod => mod.MatchPlanningComponent),
+                loadComponent: () => import('./scouting/components/strategizing/match-planning/match-planning.component').then(mod => mod.MatchPlanningComponent),
             },
             {
                 path: 'admin/users',

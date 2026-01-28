@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -14,7 +14,7 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { PitResultDisplayComponent } from '@app/shared/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
-import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
+import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
 
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, downloadFileAs, strNoE, triggerChange } from '@app/core/utils/utils.functions';
