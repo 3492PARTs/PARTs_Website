@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlbumsComponent, Album } from '@app/media/components/elements/albums/albums.component';
-import { ReturnCardComponent } from '@app/shared/components/elements/return-card/return-card.component';
+import { ReturnCardComponent } from '@app/media/components/elements/return-card/return-card.component';
 
 @Component({
   selector: 'app-build-season',

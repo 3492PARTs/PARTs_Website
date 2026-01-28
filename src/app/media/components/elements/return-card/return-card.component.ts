@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
-import { ReturnLinkComponent } from "../../atoms/return-link/return-link.component";
+import { ReturnLinkComponent } from "../../../../shared/components/atoms/return-link/return-link.component";
 
 @Component({
   selector: 'app-return-card',
