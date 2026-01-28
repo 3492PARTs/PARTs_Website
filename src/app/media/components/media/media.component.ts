@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
-import { AlbumsComponent, Album } from '@app/shared/components/elements/albums/albums.component';
+import { AlbumsComponent, Album } from '@app/media/components/elements/albums/albums.component';
 
 @Component({
   selector: 'app-media',

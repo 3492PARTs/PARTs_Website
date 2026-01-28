@@ -115,7 +115,7 @@ describe('NavigationService', () => {
     });
 
     it('should set scouting admin sub pages for scouting-admin route', () => {
-      service.setSubPages('/scouting-admin/activity');
+      service.setSubPages('/scouting/admin/activity');
       service.subPages.subscribe(pages => {
         expect(pages.length).toBeGreaterThan(0);
         expect(pages.some(p => p.menu_name === 'Scouting Activity')).toBe(true);
