@@ -121,7 +121,7 @@ export const routes: Routes = [
             {
                 path: 'admin/activity',
                 title: 'Scout Admin Activity',
-                loadComponent: () => import('./scouting/admin/components/scouting-activity/scouting-activity.component').then(mod => mod.ScoutingActivityComponent),
+                loadComponent: () => import('./scouting/admin/components/activity/activity.component').then(mod => mod.ActivityComponent),
             },
             {
                 path: 'admin/manage-field-questions',

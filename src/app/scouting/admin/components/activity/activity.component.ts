@@ -19,10 +19,10 @@ import { cloneObject, decodeSentBoolean, formatDateString } from '@app/core/util
 @Component({
   selector: 'app-scouting-activity',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
-  templateUrl: './scouting-activity.component.html',
-  styleUrls: ['./scouting-activity.component.scss']
+  templateUrl: './activity.component.html',
+  styleUrls: ['./activity.component.scss']
 })
-export class ScoutingActivityComponent implements OnInit {
+export class ActivityComponent implements OnInit {
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
 
   usersScoutingUserInfo: UserInfo[] = [];
