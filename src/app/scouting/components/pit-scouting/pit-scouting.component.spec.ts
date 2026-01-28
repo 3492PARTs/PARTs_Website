@@ -9,7 +9,7 @@ import { AuthService } from '@app/auth/services/auth.service';
 import { CacheService } from '@app/core/services/cache.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
-import { createMockAPIService, createMockAuthService, createMockCacheService, createMockGeneralService, createMockScoutingService } from '../../../../../test-helpers';
+import { createMockAPIService, createMockAuthService, createMockCacheService, createMockGeneralService, createMockScoutingService } from '../../../../test-helpers';
 
 describe('PitScoutingComponent', () => {
   let component: PitScoutingComponent;

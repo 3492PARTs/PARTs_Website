@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { FieldScoutingComponent } from './field-scouting.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 import { AuthService } from '@app/auth/services/auth.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { User } from '@app/auth/models/user.models';
@@ -30,7 +30,7 @@ describe('FieldScoutingComponent', () => {
     });
 
     TestBed.configureTestingModule({
-      imports: [ FieldScoutingComponent ],
+      imports: [FieldScoutingComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

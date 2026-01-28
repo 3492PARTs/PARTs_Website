@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 
 import { ScoutPitResponsesComponent } from './pit-scouting-responses.component';
@@ -14,7 +14,7 @@ describe('ScoutPitResultsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ ScoutPitResponsesComponent ],
+      imports: [ScoutPitResponsesComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { MatchPlanningComponent } from './match-planning.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../../test-helpers';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('MatchPlanningComponent', () => {
   let component: MatchPlanningComponent;
@@ -22,7 +22,7 @@ describe('MatchPlanningComponent', () => {
         { provide: SwPush, useValue: createMockSwPush() }
       ]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(MatchPlanningComponent);
     component = fixture.componentInstance;

@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { ScoutingPortalComponent } from './scouting-portal.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ScoutPortalComponent', () => {
   let component: ScoutingPortalComponent;
@@ -14,7 +14,7 @@ describe('ScoutPortalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ ScoutingPortalComponent ],
+      imports: [ScoutingPortalComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

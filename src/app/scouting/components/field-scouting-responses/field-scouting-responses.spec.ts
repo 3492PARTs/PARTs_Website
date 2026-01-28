@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { FieldScoutingResponsesComponent } from './field-scouting-responses.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../test-helpers';
+import { createMockSwPush } from '../../../../test-helpers';
 
 describe('ScoutFieldResultsComponent', () => {
   let component: FieldScoutingResponsesComponent;
@@ -14,7 +14,7 @@ describe('ScoutFieldResultsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ FieldScoutingResponsesComponent ],
+      imports: [FieldScoutingResponsesComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

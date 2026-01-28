@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { TeamNotesComponent } from './team-notes.component';
 import { SwPush } from '@angular/service-worker';
-import { createMockSwPush } from '../../../../../../test-helpers';
+import { createMockSwPush } from '../../../../../test-helpers';
 
 describe('TeamNotesComponent', () => {
   let component: TeamNotesComponent;
@@ -14,7 +14,7 @@ describe('TeamNotesComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ TeamNotesComponent ],
+      imports: [TeamNotesComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

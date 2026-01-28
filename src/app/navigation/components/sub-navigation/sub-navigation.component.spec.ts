@@ -98,11 +98,11 @@ describe('SubNavigationComponent', () => {
   });
 
   it('should update navItems when navigation service broadcasts new pages', () => {
-    navigationService.setSubPages('/admin/admin-users');
+    navigationService.setSubPages('/admin/users');
     const items1Length = component.navItems.length;
     expect(items1Length).toBeGreaterThan(0);
 
-    navigationService.setSubPages('/scouting-admin/activity');
+    navigationService.setSubPages('/scouting/admin/activity');
     const items2Length = component.navItems.length;
     expect(items2Length).toBeGreaterThan(0);
   });
