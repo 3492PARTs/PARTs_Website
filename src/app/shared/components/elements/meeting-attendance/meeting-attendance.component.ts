@@ -74,7 +74,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   totalMeetingHours = new MeetingHours();
 
-  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }];
+  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }, { property: 'Exempt', value: 'exmpt' }];
   attendanceFilterOption = 'all';
 
   attendance: Attendance[] = [];
