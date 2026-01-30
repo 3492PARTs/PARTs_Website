@@ -65,6 +65,10 @@ export class AttendanceService {
     return attendance.approval_typ.approval_typ === 'rej';
   }
 
+  isAttendanceExempted(attendance: Attendance): boolean {
+    return attendance.approval_typ.approval_typ === 'exmpt';
+  }
+
   hasCheckedOut(attendance: Attendance): boolean {
     return attendance.time_out !== null || attendance.absent;
   }
@@ -109,16 +113,10 @@ export class AttendanceService {
   }
 
   computeAttendanceDuration(attendance: Attendance): string {
-    if (!attendance.time_in || attendance.absent) {
+    if (!attendance.time_out)
       return '0m';
-    }
 
-    let endTime = new Date();
-    if (attendance.time_out) {
-      endTime = new Date(attendance.time_out);
-    }
-
-    return getDateDuration(new Date(attendance.time_in), endTime);
+    return getDateDuration(new Date(attendance.time_in), new Date(attendance.time_out));
   }
 
   // ATTENDANCE REPORT -----------------------------------------------------------

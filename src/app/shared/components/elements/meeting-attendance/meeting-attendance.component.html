@@ -151,29 +151,29 @@
             @if (AdminInterface) {
             <app-form-element [LabelText]="'Meeting'" [Type]="'select'" [(Model)]="attendanceEntry.meeting"
                 [SelectList]="meetings" [DisplayProperty]="'title'" [SelectComparatorFunction]="compareMeetingObjects"
-                [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
+                [Disabled]="isAttendanceFinal(attendanceEntry)"></app-form-element>
             <app-form-element [LabelText]="'User'" [Type]="'select'" [(Model)]="attendanceEntry.user"
-                [Disabled]="isAttendanceApproved(attendanceEntry)" [SelectList]="users" [DisplayProperty]="'name'"
+                [Disabled]="isAttendanceFinal(attendanceEntry)" [SelectList]="users" [DisplayProperty]="'name'"
                 [SelectComparatorFunction]="compareUserObjects.bind(this)" [Required]="true"></app-form-element>
             }
             <app-form-element [LabelText]="'Time In'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_in"
-                [Disabled]="isAttendanceApproved(attendanceEntry)" [FormGroupInline]="true"
+                [Disabled]="isAttendanceFinal(attendanceEntry)" [FormGroupInline]="true"
                 [Required]="true"></app-form-element>
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
-                [Disabled]="isAttendanceApproved(attendanceEntry)" [FormGroupInline]="true"></app-form-element>
+                [Disabled]="isAttendanceFinal(attendanceEntry)" [FormGroupInline]="true"></app-form-element>
 
 
 
 
 
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
-                [Disabled]="isAttendanceApproved(attendanceEntry)"></app-form-element>
+                [Disabled]="isAttendanceFinal(attendanceEntry)"></app-form-element>
 
             <app-form-element [LabelText]="'Approval'" [Type]="'select'" [(Model)]="attendanceEntry.approval_typ"
                 [SelectList]="attendanceApprovalTypeOptions" [DisplayProperty]="'approval_nm'"
                 [Disabled]="!AdminInterface"></app-form-element>
 
-            @if (AdminInterface || !isAttendanceApproved(attendanceEntry)) {
+            @if (AdminInterface || !isAttendanceFinal(attendanceEntry)) {
             <app-button-ribbon>
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>

@@ -83,7 +83,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceTableCols: TableColType[] = [];
   attendanceTableButtons: TableButtonType[] = [];
   attendanceModalVisible = false;
-  attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }];
+  attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }, { approval_typ: 'exmpt', approval_nm: 'Exempt' }];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
     this.auth.user.subscribe(u => {
@@ -313,8 +313,8 @@ export class MeetingAttendanceComponent implements OnInit {
     this.reportAttendanceTableCols = this.attendanceTableCols;
   }
 
-  isAttendanceApproved(attendance: Attendance): boolean {
-    return this.attendanceService.isAttendanceApproved(attendance);
+  isAttendanceFinal(attendance: Attendance): boolean {
+    return !this.attendanceService.isAttendanceUnapproved(attendance);
   }
 
   computeAttendanceDuration(attendance: Attendance): string {
