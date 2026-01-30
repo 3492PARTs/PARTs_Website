@@ -38,10 +38,11 @@
     @else if (attendanceReports.length > 0) {
     <app-form-element-group [LabelText]="'My Hours Summary'">
         <div class="grid two-column-grid">
-            <p>Completed Meeting Hours: {{attendanceReports[0].reg_time}}</p>
+            <p>Required Meeting Hours: {{attendanceReports[0].req_reg_time}}</p>
             <p>Completed Event Hours: {{attendanceReports[0].event_time}}</p>
-            <p>Meeting Hours Percentage: {{attendanceReports[0].reg_time_percentage}}%</p>
+            <p>Completed Meeting Hours: {{attendanceReports[0].reg_time}}</p>
             <p>Event Hours Percentage: {{attendanceReports[0].event_time_percentage}}%</p>
+            <p>Meeting Hours Percentage: {{attendanceReports[0].reg_time_percentage}}%</p>
         </div>
 
     </app-form-element-group>
@@ -97,10 +98,11 @@
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
         <app-form-element-group [LabelText]="'Hours Summary'">
             <div class="grid two-column-grid">
-                <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
+                <p>Required Meeting Hours: {{attendanceReport.req_reg_time}}</p>
                 <p>Completed Event Hours: {{attendanceReport.event_time}}</p>
-                <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
+                <p>Completed Meeting Hours: {{attendanceReport.reg_time}}</p>
                 <p>Event Hours Percentage: {{attendanceReport.event_time_percentage}}%</p>
+                <p>Meeting Hours Percentage: {{attendanceReport.reg_time_percentage}}%</p>
             </div>
 
         </app-form-element-group>

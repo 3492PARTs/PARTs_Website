@@ -32,6 +32,7 @@ export class Attendance {
 
 export class AttendanceReport {
     user = new User();
+    req_reg_time = NaN;
     reg_time = NaN;
     reg_time_percentage = NaN;
     event_time = NaN;
