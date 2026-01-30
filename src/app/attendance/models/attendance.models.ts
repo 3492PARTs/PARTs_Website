@@ -12,6 +12,7 @@ export class Meeting {
     season = new Season();
     start = new Date();
     end = new Date(new Date().setHours(new Date().getHours() + 1));
+    ended = false;
     title = '';
     description = '';
     bonus = false;

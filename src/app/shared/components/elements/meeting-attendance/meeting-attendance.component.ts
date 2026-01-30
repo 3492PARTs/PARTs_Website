@@ -15,7 +15,6 @@ import { GeneralService, RetMessage } from '@app/core/services/general.service';
 import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';
-import { DateFilterPipe } from "../../../pipes/date-filter.pipe";
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
@@ -23,9 +22,10 @@ import { AppSize, cloneObject, decodeYesNoBoolean, formatDateString } from '@app
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
+import { RemovedFilterPipe } from '@app/shared/pipes';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, DateFilterPipe, CommonModule],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule],
   templateUrl: './meeting-attendance.component.html',
   styleUrls: ['./meeting-attendance.component.scss']
 })
@@ -39,7 +39,6 @@ export class MeetingAttendanceComponent implements OnInit {
 
   meetingFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Future', value: 'future' }, { property: 'Past', value: 'past' }];
   meetingFilterOption = 'future';
-  today = new Date();
 
   meetingTypeOptions: MeetingType[] = [{ meeting_typ: 'reg', meeting_nm: 'Regular' }, { meeting_typ: 'evnt', meeting_nm: 'Event' }, { meeting_typ: 'bns', meeting_nm: 'Bonus' }];
   meetings: Meeting[] = [];
@@ -118,8 +117,6 @@ export class MeetingAttendanceComponent implements OnInit {
         ...this.attendanceReportTableCols
       ];
     }
-
-    this.today.setHours(0, 0, 0, 0);
 
     if (this.AdminInterface) {
       this.getAttendance();
@@ -322,16 +319,26 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   // MEETING -----------------------------------------------------------
-  getMeetings(): void | null {
-    this.meetingService.getMeetings().then((result) => {
-      if (result) this.meetings = result;
+  getMeetings(id?: number): void | null {
+
+    this.meetingService.getMeetings(id).then((result) => {
+      if (result) {
+        if (Array.isArray(result)) {
+          this.meetings = result;
+          if (this.meeting) {
+            const updatedMeeting = this.meetings.find(m => m.id === this.meeting.id);
+            if (updatedMeeting) this.meeting = updatedMeeting;
+          }
+        }
+        else this.meeting = result
+      }
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       this.getMeetingHours();
     });
   }
 
   endMeeting(meeting: Meeting): void | null {
-    this.meetingService.endMeeting(meeting).then(() => this.getAttendance(meeting));
+    this.meetingService.endMeeting(meeting).then(() => { this.getMeetings(); this.getAttendance(meeting); });
   }
 
   saveMeeting(meeting?: Meeting): void | null {

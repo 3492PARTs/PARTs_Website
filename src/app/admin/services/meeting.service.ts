@@ -10,8 +10,8 @@ export class MeetingService {
 
   constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) { }
 
-  getMeetings(): Promise<Meeting[] | null> {
-    return this.api.get(true, 'attendance/meetings/', undefined);
+  getMeetings(id?: number): Promise<Meeting[] | Meeting | null> {
+    return this.api.get(true, 'attendance/meetings/', id !== undefined ? { meeting_id: id } : undefined);
   }
 
   endMeeting(meeting: Meeting): Promise<void> {
@@ -57,7 +57,7 @@ export class MeetingService {
 
   getActiveMeeting(meetings?: Meeting[]): Promise<Meeting | null> {
     return new Promise(async (resolve) => {
-      meetings = meetings ?? await this.getMeetings() ?? undefined;
+      meetings = meetings ?? (await this.getMeetings() as Meeting[] | null) ?? undefined;
 
       if (meetings !== undefined) {
         const activeMeeting = meetings.find(m => this.isDayToTakeAttendance(m));

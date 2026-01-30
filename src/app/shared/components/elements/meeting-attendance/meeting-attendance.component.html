@@ -6,17 +6,15 @@
     <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="meetingFilterOptions"
         [(Model)]="meetingFilterOption" [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
 
-    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings | dateFilter
+    <app-table [TableCols]="meetingsTableCols" [TableData]="meetings | RemovedFilterPipe
     : meetingFilterOption !== 'all'
-    : 'end'
-    : today
-    : meetingFilterOption === 'future' ? 'gte' : 'lt'" [ShowAddButton]="AdminInterface"
-        (AddRecordCallBack)="showMeetingModal()" [ShowEditButton]="AdminInterface"
-        (EditRecordCallBack)="showMeetingModal($event)" [TableDataButtons]="meetingsTableButtons"
-        [TriggerUpdate]="triggerMeetingTableUpdate" [ShowRemoveButton]="AdminInterface"
-        (RemoveRecordCallBack)="removeMeeting($event)" (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'"
-        [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true" [OrderByProperty]="'start'"
-        [ShowDownloadButton]="true"></app-table>
+    : 'ended'
+    : meetingFilterOption === 'past'" [ShowAddButton]="AdminInterface" (AddRecordCallBack)="showMeetingModal()"
+        [ShowEditButton]="AdminInterface" (EditRecordCallBack)="showMeetingModal($event)"
+        [TableDataButtons]="meetingsTableButtons" [TriggerUpdate]="triggerMeetingTableUpdate"
+        [ShowRemoveButton]="AdminInterface" (RemoveRecordCallBack)="removeMeeting($event)"
+        (RecordClickCallBack)="showMeetingModal($event)" [Width]="'100%'" [Scrollable]="true" [ScrollHeight]="'50vh'"
+        [Stripes]="true" [OrderByProperty]="'start'" [ShowDownloadButton]="true"></app-table>
 
     <app-header [h]="2">Attendance Report</app-header>
 
@@ -132,7 +130,9 @@
 
             @if (AdminInterface) {
             <app-button-ribbon>
+                @if (!meeting.ended) {
                 <app-button [ButtonType]="'danger'" (FunctionCallBack)="endMeeting(meeting)">End</app-button>
+                }
                 <app-button [Type]="'submit'" [ButtonType]="'success'">Save</app-button>
             </app-button-ribbon>
 
