@@ -18,11 +18,13 @@ export class AttendanceService {
         if (this.isAttendanceApproved(attendance) && !attendance.time_out && !attendance.absent && attendance.void_ind !== 'y') {
           this.modalService.triggerError('Cannot approve if no time out.');
           resolve(false);
+          return;
         }
 
-        if (attendance.time_out && attendance.time_out < attendance.time_out) {
+        if (attendance.time_out && attendance.time_out < attendance.time_in) {
           this.modalService.triggerError('You cannot check out before checking in.');
           resolve(false);
+          return;
         }
 
         this.api.post(true, 'attendance/attendance/',
