@@ -3,8 +3,7 @@ import { Directive, ElementRef, HostListener, Inject, PLATFORM_ID } from '@angul
 import { Router } from '@angular/router';
 
 @Directive({
-  selector: '[appLinkify]',
-  standalone: true
+  selector: '[appLinkify]'
 })
 export class LinkifyDirective {
   constructor(

@@ -72,7 +72,7 @@ export class AttendanceService {
   }
 
   hasCheckedOut(attendance: Attendance): boolean {
-    return attendance.time_out !== null || attendance.absent || !this.isAttendanceUnapproved(attendance);
+    return (attendance.time_out !== null && attendance.time_out !== undefined) || attendance.absent || !this.isAttendanceUnapproved(attendance);
   }
 
   attendMeeting(user: User, meeting: Meeting): Promise<boolean | null> {

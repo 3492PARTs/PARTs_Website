@@ -26,7 +26,7 @@ describe('LinkifyDirective', () => {
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
-      imports: [TestComponent],
+      imports: [TestComponent, LinkifyDirective],
       providers: [
         { provide: Router, useValue: mockRouter },
         provideRouter([]),
