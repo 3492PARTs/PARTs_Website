@@ -243,7 +243,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hideAttendanceEditDeleteButton(attendance: Attendance): boolean {
-    return !this.isAdminInterface() && this.attendanceService.isAttendanceApproved(attendance);
+    return !this.isAdminInterface() && !this.attendanceService.isAttendanceUnapproved(attendance);
   }
 
   hideCheckOutButton(attendance: Attendance): boolean {
