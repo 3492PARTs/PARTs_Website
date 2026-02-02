@@ -260,6 +260,7 @@ export interface IFlowQuestion {
     id: number;
     flow_id: number;
     question: Question;
+    press_to_continue: boolean;
     order: number;
     active: string;
 }
@@ -268,6 +269,7 @@ export class FlowQuestion implements IFlowQuestion {
     id = NaN;
     flow_id = NaN;
     question = new Question();
+    press_to_continue = false;
     order = NaN;
     active = '';
 }

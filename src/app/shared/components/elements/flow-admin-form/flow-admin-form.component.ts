@@ -39,6 +39,7 @@ export class FlowAdminFormComponent implements OnInit {
   questionTableCols: TableColType[] = [
     { PropertyName: 'order', ColLabel: 'Order', Type: 'number', Required: true, Width: '150px' },
     { PropertyName: 'question.display_value', ColLabel: 'Question' },
+    { PropertyName: 'press_to_continue', ColLabel: 'Press to continue', Type: 'checkbox' },
   ];
 
   constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
