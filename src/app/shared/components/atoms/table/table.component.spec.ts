@@ -198,7 +198,6 @@ describe('TableComponent', () => {
 
     it('should emit AddRecordCallBack', (done) => {
       component.AddRecordCallBack.subscribe(() => {
-        expect(true).toBe(true);
         done();
       });
       component.AddRecordCallBack.emit();
