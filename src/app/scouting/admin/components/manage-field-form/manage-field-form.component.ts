@@ -34,8 +34,8 @@ export class ManageFieldFormComponent {
   startX = NaN;
   startY = NaN;
 
-  fieldImageTypes = ['Original', 'Inverted', 'Full'];
-  fieldImageType = 'Original';
+  fieldImageTypes = ['Red', 'Blue', 'Full'];
+  fieldImageType = 'Red';
 
   availableFlows: Flow[] = [];
 
