@@ -231,6 +231,12 @@ export const routes: Routes = [
 
     // User and Attendance Routes
     {
+        path: 'user/profile',
+        title: 'User Profile',
+        loadComponent: () => import('./user/components/user/profile/profile.component').then(mod => mod.ProfileComponent),
+        canActivate: [authGuard]
+    },
+    {
         path: 'user/profile/:id',
         title: 'User Profile',
         loadComponent: () => import('./user/components/user/profile/profile.component').then(mod => mod.ProfileComponent),
