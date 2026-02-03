@@ -96,10 +96,12 @@ describe('QuestionDisplayFormComponent', () => {
       expect(component.questionsWithConditions).toEqual([]);
     });
 
-    it('should handle undefined questions', () => {
+    it('should handle undefined questions gracefully', () => {
+      // Component should handle undefined questions without crashing
+      // and maintain empty arrays
       component.Questions = undefined as any;
-      // Should not crash
       expect(component.allQuestions).toBeDefined();
+      expect(component.questionsWithConditions).toBeDefined();
     });
   });
 
