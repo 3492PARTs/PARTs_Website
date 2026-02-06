@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TableComponent, TableButtonType, TableColType } from './table.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { SimpleChange } from '@angular/core';
 
 describe('TableComponent', () => {
   let component: TableComponent;
@@ -23,6 +24,404 @@ describe('TableComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('Initialization', () => {
+    it('should initialize with default values', () => {
+      expect(component.TableData).toEqual([]);
+      expect(component.TableCols).toEqual([]);
+      expect(component.TableDataButtons).toEqual([]);
+      expect(component.EnableFilter).toBe(false);
+      expect(component.DisableSort).toBe(false);
+      expect(component.ShowRemoveButton).toBe(false);
+      expect(component.ShowViewButton).toBe(false);
+      expect(component.ShowEditButton).toBe(false);
+      expect(component.ShowAddButton).toBe(false);
+      expect(component.ShowDownloadButton).toBe(false);
+      expect(component.ShowArchiveButton).toBe(false);
+    });
+
+    it('should set CursorPointer when RecordClickCallBack is observed', () => {
+      component.RecordClickCallBack.observers.push({} as any);
+      component.ngOnInit();
+      expect(component.CursorPointer).toBe(true);
+    });
+
+    it('should set TableName from TableTitle if TableName is empty', () => {
+      component.TableTitle = 'Test Table';
+      component.TableName = '';
+      component.ngOnInit();
+      expect(component.TableName).toBe('Test Table');
+    });
+
+    it('should not override TableName if already set', () => {
+      component.TableTitle = 'Test Table';
+      component.TableName = 'Custom Name';
+      component.ngOnInit();
+      expect(component.TableName).toBe('Custom Name');
+    });
+  });
+
+  describe('Input Properties', () => {
+    it('should accept TableData input', () => {
+      const testData = [{ id: 1, name: 'Test' }, { id: 2, name: 'Test2' }];
+      component.TableData = testData;
+      expect(component.TableData).toEqual(testData);
+    });
+
+    it('should accept TableCols input', () => {
+      const col = new TableColType();
+      col.ColLabel = 'Name';
+      col.PropertyName = 'name';
+      component.TableCols = [col];
+      expect(component.TableCols.length).toBe(1);
+      expect(component.TableCols[0].ColLabel).toBe('Name');
+    });
+
+    it('should accept EnableFilter input', () => {
+      component.EnableFilter = true;
+      expect(component.EnableFilter).toBe(true);
+    });
+
+    it('should accept DisableSort input', () => {
+      component.DisableSort = true;
+      expect(component.DisableSort).toBe(true);
+    });
+
+    it('should accept FilterText input', () => {
+      component.FilterText = 'search term';
+      expect(component.FilterText).toBe('search term');
+    });
+
+    it('should accept OrderByProperty input', () => {
+      component.OrderByProperty = 'name';
+      expect(component.OrderByProperty).toBe('name');
+    });
+
+    it('should accept OrderByReverse input', () => {
+      component.OrderByReverse = true;
+      expect(component.OrderByReverse).toBe(true);
+    });
+
+    it('should accept Stripes input', () => {
+      component.Stripes = true;
+      expect(component.Stripes).toBe(true);
+    });
+
+    it('should accept Borders input', () => {
+      component.Borders = true;
+      expect(component.Borders).toBe(true);
+    });
+
+    it('should accept Highlighting input', () => {
+      component.Highlighting = true;
+      expect(component.Highlighting).toBe(true);
+    });
+
+    it('should accept Scrollable input', () => {
+      component.Scrollable = true;
+      expect(component.Scrollable).toBe(true);
+    });
+
+    it('should accept ScrollHeight input', () => {
+      component.ScrollHeight = '30em';
+      expect(component.ScrollHeight).toBe('30em');
+    });
+
+    it('should accept Responsive input', () => {
+      component.Responsive = true;
+      expect(component.Responsive).toBe(true);
+    });
+
+    it('should accept Width input', () => {
+      component.Width = '800px';
+      expect(component.Width).toBe('800px');
+    });
+  });
+
+  describe('Button Visibility', () => {
+    it('should handle ShowAddButton', () => {
+      component.ShowAddButton = true;
+      expect(component.ShowAddButton).toBe(true);
+    });
+
+    it('should handle ShowEditButton', () => {
+      component.ShowEditButton = true;
+      expect(component.ShowEditButton).toBe(true);
+    });
+
+    it('should handle ShowViewButton', () => {
+      component.ShowViewButton = true;
+      expect(component.ShowViewButton).toBe(true);
+    });
+
+    it('should handle ShowRemoveButton', () => {
+      component.ShowRemoveButton = true;
+      expect(component.ShowRemoveButton).toBe(true);
+    });
+
+    it('should handle ShowDownloadButton', () => {
+      component.ShowDownloadButton = true;
+      expect(component.ShowDownloadButton).toBe(true);
+    });
+
+    it('should handle ShowArchiveButton', () => {
+      component.ShowArchiveButton = true;
+      expect(component.ShowArchiveButton).toBe(true);
+    });
+  });
+
+  describe('Output Events', () => {
+    it('should emit RemoveRecordCallBack', (done) => {
+      component.RemoveRecordCallBack.subscribe((record: any) => {
+        expect(record).toEqual({ id: 1 });
+        done();
+      });
+      component.RemoveRecordCallBack.emit({ id: 1 });
+    });
+
+    it('should emit ViewRecordCallBack', (done) => {
+      component.ViewRecordCallBack.subscribe((record: any) => {
+        expect(record).toEqual({ id: 2 });
+        done();
+      });
+      component.ViewRecordCallBack.emit({ id: 2 });
+    });
+
+    it('should emit EditRecordCallBack', (done) => {
+      component.EditRecordCallBack.subscribe((record: any) => {
+        expect(record).toEqual({ id: 3 });
+        done();
+      });
+      component.EditRecordCallBack.emit({ id: 3 });
+    });
+
+    it('should emit AddRecordCallBack', (done) => {
+      component.AddRecordCallBack.subscribe(() => {
+        done();
+      });
+      component.AddRecordCallBack.emit();
+    });
+
+    it('should emit RecordClickCallBack', (done) => {
+      component.RecordClickCallBack.subscribe((record: any) => {
+        expect(record).toEqual({ id: 4 });
+        done();
+      });
+      component.RecordClickCallBack.emit({ id: 4 });
+    });
+
+    it('should emit DblClkRecordClickCallBack', (done) => {
+      component.DblClkRecordClickCallBack.subscribe((record: any) => {
+        expect(record).toEqual({ id: 5 });
+        done();
+      });
+      component.DblClkRecordClickCallBack.emit({ id: 5 });
+    });
+
+    it('should emit FilterTextChange', (done) => {
+      component.FilterTextChange.subscribe((text: string) => {
+        expect(text).toBe('filter');
+        done();
+      });
+      component.FilterTextChange.emit('filter');
+    });
+  });
+
+  describe('ngOnChanges', () => {
+    it('should handle TableData changes', () => {
+      spyOn<any>(component, 'generateTableDisplayValues');
+      
+      component.ngOnChanges({
+        TableData: new SimpleChange(null, [{ id: 1 }], false)
+      });
+
+      expect(component['generateTableDisplayValues']).toHaveBeenCalled();
+    });
+
+    it('should handle TableCols changes', () => {
+      spyOn<any>(component, 'generateTableDisplayValues');
+      
+      component.ngOnChanges({
+        TableCols: new SimpleChange(null, [], false)
+      });
+
+      expect(component['generateTableDisplayValues']).toHaveBeenCalled();
+    });
+
+    it('should handle ShowAddButton changes', () => {
+      spyOn<any>(component, 'ShowButtonColumn');
+      
+      component.ngOnChanges({
+        ShowAddButton: new SimpleChange(false, true, false)
+      });
+
+      expect(component['ShowButtonColumn']).toHaveBeenCalled();
+    });
+
+    it('should handle ShowEditButton changes', () => {
+      spyOn<any>(component, 'ShowButtonColumn');
+      
+      component.ngOnChanges({
+        ShowEditButton: new SimpleChange(false, true, false)
+      });
+
+      expect(component['ShowButtonColumn']).toHaveBeenCalled();
+    });
+
+    it('should handle TableDataButtons changes', () => {
+      spyOn<any>(component, 'generateTableDisplayValues');
+      
+      component.ngOnChanges({
+        TableDataButtons: new SimpleChange(null, [], false)
+      });
+
+      expect(component['generateTableDisplayValues']).toHaveBeenCalled();
+    });
+
+    it('should handle TriggerUpdate changes', () => {
+      spyOn<any>(component, 'generateTableDisplayValues');
+      
+      component.ngOnChanges({
+        TriggerUpdate: new SimpleChange(null, true, false)
+      });
+
+      expect(component['generateTableDisplayValues']).toHaveBeenCalled();
+    });
+
+    it('should handle multiple changes at once', () => {
+      spyOn<any>(component, 'generateTableDisplayValues');
+      spyOn<any>(component, 'ShowButtonColumn');
+      
+      component.ngOnChanges({
+        TableData: new SimpleChange(null, [], false),
+        ShowAddButton: new SimpleChange(false, true, false)
+      });
+
+      expect(component['generateTableDisplayValues']).toHaveBeenCalled();
+      expect(component['ShowButtonColumn']).toHaveBeenCalled();
+    });
+  });
+
+  describe('SetActiveRec', () => {
+    it('should set ActiveRec', () => {
+      const record = { id: 1, name: 'Test' };
+      component.SetActiveRec = record;
+      expect(component.ActiveRec).toEqual(record);
+    });
+
+    it('should allow null ActiveRec', () => {
+      component.SetActiveRec = null;
+      expect(component.ActiveRec).toBeNull();
+    });
+  });
+
+  describe('Filtering and Sorting', () => {
+    it('should support EnableRemovedFilter', () => {
+      component.EnableRemovedFilter = true;
+      expect(component.EnableRemovedFilter).toBe(true);
+    });
+
+    it('should accept RemovedFilterProperty', () => {
+      component.RemovedFilterProperty = 'deleted';
+      expect(component.RemovedFilterProperty).toBe('deleted');
+    });
+
+    it('should accept RemovedFilterPropertyValue', () => {
+      component.RemovedFilterPropertyValue = false;
+      expect(component.RemovedFilterPropertyValue).toBe(false);
+    });
+
+    it('should accept ApplyRemovedFilter', () => {
+      component.ApplyRemovedFilter = false;
+      expect(component.ApplyRemovedFilter).toBe(false);
+    });
+  });
+
+  describe('Advanced Features', () => {
+    it('should accept AllowActiveRecord', () => {
+      component.AllowActiveRecord = true;
+      expect(component.AllowActiveRecord).toBe(true);
+    });
+
+    it('should accept DisplayRecordInfo', () => {
+      component.DisplayRecordInfo = true;
+      expect(component.DisplayRecordInfo).toBe(true);
+    });
+
+    it('should accept Resizable', () => {
+      component.Resizable = true;
+      expect(component.Resizable).toBe(true);
+    });
+
+    it('should accept ButtonsFirstCol', () => {
+      component.ButtonsFirstCol = true;
+      expect(component.ButtonsFirstCol).toBe(true);
+    });
+
+    it('should accept DisableInputs', () => {
+      component.DisableInputs = true;
+      expect(component.DisableInputs).toBe(true);
+    });
+
+    it('should accept StrikeThroughFn', () => {
+      const strikeFn = (rec: any) => rec.completed === true;
+      component.StrikeThroughFn = strikeFn;
+      expect(component.StrikeThroughFn).toBe(strikeFn);
+      expect(component.StrikeThroughFn?.({ completed: true })).toBe(true);
+    });
+
+    it('should accept SymbolSize', () => {
+      component.SymbolSize = '4rem';
+      expect(component.SymbolSize).toBe('4rem');
+    });
+  });
+
+  describe('TableDataButtons', () => {
+    it('should accept custom button configurations', () => {
+      const mockCallback = jasmine.createSpy('callback');
+      const button = new TableButtonType('custom', mockCallback, 'Custom Action');
+      component.TableDataButtons = [button];
+      
+      expect(component.TableDataButtons.length).toBe(1);
+      expect(component.TableDataButtons[0].ButtonType).toBe('custom');
+    });
+
+    it('should handle multiple buttons', () => {
+      const mockCallback = jasmine.createSpy('callback');
+      const btn1 = new TableButtonType('edit', mockCallback);
+      const btn2 = new TableButtonType('delete', mockCallback);
+      const btn3 = new TableButtonType('view', mockCallback);
+      
+      component.TableDataButtons = [btn1, btn2, btn3];
+      expect(component.TableDataButtons.length).toBe(3);
+    });
+  });
+
+  describe('Window Resize Handling', () => {
+    it('should call setSymbolSizeForButtons on resize', (done) => {
+      spyOn<any>(component, 'setSymbolSizeForButtons');
+      
+      component.onResize({});
+      
+      // Wait for debounce
+      setTimeout(() => {
+        expect(component['setSymbolSizeForButtons']).toHaveBeenCalled();
+        done();
+      }, 250);
+    });
+
+    it('should debounce resize events', () => {
+      spyOn<any>(component, 'SetTableContainerWidth');
+      
+      // Trigger multiple resize events
+      component.onResize({});
+      component.onResize({});
+      component.onResize({});
+      
+      // SetTableContainerWidth should not be called immediately
+      expect(component['SetTableContainerWidth']).not.toHaveBeenCalled();
+    });
   });
 });
 
