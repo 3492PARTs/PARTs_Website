@@ -40,7 +40,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   previewUrl: any = null;
   scoutPitResponse = new ScoutPitFormResponse();
 
-  stampOptions = ['start', 'end', 'pick-up', 'place', 'coral', 'algae'];
+  stampOptions = ['start', 'end', 'pick-up', 'place'];
 
   private checkTeamInterval: number | undefined;
   previewImages: ScoutPitImage[] = [];
