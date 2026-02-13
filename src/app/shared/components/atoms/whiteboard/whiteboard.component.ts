@@ -6,9 +6,10 @@ import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
 import { ModalService } from '@app/core/services/modal.service';
+import { FormElementComponent } from "../form-element/form-element.component";
 @Component({
   selector: 'app-whiteboard',
-  imports: [ButtonComponent, FormElementGroupComponent, CommonModule],
+  imports: [ButtonComponent, FormElementGroupComponent, CommonModule, FormElementComponent],
   templateUrl: './whiteboard.component.html',
   styleUrls: ['./whiteboard.component.scss']
 })
@@ -48,6 +49,8 @@ export class WhiteboardComponent implements OnInit {
     }
   }
   @Output() ImageChange: EventEmitter<File> = new EventEmitter<File>();
+
+  customStampText = '';
 
   // For undo/redo functionality
   private undoStack: ImageData[] = [];
@@ -320,5 +323,10 @@ export class WhiteboardComponent implements OnInit {
       this.stampText = s;
     else
       this.stampText = '';
+  }
+
+  resetCustomStampText(): void {
+    this.customStampText = '';
+    this.toggleStampText(this.customStampText);
   }
 }

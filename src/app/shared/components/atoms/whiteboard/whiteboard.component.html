@@ -1,92 +1,46 @@
-<canvas
-  #canvas
-  (click)="onCanvasClick($event)"
-  (mousedown)="onMouseDown($event)"
-  (mousemove)="onMouseMove($event)"
-  (mouseup)="onMouseUp()"
-  (touchstart)="onTouchStart($event)"
-  (touchmove)="onTouchMove($event)"
-  (touchend)="onTouchEnd($event)"
-  [width]="width"
-  [height]="height"
-  style="border: 1px solid black"
->
+<canvas #canvas (click)="onCanvasClick($event)" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+  (mouseup)="onMouseUp()" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd($event)" [width]="width" [height]="height" style="border: 1px solid black">
 </canvas>
 
 <app-form-element-group [MarginTop]="'0'">
   <div class="flex flex-wrap justify-content-space-between">
     <div>
       <div class="flex gap-p4rem">
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'black'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'black' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('black')"
-        >
+        <app-button [ButtonType]="''" [BackgroundColor]="'black'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'black' ? '0.7' : '1'" (FunctionCallBack)="selectColor('black')">
         </app-button>
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'red'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'red' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('red')"
-        >
+        <app-button [ButtonType]="''" [BackgroundColor]="'red'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'red' ? '0.7' : '1'" (FunctionCallBack)="selectColor('red')">
         </app-button>
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'blue'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'blue' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('blue')"
-        >
+        <app-button [ButtonType]="''" [BackgroundColor]="'blue'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'blue' ? '0.7' : '1'" (FunctionCallBack)="selectColor('blue')">
         </app-button>
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'green'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'green' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('green')"
-        >
+        <app-button [ButtonType]="''" [BackgroundColor]="'green'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'green' ? '0.7' : '1'" (FunctionCallBack)="selectColor('green')">
         </app-button>
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'yellow'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'yellow' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('yellow')"
-        >
+        <app-button [ButtonType]="''" [BackgroundColor]="'yellow'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'yellow' ? '0.7' : '1'" (FunctionCallBack)="selectColor('yellow')">
         </app-button>
-        <app-button
-          [ButtonType]="''"
-          [BackgroundColor]="'white'"
-          [BoxShadow]="boxShadow"
-          [Opacity]="currentColor === 'white' ? '0.7' : '1'"
-          (FunctionCallBack)="selectColor('white')"
-        ></app-button>
+        <app-button [ButtonType]="''" [BackgroundColor]="'white'" [BoxShadow]="boxShadow"
+          [Opacity]="currentColor === 'white' ? '0.7' : '1'" (FunctionCallBack)="selectColor('white')"></app-button>
       </div>
       <div [ngClass]="{ 'stamp-padding': StampOptions.length > 0 }">
         @for (s of StampOptions; track $index) {
-        <app-button
-          (FunctionCallBack)="toggleStampText(s)"
-          [Opacity]="stampText === s ? '0.7' : '1'"
-          >{{ s }}</app-button
-        >
+        <app-button (FunctionCallBack)="toggleStampText(s)" [Opacity]="stampText === s ? '0.7' : '1'">{{ s
+          }}</app-button>
         }
+        <app-form-element [Type]="'text'" [LabelText]="'Custom Stamp'" [(Model)]="customStampText"
+          [FormGroupInline]="true" (FunctionCallBack)="toggleStampText(customStampText)"></app-form-element>
+        <app-button [ButtonType]="'reset'" (FunctionCallBack)="resetCustomStampText()"></app-button>
       </div>
     </div>
 
     <div>
       <app-button [ButtonType]="'eraser'" (FunctionCallBack)="clearCanvas()">
       </app-button>
-      <app-button
-        [ButtonType]="'undo'"
-        (FunctionCallBack)="undo()"
-      ></app-button>
-      <app-button
-        [ButtonType]="'redo'"
-        (FunctionCallBack)="redo()"
-      ></app-button>
+      <app-button [ButtonType]="'undo'" (FunctionCallBack)="undo()"></app-button>
+      <app-button [ButtonType]="'redo'" (FunctionCallBack)="redo()"></app-button>
       <!--<app-button
         [ButtonType]="'download'"
         (FunctionCallBack)="emitImage()"
