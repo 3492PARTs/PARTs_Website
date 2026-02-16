@@ -3,7 +3,7 @@
 @use 'sass:color';
 
 // penetrate into inner Html
-:host ::ng-deep a {
+:host ::ng-deep #site-banner a {
   color: white;
 }
 //f* {
