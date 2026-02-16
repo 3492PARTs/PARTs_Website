@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
       }
     });
 
-    console.log(`ver: ${environment.version}`);
+    console.log(`commit: ${environment.version}`);
     console.log(`prod: ${environment.production}`);
   }
 
