@@ -25,6 +25,7 @@ export class MeetingService {
       if (meeting.end < meeting.start) {
         this.modalService.triggerError('Meeting end cannot be before start.');
         resolve(false);
+        return;
       }
 
       this.api.post(true, 'attendance/meetings/',
