@@ -131,6 +131,9 @@
                 [Required]="true"></app-form-element>
 
             @if (AdminInterface) {
+            <app-form-element [LabelText]="'Private'" [Type]="'checkbox'" [(Model)]="meeting.private_ind"
+                [Required]="true"></app-form-element>
+
             <app-button-ribbon>
                 @if (!meeting.ended) {
                 <app-button [ButtonType]="'danger'" (FunctionCallBack)="endMeeting(meeting)">End</app-button>
