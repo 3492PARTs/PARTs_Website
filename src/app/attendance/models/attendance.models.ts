@@ -15,7 +15,7 @@ export class Meeting {
     ended = false;
     title = '';
     description = '';
-    bonus = false;
+    private_ind = false;
     void_ind = 'n';
 }
 
