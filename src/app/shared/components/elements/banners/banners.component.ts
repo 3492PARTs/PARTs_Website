@@ -53,14 +53,14 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:scroll', ['$event'])
-  onWindowScroll() {
+  onWindowScroll(event: any) {
     //this.positionBannerWrapper();
     this.mobile = this.gs.getAppSize() === AppSize.XS;
     if (this.mobile) this.scrollEvents(window.scrollY);
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize() {
+  onResize(event: any) {
     this.positionBannerWrapper();
   }
 
