@@ -415,7 +415,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     //const question = questionFlow.question;
 
     if (question.question_typ.question_typ === 'mnt-psh-btn' || override) {
-      // Check if there are any required/invalid fields
+      // Check if there are any required/invalid fields for form elements
       if (question.question_typ.question_typ !== 'mnt-psh-btn') {
         const qfe = this.getQuestionFormElement(question);
         if (qfe && !qfe.formElement.valid) {
@@ -434,6 +434,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       question.answer = undefined;
 
       this.flowsActionStack.push(new FlowAction(flow.id, question.id));
+
+      // check if there is a push to continue condition on a same order question in flow
+      if (!flowQuestion.press_to_continue) {
+        const pushToContinueQuestions = flow.flow_questions.filter(fq => fq.order === flowQuestion.order && fq.question.id !== question.id && fq.question.question_typ.question_typ === 'mnt-psh-btn');
+        if (pushToContinueQuestions.length > 0) return;
+      }
 
       // Hides current stage
       this.displayFlowStage(flow, flowQuestion.order, false);
