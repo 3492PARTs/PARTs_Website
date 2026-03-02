@@ -320,8 +320,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   // MEETING -----------------------------------------------------------
   getMeetings(id?: number): void | null {
-
-    this.meetingService.getMeetings(id).then((result) => {
+    this.meetingService.getMeetings(id, this.isNotAdminInterface()).then((result) => {
       if (result) {
         if (Array.isArray(result)) {
           this.meetings = result;
@@ -345,6 +344,11 @@ export class MeetingAttendanceComponent implements OnInit {
     const m = meeting ? meeting : this.meeting;
     if (m.end < m.start) {
       this.modalService.triggerError('Meeting end cannot be before start.');
+      return null;
+    }
+
+    if (m.private_ind && m.meeting_typ.meeting_typ !== 'bns') {
+      this.modalService.triggerError('Private meetings have to be bonus.');
       return null;
     }
 

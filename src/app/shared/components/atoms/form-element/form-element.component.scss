@@ -155,6 +155,7 @@ textarea.form-control {
   display: inline-block;
   padding-right: 0.5em;
   vertical-align: top;
+  margin-top: -2.5px; // just added on 2/13/26 watch out for issues
 
   &.checkboxElement {
     display: inline-flex;

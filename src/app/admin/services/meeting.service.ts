@@ -10,8 +10,11 @@ export class MeetingService {
 
   constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) { }
 
-  getMeetings(id?: number): Promise<Meeting[] | Meeting | null> {
-    return this.api.get(true, 'attendance/meetings/', id !== undefined ? { meeting_id: id } : undefined);
+  getMeetings(id?: number, removePrivateMeetings = false): Promise<Meeting[] | Meeting | null> {
+    const prms: any = { 'remove_private_meetings': removePrivateMeetings };
+    if (id !== undefined) prms['meeting_id'] = id;
+
+    return this.api.get(true, 'attendance/meetings/', prms);
   }
 
   endMeeting(meeting: Meeting): Promise<void> {
