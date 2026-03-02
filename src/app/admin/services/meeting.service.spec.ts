@@ -39,7 +39,7 @@ describe('MeetingService', () => {
 
       const result = await service.getMeetings();
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', undefined);
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', { remove_private_meetings: false });
       expect(result).toEqual(mockMeetings);
     });
 
@@ -50,7 +50,7 @@ describe('MeetingService', () => {
 
       const result = await service.getMeetings(123);
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', { meeting_id: 123 });
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', { remove_private_meetings: false, meeting_id: 123 });
       expect(result).toEqual(mockMeeting);
     });
   });
@@ -264,7 +264,7 @@ describe('MeetingService', () => {
 
       const result = await service.getActiveMeeting();
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', undefined);
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/meetings/', { remove_private_meetings: false });
       expect(result).toEqual(activeMeeting);
     });
 
