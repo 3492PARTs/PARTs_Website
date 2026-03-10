@@ -196,7 +196,7 @@
         @if (
         activeFormSubTypeForm &&
         activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.length > 0
+        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0
         ) {
         <div #imageContainer id="image-container" (click)="stopwatchStart()">
           @if (fieldForm.img_url && activeFormSubTypeForm) {
@@ -238,6 +238,11 @@
       </div>
 
       @if (activeFormSubTypeForm) {
+      <app-question-display-form [(Questions)]="activeFieldSubTypeFormFormBasedFlowQuestions"
+        [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
+        [Disabled]="formDisabled">
+      </app-question-display-form>
+
       <app-question-display-form [(Questions)]="activeFormSubTypeForm.questions"
         [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
         [Disabled]="formDisabled">

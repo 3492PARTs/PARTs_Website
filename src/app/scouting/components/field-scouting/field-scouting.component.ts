@@ -33,6 +33,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   fieldForm = new FieldForm();
   formSubTypeForms: FormSubTypeForm[] = [];
   activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
+  activeFieldSubTypeFormFormBasedFlowQuestions: Question[] = [];
 
   flowsActionStack: FlowAction[] = [];
 
@@ -93,7 +94,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.fieldForm = result.field_form_form.field_form;
         this.formSubTypeForms = result.field_form_form.form_sub_types;
 
-        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
+        this.setActiveFormSubTypeForm(this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1));
         triggerChange(() => {
           this.activeFormSubTypeForm?.flows.forEach(qf => {
             if (!strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
@@ -394,7 +395,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // advance to next form sub type
       triggerChange(() => {
-        this.activeFormSubTypeForm = this.formSubTypeForms[i];
+        this.setActiveFormSubTypeForm(this.formSubTypeForms[i]);
         // Display the first stage of each flow for this sub type
         triggerChange(() => {
           this.setFullScreen(false);
@@ -831,6 +832,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         throw new Error('no flow to undo')
       }
     }
+  }
+
+  private setActiveFormSubTypeForm(f: FormSubTypeForm | undefined): void {
+    this.activeFormSubTypeForm = f;
+    this.activeFieldSubTypeFormFormBasedFlowQuestions = this.activeFormSubTypeForm ? this.activeFormSubTypeForm.flows.filter(f => f.form_based).map(f => f.flow_questions).flat().map(q => q.question) : [];
   }
 }
 

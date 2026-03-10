@@ -296,6 +296,7 @@ export class Flow implements IFlow {
     form_sub_typ!: FormSubType;
     flow_questions: FlowQuestion[] = [];
     question_answer: Answer | undefined = undefined;
+    form_based = false;
     void_ind = 'n';
 
     flow_conditional_on = NaN;
