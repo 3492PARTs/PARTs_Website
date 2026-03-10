@@ -33,7 +33,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   fieldForm = new FieldForm();
   formSubTypeForms: FormSubTypeForm[] = [];
   activeFormSubTypeForm: FormSubTypeForm | undefined = undefined;
-  activeFieldSubTypeFormFormBasedFlowQuestions: Question[] = [];
 
   flowsActionStack: FlowAction[] = [];
 
@@ -836,7 +835,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   private setActiveFormSubTypeForm(f: FormSubTypeForm | undefined): void {
     this.activeFormSubTypeForm = f;
-    this.activeFieldSubTypeFormFormBasedFlowQuestions = this.activeFormSubTypeForm ? this.activeFormSubTypeForm.flows.filter(f => f.form_based).map(f => f.flow_questions).flat().map(q => q.question) : [];
   }
 }
 

@@ -238,10 +238,19 @@
       </div>
 
       @if (activeFormSubTypeForm) {
-      <app-question-display-form [(Questions)]="activeFieldSubTypeFormFormBasedFlowQuestions"
-        [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
-        [Disabled]="formDisabled">
-      </app-question-display-form>
+      @for (activeFormSubTypeFormFlow of activeFormSubTypeForm.flows.filter(f => f.form_based); track
+      activeFormSubTypeFormFlow) {
+      <app-form-element-group [LabelText]="activeFormSubTypeFormFlow.name">
+        @for (q of activeFormSubTypeFormFlow.flow_questions; track q) {
+        <app-question-form-element [Question]="q.question" (QuestionChange)="setFormElements($event)"
+          [Inverted]="invertedImage" [Disabled]="formDisabled"></app-question-form-element>
+        }
+        <app-button-ribbon>
+          <app-button [ButtonType]="'delete'"></app-button>
+          <app-button [ButtonType]="'add'"></app-button>
+        </app-button-ribbon>
+      </app-form-element-group>
+      }
 
       <app-question-display-form [(Questions)]="activeFormSubTypeForm.questions"
         [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
