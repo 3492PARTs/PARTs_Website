@@ -14,6 +14,7 @@ import { DisplayQuestionSvgComponent } from "../display-question-svg/display-que
 export class QuestionFormElementComponent implements AfterViewInit {
   @Input() Question!: Question;
   @Input() Disabled = false;
+  @Input() FormGroupInline = false;
   @Output() QuestionChange = new EventEmitter<any>();
   @ViewChild(FormElementComponent) formElement!: FormElementComponent;
 
