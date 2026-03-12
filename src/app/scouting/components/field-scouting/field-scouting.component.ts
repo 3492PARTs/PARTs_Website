@@ -436,7 +436,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.flowsActionStack.push(new FlowAction(flow.id, question.id));
 
       // check if there is a push to continue condition on a same order question in flow
-      if (!flowQuestion.press_to_continue) {
+      if (!flowQuestion.press_to_continue && !override) {
         const pushToContinueQuestions = flow.flow_questions.filter(fq => fq.order === flowQuestion.order && fq.question.id !== question.id && fq.question.question_typ.question_typ === 'mnt-psh-btn');
         if (pushToContinueQuestions.length > 0) return;
       }
@@ -645,11 +645,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       this.renderer.setStyle(box, 'display', "block");
-      this.renderer.setStyle(box, 'width', `${width}%`);
-      this.renderer.setStyle(box, 'height', `${height}%`);
+      if (!box.classList.contains('flow-box')) {
+        this.renderer.setStyle(box, 'width', `${width}%`);
+        this.renderer.setStyle(box, 'height', `${height}%`);
 
-      this.renderer.setStyle(box, 'left', `${x}%`);
-      this.renderer.setStyle(box, 'top', `${y}%`);
+        this.renderer.setStyle(box, 'left', `${x}%`);
+        this.renderer.setStyle(box, 'top', `${y}%`);
+      }
     }
 
   }

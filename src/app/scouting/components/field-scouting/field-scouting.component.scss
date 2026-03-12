@@ -89,6 +89,10 @@
   //pointer-events: none; /* Allow clicks to pass through */
   display: none;
 
+  &.flow-box {
+    position: relative;
+  }
+
   .label {
     position: absolute;
     top: 50%;
