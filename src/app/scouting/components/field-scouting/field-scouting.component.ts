@@ -367,6 +367,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     // allow to go past auto with form errors
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
 
+    this.stopwatchStop();
+
     let fn = () => {
       scrollTo(0);
 
