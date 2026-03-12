@@ -196,7 +196,7 @@
         @if (
         activeFormSubTypeForm &&
         activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.length > 0
+        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0
         ) {
         <div #imageContainer id="image-container" (click)="stopwatchStart()">
           @if (fieldForm.img_url && activeFormSubTypeForm) {
@@ -238,6 +238,27 @@
       </div>
 
       @if (activeFormSubTypeForm) {
+      @for (flow of activeFormSubTypeForm.flows.filter(f => f.form_based); track
+      flow) {
+      <app-form-element-group [LabelText]="flow.name">
+        @for (q of flow.flow_questions; track q; let i = $index) {
+        <div #box class="box flow-box" id="{{ q.id }}">
+          <app-question-form-element [Question]="q.question" [Disabled]="formDisabled"></app-question-form-element>
+
+          <app-button [ButtonType]="'check-bold'" (FunctionCallBack)="
+                    advanceFlow(
+                      flow,
+                      flow.flow_questions[i],
+                      flow.flow_questions[i].question,
+                      true
+                    )
+                  " [BackgroundColor]="'lightgray'"></app-button>
+
+        </div>
+        }
+      </app-form-element-group>
+      }
+
       <app-question-display-form [(Questions)]="activeFormSubTypeForm.questions"
         [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
         [Disabled]="formDisabled">

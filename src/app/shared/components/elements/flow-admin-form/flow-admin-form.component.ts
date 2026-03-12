@@ -28,6 +28,7 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
     { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
+    { PropertyName: 'form_based', ColLabel: 'Form Based', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
     { PropertyName: 'flow_questions', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeFlowQuestions },
     { PropertyName: 'flow_conditional_on', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.decodeConditionalFlow.bind(this) },
   ];
