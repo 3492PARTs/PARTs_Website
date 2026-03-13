@@ -631,29 +631,32 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   showFlowQuestionBox(flow: Flow, flowQuestion: FlowQuestion): void {
     const question = flowQuestion.question;
     const box = this.getFlowQuestionBox(flow, flowQuestion);
-    if (box &&
-      !strNoE(question.x) &&
-      !strNoE(question.y) &&
-      !strNoE(question.width) &&
-      !strNoE(question.height) &&
-      box) {
-      let width = question.width;
-      let height = question.height;
-      let x = question.x;
-      let y = question.y;
+    if (box) {
 
-      if (this.invertedImage) {
-        x = 50 + (50 - x) - width;
+      if (!strNoE(question.x) &&
+        !strNoE(question.y) &&
+        !strNoE(question.width) &&
+        !strNoE(question.height)) {
+        let width = question.width;
+        let height = question.height;
+        let x = question.x;
+        let y = question.y;
+
+        if (this.invertedImage) {
+          x = 50 + (50 - x) - width;
+        }
+
+        if (!box.classList.contains('flow-box')) {
+          this.renderer.setStyle(box, 'width', `${width}%`);
+          this.renderer.setStyle(box, 'height', `${height}%`);
+
+          this.renderer.setStyle(box, 'left', `${x}%`);
+          this.renderer.setStyle(box, 'top', `${y}%`);
+        }
       }
 
       this.renderer.setStyle(box, 'display', "block");
-      if (!box.classList.contains('flow-box')) {
-        this.renderer.setStyle(box, 'width', `${width}%`);
-        this.renderer.setStyle(box, 'height', `${height}%`);
 
-        this.renderer.setStyle(box, 'left', `${x}%`);
-        this.renderer.setStyle(box, 'top', `${y}%`);
-      }
     }
 
   }
