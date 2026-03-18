@@ -166,7 +166,7 @@
       @if(activeFormSubTypeForm) {
       <div id="header-wrapper">
         @if(activeFormSubTypeForm && activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.length > 0) {
+        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0) {
         <div #flowButtonsWrapper>
           @if (flowsActionStack.length > 0) {
           <app-button id="undo-btn" [ButtonType]="'arrow-u-left-top'" (FunctionCallBack)="undoFlowAction()"
@@ -196,14 +196,19 @@
         @if (
         activeFormSubTypeForm &&
         activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.length > 0
+        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0
         ) {
         <div #imageContainer id="image-container" (click)="stopwatchStart()">
+          <!--load field image if it exists-->
           @if (fieldForm.img_url && activeFormSubTypeForm) {
           <img #image id="image" [src]="invertedImage ? fieldForm.inv_img_url : fieldForm.img_url" />
           }
+
+          <!--loop over all flows in the active form-->
           @for (flow of activeFormSubTypeForm.flows || []; track flow) {
           <div class="flow">
+
+            <!--display each question in a flow. they start as hidden the js choses which to show first-->
             @for (q of flow.flow_questions; track q; let i = $index) {
             <div #box class="box" id="{{ q.id }}">
               <div [ngClass]="{
@@ -218,6 +223,8 @@
                 <app-question-form-element [Question]="flow.flow_questions[i].question" (QuestionChange)="
                     advanceFlow(flow, flow.flow_questions[i], $event)
                   " [Inverted]="invertedImage"></app-question-form-element>
+
+                <!--if it is not a button element add a way to trigger next flow stage-->
                 @if (q.question.question_typ.question_typ !== 'mnt-psh-btn') {
                 <app-button [ButtonType]="'check-bold'" (FunctionCallBack)="
                     advanceFlow(
@@ -237,7 +244,47 @@
         }
       </div>
 
+      <!--form based questions-->
       @if (activeFormSubTypeForm) {
+
+      <!-- form based flows-->
+      @for (flow of activeFormSubTypeForm.flows.filter(f => f.form_based); track
+      flow) {
+      <app-form-element-group [LabelText]="flow.name">
+
+
+        <!--works like above flow questions where js choses what to show-->
+        @for (q of flow.flow_questions; track q; let i = $index) {
+        <div #box class="box flow-box" id="{{ q.id }}">
+
+          <app-question-form-element [Question]="q.question" [Disabled]="formDisabled"></app-question-form-element>
+
+          <!--manual trigger for next flow stage-->
+          <app-button-ribbon [TextAlign]="'left'">
+            <!--undo button-->
+            @if(activeFormSubTypeForm && activeFormSubTypeForm.flows &&
+            activeFormSubTypeForm.flows.length > 0) {
+            @if (flowsActionStack.length > 0) {
+            <app-button id="undo-btn" [ButtonType]="'danger'" (FunctionCallBack)="undoFlowAction()">Undo</app-button>
+            }
+
+            }
+
+            <app-button [ButtonType]="'success'" (FunctionCallBack)="
+                    advanceFlow(
+                      flow,
+                      flow.flow_questions[i],
+                      flow.flow_questions[i].question,
+                      true
+                    )
+                  ">Next</app-button>
+          </app-button-ribbon>
+        </div>
+        }
+      </app-form-element-group>
+      }
+
+      <!--regular form questions-->
       <app-question-display-form [(Questions)]="activeFormSubTypeForm.questions"
         [QuestionAnswers]="scoutFieldResponse.answers" (FormElementsChange)="setFormElements($event)"
         [Disabled]="formDisabled">

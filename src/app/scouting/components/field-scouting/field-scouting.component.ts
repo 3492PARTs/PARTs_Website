@@ -93,7 +93,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.fieldForm = result.field_form_form.field_form;
         this.formSubTypeForms = result.field_form_form.form_sub_types;
 
-        this.activeFormSubTypeForm = this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1);
+        this.setActiveFormSubTypeForm(this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1));
         triggerChange(() => {
           this.activeFormSubTypeForm?.flows.forEach(qf => {
             if (!strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
@@ -367,6 +367,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     // allow to go past auto with form errors
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1 && !this.isQuestionDisplayFormValid()) return;
 
+    this.stopwatchStop();
+
     let fn = () => {
       scrollTo(0);
 
@@ -394,7 +396,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // advance to next form sub type
       triggerChange(() => {
-        this.activeFormSubTypeForm = this.formSubTypeForms[i];
+        this.setActiveFormSubTypeForm(this.formSubTypeForms[i]);
         // Display the first stage of each flow for this sub type
         triggerChange(() => {
           this.setFullScreen(false);
@@ -436,7 +438,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       this.flowsActionStack.push(new FlowAction(flow.id, question.id));
 
       // check if there is a push to continue condition on a same order question in flow
-      if (!flowQuestion.press_to_continue) {
+      if (!flowQuestion.press_to_continue && !override) {
         const pushToContinueQuestions = flow.flow_questions.filter(fq => fq.order === flowQuestion.order && fq.question.id !== question.id && fq.question.question_typ.question_typ === 'mnt-psh-btn');
         if (pushToContinueQuestions.length > 0) return;
       }
@@ -629,27 +631,32 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   showFlowQuestionBox(flow: Flow, flowQuestion: FlowQuestion): void {
     const question = flowQuestion.question;
     const box = this.getFlowQuestionBox(flow, flowQuestion);
-    if (box &&
-      !strNoE(question.x) &&
-      !strNoE(question.y) &&
-      !strNoE(question.width) &&
-      !strNoE(question.height) &&
-      box) {
-      let width = question.width;
-      let height = question.height;
-      let x = question.x;
-      let y = question.y;
+    if (box) {
 
-      if (this.invertedImage) {
-        x = 50 + (50 - x) - width;
+      if (!strNoE(question.x) &&
+        !strNoE(question.y) &&
+        !strNoE(question.width) &&
+        !strNoE(question.height)) {
+        let width = question.width;
+        let height = question.height;
+        let x = question.x;
+        let y = question.y;
+
+        if (this.invertedImage) {
+          x = 50 + (50 - x) - width;
+        }
+
+        if (!box.classList.contains('flow-box')) {
+          this.renderer.setStyle(box, 'width', `${width}%`);
+          this.renderer.setStyle(box, 'height', `${height}%`);
+
+          this.renderer.setStyle(box, 'left', `${x}%`);
+          this.renderer.setStyle(box, 'top', `${y}%`);
+        }
       }
 
       this.renderer.setStyle(box, 'display', "block");
-      this.renderer.setStyle(box, 'width', `${width}%`);
-      this.renderer.setStyle(box, 'height', `${height}%`);
 
-      this.renderer.setStyle(box, 'left', `${x}%`);
-      this.renderer.setStyle(box, 'top', `${y}%`);
     }
 
   }
@@ -831,6 +838,10 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         throw new Error('no flow to undo')
       }
     }
+  }
+
+  private setActiveFormSubTypeForm(f: FormSubTypeForm | undefined): void {
+    this.activeFormSubTypeForm = f;
   }
 }
 
