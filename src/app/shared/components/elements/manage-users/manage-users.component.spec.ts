@@ -43,7 +43,7 @@ describe('ManageUsersComponent', () => {
   });
 
   it('should have user table columns configured', () => {
-    expect(component.userTableCols.length).toBe(6);
+    expect(component.userTableCols.length).toBe(4);
     expect(component.userTableCols[0].PropertyName).toBe('name');
     expect(component.userTableCols[1].PropertyName).toBe('username');
     expect(component.userTableCols[2].PropertyName).toBe('email');
