@@ -224,9 +224,11 @@ export class FieldScoutingResponsesComponent implements OnInit {
             point = null;
           }
 
-          s += `Rnd${r['round']}: ${point ? 1 : r['value']}\n`;
+          const isPoint = point && Object.hasOwn(point, 'x') && Object.hasOwn(point, 'y');
 
-          sum += (isNumber(r['value']) ? parseFloat(r['value']) : point && Object.hasOwn(point, 'x') && Object.hasOwn(point, 'y') ? 1 : 0);
+          s += `Rnd${r['round']}: ${isPoint ? 1 : r['value']}\n`;
+
+          sum += (isNumber(r['value']) ? parseFloat(r['value']) : isPoint ? 1 : 0);
         }
         else
           s += `${JSON.stringify(rec)}\n`;
