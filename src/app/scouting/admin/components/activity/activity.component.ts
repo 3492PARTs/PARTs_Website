@@ -16,6 +16,7 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, decodeSentBoolean, formatDateString } from '@app/core/utils/utils.functions';
+import { formatFieldRecord } from '@app/scouting/components/field-scouting-responses/field-scouting-responses.component';
 @Component({
   selector: 'app-scouting-activity',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
@@ -204,6 +205,10 @@ export class ActivityComponent implements OnInit {
 
     this.gs.incrementOutstandingCalls();
     this.ss.getFieldResponseColumnsFromCache().then(frcs => {
+      frcs.forEach(c => {
+        c['ColValueFunction'] = this.formatRec;
+        c['Type'] = 'function';
+      });
       this.activeUserScoutingScoutCols = frcs;
       this.gs.decrementOutstandingCalls();
     });
@@ -298,5 +303,9 @@ export class ActivityComponent implements OnInit {
 
   decodeSentBoolean(b: boolean): string {
     return decodeSentBoolean(b);
+  }
+
+  formatRec(rec: any): any {
+    return formatFieldRecord(rec);
   }
 }

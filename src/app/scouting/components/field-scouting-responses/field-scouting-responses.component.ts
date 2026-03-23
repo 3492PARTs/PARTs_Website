@@ -209,37 +209,42 @@ export class FieldScoutingResponsesComponent implements OnInit {
   }
 
   formatRec(rec: any): any {
-    if (Array.isArray(rec)) {
-      let s = '';
-      let sum = 0;
-      rec.forEach(r => {
-        if (Object.hasOwn(r, 'round') && Object.hasOwn(r, 'value')) {
+    return formatFieldRecord(rec);
+  }
+}
 
 
-          let point = null;
-          try {
-            point = JSON.parse(r['value']);
-          }
-          catch {
-            point = null;
-          }
+export function formatFieldRecord(rec: any): any {
+  if (Array.isArray(rec)) {
+    let s = '';
+    let sum = 0;
+    rec.forEach(r => {
+      if (Object.hasOwn(r, 'round') && Object.hasOwn(r, 'value')) {
 
-          const isPoint = point && Object.hasOwn(point, 'x') && Object.hasOwn(point, 'y');
 
-          s += `Rnd${r['round']}: ${isPoint ? 1 : r['value']}\n`;
-
-          sum += (isNumber(r['value']) ? parseFloat(r['value']) : isPoint ? 1 : 0);
+        let point = null;
+        try {
+          point = JSON.parse(r['value']);
         }
-        else
-          s += `${JSON.stringify(rec)}\n`;
-      });
-      s += `Sum: ${sum}`;
-      return s;
-    }
-    else {
-      const dt = returnIfValidDate(rec);
-      if (dt) return formatDateString(dt);
-      else return rec;
-    }
+        catch {
+          point = null;
+        }
+
+        const isPoint = point && Object.hasOwn(point, 'x') && Object.hasOwn(point, 'y');
+
+        s += `Rnd${r['round']}: ${isPoint ? 1 : r['value']}\n`;
+
+        sum += (isNumber(r['value']) ? parseFloat(r['value']) : isPoint ? 1 : 0);
+      }
+      else
+        s += `${JSON.stringify(rec)}\n`;
+    });
+    s += `Sum: ${sum}`;
+    return s;
+  }
+  else {
+    const dt = returnIfValidDate(rec);
+    if (dt) return formatDateString(dt);
+    else return rec;
   }
 }
