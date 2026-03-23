@@ -53,7 +53,7 @@ describe('ScoutingService', () => {
     });
 
     service = TestBed.inject(ScoutingService);
-    
+
     // Clear any cached promises between tests
     service['loadSeasonsPromise'] = null;
     service['loadEventsPromise'] = null;
@@ -79,9 +79,9 @@ describe('ScoutingService', () => {
   describe('startUploadOutstandingResponsesTimeout', () => {
     it('should set a timeout to upload outstanding responses', (done) => {
       spyOn(service, 'uploadOutstandingResponses');
-      
+
       service.startUploadOutstandingResponsesTimeout();
-      
+
       setTimeout(() => {
         expect(service['outstandingResponsesTimeout']).toBeDefined();
         done();
@@ -91,9 +91,9 @@ describe('ScoutingService', () => {
     it('should clear existing timeout before setting new one', () => {
       spyOn(window, 'clearTimeout');
       service['outstandingResponsesTimeout'] = 123;
-      
+
       service.startUploadOutstandingResponsesTimeout();
-      
+
       expect(window.clearTimeout).toHaveBeenCalledWith(123);
     });
   });
@@ -102,21 +102,21 @@ describe('ScoutingService', () => {
     it('should return -1 when first team number is less', () => {
       const team1 = { team_no: 100 } as Team;
       const team2 = { team_no: 200 } as Team;
-      
+
       expect(service.teamSortFunction(team1, team2)).toBe(-1);
     });
 
     it('should return 1 when first team number is greater', () => {
       const team1 = { team_no: 300 } as Team;
       const team2 = { team_no: 200 } as Team;
-      
+
       expect(service.teamSortFunction(team1, team2)).toBe(1);
     });
 
     it('should return 0 when team numbers are equal', () => {
       const team1 = { team_no: 200 } as Team;
       const team2 = { team_no: 200 } as Team;
-      
+
       expect(service.teamSortFunction(team1, team2)).toBe(0);
     });
   });
@@ -126,7 +126,7 @@ describe('ScoutingService', () => {
       const mockSeasons: Season[] = [
         { id: 1, season: '2023', current: 'y', game: 'Test Game', manual: '' }
       ];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockSeasons);
         if (onComplete) onComplete();
@@ -146,7 +146,7 @@ describe('ScoutingService', () => {
       const mockSeasons: Season[] = [
         { id: 1, season: '2023', current: 'n', game: 'Test Game', manual: '' }
       ];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -175,7 +175,7 @@ describe('ScoutingService', () => {
 
     it('should reuse existing promise if already loading', async () => {
       const mockSeasons: Season[] = [{ id: 1, season: '2023', current: 'y', game: 'Test', manual: '' }];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -225,7 +225,7 @@ describe('ScoutingService', () => {
       const mockEvents: Event[] = [
         { id: 1, season_id: 1, event_nm: 'Test Event', current: 'y' } as Event
       ];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockEvents);
         if (onComplete) onComplete();
@@ -244,7 +244,7 @@ describe('ScoutingService', () => {
       const mockEvents: Event[] = [
         { id: 1, season_id: 1, event_nm: 'Test Event', current: 'n' } as Event
       ];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -274,9 +274,9 @@ describe('ScoutingService', () => {
   describe('loadTeams', () => {
     it('should load teams and update cache on success', async () => {
       const mockTeams: Team[] = [
-        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 }
+        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, pit_image: 0, rank: 1 }
       ];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockTeams);
         if (onComplete) onComplete();
@@ -294,7 +294,7 @@ describe('ScoutingService', () => {
 
   describe('getTeamFromCache', () => {
     it('should get a team by id', async () => {
-      const mockTeam: Team = { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 };
+      const mockTeam: Team = { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, pit_image: 0, rank: 1 };
       mockCacheService.Team.getById.and.returnValue(Promise.resolve(mockTeam));
 
       const result = await service.getTeamFromCache(3492);
@@ -307,7 +307,7 @@ describe('ScoutingService', () => {
   describe('getTeamsFromCache', () => {
     it('should get all teams without filter', async () => {
       const mockTeams: Team[] = [
-        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 }
+        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, pit_image: 0, rank: 1 }
       ];
       mockCacheService.Team.getAll.and.returnValue(Promise.resolve(mockTeams));
 
@@ -320,7 +320,7 @@ describe('ScoutingService', () => {
   describe('filterTeamsFromCache', () => {
     it('should filter teams by custom function', async () => {
       const mockTeams: Team[] = [
-        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, rank: 1 }
+        { team_no: 3492, team_nm: 'PARTs', void_ind: 'n', checked: false, pit_result: 0, pit_image: 0, rank: 1 }
       ];
       const filterFn = (team: Team) => team.team_no === 3492;
       mockCacheService.Team.filterAll.and.returnValue(Promise.resolve(mockTeams));
@@ -337,7 +337,7 @@ describe('ScoutingService', () => {
       const mockMatches = [
         { match_number: 1, match_key: 'qm1' }
       ] as Match[];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockMatches);
         if (onComplete) onComplete();
@@ -355,7 +355,7 @@ describe('ScoutingService', () => {
       const mockMatches = [
         { match_number: 1, match_key: 'qm1' }
       ] as Match[];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -400,7 +400,7 @@ describe('ScoutingService', () => {
   describe('loadFieldScoutingForm', () => {
     it('should load field scouting form from API on success', async () => {
       const mockForm: FieldFormForm = { id: 1 } as FieldFormForm;
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockForm);
         if (onComplete) onComplete();
@@ -416,7 +416,7 @@ describe('ScoutingService', () => {
 
     it('should load field scouting form from cache on API failure', async () => {
       const mockForm: FieldFormForm = { id: 1 } as FieldFormForm;
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -439,7 +439,7 @@ describe('ScoutingService', () => {
         form_typ: 'field',
         match: undefined
       } as ScoutFieldFormResponse;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -460,7 +460,7 @@ describe('ScoutingService', () => {
         form_typ: 'field',
         match: undefined
       } as ScoutFieldFormResponse;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -484,7 +484,7 @@ describe('ScoutingService', () => {
         form_typ: 'field',
         match: undefined
       } as ScoutFieldFormResponse;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -501,7 +501,7 @@ describe('ScoutingService', () => {
   describe('loadPitScoutingForm', () => {
     it('should load pit scouting form from API on success', async () => {
       const mockQuestions: any[] = [{ id: 1, question: 'Test' }];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockQuestions);
         if (onComplete) onComplete();
@@ -527,7 +527,7 @@ describe('ScoutingService', () => {
         form_typ: 'pit',
         pics: []
       } as ScoutPitFormResponse;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -551,7 +551,7 @@ describe('ScoutingService', () => {
         form_typ: 'pit',
         pics: []
       } as ScoutPitFormResponse;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -570,7 +570,7 @@ describe('ScoutingService', () => {
   describe('loadScheduleTypes', () => {
     it('should load schedule types from API on success', async () => {
       const mockTypes: ScheduleType[] = [{ id: 1, sch_typ: 'Type1', sch_nm: 'Schedule Type 1' } as ScheduleType];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockTypes);
         if (onComplete) onComplete();
@@ -588,7 +588,7 @@ describe('ScoutingService', () => {
   describe('loadSchedules', () => {
     it('should load schedules from API on success', async () => {
       const mockSchedules: Schedule[] = [{ id: 1 } as Schedule];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockSchedules);
         if (onComplete) onComplete();
@@ -606,7 +606,7 @@ describe('ScoutingService', () => {
   describe('loadScoutingFieldSchedules', () => {
     it('should load scouting field schedules from API on success', async () => {
       const mockSchedules: ScoutFieldSchedule[] = [{ id: 1 } as ScoutFieldSchedule];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockSchedules);
         if (onComplete) onComplete();
@@ -682,21 +682,21 @@ describe('ScoutingService', () => {
     it('should sort by start time ascending', () => {
       const schedule1 = { st_time: new Date('2023-01-01T10:00:00') } as ScoutFieldSchedule;
       const schedule2 = { st_time: new Date('2023-01-01T11:00:00') } as ScoutFieldSchedule;
-      
+
       expect(service.scoutFieldScheduleSortFunction(schedule1, schedule2)).toBeLessThan(0);
     });
 
     it('should sort by start time descending', () => {
       const schedule1 = { st_time: new Date('2023-01-01T11:00:00') } as ScoutFieldSchedule;
       const schedule2 = { st_time: new Date('2023-01-01T10:00:00') } as ScoutFieldSchedule;
-      
+
       expect(service.scoutFieldScheduleSortFunction(schedule1, schedule2)).toBeGreaterThan(0);
     });
 
     it('should return 0 for equal times', () => {
       const schedule1 = { st_time: new Date('2023-01-01T10:00:00') } as ScoutFieldSchedule;
       const schedule2 = { st_time: new Date('2023-01-01T10:00:00') } as ScoutFieldSchedule;
-      
+
       expect(service.scoutFieldScheduleSortFunction(schedule1, schedule2)).toBe(0);
     });
   });
@@ -704,7 +704,7 @@ describe('ScoutingService', () => {
   describe('loadTeamNotes', () => {
     it('should load team notes from API on success', async () => {
       const mockNotes: TeamNote[] = [{ id: 1, team_id: 3492 } as TeamNote];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockNotes);
         if (onComplete) onComplete();
@@ -722,7 +722,7 @@ describe('ScoutingService', () => {
   describe('saveTeamNote', () => {
     it('should save team note via API', async () => {
       const mockNote: TeamNote = { id: 1, team_id: 3492, note: 'Test note' } as TeamNote;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -739,7 +739,7 @@ describe('ScoutingService', () => {
   describe('loadMatchStrategies', () => {
     it('should load match strategies from API on success', async () => {
       const mockStrategies: MatchStrategy[] = [{ id: 1 } as MatchStrategy];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockStrategies);
         if (onComplete) onComplete();
@@ -756,12 +756,12 @@ describe('ScoutingService', () => {
 
   describe('saveMatchStrategy', () => {
     it('should save match strategy via API', async () => {
-      const mockStrategy: MatchStrategy = { 
-        id: 1, 
+      const mockStrategy: MatchStrategy = {
+        id: 1,
         strategy: 'Test strategy',
         match: { match_key: 'qm1' }
       } as MatchStrategy;
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -778,7 +778,7 @@ describe('ScoutingService', () => {
   describe('loadAllianceSelection', () => {
     it('should load alliance selections from API on success', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
-      
+
       mockAPIService.get.and.callFake((loadingScreen, endpoint, params, onNext, onError, onComplete) => {
         if (onNext) onNext(mockSelections);
         if (onComplete) onComplete();
@@ -796,7 +796,7 @@ describe('ScoutingService', () => {
   describe('saveAllianceSelections', () => {
     it('should save alliance selections via API', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onNext) onNext({ message: 'Success' });
         if (onComplete) onComplete();
@@ -811,7 +811,7 @@ describe('ScoutingService', () => {
 
     it('should return false on API failure', async () => {
       const mockSelections: AllianceSelection[] = [{ id: 1 } as AllianceSelection];
-      
+
       mockAPIService.post.and.callFake((loadingScreen, endpoint, data, onNext, onError, onComplete) => {
         if (onError) onError('API Error');
         if (onComplete) onComplete();
@@ -828,7 +828,7 @@ describe('ScoutingService', () => {
   describe('getLoadAllScoutingInfoPromise', () => {
     it('should return null when no promise exists', () => {
       const result = service.getLoadAllScoutingInfoPromise();
-      
+
       expect(result).toBeNull();
     });
   });
