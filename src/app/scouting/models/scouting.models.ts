@@ -23,6 +23,7 @@ export interface ITeam {
     void_ind: string;
     checked: boolean;
     pit_result: number;
+    pit_image: number;
     rank: number;
 }
 
@@ -32,6 +33,7 @@ export class Team implements ITeam {
     void_ind = 'n'
     checked = false;
     pit_result = 0;
+    pit_image = 0;
     rank = NaN;
 
     constructor(team_no = NaN) {

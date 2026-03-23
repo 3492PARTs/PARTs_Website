@@ -866,34 +866,41 @@ export class ScoutingService {
 
         let count = 0;
 
+        const calls: Promise<void>[] = [];
+
         spr?.pics.forEach(pic => {
           if (pic.img && pic.img.size >= 0) {
             const team_no = spr?.team_id;
 
-            window.setTimeout(() => {
-              this.gs.incrementOutstandingCalls();
+            calls.push(new Promise<void>(resolvePics => {
+              window.setTimeout(() => {
+                this.gs.incrementOutstandingCalls();
 
-              if (pic.img)
-                resizeImageToMaxSize(pic.img).then(resizedPic => {
-                  if (resizedPic) {
-                    const formData = new FormData();
-                    formData.append('file', resizedPic);
-                    formData.append('team_no', team_no?.toString() || '');
-                    formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
-                    formData.append('img_title', pic.img_title);
+                if (pic.img)
+                  resizeImageToMaxSize(pic.img, .5).then(resizedPic => {
+                    if (resizedPic) {
+                      const formData = new FormData();
+                      formData.append('file', resizedPic);
+                      formData.append('team_no', team_no?.toString() || '');
+                      formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
+                      formData.append('img_title', pic.img_title);
 
-                    this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                      this.modalService.successfulResponseBanner(result);
-                    }, (err: any) => {
-                      this.modalService.triggerError(err);
-                    });
-                  }
-                }).finally(() => {
-                  this.gs.decrementOutstandingCalls();
-                });
-            }, 5000 * ++count);
+                      this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
+                        this.modalService.successfulResponseBanner(result);
+                      }, (err: any) => {
+                        this.modalService.triggerError(err);
+                      });
+                    }
+                  }).finally(() => {
+                    this.gs.decrementOutstandingCalls();
+                    resolvePics();
+                  });
+              }, 5000 * ++count);
+            }));
           }
         });
+
+        await Promise.all(calls);
 
         window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 5000 * count)
 

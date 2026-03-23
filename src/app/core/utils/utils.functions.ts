@@ -488,9 +488,9 @@ export function isQuestionConditionMet(answer: string, question: Question, condi
 /**
  * Resize an image file to maximum size
  */
-export function resizeImageToMaxSize(file: File): Promise<File> {
+export function resizeImageToMaxSize(file: File, sizeMB = 10485760): Promise<File> {
   const options = {
-    maxSizeMB: 10485760,
+    maxSizeMB: sizeMB,
     useWebWorker: true
   }
 

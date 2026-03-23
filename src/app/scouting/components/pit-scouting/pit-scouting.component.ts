@@ -30,6 +30,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   private buildOutstandingTeamsTimeout: number | undefined;
   outstandingTeams: Team[] = [];
   completedTeams: Team[] = [];
+  missingImagesTeams: Team[] = [];
 
   questions: Question[] = [];
 
@@ -130,6 +131,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       if (amendWithOutstandingResponses) this.amendOutstandTeamsList();
 
       this.completedTeams = teams?.filter(t => t.pit_result === 1) || [];
+      this.missingImagesTeams = teams?.filter(t => t.pit_result === 1 && t.pit_image === 0) || [];
 
       if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
         const fn = () => { window.location.reload(); }
