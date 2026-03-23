@@ -33,8 +33,8 @@ export class ManageUsersComponent implements OnInit {
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
     { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'function', ColValueFunction: this.hasDiscordId.bind(this), ColorFunction: this.colorDiscordColumn.bind(this) },
-    { PropertyName: 'phone', ColLabel: 'Phone' },
-    { PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
+    //{ PropertyName: 'phone', ColLabel: 'Phone' },
+    //{ PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
   ];
 
   userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
