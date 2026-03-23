@@ -88,12 +88,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     this.updateScoutFieldSchedule().then(() => this.setUpdateScoutFieldScheduleTimeout());
 
     this.gs.incrementOutstandingCalls();
-    this.ss.loadAllScoutingInfo().then(async result => {
+    this.ss.loadAllScoutingInfo(true, undefined, 5_000).then(async result => {
       if (result) {
         this.fieldForm = result.field_form_form.field_form;
         this.formSubTypeForms = result.field_form_form.form_sub_types;
 
         this.setActiveFormSubTypeForm(this.formSubTypeForms.find(fst => fst.form_sub_typ.order === 1));
+
         triggerChange(() => {
           this.activeFormSubTypeForm?.flows.forEach(qf => {
             if (!strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {

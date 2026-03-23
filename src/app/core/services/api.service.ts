@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DefinedSiteBanners, GeneralService } from './general.service';
 import { APIStatus, Banner, SiteBanner } from '../models/api.models';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, timeout } from 'rxjs';
 
 import { ModalService } from '@app/core/services/modal.service';
 @Injectable({
@@ -48,6 +48,8 @@ export class APIService {
       this.outstandingApiStatusCheck = new Promise(resolve => {
         this.http.get(
           'public/api-status/'
+        ).pipe(
+          timeout(1_000) // 1s
         ).subscribe(
           {
             next: (result: any) => {
@@ -70,30 +72,34 @@ export class APIService {
   }
 
   get(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void, timeToLive = 10_000 // 10 seconds
   ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     return this.subscriptionToPromise(this.http.get(
       endpoint,
       {
-        params: params
+        params: params,
       }
+    ).pipe(
+      timeout(timeToLive)
     ), loadingScreen, onNext, onError, onComplete);
   }
 
   post(loadingScreen: boolean, endpoint: string, obj: any,
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void, timeToLive = 10_000 // 10 seconds
   ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     return this.subscriptionToPromise(this.http.post(
       endpoint, obj
+    ).pipe(
+      timeout(timeToLive)
     ), loadingScreen, onNext, onError, onComplete);
   }
 
   delete(loadingScreen: boolean, endpoint: string, params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void, timeToLive = 10_000 // 10 seconds
   ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
@@ -102,16 +108,20 @@ export class APIService {
       {
         params: params
       }
+    ).pipe(
+      timeout(timeToLive)
     ), loadingScreen, onNext, onError, onComplete);
   }
 
   put(loadingScreen: boolean, endpoint: string, obj: any,
-    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void,
+    onNext?: (result: any) => void, onError?: (error: any) => void, onComplete?: () => void, timeToLive = 10_000 // 10 seconds
   ): Promise<any> {
     if (loadingScreen) this.gs.incrementOutstandingCalls();
 
     return this.subscriptionToPromise(this.http.put(
       endpoint, obj
+    ).pipe(
+      timeout(timeToLive)
     ), loadingScreen, onNext, onError, onComplete);
   }
 
