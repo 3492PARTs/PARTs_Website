@@ -33,7 +33,7 @@ export class ActivityComponent implements OnInit {
     { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
   ];
   userActivityTableButtons: TableButtonType[] = [
-    new TableButtonType('main', this.markScoutPresent.bind(this), 'Mark Present')];
+    new TableButtonType('account-arrow-down-outline', this.markScoutPresent.bind(this), 'Mark Present')];
   userActivityModalVisible = false;
   triggerUserActivityTableUpdate = false;
 
