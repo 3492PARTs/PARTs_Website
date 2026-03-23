@@ -17,7 +17,7 @@ import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
 
 import { ModalService } from '@app/core/services/modal.service';
-import { cloneObject, downloadFileAs, strNoE, triggerChange } from '@app/core/utils/utils.functions';
+import { cloneObject, downloadFileAs, formatDateString, isNumber, returnIfValidDate, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting-responses',
   imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
@@ -150,12 +150,17 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   showHideTableCols(): void {
     triggerChange(() => {
-      let tmp: object[] = [];
+      let tmp: any[] = [];
       for (let i = 0; i < this.showScoutFieldCols.length; i++) {
         if (this.showScoutFieldCols[i]['checked']) {
           tmp.push(this.showScoutFieldCols[i]);
         }
       }
+
+      tmp.forEach(c => {
+        c['ColValueFunction'] = this.formatRec;
+        c['Type'] = 'function';
+      });
 
       this.scoutTableCols = tmp;
     }, 500);
@@ -201,5 +206,27 @@ export class FieldScoutingResponsesComponent implements OnInit {
     this.filterTeam = '';
     this.filterText = '';
     this.filter();
+  }
+
+  formatRec(rec: any): any {
+    if (Array.isArray(rec)) {
+      let s = '';
+      let sum = 0;
+      rec.forEach(r => {
+        if (Object.hasOwn(r, 'round') && Object.hasOwn(r, 'value')) {
+          s += `Rnd${r['round']}: ${r['value']}\n`;
+          sum += (isNumber(r['value']) ? parseFloat(r['value']) : 1);
+        }
+        else
+          s += `${JSON.stringify(rec)}\n`;
+      });
+      s += `Sum: ${sum}`;
+      return s;
+    }
+    else {
+      const dt = returnIfValidDate(rec);
+      if (dt) return formatDateString(dt);
+      else return rec;
+    }
   }
 }
