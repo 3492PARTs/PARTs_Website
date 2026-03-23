@@ -202,14 +202,19 @@ export class ActivityComponent implements OnInit {
     this.activeUserScoutingScoutCols = [];
     this.activeUserScoutingScoutAnswers = [];
 
-    await this.ss.getFieldResponseColumnsFromCache().then(frcs => {
+    this.gs.incrementOutstandingCalls();
+    this.ss.getFieldResponseColumnsFromCache().then(frcs => {
       this.activeUserScoutingScoutCols = frcs;
+      this.gs.decrementOutstandingCalls();
     });
 
-    await this.ss.getFieldResponseFromCache(f => f.where({ 'user_id': ua.user.id })).then(frs => {
+    this.gs.incrementOutstandingCalls();
+    this.ss.getFieldResponseFromCache(f => f.where({ 'user_id': ua.user.id })).then(frs => {
       this.activeUserScoutingScoutAnswers = frs.sort(this.ss.scoutFieldResponseSortFunction);
+      this.gs.decrementOutstandingCalls();
     });
 
+    this.gs.incrementOutstandingCalls();
     this.ss.filterScoutFieldSchedulesFromCache(fs => {
       let ids = [];
 
@@ -232,6 +237,7 @@ export class ActivityComponent implements OnInit {
       return ids.includes(ua.user.id);
     }).then(fsf => {
       this.activeUserScoutingFieldSchedule = fsf.sort(this.ss.scoutFieldScheduleSortFunction);
+      this.gs.decrementOutstandingCalls();
     });
   }
 
