@@ -187,8 +187,13 @@ export class TableComponent implements OnInit, OnChanges {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    if (this.resizeTimer != null) {
-      window.clearTimeout(this.resizeTimer);
+    try {
+      if (this.resizeTimer != null) {
+        window.clearTimeout(this.resizeTimer);
+      }
+    }
+    catch (e) {
+      console.error('Error clearing resize timer:', e);
     }
 
     this.setSymbolSizeForButtons();
