@@ -84,7 +84,7 @@ describe('TeamContactFormComponent', () => {
       expect(result.endsWith('...')).toBeFalse();
     });
 
-    it('returns full string without ellipsis when length equals 100', () => {
+    it('adds ellipsis when length equals 100 (boundary)', () => {
       const str100 = 'b'.repeat(100);
       const result = truncate(str100);
       expect(result).toBe(str100 + '...');
@@ -94,6 +94,12 @@ describe('TeamContactFormComponent', () => {
       const long = 'x'.repeat(150);
       const result = truncate(long);
       expect(result).toBe('x'.repeat(100) + '...');
+    });
+
+    it('adds ellipsis when length equals 101', () => {
+      const str101 = 'c'.repeat(101);
+      const result = truncate(str101);
+      expect(result).toBe('c'.repeat(100) + '...');
     });
   });
 });
