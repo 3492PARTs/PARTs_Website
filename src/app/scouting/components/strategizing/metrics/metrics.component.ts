@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { DashboardComponent } from "../../elements/dashboard/dashboard.component";
 import { APIService, ModalService, RetMessage, downloadFileAs } from '@app/core';
-import { ButtonComponent, FormElementGroupComponent } from '@app/shared';
+import { BoxComponent, ButtonComponent, FormElementGroupComponent } from '@app/shared';
 
 @Component({
   selector: 'app-metrics',
-  imports: [DashboardComponent, FormElementGroupComponent, ButtonComponent],
+  imports: [DashboardComponent, FormElementGroupComponent, ButtonComponent, BoxComponent],
   templateUrl: './metrics.component.html',
   styleUrls: ['./metrics.component.scss']
 })
