@@ -719,5 +719,5 @@ export function previewImage(link: string, id: string): void {
   );
 }
 
-export function isNumber(value: any): boolean { return !Number.isNaN(+value) && Number.isFinite(+value) }
+export function isNumber(value: any): boolean { return !Number.isNaN(+value) && Number.isFinite(+value) && !Number.isNaN(parseFloat(value)) }
 
