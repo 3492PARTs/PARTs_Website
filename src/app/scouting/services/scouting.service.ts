@@ -877,7 +877,7 @@ export class ScoutingService {
                 this.gs.incrementOutstandingCalls();
 
                 if (pic.img)
-                  resizeImageToMaxSize(pic.img, .5).then(resizedPic => {
+                  resizeImageToMaxSize(pic.img, .2).then(resizedPic => {
                     if (resizedPic) {
                       const formData = new FormData();
                       formData.append('file', resizedPic);
@@ -895,14 +895,14 @@ export class ScoutingService {
                     this.gs.decrementOutstandingCalls();
                     resolvePics();
                   });
-              }, 5000 * ++count);
+              }, 1000 * ++count);
             }));
           }
         });
 
         await Promise.all(calls);
 
-        window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 5000 * count)
+        window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1000 * count)
 
         if (id) {
           await this.cs.ScoutPitFormResponse.RemoveAsync(id);
@@ -921,7 +921,7 @@ export class ScoutingService {
         });
         else
           resolve(false);
-      });
+      }, undefined, 1_000 * 60 * 5);// longer timeout for pit scouting response since it can include images 5 mins
     });
   }
 
