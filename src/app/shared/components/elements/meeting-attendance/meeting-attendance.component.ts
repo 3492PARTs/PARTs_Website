@@ -23,9 +23,10 @@ import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
 import { RemovedFilterPipe } from '@app/shared/pipes';
+import { LoadingComponent } from '../../atoms/loading/loading.component';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule, LoadingComponent],
   templateUrl: './meeting-attendance.component.html',
   styleUrls: ['./meeting-attendance.component.scss']
 })
@@ -77,6 +78,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }, { property: 'Exempt', value: 'exmpt' }];
   attendanceFilterOption = 'all';
 
+  attendanceLoading = false;
   attendance: Attendance[] = [];
   attendanceEntry = new Attendance();
   attendanceTableCols: TableColType[] = [];
@@ -85,11 +87,7 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }, { approval_typ: 'exmpt', approval_nm: 'Exempt' }];
 
   constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
-    this.auth.user.subscribe(u => {
-      this.user = !Number.isNaN(u.id) ? u : undefined;
-      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
-    }
-    );
+
   }
 
   ngOnInit(): void {
@@ -110,6 +108,12 @@ export class MeetingAttendanceComponent implements OnInit {
       { PropertyName: 'event_time', ColLabel: 'Event Hours' },
       { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
     ];
+
+    this.auth.user.subscribe(u => {
+      this.user = !Number.isNaN(u.id) ? u : undefined;
+      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
+    }
+    );
 
     if (this.isAdminInterface()) {
       this.attendanceReportTableCols = [
@@ -151,7 +155,15 @@ export class MeetingAttendanceComponent implements OnInit {
       if (result) {
         this.attendanceModalVisible = false;
         attendance = new Attendance();
-        this.attendance = [...updateObjectInArray(this.attendance, 'id', result)];
+        if (a.void_ind === 'y' || Number.isNaN(a.id)) {
+          this.getAttendance(undefined, undefined, false);
+          if (this.meetingModalVisible) this.getAttendance(this.meeting, undefined, false);
+        }
+        else {
+          this.attendance = [...updateObjectInArray(this.attendance, 'id', result)];
+          this.meetingAttendance = [...updateObjectInArray(this.meetingAttendance, 'id', result)];
+        }
+
         this.getMeetingHours(false);
         this.getAttendanceReport(undefined, false);
 
@@ -173,6 +185,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (user) u = user;
 
+    this.attendanceLoading = true;
     this.attendanceService.getAttendance(u, meeting, loadingScreen).then((result: Attendance[]) => {
       if (meeting)
         this.meetingAttendance = result;
@@ -181,7 +194,7 @@ export class MeetingAttendanceComponent implements OnInit {
       else
         this.attendance = result;
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
-    });
+    }).finally(() => this.attendanceLoading = false);
 
     //if (!meeting) this.getAttendanceReport();
   }
@@ -228,6 +241,7 @@ export class MeetingAttendanceComponent implements OnInit {
     const a = new Attendance();
     a.absent = true;
     a.meeting = meeting;
+    if (this.user) a.user = this.user;
     this.saveAttendance(a);
   }
 
@@ -366,7 +380,7 @@ export class MeetingAttendanceComponent implements OnInit {
         this.getMeetingHours(false);
         this.getAttendanceReport(undefined, false);
         //this.getMeetings();
-        //this.getAttendance();
+        this.getAttendance(undefined, undefined, false);
       }
     });
   }
