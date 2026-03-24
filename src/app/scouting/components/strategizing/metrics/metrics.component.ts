@@ -19,6 +19,6 @@ export class MetricsComponent {
       downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
     }, (err: any) => {
       this.modalService.triggerError(err);
-    });
+    }, undefined, 1_000 * 60 * 10); // 10m timeout
   }
 }
