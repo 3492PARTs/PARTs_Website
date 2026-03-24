@@ -11,14 +11,13 @@ import { Attendance, AttendanceApprovalType, AttendanceReport, Meeting, MeetingH
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
-import { GeneralService, RetMessage } from '@app/core/services/general.service';
-import { LocationService, LocationCheckResult } from '@app/core/services/location.service';
+import { GeneralService } from '@app/core/services/general.service';
 import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, cloneObject, decodeYesNoBoolean, formatDateString, updateObjectInArray } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, decodeYesNoBoolean, updateOrAddObjectInArray as addOrUpdateObjectInArray } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
@@ -155,13 +154,13 @@ export class MeetingAttendanceComponent implements OnInit {
       if (result) {
         this.attendanceModalVisible = false;
         attendance = new Attendance();
-        if (a.void_ind === 'y' || Number.isNaN(a.id)) {
+        if (a.void_ind === 'y') {
           this.getAttendance(undefined, undefined, false);
           if (this.meetingModalVisible) this.getAttendance(this.meeting, undefined, false);
         }
         else {
-          this.attendance = [...updateObjectInArray(this.attendance, 'id', result)];
-          this.meetingAttendance = [...updateObjectInArray(this.meetingAttendance, 'id', result)];
+          this.attendance = [...addOrUpdateObjectInArray(this.attendance, 'id', result)];
+          this.meetingAttendance = [...addOrUpdateObjectInArray(this.meetingAttendance, 'id', result)];
         }
 
         this.getMeetingHours(false);
@@ -376,7 +375,7 @@ export class MeetingAttendanceComponent implements OnInit {
       if (result) {
         this.meetingModalVisible = false;
         this.meeting = new Meeting();
-        this.meetings = [...updateObjectInArray(this.meetings, 'id', result)];
+        this.meetings = [...addOrUpdateObjectInArray(this.meetings, 'id', result)];
         this.getMeetingHours(false);
         this.getAttendanceReport(undefined, false);
         //this.getMeetings();

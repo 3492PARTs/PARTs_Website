@@ -161,6 +161,19 @@ export function updateObjectInArray(arr: any[], property: string, obj: any): any
   return arr;
 }
 
+export function updateOrAddObjectInArray(arr: any[], property: string, obj: any): any[] {
+  let i = arrayObjectIndexOf(arr, property, obj[property]);
+  if (i !== -1) {
+    arr[i] = obj;
+  }
+
+  if (i === -1) {
+    arr.push(obj);
+  }
+
+  return arr;
+}
+
 /**
  * Format a question answer for display
  */
