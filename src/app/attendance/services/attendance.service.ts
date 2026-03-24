@@ -12,39 +12,39 @@ export class AttendanceService {
   constructor(private modalService: ModalService, private gs: GeneralService, private api: APIService) {
   }
 
-  saveAttendance(attendance: Attendance): Promise<boolean> {
+  saveAttendance(attendance: Attendance): Promise<Attendance | undefined> {
     return new Promise((resolve) => {
       if (attendance.user) {
         if (this.isAttendanceApproved(attendance) && !attendance.time_out && !attendance.absent && attendance.void_ind !== 'y') {
           this.modalService.triggerError('Cannot approve if no time out.');
-          resolve(false);
+          resolve(undefined);
           return;
         }
 
         if (attendance.time_out && attendance.time_out < attendance.time_in) {
           this.modalService.triggerError('You cannot check out before checking in.');
-          resolve(false);
+          resolve(undefined);
           return;
         }
 
         this.api.post(true, 'attendance/attendance/',
           attendance,
-          (result: any) => {
-            this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
-            resolve(true);
+          (result: Attendance) => {
+            this.gs.addBanner(new Banner('Saved attendance successfully', 3500));
+            resolve(result);
           }, (err: any) => {
             this.modalService.triggerError(err);
-            resolve(false);
+            resolve(undefined);
           });
       }
       else {
         this.modalService.triggerError('No user, couldn\'t take attendance see a mentor.');
-        resolve(false);
+        resolve(undefined);
       }
     });
   }
 
-  getAttendance(user?: User, meeting?: Meeting): Promise<Attendance[]> {
+  getAttendance(user?: User, meeting?: Meeting, loadingScreen = true): Promise<Attendance[]> {
     let qp = {};
     if (user)
       qp = { user_id: user.id }
@@ -52,7 +52,8 @@ export class AttendanceService {
     if (meeting)
       qp = { meeting_id: meeting.id }
 
-    return this.api.get(true, 'attendance/attendance/', qp);
+    return this.api.get(loadingScreen, 'attendance/attendance/', qp, undefined, undefined, undefined, 1_000 * 60 * 5 /* 5m timeout */
+    );
   }
 
   isAttendanceUnapproved(attendance: Attendance): boolean {
@@ -75,7 +76,7 @@ export class AttendanceService {
     return (attendance.time_out !== null && attendance.time_out !== undefined) || attendance.absent || !this.isAttendanceUnapproved(attendance);
   }
 
-  attendMeeting(user: User, meeting: Meeting): Promise<boolean | null> {
+  attendMeeting(user: User, meeting: Meeting): Promise<Attendance | undefined> {
     const a = new Attendance();
     a.user = user;
     a.meeting = meeting;
@@ -83,7 +84,7 @@ export class AttendanceService {
     //this.checkLocation(this.saveAttendance.bind(this, undefined, meeting));
   }
 
-  leaveMeeting(attendance: Attendance[], meeting: Meeting): Promise<boolean | null> {
+  leaveMeeting(attendance: Attendance[], meeting: Meeting): Promise<Attendance | undefined> {
     const a = attendance.find(a => a.meeting?.id === meeting.id);
     if (a) {
       a.time_out = new Date();
@@ -92,7 +93,7 @@ export class AttendanceService {
     }
     else {
       this.modalService.triggerError('Couldn\'t take attendance see a mentor.');
-      return Promise.resolve(null);
+      return Promise.resolve(undefined);
     }
   }
 
@@ -122,7 +123,7 @@ export class AttendanceService {
   }
 
   // ATTENDANCE REPORT -----------------------------------------------------------
-  getAttendanceReport(user?: User, meeting?: Meeting): Promise<AttendanceReport[] | null> {
+  getAttendanceReport(user?: User, meeting?: Meeting, loadingScreen = true): Promise<AttendanceReport[] | null> {
     let qp = {};
     if (user)
       qp = { user_id: user.id }
@@ -130,6 +131,6 @@ export class AttendanceService {
     if (meeting)
       qp = { meeting_id: meeting.id }
 
-    return this.api.get(true, 'attendance/attendance-report/', qp);
+    return this.api.get(loadingScreen, 'attendance/attendance-report/', qp);
   }
 }

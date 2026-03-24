@@ -18,7 +18,7 @@ import { UserService } from '@app/user/services/user.service';
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, cloneObject, decodeYesNoBoolean, formatDateString } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, decodeYesNoBoolean, formatDateString, updateObjectInArray } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
@@ -119,7 +119,7 @@ export class MeetingAttendanceComponent implements OnInit {
     }
 
     if (this.AdminInterface) {
-      this.getAttendance();
+      this.getAttendance(undefined, undefined, false);
       this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []);
     }
     this.getMeetings();
@@ -128,6 +128,9 @@ export class MeetingAttendanceComponent implements OnInit {
       this.attendanceFilterOption = 'unapp';
 
     this.setAttendanceTableCols();
+
+    this.getAttendanceReport();
+    this.getMeetingHours();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -144,18 +147,21 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (meeting) a.meeting = meeting;
 
-    this.attendanceService.saveAttendance(a).then((success => {
-      if (success) {
+    this.attendanceService.saveAttendance(a).then((result: Attendance | undefined) => {
+      if (result) {
         this.attendanceModalVisible = false;
         attendance = new Attendance();
-        this.getAttendance();
-        if (a.meeting) this.getAttendance(a.meeting);
-        this.getAttendance(undefined, a.user);
+        this.attendance = [...updateObjectInArray(this.attendance, 'id', result)];
+        this.getMeetingHours(false);
+        this.getAttendanceReport(undefined, false);
+
+        //if (a.meeting) this.getAttendance(a.meeting);
+        //this.getAttendance(undefined, a.user);
       }
-    }));
+    });
   }
 
-  getAttendance(meeting?: Meeting, user?: User): void | null {
+  getAttendance(meeting?: Meeting, user?: User, loadingScreen = true): void | null {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
@@ -167,7 +173,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (user) u = user;
 
-    this.attendanceService.getAttendance(u, meeting).then((result: Attendance[]) => {
+    this.attendanceService.getAttendance(u, meeting, loadingScreen).then((result: Attendance[]) => {
       if (meeting)
         this.meetingAttendance = result;
       else if (user)
@@ -177,7 +183,7 @@ export class MeetingAttendanceComponent implements OnInit {
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
     });
 
-    if (!meeting) this.getAttendanceReport();
+    //if (!meeting) this.getAttendanceReport();
   }
 
   removeAttendance(attendance: Attendance): void | null {
@@ -332,7 +338,7 @@ export class MeetingAttendanceComponent implements OnInit {
         else this.meeting = result
       }
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
-      this.getMeetingHours();
+      //this.getMeetingHours();
     });
   }
 
@@ -352,12 +358,15 @@ export class MeetingAttendanceComponent implements OnInit {
       return null;
     }
 
-    this.meetingService.saveMeeting(m).then(success => {
-      if (success) {
+    this.meetingService.saveMeeting(m).then((result: Meeting | undefined) => {
+      if (result) {
         this.meetingModalVisible = false;
         this.meeting = new Meeting();
-        this.getMeetings();
-        this.getAttendance();
+        this.meetings = [...updateObjectInArray(this.meetings, 'id', result)];
+        this.getMeetingHours(false);
+        this.getAttendanceReport(undefined, false);
+        //this.getMeetings();
+        //this.getAttendance();
       }
     });
   }
@@ -400,7 +409,7 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   // ATTENDANCE REPORT -----------------------------------------------------------
-  getAttendanceReport(meeting?: Meeting): void | null {
+  getAttendanceReport(meeting?: Meeting, loadingScreen = true): void | null {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
@@ -410,7 +419,7 @@ export class MeetingAttendanceComponent implements OnInit {
         return null;
       }
 
-    this.attendanceService.getAttendanceReport(u, meeting).then((result: AttendanceReport[] | null) => {
+    this.attendanceService.getAttendanceReport(u, meeting, loadingScreen).then((result: AttendanceReport[] | null) => {
       if (result) this.attendanceReports = result;
     });
   }
@@ -439,8 +448,8 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   // MEETING HOURS -----------------------------------------------------------
-  getMeetingHours(): void | null {
-    this.meetingService.getMeetingHours().then((result: MeetingHours | null) => {
+  getMeetingHours(loadingScreen = true): void | null {
+    this.meetingService.getMeetingHours(loadingScreen).then((result: MeetingHours | null) => {
       if (result) this.totalMeetingHours = result;
     });
   }

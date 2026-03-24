@@ -139,15 +139,6 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  runScoutingReport(): void {
-    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
-      //console.log(result);
-      downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
   setSeasonEvent(): void | null {
     if (!this.currentSeason.id || !this.currentEvent.id) {
       this.modalService.triggerError('No season or event selected.');
