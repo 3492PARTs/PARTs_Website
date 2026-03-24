@@ -25,7 +25,10 @@ describe('DashboardComponent', () => {
   beforeEach(async () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post', 'delete']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({}); return Promise.resolve({}); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext({ dashboard_views: [] });
+      return Promise.resolve({ dashboard_views: [] });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
@@ -35,9 +38,12 @@ describe('DashboardComponent', () => {
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadAllScoutingInfo', 'loadFieldScoutingResponses',
+      'getFieldFormFormFromCache', 'getTeamsFromCache',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
+    mockSS.getFieldFormFormFromCache.and.returnValue(Promise.resolve(null) as any);
+    mockSS.getTeamsFromCache.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
 
     await TestBed.configureTestingModule({

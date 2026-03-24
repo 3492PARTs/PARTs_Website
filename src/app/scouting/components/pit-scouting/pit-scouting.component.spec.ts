@@ -29,6 +29,7 @@ describe('PitScoutingComponent', () => {
     authInFlight = new BehaviorSubject<number>(0);
     outstandingResponsesUploaded = new Subject<number>();
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
+    mockAPI.apiStatus = new BehaviorSubject<any>(null).asObservable();
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext([]); return Promise.resolve([]); });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),

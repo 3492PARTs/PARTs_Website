@@ -5,7 +5,13 @@ import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { createMockSwPush } from '../../../../../test-helpers';
 import { QuestionFormElementComponent } from './question-form-element.component';
-import { Question } from '@app/core/models/form.models';
+import { Question, QuestionType } from '@app/core/models/form.models';
+
+function makeQuestion(): Question {
+  const q = new Question();
+  q.question_typ = Object.assign(new QuestionType(), { question_typ: 'text', question_typ_nm: 'Text' });
+  return q;
+}
 
 describe('QuestionFormElementComponent', () => {
   let component: QuestionFormElementComponent;
@@ -23,7 +29,7 @@ describe('QuestionFormElementComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(QuestionFormElementComponent);
     component = fixture.componentInstance;
-    component.Question = new Question();
+    component.Question = makeQuestion();
     fixture.detectChanges();
   });
 
@@ -33,7 +39,7 @@ describe('QuestionFormElementComponent', () => {
 
   it('change should update question answer and emit', () => {
     spyOn(component.QuestionChange, 'emit');
-    component.Question = new Question();
+    component.Question = makeQuestion();
     component.change('test_answer');
     expect(component.Question.answer).toBe('test_answer');
     expect(component.QuestionChange.emit).toHaveBeenCalled();
@@ -41,7 +47,7 @@ describe('QuestionFormElementComponent', () => {
 
   it('questionChange should update question and emit', () => {
     spyOn(component.QuestionChange, 'emit');
-    const q = new Question();
+    const q = makeQuestion();
     q.answer = 'new_answer';
     component.questionChange(q);
     expect(component.Question).toBe(q);
