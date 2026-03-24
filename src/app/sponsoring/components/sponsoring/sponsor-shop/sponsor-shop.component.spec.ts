@@ -25,7 +25,8 @@ describe('SponsorShopComponent', () => {
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
-    mockGS = jasmine.createSpyObj('GeneralService', ['incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS.getNextGsId.and.returnValue('gs-1');
 
     await TestBed.configureTestingModule({
       imports: [SponsorShopComponent],

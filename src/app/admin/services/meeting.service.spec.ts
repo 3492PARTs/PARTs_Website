@@ -15,7 +15,8 @@ describe('MeetingService', () => {
   beforeEach(() => {
     mockAPIService = jasmine.createSpyObj('APIService', ['get', 'post']);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerConfirm', 'triggerError']);
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'addBanner']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
 
     TestBed.configureTestingModule({
       providers: [

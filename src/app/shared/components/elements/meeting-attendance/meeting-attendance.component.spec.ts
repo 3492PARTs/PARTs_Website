@@ -9,9 +9,9 @@ import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ModalService } from '@app/core/services/modal.service';
 import { UserService } from '@app/user/services/user.service';
-import { LocationService } from '@app/core/services/location.service';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
+import { AppSize } from '@app/core/utils/utils.functions';
 import { createMockSwPush } from '../../../../../test-helpers';
 import { MeetingAttendanceComponent } from './meeting-attendance.component';
 import { User } from '@app/auth/models/user.models';
@@ -24,7 +24,6 @@ describe('MeetingAttendanceComponent', () => {
   let mockGS: jasmine.SpyObj<GeneralService>;
   let mockModalService: jasmine.SpyObj<ModalService>;
   let mockUS: jasmine.SpyObj<UserService>;
-  let mockLS: jasmine.SpyObj<LocationService>;
   let mockAS: jasmine.SpyObj<AttendanceService>;
   let mockMS: jasmine.SpyObj<MeetingService>;
   let userSubject: BehaviorSubject<User>;
@@ -39,21 +38,22 @@ describe('MeetingAttendanceComponent', () => {
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
-    mockGS.getAppSize.and.returnValue(5);
+    mockGS.getNextGsId.and.returnValue('gs-1');
+    mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers']);
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
-    mockLS = jasmine.createSpyObj('LocationService', ['getLocation', 'checkLocation']);
-    mockLS.getLocation.and.returnValue(Promise.resolve(null) as any);
-    mockLS.checkLocation.and.returnValue(Promise.resolve({ status: 'ok', message: '' } as any));
-    mockAS = jasmine.createSpyObj('AttendanceService', ['getAttendance', 'getMeetings', 'getAttendanceReports']);
-    mockAS.getMeetings.and.returnValue(Promise.resolve(null) as any);
-    mockAS.getAttendance.and.returnValue(Promise.resolve(null) as any);
-    mockAS.getAttendanceReports.and.returnValue(Promise.resolve(null) as any);
-    mockMS = jasmine.createSpyObj('MeetingService', ['saveMeeting', 'deleteMeeting']);
+    mockAS = jasmine.createSpyObj('AttendanceService', ['getAttendance', 'getAttendanceReport']);
+    mockAS.getAttendance.and.returnValue(Promise.resolve([]) as any);
+    mockAS.getAttendanceReport.and.returnValue(Promise.resolve(null) as any);
+    mockMS = jasmine.createSpyObj('MeetingService', ['saveMeeting', 'removeMeeting', 'getMeetings', 'computeMeetingDuration', 'getActiveMeeting', 'getMeetingHours']);
     mockMS.saveMeeting.and.returnValue(Promise.resolve(false) as any);
-    mockMS.deleteMeeting.and.returnValue(Promise.resolve(false) as any);
+    mockMS.removeMeeting.and.returnValue(Promise.resolve(false) as any);
+    mockMS.getMeetings.and.returnValue(Promise.resolve([]) as any);
+    mockMS.getActiveMeeting.and.returnValue(Promise.resolve(null) as any);
+    mockMS.getMeetingHours.and.returnValue(Promise.resolve(null) as any);
+    mockMS.computeMeetingDuration.and.returnValue('');
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerError', 'successfulResponseBanner', 'triggerConfirm',
     ]);
@@ -70,7 +70,6 @@ describe('MeetingAttendanceComponent', () => {
         { provide: GeneralService, useValue: mockGS },
         { provide: ModalService, useValue: mockModalService },
         { provide: UserService, useValue: mockUS },
-        { provide: LocationService, useValue: mockLS },
         { provide: AttendanceService, useValue: mockAS },
         { provide: MeetingService, useValue: mockMS },
       ],

@@ -61,7 +61,8 @@ describe('AuthService', () => {
     });
     mockRouter = jasmine.createSpyObj('Router', ['navigateByUrl']);
     Object.defineProperty(mockRouter, 'url', { get: () => routerUrl, configurable: true });
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'addBanner']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
     mockNotificationsService = jasmine.createSpyObj('NotificationsService', ['subscribeToNotifications', 'getUserAlerts']);
     
     const mockUserStore = jasmine.createSpyObj('UserStore', ['AddOrEditAsync', 'getAll']);

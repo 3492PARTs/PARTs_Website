@@ -363,7 +363,7 @@ describe('SecurityComponent', () => {
   describe('getScoutAuthGroups', () => {
     it('calls api.get and sets scoutAuthGroups', () => {
       const group = Object.assign(new AuthGroup(), { id: 10, name: 'Scout', permissions: [] });
-      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn([group]) });
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn([group]); return Promise.resolve([group]); });
       component.getScoutAuthGroups(true);
       expect(apiServiceSpy.get).toHaveBeenCalled();
       expect(component.scoutAuthGroups).toEqual([group]);

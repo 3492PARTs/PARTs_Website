@@ -15,7 +15,8 @@ describe('WhiteboardComponent', () => {
   let mockModalService: jasmine.SpyObj<ModalService>;
 
   beforeEach(async () => {
-    mockGS = jasmine.createSpyObj('GeneralService', ['incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'triggerConfirm']);
 
     await TestBed.configureTestingModule({

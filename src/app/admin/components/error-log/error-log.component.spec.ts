@@ -34,7 +34,7 @@ describe('ErrorLogComponent', () => {
 
     apiServiceSpy = {
       get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn(makeApiResponse() })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn(makeApiResponse()); return Promise.resolve(makeApiResponse()); }
       )
     };
 
@@ -105,8 +105,7 @@ describe('ErrorLogComponent', () => {
         user: { first_name: 'Jane', last_name: 'Doe' }
       };
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) =>
-          fn({ errors: [rawError], count: 1, num_pages: 1 })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
       );
       component.getErrors(1);
       expect(component.errors.length).toBe(1);
@@ -123,8 +122,7 @@ describe('ErrorLogComponent', () => {
         user: { first_name: 'A', last_name: 'B' }
       };
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) =>
-          fn({ errors: [rawError], count: 1, num_pages: 1 })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
       );
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
@@ -141,8 +139,7 @@ describe('ErrorLogComponent', () => {
         user: { first_name: 'A', last_name: 'B' }
       };
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) =>
-          fn({ errors: [rawError], count: 1, num_pages: 1 })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
       );
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
@@ -159,8 +156,7 @@ describe('ErrorLogComponent', () => {
         user: { first_name: 'A', last_name: 'B' }
       };
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) =>
-          fn({ errors: [rawError], count: 1, num_pages: 1 })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
       );
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
@@ -169,8 +165,7 @@ describe('ErrorLogComponent', () => {
 
     it('sets pageInfo from result excluding errors', () => {
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) =>
-          fn({ errors: [], count: 5, num_pages: 2 })
+        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [], count: 5, num_pages: 2 }; if (fn) fn(_r); return Promise.resolve(_r); }
       );
       component.getErrors(1);
       expect((component.pageInfo as any).count).toBe(5);

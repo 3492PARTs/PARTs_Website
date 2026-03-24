@@ -19,7 +19,8 @@ describe('EventCompetitionComponent', () => {
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
       if (successCb) successCb({ matches: [], current_team: 3492 }); return Promise.resolve({ matches: [], current_team: 3492 });
     });
-    mockGS = jasmine.createSpyObj('GeneralService', ['incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
+    mockGS.getNextGsId.and.returnValue('gs-1');
 
     await TestBed.configureTestingModule({
       imports: [EventCompetitionComponent],

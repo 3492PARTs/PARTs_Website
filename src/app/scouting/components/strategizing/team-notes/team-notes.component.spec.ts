@@ -33,7 +33,8 @@ describe('TeamNotesComponent', () => {
       authInFlight: authInFlight.asObservable(),
       user: userSubject.asObservable(),
     });
-    mockGS = jasmine.createSpyObj('GeneralService', ['incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadTeams', 'loadTeamNotes', 'saveTeamNote', 'getTeamNotesFromCache',
       'uploadOutstandingResponses', 'getTeamNoteResponsesFromCache', 'removeTeamNoteResponseFromCache',
@@ -101,7 +102,7 @@ describe('TeamNotesComponent', () => {
 
   it('loadTeamNotes should set teamNotes from cache result', async () => {
     const note = new TeamNote();
-    mockSS.getTeamNotesFromCache.and.returnValue(Promise.resolve([note]));
+    mockSS.getTeamNotesFromCache.and.returnValue(Promise.resolve([note]) as any);
     component.loadTeamNotes();
     await Promise.resolve() as any;
     expect(component.teamNotes[0]).toBe(note);

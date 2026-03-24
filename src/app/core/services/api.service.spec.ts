@@ -17,11 +17,12 @@ describe('APIService', () => {
     siteBannersSubject = new BehaviorSubject<SiteBanner[]>([]);
 
     const gsSpy = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls',
+      'getNextGsId', 'incrementOutstandingCalls',
       'decrementOutstandingCalls',
       'addSiteBanner',
       'removeSiteBanner'
     ]);
+    gsSpy.getNextGsId.and.returnValue('gs-1');
     gsSpy.siteBanners = siteBannersSubject.asObservable();
 
     const msSpy = jasmine.createSpyObj('ModalService', ['checkResponse']);

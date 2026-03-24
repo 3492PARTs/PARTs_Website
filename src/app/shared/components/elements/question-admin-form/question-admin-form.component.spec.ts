@@ -8,6 +8,7 @@ import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ModalService } from '@app/core/services/modal.service';
+import { AppSize } from '@app/core/utils/utils.functions';
 import { createMockSwPush } from '../../../../../test-helpers';
 import { QuestionAdminFormComponent } from './question-admin-form.component';
 import { FormInitialization } from '@app/core/models/form.models';
@@ -25,16 +26,17 @@ describe('QuestionAdminFormComponent', () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post', 'delete']);
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
-      successCb(new FormInitialization());
+      const r = new FormInitialization(); if (successCb) successCb(r); return Promise.resolve(r);
     });
     mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
-    mockGS.getAppSize.and.returnValue(5);
+    mockGS.getNextGsId.and.returnValue('gs-1');
+    mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
 
     await TestBed.configureTestingModule({

@@ -34,8 +34,9 @@ describe('ProfileComponent', () => {
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'navigateByUrl',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'navigateByUrl',
     ]);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockNS = jasmine.createSpyObj('NotificationsService', [], {
       notifications: new BehaviorSubject([]).asObservable(),
       messages: new BehaviorSubject([]).asObservable(),

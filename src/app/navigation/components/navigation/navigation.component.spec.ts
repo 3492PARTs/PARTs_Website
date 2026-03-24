@@ -38,9 +38,10 @@ describe('NavigationComponent', () => {
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
       'navigateByUrl', 'addBanner',
     ]);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.currentOutstandingCalls = outstandingCallsSubject.asObservable();
     mockNavService = jasmine.createSpyObj('NavigationService', ['setNavigationState'], {
       currentNavigationState: navigationStateSubject.asObservable(),

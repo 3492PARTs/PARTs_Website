@@ -30,8 +30,9 @@ describe('MatchesComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.isMobile.and.returnValue(false);
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadAllScoutingInfo', 'loadMatchStrategies', 'saveMatchStrategy',

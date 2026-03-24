@@ -30,9 +30,10 @@ describe('ScoutPitResponsesComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
-    mockGS.getAppSize.and.returnValue(AppSize.MD);
+    mockGS.getNextGsId.and.returnValue('gs-1');
+    mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadPitScoutingResponses', 'filterPitResponsesFromCache', 'teamSortFunction',
     ]);

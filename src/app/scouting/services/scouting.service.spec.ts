@@ -39,7 +39,8 @@ describe('ScoutingService', () => {
     };
 
     mockAPIService = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner', 'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['successfulResponseBanner', 'triggerError']);
 
     TestBed.configureTestingModule({

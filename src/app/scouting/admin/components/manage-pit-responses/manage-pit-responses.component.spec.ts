@@ -32,8 +32,9 @@ describe('ManagePitResponsesComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', ['loadPitScoutingResponses']);
     mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
@@ -119,7 +120,7 @@ describe('ManagePitResponsesComponent', () => {
   it('deletePitResult confirm callback error should call triggerError', () => {
     component.activePitScoutResult = Object.assign(new ScoutPitResponse(), { id: 7 });
     mockModalService.triggerConfirm.and.callFake((_msg: string, cb: () => void) => cb());
-    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, errorCb?: (e: any) => void): Promise<any> => if (errorCb) errorCb('err') });
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, errorCb?: (e: any) => void): Promise<any> => { if (errorCb) errorCb('err'); return Promise.resolve(); });
     component.deletePitResult();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
