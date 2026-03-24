@@ -90,13 +90,13 @@ describe('MeetingService', () => {
       meeting.start = new Date('2024-01-01T10:00:00');
       meeting.end = new Date('2024-01-01T12:00:00');
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(meeting);
         return Promise.resolve();
       });
 
       const result = await service.saveMeeting(meeting);
 
-      expect(result).toBe(true);
+      expect(result).toBe(meeting);
       expect(mockAPIService.post).toHaveBeenCalledWith(
         true,
         'attendance/meetings/',
@@ -114,7 +114,7 @@ describe('MeetingService', () => {
 
       const result = await service.saveMeeting(meeting);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(mockModalService.triggerError).toHaveBeenCalledWith('Meeting end cannot be before start.');
       expect(mockAPIService.post).not.toHaveBeenCalled();
     });
@@ -130,7 +130,7 @@ describe('MeetingService', () => {
 
       const result = await service.saveMeeting(meeting);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(mockModalService.triggerError).toHaveBeenCalledWith('Error saving meeting');
     });
   });
@@ -143,13 +143,13 @@ describe('MeetingService', () => {
         onConfirm();
       });
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Removed' });
+        onSuccess(meeting);
         return Promise.resolve();
       });
 
       const result = await service.removeMeeting(meeting);
 
-      expect(result).toBe(true);
+      expect(result).toBe(meeting);
       expect(meeting.void_ind).toBe('y');
     });
 
@@ -163,7 +163,7 @@ describe('MeetingService', () => {
 
       const result = await service.removeMeeting(meeting);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(meeting.void_ind).toBe('n');
     });
   });

@@ -40,13 +40,13 @@ describe('AttendanceService', () => {
       attendance.time_out = new Date('2024-01-01T12:00:00');
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
       expect(mockAPIService.post).toHaveBeenCalled();
       expect(mockGeneralService.addBanner).toHaveBeenCalled();
     });
@@ -57,7 +57,7 @@ describe('AttendanceService', () => {
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(mockModalService.triggerError).toHaveBeenCalledWith('No user, couldn\'t take attendance see a mentor.');
       expect(mockAPIService.post).not.toHaveBeenCalled();
     });
@@ -71,7 +71,7 @@ describe('AttendanceService', () => {
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(mockModalService.triggerError).toHaveBeenCalledWith('Cannot approve if no time out.');
     });
 
@@ -85,7 +85,7 @@ describe('AttendanceService', () => {
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(false);
+      expect(result).toBe(undefined);
       expect(mockModalService.triggerError).toHaveBeenCalledWith('API Error');
     });
 
@@ -97,13 +97,13 @@ describe('AttendanceService', () => {
       attendance.time_out = new Date('2024-01-01T12:00:00');
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
     });
 
     it('should allow approved attendance when marked absent', async () => {
@@ -113,13 +113,13 @@ describe('AttendanceService', () => {
       attendance.absent = true;
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
     });
 
     it('should allow approved attendance when voided', async () => {
@@ -129,13 +129,13 @@ describe('AttendanceService', () => {
       attendance.void_ind = 'y';
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.saveAttendance(attendance);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
     });
   });
 
@@ -146,7 +146,7 @@ describe('AttendanceService', () => {
 
       const result = await service.getAttendance();
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', {});
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', {}, undefined, undefined, undefined, 300000);
       expect(result).toEqual(mockAttendance);
     });
 
@@ -158,7 +158,7 @@ describe('AttendanceService', () => {
 
       const result = await service.getAttendance(user);
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', { user_id: 123 });
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', { user_id: 123 }, undefined, undefined, undefined, 300000);
       expect(result).toEqual(mockAttendance);
     });
 
@@ -170,7 +170,7 @@ describe('AttendanceService', () => {
 
       const result = await service.getAttendance(undefined, meeting);
 
-      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', { meeting_id: 456 });
+      expect(mockAPIService.get).toHaveBeenCalledWith(true, 'attendance/attendance/', { meeting_id: 456 }, undefined, undefined, undefined, 300000);
       expect(result).toEqual(mockAttendance);
     });
   });
@@ -256,14 +256,16 @@ describe('AttendanceService', () => {
       const meeting = new Meeting();
       meeting.id = 2;
 
+      const attendance = new Attendance();
+
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.attendMeeting(user, meeting);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
       expect(mockAPIService.post).toHaveBeenCalled();
     });
   });
@@ -277,13 +279,13 @@ describe('AttendanceService', () => {
       attendance.user = new User();
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
-        onSuccess({ retMessage: 'Success' });
+        onSuccess(attendance);
         return Promise.resolve();
       });
 
       const result = await service.leaveMeeting([attendance], meeting);
 
-      expect(result).toBe(true);
+      expect(result).toBe(attendance);
       expect(attendance.time_out).toBeDefined();
     });
 
@@ -297,7 +299,7 @@ describe('AttendanceService', () => {
 
       const result = await service.leaveMeeting([attendance], meeting);
 
-      expect(result).toBeNull();
+      expect(result).toBeUndefined();
       expect(mockModalService.triggerError).toHaveBeenCalledWith('Couldn\'t take attendance see a mentor.');
     });
   });
