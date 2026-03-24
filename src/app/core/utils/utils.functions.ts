@@ -152,11 +152,13 @@ export function arrayObjectIndexOf(arr: any[], property: string, searchTerm: any
 /**
  * Update an object in an array by matching a property value
  */
-export function updateObjectInArray(arr: any[], property: string, obj: any): void {
+export function updateObjectInArray(arr: any[], property: string, obj: any): any[] {
   let i = arrayObjectIndexOf(arr, property, obj[property]);
   if (i !== -1) {
     arr[i] = obj;
   }
+
+  return arr;
 }
 
 /**

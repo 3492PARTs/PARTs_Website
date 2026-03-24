@@ -78,23 +78,25 @@
         </app-form-element-group>
     </ng-template>
 
-    @if (AdminInterface) {
-    <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
+    <div id="attendance">
+        <app-loading [Loading]="attendanceLoading"></app-loading>
+        @if (AdminInterface) {
+        <ng-container *ngTemplateOutlet="attendanceLegend"></ng-container>
 
-    <div class="padding-top-1rem"></div>
+        <div class="padding-top-1rem"></div>
 
-    <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
-        [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
-        [BindingProperty]="'value'"></app-form-element>
-    }
-    <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
-        (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()"
-        [TableDataButtons]="attendanceTableButtons" [Width]="'100%'"
-        [EnableRemovedFilter]="attendanceFilterOption !== 'all'" [RemovedFilterProperty]="'approval_typ.approval_typ'"
-        [RemovedFilterPropertyValue]="attendanceFilterOption" [Scrollable]="true" [ScrollHeight]="'50vh'"
-        [Stripes]="true" [EnableFilter]="isAdminInterface()" [OrderByProperty]="'time_in'" [OrderByReverse]="true"
-        [ShowDownloadButton]="true"></app-table>
-
+        <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
+            [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
+            [BindingProperty]="'value'"></app-form-element>
+        }
+        <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
+            (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()"
+            [TableDataButtons]="attendanceTableButtons" [Width]="'100%'"
+            [EnableRemovedFilter]="attendanceFilterOption !== 'all'"
+            [RemovedFilterProperty]="'approval_typ.approval_typ'" [RemovedFilterPropertyValue]="attendanceFilterOption"
+            [Scrollable]="true" [ScrollHeight]="'50vh'" [Stripes]="true" [EnableFilter]="isAdminInterface()"
+            [OrderByProperty]="'time_in'" [OrderByReverse]="true" [ShowDownloadButton]="true"></app-table>
+    </div>
     <app-modal [(Visible)]="reportAttendanceModalVisible" [Title]="'Attendance Report'">
         <app-form-element-group [LabelText]="'Hours Summary'">
             <div class="grid two-column-grid">

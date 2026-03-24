@@ -23,32 +23,32 @@ export class MeetingService {
     });
   }
 
-  saveMeeting(meeting: Meeting): Promise<boolean> {
+  saveMeeting(meeting: Meeting): Promise<Meeting | undefined> {
     return new Promise((resolve) => {
       if (meeting.end < meeting.start) {
         this.modalService.triggerError('Meeting end cannot be before start.');
-        resolve(false);
+        resolve(undefined);
         return;
       }
 
       this.api.post(true, 'attendance/meetings/',
         meeting,
-        (result: any) => {
-          this.gs.addBanner(new Banner((result as RetMessage).retMessage, 3500));
-          resolve(true);
+        (result: Meeting) => {
+          this.gs.addBanner(new Banner('Saved meeting successfully.', 3500));
+          resolve(result);
         }, (err: any) => {
           this.modalService.triggerError(err);
-          resolve(false);
+          resolve(undefined);
         });
     });
   }
 
-  removeMeeting(meeting: Meeting): Promise<boolean> {
+  removeMeeting(meeting: Meeting): Promise<Meeting | undefined> {
     return new Promise((resolve) => {
       this.modalService.triggerConfirm('Are you sure you want to remove this record?', () => {
         meeting.void_ind = 'y';
         this.saveMeeting(meeting).then((result) => resolve(result));
-      }, () => resolve(false));
+      }, () => resolve(undefined));
     });
   }
 
@@ -78,7 +78,7 @@ export class MeetingService {
   }
 
   // MEETING HOURS -----------------------------------------------------------
-  getMeetingHours(): Promise<MeetingHours | null> {
-    return this.api.get(true, 'attendance/meeting-hours/');
+  getMeetingHours(loadingScreen = true): Promise<MeetingHours | null> {
+    return this.api.get(loadingScreen, 'attendance/meeting-hours/');
   }
 }
