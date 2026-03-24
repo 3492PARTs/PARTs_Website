@@ -11,11 +11,11 @@ describe('CacheService', () => {
   beforeEach(() => {
     // Create a mock Dexie table
     mockTable = {
-      toArray: jasmine.createSpy('toArray').and.returnValue(Promise.resolve([])),
-      get: jasmine.createSpy('get').and.returnValue(Promise.resolve(null)),
+      toArray: jasmine.createSpy('toArray').and.returnValue(Promise.resolve([]) as any),
+      get: jasmine.createSpy('get').and.returnValue(Promise.resolve(null) as any),
       put: jasmine.createSpy('put').and.returnValue(Promise.resolve(1)),
-      delete: jasmine.createSpy('delete').and.returnValue(Promise.resolve()),
-      clear: jasmine.createSpy('clear').and.returnValue(Promise.resolve())
+      delete: jasmine.createSpy('delete').and.returnValue(Promise.resolve() as any),
+      clear: jasmine.createSpy('clear').and.returnValue(Promise.resolve() as any)
     };
 
     // Create mock database service with all required tables

@@ -35,7 +35,7 @@ describe('ManagePitResponsesComponent', () => {
       'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
     mockSS = jasmine.createSpyObj('ScoutingService', ['loadPitScoutingResponses']);
-    mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null));
+    mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
     ]);
@@ -77,16 +77,16 @@ describe('ManagePitResponsesComponent', () => {
       Promise.resolve({ teams: [team1, team2] } as any),
     );
     component.getPitResponses();
-    await Promise.resolve();
-    await Promise.resolve(); // flush microtasks
+    await Promise.resolve() as any;
+    await Promise.resolve() as any; // flush microtasks
     expect(component.scoutPitResults.length).toBe(1);
     expect(component.scoutPitResults[0].team_no).toBe(111);
   });
 
   it('getPitResponses should handle null result', async () => {
-    mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null));
+    mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     component.getPitResponses();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.scoutPitResults).toEqual([]);
   });
 
@@ -105,8 +105,8 @@ describe('ManagePitResponsesComponent', () => {
 
   it('deletePitResult confirm callback should call api.delete', () => {
     component.activePitScoutResult = Object.assign(new ScoutPitResponse(), { id: 7 });
-    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: Function) => cb());
-    mockAPI.delete.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: () => void) => cb());
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.deletePitResult();
     expect(mockAPI.delete).toHaveBeenCalledWith(
       true, 'scouting/admin/delete-pit-result/', { scout_pit_id: 7 },
@@ -118,8 +118,8 @@ describe('ManagePitResponsesComponent', () => {
 
   it('deletePitResult confirm callback error should call triggerError', () => {
     component.activePitScoutResult = Object.assign(new ScoutPitResponse(), { id: 7 });
-    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: Function) => cb());
-    mockAPI.delete.and.callFake((_auth: any, _url: string, _params: any, _s: Function, errorCb: Function) => errorCb('err'));
+    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: () => void) => cb());
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, errorCb?: (e: any) => void): Promise<any> => if (errorCb) errorCb('err') });
     component.deletePitResult();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

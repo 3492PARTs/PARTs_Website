@@ -41,7 +41,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -80,7 +80,7 @@ describe('AttendanceService', () => {
       attendance.user = new User();
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any, onError: any) => {
         onError('API Error');
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -98,7 +98,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -114,7 +114,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -130,7 +130,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -258,7 +258,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.attendMeeting(user, meeting);
@@ -278,7 +278,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.leaveMeeting([attendance], meeting);
@@ -309,7 +309,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.markAbsent(user, meeting);
@@ -326,7 +326,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.approveAttendance(attendance);
@@ -344,7 +344,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.rejectAttendance(attendance);
@@ -412,7 +412,7 @@ describe('AttendanceService', () => {
     });
 
     it('should return null when API returns null', async () => {
-      mockAPIService.get.and.returnValue(Promise.resolve(null));
+      mockAPIService.get.and.returnValue(Promise.resolve(null) as any);
 
       const result = await service.getAttendanceReport();
 

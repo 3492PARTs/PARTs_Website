@@ -40,11 +40,11 @@ describe('ActivityComponent', () => {
       'filterScoutFieldSchedulesFromCache', 'loadScoutingFieldSchedules', 'scoutFieldResponseSortFunction',
       'scoutFieldScheduleSortFunction',
     ]);
-    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null));
-    mockSS.getFieldResponseColumnsFromCache.and.returnValue(Promise.resolve([]));
-    mockSS.getFieldResponseFromCache.and.returnValue(Promise.resolve([]));
-    mockSS.filterScoutFieldSchedulesFromCache.and.returnValue(Promise.resolve([]));
-    mockSS.loadScoutingFieldSchedules.and.returnValue(Promise.resolve(null));
+    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
+    mockSS.getFieldResponseColumnsFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockSS.getFieldResponseFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockSS.filterScoutFieldSchedulesFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockSS.loadScoutingFieldSchedules.and.returnValue(Promise.resolve(null) as any);
     mockSS.scoutFieldResponseSortFunction.and.returnValue(0);
     mockSS.scoutFieldScheduleSortFunction.and.returnValue(0);
     mockModalService = jasmine.createSpyObj('ModalService', [
@@ -97,13 +97,13 @@ describe('ActivityComponent', () => {
     );
     spyOn(component, 'getUsersScoutingUserInfo');
     component.init();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.scoutFieldSchedules[0].st_time instanceof Date).toBeTrue();
   });
 
   it('getUsersScoutingUserInfo should set usersScoutingUserInfo on success', () => {
     const userData: UserInfo[] = [{ user: { id: 1, first_name: 'John', last_name: 'Doe' } } as any];
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb(userData));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext(userData); return Promise.resolve(userData); });
     component.getUsersScoutingUserInfo();
     expect(component.usersScoutingUserInfo).toEqual(userData);
   });
@@ -114,13 +114,13 @@ describe('ActivityComponent', () => {
     const newData: UserInfo[] = [
       { user: { id: 2, first_name: 'Jane', last_name: 'Updated' } } as any,
     ];
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb(newData));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext(newData); return Promise.resolve(newData); });
     component.getUsersScoutingUserInfo();
     expect(component.activeUserScoutingUserInfo.user.last_name).toBe('Updated');
   });
 
   it('getUsersScoutingUserInfo should call triggerError on failure', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.getUsersScoutingUserInfo();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -157,9 +157,9 @@ describe('ActivityComponent', () => {
   });
 
   it('saveUserInfo should call api.post', () => {
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => {
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
       mockModalService.checkResponse.and.returnValue(true);
-      successCb({ message: 'ok' });
+      if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' });
     });
     mockModalService.checkResponse.and.returnValue(true);
     component.saveUserInfo();
@@ -167,7 +167,7 @@ describe('ActivityComponent', () => {
   });
 
   it('saveUserInfo should call triggerError on failure', () => {
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.saveUserInfo();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

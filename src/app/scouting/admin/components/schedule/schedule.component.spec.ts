@@ -45,9 +45,9 @@ describe('ScheduleComponent', () => {
       'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
     mockSS = jasmine.createSpyObj('ScoutingService', ['loadAllScoutingInfo']);
-    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null));
+    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers', 'compareUserObjects']);
-    mockUS.getUsers.and.returnValue(Promise.resolve([]));
+    mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
     mockUS.compareUserObjects.and.returnValue(false);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
@@ -87,7 +87,7 @@ describe('ScheduleComponent', () => {
   it('init should load schedules and users', async () => {
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(makeAllScoutInfo() as any));
     component.init();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(mockUS.getUsers).toHaveBeenCalled();
     expect(mockSS.loadAllScoutingInfo).toHaveBeenCalled();
   });
@@ -128,7 +128,7 @@ describe('ScheduleComponent', () => {
   it('saveScoutFieldScheduleEntry should call api.post when event is valid', () => {
     component.currentEvent = Object.assign(new Event(), { id: 3 });
     component.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveScoutFieldScheduleEntry();
     expect(mockAPI.post).toHaveBeenCalled();
     expect(component.scoutScheduleModalVisible).toBeFalse();
@@ -137,19 +137,19 @@ describe('ScheduleComponent', () => {
   it('saveScoutFieldScheduleEntry error should call triggerError', () => {
     component.currentEvent = Object.assign(new Event(), { id: 3 });
     component.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.saveScoutFieldScheduleEntry();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('notifyUsers should call api.get', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.notifyUsers(7);
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/notify-user/', { scout_field_sch_id: 7 }, jasmine.any(Function), jasmine.any(Function));
   });
 
   it('notifyUsers error should call triggerError', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.notifyUsers(7);
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -184,26 +184,26 @@ describe('ScheduleComponent', () => {
 
   it('saveScheduleEntry should call api.post', () => {
     component.currentSchedule = new Schedule();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveScheduleEntry();
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('saveScheduleEntry error should call triggerError', () => {
     component.currentSchedule = new Schedule();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.saveScheduleEntry();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('notifyUser should call api.get with sch_id', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.notifyUser(5);
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/notify-user/', { sch_id: 5 }, jasmine.any(Function), jasmine.any(Function));
   });
 
   it('notifyUser error should call triggerError', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.notifyUser(5);
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

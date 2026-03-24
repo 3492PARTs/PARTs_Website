@@ -66,10 +66,10 @@ describe('AuthService', () => {
     
     const mockUserStore = jasmine.createSpyObj('UserStore', ['AddOrEditAsync', 'getAll']);
     const mockUserLinksStore = jasmine.createSpyObj('UserLinksStore', ['getAll', 'RemoveAllAsync', 'AddOrEditBulkAsync']);
-    mockUserStore.AddOrEditAsync.and.returnValue(Promise.resolve());
-    mockUserLinksStore.getAll.and.returnValue(Promise.resolve([]));
-    mockUserLinksStore.RemoveAllAsync.and.returnValue(Promise.resolve());
-    mockUserLinksStore.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
+    mockUserStore.AddOrEditAsync.and.returnValue(Promise.resolve() as any);
+    mockUserLinksStore.getAll.and.returnValue(Promise.resolve([]) as any);
+    mockUserLinksStore.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+    mockUserLinksStore.AddOrEditBulkAsync.and.returnValue(Promise.resolve() as any);
     
     mockCacheService = jasmine.createSpyObj('CacheService', [], {
       User: mockUserStore,
@@ -124,7 +124,7 @@ describe('AuthService', () => {
       });
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.authorizeUser(userData);
@@ -163,7 +163,7 @@ describe('AuthService', () => {
       });
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.authorizeUser(userData, returnUrl);
@@ -199,7 +199,7 @@ describe('AuthService', () => {
       });
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.previouslyAuthorized();
@@ -500,7 +500,7 @@ describe('AuthService', () => {
     it('should get logged in user data', async () => {
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
       service.setToken(mockToken);
 
@@ -513,7 +513,7 @@ describe('AuthService', () => {
     it('should get user object', async () => {
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
       service.setToken(mockToken);
 
@@ -528,7 +528,7 @@ describe('AuthService', () => {
     it('should handle array result from cache', async () => {
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext([mockUser]);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
       service.setToken(mockToken);
 
@@ -540,7 +540,7 @@ describe('AuthService', () => {
     it('should log out on get user object error', async () => {
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext, onError: any) => {
         onError({ error: 'Failed' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
       service.setToken(mockToken);
       spyOn(service, 'logOut');
@@ -554,7 +554,7 @@ describe('AuthService', () => {
     it('should get user', () => {
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(mockUser);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
       service.setToken(mockToken);
 
@@ -583,7 +583,7 @@ describe('AuthService', () => {
       
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(links);
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.getUserLinks();

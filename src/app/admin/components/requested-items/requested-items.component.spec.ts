@@ -26,10 +26,10 @@ describe('RequestedItemsComponent', () => {
 
     apiServiceSpy = {
       get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => fn([])
+        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([]) }
       ),
       post: jasmine.createSpy('post').and.callFake(
-        (_a: boolean, _u: string, _d: any, fn: Function) => fn({})
+        (_a: boolean, _u: string, _d: any, fn: Function) => { if (fn) fn({}) }
       )
     };
 
@@ -82,7 +82,7 @@ describe('RequestedItemsComponent', () => {
     it('calls api.get and populates items', () => {
       const item: Item = Object.assign(new Item(), { item_id: 1, item_nm: 'Bolt' });
       apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => fn([item])
+        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([item]) }
       );
       component.getItems();
       expect(component.items).toEqual([item]);

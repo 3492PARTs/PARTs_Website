@@ -91,7 +91,7 @@ describe('MeetingService', () => {
       meeting.end = new Date('2024-01-01T12:00:00');
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveMeeting(meeting);
@@ -125,7 +125,7 @@ describe('MeetingService', () => {
       meeting.end = new Date('2024-01-01T12:00:00');
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any, onError: any) => {
         onError('Error saving meeting');
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveMeeting(meeting);
@@ -144,7 +144,7 @@ describe('MeetingService', () => {
       });
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Removed' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.removeMeeting(meeting);
@@ -269,7 +269,7 @@ describe('MeetingService', () => {
     });
 
     it('should return null when API returns null', async () => {
-      mockAPIService.get.and.returnValue(Promise.resolve(null));
+      mockAPIService.get.and.returnValue(Promise.resolve(null) as any);
 
       const result = await service.getActiveMeeting();
 
@@ -303,7 +303,7 @@ describe('MeetingService', () => {
     });
 
     it('should return null when API returns null', async () => {
-      mockAPIService.get.and.returnValue(Promise.resolve(null));
+      mockAPIService.get.and.returnValue(Promise.resolve(null) as any);
 
       const result = await service.getMeetingHours();
 

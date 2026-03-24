@@ -35,12 +35,12 @@ describe('ManageFieldResponsesComponent', () => {
     mockGS = jasmine.createSpyObj('GeneralService', [
       'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
     ]);
-    mockGS.getAppSize.and.returnValue(AppSize.XL);
+    mockGS.getAppSize.and.returnValue(AppSize.XLG);
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadFieldScoutingResponses', 'loadFieldScoutingResponseColumns',
     ]);
-    mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null));
-    mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(null));
+    mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
+    mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(null) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
     ]);
@@ -91,18 +91,18 @@ describe('ManageFieldResponsesComponent', () => {
   it('getFieldResponses should populate results when data is returned', async () => {
     const mockResult = new ScoutFieldResponsesReturn();
     mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(mockResult));
-    mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve([]));
+    mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve([]) as any);
     component.getFieldResponses();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.scoutResults).toBe(mockResult);
   });
 
   it('getFieldResponses should populate columns when data is returned', async () => {
     const mockCols = [{ ColLabel: 'Team', PropertyName: 'team' }];
-    mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null));
+    mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(mockCols as any));
     component.getFieldResponses();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.scoutResultColumns).toEqual(mockCols as any);
   });
 
@@ -121,8 +121,8 @@ describe('ManageFieldResponsesComponent', () => {
 
   it('deleteFieldResult confirm callback should call api.delete', () => {
     component.activeScoutResult = { id: 10 };
-    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: Function) => cb());
-    mockAPI.delete.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: () => void) => cb());
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.deleteFieldResult();
     expect(mockAPI.delete).toHaveBeenCalledWith(true, 'scouting/admin/delete-field-result/', { scout_field_id: 10 }, jasmine.any(Function), jasmine.any(Function));
     expect(mockModalService.successfulResponseBanner).toHaveBeenCalled();
@@ -130,8 +130,8 @@ describe('ManageFieldResponsesComponent', () => {
 
   it('deleteFieldResult confirm callback error should call triggerError', () => {
     component.activeScoutResult = { id: 10 };
-    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: Function) => cb());
-    mockAPI.delete.and.callFake((_auth: any, _url: string, _params: any, _success: Function, errorCb: Function) => errorCb('err'));
+    mockModalService.triggerConfirm.and.callFake((_msg: string, cb: () => void) => cb());
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.deleteFieldResult();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

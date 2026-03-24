@@ -36,9 +36,9 @@ describe('SecurityComponent', () => {
       'runSecurityAudit',
       'saveLink', 'deleteLink'
     ]);
-    userServiceSpy.getGroups.and.returnValue(Promise.resolve([]));
-    userServiceSpy.getPermissions.and.returnValue(Promise.resolve([]));
-    userServiceSpy.getLinks.and.returnValue(Promise.resolve([]));
+    userServiceSpy.getGroups.and.returnValue(Promise.resolve([]) as any);
+    userServiceSpy.getPermissions.and.returnValue(Promise.resolve([]) as any);
+    userServiceSpy.getLinks.and.returnValue(Promise.resolve([]) as any);
     userServiceSpy.runSecurityAudit.and.callFake((fn?: (result: any) => void) => fn && fn([]));
     userServiceSpy.saveGroup.and.callFake((_grp: AuthGroup, fn?: Function) => fn && fn());
     userServiceSpy.deleteGroup.and.callFake((_id: number, fn?: Function) => fn && fn());
@@ -49,16 +49,16 @@ describe('SecurityComponent', () => {
 
     apiServiceSpy = {
       get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => fn([])
+        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([]) }
       ),
       post: jasmine.createSpy('post').and.callFake(
-        (_a: boolean, _u: string, _d: any, fn: Function) => fn({ retMessage: 'Success' })
+        (_a: boolean, _u: string, _d: any, fn: Function) => { if (fn) fn({ retMessage: 'Success' }) }
       )
     };
 
     modalServiceSpy = {
       triggerConfirm: jasmine.createSpy('triggerConfirm').and.callFake(
-        (_msg: string, fn: Function) => fn()
+        (_msg: string, fn: Function) => { if (fn) fn() }
       ),
       triggerError: jasmine.createSpy('triggerError'),
       successfulResponseBanner: jasmine.createSpy('successfulResponseBanner')
@@ -127,7 +127,7 @@ describe('SecurityComponent', () => {
     }));
 
     it('does not set groups when result is null', fakeAsync(() => {
-      userServiceSpy.getGroups.and.returnValue(Promise.resolve(null));
+      userServiceSpy.getGroups.and.returnValue(Promise.resolve(null) as any);
       component.groups = [];
       component.getGroups();
       flush();
@@ -145,7 +145,7 @@ describe('SecurityComponent', () => {
     }));
 
     it('does not set permissions when result is null', fakeAsync(() => {
-      userServiceSpy.getPermissions.and.returnValue(Promise.resolve(null));
+      userServiceSpy.getPermissions.and.returnValue(Promise.resolve(null) as any);
       component.permissions = [];
       component.getPermissions();
       flush();
@@ -163,7 +163,7 @@ describe('SecurityComponent', () => {
     }));
 
     it('does not set links when result is null', fakeAsync(() => {
-      userServiceSpy.getLinks.and.returnValue(Promise.resolve(null));
+      userServiceSpy.getLinks.and.returnValue(Promise.resolve(null) as any);
       component.links = [];
       component.getLinks();
       flush();
@@ -363,7 +363,7 @@ describe('SecurityComponent', () => {
   describe('getScoutAuthGroups', () => {
     it('calls api.get and sets scoutAuthGroups', () => {
       const group = Object.assign(new AuthGroup(), { id: 10, name: 'Scout', permissions: [] });
-      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p: any, fn: Function) => fn([group]));
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn([group]) });
       component.getScoutAuthGroups(true);
       expect(apiServiceSpy.get).toHaveBeenCalled();
       expect(component.scoutAuthGroups).toEqual([group]);

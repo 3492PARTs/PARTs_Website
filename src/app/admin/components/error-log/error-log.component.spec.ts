@@ -34,7 +34,7 @@ describe('ErrorLogComponent', () => {
 
     apiServiceSpy = {
       get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => fn(makeApiResponse())
+        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn(makeApiResponse() })
       )
     };
 

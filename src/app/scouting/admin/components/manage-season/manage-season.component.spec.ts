@@ -44,9 +44,9 @@ describe('ManageSeasonComponent', () => {
     mockSS = jasmine.createSpyObj('ScoutingService', [
       'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache',
     ]);
-    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null));
-    mockSS.getTeams.and.returnValue(Promise.resolve(null));
-    mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]));
+    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
+    mockSS.getTeams.and.returnValue(Promise.resolve(null) as any);
+    mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
     ]);
@@ -92,32 +92,32 @@ describe('ManageSeasonComponent', () => {
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(makeAllScoutInfo() as any));
     spyOn(component, 'getAllTeams');
     component.init();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.seasons.length).toBe(1);
   });
 
   it('syncSeason should call api.get', () => {
     component.currentSeason = Object.assign(new Season(), { id: 1 });
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ retMessage: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
     component.syncSeason();
     expect(mockAPI.get).toHaveBeenCalled();
   });
 
   it('syncSeason error should call triggerError', () => {
     component.currentSeason = Object.assign(new Season(), { id: 1 });
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.syncSeason();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('syncMatches should call api.get', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ retMessage: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
     component.syncMatches();
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'tba/sync-matches/', undefined, jasmine.any(Function), jasmine.any(Function));
   });
 
   it('syncEventTeamInfo should call api.get', () => {
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ retMessage: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
     component.syncEventTeamInfo();
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'tba/sync-event-team-info/', { force: 1 }, jasmine.any(Function), jasmine.any(Function));
   });
@@ -133,22 +133,22 @@ describe('ManageSeasonComponent', () => {
   it('setSeasonEvent should call api.get when season and event are valid', () => {
     component.currentSeason = Object.assign(new Season(), { id: 1 });
     component.currentEvent = Object.assign(new Event(), { id: 2, competition_page_active: 'y' });
-    mockAPI.get.and.callFake((_auth: any, _url: string, _params: any, successCb: Function) => successCb({ message: 'ok' }));
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.setSeasonEvent();
     expect(mockAPI.get).toHaveBeenCalled();
   });
 
   it('saveSeason should call api.post', () => {
     const s = new Season();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveSeason(s);
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('saveSeason error should call triggerError', () => {
     const s = new Season();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, _s: Function, errCb: Function) => errCb('err'));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
     component.saveSeason(s);
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -174,7 +174,7 @@ describe('ManageSeasonComponent', () => {
 
   it('saveEvent should call api.post when event_cd is empty', () => {
     component.newEvent = Object.assign(new Event(), { event_cd: '', event_nm: 'Test', season_id: 2024 });
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveEvent();
     expect(mockAPI.post).toHaveBeenCalled();
   });
@@ -195,13 +195,13 @@ describe('ManageSeasonComponent', () => {
     const teams: Team[] = [Object.assign(new Team(), { team_no: 3492 })];
     mockSS.getTeams.and.returnValue(Promise.resolve(teams));
     component.getAllTeams();
-    await Promise.resolve();
+    await Promise.resolve() as any;
     expect(component.teams).toEqual(teams);
   });
 
   it('saveTeam should call api.post', () => {
     component.newTeam = new Team();
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveTeam();
     expect(mockAPI.post).toHaveBeenCalled();
   });
@@ -248,19 +248,19 @@ describe('ManageSeasonComponent', () => {
   });
 
   it('addEventToTeams should call api.post', () => {
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.addEventToTeams();
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('removeEventToTeams should call api.post', () => {
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.removeEventToTeams();
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('saveMatch should call api.post', () => {
-    mockAPI.post.and.callFake((_auth: any, _url: string, _data: any, successCb: Function) => successCb({ message: 'ok' }));
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
     component.saveMatch();
     expect(mockAPI.post).toHaveBeenCalled();
   });

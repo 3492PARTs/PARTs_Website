@@ -68,9 +68,9 @@ describe('FieldScoutingResponsesComponent', () => {
       Promise.resolve(new ScoutFieldResponsesReturn())
     );
     mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(
-      Promise.resolve([])
+      Promise.resolve([]) as any
     );
-    mockScoutingService.loadTeamNotes.and.returnValue(Promise.resolve([]));
+    mockScoutingService.loadTeamNotes.and.returnValue(Promise.resolve([]) as any);
     mockScoutingService.loadPitScoutingResponses.and.returnValue(
       Promise.resolve(new ScoutPitResponsesReturn())
     );
@@ -212,8 +212,8 @@ describe('FieldScoutingResponsesComponent', () => {
     });
 
     it('should handle null responses gracefully', async () => {
-      mockScoutingService.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null));
-      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(null));
+      mockScoutingService.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
+      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(null) as any);
 
       await component.init();
 
