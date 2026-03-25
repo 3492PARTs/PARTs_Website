@@ -178,6 +178,7 @@ node {
             """
         }
         env.RESULT = 'success'
+        currentBuild.result = 'SUCCESS'
     }
     catch (e) {
         env.RESULT = 'error'
@@ -202,10 +203,10 @@ node {
             '''
 
             mail(
-            to: recipient,
-            subject: "Build ${env.JOB_NAME} ${currentBuild.result}",
-            body: "Check the build details here: ${env.BUILD_URL}"
-        )
+                to: recipient,
+                subject: "Build ${env.JOB_NAME} ${currentBuild.result}",
+                body: "Check the build details here: ${env.BUILD_URL}"
+            )
         }
     }
 }
