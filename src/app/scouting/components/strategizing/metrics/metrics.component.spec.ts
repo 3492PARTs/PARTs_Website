@@ -64,7 +64,7 @@ describe('MetricsComponent', () => {
 
   it('runScoutingReport should call api.get', () => {
     component.runScoutingReport();
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/scouting-report/', undefined, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/scouting-report/', undefined, jasmine.any(Function), jasmine.any(Function), undefined, 600000);
   });
 
   it('runScoutingReport error should call triggerError', () => {
