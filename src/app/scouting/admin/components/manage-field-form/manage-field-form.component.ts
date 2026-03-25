@@ -74,7 +74,7 @@ export class ManageFieldFormComponent {
         this.uploadImageModalVisible = false;
       }, (err: any) => {
         this.modalService.triggerError(err);
-      });
+      }, undefined, 50_000);
     }
   }
 
