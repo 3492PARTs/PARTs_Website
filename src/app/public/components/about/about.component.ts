@@ -27,7 +27,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2025 - B.O.B.',
-      img: 'https://i.imgur.com/TcV2Hjv.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455045/Website/Robots/Robots_-_Imgur_11.jpg',
       paragraphs: [
         `"B.O.B." or "Brand-o-bot", named after our Software mentor Brandon Duke, was our fourteenth robot designed to play the 2025 game
           REEFSCAPE. He was designed to intake coral through its rear hopper and place it out of
@@ -80,7 +80,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2024 - DOC BOT',
-      img: 'https://i.imgur.com/DmsQWb1.png',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455312/Website/Robots/Robots_-_Imgur_12.png',
       paragraphs: [
         `DOC BOT was our thirteenth robot and was named after our new head mentor
           Dr. Angela Abbott, who we refer to as "Doc" because of her PhD in
@@ -125,7 +125,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2023 - T.I.N.A.',
-      img: 'https://i.imgur.com/7KxyFlB.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455046/Website/Robots/Robots_-_Imgur_9.jpg',
       paragraphs: [
         `"T.I.N.A." (Tank Inspired Nightmare Automaton) was our twelfth robot
           and was named after our retiring mentor Tina Kirk.`,
@@ -162,7 +162,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2022 - Jake and Bake',
-      img: 'https://i.imgur.com/e1gwE3O.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455040/Website/Robots/Robots_-_Imgur_7.jpg',
       paragraphs: [
         `"Jake and Bake" was our eleventh robot and was named after our
           mechanical mentor Jacob Plasters. Our 2022 robot had a rear intake
@@ -205,7 +205,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2020/21 - Plaster Blaster',
-      img: 'https://i.imgur.com/Epu2wza.png',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455045/Website/Robots/Robots_-_Imgur_1.png',
       paragraphs: [
         `"Plaster Blaster" was named after our current mechanical mentor Jacob
           Plasters. Plaster Blaster is our tenth robot designed to play in the
@@ -248,7 +248,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2019 - BeanIX',
-      img: 'https://i.imgur.com/uZKqZ6L.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455041/Website/Robots/Robots_-_Imgur_2.jpg',
       paragraphs: [
         `"Bean IX" was made our 2019 year for our FIRST competition Deep Space
           and was named because it was our teams ninth ever competition robot.
@@ -292,7 +292,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2018 - GLough',
-      img: 'https://i.imgur.com/5gGK4tR.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455041/Website/Robots/Robots_-_Imgur_5.jpg',
       paragraphs: [
         `"GLough" was named in loving memory of electrical mentor and father,
           Glenn Lough, after he passed away earlier that year. GLough is our
@@ -351,7 +351,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2017 - Beaniehemoth',
-      img: 'https://i.imgur.com/419SOF0.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455043/Website/Robots/Robots_-_Imgur.jpg',
       paragraphs: [
         `"Beaniehemoth", named after our team mascot "BeanieBot" and its
           violent attack on Jack Powers (our head programmer), was our seventh
@@ -401,7 +401,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2016 - Beanie the Barbarian',
-      img: 'https://i.imgur.com/avXILvt.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455440/Website/Robots/Robots_-_Imgur_13.jpg',
       paragraphs: [
         `"Beanie the Barbarian", named after our team mascot "BeanieBot" and
           this year's game, was our sixth robot designed to play the 2016 game
@@ -434,7 +434,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2015 - Turbo Mike',
-      img: 'https://i.imgur.com/9qb4Yi4.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455044/Website/Robots/Robots_-_Imgur_10.jpg',
       paragraphs: [
         `"Turbo Mike", named after an original team member and mentor nicked
           named as such, was our fifth robot designed to play the 2015 game
@@ -463,7 +463,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2014 - Carla',
-      img: 'https://i.imgur.com/zx1KxhC.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455041/Website/Robots/Robots_-_Imgur_3.jpg',
       paragraphs: [
         `"Carla", named after a beloved team mother who lost her battle to
           breast cancer, was our fourth robot designed to play the 2014 game
@@ -496,7 +496,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2013 - DJ',
-      img: 'https://i.imgur.com/SbktBVu.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455041/Website/Robots/Robots_-_Imgur_4.jpg',
       paragraphs: [
         `"DJ", named after our amazing and inspiring mentor Denise Johnson who
           was retiring this year, was our third robot designed to play the 2013
@@ -525,7 +525,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2012 - HU',
-      img: 'https://i.imgur.com/HF9COiq.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455041/Website/Robots/Robots_-_Imgur_6.jpg',
       paragraphs: [
         `"HU", named after Winfield High School's beloved principal William
           Hughes, was our second robot designed to play the 2012 game REBOUND
@@ -553,7 +553,7 @@ export class AboutComponent implements OnInit {
     {
       visible: false,
       title: '2011 - McCoy',
-      img: 'https://i.imgur.com/nD0SAxr.jpeg',
+      img: 'https://res.cloudinary.com/parts-website/image/upload/v1774455045/Website/Robots/Robots_-_Imgur_8.jpg',
       paragraphs: [
         `"McCoy", named in honor of one of the most respected faculty members
           at Winfield High, Coach Leon McCoy, was our first robot designed to
