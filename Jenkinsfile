@@ -1,4 +1,5 @@
 node {
+    def recipient = 'brandon@bduke.dev'
     def now = new Date()
     def formattedDate = now.format('yyyy.MM.dd')
     env.BUILD_DATE = formattedDate
@@ -181,6 +182,13 @@ node {
     catch (e) {
         env.RESULT = 'error'
         currentBuild.result = 'FAILURE'
+
+        mail(
+            to: recipient,
+            subject: "Build ${env.JOB_NAME} Failed",
+            body: "The build failed with error: ${err}"
+        )
+
         throw e
     }
     finally {
@@ -192,15 +200,12 @@ node {
                     -H "Content-Type: application/json" \
                     -d '{"state":"'\$RESULT'", "description":"Build '\$BUILD_NO' '\$RESULT'", "context":"Jenkins Build"}'
             '''
-        }
-    }
-}
 
-post {
-    always {
-        step([$class: 'Mailer', 
-              notifyEveryUnstableBuild: true, 
-              recipients: 'brandon@bduke.dev',
-              sendToIndividuals: true])
+            mail(
+            to: recipient,
+            subject: "Build ${env.JOB_NAME} ${currentBuild.result}",
+            body: "Check the build details here: ${env.BUILD_URL}"
+        )
+        }
     }
 }
