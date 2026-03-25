@@ -44,9 +44,13 @@ describe('MeetingAttendanceComponent', () => {
     mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers']);
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
-    mockAS = jasmine.createSpyObj('AttendanceService', ['getAttendance', 'getAttendanceReport', 'approveAttendance', 'rejectAttendance']);
+    mockAS = jasmine.createSpyObj('AttendanceService', ['getAttendance', 'getAttendanceReport', 'approveAttendance', 'rejectAttendance', 'isAttendanceUnapproved', 'isAttendanceApproved', 'isAttendanceRejected', 'isAttendanceExempted']);
     mockAS.getAttendance.and.returnValue(Promise.resolve([]) as any);
     mockAS.getAttendanceReport.and.returnValue(Promise.resolve(null) as any);
+    mockAS.isAttendanceUnapproved.and.returnValue(false);
+    mockAS.isAttendanceApproved.and.returnValue(false);
+    mockAS.isAttendanceRejected.and.returnValue(false);
+    mockAS.isAttendanceExempted.and.returnValue(false);
     mockMS = jasmine.createSpyObj('MeetingService', ['saveMeeting', 'removeMeeting', 'getMeetings', 'computeMeetingDuration', 'getActiveMeeting', 'getMeetingHours']);
     mockMS.saveMeeting.and.returnValue(Promise.resolve(false) as any);
     mockMS.removeMeeting.and.returnValue(Promise.resolve(false) as any);

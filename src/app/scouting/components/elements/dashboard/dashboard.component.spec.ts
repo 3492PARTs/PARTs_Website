@@ -69,9 +69,9 @@ describe('DashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call loadAllScoutingInfo when auth completes', () => {
-    mockSS.loadAllScoutingInfo.calls.reset();
+  it('should call getFieldFormFormFromCache when auth completes', () => {
+    mockSS.getFieldFormFormFromCache.calls.reset();
     authInFlight.next(AuthCallStates.comp);
-    expect(mockSS.loadAllScoutingInfo).toHaveBeenCalled();
+    expect(mockSS.getFieldFormFormFromCache).toHaveBeenCalled();
   });
 });

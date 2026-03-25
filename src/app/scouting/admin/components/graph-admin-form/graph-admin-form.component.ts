@@ -138,12 +138,8 @@ export class GraphAdminFormComponent implements OnInit {
         this.modalService.triggerError('Can\'t delete saved bin, please mark inactive instead.');
       }
       else {
-        let i = 0;
-        for (; i < this.activeGraph.graphbin_set.length; i++)
-          if (this.activeGraph.graphbin_set[i].id === bin.id && this.activeGraph.graphbin_set[i].bin === bin.bin)
-            break;
-
-        this.activeGraph.graphbin_set.splice(i, 1);
+        const i = this.activeGraph.graphbin_set.indexOf(bin);
+        if (i !== -1) this.activeGraph.graphbin_set.splice(i, 1);
       }
     }
   }
@@ -215,12 +211,8 @@ export class GraphAdminFormComponent implements OnInit {
         this.modalService.triggerError('Can\'t delete saved question, please mark inactive instead.');
       }
       else {
-        let i = 0;
-        for (; i < this.activeGraph.graphquestion_set.length; i++)
-          if (this.activeGraph.graphquestion_set[i].id === graphQuestion.id && this.activeGraph.graphquestion_set[i].question === graphQuestion.question && this.activeGraph.graphquestion_set[i].question_aggregate === graphQuestion.question_aggregate && this.activeGraph.graphquestion_set[i].graph_question_typ === graphQuestion.graph_question_typ)
-            break;
-
-        this.activeGraph.graphquestion_set.splice(i, 1);
+        const i = this.activeGraph.graphquestion_set.indexOf(graphQuestion);
+        if (i !== -1) this.activeGraph.graphquestion_set.splice(i, 1);
       }
     }
   }

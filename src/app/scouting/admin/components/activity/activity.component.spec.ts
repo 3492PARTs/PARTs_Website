@@ -190,6 +190,12 @@ describe('ActivityComponent', () => {
 
   it('getScoutingActivityScoutsForTable should return empty string when no scouts assigned', () => {
     const sfs = new ScoutFieldSchedule();
+    sfs.red_one_id = null;
+    sfs.red_two_id = null;
+    sfs.red_three_id = null;
+    sfs.blue_one_id = null;
+    sfs.blue_two_id = null;
+    sfs.blue_three_id = null;
     const result = component.getScoutingActivityScoutsForTable(sfs);
     expect(result).toBe('');
   });

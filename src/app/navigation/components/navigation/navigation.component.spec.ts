@@ -35,6 +35,7 @@ describe('NavigationComponent', () => {
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
     mockAuthService = jasmine.createSpyObj('AuthService', ['logout', 'isAdmin'], {
       user: userSubject.asObservable(),
+      userLinks: new BehaviorSubject<any[]>([]).asObservable(),
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
@@ -43,8 +44,12 @@ describe('NavigationComponent', () => {
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.currentOutstandingCalls = outstandingCallsSubject.asObservable();
-    mockNavService = jasmine.createSpyObj('NavigationService', ['setNavigationState'], {
+    mockGS.siteBanners = new BehaviorSubject<any[]>([]).asObservable();
+    mockGS.scrollPosition$ = new BehaviorSubject<number>(0).asObservable();
+    mockNavService = jasmine.createSpyObj('NavigationService', ['setNavigationState', 'setSubPages'], {
       currentNavigationState: navigationStateSubject.asObservable(),
+      subPage: new BehaviorSubject<string>('-1').asObservable(),
+      allSubPages: [],
     });
     mockNS = jasmine.createSpyObj('NotificationsService', ['getNotifications', 'getMessages'], {
       notifications: new BehaviorSubject([]).asObservable(),
@@ -52,6 +57,7 @@ describe('NavigationComponent', () => {
     });
     mockPwa = jasmine.createSpyObj('PwaService', ['checkForUpdate'], {
       promptEvent: new Subject(),
+      installEligible: new BehaviorSubject<boolean>(false).asObservable(),
     });
 
     await TestBed.configureTestingModule({

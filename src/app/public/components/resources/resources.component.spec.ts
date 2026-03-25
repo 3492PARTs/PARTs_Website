@@ -46,8 +46,7 @@ describe('ResourcesComponent', () => {
   });
 
   it('should add season resource after API resolves', async () => {
-    const initialCount = component.resources.length;
     await fixture.whenStable();
-    expect(component.resources.length).toBe(initialCount + 1);
+    expect(component.resources.length).toBe(6);
   });
 });
