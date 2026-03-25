@@ -81,7 +81,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    window.clearTimeout(this.checkScoutTimeout);
+    try {
+      window.clearTimeout(this.checkScoutTimeout);
+    }
+    catch (e) {
+      console.log('error clearing timeout');
+    }
   }
 
   init(): void {
