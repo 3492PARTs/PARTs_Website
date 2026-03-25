@@ -50,6 +50,8 @@ describe('NavigationComponent', () => {
       currentNavigationState: navigationStateSubject.asObservable(),
       subPage: new BehaviorSubject<string>('-1').asObservable(),
       allSubPages: [],
+      applicationMenu: [],
+      pagesWithNavigation: [],
     });
     mockNS = jasmine.createSpyObj('NotificationsService', ['getNotifications', 'getMessages'], {
       notifications: new BehaviorSubject([]).asObservable(),
