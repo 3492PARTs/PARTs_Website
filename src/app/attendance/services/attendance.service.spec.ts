@@ -15,7 +15,8 @@ describe('AttendanceService', () => {
   beforeEach(() => {
     mockAPIService = jasmine.createSpyObj('APIService', ['get', 'post']);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError']);
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'addBanner']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
 
     TestBed.configureTestingModule({
       providers: [
@@ -80,7 +81,7 @@ describe('AttendanceService', () => {
       attendance.user = new User();
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any, onError: any) => {
         onError('API Error');
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       const result = await service.saveAttendance(attendance);
@@ -311,7 +312,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.markAbsent(user, meeting);
@@ -328,7 +329,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.approveAttendance(attendance);
@@ -346,7 +347,7 @@ describe('AttendanceService', () => {
 
       mockAPIService.post.and.callFake((loading: boolean, endpoint: string, data: any, onSuccess: any) => {
         onSuccess({ retMessage: 'Success' });
-        return Promise.resolve();
+        return Promise.resolve() as any;
       });
 
       service.rejectAttendance(attendance);
@@ -414,7 +415,7 @@ describe('AttendanceService', () => {
     });
 
     it('should return null when API returns null', async () => {
-      mockAPIService.get.and.returnValue(Promise.resolve(null));
+      mockAPIService.get.and.returnValue(Promise.resolve(null) as any);
 
       const result = await service.getAttendanceReport();
 

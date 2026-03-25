@@ -39,7 +39,8 @@ describe('ScoutingService', () => {
     };
 
     mockAPIService = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner', 'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['successfulResponseBanner', 'triggerError']);
 
     TestBed.configureTestingModule({
@@ -132,9 +133,9 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockSeasons);
       });
-      mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]) as any);
 
       const result = await service.loadSeasons();
 
@@ -185,9 +186,9 @@ describe('ScoutingService', () => {
           }, 100);
         });
       });
-      mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.Season.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Season.AddBulkAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]) as any);
 
       const promise1 = service.loadSeasons();
       const promise2 = service.loadSeasons();
@@ -212,7 +213,7 @@ describe('ScoutingService', () => {
 
     it('should get seasons with filter', async () => {
       const filterFn = (table: any) => table.where({ 'current': 'y' });
-      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.Season.getAll.and.returnValue(Promise.resolve([]) as any);
 
       await service.getSeasonsFromCache(filterFn);
 
@@ -231,9 +232,9 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockEvents);
       });
-      mockCacheService.Event.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Event.AddBulkAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Event.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.Event.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Event.AddBulkAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Event.getAll.and.returnValue(Promise.resolve([]) as any);
 
       const result = await service.loadEvents();
 
@@ -282,8 +283,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockTeams);
       });
-      mockCacheService.Team.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Team.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.Team.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Team.AddOrEditBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadTeams();
 
@@ -343,8 +344,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockMatches);
       });
-      mockCacheService.Match.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Match.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.Match.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Match.AddOrEditBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadMatches();
 
@@ -406,8 +407,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockForm);
       });
-      mockCacheService.FieldFormForm.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.FieldFormForm.AddAsync.and.returnValue(Promise.resolve());
+      mockCacheService.FieldFormForm.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.FieldFormForm.AddAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadFieldScoutingForm();
 
@@ -466,7 +467,7 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.reject('API Error');
       });
-      mockCacheService.ScoutFieldFormResponse.AddAsync.and.returnValue(Promise.resolve());
+      mockCacheService.ScoutFieldFormResponse.AddAsync.and.returnValue(Promise.resolve() as any);
       spyOn(service, 'startUploadOutstandingResponsesTimeout');
 
       const result = await service.saveFieldScoutingResponse(mockResponse);
@@ -490,7 +491,7 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve({ message: 'Success' });
       });
-      mockCacheService.ScoutFieldFormResponse.RemoveAsync.and.returnValue(Promise.resolve());
+      mockCacheService.ScoutFieldFormResponse.RemoveAsync.and.returnValue(Promise.resolve() as any);
 
       await service.saveFieldScoutingResponse(mockResponse, 1);
 
@@ -507,9 +508,9 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockQuestions);
       });
-      mockCacheService.Question.filterAll.and.returnValue(Promise.resolve([]));
-      mockCacheService.Question.RemoveBulkAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Question.AddOrEditBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.Question.filterAll.and.returnValue(Promise.resolve([]) as any);
+      mockCacheService.Question.RemoveBulkAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Question.AddOrEditBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadPitScoutingForm();
 
@@ -557,7 +558,7 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.reject('API Error');
       });
-      mockCacheService.ScoutPitFormResponse.AddAsync.and.returnValue(Promise.resolve());
+      mockCacheService.ScoutPitFormResponse.AddAsync.and.returnValue(Promise.resolve() as any);
       spyOn(service, 'startUploadOutstandingResponsesTimeout');
 
       const result = await service.savePitScoutingResponse(mockResponse);
@@ -576,8 +577,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockTypes);
       });
-      mockCacheService.ScheduleType.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.ScheduleType.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.ScheduleType.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.ScheduleType.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadScheduleTypes();
 
@@ -594,8 +595,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockSchedules);
       });
-      mockCacheService.Schedule.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.Schedule.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.Schedule.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.Schedule.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadSchedules();
 
@@ -612,8 +613,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockSchedules);
       });
-      mockCacheService.ScoutFieldSchedule.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.ScoutFieldSchedule.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.ScoutFieldSchedule.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.ScoutFieldSchedule.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadScoutingFieldSchedules();
 
@@ -710,8 +711,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockNotes);
       });
-      mockCacheService.TeamNote.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.TeamNote.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.TeamNote.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.TeamNote.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadTeamNotes();
 
@@ -745,8 +746,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockStrategies);
       });
-      mockCacheService.MatchStrategy.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.MatchStrategy.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.MatchStrategy.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.MatchStrategy.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadMatchStrategies();
 
@@ -784,8 +785,8 @@ describe('ScoutingService', () => {
         if (onComplete) onComplete();
         return Promise.resolve(mockSelections);
       });
-      mockCacheService.AllianceSelection.RemoveAllAsync.and.returnValue(Promise.resolve());
-      mockCacheService.AllianceSelection.AddBulkAsync.and.returnValue(Promise.resolve());
+      mockCacheService.AllianceSelection.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
+      mockCacheService.AllianceSelection.AddBulkAsync.and.returnValue(Promise.resolve() as any);
 
       const result = await service.loadAllianceSelection();
 

@@ -30,7 +30,7 @@ describe('PhoneTypesComponent', () => {
     
     // Create mock UserService
     mockUserService = jasmine.createSpyObj('UserService', ['getPhoneTypes']);
-    mockUserService.getPhoneTypes.and.returnValue(Promise.resolve([]));
+    mockUserService.getPhoneTypes.and.returnValue(Promise.resolve([]) as any);
     
     // Create a BehaviorSubject for authInFlight
     authInFlightSubject = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
@@ -126,7 +126,7 @@ describe('PhoneTypesComponent', () => {
     });
 
     it('should handle null result from getPhoneTypes', async () => {
-      mockUserService.getPhoneTypes.and.returnValue(Promise.resolve(null));
+      mockUserService.getPhoneTypes.and.returnValue(Promise.resolve(null) as any);
       
       await component.getPhoneTypes();
       

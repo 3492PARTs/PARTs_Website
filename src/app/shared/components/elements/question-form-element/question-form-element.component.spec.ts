@@ -2,29 +2,61 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
-
+import { SwPush } from '@angular/service-worker';
+import { createMockSwPush } from '../../../../../test-helpers';
 import { QuestionFormElementComponent } from './question-form-element.component';
+import { Question, QuestionType } from '@app/core/models/form.models';
+
+function makeQuestion(): Question {
+  const q = new Question();
+  q.question_typ = Object.assign(new QuestionType(), { question_typ: 'text', question_typ_nm: 'Text' });
+  return q;
+}
 
 describe('QuestionFormElementComponent', () => {
   let component: QuestionFormElementComponent;
   let fixture: ComponentFixture<QuestionFormElementComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [ QuestionFormElementComponent ],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [QuestionFormElementComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    });
+        provideRouter([]),
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
     fixture = TestBed.createComponent(QuestionFormElementComponent);
     component = fixture.componentInstance;
+    component.Question = makeQuestion();
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('change should update question answer and emit', () => {
+    spyOn(component.QuestionChange, 'emit');
+    component.Question = makeQuestion();
+    component.change('test_answer');
+    expect(component.Question.answer).toBe('test_answer');
+    expect(component.QuestionChange.emit).toHaveBeenCalled();
+  });
+
+  it('questionChange should update question and emit', () => {
+    spyOn(component.QuestionChange, 'emit');
+    const q = makeQuestion();
+    q.answer = 'new_answer';
+    component.questionChange(q);
+    expect(component.Question).toBe(q);
+    expect(component.QuestionChange.emit).toHaveBeenCalled();
+  });
+
+  it('runFunction should emit FunctionCallBack', () => {
+    spyOn(component.FunctionCallBack, 'emit');
+    component.runFunction();
+    expect(component.FunctionCallBack.emit).toHaveBeenCalled();
   });
 });

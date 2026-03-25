@@ -12,7 +12,7 @@ describe('DataService', () => {
   beforeEach(() => {
     mockCacheService = {
       TestRepo: {
-        getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([]))
+        getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([]) as any)
       }
     };
 
@@ -91,7 +91,7 @@ describe('DataService', () => {
       const onNext = jasmine.createSpy('onNext');
       const onError = jasmine.createSpy('onError');
 
-      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]) as any);
 
       mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
         errorCallback(new Error('API Error'));
@@ -123,7 +123,7 @@ describe('DataService', () => {
       const filterDelegate = (item: any) => item.active === true;
       const onError = jasmine.createSpy('onError');
 
-      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]) as any);
 
       mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
         errorCallback(new Error('API Error'));
@@ -162,7 +162,7 @@ describe('DataService', () => {
       const apiError = new Error('API Error');
       const onError = jasmine.createSpy('onError');
 
-      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve(null));
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve(null) as any);
 
       mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
         errorCallback(apiError);
@@ -289,7 +289,7 @@ describe('DataService', () => {
       const specificError = { message: 'Specific API error', code: 500 };
       const onError = jasmine.createSpy('onError');
 
-      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]));
+      mockCacheService.TestRepo.getAll.and.returnValue(Promise.resolve([]) as any);
 
       mockAPIService.get.and.callFake((loadingScreen: any, endpoint: any, params: any, successCallback: any, errorCallback: any) => {
         errorCallback(specificError);

@@ -84,7 +84,9 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     try {
       window.clearTimeout(this.checkScoutTimeout);
     }
-    catch { }
+    catch (e) {
+      console.log('error clearing timeout');
+    }
   }
 
   init(): void {
@@ -842,6 +844,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         throw new Error('no flow to undo')
       }
     }
+  }
+
+  get hasNonFormBasedFlows(): boolean {
+    return !!(this.activeFormSubTypeForm?.flows?.filter(f => !f.form_based).length);
+  }
+
+  get formBasedFlows(): any[] {
+    return this.activeFormSubTypeForm?.flows?.filter(f => f.form_based) ?? [];
   }
 
   private setActiveFormSubTypeForm(f: FormSubTypeForm | undefined): void {

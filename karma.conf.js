@@ -28,8 +28,10 @@ module.exports = function (config) {
       subdir: '.',
       reporters: [
         { type: 'html' },
+        { type: 'text' },
         { type: 'text-summary' },
-        { type: 'lcovonly' }
+        { type: 'lcovonly' },
+        { type: 'json-summary' }
       ],
       check: {
         global: {

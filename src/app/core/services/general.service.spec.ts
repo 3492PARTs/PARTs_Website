@@ -23,8 +23,8 @@ describe('GeneralService', () => {
 
     mockCacheService = {
       SiteBanner: {
-        GetAll: jasmine.createSpy('GetAll').and.returnValue(Promise.resolve()),
-        AddOrEditAsync: jasmine.createSpy('AddOrEditAsync').and.returnValue(Promise.resolve()),
+        GetAll: jasmine.createSpy('GetAll').and.returnValue(Promise.resolve() as any),
+        AddOrEditAsync: jasmine.createSpy('AddOrEditAsync').and.returnValue(Promise.resolve() as any),
         getById: jasmine.createSpy('getById').and.returnValue(Promise.resolve(undefined)),
         //GetById: jasmine.createSpy('GetById').and.returnValue(Promise.resolve(undefined))
       }

@@ -15,7 +15,8 @@ describe('FormComponent', () => {
   let mockTable: jasmine.SpyObj<TableComponent>;
 
   beforeEach(async () => {
-    mockGeneralService = jasmine.createSpyObj('GeneralService', ['addBanner']);
+    mockGeneralService = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'addBanner']);
+    mockGeneralService.getNextGsId.and.returnValue('gs-1');
     
     await TestBed.configureTestingModule({
       imports: [FormComponent, FormsModule],
