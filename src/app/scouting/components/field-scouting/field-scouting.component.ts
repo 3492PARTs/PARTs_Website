@@ -841,6 +841,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
   }
 
+  get hasNonFormBasedFlows(): boolean {
+    return !!(this.activeFormSubTypeForm?.flows?.filter(f => !f.form_based).length);
+  }
+
+  get formBasedFlows(): any[] {
+    return this.activeFormSubTypeForm?.flows?.filter(f => f.form_based) ?? [];
+  }
+
   private setActiveFormSubTypeForm(f: FormSubTypeForm | undefined): void {
     this.activeFormSubTypeForm = f;
   }

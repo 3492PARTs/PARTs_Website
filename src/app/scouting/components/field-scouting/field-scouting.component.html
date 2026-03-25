@@ -165,8 +165,7 @@
 
       @if(activeFormSubTypeForm) {
       <div id="header-wrapper">
-        @if(activeFormSubTypeForm && activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0) {
+        @if(activeFormSubTypeForm && hasNonFormBasedFlows) {
         <div #flowButtonsWrapper>
           @if (flowsActionStack.length > 0) {
           <app-button id="undo-btn" [ButtonType]="'arrow-u-left-top'" (FunctionCallBack)="undoFlowAction()"
@@ -195,8 +194,7 @@
       <div #imageBackground id="image-background" class="flex align-items-center justify-content-center">
         @if (
         activeFormSubTypeForm &&
-        activeFormSubTypeForm.flows &&
-        activeFormSubTypeForm.flows.filter(f => !f.form_based).length > 0
+        hasNonFormBasedFlows
         ) {
         <div #imageContainer id="image-container" (click)="stopwatchStart()">
           <!--load field image if it exists-->
@@ -248,7 +246,7 @@
       @if (activeFormSubTypeForm) {
 
       <!-- form based flows-->
-      @for (flow of activeFormSubTypeForm.flows.filter(f => f.form_based); track
+      @for (flow of formBasedFlows; track
       flow) {
       <app-form-element-group [LabelText]="flow.name">
 
