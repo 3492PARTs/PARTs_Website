@@ -195,3 +195,12 @@ node {
         }
     }
 }
+
+post {
+    always {
+        step([$class: 'Mailer', 
+              notifyEveryUnstableBuild: true, 
+              recipients: 'brandon@bduke.dev',
+              sendToIndividuals: true])
+    }
+}
