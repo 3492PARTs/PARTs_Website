@@ -119,7 +119,7 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
     export_file.scoutAnswers.forEach(el => {
       this.scoutResponseColumns.forEach(element => {
-        csv += '"' + el[element['PropertyName']] + '"' + ',';
+        csv += `"${formatFieldRecord(el[element['PropertyName']])}",`;
       });
       csv = csv.substring(0, csv.length - 1);
       csv += '\n';
