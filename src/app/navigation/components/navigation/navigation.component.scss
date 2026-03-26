@@ -30,7 +30,7 @@
   flex-direction: row;
 }
 
-nav {
+:host ::ng-deep nav {
   position: fixed;
   z-index: 17;
   top: 0;
@@ -199,6 +199,7 @@ nav {
           }
 
           svg {
+            padding-top: 0.4rem;
             width: 20px;
             height: 20px;
           }
