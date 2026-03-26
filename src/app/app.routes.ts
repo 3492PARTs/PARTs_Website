@@ -4,12 +4,11 @@ import { AboutComponent } from './public/components/about/about.component';
 import { ContactComponent } from './public/components/contact/contact.component';
 import { EventCompetitionComponent } from './public/components/event-competition/event-competition.component'; // Public
 import { FirstComponent } from './public/components/first/first.component';
-import { ElectricalComponent } from './recruitment/components/join/electrical/electrical.component';
-import { ImpactComponent } from './recruitment/components/join/impact/impact.component';
-import { JoinComponent } from './recruitment/components/join/join.component';
-import { MechanicalComponent } from './recruitment/components/join/mechanical/mechanical.component';
-import { ProgrammingComponent } from './recruitment/components/join/programming/programming.component';
-import { TeamApplicationComponent } from './recruitment/components/join/team-application/team-application.component';
+import { ElectricalComponent } from './public/components/recruitment/electrical/electrical.component';
+import { ImpactComponent } from './public/components/recruitment/impact/impact.component';
+import { MechanicalComponent } from './public/components/recruitment/mechanical/mechanical.component';
+import { SoftwareComponent } from './public/components/recruitment/software/software.component';
+import { TeamApplicationComponent } from './public/components/recruitment/team-application/team-application.component';
 import { LoginComponent } from './auth/components/login/login.component';
 import { BuildSeasonComponent } from './public/components/media/build-season/build-season.component';
 import { MediaCommunityOutreachComponent } from './public/components/media/community-outreach/community-outreach.component';
@@ -28,9 +27,8 @@ export const routes: Routes = [
     { path: 'login', title: 'Login', component: LoginComponent },
     { path: 'contact', title: 'Contact Us', component: ContactComponent },
     { path: 'calendar', title: 'Calendar', component: CalendarComponent },
-    { path: 'join', title: 'Join', component: JoinComponent },
     { path: 'join/impact', title: 'Join Impact', component: ImpactComponent },
-    { path: 'join/programming', title: 'Join Programming', component: ProgrammingComponent },
+    { path: 'join/software', title: 'Join Software', component: SoftwareComponent },
     { path: 'join/mechanical', title: 'Join Mechanical', component: MechanicalComponent },
     { path: 'join/electrical', title: 'Join Electrical', component: ElectricalComponent },
     { path: 'join/team-application', title: 'Team Application', component: TeamApplicationComponent },

@@ -4,7 +4,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { createMockSwPush } from '../../../../../test-helpers';
-import { ProgrammingComponent } from './programming.component';
+import { ProgrammingComponent } from './software.component';
 
 describe('ProgrammingComponent', () => {
   let component: ProgrammingComponent;

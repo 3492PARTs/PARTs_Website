@@ -17,7 +17,7 @@ export class NavigationService {
     new Link('Join PARTs', '', 'account-supervisor', [
       new Link('Mechanical', 'join/mechanical'),
       new Link('Electrical', 'join/electrical'),
-      new Link('Programming', 'join/programming'),
+      new Link('Software', 'join/software'),
       new Link('Impact', 'join/impact'),
       new Link('Application Form', 'join/team-application'),
     ], 'Our Subteams'),

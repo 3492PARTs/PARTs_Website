@@ -3,12 +3,12 @@ import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-programming',
+  selector: 'app-software',
   imports: [BoxComponent, RouterLink],
-  templateUrl: './programming.component.html',
-  styleUrls: ['./programming.component.scss']
+  templateUrl: './software.component.html',
+  styleUrls: ['./software.component.scss']
 })
-export class ProgrammingComponent implements AfterViewInit {
+export class SoftwareComponent implements AfterViewInit {
 
   @ViewChild('thisJoinPic', { read: ElementRef, static: true }) pic!: ElementRef;
 
