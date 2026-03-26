@@ -1,6 +1,6 @@
 @charset 'utf-8';
 
-@use "abstracts/variables";
+@use 'abstracts/variables';
 
 /* Created by Erik Boesen with FIRST Robotics Competition Team 1418.
     Offered under the MIT License. */
@@ -8,8 +8,8 @@
 $blue: #0f4bcb;
 
 @font-face {
-  font-family: "Adam";
-  src: url(/fonts/adam.otf) format("opentype");
+  font-family: 'Adam';
+  src: url(/fonts/adam.otf) format('opentype');
   unicode-range: U+0000-00FF;
 }
 
@@ -52,21 +52,21 @@ $blue: #0f4bcb;
   }
 
   .title {
-    font-family: "Adam", sans-serif;
+    font-family: 'Adam', sans-serif;
     font-style: italic;
     padding-top: 1rem;
   }
 }
 
-.banners img,
-.banner img {
+:host ::ng-deep .banners span,
+:host ::ng-deep .banner span {
   width: 75px;
   margin-bottom: 5px;
 }
 
 .banners li:after,
 .banner:after {
-  content: "";
+  content: '';
   position: absolute;
   display: block;
   border: 70px solid $blue;
