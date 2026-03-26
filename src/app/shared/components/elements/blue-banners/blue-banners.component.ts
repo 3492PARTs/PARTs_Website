@@ -1,4 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ICON_SVG_FRC as ICON_SVG_FIRST } from '@app/core';
 import { GeneralService } from '@app/core/services/general.service';
 
 import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
@@ -19,12 +21,15 @@ export class BlueBannersComponent implements OnInit {
   { title: 'WINNER', event: '2015 SMOKY MOUNTAINS REGIONAL' },
   { title: 'ENGINEERING INSPIRATION AWARD', event: '2014 SMOKY MOUNTAINS REGIONAL' },
   { title: 'WINNER', event: '2011 PITTSBURGH REGIONAL' },
-  ]
+  ];
 
-  constructor(private gs: GeneralService) { }
+  iconFIRST: SafeHtml | undefined = undefined;
+
+  constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
     this.setScreenSize();
+    this.iconFIRST = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_FIRST);
   }
 
   @HostListener('window:resize', ['$event'])
