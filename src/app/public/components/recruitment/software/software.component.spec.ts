@@ -4,15 +4,15 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { createMockSwPush } from '../../../../../test-helpers';
-import { ProgrammingComponent } from './software.component';
+import { SoftwareComponent } from './software.component';
 
-describe('ProgrammingComponent', () => {
-  let component: ProgrammingComponent;
-  let fixture: ComponentFixture<ProgrammingComponent>;
+describe('SoftwareComponent', () => {
+  let component: SoftwareComponent;
+  let fixture: ComponentFixture<SoftwareComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProgrammingComponent],
+      imports: [SoftwareComponent],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -20,7 +20,7 @@ describe('ProgrammingComponent', () => {
         { provide: SwPush, useValue: createMockSwPush() },
       ],
     }).compileComponents();
-    fixture = TestBed.createComponent(ProgrammingComponent);
+    fixture = TestBed.createComponent(SoftwareComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
