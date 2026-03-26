@@ -20,8 +20,10 @@ import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import * as Utils from '@app/core/utils/utils.functions';
+import { ICON_SVG_FRC, ICON_SVG_GITHUB, ICON_SVG_BOOKSTACK } from '@app/core';
 
 import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-navigation',
   imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
@@ -86,6 +88,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   //subPages: Link[] = [];
   subPage = '-1';
 
+  iconFrc: SafeHtml | undefined = undefined;
+  iconGitHub: SafeHtml | undefined = undefined;
+  iconBookStack: SafeHtml | undefined = undefined;
+
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
     private auth: AuthService,
@@ -93,7 +99,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     private api: APIService,
     private pwa: PwaService,
     private ns: NotificationsService,
-    private navigationService: NavigationService) {
+    private navigationService: NavigationService, private sanitizer: DomSanitizer) {
     this.gs.currentOutstandingCalls.subscribe(o => {
       this.loading = o > 0;
 
@@ -228,6 +234,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.iconFrc = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_FRC);
+    this.iconGitHub = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_GITHUB);
+    this.iconBookStack = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_BOOKSTACK);
+
+    console.log('FRC SVG: ' + this.iconFrc);
+
     this.frontendEnv = environment.environment;
 
     if (!strNoE(this.frontendEnv)) this.api.getAPIStatus().then(result => {

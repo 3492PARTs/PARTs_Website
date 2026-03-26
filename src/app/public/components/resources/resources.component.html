@@ -4,7 +4,16 @@
     <app-box [Title]="resource.title" [CenterTitle]="true" [Width]="'100%'" [Height]="'100%'">
       <div class="flex flex-direction-column align-items-center full-height">
         <div class="flex-grow-2 flex align-items-center">
+          @switch (resource.icon) {
+          @case ('bookstack')
+          @case ('TBA'){
+          <span class="icon" [ngClass]="{'bookstack':resource.icon == 'bookstack', 'tba': resource.icon == 'TBA'}"
+            [innerHTML]="resource.icon == 'bookstack' ? iconBookStack : iconTBA"></span>
+          }
+          @default {
           <span class="mdi mdi-icon mdi-{{resource.icon}}" [ngStyle]="{'rotate': resource.rotate}"></span>
+          }
+          }
         </div>
 
         <div class="flex-grow-2 flex align-items-center">
