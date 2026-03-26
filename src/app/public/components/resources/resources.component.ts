@@ -5,6 +5,8 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { CommonModule } from '@angular/common';
 import { APIService } from '@app/core/services/api.service';
 import { Season } from '@app/scouting/models/scouting.models';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ICON_SVG_BOOKSTACK, ICON_SVG_TBA } from '@app/core/constants/app.constants';
 
 @Component({
   selector: 'app-resources',
@@ -15,17 +17,23 @@ import { Season } from '@app/scouting/models/scouting.models';
 export class ResourcesComponent implements OnInit {
 
   resources = [
-    { title: 'PARTs 3492 Wiki', icon: 'bookshelf', rotate: '0deg', description: 'This is the team wiki where you will find information and training that we have written over the years.', link: 'https://wiki.parts3492.org' },
+    { title: 'PARTs 3492 Wiki', icon: 'bookstack', rotate: '0deg', description: 'This is the team wiki where you will find information and training that we have written over the years.', link: 'https://wiki.parts3492.org' },
     { title: 'PARTs 3492 GitHub Repository', icon: 'source-branch', rotate: '0deg', description: 'This is where you can look at the code we have created for our robots and other various projects over the years.', link: 'https://github.com/3492PARTs' },
     { title: 'Chief Delphi', icon: 'forum', rotate: '0deg', description: 'Forums and discussions created by FRC&reg; teams to talk about the FRC&reg; game and robots. Great for answering any questions you may have.', link: 'https://www.chiefdelphi.com/' },
-    { title: 'The Blue Alliance (TBA)', icon: 'alarm-light-outline', rotate: '180deg', description: 'FIRST Robotics Competition team information, event results, and videos. Click <a target="_blank" href="http://www.thebluealliance.com/team/3492">here</a> for the Blue Alliance page for Team 3492.', link: 'http://www.thebluealliance.com/' },
+    { title: 'The Blue Alliance (TBA)', icon: 'TBA', rotate: '180deg', description: 'FIRST Robotics Competition team information, event results, and videos. Click <a target="_blank" href="http://www.thebluealliance.com/team/3492">here</a> for the Blue Alliance page for Team 3492.', link: 'http://www.thebluealliance.com/' },
     { title: 'WPILib Docs', icon: 'book-open-page-variant', rotate: '0deg', description: 'The documentation on this site encompasses a number of helpful documents including control system manual and resources to help teams get started on programming a robot.', link: 'https://docs.wpilib.org' },
 
-  ]
+  ];
 
-  constructor(private api: APIService) { }
+  iconBookStack: SafeHtml | undefined = undefined;
+  iconTBA: SafeHtml | undefined = undefined;
+
+  constructor(private api: APIService, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
+    this.iconBookStack = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_BOOKSTACK);
+    this.iconTBA = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_TBA);
+
     this.api.get(true, 'public/season/current/').then((result: Season) => {
       this.resources.push({
         title: `FRC&reg; ${result.season} Game Manual`,

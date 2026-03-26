@@ -1,4 +1,4 @@
-@use "abstracts/variables";
+@use 'abstracts/variables';
 
 .mdi-icon {
   color: variables.$gray;
@@ -8,11 +8,32 @@
   }
 }
 
-.icon {
+:host ::ng-deep .icon {
   width: 10rem;
   display: block;
   margin: 0 auto;
   padding: 1em;
+
+  svg {
+    width: 8rem;
+    display: block;
+    margin: 0 auto;
+
+    path {
+      fill: variables.$gray !important;
+    }
+  }
+
+  &.bookstack svg {
+    padding-bottom: 8rem;
+    #path16 {
+      fill: #fff !important;
+    }
+  }
+
+  &.tba svg {
+    padding-bottom: 4rem;
+  }
 }
 
 h4 {

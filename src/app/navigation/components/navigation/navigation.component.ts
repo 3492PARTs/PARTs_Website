@@ -20,7 +20,7 @@ import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import * as Utils from '@app/core/utils/utils.functions';
-import { ICON_SVG_FRC } from '@app/core';
+import { ICON_SVG_FRC, ICON_SVG_GITHUB, ICON_SVG_BOOKSTACK } from '@app/core';
 
 import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -89,6 +89,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   subPage = '-1';
 
   iconFrc: SafeHtml | undefined = undefined;
+  iconGitHub: SafeHtml | undefined = undefined;
+  iconBookStack: SafeHtml | undefined = undefined;
 
   constructor(private gs: GeneralService,
     private renderer: Renderer2,
@@ -233,6 +235,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.iconFrc = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_FRC);
+    this.iconGitHub = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_GITHUB);
+    this.iconBookStack = this.sanitizer.bypassSecurityTrustHtml(ICON_SVG_BOOKSTACK);
 
     console.log('FRC SVG: ' + this.iconFrc);
 

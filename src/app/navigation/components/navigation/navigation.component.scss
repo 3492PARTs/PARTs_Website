@@ -265,6 +265,23 @@
 
         &:hover {
           color: #fff !important;
+
+          svg path {
+            fill: #fff !important;
+          }
+
+          svg #path16 {
+            fill: rgba(255, 255, 255, 0.7) !important;
+          }
+        }
+
+        svg {
+          margin-top: 0.5rem;
+          width: 25px;
+          height: 25px;
+          path {
+            fill: rgba(255, 255, 255, 0.3) !important;
+          }
         }
       }
     }
