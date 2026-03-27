@@ -12,7 +12,7 @@
   width: 10rem;
   display: block;
   margin: 0 auto;
-  padding: 1em;
+  //padding: 1em;
 
   svg {
     width: 8rem;
@@ -25,14 +25,15 @@
   }
 
   &.bookstack svg {
-    padding-bottom: 8rem;
+    //padding-bottom: 8rem;
     #path16 {
       fill: #fff !important;
     }
   }
 
   &.tba svg {
-    padding-bottom: 4rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
   }
 }
 
