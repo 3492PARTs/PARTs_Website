@@ -169,9 +169,12 @@
             <app-form-element [LabelText]="'Time Out'" [Type]="'datetime'" [(Model)]="attendanceEntry.time_out"
                 [Disabled]="isAttendanceFinal(attendanceEntry)" [FormGroupInline]="true"></app-form-element>
 
-
-
-
+            @if (attendanceEntry.meeting && !isAttendanceFinal(attendanceEntry) && (attendanceEntry.meeting.end ||
+            0).toString() !=
+            (attendanceEntry.time_out || 0).toString()) {
+            <app-button [ButtonType]="'calendar-end'" [Title]="'Set to meeting end'"
+                (FunctionCallBack)="setAttendanceToMeetingEnd(attendanceEntry)"></app-button>
+            }
 
             <app-form-element [LabelText]="'Absent'" [Type]="'checkbox'" [(Model)]="attendanceEntry.absent"
                 [Disabled]="isAttendanceFinal(attendanceEntry)"></app-form-element>

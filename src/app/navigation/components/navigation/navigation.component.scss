@@ -722,15 +722,15 @@ header {
         margin: 0 auto;
         padding: 2em 0;
         display: grid;
-        grid-template-columns: calc(50% - 0.5rem) calc(50% - 0.5rem);
+        //grid-template-columns: calc(50% - 0.5rem) calc(50% - 0.5rem);
+        grid-template-columns: calc(25% - 0.25rem) calc(25% - 0.25rem) calc(25% - 0.25rem) calc(25% - 0.25rem);
         grid-template-rows:
-          calc((100% / 7) - 2rem)
-          calc(1.2 * (100% / 7) - 2rem)
-          calc(0.8 * (100% / 7) - 2rem)
-          calc(0.9 * (100% / 7) - 2rem)
-          calc(0.8 * (100% / 7) - 2rem)
-          calc(1.6 * (100% / 7) - 2rem)
-          calc(0.7 * (100% / 7) - 2rem); //repeat(7, calc((100% / 7) - 2rem)); //25% 25% 25% 25%;
+          calc((100% / 6) - 2rem)
+          calc(1.25 * (100% / 6) - 2rem)
+          calc(0.75 * (100% / 6) - 2rem)
+          calc(1 * (100% / 6) - 2rem)
+          calc(1.5 * (100% / 6) - 2rem)
+          calc(1.5 * (100% / 6) - 2rem); //repeat(7, calc((100% / 7) - 2rem)); //25% 25% 25% 25%;
         column-gap: 2rem;
         row-gap: 2rem;
         justify-items: center;
@@ -763,7 +763,7 @@ header {
         h1 {
           color: white;
           grid-column-start: 1;
-          grid-column-end: span 2;
+          grid-column-end: span 4;
           //grid-row-start: 1;
           font-size: 3.3em;
           text-align: center;
@@ -784,6 +784,23 @@ header {
           fill: white;
         }
 
+        #toyota,
+        #putnamCoSchools,
+        #encovaFoundation {
+          grid-column-start: 1;
+          grid-column-end: span 2;
+        }
+
+        #aep,
+        #optimum,
+        #dow,
+        #villageSampler,
+        #nasarap {
+          grid-column-start: 3;
+          grid-column-end: span 2;
+        }
+
+        /*
         #nasarap,
         #WVSpaceGrant {
           grid-column-start: 1;
@@ -791,7 +808,7 @@ header {
           width: 200%;
           height: 200%;
           //grid-row-start: 1;
-        }
+        }*/
       }
     }
   }

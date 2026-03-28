@@ -228,6 +228,13 @@ export class MeetingAttendanceComponent implements OnInit {
     //this.checkLocation(this.saveAttendance.bind(this, attendance));
   }
 
+  setAttendanceToMeetingEnd(attendance: Attendance): void | null {
+    if (attendance.meeting && attendance.meeting.end) {
+      attendance.meeting.end = new Date(attendance.meeting.end);
+      attendance.time_out = new Date(attendance.meeting.end);
+    }
+  }
+
   attendMeeting(meeting: Meeting): void | null {
     this.attendanceService.attendMeeting(this.user!, meeting).then(() => this.getAttendance());
   }
