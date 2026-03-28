@@ -125,7 +125,7 @@ export class ScoutingService {
     return this.loadAllScoutingInfoPromise;
   }
 
-  loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void, timeToLive = 10_000): Promise<AllScoutInfo | null> {
+  loadAllScoutingInfo(loadingScreen = true, callbackFn?: (result: any) => void, timeToLive = 30_000): Promise<AllScoutInfo | null> {
     if (!this.loadAllScoutingInfoPromise) {
       this.loadAllScoutingInfoPromise = new Promise<AllScoutInfo | null>(resolve => {
         this.api.get(loadingScreen, 'scouting/all-scouting-info/', undefined, async (result: AllScoutInfo) => {
