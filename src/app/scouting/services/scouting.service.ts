@@ -889,7 +889,7 @@ export class ScoutingService {
                         this.modalService.successfulResponseBanner(result);
                       }, (err: any) => {
                         this.modalService.triggerError(err);
-                      });
+                      }, undefined, 1_000 * 60 * 5);
                     }
                   }).finally(() => {
                     this.gs.decrementOutstandingCalls();
@@ -921,7 +921,7 @@ export class ScoutingService {
         });
         else
           resolve(false);
-      }, undefined, 1_000 * 60 * 5);// longer timeout for pit scouting response since it can include images 5 mins
+      }, undefined, 1_000 * 60 * 20);// longer timeout for pit scouting response since it can include images 5 mins
     });
   }
 
