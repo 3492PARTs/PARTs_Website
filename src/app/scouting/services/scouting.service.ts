@@ -846,6 +846,14 @@ export class ScoutingService {
     return this.initPitScoutingPromise;
   }
 
+  addOutstandingPitScoutingResponse(spr: ScoutPitFormResponse): Promise<void> {
+    this.startUploadOutstandingResponsesTimeout();
+    return this.cs.ScoutPitFormResponse.AddAsync(spr).then(() => {
+      this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
+
+    });
+  }
+
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
       spr.answers.forEach(a => {
@@ -862,66 +870,66 @@ export class ScoutingService {
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
         this.modalService.successfulResponseBanner(result);
 
-        this.gs.incrementOutstandingCalls();
-
-        let count = 0;
-
-        const calls: Promise<void>[] = [];
-
-        spr?.pics.forEach(pic => {
-          if (pic.img && pic.img.size >= 0) {
-            const team_no = spr?.team_id;
-
-            calls.push(new Promise<void>(resolve => {
-              window.setTimeout(() => {
-                this.gs.incrementOutstandingCalls();
-
-                if (pic.img)
-                  resizeImageToMaxSize(pic.img, .2).then(resizedPic => {
-                    if (resizedPic) {
-                      const formData = new FormData();
-                      formData.append('file', resizedPic);
-                      formData.append('team_no', team_no?.toString() || '');
-                      formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
-                      formData.append('img_title', pic.img_title);
-
-                      this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
-                        this.modalService.successfulResponseBanner(result);
-                      }, (err: any) => {
-                        this.modalService.triggerError(err);
-                      }, undefined, 1_000 * 60).finally(() => {
-                        resolve();
-                        this.gs.decrementOutstandingCalls();
-                      });
-                    }
-                  });
-              }, 500 + (1000 * count++));
-            }));
-          }
-        });
-
-        await Promise.all(calls);
-
-        //window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1000 * count)
 
         if (id) {
           await this.cs.ScoutPitFormResponse.RemoveAsync(id);
         }
 
-        resolve(true);
       }, (err: any) => {
         this.startUploadOutstandingResponsesTimeout();
-        if (!id) this.cs.ScoutPitFormResponse.AddAsync(spr).then(() => {
-          this.gs.addBanner(new Banner('Failed to save, will try again later.', 3500));
-
-          resolve(true);
-        }).catch((reason: any) => {
-          console.log(reason);
-          resolve(false);
-        });
+        if (!id)
+          this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
+            console.log(reason);
+            resolve(false);
+          });
         else
           resolve(false);
-      }, undefined, 1_000 * 60 * (spr.pics.length + 1));// longer timeout for pit scouting response since it can include images 5 mins
+      }).then(async () => {
+
+        for (let i = 0; i < spr.pics.length; i++) {
+          let pic = spr.pics[i];
+          if (pic.img && pic.img.size >= 0) {
+            const team_no = spr?.team_id;
+
+            this.gs.incrementOutstandingCalls();
+
+            if (pic.img)
+              await resizeImageToMaxSize(pic.img, .2).then(async resizedPic => {
+                if (resizedPic) {
+                  const formData = new FormData();
+                  formData.append('file', resizedPic);
+                  formData.append('team_no', team_no?.toString() || '');
+                  formData.append('pit_image_typ', pic.pit_image_typ.pit_image_typ);
+                  formData.append('img_title', pic.img_title);
+
+                  let error = false;
+                  await this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
+                    this.modalService.successfulResponseBanner(result);
+                  }, (err: any) => {
+                    this.modalService.triggerError(err);
+                    if (!id)
+                      this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
+                        console.log(reason);
+                        error = true;
+                      });
+                    else
+                      error = true;
+
+                  }, undefined, 1_000 * 60).finally(() => {
+                    this.gs.decrementOutstandingCalls();
+                  });
+
+                  if (error) {
+                    resolve(false);
+                    return;
+                  }
+                }
+              });
+          }
+        }
+
+        resolve(true);
+      });
     });
   }
 
