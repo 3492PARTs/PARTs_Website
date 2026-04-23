@@ -872,7 +872,7 @@ export class ScoutingService {
           if (pic.img && pic.img.size >= 0) {
             const team_no = spr?.team_id;
 
-            calls.push(new Promise<void>(resolvePics => {
+            calls.push(new Promise<void>(resolve => {
               window.setTimeout(() => {
                 this.gs.incrementOutstandingCalls();
 
@@ -889,20 +889,20 @@ export class ScoutingService {
                         this.modalService.successfulResponseBanner(result);
                       }, (err: any) => {
                         this.modalService.triggerError(err);
+                      }, undefined, 1_000 * 60).finally(() => {
+                        resolve();
+                        this.gs.decrementOutstandingCalls();
                       });
                     }
-                  }).finally(() => {
-                    this.gs.decrementOutstandingCalls();
-                    resolvePics();
                   });
-              }, 1000 * ++count);
+              }, 500 + (1000 * count++));
             }));
           }
         });
 
         await Promise.all(calls);
 
-        window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1000 * count)
+        //window.setTimeout(() => { this.gs.decrementOutstandingCalls(); }, 1000 * count)
 
         if (id) {
           await this.cs.ScoutPitFormResponse.RemoveAsync(id);
@@ -921,7 +921,7 @@ export class ScoutingService {
         });
         else
           resolve(false);
-      }, undefined, 1_000 * 60 * 5);// longer timeout for pit scouting response since it can include images 5 mins
+      }, undefined, 1_000 * 60 * (spr.pics.length + 1));// longer timeout for pit scouting response since it can include images 5 mins
     });
   }
 
