@@ -856,6 +856,7 @@ export class ScoutingService {
 
   savePitScoutingResponse(spr: ScoutPitFormResponse, id?: number, loadingScreen = true): Promise<boolean> {
     return new Promise(resolve => {
+      // format answers
       spr.answers.forEach(a => {
         if (a.question) {
           a.question.answer = '';
@@ -864,36 +865,46 @@ export class ScoutingService {
       })
       spr.form_typ = 'pit';
 
+      // clone the object to avoid uploading the images with form data, we will upload them separately, and the api will link them together with the team_no and pit_image_typ fields
       const sprPost = cloneObject(spr);
-      sprPost.robotPics = []; // we don't want to upload the images here
+      sprPost.robotPics = [];
 
+      // upload form data
       this.api.post(loadingScreen, 'form/save-answers/', sprPost, async (result: any) => {
         this.modalService.successfulResponseBanner(result);
 
 
+        // once it has an id on the server, we can remove it from the outstanding responses in the cache if it was there, 
+        // since it has been successfully uploaded at this point
         if (id) {
           await this.cs.ScoutPitFormResponse.RemoveAsync(id);
         }
 
       }, (err: any) => {
-        this.startUploadOutstandingResponsesTimeout();
-        if (!id)
+        // if it fails to save, add to outstanding responses to try again later
+        if (!id) {
+          this.startUploadOutstandingResponsesTimeout();
           this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
             console.log(reason);
+            // if it fails to add to the outstanding responses, then we have no way to save this response, so we should show an error
             resolve(false);
           });
+        }
         else
+          // if it already had an id it cant be added to the outstanding responses, so we should just show an error
           resolve(false);
       }).then(async () => {
-
+        // if the form data is saved successfully, we can try to upload the images, if there are any
         for (let i = 0; i < spr.pics.length; i++) {
           let pic = spr.pics[i];
+
           if (pic.img && pic.img.size >= 0) {
             const team_no = spr?.team_id;
 
             this.gs.incrementOutstandingCalls();
 
             if (pic.img)
+              // we will resize the image to a max size of 200kb to save bandwidth
               await resizeImageToMaxSize(pic.img, .2).then(async resizedPic => {
                 if (resizedPic) {
                   const formData = new FormData();
@@ -903,21 +914,23 @@ export class ScoutingService {
                   formData.append('img_title', pic.img_title);
 
                   let error = false;
+                  //upload one image at a time, if any of them fail, we will show an error and add the response to the outstanding responses to try again later
                   await this.api.post(true, 'scouting/pit/save-picture/', formData, (result: any) => {
                     this.modalService.successfulResponseBanner(result);
+                    // remove the pic from the array so it doesn't get uploaded again if we have to add to outstanding responses
+                    spr.pics.splice(i--, 1);
                   }, (err: any) => {
                     this.modalService.triggerError(err);
-                    if (!id)
-                      this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
-                        console.log(reason);
-                        error = true;
-                      });
-                    else
+                    // if any of the image uploads fail, we should add the response to the outstanding responses to try again later
+                    this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
+                      console.log(reason);
                       error = true;
+                    });
 
-                  }, undefined, 1_000 * 60).finally(() => {
-                    this.gs.decrementOutstandingCalls();
-                  });
+                  }, undefined, 1_000 * 60) // set timeout to 1 min since uploading images can take a while
+                    .finally(() => {
+                      this.gs.decrementOutstandingCalls();
+                    });
 
                   if (error) {
                     resolve(false);
