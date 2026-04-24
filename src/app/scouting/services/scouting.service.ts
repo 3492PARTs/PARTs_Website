@@ -884,7 +884,9 @@ export class ScoutingService {
         // if it fails to save, add to outstanding responses to try again later
         if (!id) {
           this.startUploadOutstandingResponsesTimeout();
-          this.addOutstandingPitScoutingResponse(spr).catch((reason: any) => {
+          this.addOutstandingPitScoutingResponse(spr).then(() => {
+            resolve(true);
+          }).catch((reason: any) => {
             console.log(reason);
             // if it fails to add to the outstanding responses, then we have no way to save this response, so we should show an error
             resolve(false);
@@ -940,8 +942,9 @@ export class ScoutingService {
               });
           }
         }
-
         resolve(true);
+      }).catch(() => {
+        resolve(false);
       });
     });
   }
