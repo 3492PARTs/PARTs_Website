@@ -227,9 +227,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   setSiteBannerHeight(): void {
-    if (this.siteBannersElementRef) {
+    if (this.siteBannersElementRef && this.siteBanners.length > 0) {
       const height = this.siteBannersElementRef.nativeElement.scrollHeight;
       this.siteBannerHeight = height + 'px';
+    }
+    else {
+      this.siteBannerHeight = '0px';
     }
   }
 
