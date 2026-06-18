@@ -188,7 +188,7 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getUserSeasons(): void {
-    this.api.get(true, 'scouting/admin/user-season/', undefined, (result: UserSeason[]) => {
+    this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
       this.userSeasons = result || [];
       this.buildActiveUserAvailableSeasons();
     }, (err: any) => {
@@ -287,7 +287,7 @@ export class ManageSeasonComponent implements OnInit {
 
   private postUserSeason(userSeason: UserSeason): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.api.post(true, 'scouting/admin/user-season/', userSeason, () => {
+      this.api.post(true, 'scouting/admin/user-seasons/', userSeason, () => {
         resolve();
       }, (err: any) => {
         reject(err);
@@ -297,7 +297,7 @@ export class ManageSeasonComponent implements OnInit {
 
   private deleteUserSeason(seasonId: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.api.delete(true, 'scouting/admin/user-season/', {
+      this.api.delete(true, 'scouting/admin/user-seasons/', {
         user_id: this.activeUser.id.toString(),
         season_id: seasonId.toString()
       }, () => {
