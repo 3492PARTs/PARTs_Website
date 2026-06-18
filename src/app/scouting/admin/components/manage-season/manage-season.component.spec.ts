@@ -44,11 +44,12 @@ describe('ManageSeasonComponent', () => {
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache',
+      'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache', 'loadSeasons',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.getTeams.and.returnValue(Promise.resolve(null) as any);
     mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockSS.loadSeasons.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
     ]);
@@ -190,24 +191,31 @@ describe('ManageSeasonComponent', () => {
     expect(component.getUserSeasonsForTable(1)).toBe('2025, 2024');
   });
 
-  it('showUserSeasonModal should load user seasons for selected user', () => {
+  it('showUserSeasonModal should load user seasons for selected user', async () => {
     const user = Object.assign(new User(), { id: 10, first_name: 'Scout', last_name: 'One' });
     const userInfo = Object.assign(new UserInfo(), { user });
     const season = Object.assign(new Season(), { id: 2, season: '2026' });
+    const season3 = Object.assign(new Season(), { id: 3, season: '2027' });
     const userSeasons = [Object.assign(new UserSeason(), { user, season, void_ind: 'n' })];
 
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
       onNext?.(userSeasons);
       return Promise.resolve(userSeasons);
     });
+    mockSS.loadSeasons.and.returnValue(Promise.resolve([season, season3]));
 
     component.showUserSeasonModal(userInfo);
+    await Promise.resolve();
+    await Promise.resolve();
 
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', { user_id: '10' }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockSS.loadSeasons).toHaveBeenCalled();
     expect(component.userSeasonModalVisible).toBeTrue();
     expect(component.activeUser.id).toBe(10);
     expect(component.activeUserSeasons.length).toBe(1);
     expect(component.activeUserSeasonIdsAtOpen).toEqual([2]);
+    expect(component.activeUserAvailableSeasons.length).toBe(1);
+    expect(component.activeUserAvailableSeasons[0].id).toBe(3);
   });
 
   it('addSeasonToActiveUser should add season and avoid duplicates', () => {
@@ -225,7 +233,7 @@ describe('ManageSeasonComponent', () => {
 
   it('saveUserSeasons should post and delete changed season links', async () => {
     component.activeUser = Object.assign(new User(), { id: 1 });
-    component.seasons = [
+    (component as any).allSeasons = [
       Object.assign(new Season(), { id: 1, season: '2025' }),
       Object.assign(new Season(), { id: 2, season: '2026' }),
     ];
