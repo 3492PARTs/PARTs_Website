@@ -199,7 +199,9 @@ export class ManageSeasonComponent implements OnInit {
   getUserNameForTable(userId: number): string {
     const userInfo = this.usersScoutingUserInfo.find(ui => ui.user.id === userId);
     if (!userInfo?.user) return '';
-    return `${userInfo.user.first_name} ${userInfo.user.last_name}`;
+    const firstName = userInfo.user.first_name || '';
+    const lastName = userInfo.user.last_name || '';
+    return `${firstName} ${lastName}`.trim();
   }
 
   getUserSeasonsForTable(userId: number): string {
@@ -251,9 +253,13 @@ export class ManageSeasonComponent implements OnInit {
 
     try {
       for (const seasonId of toAdd) {
+        const season = this.seasons.find(s => s.id === seasonId);
+        if (!season) {
+          throw new Error(`Unable to find season ${seasonId} while saving user seasons.`);
+        }
         const userSeason = new UserSeason();
         userSeason.user = cloneObject(this.activeUser);
-        userSeason.season = cloneObject(this.seasons.find(s => s.id === seasonId) || new Season());
+        userSeason.season = cloneObject(season);
         userSeason.void_ind = 'n';
         await this.postUserSeason(userSeason);
       }
