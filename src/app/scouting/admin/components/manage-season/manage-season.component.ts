@@ -66,6 +66,8 @@ export class ManageSeasonComponent implements OnInit {
   activeUserAvailableSeasons: Season[] = [];
   selectedSeasonToAdd: Season | null = null;
 
+  private allSeasons: Season[] = [];
+
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
@@ -190,7 +192,6 @@ export class ManageSeasonComponent implements OnInit {
   getUserSeasons(): void {
     this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
       this.userSeasons = result || [];
-      this.buildActiveUserAvailableSeasons();
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
@@ -219,8 +220,11 @@ export class ManageSeasonComponent implements OnInit {
     this.api.get(true, 'scouting/admin/user-seasons/', { user_id: this.activeUser.id.toString() }, (result: UserSeason[]) => {
       this.activeUserSeasons = result || [];
       this.activeUserSeasonIdsAtOpen = this.activeUserSeasons.map(us => us.season.id);
-      this.buildActiveUserAvailableSeasons();
-      this.userSeasonModalVisible = true;
+      this.ss.loadSeasons().then(seasons => {
+        this.allSeasons = seasons || [];
+        this.updateAvailableSeasons();
+        this.userSeasonModalVisible = true;
+      });
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
@@ -238,12 +242,12 @@ export class ManageSeasonComponent implements OnInit {
     userSeason.void_ind = 'n';
     this.activeUserSeasons.push(userSeason);
     this.selectedSeasonToAdd = null;
-    this.buildActiveUserAvailableSeasons();
+    this.updateAvailableSeasons();
   }
 
   removeSeasonFromActiveUser(userSeason: UserSeason): void {
     this.activeUserSeasons = this.activeUserSeasons.filter(us => us.season.id !== userSeason.season.id);
-    this.buildActiveUserAvailableSeasons();
+    this.updateAvailableSeasons();
   }
 
   async saveUserSeasons(): Promise<void> {
@@ -255,7 +259,7 @@ export class ManageSeasonComponent implements OnInit {
 
     try {
       for (const seasonId of toAdd) {
-        const season = this.seasons.find(s => s.id === seasonId);
+        const season = this.allSeasons.find(s => s.id === seasonId);
         if (!season) {
           throw new Error(`Unable to find season ${seasonId} while saving user seasons.`);
         }
@@ -282,9 +286,9 @@ export class ManageSeasonComponent implements OnInit {
     }
   }
 
-  private buildActiveUserAvailableSeasons(): void {
+  private updateAvailableSeasons(): void {
     const selectedSeasonIds = new Set(this.activeUserSeasons.map(us => us.season.id));
-    this.activeUserAvailableSeasons = this.seasons.filter(season => !selectedSeasonIds.has(season.id));
+    this.activeUserAvailableSeasons = this.allSeasons.filter(season => !selectedSeasonIds.has(season.id));
   }
 
   private postUserSeason(userSeason: UserSeason): Promise<void> {
