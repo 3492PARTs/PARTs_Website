@@ -1,10 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 import { Event, Season } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { RetMessage } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
-import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
@@ -16,11 +15,15 @@ import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-manage-event',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
   templateUrl: './manage-event.component.html',
   styleUrls: ['./manage-event.component.scss']
 })
 export class ManageEventComponent {
+  private readonly api = inject(APIService);
+  private readonly modalService = inject(ModalService);
+  private readonly ss = inject(ScoutingService);
+
   @Input() seasons: Season[] = [];
   @Input() currentSeason = new Season();
   @Input() currentEvent = new Event();
@@ -35,8 +38,6 @@ export class ManageEventComponent {
   removeSeasonEventModalVisible = false;
 
   syncEventResponse = new RetMessage();
-
-  constructor(private api: APIService, private modalService: ModalService, private ss: ScoutingService) { }
 
   saveEvent(): void {
     if (strNoE(this.newEvent.event_cd)) {

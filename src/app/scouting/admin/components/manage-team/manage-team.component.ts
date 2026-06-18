@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 import { Event, EventToTeams, Season, Team } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
@@ -20,6 +20,11 @@ import { cloneObject } from '@app/core/utils/utils.functions';
   styleUrls: ['./manage-team.component.scss']
 })
 export class ManageTeamComponent {
+  private readonly api = inject(APIService);
+  private readonly gs = inject(GeneralService);
+  private readonly modalService = inject(ModalService);
+  private readonly ss = inject(ScoutingService);
+
   @Input() seasons: Season[] = [];
   @Input() teams: Team[] = [];
   @Output() refreshRequested = new EventEmitter<void>();
@@ -40,8 +45,6 @@ export class ManageTeamComponent {
   manageTeamModalVisible = false;
   linkTeamToEventModalVisible = false;
   removeTeamFromEventModalVisible = false;
-
-  constructor(private api: APIService, private gs: GeneralService, private modalService: ModalService, private ss: ScoutingService) { }
 
   saveTeam(): void {
     this.api.post(true, 'scouting/admin/team/', this.newTeam, () => {

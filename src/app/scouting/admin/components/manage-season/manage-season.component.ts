@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Season, Team, Event } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -24,6 +24,12 @@ import { ManageMatchComponent } from '../manage-match/manage-match.component';
   styleUrls: ['./manage-season.component.scss']
 })
 export class ManageSeasonComponent implements OnInit {
+  private readonly api = inject(APIService);
+  private readonly gs = inject(GeneralService);
+  private readonly authService = inject(AuthService);
+  private readonly ss = inject(ScoutingService);
+  private readonly modalService = inject(ModalService);
+
   currentSeason = new Season();
   currentEvent = new Event();
 
@@ -39,8 +45,6 @@ export class ManageSeasonComponent implements OnInit {
 
   addSeasonModalVisible = false;
   removeSeasonModalVisible = false;
-
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService, private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -60,9 +64,6 @@ export class ManageSeasonComponent implements OnInit {
         this.events = result.events;
         this.currentSeason = result.seasons.find(s => s.current === 'y') || new Season();
         this.currentEvent = result.events.find(e => e.current === 'y') || new Event();
-        result.schedule_types.forEach(async st => {
-          const tmp = result.schedules.filter(s => s.sch_typ === st.sch_typ);
-        });
 
         this.getEventsForCurrentSeason();
       };
