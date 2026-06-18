@@ -189,14 +189,6 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  getUserSeasons(): void {
-    this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
-      this.userSeasons = result || [];
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
   getUserNameForTable(userId: number): string {
     const userInfo = this.usersScoutingUserInfo.find(ui => ui.user.id === userId);
     if (!userInfo?.user) return '';
@@ -212,6 +204,14 @@ export class ManageSeasonComponent implements OnInit {
       .filter((season): season is string => season !== undefined && season !== null && season !== '')
       .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
       .join(', ');
+  }
+
+  getUserSeasons(): void {
+    this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
+      this.userSeasons = result || [];
+    }, (err: any) => {
+      this.modalService.triggerError(err);
+    });
   }
 
   showUserSeasonModal(userInfo: UserInfo): void {
