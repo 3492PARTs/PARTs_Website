@@ -87,19 +87,9 @@ export class ManageTeamComponent {
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
     const teamList = cloneObject(this.teams);
-    const existingEventTeams = cloneObject(eventTeamList);
+    const eventTeamNumbers = new Set(eventTeamList.map(team => team.team_no));
 
-    for (let i = 0; i < teamList.length; i++) {
-      for (let j = 0; j < existingEventTeams.length; j++) {
-        if (teamList[i].team_no === existingEventTeams[j].team_no) {
-          teamList.splice(i--, 1);
-          existingEventTeams.splice(j--, 1);
-          break;
-        }
-      }
-    }
-
-    return teamList;
+    return teamList.filter((team: Team) => !eventTeamNumbers.has(team.team_no));
   }
 
   clearEventToTeams(): void {
@@ -141,12 +131,6 @@ export class ManageTeamComponent {
   }
 
   private async getEventsForSeason(season_id: number): Promise<Event[]> {
-    let eventsList: Event[] = [];
-
-    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
-      eventsList = es;
-    });
-
-    return eventsList;
+    return await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id }));
   }
 }

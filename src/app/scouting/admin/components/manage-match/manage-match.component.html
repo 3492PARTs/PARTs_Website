@@ -9,7 +9,7 @@
         </app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="newMatchEvents"
-          [DisplayProperty]="'event_nm'" [(Model)]="newMatch.event" (FunctionCallBack)="getTeamsForNewMatch()"
+          [DisplayProperty]="'event_nm'" [(Model)]="newMatch.event" (FunctionCallBack)="setNewMatchTeams()"
           [MinWidth]="'100px'" [FormGroupInline]="true" [Required]="true">
         </app-form-element>
 
