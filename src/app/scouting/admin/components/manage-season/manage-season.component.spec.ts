@@ -194,10 +194,16 @@ describe('ManageSeasonComponent', () => {
     const user = Object.assign(new User(), { id: 10, first_name: 'Scout', last_name: 'One' });
     const userInfo = Object.assign(new UserInfo(), { user });
     const season = Object.assign(new Season(), { id: 2, season: '2026' });
-    component.userSeasons = [Object.assign(new UserSeason(), { user, season, void_ind: 'n' })];
+    const userSeasons = [Object.assign(new UserSeason(), { user, season, void_ind: 'n' })];
+
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.(userSeasons);
+      return Promise.resolve(userSeasons);
+    });
 
     component.showUserSeasonModal(userInfo);
 
+    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', { user_id: '10' }, jasmine.any(Function), jasmine.any(Function));
     expect(component.userSeasonModalVisible).toBeTrue();
     expect(component.activeUser.id).toBe(10);
     expect(component.activeUserSeasons.length).toBe(1);
