@@ -74,7 +74,7 @@ export class ManageMatchComponent {
     this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.id || NaN);
   }
 
-  setNewMatchTeams(): void {
+  populateTeamsForMatch(): void {
     this.newMatchTeams = cloneObject(this.newMatch.event?.teams || []);
   }
 
