@@ -155,7 +155,10 @@ textarea.form-control {
   display: inline-block;
   padding-right: 0.5em;
   vertical-align: top;
-  margin-top: -2.5px; // just added on 2/13/26 watch out for issues
+  //margin-top: -2.5px; // just added on 2/13/26 watch out for issues
+  // removed on 6/18/26 because it was causing the label text on modals inparticular
+  // to be slightly cut off. when you notice why this is needed again
+  // make a note why it is needed and compare.
 
   &.checkboxElement {
     display: inline-flex;
