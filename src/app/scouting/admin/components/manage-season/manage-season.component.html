@@ -88,6 +88,42 @@
     </div>
   </app-form-element-group>
 
+  <app-form-element-group [LabelText]="'Manage User Seasons'">
+    <app-table [TableCols]="userSeasonTableCols" [TableData]="usersScoutingUserInfo" [EnableFilter]="true"
+      [ShowEditButton]="true" (EditRecordCallBack)="showUserSeasonModal($event)" [Scrollable]="true"
+      [ScrollHeight]="'calc(100vh - 28rem)'">
+    </app-table>
+
+    <app-modal [Title]="'Manage User Seasons'" [(Visible)]="userSeasonModalVisible" [MaxWidth]="'500px'">
+      <app-form (SubmitFunction)="saveUserSeasons()">
+        <app-form-element-group [LabelText]="'User'" [InlineElements]="true">
+          <p>{{ activeUser.get_full_name() }}</p>
+        </app-form-element-group>
+
+        <app-form-element-group [LabelText]="'Linked Seasons'">
+          <div class="flex align-items-center">
+            <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="activeUserAvailableSeasons"
+              [DisplayProperty]="'season'" [FormGroupInline]="true" [(Model)]="selectedSeasonToAdd"
+              [DisplayEmptyOption]="true" [MinWidth]="'100px'">
+            </app-form-element>
+
+            <div class="padding-bottom-2rem">
+              <app-button [ButtonType]="'add'" (FunctionCallBack)="addSeasonToActiveUser()"></app-button>
+            </div>
+          </div>
+
+          <app-table [TableCols]="activeUserSeasonTableCols" [TableData]="activeUserSeasons" [ShowRemoveButton]="true"
+            (RemoveRecordCallBack)="removeSeasonFromActiveUser($event)" [Width]="'100%'">
+          </app-table>
+        </app-form-element-group>
+
+        <app-button-ribbon>
+          <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+        </app-button-ribbon>
+      </app-form>
+    </app-modal>
+  </app-form-element-group>
+
   <app-manage-event [seasons]="seasons" [currentSeason]="currentSeason" [currentEvent]="currentEvent"
     (refreshRequested)="init()">
   </app-manage-event>

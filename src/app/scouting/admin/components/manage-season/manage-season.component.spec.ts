@@ -12,7 +12,8 @@ import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { ModalService } from '@app/core/services/modal.service';
 import { createMockSwPush } from '../../../../../test-helpers';
-import { Event, Season, Team } from '@app/scouting/models/scouting.models';
+import { Event, Season, Team, UserInfo, UserSeason } from '@app/scouting/models/scouting.models';
+import { User } from '@app/auth/models/user.models';
 
 describe('ManageSeasonComponent', () => {
   let component: ManageSeasonComponent;
@@ -175,5 +176,75 @@ describe('ManageSeasonComponent', () => {
     component.resetSeasonForm();
 
     expect(component.init).toHaveBeenCalled();
+  });
+
+  it('getUserSeasonsForTable should return comma separated seasons', () => {
+    const user = Object.assign(new User(), { id: 1 });
+    const season2025 = Object.assign(new Season(), { id: 1, season: '2025' });
+    const season2024 = Object.assign(new Season(), { id: 2, season: '2024' });
+    component.userSeasons = [
+      Object.assign(new UserSeason(), { user, season: season2024 }),
+      Object.assign(new UserSeason(), { user, season: season2025 }),
+    ];
+
+    expect(component.getUserSeasonsForTable(1)).toBe('2025, 2024');
+  });
+
+  it('showUserSeasonModal should load user seasons for selected user', () => {
+    const user = Object.assign(new User(), { id: 10, first_name: 'Scout', last_name: 'One' });
+    const userInfo = Object.assign(new UserInfo(), { user });
+    const season = Object.assign(new Season(), { id: 2, season: '2026' });
+    component.userSeasons = [Object.assign(new UserSeason(), { user, season, void_ind: 'n' })];
+
+    component.showUserSeasonModal(userInfo);
+
+    expect(component.userSeasonModalVisible).toBeTrue();
+    expect(component.activeUser.id).toBe(10);
+    expect(component.activeUserSeasons.length).toBe(1);
+    expect(component.activeUserSeasonIdsAtOpen).toEqual([2]);
+  });
+
+  it('addSeasonToActiveUser should add season and avoid duplicates', () => {
+    component.activeUser = Object.assign(new User(), { id: 1 });
+    const season = Object.assign(new Season(), { id: 3, season: '2027' });
+    component.selectedSeasonToAdd = season;
+
+    component.addSeasonToActiveUser();
+    component.selectedSeasonToAdd = season;
+    component.addSeasonToActiveUser();
+
+    expect(component.activeUserSeasons.length).toBe(1);
+    expect(component.activeUserSeasons[0].season.id).toBe(3);
+  });
+
+  it('saveUserSeasons should post and delete changed season links', async () => {
+    component.activeUser = Object.assign(new User(), { id: 1 });
+    component.seasons = [
+      Object.assign(new Season(), { id: 1, season: '2025' }),
+      Object.assign(new Season(), { id: 2, season: '2026' }),
+    ];
+    component.activeUserSeasonIdsAtOpen = [1];
+    component.activeUserSeasons = [Object.assign(new UserSeason(), {
+      user: component.activeUser,
+      season: Object.assign(new Season(), { id: 2, season: '2026' }),
+      void_ind: 'n'
+    })];
+
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+
+    await component.saveUserSeasons();
+
+    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-season/', jasmine.any(UserSeason), jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.delete).toHaveBeenCalledWith(true, 'scouting/admin/user-season/', {
+      user_id: '1',
+      season_id: '1'
+    }, jasmine.any(Function), jasmine.any(Function));
   });
 });
