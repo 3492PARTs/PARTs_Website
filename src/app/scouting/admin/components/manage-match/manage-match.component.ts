@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 
 import { CompetitionLevel, Event, Match, Season, Team } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
@@ -20,6 +20,11 @@ import { cloneObject } from '@app/core/utils/utils.functions';
   styleUrls: ['./manage-match.component.scss']
 })
 export class ManageMatchComponent {
+  private readonly api = inject(APIService);
+  private readonly gs = inject(GeneralService);
+  private readonly modalService = inject(ModalService);
+  private readonly ss = inject(ScoutingService);
+
   @Input() seasons: Season[] = [];
   @Input() currentEvent = new Event();
   @Output() refreshRequested = new EventEmitter<void>();
@@ -38,8 +43,6 @@ export class ManageMatchComponent {
     new CompetitionLevel('sf', 'Semi Finals'),
     new CompetitionLevel('f', 'Finals')
   ];
-
-  constructor(private api: APIService, private gs: GeneralService, private modalService: ModalService, private ss: ScoutingService) { }
 
   saveMatch(): void {
     this.api.post(true, 'scouting/admin/match/', this.newMatch, () => {

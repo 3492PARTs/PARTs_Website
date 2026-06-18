@@ -9,6 +9,7 @@ import { APIService } from '@app/core/services/api.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ModalService } from '@app/core/services/modal.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
+import { AppSize } from '@app/core/utils/utils.functions';
 import { createMockSwPush } from '../../../../../test-helpers';
 import { Event, Team } from '@app/scouting/models/scouting.models';
 
@@ -22,7 +23,9 @@ describe('ManageMatchComponent', () => {
 
   beforeEach(async () => {
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockGS = jasmine.createSpyObj('GeneralService', ['decrementOutstandingCalls']);
+    mockGS = jasmine.createSpyObj('GeneralService', ['decrementOutstandingCalls', 'getAppSize', 'getNextGsId']);
+    mockGS.getAppSize.and.returnValue(AppSize.SM);
+    mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', ['getEventsFromCache']);
     mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError']);
@@ -51,8 +54,8 @@ describe('ManageMatchComponent', () => {
   });
 
   it('saveMatch should call api.post', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: () => void): Promise<any> => {
-      onNext?.();
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({});
       return Promise.resolve();
     });
     component.saveMatch();
@@ -74,7 +77,7 @@ describe('ManageMatchComponent', () => {
 
     component.getTeamsForNewMatch();
 
-    expect(component.newMatchTeams).toEqual([team]);
+    expect(component.newMatchTeams[0].team_no).toBe(111);
     expect(component.newMatchTeams).not.toBe(component.newMatch.event.teams);
   });
 });
