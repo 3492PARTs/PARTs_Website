@@ -81,23 +81,22 @@
       </app-modal>
 
       @if (currentSeason.id) {
-        <app-button [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
-          Sync Season
-        </app-button>
+      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncSeason()">
+        Sync Season
+      </app-button>
       }
     </div>
   </app-form-element-group>
 
   <app-form-element-group [LabelText]="'Manage User Seasons'">
-    <app-table [TableCols]="userSeasonTableCols" [TableData]="usersScoutingUserInfo" [EnableFilter]="true"
-      [ShowEditButton]="true" (EditRecordCallBack)="showUserSeasonModal($event)" [Scrollable]="true"
-      [ScrollHeight]="'calc(100vh - 28rem)'">
+    <app-table [TableCols]="userSeasonTableCols" [TableData]="users" [EnableFilter]=" true" [ShowEditButton]="true"
+      (EditRecordCallBack)="showUserSeasonModal($event)" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 28rem)'">
     </app-table>
 
     <app-modal [Title]="'Manage User Seasons'" [(Visible)]="userSeasonModalVisible" [MaxWidth]="'500px'">
       <app-form (SubmitFunction)="saveUserSeasons()">
         <app-form-element-group [LabelText]="'User'" [InlineElements]="true">
-          <p>{{ activeUser.get_full_name() }}</p>
+          <p>{{ activeUser.name }}</p>
         </app-form-element-group>
 
         <app-form-element-group [LabelText]="'Linked Seasons'">
@@ -135,10 +134,10 @@
   </app-manage-match>
 
   @if (syncSeasonResponse.retMessage) {
-    <app-form-element-group [LabelText]="'Season Response'">
-      <div id="respose">
-        <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
-      </div>
-    </app-form-element-group>
+  <app-form-element-group [LabelText]="'Season Response'">
+    <div id="respose">
+      <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
+    </div>
+  </app-form-element-group>
   }
 </app-box>
