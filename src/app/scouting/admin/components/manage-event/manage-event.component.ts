@@ -110,12 +110,6 @@ export class ManageEventComponent {
   }
 
   private async getEventsForSeason(season_id: number): Promise<Event[]> {
-    let eventsList: Event[] = [];
-
-    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
-      eventsList = es;
-    });
-
-    return eventsList;
+    return await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id }));
   }
 }

@@ -74,17 +74,11 @@ export class ManageMatchComponent {
     this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.id || NaN);
   }
 
-  getTeamsForNewMatch(): void {
+  setNewMatchTeams(): void {
     this.newMatchTeams = cloneObject(this.newMatch.event?.teams || []);
   }
 
   private async getEventsForSeason(season_id: number): Promise<Event[]> {
-    let eventsList: Event[] = [];
-
-    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
-      eventsList = es;
-    });
-
-    return eventsList;
+    return await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id }));
   }
 }
