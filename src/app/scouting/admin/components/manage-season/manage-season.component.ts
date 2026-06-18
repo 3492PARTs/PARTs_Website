@@ -20,6 +20,7 @@ import { ManageTeamComponent } from '../manage-team/manage-team.component';
 import { ManageMatchComponent } from '../manage-match/manage-match.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { cloneObject } from '@app/core/utils/utils.functions';
+import { UserService } from '@app/user/services/user.service';
 @Component({
   selector: 'app-manage-season',
   imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent, ManageEventComponent, ManageTeamComponent, ManageMatchComponent, TableComponent],
@@ -43,12 +44,12 @@ export class ManageSeasonComponent implements OnInit {
   newSeason = new Season();
   delSeason: number | null = null;
   eventList: Event[] = [];
-  usersScoutingUserInfo: UserInfo[] = [];
+  users: User[] = [];
   userSeasons: UserSeason[] = [];
 
   userSeasonTableCols: TableColType[] = [
-    { PropertyName: 'user.id', ColLabel: 'User', Width: '220px', Type: 'function', ColValueFunction: this.getUserNameForTable.bind(this) },
-    { PropertyName: 'user.id', ColLabel: 'Seasons', Type: 'function', ColValueFunction: this.getUserSeasonsForTable.bind(this) },
+    { PropertyName: 'name', ColLabel: 'User', Width: '220px' },
+    { PropertyName: 'id', ColLabel: 'Seasons', Type: 'function', ColValueFunction: this.getUserSeasonsForTable.bind(this) },
   ];
   activeUserSeasonTableCols: TableColType[] = [
     { PropertyName: 'season.season', ColLabel: 'Season' },
@@ -68,6 +69,8 @@ export class ManageSeasonComponent implements OnInit {
 
   private allSeasons: Season[] = [];
 
+  constructor(private us: UserService) { }
+
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
       if (r === AuthCallStates.comp) {
@@ -78,7 +81,7 @@ export class ManageSeasonComponent implements OnInit {
 
   init(): void {
     this.getAllTeams();
-    this.getUsersScoutingUserInfo();
+    this.getUsers();
     this.getUserSeasons();
 
     this.gs.incrementOutstandingCalls();
@@ -181,22 +184,6 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  getUsersScoutingUserInfo(): void {
-    this.api.get(true, 'scouting/admin/scouting-user-info/', undefined, (result: UserInfo[]) => {
-      this.usersScoutingUserInfo = result || [];
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
-  getUserNameForTable(userId: number): string {
-    const userInfo = this.usersScoutingUserInfo.find(ui => ui.user.id === userId);
-    if (!userInfo?.user) return '';
-    const firstName = userInfo.user.first_name || '';
-    const lastName = userInfo.user.last_name || '';
-    return `${firstName} ${lastName}`.trim();
-  }
-
   getUserSeasonsForTable(userId: number): string {
     return this.userSeasons
       .filter(us => us.user?.id === userId && us.void_ind !== 'y')
@@ -204,6 +191,12 @@ export class ManageSeasonComponent implements OnInit {
       .filter((season): season is string => season !== undefined && season !== null && season !== '')
       .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
       .join(', ');
+  }
+
+  getUsers(): void {
+    this.us.getUsers(1, 0).then(us => {
+      this.users = us || [];
+    });
   }
 
   getUserSeasons(): void {
@@ -214,8 +207,8 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  showUserSeasonModal(userInfo: UserInfo): void {
-    this.activeUser = cloneObject(userInfo.user);
+  showUserSeasonModal(user: User): void {
+    this.activeUser = cloneObject(user);
     this.selectedSeasonToAdd = null;
     this.api.get(true, 'scouting/admin/user-seasons/', { user_id: this.activeUser.id.toString() }, (result: UserSeason[]) => {
       this.activeUserSeasons = result || [];
@@ -240,7 +233,7 @@ export class ManageSeasonComponent implements OnInit {
     userSeason.user = cloneObject(this.activeUser);
     userSeason.season = cloneObject(this.selectedSeasonToAdd);
     userSeason.void_ind = 'n';
-    this.activeUserSeasons.push(userSeason);
+    this.activeUserSeasons = [...this.activeUserSeasons, userSeason];
     this.selectedSeasonToAdd = null;
     this.updateAvailableSeasons();
   }
@@ -293,7 +286,7 @@ export class ManageSeasonComponent implements OnInit {
 
   private postUserSeason(userSeason: UserSeason): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.api.post(true, 'scouting/admin/user-season/', userSeason, () => {
+      this.api.post(true, 'scouting/admin/user-seasons/', userSeason, () => {
         resolve();
       }, (err: any) => {
         reject(err);
@@ -303,7 +296,7 @@ export class ManageSeasonComponent implements OnInit {
 
   private deleteUserSeason(seasonId: number): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.api.delete(true, 'scouting/admin/user-season/', {
+      this.api.delete(true, 'scouting/admin/user-seasons/', {
         user_id: this.activeUser.id.toString(),
         season_id: seasonId.toString()
       }, () => {
