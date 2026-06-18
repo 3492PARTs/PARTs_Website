@@ -86,10 +86,9 @@ export class ManageTeamComponent {
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
-    const teamList = cloneObject(this.teams);
     const eventTeamNumbers = new Set(eventTeamList.map(team => team.team_no));
 
-    return teamList.filter((team: Team) => !eventTeamNumbers.has(team.team_no));
+    return this.teams.filter((team: Team) => !eventTeamNumbers.has(team.team_no));
   }
 
   clearEventToTeams(): void {

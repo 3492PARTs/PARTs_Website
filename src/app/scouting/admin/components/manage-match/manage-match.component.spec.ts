@@ -71,11 +71,11 @@ describe('ManageMatchComponent', () => {
     expect(mockAPI.get).toHaveBeenCalledWith(true, 'tba/sync-matches/', undefined, jasmine.any(Function), jasmine.any(Function));
   });
 
-  it('setNewMatchTeams should clone teams from the selected event', () => {
+  it('populateTeamsForMatch should clone teams from the selected event', () => {
     const team = Object.assign(new Team(), { team_no: 111 });
     component.newMatch.event = Object.assign(new Event(), { teams: [team] });
 
-    component.setNewMatchTeams();
+    component.populateTeamsForMatch();
 
     expect(component.newMatchTeams[0].team_no).toBe(111);
     expect(component.newMatchTeams).not.toBe(component.newMatch.event.teams);

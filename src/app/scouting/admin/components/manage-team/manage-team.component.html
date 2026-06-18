@@ -66,7 +66,8 @@
 
         @if (!removeTeamFromEventEvent) {
           <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
-            [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [Required]="true" [MinWidth]="'100px'">
+            [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+            [Required]="true" [MinWidth]="'100px'">
           </app-form-element>
         }
 
