@@ -63,7 +63,6 @@ export class ManageSeasonComponent implements OnInit {
 
   activeUser = new User();
   activeUserSeasons: UserSeason[] = [];
-  activeUserSeasonIdsAtOpen: number[] = [];
   activeUserAvailableSeasons: Season[] = [];
   selectedSeasonToAdd: Season | null = null;
 
@@ -212,7 +211,6 @@ export class ManageSeasonComponent implements OnInit {
     this.selectedSeasonToAdd = null;
     this.api.get(true, 'scouting/admin/user-seasons/', { user_id: this.activeUser.id.toString() }, (result: UserSeason[]) => {
       this.activeUserSeasons = result || [];
-      this.activeUserSeasonIdsAtOpen = this.activeUserSeasons.map(us => us.season.id);
       this.ss.loadSeasons().then(seasons => {
         this.allSeasons = seasons || [];
         this.updateAvailableSeasons();
@@ -243,67 +241,23 @@ export class ManageSeasonComponent implements OnInit {
     this.updateAvailableSeasons();
   }
 
-  async saveUserSeasons(): Promise<void> {
+  saveUserSeasons(): void {
     if (!this.activeUser.id) return;
 
-    const currentSeasonIds = this.activeUserSeasons.map(us => us.season.id);
-    const toAdd = currentSeasonIds.filter(id => !this.activeUserSeasonIdsAtOpen.includes(id));
-    const toRemove = this.activeUserSeasonIdsAtOpen.filter(id => !currentSeasonIds.includes(id));
-
-    try {
-      for (const seasonId of toAdd) {
-        const season = this.allSeasons.find(s => s.id === seasonId);
-        if (!season) {
-          throw new Error(`Unable to find season ${seasonId} while saving user seasons.`);
-        }
-        const userSeason = new UserSeason();
-        userSeason.user = cloneObject(this.activeUser);
-        userSeason.season = cloneObject(season);
-        userSeason.void_ind = 'n';
-        await this.postUserSeason(userSeason);
-      }
-
-      for (const seasonId of toRemove) {
-        await this.deleteUserSeason(seasonId);
-      }
-
+    this.api.post(true, 'scouting/admin/user-seasons/', this.activeUserSeasons, (result: any) => {
       this.userSeasonModalVisible = false;
       this.activeUser = new User();
       this.activeUserSeasons = [];
-      this.activeUserSeasonIdsAtOpen = [];
       this.selectedSeasonToAdd = null;
       this.getUserSeasons();
-      this.modalService.successfulResponseBanner({ retMessage: 'User seasons updated successfully.' });
-    } catch (err: any) {
+      this.modalService.successfulResponseBanner(result);
+    }, (err: any) => {
       this.modalService.triggerError(err);
-    }
+    });
   }
 
   private updateAvailableSeasons(): void {
     const selectedSeasonIds = new Set(this.activeUserSeasons.map(us => us.season.id));
     this.activeUserAvailableSeasons = this.allSeasons.filter(season => !selectedSeasonIds.has(season.id));
-  }
-
-  private postUserSeason(userSeason: UserSeason): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.api.post(true, 'scouting/admin/user-seasons/', userSeason, () => {
-        resolve();
-      }, (err: any) => {
-        reject(err);
-      });
-    });
-  }
-
-  private deleteUserSeason(seasonId: number): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.api.delete(true, 'scouting/admin/user-seasons/', {
-        user_id: this.activeUser.id.toString(),
-        season_id: seasonId.toString()
-      }, () => {
-        resolve();
-      }, (err: any) => {
-        reject(err);
-      });
-    });
   }
 }

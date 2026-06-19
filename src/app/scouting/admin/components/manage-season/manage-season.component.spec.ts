@@ -213,7 +213,6 @@ describe('ManageSeasonComponent', () => {
     expect(component.userSeasonModalVisible).toBeTrue();
     expect(component.activeUser.id).toBe(10);
     expect(component.activeUserSeasons.length).toBe(1);
-    expect(component.activeUserSeasonIdsAtOpen).toEqual([2]);
     expect(component.activeUserAvailableSeasons.length).toBe(1);
     expect(component.activeUserAvailableSeasons[0].id).toBe(3);
   });
@@ -231,34 +230,23 @@ describe('ManageSeasonComponent', () => {
     expect(component.activeUserSeasons[0].season.id).toBe(3);
   });
 
-  it('saveUserSeasons should post and delete changed season links', async () => {
+  it('saveUserSeasons should post the full list of user seasons', async () => {
     component.activeUser = Object.assign(new User(), { id: 1 });
-    (component as any).allSeasons = [
-      Object.assign(new Season(), { id: 1, season: '2025' }),
-      Object.assign(new Season(), { id: 2, season: '2026' }),
-    ];
-    component.activeUserSeasonIdsAtOpen = [1];
-    component.activeUserSeasons = [Object.assign(new UserSeason(), {
+    const activeSeasons = [Object.assign(new UserSeason(), {
       user: component.activeUser,
       season: Object.assign(new Season(), { id: 2, season: '2026' }),
       void_ind: 'n'
     })];
+    component.activeUserSeasons = activeSeasons;
 
     mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
       onNext?.({ message: 'ok' });
       return Promise.resolve({ message: 'ok' });
     });
-    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
-      onNext?.({ message: 'ok' });
-      return Promise.resolve({ message: 'ok' });
-    });
 
-    await component.saveUserSeasons();
+    component.saveUserSeasons();
 
-    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-season/', jasmine.any(UserSeason), jasmine.any(Function), jasmine.any(Function));
-    expect(mockAPI.delete).toHaveBeenCalledWith(true, 'scouting/admin/user-season/', {
-      user_id: '1',
-      season_id: '1'
-    }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', activeSeasons, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.delete).not.toHaveBeenCalled();
   });
 });
