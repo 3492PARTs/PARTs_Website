@@ -89,8 +89,9 @@
   </app-form-element-group>
 
   <app-form-element-group [LabelText]="'Manage User Seasons'">
-    <app-table [TableCols]="userSeasonTableCols" [TableData]="users" [EnableFilter]=" true" [ShowEditButton]="true"
-      (EditRecordCallBack)="showUserSeasonModal($event)" [Scrollable]="true" [ScrollHeight]="'calc(100vh - 28rem)'">
+    <app-table [TableCols]="userSeasonTableCols" [TableData]="users" [TriggerUpdate]="userSeasonTableUpdateTrigger"
+      [EnableFilter]=" true" [ShowEditButton]="true" (EditRecordCallBack)="showUserSeasonModal($event)"
+      [Scrollable]="true" [ScrollHeight]="'calc(100vh - 28rem)'">
     </app-table>
 
     <app-modal [Title]="'Manage User Seasons'" [(Visible)]="userSeasonModalVisible" [MaxWidth]="'500px'">

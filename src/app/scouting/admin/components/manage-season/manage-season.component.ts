@@ -65,6 +65,7 @@ export class ManageSeasonComponent implements OnInit {
   activeUserSeasons: UserSeason[] = [];
   activeUserAvailableSeasons: Season[] = [];
   selectedSeasonToAdd: Season | null = null;
+  userSeasonTableUpdateTrigger = false;
 
   private allSeasons: Season[] = [];
 
@@ -201,6 +202,7 @@ export class ManageSeasonComponent implements OnInit {
   getUserSeasons(): void {
     this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
       this.userSeasons = result || [];
+      this.userSeasonTableUpdateTrigger = !this.userSeasonTableUpdateTrigger;
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
