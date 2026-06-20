@@ -34,7 +34,6 @@ export class ProfileComponent implements OnInit {
   // Expose Utils to template
   Utils = Utils;
 
-  isAdmin = false;
   user: User = new User();
   editUser: User = new User();
   userProfileImage!: File | null;
@@ -75,10 +74,6 @@ export class ProfileComponent implements OnInit {
 
     this.ns.notifications.subscribe(ns => this.notifications = ns);
     this.ns.messages.subscribe(ms => this.messages = ms);
-
-    this.auth.user.subscribe(u => {
-      this.isAdmin = this.auth.isAdmin();
-    });
   }
 
   ngOnInit(): void {

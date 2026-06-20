@@ -40,6 +40,7 @@ export class NavigationService {
     new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
     new Link('Security', '/admin/security', 'security'),
     new Link('Phone Types', '/admin/phone-types', 'phone'),
+    new Link('User Image Approval', '/admin/user-image-approval', 'image-check'),
     new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
   ], [
     new Link('Scouting Activity', '/scouting/admin/activity', 'account-reactivate'),
