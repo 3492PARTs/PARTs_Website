@@ -27,7 +27,7 @@ export class UserImageApprovalComponent implements OnInit {
   ];
   userImageTableButtons: TableButtonType[] = [
     new TableButtonType('check-decagram-outline', this.approveUserImage.bind(this), 'Approve Image', undefined, undefined, undefined, '', '', 'success'),
-    new TableButtonType('trash-outline', this.deleteUserImage.bind(this), 'Delete Image', undefined, undefined, undefined, '', '', 'danger')
+    new TableButtonType('trash-can-outline', this.deleteUserImage.bind(this), 'Delete Image', undefined, undefined, undefined, '', '', 'danger')
   ];
 
   constructor(private api: APIService, private authService: AuthService, private modalService: ModalService) { }

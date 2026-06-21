@@ -19,10 +19,11 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
+import { cloneObject, resizeImageToMaxSize, strNoE } from '@app/core/utils/utils.functions';
 import * as Utils from '@app/core/utils/utils.functions';
 import { UserService } from '@app/user/services/user.service';
 import { Alert } from '@app/core/models/alert.models';
+import { Banner } from '@app/core';
 
 @Component({
   selector: 'app-profile',
@@ -101,7 +102,8 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  saveProfile(): null | undefined | void {
+  async saveProfile(): Promise<null | undefined | void> {
+    this.gs.incrementOutstandingCalls();
     this.closeEditProfileImageModal();
     let form = new FormData();
 
@@ -109,7 +111,10 @@ export class ProfileComponent implements OnInit {
       const imageName = 'name.png';
       const imageFile = new File([this.croppedImage], imageName, { type: this.croppedImage.type });
 
-      form.append('image', imageFile, imageFile.name);
+      this.gs.addBanner(new Banner('New profile images are pending approval.', 5000));
+      await resizeImageToMaxSize(imageFile, .2).then(async resizedPic => {
+        form.append('image', resizedPic, imageFile.name);
+      });
     }
     else if (!strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
@@ -130,8 +135,10 @@ export class ProfileComponent implements OnInit {
       this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
+      this.gs.decrementOutstandingCalls();
     }, (err: any) => {
       this.modalService.triggerError(err);
+      this.gs.decrementOutstandingCalls();
     });
   }
 
