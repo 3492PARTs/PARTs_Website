@@ -20,8 +20,8 @@
                 [Required]="true" [Disabled]="activeAlertType.void_ind === 'y'">
             </app-form-element>
 
-            <app-form-element [Type]="'text'" [LabelText]="'Body'" [(Model)]="activeAlertType.body" [Required]="true"
-                [Disabled]="activeAlertType.void_ind === 'y'">
+            <app-form-element [Type]="'area'" [LabelText]="'Body'" [(Model)]="activeAlertType.body" [Required]="true"
+                [Rows]="4" [Disabled]="activeAlertType.void_ind === 'y'">
             </app-form-element>
 
             <app-form-element [Type]="'select'" [LabelText]="'Permission'" [FormGroupInline]="true"

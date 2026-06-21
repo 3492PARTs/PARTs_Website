@@ -5,13 +5,12 @@ import { APIService } from '@app/core/services/api.service';
 import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 import { ModalService } from '@app/core/services/modal.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
-import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { TableButtonType, TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 
 
 @Component({
   selector: 'app-user-image-approval',
-  imports: [BoxComponent, ButtonComponent, TableComponent],
+  imports: [BoxComponent, TableComponent],
   templateUrl: './user-image-approval.component.html',
   styleUrls: ['./user-image-approval.component.scss']
 })

@@ -22,11 +22,9 @@ import { cloneObject } from '@app/core/utils/utils.functions';
 })
 export class AlertTypesComponent implements OnInit {
     alertTypesTableCols: TableColType[] = [
-        { PropertyName: 'alert_typ', ColLabel: 'Code' },
         { PropertyName: 'alert_typ_nm', ColLabel: 'Name' },
-        { PropertyName: 'subject', ColLabel: 'Subject' },
-        { PropertyName: 'permission.name', ColLabel: 'Permission' },
-        { PropertyName: 'void_ind', ColLabel: 'Voided', Type: 'function', ColValueFunction: this.getVoidIndicator }
+        { PropertyName: 'alert_typ', ColLabel: 'Code' },
+        { PropertyName: 'permission.name', ColLabel: 'Permission' }
     ];
 
     alertTypes: AlertType[] = [];
@@ -57,10 +55,6 @@ export class AlertTypesComponent implements OnInit {
     editAlertType(alertType: AlertType): void {
         this.activeAlertType = cloneObject(alertType);
         this.alertTypeModalVisible = true;
-    }
-
-    getVoidIndicator(voidInd: string): string {
-        return voidInd === 'y' ? 'Yes' : 'No';
     }
 
     getAlertTypes(): void {
