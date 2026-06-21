@@ -6,7 +6,7 @@
     </app-table>
 
     <app-modal [Title]="activeAlertType.alert_typ ? 'Edit Alert Type' : 'New Alert Type'"
-        [(Visible)]="alertTypeModalVisible" [Width]="'700px'">
+        [(Visible)]="alertTypeModalVisible" [Width]="'400px'">
         <app-form (SubmitFunction)="saveAlertType()">
             <app-form-element [Type]="'text'" [LabelText]="'Alert Type Code'" [(Model)]="activeAlertType.alert_typ"
                 [Required]="true" [Disabled]="activeAlertType.void_ind === 'y'">
@@ -21,7 +21,7 @@
             </app-form-element>
 
             <app-form-element [Type]="'area'" [LabelText]="'Body'" [(Model)]="activeAlertType.body" [Required]="true"
-                [Rows]="4" [Disabled]="activeAlertType.void_ind === 'y'">
+                [Rows]="4" [Width]="'100%'" [Disabled]="activeAlertType.void_ind === 'y'">
             </app-form-element>
 
             <app-form-element [Type]="'select'" [LabelText]="'Permission'" [FormGroupInline]="true"
