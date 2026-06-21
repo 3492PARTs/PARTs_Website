@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Season, Team, EventToTeams, Event, Match, CompetitionLevel } from '@app/scouting/models/scouting.models';
+import { Component, OnInit, inject } from '@angular/core';
+import { User } from '@app/auth/models/user.models';
+import { Season, Team, Event, UserInfo, UserSeason } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { RetMessage, GeneralService } from '@app/core/services/general.service';
@@ -14,14 +15,25 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { Page, cloneObject, downloadFileAs, strNoE } from '@app/core/utils/utils.functions';
+import { ManageEventComponent } from '../manage-event/manage-event.component';
+import { ManageTeamComponent } from '../manage-team/manage-team.component';
+import { ManageMatchComponent } from '../manage-match/manage-match.component';
+import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { cloneObject } from '@app/core/utils/utils.functions';
+import { UserService } from '@app/user/services/user.service';
 @Component({
   selector: 'app-manage-season',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
+  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent, ManageEventComponent, ManageTeamComponent, ManageMatchComponent, TableComponent],
   templateUrl: './manage-season.component.html',
   styleUrls: ['./manage-season.component.scss']
 })
 export class ManageSeasonComponent implements OnInit {
+  private readonly api = inject(APIService);
+  private readonly gs = inject(GeneralService);
+  private readonly authService = inject(AuthService);
+  private readonly ss = inject(ScoutingService);
+  private readonly modalService = inject(ModalService);
+
   currentSeason = new Season();
   currentEvent = new Event();
 
@@ -30,41 +42,34 @@ export class ManageSeasonComponent implements OnInit {
   teams: Team[] = [];
 
   newSeason = new Season();
-  delSeason!: number | null;
-  newEvent: Event = new Event();
-  delEvent!: number | null;
-  delEventList: Event[] = [];
-  removeTeamFromEventEvent: Event | null = null;
-  newTeam: Team = new Team();
-  eventToTeams: EventToTeams = new EventToTeams();
+  delSeason: number | null = null;
   eventList: Event[] = [];
-  linkTeamToEventSeason!: number | null;
-  linkTeamToEventEvent: Event | null = null;
-  linkTeamToEventTeams: Team[] = [];
-  linkTeamToEventList: Event[] = [];
-  removeTeamFromEventSeason!: number | null;
-  removeTeamFromEventList: Event[] = [];
-  removeTeamFromEventTeams: Team[] = [];
-  competitionPageActive = 'n';
+  users: User[] = [];
+  userSeasons: UserSeason[] = [];
+
+  userSeasonTableCols: TableColType[] = [
+    { PropertyName: 'name', ColLabel: 'User', Width: '220px' },
+    { PropertyName: 'id', ColLabel: 'Seasons', Type: 'function', ColValueFunction: this.getUserSeasonsForTable.bind(this) },
+  ];
+  activeUserSeasonTableCols: TableColType[] = [
+    { PropertyName: 'season.season', ColLabel: 'Season' },
+  ];
 
   syncSeasonResponse = new RetMessage();
 
   addSeasonModalVisible = false;
-  removeSeasonEventModalVisible = false;
-  manageEventsModalVisible = false;
-  manageTeamModalVisible = false;
-  linkTeamToEventModalVisible = false;
-  removeTeamFromEventModalVisible = false;
+  removeSeasonModalVisible = false;
+  userSeasonModalVisible = false;
 
-  newMatchModalVisible = false;
-  newMatch = new Match();
-  newMatchSeason: Season | undefined = undefined;
-  newMatchEvents: Event[] = [];
-  newMatchTeams: Team[] = [];
+  activeUser = new User();
+  activeUserSeasons: UserSeason[] = [];
+  activeUserAvailableSeasons: Season[] = [];
+  selectedSeasonToAdd: Season | null = null;
+  userSeasonTableUpdateTrigger = false;
 
-  competitionLevels: CompetitionLevel[] = [new CompetitionLevel('qm', 'Qualifying Match'), new CompetitionLevel('qf', 'Quarter Finals'), new CompetitionLevel('sf', 'Semi Finals'), new CompetitionLevel('f', 'Finals')];
+  private allSeasons: Season[] = [];
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private ss: ScoutingService, private modalService: ModalService) { }
+  constructor(private us: UserService) { }
 
   ngOnInit(): void {
     this.authService.authInFlight.subscribe((r) => {
@@ -76,18 +81,16 @@ export class ManageSeasonComponent implements OnInit {
 
   init(): void {
     this.getAllTeams();
+    this.getUsers();
+    this.getUserSeasons();
 
     this.gs.incrementOutstandingCalls();
     this.ss.loadAllScoutingInfo().then(async result => {
       if (result) {
         this.seasons = result.seasons;
         this.events = result.events;
-        //this.teams = result.teams; this is a list of current. we need all teams
-        this.currentSeason = result.seasons.filter(s => s.current === 'y')[0];
-        this.currentEvent = result.events.filter(e => e.current === 'y')[0];
-        result.schedule_types.forEach(async st => {
-          const tmp = result.schedules.filter(s => s.sch_typ === st.sch_typ);
-        });
+        this.currentSeason = result.seasons.find(s => s.current === 'y') || new Season();
+        this.currentEvent = result.events.find(e => e.current === 'y') || new Event();
 
         this.getEventsForCurrentSeason();
       };
@@ -102,38 +105,6 @@ export class ManageSeasonComponent implements OnInit {
     }, (result: any) => {
       this.syncSeasonResponse = result as RetMessage;
       this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
-  syncEvent(event_cd: string): void {
-    this.api.get(true, 'tba/sync-event/', {
-      season_id: this.currentSeason.id.toString(),
-      event_cd: event_cd
-    }, (result: any) => {
-      this.syncSeasonResponse = result as RetMessage;
-      this.manageEventsModalVisible = false;
-      this.init();
-      this.newEvent = new Event();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
-  syncMatches(): void {
-    this.api.get(true, 'tba/sync-matches/', undefined, (result: any) => {
-      this.syncSeasonResponse = result as RetMessage;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
-  }
-
-  syncEventTeamInfo(): void {
-    this.api.get(true, 'tba/sync-event-team-info/', {
-      force: 1
-    }, (result: any) => {
-      this.syncSeasonResponse = result as RetMessage;
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
@@ -159,21 +130,9 @@ export class ManageSeasonComponent implements OnInit {
   async getEventsForCurrentSeason(): Promise<void> {
     this.eventList = await this.getEventsForSeason(this.currentSeason.id);
 
-    let current = this.eventList.filter(e => e.current === 'y');
+    const current = this.eventList.filter(e => e.current === 'y');
     if (current.length > 0) this.currentEvent = current[0];
     else this.currentEvent = new Event();
-  }
-
-  async getEventsForLinkTeamToEvent() {
-    this.linkTeamToEventList = await this.getEventsForSeason(this.linkTeamToEventSeason || NaN);
-  }
-
-  async getEventsForRemoveTeamFromEvent() {
-    this.removeTeamFromEventList = await this.getEventsForSeason(this.removeTeamFromEventSeason || NaN);
-  }
-
-  async getEventsForDeleteEvent() {
-    this.delEventList = await this.getEventsForSeason(this.delSeason || NaN);
   }
 
   async getEventsForSeason(season_id: number): Promise<Event[]> {
@@ -210,56 +169,13 @@ export class ManageSeasonComponent implements OnInit {
           this.modalService.successfulResponseBanner(result);
           this.init();
           this.delSeason = null;
-          this.delEvent = null;
-          this.delEventList = [];
-          this.removeSeasonEventModalVisible = false;
+          this.removeSeasonModalVisible = false;
         }, (err: any) => {
           this.modalService.triggerError(err);
         });
       });
 
     }
-  }
-
-  saveEvent(): void {
-    if (strNoE(this.newEvent.event_cd)) {
-
-      let event = cloneObject(this.newEvent);
-      event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
-
-      this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.manageEventsModalVisible = false;
-        this.init();
-        this.newEvent = new Event();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
-    }
-    else {
-      this.syncEvent(this.newEvent.event_cd);
-    }
-  }
-
-  clearEvent() {
-    this.newEvent = new Event();
-  }
-
-  deleteEvent(): void | null {
-    if (this.delEvent)
-      this.modalService.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
-        this.api.delete(true, 'scouting/admin/event/', {
-          event_id: this.delEvent?.toString() || ''
-        }, (result: any) => {
-          this.modalService.successfulResponseBanner(result);
-          this.delEvent = null;
-          this.removeSeasonEventModalVisible = false;
-          this.getEventsForDeleteEvent();
-          this.init();
-        }, (err: any) => {
-          this.modalService.triggerError(err);
-        });
-      });
   }
 
   getAllTeams(): void {
@@ -268,113 +184,82 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  saveTeam(): void {
-    this.api.post(true, 'scouting/admin/team/', this.newTeam, (result: any) => {
-      this.init();
-      this.manageTeamModalVisible = false;
-      this.newTeam = new Team();
-      this.getAllTeams();
-    }, (err: any) => {
-      console.log('error', err);
-      this.modalService.triggerError(err);
-      this.gs.decrementOutstandingCalls();
+  getUserSeasonsForTable(userId: number): string {
+    return this.userSeasons
+      .filter(us => us.user?.id === userId && us.void_ind !== 'y')
+      .map(us => us.season?.season)
+      .filter((season): season is string => season !== undefined && season !== null && season !== '')
+      .sort((a, b) => parseInt(b, 10) - parseInt(a, 10))
+      .join(', ');
+  }
+
+  getUsers(): void {
+    this.us.getUsers(1, 0).then(us => {
+      this.users = us || [];
     });
   }
 
-  clearTeam() {
-    this.newTeam = new Team();
-  }
-
-  showLinkTeamToEventModal(visible: boolean) {
-    this.linkTeamToEventModalVisible = visible;
-    this.clearEventToTeams();
-  }
-
-  addEventToTeams(): void {
-    this.api.post(true, 'scouting/admin/team-to-event/', this.eventToTeams, (result: any) => {
-      this.init();
-      this.linkTeamToEventModalVisible = false;
-      this.linkTeamToEventSeason = null;
-      this.linkTeamToEventEvent = null;
-      this.linkTeamToEventTeams = [];
-      this.eventToTeams = new EventToTeams();
+  getUserSeasons(): void {
+    this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
+      this.userSeasons = result || [];
+      this.userSeasonTableUpdateTrigger = !this.userSeasonTableUpdateTrigger;
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
   }
 
-  buildLinkTeamToEventTeamList(): void {
-    this.eventToTeams.event_id = this.linkTeamToEventEvent?.id || -1;
-    this.linkTeamToEventTeams = this.buildEventTeamList(this.linkTeamToEventEvent?.teams || []);
-  }
-
-  buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? cloneObject(this.removeTeamFromEventEvent.teams) : [];
-  }
-
-  buildEventTeamList(eventTeamList: Team[]): Team[] {
-    let teamList = cloneObject(this.teams);
-
-    for (let i = 0; i < teamList.length; i++) {
-      for (let j = 0; j < eventTeamList.length; j++) {
-        if (teamList[i].team_no === eventTeamList[j].team_no) {
-          teamList.splice(i--, 1);
-          eventTeamList.splice(j--, 1);
-          break;
-        }
-      }
-    }
-
-    return teamList;
-  }
-
-  clearEventToTeams() {
-    this.linkTeamToEventSeason = null;
-    this.linkTeamToEventEvent = null;
-    this.linkTeamToEventList = [];
-    this.eventToTeams.teams = [];
-  }
-
-  removeEventToTeams(): void {
-    this.api.post(true, 'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent, (result: any) => {
-      this.removeTeamFromEventEvent = null;
-      this.init();
-      this.removeTeamFromEventModalVisible = false;
-      this.removeTeamFromEventSeason = null;
-      this.removeTeamFromEventList = [];
-      this.removeTeamFromEventTeams = [];
+  showUserSeasonModal(user: User): void {
+    this.activeUser = cloneObject(user);
+    this.selectedSeasonToAdd = null;
+    this.api.get(true, 'scouting/admin/user-seasons/', { user_id: this.activeUser.id.toString() }, (result: UserSeason[]) => {
+      this.activeUserSeasons = result || [];
+      this.ss.loadSeasons().then(seasons => {
+        this.allSeasons = seasons || [];
+        this.updateAvailableSeasons();
+        this.userSeasonModalVisible = true;
+      });
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
   }
 
-  clearRemoveEventToTeams() {
-    this.removeTeamFromEventSeason = null;
-    this.removeTeamFromEventEvent = null;
-    this.removeTeamFromEventList = [];
+  addSeasonToActiveUser(): void {
+    if (!this.selectedSeasonToAdd || !this.activeUser.id) return;
+
+    const alreadySelected = this.activeUserSeasons.some(us => us.season.id === this.selectedSeasonToAdd?.id);
+    if (alreadySelected) return;
+
+    const userSeason = new UserSeason();
+    userSeason.user = cloneObject(this.activeUser);
+    userSeason.season = cloneObject(this.selectedSeasonToAdd);
+    userSeason.void_ind = 'n';
+    this.activeUserSeasons = [...this.activeUserSeasons, userSeason];
+    this.selectedSeasonToAdd = null;
+    this.updateAvailableSeasons();
   }
 
-  showRemoveTeamFromEventModal(visible: boolean) {
-    this.removeTeamFromEventModalVisible = visible;
-    this.clearRemoveEventToTeams();
+  removeSeasonFromActiveUser(userSeason: UserSeason): void {
+    this.activeUserSeasons = this.activeUserSeasons.filter(us => us.season.id !== userSeason.season.id);
+    this.updateAvailableSeasons();
   }
 
-  saveMatch(): void {
-    this.api.post(true, 'scouting/admin/match/', this.newMatch, (result: any) => {
-      this.init();
-      this.newMatchModalVisible = false;
+  saveUserSeasons(): void {
+    if (!this.activeUser.id) return;
+
+    this.api.post(true, 'scouting/admin/user-seasons/', this.activeUserSeasons, (result: any) => {
+      this.userSeasonModalVisible = false;
+      this.activeUser = new User();
+      this.activeUserSeasons = [];
+      this.selectedSeasonToAdd = null;
+      this.getUserSeasons();
+      this.modalService.successfulResponseBanner(result);
     }, (err: any) => {
-      console.log('error', err);
       this.modalService.triggerError(err);
-      this.gs.decrementOutstandingCalls();
     });
   }
 
-  async getEventsForNewMatch() {
-    this.newMatchEvents = await this.getEventsForSeason(this.newMatchSeason?.id || NaN);
-  }
-
-  getTeamsForNewMatch() {
-    this.newMatchTeams = cloneObject(this.newMatch.event.teams);
+  private updateAvailableSeasons(): void {
+    const selectedSeasonIds = new Set(this.activeUserSeasons.map(us => us.season.id));
+    this.activeUserAvailableSeasons = this.allSeasons.filter(season => !selectedSeasonIds.has(season.id));
   }
 }
