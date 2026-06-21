@@ -35,13 +35,13 @@ export class NavigationService {
 
   readonly allSubPages = [[
     new Link('Meetings', '/admin/meetings', 'calendar-account-outline'),
+    new Link('Contact Form', '/admin/team-contact-form', 'card-account-mail-outline'),
+    new Link('Application Form', '/admin/team-application-form', 'list-box-outline'),
     new Link('Users', '/admin/users', 'account-group'),
-    new Link('Team Application Form', '/admin/team-application-form', 'chat-question-outline'),
-    new Link('Team Contact Form', '/admin/team-contact-form', 'chat-question-outline'),
     new Link('Security', '/admin/security', 'security'),
-    new Link('Phone Types', '/admin/phone-types', 'phone'),
     new Link('Alert Types', '/admin/alert-types', 'alert-outline'),
     new Link('User Image Approval', '/admin/user-image-approval', 'image-check'),
+    new Link('Phone Types', '/admin/phone-types', 'phone'),
     new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
   ], [
     new Link('Scouting Activity', '/scouting/admin/activity', 'account-reactivate'),

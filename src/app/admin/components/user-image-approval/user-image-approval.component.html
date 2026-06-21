@@ -1,20 +1,9 @@
 <app-box [Title]="'User Image Approval'">
-  <div class="margin-bottom-1rem">
-    <app-button [ButtonType]="'main'" (FunctionCallBack)="getUnapprovedUserImages()">Refresh Unapproved Images</app-button>
-  </div>
-
   @if (userImages.length > 0) {
-    <app-table
-      [TableCols]="userImageTableCols"
-      [TableData]="userImages"
-      [TableDataButtons]="userImageTableButtons"
-      [EnableFilter]="true"
-      [Scrollable]="true"
-      [Responsive]="true"
-      [ScrollHeight]="'calc(100vh - 24rem)'"
-    >
-    </app-table>
+  <app-table [TableCols]="userImageTableCols" [TableData]="userImages" [TableDataButtons]="userImageTableButtons"
+    [EnableFilter]="true" [Scrollable]="true" [Responsive]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
+  </app-table>
   } @else {
-    <p>No unapproved user images found.</p>
+  <p>No unapproved user images found.</p>
   }
 </app-box>
