@@ -5,7 +5,7 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { UserData, AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { Alert, NotificationsService } from '@app/core/services/notifications.service';
+import { NotificationsService } from '@app/core/services/notifications.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -22,6 +22,7 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
 import * as Utils from '@app/core/utils/utils.functions';
 import { UserService } from '@app/user/services/user.service';
+import { Alert } from '@app/core/models/alert.models';
 
 @Component({
   selector: 'app-profile',
