@@ -1,0 +1,48 @@
+<app-box [Title]="'Manage Alert Types'">
+    <app-table [TableTitle]="'Alert Types'" [TableCols]="alertTypesTableCols" [TableData]="alertTypes"
+        [ShowAddButton]="true" (AddRecordCallBack)="startNewAlertType()" [ShowEditButton]="true"
+        (EditRecordCallBack)="editAlertType($event)" [ShowRemoveButton]="true"
+        (RemoveRecordCallBack)="voidAlertType($event)" [Width]="'100%'">
+    </app-table>
+
+    <app-modal [Title]="activeAlertType.alert_typ ? 'Edit Alert Type' : 'New Alert Type'"
+        [(Visible)]="alertTypeModalVisible" [Width]="'700px'">
+        <app-form (SubmitFunction)="saveAlertType()">
+            <app-form-element [Type]="'text'" [LabelText]="'Alert Type Code'" [(Model)]="activeAlertType.alert_typ"
+                [Required]="true" [Disabled]="activeAlertType.void_ind === 'y'">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeAlertType.alert_typ_nm"
+                [Required]="true" [Disabled]="activeAlertType.void_ind === 'y'">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [LabelText]="'Subject'" [(Model)]="activeAlertType.subject"
+                [Required]="true" [Disabled]="activeAlertType.void_ind === 'y'">
+            </app-form-element>
+
+            <app-form-element [Type]="'text'" [LabelText]="'Body'" [(Model)]="activeAlertType.body" [Required]="true"
+                [Disabled]="activeAlertType.void_ind === 'y'">
+            </app-form-element>
+
+            <app-form-element [Type]="'select'" [LabelText]="'Permission'" [FormGroupInline]="true"
+                [(Model)]="activeAlertType.permission" [SelectList]="permissions" [DisplayProperty]="'name'"
+                [DisplayEmptyOption]="true" [Disabled]="activeAlertType.void_ind === 'y'">
+            </app-form-element>
+
+            @if (activeAlertType.void_ind === 'y') {
+            <div class="voided-label">This alert type is voided.</div>
+            }
+
+            <app-button-ribbon>
+                @if (activeAlertType.alert_typ && activeAlertType.void_ind !== 'y') {
+                <app-button [ButtonType]="'danger'" [Type]="'button'" (FunctionCallBack)="voidAlertType()">Void Alert
+                    Type
+                </app-button>
+                }
+                @if (activeAlertType.void_ind !== 'y') {
+                <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+                }
+            </app-button-ribbon>
+        </app-form>
+    </app-modal>
+</app-box>

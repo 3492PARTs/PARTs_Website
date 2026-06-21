@@ -58,6 +58,12 @@ describe('NavigationService', () => {
       expect(service.allSubPages[0].length).toBeGreaterThan(0);
     });
 
+    it('should include alert types admin sub page', () => {
+      const alertTypesPage = service.allSubPages[0].find(sp => sp.routerlink === '/admin/alert-types');
+      expect(alertTypesPage).toBeDefined();
+      expect(alertTypesPage?.menu_name).toBe('Alert Types');
+    });
+
     it('should have scouting admin sub pages', () => {
       expect(service.allSubPages[1]).toBeDefined();
       expect(service.allSubPages[1].length).toBeGreaterThan(0);

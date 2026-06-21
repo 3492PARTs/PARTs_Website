@@ -205,6 +205,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./admin/components/phone-types/phone-types.component').then(mod => mod.PhoneTypesComponent),
             },
             {
+                path: 'alert-types',
+                title: 'Admin Alert Types',
+                loadComponent: () => import('./admin/components/alert-types/alert-types.component').then(mod => mod.AlertTypesComponent),
+            },
+            {
                 path: 'user-image-approval',
                 title: 'Admin User Image Approval',
                 loadComponent: () => import('./admin/components/user-image-approval/user-image-approval.component').then(mod => mod.UserImageApprovalComponent),
