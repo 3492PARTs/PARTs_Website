@@ -27,11 +27,12 @@ import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 import { getPropertyValue, setPropertyValue, strNoE, previewImage, tableToCSV, downloadFileAs } from '@app/core/utils/utils.functions';
+import { OnCreateDirective } from '@app/shared/directives/on-create/on-create.directive';
 //import * as $ from 'jquery';
 
 @Component({
   selector: 'app-table',
-  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe],
+  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe, OnCreateDirective],
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })

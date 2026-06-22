@@ -61,3 +61,13 @@ export class User implements IUser {
     image = '';
     links: Link[] = [];
 }
+
+
+export class UserImage {
+    id = NaN;
+    user!: User;
+    image = '';
+    date_added = new Date();
+    img_approved = false;
+    void_ind = "n";
+}

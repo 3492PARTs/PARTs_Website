@@ -12,7 +12,9 @@ import {
   HostListener,
   DoCheck,
   SimpleChanges,
-  OnChanges
+  OnChanges,
+  ViewChildren,
+  QueryList
 } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
 import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
@@ -38,7 +40,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @Input() Width = 'auto';
   @Input() MinWidth = 'auto';
   @Input() MaxWidth = 'auto';
-  private originalMinWidth = '';
+  //private originalMinWidth = '';
   @Input() Placeholder = '';
   @Input() Rows: number | null = 0;
   //@Input() SelectDisplayValue = '';
@@ -122,7 +124,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   @ViewChild('input', { read: ElementRef, static: false }) input: ElementRef | undefined = undefined;
 
   @ViewChild('multiSelectText', { read: ElementRef, static: false }) multiSelectText: ElementRef | undefined = undefined;
-  @ViewChild('validationIndicator', { read: ElementRef, static: false }) validationIndicator: ElementRef | undefined = undefined;
+  @ViewChildren('validationIndicator', { read: ElementRef }) validationIndicator: QueryList<ElementRef> | undefined = undefined;
 
   //private resizeTimeout: number | null | undefined;
 
@@ -130,7 +132,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   ngOnInit() {
     this.LabelID = this.gs.getNextGsId();
-    this.originalMinWidth = this.MinWidth;
+    //this.originalMinWidth = this.MinWidth;
 
     if (!this.FieldSize) this.FieldSize = 2000;
 
@@ -161,13 +163,13 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
     this.markRequired();
 
+    this.setDatePanel();
+
     this.navigationService.currentNavigationState.subscribe(ns => {
       if (ns === NavigationState.collapsed && this.Type != 'select') this.MinWidth = 'auto';
       this.setElementPositions();
 
     });
-
-    this.setDatePanel();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -207,7 +209,9 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
   }
 
   ngAfterViewInit() {
-
+    this.validationIndicator?.changes.subscribe(() => {
+      this.setElementPositions();
+    });
     this.setElementPositions();
   }
 
@@ -407,17 +411,17 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
 
   setIndicatorPosition(): void {
     //triggerChange(() => {
-    if (this.validationIndicator && this.validationIndicator.nativeElement) {
+    if (this.validationIndicator && this.validationIndicator.first) {
       if (['radio', 'multiCheckbox', 'checkbox'].includes(this.Type)) {
         if (this.label) {
           if (['radio', 'multiCheckbox'].includes(this.Type))
-            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
+            this.renderer.setStyle(this.validationIndicator.first.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem)');
           if (['checkbox'].includes(this.Type))
-            this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
+            this.renderer.setStyle(this.validationIndicator.first.nativeElement, 'left', 'calc(' + this.label.nativeElement.scrollWidth + 'px + 1rem + 13px)');
         }
       }
       else if (this.Type === 'area') {
-        this.renderer.setStyle(this.validationIndicator.nativeElement, 'right', `1.5rem`);
+        this.renderer.setStyle(this.validationIndicator.first.nativeElement, 'right', `1.5rem`);
       }
       else if (this.input && this.input.nativeElement) {
         let width = this.input.nativeElement.offsetWidth;
@@ -429,7 +433,7 @@ export class FormElementComponent implements OnInit, AfterViewInit, DoCheck, OnC
         else if (['date', 'datetime'].includes(this.Type))
           offset = '2.8rem'
 
-        this.renderer.setStyle(this.validationIndicator.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
+        this.renderer.setStyle(this.validationIndicator.first.nativeElement, 'left', `calc(${width}px - 24px - ${offset})`); //24 px is the size of the indicator
       }
     }
     //});
