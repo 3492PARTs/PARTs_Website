@@ -5,7 +5,7 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { UserData, AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { Alert, NotificationsService } from '@app/core/services/notifications.service';
+import { NotificationsService } from '@app/core/services/notifications.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -19,9 +19,11 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { cloneObject, strNoE } from '@app/core/utils/utils.functions';
+import { cloneObject, resizeImageToMaxSize, strNoE } from '@app/core/utils/utils.functions';
 import * as Utils from '@app/core/utils/utils.functions';
 import { UserService } from '@app/user/services/user.service';
+import { Alert } from '@app/core/models/alert.models';
+import { Banner } from '@app/core';
 
 @Component({
   selector: 'app-profile',
@@ -34,7 +36,6 @@ export class ProfileComponent implements OnInit {
   // Expose Utils to template
   Utils = Utils;
 
-  isAdmin = false;
   user: User = new User();
   editUser: User = new User();
   userProfileImage!: File | null;
@@ -75,10 +76,6 @@ export class ProfileComponent implements OnInit {
 
     this.ns.notifications.subscribe(ns => this.notifications = ns);
     this.ns.messages.subscribe(ms => this.messages = ms);
-
-    this.auth.user.subscribe(u => {
-      this.isAdmin = this.auth.isAdmin();
-    });
   }
 
   ngOnInit(): void {
@@ -105,7 +102,8 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  saveProfile(): null | undefined | void {
+  async saveProfile(): Promise<null | undefined | void> {
+    this.gs.incrementOutstandingCalls();
     this.closeEditProfileImageModal();
     let form = new FormData();
 
@@ -113,7 +111,10 @@ export class ProfileComponent implements OnInit {
       const imageName = 'name.png';
       const imageFile = new File([this.croppedImage], imageName, { type: this.croppedImage.type });
 
-      form.append('image', imageFile, imageFile.name);
+      this.gs.addBanner(new Banner('New profile images are pending approval.', 5000));
+      await resizeImageToMaxSize(imageFile, .2).then(async resizedPic => {
+        form.append('image', resizedPic, imageFile.name);
+      });
     }
     else if (!strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
@@ -134,8 +135,10 @@ export class ProfileComponent implements OnInit {
       this.auth.getUserObject();
       this.userProfileImage = null;
       this.input = new UserData();
+      this.gs.decrementOutstandingCalls();
     }, (err: any) => {
       this.modalService.triggerError(err);
+      this.gs.decrementOutstandingCalls();
     });
   }
 

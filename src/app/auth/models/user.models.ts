@@ -59,9 +59,15 @@ export class User implements IUser {
     groups: AuthGroup[] = [];
     permissions: AuthPermission[] = [];
     image = '';
-    links: Link[] = []
+    links: Link[] = [];
+}
 
-    get_full_name(): string {
-        return `${this.first_name} ${this.last_name}`;
-    }
+
+export class UserImage {
+    id = NaN;
+    user!: User;
+    image = '';
+    date_added = new Date();
+    img_approved = false;
+    void_ind = "n";
 }

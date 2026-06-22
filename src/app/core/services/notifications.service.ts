@@ -9,6 +9,7 @@ import { Banner } from '../models/api.models';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { arrayObjectIndexOf, devConsoleLog } from '@app/core/utils/utils.functions';
+import { Alert } from '../models/alert.models';
 @Injectable({
   providedIn: 'root'
 })
@@ -153,13 +154,4 @@ export class UserPushNotificationSubscriptionObject {
   endpoint = '';
   p256dh = '';
   auth = '';
-}
-
-export class Alert {
-  id = 0;
-  channel_send_id = 0;
-  body = '';
-  subject = '';
-  url = '';
-  staged_time = new Date();
 }

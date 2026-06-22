@@ -495,6 +495,13 @@ export class UserInfo {
     eliminate_results = false;
 }
 
+export class UserSeason {
+    id = NaN;
+    user = new User();
+    season = new Season();
+    void_ind = 'n';
+}
+
 export class FieldForm {
     id!: number;
     season_id!: number;
