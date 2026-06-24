@@ -15,6 +15,6 @@ export class AlertType {
     subject = '';
     body = '';
     last_run = new Date();
-    permission = new AuthPermission();
+    permission: AuthPermission | undefined = undefined;
     void_ind = 'n';
 }

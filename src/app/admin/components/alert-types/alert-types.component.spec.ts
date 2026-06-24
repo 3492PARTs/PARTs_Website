@@ -155,8 +155,8 @@ describe('AlertTypesComponent', () => {
             true,
             'alerts/types/',
             component.activeAlertType,
-            jasmine.any(Function),
-            jasmine.any(Function)
+            Function,
+            Function
         );
         expect(component.alertTypeModalVisible).toBe(false);
     });
