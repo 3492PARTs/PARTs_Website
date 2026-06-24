@@ -204,7 +204,7 @@ describe('ManageSeasonComponent', () => {
     });
     mockSS.loadSeasons.and.returnValue(Promise.resolve([season, season3]));
 
-    component.showUserSeasonModal(userInfo);
+    component.showUserSeasonModal(user);
     await Promise.resolve();
     await Promise.resolve();
 

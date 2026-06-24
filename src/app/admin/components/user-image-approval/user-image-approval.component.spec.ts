@@ -85,6 +85,7 @@ describe('UserImageApprovalComponent', () => {
       id: 7,
       first_name: 'Test',
       last_name: 'User',
+      name: 'Test User',
       username: 'test.user',
       email: 'test@parts.com'
     });
@@ -107,8 +108,8 @@ describe('UserImageApprovalComponent', () => {
     component.getUnapprovedUserImages();
 
     expect(component.userImages.length).toBe(1);
-    expect(component.userImages[0].user_name).toBe('Test User');
-    expect(component.userImages[0].image_url).toContain('/upload/v123/path/image');
+    expect(component.userImages[0].user.name).toBe('Test User');
+    expect(component.userImages[0].image).toContain('/upload/v123/path/image');
   });
 
   it('should approve image and remove it from list', () => {
@@ -130,10 +131,10 @@ describe('UserImageApprovalComponent', () => {
 
     component.userImages = [{
       ...image,
-      image_url: 'https://example.com/x.png',
-      user_name: 'Approve Me',
-      username: 'approve.me',
-      email: 'approve@parts.com'
+      image: 'https://example.com/x.png',
+      date_added: new Date(),
+      img_approved: false,
+      user: user,
     }];
 
     component.approveUserImage(component.userImages[0]);
