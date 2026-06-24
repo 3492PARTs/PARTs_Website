@@ -74,9 +74,9 @@ export class AlertTypesComponent implements OnInit {
     }
 
     saveAlertType(): void {
-        const alertTypeToSave = cloneObject(this.activeAlertType);
+        const alertTypeToSave: AlertType = cloneObject(this.activeAlertType);
 
-        if (alertTypeToSave.permission.id === null) {
+        if (alertTypeToSave.permission === undefined || alertTypeToSave.permission.id === 0) {
             alertTypeToSave.permission = undefined;
         }
         this.api.post(true, 'alerts/types/', alertTypeToSave, (result: any) => {
