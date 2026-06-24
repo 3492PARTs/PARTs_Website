@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { NotificationsService, Alert } from './notifications.service';
+import { NotificationsService } from './notifications.service';
 import { SwPush } from '@angular/service-worker';
 import { Router } from '@angular/router';
 import { GeneralService } from './general.service';
@@ -7,6 +7,7 @@ import { APIService } from './api.service';
 import { ModalService } from './modal.service';
 import { createMockSwPush, createMockGeneralService, createMockAPIService, createMockModalService, createMockRouter } from '../../../test-helpers';
 import { of } from 'rxjs';
+import { Alert } from '../models/alert.models';
 
 describe('NotificationsService', () => {
   let service: NotificationsService;
@@ -97,7 +98,7 @@ describe('NotificationsService', () => {
 
     it('should subscribe to notification clicks when service worker is enabled', () => {
       mockSwPush.isEnabled = true;
-      
+
       service.subscribeToNotifications();
 
       // Trigger a notification click with field-scouting action
