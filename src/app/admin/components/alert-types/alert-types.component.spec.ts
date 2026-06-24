@@ -151,13 +151,16 @@ describe('AlertTypesComponent', () => {
 
         component.saveAlertType();
 
-        expect(mockAPIService.post).toHaveBeenCalledWith(
-            true,
-            'alerts/types/',
-            component.activeAlertType,
-            Function,
-            Function
-        );
+        const postArgs = mockAPIService.post.calls.mostRecent().args;
+        expect(postArgs[0]).toBeTrue();
+        expect(postArgs[1]).toBe('alerts/types/');
+        expect(postArgs[2]).toEqual(jasmine.objectContaining({
+            alert_typ: 'WELCOME',
+            void_ind: 'n',
+            permission: undefined
+        }));
+        expect(postArgs[3]).toEqual(jasmine.any(Function));
+        expect(postArgs[4]).toEqual(jasmine.any(Function));
         expect(component.alertTypeModalVisible).toBe(false);
     });
 

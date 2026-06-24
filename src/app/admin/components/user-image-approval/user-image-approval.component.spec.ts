@@ -83,8 +83,8 @@ describe('UserImageApprovalComponent', () => {
       true,
       'user/user-images/',
       { img_approved: false },
-      Function,
-      Function
+      jasmine.any(Function),
+      jasmine.any(Function)
     );
   });
 
