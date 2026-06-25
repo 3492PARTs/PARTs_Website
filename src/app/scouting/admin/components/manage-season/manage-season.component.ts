@@ -246,7 +246,7 @@ export class ManageSeasonComponent implements OnInit {
   saveUserSeasons(): void {
     if (!this.activeUser.id) return;
 
-    this.api.post(true, 'scouting/admin/user-seasons/', this.activeUserSeasons, (result: any) => {
+    this.api.post(true, `scouting/admin/user-seasons/${this.activeUser.id}/`, this.activeUserSeasons, (result: any) => {
       this.userSeasonModalVisible = false;
       this.activeUser = new User();
       this.activeUserSeasons = [];
