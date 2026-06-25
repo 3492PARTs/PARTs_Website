@@ -1,3 +1,28 @@
-<app-box [Title]="'Manage Field Questions'"
-  ><app-question-admin-form [formType]="formType"> </app-question-admin-form
-></app-box>
+<app-box [Title]="'Manage Field Scouting'">
+  <app-form-element-group>
+    <app-button-ribbon [TextAlign]="'left'">
+      <app-modal [ButtonText]="'Conditions'" [Title]="'Manage Conditions'">
+        <app-manage-field-question-conditions></app-manage-field-question-conditions>
+      </app-modal>
+
+      <app-modal [ButtonText]="'Aggregates'" [Title]="'Manage Aggregates'">
+        <app-manage-field-question-aggregates></app-manage-field-question-aggregates>
+      </app-modal>
+
+      <app-modal [ButtonText]="'Flows'" [Title]="'Manage Flows'">
+        <app-manage-field-flows></app-manage-field-flows>
+      </app-modal>
+
+      <app-modal [ButtonText]="'Graphs'" [Title]="'Manage Graphs'">
+        <app-graph-admin-form></app-graph-admin-form>
+      </app-modal>
+
+      <app-modal [ButtonText]="'Responses'" [Title]="'Manage Responses'">
+        <app-manage-field-responses></app-manage-field-responses>
+      </app-modal>
+    </app-button-ribbon>
+  </app-form-element-group>
+
+
+  <app-question-admin-form [formType]="formType">
+  </app-question-admin-form></app-box>
