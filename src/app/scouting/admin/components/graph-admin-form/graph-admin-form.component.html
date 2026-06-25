@@ -1,20 +1,17 @@
-<app-box [Title]="'Manage Graphs'">
-  <app-form-element-group [InlineElements]="true">
-    <div class="flex justify-content-space-between flex-wrap">
-      <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
+<app-form-element-group [InlineElements]="true">
+  <div class="flex justify-content-space-between flex-wrap">
+    <app-form-element [Type]="'text'" [LabelText]="'Filter'" [(Model)]="filterText"></app-form-element>
 
-      <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="filterOptions" [(Model)]="filterOption"
-        [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
-    </div>
-  </app-form-element-group>
+    <app-form-element [Type]="'radio'" [LabelText]="'Active'" [SelectList]="filterOptions" [(Model)]="filterOption"
+      [DisplayProperty]="'property'" [BindingProperty]="'value'"></app-form-element>
+  </div>
+</app-form-element-group>
 
-  <app-table [TableCols]="graphTableCols" [TableData]="graphs" [TableDataButtons]="graphTableButtons" [Width]="'100%'"
-    [ShowAddButton]="true" (AddRecordCallBack)="showGraphModal()" [ShowEditButton]="true"
-    (EditRecordCallBack)="showGraphModal($event)" [Scrollable]="true" [ScrollHeight]="'72vh'"
-    [(FilterText)]="filterText" [EnableRemovedFilter]="true" [RemovedFilterProperty]="'active'"
-    [RemovedFilterPropertyValue]="filterOption">
-  </app-table>
-</app-box>
+<app-table [TableCols]="graphTableCols" [TableData]="graphs" [TableDataButtons]="graphTableButtons" [Width]="'100%'"
+  [ShowAddButton]="true" (AddRecordCallBack)="showGraphModal()" [ShowEditButton]="true"
+  (EditRecordCallBack)="showGraphModal($event)" [Scrollable]="true" [ScrollHeight]="'72vh'" [(FilterText)]="filterText"
+  [EnableRemovedFilter]="true" [RemovedFilterProperty]="'active'" [RemovedFilterPropertyValue]="filterOption">
+</app-table>
 
 <app-modal [Title]="'Manage Graph'" [(Visible)]="graphModalVisible">
   @if (activeGraph) {

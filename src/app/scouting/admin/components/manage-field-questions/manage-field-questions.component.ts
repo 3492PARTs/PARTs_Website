@@ -6,10 +6,12 @@ import { FormElementGroupComponent, ButtonRibbonComponent } from "@app/shared";
 import { ManageFieldQuestionConditionsComponent } from "../manage-field-question-conditions/manage-field-question-conditions.component";
 import { ManageFieldQuestionAggregatesComponent } from "../manage-field-question-aggregates/manage-field-question-aggregates.component";
 import { ManageFieldFlowsComponent } from "../manage-field-flows/manage-field-flows.component";
+import { GraphAdminFormComponent } from "../graph-admin-form/graph-admin-form.component";
+import { ManageFieldResponsesComponent } from "../manage-field-responses/manage-field-responses.component";
 
 @Component({
   selector: 'app-manage-field-questions',
-  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, ModalComponent, ManageFieldQuestionConditionsComponent, ManageFieldQuestionAggregatesComponent, ButtonRibbonComponent, ManageFieldFlowsComponent],
+  imports: [QuestionAdminFormComponent, BoxComponent, FormElementGroupComponent, ModalComponent, ManageFieldQuestionConditionsComponent, ManageFieldQuestionAggregatesComponent, ButtonRibbonComponent, ManageFieldFlowsComponent, GraphAdminFormComponent, ManageFieldResponsesComponent],
   templateUrl: './manage-field-questions.component.html',
   styleUrls: ['./manage-field-questions.component.scss']
 })
