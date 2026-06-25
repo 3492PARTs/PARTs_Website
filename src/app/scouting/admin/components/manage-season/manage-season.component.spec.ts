@@ -246,7 +246,7 @@ describe('ManageSeasonComponent', () => {
 
     component.saveUserSeasons();
 
-    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', activeSeasons, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/1/', activeSeasons, jasmine.any(Function), jasmine.any(Function));
     expect(mockAPI.delete).not.toHaveBeenCalled();
   });
 });
