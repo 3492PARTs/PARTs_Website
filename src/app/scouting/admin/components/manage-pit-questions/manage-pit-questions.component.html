@@ -1,3 +1,15 @@
-<app-box [Title]="'Manage Pit Questions'">
+<app-box [Title]="'Manage Pit Scouting'">
+    <app-form-element-group>
+        <app-button-ribbon [TextAlign]="'left'">
+            <app-modal [ButtonText]="'Conditions'" [Title]="'Manage Conditions'">
+                <app-manage-pit-question-conditions></app-manage-pit-question-conditions>
+            </app-modal>
+
+            <app-modal [ButtonText]="'Responses'" [Title]="'Manage Responses'">
+                <app-manage-pit-responses></app-manage-pit-responses>
+            </app-modal>
+        </app-button-ribbon>
+    </app-form-element-group>
+
     <app-question-admin-form [formType]="'pit'" [runInit]="manageScoutPitQuestions"></app-question-admin-form>
 </app-box>
