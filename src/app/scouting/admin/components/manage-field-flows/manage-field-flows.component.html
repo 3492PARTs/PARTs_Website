@@ -1,3 +1,11 @@
-<app-box [Title]="'Manage Field Flows'"
-  ><app-flow-admin-form [FormType]="formType"></app-flow-admin-form
-></app-box>
+<app-button-ribbon>
+    <app-modal [ButtonText]="'Conditions'" [Title]="'Manage Conditions'">
+        <app-manage-field-flow-conditions></app-manage-field-flow-conditions>
+    </app-modal>
+
+    <app-modal [ButtonText]="'Form'" [Title]="'Manage Form'">
+        <app-manage-field-form></app-manage-field-form>
+    </app-modal>
+</app-button-ribbon>
+
+<app-flow-admin-form [FormType]="formType"></app-flow-admin-form>
