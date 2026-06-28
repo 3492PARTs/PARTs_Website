@@ -1,6 +1,6 @@
-<app-box [Title]="'Season'">
-  <app-form (SubmitFunction)="setSeasonEvent()">
-    <app-form-element-group [LabelText]="'Current Season/Event'" [InlineElements]="true">
+<app-box [Title]="'Seasons'">
+  <app-form (SubmitFunction)="setCurrentSeasonEvent()">
+    <app-form-element-group [LabelText]="'Current Season & Event'" [InlineElements]="true">
       <div>
         <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
           [(Model)]="currentSeason" (ModelChange)="getEventsForCurrentSeason()" [FormGroupInline]="true"
@@ -31,7 +31,7 @@
     </app-form-element-group>
   </app-form>
 
-  <app-form-element-group [LabelText]="'Manage Season'">
+  <app-form-element-group [LabelText]="'Seasons'">
     <div class="flex flex-wrap space-between">
       <app-modal [ButtonType]="'main'" [ButtonText]="'Manage'" [Title]="'Manage Season'"
         [(Visible)]="manageSeasonModalVisible" [MaxWidth]="'450px'">

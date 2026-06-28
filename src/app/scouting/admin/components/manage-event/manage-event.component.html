@@ -1,4 +1,4 @@
-<app-form-element-group [LabelText]="'Manage Event'">
+<app-form-element-group [LabelText]="'Events'">
   <div class="flex flex-wrap space-between">
     <app-modal [ButtonType]="'main'" [ButtonText]="'Add Event'" [Title]="'Add Event'"
       [(Visible)]="manageEventsModalVisible" [MaxWidth]="'500px'">
@@ -88,23 +88,23 @@
     </app-modal>
 
     @if (currentEvent.id) {
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
-        Sync Event
-      </app-button>
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEvent(currentEvent.event_cd)">
+      Sync Event
+    </app-button>
     }
 
     @if (currentEvent.id) {
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
-        Sync Event-Team Info
-      </app-button>
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="syncEventTeamInfo()">
+      Sync Event-Team Info
+    </app-button>
     }
   </div>
 </app-form-element-group>
 
 @if (syncEventResponse.retMessage) {
-  <app-form-element-group [LabelText]="'Event Response'">
-    <div>
-      <p class="white-space-pre">{{ syncEventResponse.retMessage }}</p>
-    </div>
-  </app-form-element-group>
+<app-form-element-group [LabelText]="'Event Response'">
+  <div>
+    <p class="white-space-pre">{{ syncEventResponse.retMessage }}</p>
+  </div>
+</app-form-element-group>
 }

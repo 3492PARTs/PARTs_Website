@@ -1,7 +1,7 @@
-<app-form-element-group [LabelText]="'Manage Match'">
+<app-form-element-group [LabelText]="'Matches'">
   <div class="flex flex-wrap space-between">
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Add Match'" [Title]="'Add Match'"
-      [(Visible)]="newMatchModalVisible" [MaxWidth]="'500px'">
+    <app-modal [ButtonType]="'main'" [ButtonText]="'Add Match'" [Title]="'Add Match'" [(Visible)]="newMatchModalVisible"
+      [MaxWidth]="'500px'">
       <app-form (SubmitFunction)="saveMatch()">
         <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
           [(Model)]="newMatchSeason" (FunctionCallBack)="getEventsForNewMatch()" [FormGroupInline]="true"
@@ -68,17 +68,17 @@
     </app-modal>
 
     @if (currentEvent.id) {
-      <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
-        Sync Matches
-      </app-button>
+    <app-button [ButtonType]="'main'" (FunctionCallBack)="syncMatches()">
+      Sync Matches
+    </app-button>
     }
   </div>
 </app-form-element-group>
 
 @if (syncMatchResponse.retMessage) {
-  <app-form-element-group [LabelText]="'Match Response'">
-    <div>
-      <p class="white-space-pre">{{ syncMatchResponse.retMessage }}</p>
-    </div>
-  </app-form-element-group>
+<app-form-element-group [LabelText]="'Match Response'">
+  <div>
+    <p class="white-space-pre">{{ syncMatchResponse.retMessage }}</p>
+  </div>
+</app-form-element-group>
 }

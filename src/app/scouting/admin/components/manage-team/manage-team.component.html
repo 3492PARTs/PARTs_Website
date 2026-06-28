@@ -1,7 +1,7 @@
-<app-form-element-group [LabelText]="'Manage Team'">
+<app-form-element-group [LabelText]="'Teams'">
   <div class="flex flex-wrap space-between">
-    <app-modal [ButtonType]="'main'" [ButtonText]="'Add Team'" [Title]="'Add Team'"
-      [(Visible)]="manageTeamModalVisible" [MaxWidth]="'300px'">
+    <app-modal [ButtonType]="'main'" [ButtonText]="'Add Team'" [Title]="'Add Team'" [(Visible)]="manageTeamModalVisible"
+      [MaxWidth]="'300px'">
       <app-form (SubmitFunction)="saveTeam()">
         <app-form-element [Type]="'text'" [LabelText]="'Number'" [(Model)]="newTeam.team_no" [Required]="true">
         </app-form-element>
@@ -20,9 +20,8 @@
       [Visible]="linkTeamToEventModalVisible" [MaxWidth]="'400px'" (VisibleChange)="showLinkTeamToEventModal($event)">
       <app-form (SubmitFunction)="addEventToTeams()">
         <app-form-element [Type]="'select'" [LabelText]="'Season'" [SelectList]="seasons" [DisplayProperty]="'season'"
-          [BindingProperty]="'id'" [(Model)]="linkTeamToEventSeason"
-          (FunctionCallBack)="getEventsForLinkTeamToEvent()" [FormGroupInline]="true" [Required]="true"
-          [MinWidth]="'100px'">
+          [BindingProperty]="'id'" [(Model)]="linkTeamToEventSeason" (FunctionCallBack)="getEventsForLinkTeamToEvent()"
+          [FormGroupInline]="true" [Required]="true" [MinWidth]="'100px'">
         </app-form-element>
 
         <app-form-element [Type]="'select'" [LabelText]="'Event'" [SelectList]="linkTeamToEventList"
@@ -58,17 +57,17 @@
         </app-form-element>
 
         @if (removeTeamFromEventEvent) {
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
-            [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-            [(Model)]="removeTeamFromEventEvent.teams" [Required]="true" [MinWidth]="'100px'">
-          </app-form-element>
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
+          [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
+          [(Model)]="removeTeamFromEventEvent.teams" [Required]="true" [MinWidth]="'100px'">
+        </app-form-element>
         }
 
         @if (!removeTeamFromEventEvent) {
-          <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
-            [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'"
-            [Required]="true" [MinWidth]="'100px'">
-          </app-form-element>
+        <app-form-element [Type]="'multiSelect'" [LabelText]="'Teams'" [SelectList]="removeTeamFromEventTeams"
+          [BindingProperty]="'team_no'" [DisplayProperty]="'team_no'" [DisplayProperty2]="'team_nm'" [Required]="true"
+          [MinWidth]="'100px'">
+        </app-form-element>
         }
 
         <app-button-ribbon>
