@@ -29,51 +29,52 @@ export class ManageEventComponent {
   @Input() currentEvent = new Event();
   @Output() refreshRequested = new EventEmitter<void>();
 
-  newEvent = new Event();
-  delSeason: number | null = null;
-  delEvent: number | null = null;
-  delEventList: Event[] = [];
+  event = new Event();
+  events: Event[] = [];
 
   manageEventsModalVisible = false;
   removeSeasonEventModalVisible = false;
 
   syncEventResponse = new RetMessage();
 
-  saveEvent(): void {
-    if (strNoE(this.newEvent.event_cd)) {
-      const event = cloneObject(this.newEvent);
-      event.event_cd = (this.newEvent.season_id + this.newEvent.event_nm.replace(' ', '')).substring(0, 10);
+  inputOptions = [{ property: 'Form', value: 'form' }, { property: 'TBA Code', value: 'tba' },];
+  inputOption = 'form';
 
-      this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.manageEventsModalVisible = false;
-        this.newEvent = new Event();
-        this.syncEventResponse = new RetMessage();
-        this.refreshRequested.emit();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
-    }
-    else {
-      this.syncEvent(this.newEvent.event_cd);
-    }
+  changeEvent(e: Event): void {
+    this.event = e ? e : new Event();
+  }
+
+  saveEvent(): void {
+    const event = cloneObject(this.event);
+    if (strNoE(event.event_cd))
+      event.event_cd = (this.event.season_id + this.event.event_nm.replace(' ', '')).substring(0, 10);
+
+    this.api.post(true, 'scouting/admin/event/', event, (result: any) => {
+      this.modalService.successfulResponseBanner(result);
+      this.manageEventsModalVisible = false;
+      this.event = new Event();
+      this.syncEventResponse = new RetMessage();
+      this.refreshRequested.emit();
+    }, (err: any) => {
+      this.modalService.triggerError(err);
+    });
   }
 
   clearEvent(): void {
-    this.newEvent = new Event();
+    this.event = new Event();
   }
 
   deleteEvent(): void {
-    if (!this.delEvent) return;
+    if (!this.event) return;
 
     this.modalService.triggerConfirm('Are you sure you want to delete this event?\nDeleting this event will result in all associated data being removed.', () => {
       this.api.delete(true, 'scouting/admin/event/', {
-        event_id: this.delEvent?.toString() || ''
+        event_id: this.event?.id?.toString() || ''
       }, (result: any) => {
         this.modalService.successfulResponseBanner(result);
-        this.delEvent = null;
+        this.event = new Event();
         this.removeSeasonEventModalVisible = false;
-        this.getEventsForDeleteEvent();
+        this.getEventsForSeason();
         this.refreshRequested.emit();
       }, (err: any) => {
         this.modalService.triggerError(err);
@@ -88,7 +89,7 @@ export class ManageEventComponent {
     }, (result: any) => {
       this.syncEventResponse = result as RetMessage;
       this.manageEventsModalVisible = false;
-      this.newEvent = new Event();
+      this.event = new Event();
       this.refreshRequested.emit();
     }, (err: any) => {
       this.modalService.triggerError(err);
@@ -105,11 +106,7 @@ export class ManageEventComponent {
     });
   }
 
-  async getEventsForDeleteEvent(): Promise<void> {
-    this.delEventList = await this.getEventsForSeason(this.delSeason || NaN);
-  }
-
-  private async getEventsForSeason(season_id: number): Promise<Event[]> {
-    return await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id }));
+  async getEventsForSeason(): Promise<void> {
+    this.events = await this.ss.getEventsFromCache(e => e.where({ 'season_id': this.event.season_id }));
   }
 }

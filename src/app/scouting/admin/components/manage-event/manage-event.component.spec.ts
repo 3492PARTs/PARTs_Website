@@ -52,13 +52,13 @@ describe('ManageEventComponent', () => {
 
   it('saveEvent should call syncEvent when event_cd is not empty', () => {
     spyOn(component, 'syncEvent');
-    component.newEvent = Object.assign(new Event(), { event_cd: 'ABC123' });
+    component.event = Object.assign(new Event(), { event_cd: 'ABC123' });
     component.saveEvent();
     expect(component.syncEvent).toHaveBeenCalledWith('ABC123');
   });
 
   it('saveEvent should call api.post when event_cd is empty', () => {
-    component.newEvent = Object.assign(new Event(), { event_cd: '', event_nm: 'Test', season_id: 2024 });
+    component.event = Object.assign(new Event(), { event_cd: '', event_nm: 'Test', season_id: 2024 });
     mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
       onNext?.({ message: 'ok' });
       return Promise.resolve({ message: 'ok' });

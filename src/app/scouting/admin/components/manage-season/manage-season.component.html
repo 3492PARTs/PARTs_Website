@@ -107,6 +107,14 @@
     </div>
   </app-form-element-group>
 
+  @if (syncSeasonResponse.retMessage) {
+  <app-form-element-group [LabelText]="'Season Response'">
+    <div id="respose">
+      <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
+    </div>
+  </app-form-element-group>
+  }
+
   <app-manage-event [seasons]="seasons" [currentSeason]="currentSeason" [currentEvent]="currentEvent"
     (refreshRequested)="init()">
   </app-manage-event>
@@ -117,11 +125,4 @@
   <app-manage-match [seasons]="seasons" [currentEvent]="currentEvent" (refreshRequested)="init()">
   </app-manage-match>
 
-  @if (syncSeasonResponse.retMessage) {
-  <app-form-element-group [LabelText]="'Season Response'">
-    <div id="respose">
-      <p class="white-space-pre">{{ syncSeasonResponse.retMessage }}</p>
-    </div>
-  </app-form-element-group>
-  }
 </app-box>
