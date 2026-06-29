@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType } from '@app/core/models/form.models';
+import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType, ConditionalOnQuestion } from '@app/core/models/form.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -87,7 +87,7 @@ export class QuestionAdminFormComponent implements OnInit {
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
         { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowNames.bind(this) },
         { PropertyName: 'conditional_question_id_set', ColLabel: 'Conditional Questions', Type: 'function', ColValueFunction: this.getQuestionDisplayValues.bind(this) },
-        { PropertyName: 'question_conditional_on', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
+        { PropertyName: 'conditional_on_questions', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
       ];
 
       if (this.FormMetadata.form_sub_types.length > 0)
@@ -96,6 +96,11 @@ export class QuestionAdminFormComponent implements OnInit {
     else {
       this.questionTableCols = [...this._questionTableCols];
     }
+
+    if (this.formType === 'pit') {
+      this.questionTableCols = this.questionTableCols.filter(qc => !["Sub Type", "Flows"].includes(qc.ColLabel));
+    }
+
   }
 
   showQuestionModal(q?: Question): void {
@@ -157,8 +162,8 @@ export class QuestionAdminFormComponent implements OnInit {
     return this.FormMetadata.questions.filter(q => ids.includes(q.id)).map(f => f.display_value).join('\n') || '';
   }
 
-  getQuestionDisplayValue(id: number): string {
-    return this.FormMetadata.questions.find(q => id == q.id)?.display_value || '';
+  getQuestionDisplayValue(questions: ConditionalOnQuestion[]): string {
+    return this.FormMetadata.questions.filter(q => questions.map(qq => qq.conditional_on).includes(q.id)).map(f => f.display_value).join('\n') || '';
   }
 
 }

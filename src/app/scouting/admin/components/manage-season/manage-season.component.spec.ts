@@ -119,7 +119,7 @@ describe('ManageSeasonComponent', () => {
     component.currentSeason = new Season();
     component.currentEvent = new Event();
 
-    const result = component.setSeasonEvent();
+    const result = component.setCurrentSeasonEvent();
 
     expect(result).toBeNull();
     expect(mockModalService.triggerError).toHaveBeenCalled();
@@ -137,7 +137,7 @@ describe('ManageSeasonComponent', () => {
       return Promise.resolve({ message: 'ok' });
     });
 
-    component.setSeasonEvent();
+    component.setCurrentSeasonEvent();
 
     expect(mockAPI.get).toHaveBeenCalled();
   });
