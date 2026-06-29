@@ -41,8 +41,7 @@ export class ManageSeasonComponent implements OnInit {
   events: Event[] = [];
   teams: Team[] = [];
 
-  newSeason = new Season();
-  delSeason: number | null = null;
+  season = new Season();
   eventList: Event[] = [];
   users: User[] = [];
   userSeasons: UserSeason[] = [];
@@ -57,8 +56,7 @@ export class ManageSeasonComponent implements OnInit {
 
   syncSeasonResponse = new RetMessage();
 
-  addSeasonModalVisible = false;
-  removeSeasonModalVisible = false;
+  manageSeasonModalVisible = false;
   userSeasonModalVisible = false;
 
   activeUser = new User();
@@ -110,7 +108,7 @@ export class ManageSeasonComponent implements OnInit {
     });
   }
 
-  setSeasonEvent(): void | null {
+  setCurrentSeasonEvent(): void | null {
     if (!this.currentSeason.id || !this.currentEvent.id) {
       this.modalService.triggerError('No season or event selected.');
       return null;
@@ -149,27 +147,32 @@ export class ManageSeasonComponent implements OnInit {
     this.init();
   }
 
+  changeSeason(s: Season): void {
+    this.season = s ? s : new Season();
+  }
+
   saveSeason(s: Season): void {
-    this.api.post(true, 'scouting/admin/season/', s, (result: any) => {
+    this.api.post(true, 'scouting/admin/seasons/', s, (result: any) => {
       this.modalService.successfulResponseBanner(result);
       this.init();
       s = new Season();
-      this.addSeasonModalVisible = false;
+      this.season = new Season();
+      this.manageSeasonModalVisible = false;
     }, (err: any) => {
       this.modalService.triggerError(err);
     });
   }
 
   deleteSeason(): void | null {
-    if (this.delSeason) {
+    if (this.season) {
       this.modalService.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
-        this.api.delete(true, 'scouting/admin/season/', {
-          season_id: this.delSeason?.toString() || ''
+        this.api.delete(true, 'scouting/admin/seasons/', {
+          season_id: this.season?.id.toString() || ''
         }, (result: any) => {
           this.modalService.successfulResponseBanner(result);
           this.init();
-          this.delSeason = null;
-          this.removeSeasonModalVisible = false;
+          this.season = new Season();
+          this.manageSeasonModalVisible = false;
         }, (err: any) => {
           this.modalService.triggerError(err);
         });
