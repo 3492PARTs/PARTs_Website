@@ -124,7 +124,7 @@ describe('NavigationService', () => {
       service.setSubPages('/scouting/admin/activity');
       service.subPages.subscribe(pages => {
         expect(pages.length).toBeGreaterThan(0);
-        expect(pages.some(p => p.menu_name === 'Scouting Activity')).toBe(true);
+        expect(pages.some(p => p.menu_name === 'Activity')).toBe(true);
       });
     });
 
@@ -253,12 +253,10 @@ describe('NavigationService', () => {
   });
 
   describe('Nested scouting routes', () => {
-    it('should set scouting admin pages for nested scouting/scouting-admin route', () => {
+    it('should not set sub pages for legacy nested scouting/scouting-admin route', () => {
       service.setSubPages('/scouting/scouting-admin/activity');
       service.subPages.subscribe(pages => {
-        if (pages.length > 0) {
-          expect(pages.some(p => p.menu_name === 'Scouting Activity')).toBe(true);
-        }
+        expect(pages.length).toBe(0);
       });
     });
   });
