@@ -4,7 +4,6 @@ import { FieldForm } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -17,7 +16,7 @@ import { ModalService } from '@app/core/services/modal.service';
 import { strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-manage-field-form',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
+  imports: [FormElementGroupComponent, FormElementComponent, ButtonComponent, FormComponent, ModalComponent, DrawQuestionSvgComponent],
   templateUrl: './manage-field-form.component.html',
   styleUrls: ['./manage-field-form.component.scss']
 })

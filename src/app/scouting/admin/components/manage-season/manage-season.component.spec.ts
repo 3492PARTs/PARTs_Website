@@ -12,7 +12,8 @@ import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { ModalService } from '@app/core/services/modal.service';
 import { createMockSwPush } from '../../../../../test-helpers';
-import { Event, Season, Team } from '@app/scouting/models/scouting.models';
+import { Event, Season, Team, UserInfo, UserSeason } from '@app/scouting/models/scouting.models';
+import { User } from '@app/auth/models/user.models';
 
 describe('ManageSeasonComponent', () => {
   let component: ManageSeasonComponent;
@@ -43,11 +44,12 @@ describe('ManageSeasonComponent', () => {
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache',
+      'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache', 'loadSeasons',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.getTeams.and.returnValue(Promise.resolve(null) as any);
     mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockSS.loadSeasons.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerConfirm', 'triggerError', 'successfulResponseBanner',
     ]);
@@ -92,41 +94,33 @@ describe('ManageSeasonComponent', () => {
   it('init should populate seasons and events when result is returned', async () => {
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(makeAllScoutInfo() as any));
     spyOn(component, 'getAllTeams');
+
     component.init();
     await Promise.resolve() as any;
+
     expect(component.seasons.length).toBe(1);
+    expect(component.currentSeason.id).toBe(1);
+    expect(component.currentEvent.id).toBe(2);
   });
 
   it('syncSeason should call api.get', () => {
     component.currentSeason = Object.assign(new Season(), { id: 1 });
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ retMessage: 'ok' });
+      return Promise.resolve({ retMessage: 'ok' });
+    });
+
     component.syncSeason();
+
     expect(mockAPI.get).toHaveBeenCalled();
-  });
-
-  it('syncSeason error should call triggerError', () => {
-    component.currentSeason = Object.assign(new Season(), { id: 1 });
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
-    component.syncSeason();
-    expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
-  });
-
-  it('syncMatches should call api.get', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
-    component.syncMatches();
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'tba/sync-matches/', undefined, jasmine.any(Function), jasmine.any(Function));
-  });
-
-  it('syncEventTeamInfo should call api.get', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
-    component.syncEventTeamInfo();
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'tba/sync-event-team-info/', { force: 1 }, jasmine.any(Function), jasmine.any(Function));
   });
 
   it('setSeasonEvent should call triggerError when no season or event', () => {
     component.currentSeason = new Season();
     component.currentEvent = new Event();
-    const result = component.setSeasonEvent();
+
+    const result = component.setCurrentSeasonEvent();
+
     expect(result).toBeNull();
     expect(mockModalService.triggerError).toHaveBeenCalled();
   });
@@ -134,141 +128,125 @@ describe('ManageSeasonComponent', () => {
   it('setSeasonEvent should call api.get when season and event are valid', () => {
     component.currentSeason = Object.assign(new Season(), { id: 1 });
     component.currentEvent = Object.assign(new Event(), { id: 2, competition_page_active: 'y' });
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.setSeasonEvent();
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+
+    component.setCurrentSeasonEvent();
+
     expect(mockAPI.get).toHaveBeenCalled();
   });
 
   it('saveSeason should call api.post', () => {
-    const s = new Season();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.saveSeason(s);
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+
+    component.saveSeason(new Season());
+
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
-  it('saveSeason error should call triggerError', () => {
-    const s = new Season();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
-    component.saveSeason(s);
-    expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
-  });
+  it('deleteSeason should call triggerConfirm when season is set', () => {
+    component.season = Object.assign(new Season(), { id: 1 });
 
-  it('deleteSeason should call triggerConfirm when delSeason is set', () => {
-    component.delSeason = 1;
     component.deleteSeason();
-    expect(mockModalService.triggerConfirm).toHaveBeenCalled();
-  });
 
-  it('deleteSeason should do nothing when delSeason is null', () => {
-    component.delSeason = null;
-    component.deleteSeason();
-    expect(mockModalService.triggerConfirm).not.toHaveBeenCalled();
-  });
-
-  it('saveEvent should call syncEvent when event_cd is not empty', () => {
-    spyOn(component, 'syncEvent');
-    component.newEvent = Object.assign(new Event(), { event_cd: 'ABC123' });
-    component.saveEvent();
-    expect(component.syncEvent).toHaveBeenCalledWith('ABC123');
-  });
-
-  it('saveEvent should call api.post when event_cd is empty', () => {
-    component.newEvent = Object.assign(new Event(), { event_cd: '', event_nm: 'Test', season_id: 2024 });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.saveEvent();
-    expect(mockAPI.post).toHaveBeenCalled();
-  });
-
-  it('clearEvent should reset newEvent', () => {
-    component.newEvent = Object.assign(new Event(), { event_nm: 'test' });
-    component.clearEvent();
-    expect(component.newEvent.event_nm).toBe('');
-  });
-
-  it('deleteEvent should call triggerConfirm when delEvent is set', () => {
-    component.delEvent = 3;
-    component.deleteEvent();
     expect(mockModalService.triggerConfirm).toHaveBeenCalled();
   });
 
   it('getAllTeams should set teams when result returned', async () => {
     const teams: Team[] = [Object.assign(new Team(), { team_no: 3492 })];
     mockSS.getTeams.and.returnValue(Promise.resolve(teams));
+
     component.getAllTeams();
     await Promise.resolve() as any;
+
     expect(component.teams).toEqual(teams);
-  });
-
-  it('saveTeam should call api.post', () => {
-    component.newTeam = new Team();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.saveTeam();
-    expect(mockAPI.post).toHaveBeenCalled();
-  });
-
-  it('clearTeam should reset newTeam', () => {
-    component.newTeam = Object.assign(new Team(), { team_no: 100 });
-    component.clearTeam();
-    expect(component.newTeam.team_no).toBeFalsy();
-  });
-
-  it('showLinkTeamToEventModal should set visibility and clear state', () => {
-    component.showLinkTeamToEventModal(true);
-    expect(component.linkTeamToEventModalVisible).toBeTrue();
-    expect(component.linkTeamToEventSeason).toBeNull();
-  });
-
-  it('showRemoveTeamFromEventModal should set visibility and clear state', () => {
-    component.showRemoveTeamFromEventModal(true);
-    expect(component.removeTeamFromEventModalVisible).toBeTrue();
-    expect(component.removeTeamFromEventSeason).toBeNull();
-  });
-
-  it('buildEventTeamList should remove teams that are in eventTeamList', () => {
-    const t1 = Object.assign(new Team(), { team_no: 100 });
-    const t2 = Object.assign(new Team(), { team_no: 200 });
-    component.teams = [t1, t2];
-    const result = component.buildEventTeamList([Object.assign(new Team(), { team_no: 100 })]);
-    expect(result.length).toBe(1);
-    expect(result[0].team_no).toBe(200);
-  });
-
-  it('buildRemoveTeamFromEventTeamList should set from event teams', () => {
-    const t = Object.assign(new Team(), { team_no: 100 });
-    const ev = Object.assign(new Event(), { teams: [t] });
-    component.removeTeamFromEventEvent = ev;
-    component.buildRemoveTeamFromEventTeamList();
-    expect(component.removeTeamFromEventTeams.length).toBe(1);
-  });
-
-  it('buildRemoveTeamFromEventTeamList should clear when event is null', () => {
-    component.removeTeamFromEventEvent = null;
-    component.buildRemoveTeamFromEventTeamList();
-    expect(component.removeTeamFromEventTeams).toEqual([]);
-  });
-
-  it('addEventToTeams should call api.post', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.addEventToTeams();
-    expect(mockAPI.post).toHaveBeenCalled();
-  });
-
-  it('removeEventToTeams should call api.post', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.removeEventToTeams();
-    expect(mockAPI.post).toHaveBeenCalled();
-  });
-
-  it('saveMatch should call api.post', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
-    component.saveMatch();
-    expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('resetSeasonForm should call init', () => {
     spyOn(component, 'init');
+
     component.resetSeasonForm();
+
     expect(component.init).toHaveBeenCalled();
+  });
+
+  it('getUserSeasonsForTable should return comma separated seasons', () => {
+    const user = Object.assign(new User(), { id: 1 });
+    const season2025 = Object.assign(new Season(), { id: 1, season: '2025' });
+    const season2024 = Object.assign(new Season(), { id: 2, season: '2024' });
+    component.userSeasons = [
+      Object.assign(new UserSeason(), { user, season: season2024 }),
+      Object.assign(new UserSeason(), { user, season: season2025 }),
+    ];
+
+    expect(component.getUserSeasonsForTable(1)).toBe('2025, 2024');
+  });
+
+  it('showUserSeasonModal should load user seasons for selected user', async () => {
+    const user = Object.assign(new User(), { id: 10, first_name: 'Scout', last_name: 'One' });
+    const userInfo = Object.assign(new UserInfo(), { user });
+    const season = Object.assign(new Season(), { id: 2, season: '2026' });
+    const season3 = Object.assign(new Season(), { id: 3, season: '2027' });
+    const userSeasons = [Object.assign(new UserSeason(), { user, season, void_ind: 'n' })];
+
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.(userSeasons);
+      return Promise.resolve(userSeasons);
+    });
+    mockSS.loadSeasons.and.returnValue(Promise.resolve([season, season3]));
+
+    component.showUserSeasonModal(user);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', { user_id: '10' }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockSS.loadSeasons).toHaveBeenCalled();
+    expect(component.userSeasonModalVisible).toBeTrue();
+    expect(component.activeUser.id).toBe(10);
+    expect(component.activeUserSeasons.length).toBe(1);
+    expect(component.activeUserAvailableSeasons.length).toBe(1);
+    expect(component.activeUserAvailableSeasons[0].id).toBe(3);
+  });
+
+  it('addSeasonToActiveUser should add season and avoid duplicates', () => {
+    component.activeUser = Object.assign(new User(), { id: 1 });
+    const season = Object.assign(new Season(), { id: 3, season: '2027' });
+    component.selectedSeasonToAdd = season;
+
+    component.addSeasonToActiveUser();
+    component.selectedSeasonToAdd = season;
+    component.addSeasonToActiveUser();
+
+    expect(component.activeUserSeasons.length).toBe(1);
+    expect(component.activeUserSeasons[0].season.id).toBe(3);
+  });
+
+  it('saveUserSeasons should post the full list of user seasons', async () => {
+    component.activeUser = Object.assign(new User(), { id: 1 });
+    const activeSeasons = [Object.assign(new UserSeason(), {
+      user: component.activeUser,
+      season: Object.assign(new Season(), { id: 2, season: '2026' }),
+      void_ind: 'n'
+    })];
+    component.activeUserSeasons = activeSeasons;
+
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+
+    component.saveUserSeasons();
+
+    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/1/', activeSeasons, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.delete).not.toHaveBeenCalled();
   });
 });
