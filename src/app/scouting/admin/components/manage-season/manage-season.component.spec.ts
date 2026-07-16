@@ -153,8 +153,8 @@ describe('ManageSeasonComponent', () => {
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
-  it('deleteSeason should call triggerConfirm when delSeason is set', () => {
-    component.delSeason = 1;
+  it('deleteSeason should call triggerConfirm when season is set', () => {
+    component.season = Object.assign(new Season(), { id: 1 });
 
     component.deleteSeason();
 
