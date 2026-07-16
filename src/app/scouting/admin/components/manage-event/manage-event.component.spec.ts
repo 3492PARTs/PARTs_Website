@@ -50,11 +50,16 @@ describe('ManageEventComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('saveEvent should call syncEvent when event_cd is not empty', () => {
-    spyOn(component, 'syncEvent');
-    component.event = Object.assign(new Event(), { event_cd: 'ABC123' });
+  it('saveEvent should call api.post when event_cd is not empty', () => {
+    component.event = Object.assign(new Event(), { event_cd: 'ABC123', event_nm: 'Test', season_id: 2024 });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      onNext?.({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
+
     component.saveEvent();
-    expect(component.syncEvent).toHaveBeenCalledWith('ABC123');
+
+    expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('saveEvent should call api.post when event_cd is empty', () => {
@@ -67,8 +72,8 @@ describe('ManageEventComponent', () => {
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
-  it('deleteEvent should call triggerConfirm when delEvent is set', () => {
-    component.delEvent = 3;
+  it('deleteEvent should call triggerConfirm when event is set', () => {
+    component.event = Object.assign(new Event(), { id: 3 });
     component.deleteEvent();
     expect(mockModalService.triggerConfirm).toHaveBeenCalled();
   });

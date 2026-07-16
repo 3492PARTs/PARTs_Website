@@ -35,10 +35,18 @@ describe('MatchesComponent', () => {
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.isMobile.and.returnValue(false);
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'loadMatchStrategies', 'saveMatchStrategy',
+      'loadAllScoutingInfo',
+      'loadMatchStrategies',
+      'saveMatchStrategy',
+      'loadFieldScoutingResponses',
+      'loadFieldScoutingResponseColumns',
+      'loadPitScoutingResponses',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.loadMatchStrategies.and.returnValue(Promise.resolve(null) as any);
+    mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
+    mockSS.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve([]) as any);
+    mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'triggerConfirm']);
 
     await TestBed.configureTestingModule({
