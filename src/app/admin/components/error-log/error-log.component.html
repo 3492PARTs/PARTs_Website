@@ -1,14 +1,9 @@
 <app-box [Title]="'Error Log'">
-  <app-table
-    [TableCols]="errorTableCols"
-    [TableData]="errors"
-    [Scrollable]="true"
-    [Responsive]="true"
-    (RecordClickCallBack)="showErrorModal($event)"
-    [ScrollHeight]="'50rem'"
-    [CursorPointer]="true"
-  >
+  <app-table [TableCols]="errorTableCols" [TableData]="errors" [Scrollable]="true" [Responsive]="true"
+    (RecordClickCallBack)="showErrorModal($event)" [ScrollHeight]="'50rem'" [CursorPointer]="true">
   </app-table>
+
+  <app-pagination [Page]="errorPage" [PageInfo]="pageInfo" (FunctionCallBack)="getErrors($event)"></app-pagination>
 
   <app-modal [Title]="'Error Detail'" [(Visible)]="errorDetailModalVisible">
     <app-form-element-group [LabelText]="'Information'">
@@ -30,10 +25,4 @@
       <p class="dont-break-out">{{ currentError.traceback }}</p>
     </app-form-element-group>
   </app-modal>
-
-  <app-pagination
-    [Page]="errorPage"
-    [PageInfo]="pageInfo"
-    (FunctionCallBack)="getErrors($event)"
-  ></app-pagination>
 </app-box>
