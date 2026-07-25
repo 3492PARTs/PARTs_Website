@@ -89,6 +89,7 @@ describe('ProfileComponent', () => {
     const mockUser = new User();
     mockUser.id = 3;
     mockUS.getUsers.and.returnValue(Promise.resolve([mockUser]) as any);
+    await TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
       imports: [ProfileComponent],
       providers: [
@@ -185,6 +186,7 @@ describe('ProfileComponent', () => {
   });
 
   it('saveProfile should call gs.incrementOutstandingCalls', async () => {
+    component.editUser.id = 1;
     await component.saveProfile();
     expect(mockGS.incrementOutstandingCalls).toHaveBeenCalled();
   });

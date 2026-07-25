@@ -89,4 +89,104 @@ describe('FlowConditionAdminFormComponent', () => {
     component.showFlowConditionModal(fc);
     expect(component.activeFlowCondition.active).toBe('y');
   });
+
+  it('showFlowConditionModal with no arg should create new FlowCondition', () => {
+    component.showFlowConditionModal();
+    expect(component.activeFlowCondition).toEqual(new FlowCondition());
+    expect(component.flowConditionModalVisible).toBeTrue();
+  });
+
+  it('buildFlowConditionFromLists should clone flows to fromList', () => {
+    const f1 = new Flow();
+    f1.id = 10;
+    component.flows = [f1];
+    component.buildFlowConditionFromLists();
+    expect(component.flowConditionQuestionFromList.length).toBe(1);
+    expect(component.flowConditionQuestionFromList[0].id).toBe(10);
+  });
+
+  it('buildFlowConditionToLists should include activeFlowCondition.flow_to at head', () => {
+    const flowTo = new Flow();
+    flowTo.id = 5;
+    flowTo.name = 'To Flow';
+    component.activeFlowCondition = new FlowCondition();
+    component.activeFlowCondition.flow_to = flowTo;
+    component.flows = [];
+    component.buildFlowConditionToLists();
+    expect(component.flowConditionQuestionToList[0].id).toBe(5);
+  });
+
+  it('buildFlowConditionToLists should exclude flow already used as from', () => {
+    const f1 = new Flow();
+    f1.id = 1;
+    component.flows = [f1];
+    component.activeFlowCondition = new FlowCondition();
+    component.activeFlowCondition.flow_from = f1;
+    component.buildFlowConditionToLists();
+    // f1 should be excluded because it is the selected from flow
+    const ids = component.flowConditionQuestionToList.map(f => f.id);
+    expect(ids).not.toContain(1);
+  });
+
+  it('compareFlowQuestions should return true for matching ids', () => {
+    const f1 = new Flow();
+    f1.id = 99;
+    const f2 = new Flow();
+    f2.id = 99;
+    expect(component.compareFlowQuestions(f1, f2)).toBeTrue();
+  });
+
+  it('compareFlowQuestions should return false for different ids', () => {
+    const f1 = new Flow();
+    f1.id = 1;
+    const f2 = new Flow();
+    f2.id = 2;
+    expect(component.compareFlowQuestions(f1, f2)).toBeFalse();
+  });
+
+  it('compareFlowQuestions should return false when either arg is falsy', () => {
+    expect(component.compareFlowQuestions(null as any, null as any)).toBeFalse();
+  });
+
+  it('saveFlowCondition should call api.post and close modal on success', () => {
+    component.saveFlowCondition();
+    expect(mockAPI.post).toHaveBeenCalled();
+    expect(mockModalService.successfulResponseBanner).toHaveBeenCalled();
+    expect(component.flowConditionModalVisible).toBeFalse();
+  });
+
+  it('saveFlowCondition should call triggerError on failure', () => {
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, _s?: any, errCb?: (e: any) => void) => {
+      if (errCb) errCb(new Error('fail'));
+      return Promise.reject(new Error('fail')).catch(() => undefined);
+    });
+    component.saveFlowCondition();
+    expect(mockModalService.triggerError).toHaveBeenCalled();
+  });
+
+  it('getFlows should call triggerError on failure', () => {
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, _s?: any, errCb?: (e: any) => void): Promise<any> => {
+      if (errCb) errCb(new Error('fail'));
+      return Promise.reject(new Error('fail')).catch(() => undefined);
+    });
+    component.getFlows();
+    expect(mockModalService.triggerError).toHaveBeenCalled();
+  });
+
+  it('getFlowConditions should call triggerError on failure', () => {
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, _s?: any, errCb?: (e: any) => void): Promise<any> => {
+      if (errCb) errCb(new Error('fail'));
+      return Promise.reject(new Error('fail')).catch(() => undefined);
+    });
+    component.getFlowConditions();
+    expect(mockModalService.triggerError).toHaveBeenCalled();
+  });
+
+  it('decodeYesNo should return Yes for y', () => {
+    expect(component.decodeYesNo('y')).toBe('Yes');
+  });
+
+  it('decodeYesNo should return No for n', () => {
+    expect(component.decodeYesNo('n')).toBe('No');
+  });
 });

@@ -33,6 +33,14 @@ describe('WhiteboardComponent', () => {
     fixture = TestBed.createComponent(WhiteboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // Mock canvas context to prevent IndexSizeError in saveToUndoStack
+    // (canvas has 0x0 size in test environment so getImageData throws)
+    const mockCtx = jasmine.createSpyObj('CanvasRenderingContext2D', [
+      'getImageData', 'putImageData', 'drawImage', 'clearRect',
+      'beginPath', 'moveTo', 'lineTo', 'stroke', 'fillText', 'save', 'restore',
+    ]);
+    mockCtx.getImageData.and.returnValue({ data: new Uint8ClampedArray(0), width: 0, height: 0 });
+    (component as any).ctx = mockCtx;
   });
 
   it('should create', () => {
