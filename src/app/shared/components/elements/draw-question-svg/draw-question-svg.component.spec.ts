@@ -8,6 +8,7 @@ import { ModalService } from '@app/core/services/modal.service';
 import { createMockSwPush } from '../../../../../test-helpers';
 import { DrawQuestionSvgComponent } from './draw-question-svg.component';
 import { FlowQuestion } from '@app/core/models/form.models';
+import { AppSize } from '@app/core/utils/utils.functions';
 
 describe('DrawQuestionSvgComponent', () => {
   let component: DrawQuestionSvgComponent;
@@ -20,7 +21,7 @@ describe('DrawQuestionSvgComponent', () => {
     mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize']);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.isMobile.and.returnValue(false);
-    mockGS.getAppSize.and.returnValue(0);
+    mockGS.getAppSize.and.returnValue(AppSize.SM);
 
     await TestBed.configureTestingModule({
       imports: [DrawQuestionSvgComponent],
