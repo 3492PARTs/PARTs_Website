@@ -167,12 +167,14 @@ describe('FieldScoutingComponent', () => {
   });
 
   it('save should call triggerError when no team selected', () => {
+    spyOn(component, 'isQuestionDisplayFormValid').and.returnValue(true);
     component.scoutFieldResponse.team_id = NaN;
     component.save();
     expect(mockModalService.triggerError).toHaveBeenCalled();
   });
 
   it('save should call saveFieldScoutingResponse when team is set', () => {
+    spyOn(component, 'isQuestionDisplayFormValid').and.returnValue(true);
     component.scoutFieldResponse.team_id = 3492;
     component.scoutFieldResponse.match = undefined;
     component.scoutFieldResponse.answers = [];

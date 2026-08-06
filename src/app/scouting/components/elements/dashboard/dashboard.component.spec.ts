@@ -157,29 +157,29 @@ describe('DashboardComponent', () => {
   it('incrementOrder should swap graph orders', () => {
     const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
     component.incrementOrder(dv, dv.dashboard_graphs[0]);
-    expect(dv.dashboard_graphs[0].order).toBe(2);
-    expect(dv.dashboard_graphs[1].order).toBe(1);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 1).order).toBe(2);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 2).order).toBe(1);
   });
 
   it('decrementOrder should swap graph orders', () => {
     const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
     component.decrementOrder(dv, dv.dashboard_graphs[1]);
-    expect(dv.dashboard_graphs[0].order).toBe(2);
-    expect(dv.dashboard_graphs[1].order).toBe(1);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 1).order).toBe(2);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 2).order).toBe(1);
   });
 
   it('incrementViewOrder should swap view orders', () => {
     component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
     component.incrementViewOrder(component.dashboard.dashboard_views[0]);
-    expect(component.dashboard.dashboard_views[0].order).toBe(2);
-    expect(component.dashboard.dashboard_views[1].order).toBe(1);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 1)!.order).toBe(2);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 2)!.order).toBe(1);
   });
 
   it('decrementViewOrder should swap view orders', () => {
     component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
     component.decrementViewOrder(component.dashboard.dashboard_views[1]);
-    expect(component.dashboard.dashboard_views[0].order).toBe(2);
-    expect(component.dashboard.dashboard_views[1].order).toBe(1);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 1)!.order).toBe(2);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 2)!.order).toBe(1);
   });
 
   it('removeGraph should call triggerConfirm', () => {
