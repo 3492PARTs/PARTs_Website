@@ -37,6 +37,7 @@ describe('DrawQuestionSvgComponent', () => {
     fixture = TestBed.createComponent(DrawQuestionSvgComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    (component as any).myPath = { nativeElement: jasmine.createSpyObj('SVGPathElement', ['setAttribute', 'getAttribute', 'getBBox']) };
   });
 
   it('should create', () => {
