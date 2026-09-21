@@ -42,6 +42,7 @@ export class NavigationService {
     new Link('Alert Types', '/admin/alert-types', 'alert-outline'),
     new Link('User Image Approval', '/admin/user-image-approval', 'image-check'),
     new Link('Phone Types', '/admin/phone-types', 'phone'),
+    new Link('Resource Types', '/admin/resource-types', 'archive-cog-outline'),
     new Link('Error Log', '/admin/error-log', 'alert-circle-outline'),
   ], [
     new Link('Activity', '/scouting/admin/activity', 'account-reactivate'),
