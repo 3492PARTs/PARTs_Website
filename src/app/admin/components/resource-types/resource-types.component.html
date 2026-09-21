@@ -8,14 +8,22 @@
         </app-table>
     </app-box>
 
+    <app-box [Title]="selectedResourceType ? 'Resources: ' + selectedResourceType.name : 'Resources'" [Width]="'60%'">
+        @if (selectedResourceType) {
+        <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
+            [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
+            (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
+            (RemoveRecordCallBack)="deleteResource($event)" (RecordClickCallBack)="editResource($event)"
+            [Width]="'100%'">
+        </app-table>
+
+        <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
+        }
+        @else {
+        <p>Select a resource type to manage its resources.</p>
+        }
+    </app-box>
 </div>
-<app-modal [Title]="`${selectedResourceType?.name} Resources`" [Visible]="selectedResourceType !== null"
-    (CloseCallBack)="selectResourceType(null)" [Width]="'600px'">
-    <app-table [TableCols]="resourcesTableCols" [TableData]="resources" [ShowAddButton]="true"
-        (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true" (EditRecordCallBack)="editResource($event)"
-        [ShowRemoveButton]="true" (RemoveRecordCallBack)="deleteResource($event)" [Width]="'100%'">
-    </app-table>
-</app-modal>
 
 <app-modal [Title]="activeResourceType.id ? 'Edit Resource Type' : 'New Resource Type'"
     [(Visible)]="resourceTypeModalVisible" [Width]="'400px'">

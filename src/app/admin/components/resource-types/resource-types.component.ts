@@ -9,11 +9,12 @@ import { ButtonComponent } from '@app/shared/components/atoms/button/button.comp
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
+import { ResourceManagerComponent } from '@app/shared/components/elements/resource-manager/resource-manager.component';
 import { cloneObject } from '@app/core/utils/utils.functions';
 
 @Component({
     selector: 'app-resource-types',
-    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, ModalComponent],
+    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, ModalComponent, ResourceManagerComponent],
     templateUrl: './resource-types.component.html',
     styleUrls: ['./resource-types.component.scss']
 })
