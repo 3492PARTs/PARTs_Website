@@ -31,6 +31,7 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
         { PropertyName: 'name', ColLabel: 'Name' },
         { PropertyName: 'description', ColLabel: 'Description' },
         { PropertyName: 'checked_out', ColLabel: 'Checked Out', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+        { PropertyName: 'checked_out_by', ColLabel: 'User' }
     ];
     resourcesTableButtons: TableButtonType[] = [];
 
