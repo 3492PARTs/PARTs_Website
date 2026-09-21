@@ -205,6 +205,11 @@ export const routes: Routes = [
                 loadComponent: () => import('./admin/components/phone-types/phone-types.component').then(mod => mod.PhoneTypesComponent),
             },
             {
+                path: 'resource-types',
+                title: 'Admin Resource Types',
+                loadComponent: () => import('./admin/components/resource-types/resource-types.component').then(mod => mod.ResourceTypesComponent),
+            },
+            {
                 path: 'alert-types',
                 title: 'Admin Alert Types',
                 loadComponent: () => import('./admin/components/alert-types/alert-types.component').then(mod => mod.AlertTypesComponent),

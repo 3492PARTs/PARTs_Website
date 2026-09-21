@@ -1,0 +1,58 @@
+<div class="flex flex-wrap resource-types-container">
+    <app-box [Title]="'Manage Resource Types'" [Width]="'40%'">
+        <app-table [TableTitle]="'Resource Types'" [TableCols]="resourceTypesTableCols" [TableData]="resourceTypes"
+            [ShowAddButton]="true" (AddRecordCallBack)="startNewResourceType()" [ShowEditButton]="true"
+            (EditRecordCallBack)="editResourceType($event)" [ShowRemoveButton]="true"
+            (RemoveRecordCallBack)="deleteResourceType($event)" (RecordClickCallBack)="selectResourceType($event)"
+            [AllowActiveRecord]="true" [SetActiveRec]="selectedResourceType" [CursorPointer]="true" [Width]="'100%'">
+        </app-table>
+    </app-box>
+
+    <app-box [Title]="selectedResourceType ? 'Resources: ' + selectedResourceType.name : 'Resources'" [Width]="'60%'">
+        @if (selectedResourceType) {
+        <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
+            [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
+            (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
+            (RemoveRecordCallBack)="deleteResource($event)" (RecordClickCallBack)="editResource($event)"
+            [Width]="'100%'">
+        </app-table>
+
+        <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
+        }
+        @else {
+        <p>Select a resource type to manage its resources.</p>
+        }
+    </app-box>
+</div>
+
+<app-modal [Title]="activeResourceType.id ? 'Edit Resource Type' : 'New Resource Type'"
+    [(Visible)]="resourceTypeModalVisible" [Width]="'400px'">
+    <app-form (SubmitFunction)="saveResourceType()">
+        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeResourceType.name" [Required]="true">
+        </app-form-element>
+
+        <app-form-element [Type]="'area'" [LabelText]="'Description'" [(Model)]="activeResourceType.description"
+            [Rows]="4" [Width]="'100%'">
+        </app-form-element>
+
+        <app-button-ribbon>
+            <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+        </app-button-ribbon>
+    </app-form>
+</app-modal>
+
+<app-modal [Title]="activeResource.id ? 'Edit Resource' : 'New Resource'" [(Visible)]="resourceModalVisible"
+    [Width]="'400px'">
+    <app-form (SubmitFunction)="saveResource()">
+        <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeResource.name" [Required]="true">
+        </app-form-element>
+
+        <app-form-element [Type]="'area'" [LabelText]="'Description'" [(Model)]="activeResource.description" [Rows]="4"
+            [Width]="'100%'">
+        </app-form-element>
+
+        <app-button-ribbon>
+            <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
+        </app-button-ribbon>
+    </app-form>
+</app-modal>
