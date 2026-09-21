@@ -39,6 +39,8 @@ export class ModalComponent implements OnInit {
   @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
 
+  @Output() CloseCallBack = new EventEmitter<void>();
+
   protected openTime: number | undefined = undefined;
   protected modalNumber = 0;
 
@@ -93,6 +95,7 @@ export class ModalComponent implements OnInit {
     this.form.forEach(elem => {
       elem.reset();
     });
+    this.CloseCallBack.emit();
   }
 
   clickOutsideClose() {
