@@ -1,28 +1,32 @@
-<div class="flex flex-wrap resource-types-container">
-    <app-box [Title]="'Manage Resource Types'" [Width]="'40%'">
-        <app-table [TableTitle]="'Resource Types'" [TableCols]="resourceTypesTableCols" [TableData]="resourceTypes"
-            [ShowAddButton]="true" (AddRecordCallBack)="startNewResourceType()" [ShowEditButton]="true"
-            (EditRecordCallBack)="editResourceType($event)" [ShowRemoveButton]="true"
-            (RemoveRecordCallBack)="deleteResourceType($event)" (RecordClickCallBack)="selectResourceType($event)"
-            [AllowActiveRecord]="true" [SetActiveRec]="selectedResourceType" [CursorPointer]="true" [Width]="'100%'">
-        </app-table>
-    </app-box>
+<div class="flex gap-1rem" [ngClass]="{'flex-wrap': appSize < breakPoint}">
+    <div id="resource-types-container"><app-box [Title]="'Manage Resource Types'">
+            <app-table [TableTitle]="'Resource Types'" [TableCols]="resourceTypesTableCols" [TableData]="resourceTypes"
+                [ShowAddButton]="true" (AddRecordCallBack)="startNewResourceType()" [ShowEditButton]="true"
+                (EditRecordCallBack)="editResourceType($event)" [ShowRemoveButton]="true"
+                (RemoveRecordCallBack)="deleteResourceType($event)" (RecordClickCallBack)="selectResourceType($event)"
+                [AllowActiveRecord]="true" [SetActiveRec]="selectedResourceType" [CursorPointer]="true"
+                [Width]="'100%'">
+            </app-table>
+        </app-box></div>
 
-    <app-box [Title]="selectedResourceType ? 'Resources: ' + selectedResourceType.name : 'Resources'" [Width]="'60%'">
-        @if (selectedResourceType) {
-        <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
-            [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
-            (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
-            (RemoveRecordCallBack)="deleteResource($event)" (RecordClickCallBack)="editResource($event)"
-            [Width]="'100%'">
-        </app-table>
 
-        <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
-        }
-        @else {
-        <p>Select a resource type to manage its resources.</p>
-        }
-    </app-box>
+    <div id="resources-container"><app-box
+            [Title]="selectedResourceType ? 'Resources: ' + selectedResourceType.name : 'Resources'">
+            @if (selectedResourceType) {
+            <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
+                [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
+                (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
+                (RemoveRecordCallBack)="deleteResource($event)" (RecordClickCallBack)="editResource($event)"
+                [Width]="'100%'">
+            </app-table>
+
+            <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
+            }
+            @else {
+            <p>Select a resource type to manage its resources.</p>
+            }
+        </app-box></div>
+
 </div>
 
 <app-modal [Title]="activeResourceType.id ? 'Edit Resource Type' : 'New Resource Type'"
