@@ -16,8 +16,7 @@
             <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
                 [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
                 (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="deleteResource($event)" (RecordClickCallBack)="editResource($event)"
-                [Width]="'100%'">
+                (RemoveRecordCallBack)="deleteResource($event)" [Width]="'100%'">
             </app-table>
 
             <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
