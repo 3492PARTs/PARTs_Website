@@ -14,7 +14,8 @@
             [Title]="selectedResourceType ? 'Resources: ' + selectedResourceType.name : 'Resources'">
             @if (selectedResourceType) {
             <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
-                [ShowAddButton]="true" (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
+                [TableDataButtons]="resourcesTableButtons" [ShowAddButton]="true"
+                (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
                 (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
                 (RemoveRecordCallBack)="deleteResource($event)" [Width]="'100%'">
             </app-table>
@@ -27,6 +28,9 @@
         </app-box></div>
 
 </div>
+
+<app-qr-code-download></app-qr-code-download>
+
 
 <app-modal [Title]="activeResourceType.id ? 'Edit Resource Type' : 'New Resource Type'"
     [(Visible)]="resourceTypeModalVisible" [Width]="'400px'">

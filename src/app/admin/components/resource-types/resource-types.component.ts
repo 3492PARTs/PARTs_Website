@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { Resource, ResourceCheckOut, ResourceType } from '@app/admin/models/resource.models';
 import { ResourceService } from '@app/admin/services/resource.service';
@@ -7,20 +7,24 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
+import { TableButtonType, TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { ResourceManagerComponent } from '@app/shared/components/elements/resource-manager/resource-manager.component';
+import { QrCodeDownloadComponent } from '@app/shared/components/elements/qr-code-download/qr-code-download.component';
 import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
 import { GeneralService } from '@app/core/services/general.service';
+import { QrCodeService } from '@app/core/services/qr-code.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-resource-types',
-    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, ModalComponent, ResourceManagerComponent, CommonModule],
+    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, ModalComponent, ResourceManagerComponent, QrCodeDownloadComponent, CommonModule],
     templateUrl: './resource-types.component.html',
     styleUrls: ['./resource-types.component.scss']
 })
 export class ResourceTypesComponent implements OnInit {
+    @ViewChild(QrCodeDownloadComponent) qrCodeDownload?: QrCodeDownloadComponent;
+
     appSize: AppSize = AppSize.SM;
 
     breakPoint: AppSize = AppSize.LG;
@@ -40,6 +44,9 @@ export class ResourceTypesComponent implements OnInit {
         { PropertyName: 'description', ColLabel: 'Description' },
         { PropertyName: 'checked_out', ColLabel: 'Checked Out' },
     ];
+    resourcesTableButtons: TableButtonType[] = [
+        new TableButtonType('qrcode', this.downloadResourceQrCode.bind(this), 'Download QR Code'),
+    ];
     resources: Resource[] = [];
     activeResource: Resource = new Resource();
     resourceModalVisible = false;
@@ -50,7 +57,7 @@ export class ResourceTypesComponent implements OnInit {
         { PropertyName: 'time_in', ColLabel: 'Checked In' },
     ];
 
-    constructor(private authService: AuthService, private resourceService: ResourceService, private gs: GeneralService) { }
+    constructor(private authService: AuthService, private resourceService: ResourceService, private gs: GeneralService, private qrCodeService: QrCodeService) { }
 
     ngOnInit(): void {
         this.authService.authInFlight.subscribe((r) => {
@@ -148,5 +155,13 @@ export class ResourceTypesComponent implements OnInit {
         this.resourceService.deleteResource(resource, () => {
             if (this.selectedResourceType) this.getResources(this.selectedResourceType);
         });
+    }
+
+    downloadResourceQrCode(resource: Resource): void {
+        const url = this.qrCodeService.buildEndpointUrl('resources/team/checkout', {
+            resourceType: resource.resource_type.name,
+            resourceId: resource.id as number
+        });
+        this.qrCodeDownload?.download(url, `${resource.name}-qrcode.png`);
     }
 }

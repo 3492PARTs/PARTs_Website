@@ -9,3 +9,4 @@ export * from './modal.service';
 export * from '../../navigation/services/navigation.service';
 export * from './notifications.service';
 export * from './pwa.service';
+export * from './qr-code.service';
