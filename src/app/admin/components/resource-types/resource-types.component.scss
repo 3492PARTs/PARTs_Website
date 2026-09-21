@@ -1,0 +1,14 @@
+#resource-types-container {
+  width: 40%;
+}
+
+#resources-container {
+  width: 60%;
+}
+
+.flex-wrap {
+  & > #resource-types-container,
+  #resources-container {
+    width: 100% !important;
+  }
+}

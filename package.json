@@ -29,6 +29,7 @@
     "@mdi/font": "^7.4.47",
     "@sgratzl/chartjs-chart-boxplot": "4.4.4",
     "@types/gtag.js": "^0.0.20",
+    "angularx-qrcode": "^21.0.5",
     "blueimp-load-image": "^5.16.0",
     "browser-image-compression": "^2.0.2",
     "chart.js": "4.5.0",

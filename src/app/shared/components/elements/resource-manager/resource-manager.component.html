@@ -1,0 +1,12 @@
+<app-box [Title]="ShowTitle ? (resourceType ? 'Resources: ' + resourceType.name : 'Resources') : ''">
+    <app-loading [Loading]="loading"></app-loading>
+
+    @if (!loading && resourceType) {
+    <app-table [TableTitle]="'Resources'" [TableCols]="resourcesTableCols" [TableData]="resources"
+        [TableDataButtons]="resourcesTableButtons" [Width]="'100%'">
+    </app-table>
+    }
+    @else if (!loading && !resourceType) {
+    <p>No resource type found for code "{{ ResourceTypeCode }}".</p>
+    }
+</app-box>
