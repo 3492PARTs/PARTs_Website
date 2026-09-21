@@ -41,7 +41,7 @@ describe('ResourceService', () => {
 
             const result = await service.getResourceTypes();
 
-            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'admin/resource-type/', undefined, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'resources/resource-types/', undefined, jasmine.any(Function), jasmine.any(Function));
             expect(result).toEqual(mockTypes);
         });
 
@@ -85,7 +85,7 @@ describe('ResourceService', () => {
 
             service.saveResourceType(resourceType, fn);
 
-            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'admin/resource-type/', resourceType, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'resources/resource-types/', resourceType, jasmine.any(Function), jasmine.any(Function));
             expect(mockModalService.successfulResponseBanner).toHaveBeenCalledWith(resourceType);
             expect(fn).toHaveBeenCalledWith(resourceType);
         });
@@ -116,7 +116,7 @@ describe('ResourceService', () => {
 
             service.deleteResourceType(resourceType, fn);
 
-            expect(mockAPIService.delete).toHaveBeenCalledWith(true, 'admin/resource-type/', { resource_type_id: 5 }, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.delete).toHaveBeenCalledWith(true, 'resources/resource-types/', { resource_type_id: 5 }, jasmine.any(Function), jasmine.any(Function));
             expect(fn).toHaveBeenCalled();
         });
 
@@ -140,7 +140,7 @@ describe('ResourceService', () => {
 
             const result = await service.getResources(1);
 
-            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'admin/resource/', { resource_type_id: 1 }, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'resources/resources/', { resource_type_id: 1 }, jasmine.any(Function), jasmine.any(Function));
             expect(result).toEqual(mockResources);
         });
 
@@ -152,7 +152,7 @@ describe('ResourceService', () => {
 
             await service.getResources();
 
-            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'admin/resource/', undefined, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.get).toHaveBeenCalledWith(true, 'resources/resources/', undefined, jasmine.any(Function), jasmine.any(Function));
         });
     });
 
@@ -167,8 +167,46 @@ describe('ResourceService', () => {
 
             service.saveResource(resource, fn);
 
-            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'admin/resource/', resource, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'resources/resources/', resource, jasmine.any(Function), jasmine.any(Function));
             expect(fn).toHaveBeenCalledWith(resource);
+        });
+    });
+
+    describe('getResourceCheckouts', () => {
+        it('should fetch checkout history for a resource', async () => {
+            const checkouts = [new ResourceCheckOut()];
+            mockAPIService.get.and.callFake((loading: boolean, endpoint: string, params: any, onNext: any) => {
+                onNext(checkouts);
+                return Promise.resolve();
+            });
+
+            const result = await service.getResourceCheckouts(7);
+
+            expect(mockAPIService.get).toHaveBeenCalledWith(
+                true,
+                'resources/resource-checkouts/',
+                { resource_id: 7, active_only: false },
+                jasmine.any(Function),
+                jasmine.any(Function)
+            );
+            expect(result).toEqual(checkouts);
+        });
+
+        it('should pass user and active-only filters when provided', async () => {
+            mockAPIService.get.and.callFake((loading: boolean, endpoint: string, params: any, onNext: any) => {
+                onNext([]);
+                return Promise.resolve();
+            });
+
+            await service.getResourceCheckouts(undefined, 3, true);
+
+            expect(mockAPIService.get).toHaveBeenCalledWith(
+                true,
+                'resources/resource-checkouts/',
+                { user_id: 3, active_only: true },
+                jasmine.any(Function),
+                jasmine.any(Function)
+            );
         });
     });
 
@@ -185,7 +223,7 @@ describe('ResourceService', () => {
 
             service.deleteResource(resource, fn);
 
-            expect(mockAPIService.delete).toHaveBeenCalledWith(true, 'admin/resource/', { resource_id: 7 }, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.delete).toHaveBeenCalledWith(true, 'resources/resources/', { resource_id: 7 }, jasmine.any(Function), jasmine.any(Function));
             expect(fn).toHaveBeenCalled();
         });
     });
@@ -202,7 +240,7 @@ describe('ResourceService', () => {
 
             service.checkOutResource(request, fn);
 
-            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'admin/resource/check-out/', request, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'resources/check-out/', request, jasmine.any(Function), jasmine.any(Function));
             expect(mockGeneralService.addBanner).toHaveBeenCalled();
             expect(fn).toHaveBeenCalledWith(checkout);
         });
@@ -232,7 +270,7 @@ describe('ResourceService', () => {
 
             service.checkInResource(request, fn);
 
-            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'admin/resource/check-in/', request, jasmine.any(Function), jasmine.any(Function));
+            expect(mockAPIService.post).toHaveBeenCalledWith(true, 'resources/check-in/', request, jasmine.any(Function), jasmine.any(Function));
             expect(mockGeneralService.addBanner).toHaveBeenCalled();
             expect(fn).toHaveBeenCalledWith(checkout);
         });

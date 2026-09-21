@@ -45,7 +45,7 @@
 </app-modal>
 
 <app-modal [Title]="activeResource.id ? 'Edit Resource' : 'New Resource'" [(Visible)]="resourceModalVisible"
-    [Width]="'400px'">
+    [Width]="'800px'">
     <app-form (SubmitFunction)="saveResource()">
         <app-form-element [Type]="'text'" [LabelText]="'Name'" [(Model)]="activeResource.name" [Required]="true">
         </app-form-element>
@@ -58,4 +58,11 @@
             <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
         </app-button-ribbon>
     </app-form>
+
+    @if (activeResource.id) {
+    <app-table [TableTitle]="'Checkout History'" [TableCols]="resourceCheckoutsTableCols"
+        [TableData]="resourceCheckouts" [ShowDownloadButton]="true" [OrderByProperty]="'time_out'"
+        [OrderByReverse]="true" [Width]="'100%'">
+    </app-table>
+    }
 </app-modal>

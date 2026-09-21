@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
-import { Resource, ResourceType } from '@app/admin/models/resource.models';
+import { Resource, ResourceCheckOut, ResourceType } from '@app/admin/models/resource.models';
 import { ResourceService } from '@app/admin/services/resource.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -43,6 +43,12 @@ export class ResourceTypesComponent implements OnInit {
     resources: Resource[] = [];
     activeResource: Resource = new Resource();
     resourceModalVisible = false;
+    resourceCheckouts: ResourceCheckOut[] = [];
+    resourceCheckoutsTableCols: TableColType[] = [
+        { PropertyName: 'user.name', ColLabel: 'User' },
+        { PropertyName: 'time_out', ColLabel: 'Checked Out' },
+        { PropertyName: 'time_in', ColLabel: 'Checked In' },
+    ];
 
     constructor(private authService: AuthService, private resourceService: ResourceService, private gs: GeneralService) { }
 
@@ -109,18 +115,30 @@ export class ResourceTypesComponent implements OnInit {
 
     startNewResource(): void {
         this.activeResource = new Resource();
+        this.resourceCheckouts = [];
         if (this.selectedResourceType) this.activeResource.resource_type = this.selectedResourceType;
         this.resourceModalVisible = true;
     }
 
     editResource(resource: Resource): void {
         this.activeResource = cloneObject(resource);
+        this.getResourceCheckouts(resource);
         this.resourceModalVisible = true;
+    }
+
+    getResourceCheckouts(resource: Resource): void {
+        this.resourceCheckouts = [];
+        if (resource.id === null) return;
+
+        this.resourceService.getResourceCheckouts(resource.id).then(result => {
+            this.resourceCheckouts = result ?? [];
+        });
     }
 
     saveResource(): void {
         this.resourceService.saveResource(this.activeResource, () => {
             this.activeResource = new Resource();
+            this.resourceCheckouts = [];
             this.resourceModalVisible = false;
             if (this.selectedResourceType) this.getResources(this.selectedResourceType);
         });

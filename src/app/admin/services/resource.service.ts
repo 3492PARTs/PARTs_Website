@@ -67,6 +67,18 @@ export class ResourceService {
         });
     }
 
+    getResourceCheckouts(resourceId?: number, userId?: number, activeOnly = false): Promise<ResourceCheckOut[] | null> {
+        const params: { resource_id?: number; user_id?: number; active_only: boolean } = { active_only: activeOnly };
+        if (resourceId !== undefined) params.resource_id = resourceId;
+        if (userId !== undefined) params.user_id = userId;
+
+        return new Promise<ResourceCheckOut[] | null>(resolve => {
+            this.api.get(true, 'resources/resource-checkouts/', params, (result: ResourceCheckOut[]) => {
+                resolve(result);
+            }, () => resolve(null));
+        });
+    }
+
     saveResource(resource: Resource, fn?: (result: Resource) => void): void {
         this.api.post(true, 'resources/resources/', resource, (result: Resource) => {
             this.modalService.successfulResponseBanner(result);

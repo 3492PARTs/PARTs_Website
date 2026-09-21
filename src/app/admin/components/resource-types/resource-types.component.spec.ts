@@ -9,7 +9,7 @@ import { ResourceTypesComponent } from './resource-types.component';
 import { createMockSwPush, createMockAuthService } from '../../../../test-helpers';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { ResourceService } from '@app/admin/services/resource.service';
-import { Resource, ResourceType } from '@app/admin/models/resource.models';
+import { Resource, ResourceCheckOut, ResourceType } from '@app/admin/models/resource.models';
 
 describe('ResourceTypesComponent', () => {
     let component: ResourceTypesComponent;
@@ -25,10 +25,11 @@ describe('ResourceTypesComponent', () => {
 
         mockResourceService = jasmine.createSpyObj('ResourceService', [
             'getResourceTypes', 'getResourceTypeByName', 'saveResourceType', 'deleteResourceType',
-            'getResources', 'saveResource', 'deleteResource', 'checkOutResource', 'checkInResource'
+            'getResources', 'getResourceCheckouts', 'saveResource', 'deleteResource', 'checkOutResource', 'checkInResource'
         ]);
         mockResourceService.getResourceTypes.and.returnValue(Promise.resolve([]));
         mockResourceService.getResources.and.returnValue(Promise.resolve([]));
+        mockResourceService.getResourceCheckouts.and.returnValue(Promise.resolve([]));
 
         TestBed.configureTestingModule({
             imports: [ResourceTypesComponent],
@@ -146,6 +147,19 @@ describe('ResourceTypesComponent', () => {
             expect(component.activeResource).toEqual(jasmine.objectContaining({ id: resource.id, name: resource.name }));
             expect(component.activeResource).not.toBe(resource);
             expect(component.resourceModalVisible).toBe(true);
+        });
+
+        it('should load checkout history when editing an existing resource', async () => {
+            const resource = new Resource();
+            resource.id = 1;
+            const history = [new ResourceCheckOut()];
+            mockResourceService.getResourceCheckouts.and.returnValue(Promise.resolve(history));
+
+            component.editResource(resource);
+            await fixture.whenStable();
+
+            expect(mockResourceService.getResourceCheckouts).toHaveBeenCalledWith(1);
+            expect(component.resourceCheckouts).toEqual(history);
         });
 
         it('should save resource and refresh list', () => {
