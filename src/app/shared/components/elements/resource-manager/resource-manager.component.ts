@@ -6,6 +6,7 @@ import { AuthService } from '@app/auth/services/auth.service';
 import { User } from '@app/auth/models/user.models';
 import { CheckInResourceRequest, CheckOutResourceRequest, Resource, ResourceType } from '@app/admin/models/resource.models';
 import { ResourceService } from '@app/admin/services/resource.service';
+import { decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 
 // Generic component for checking resources of a given resource type in and out.
 @Component({
@@ -29,7 +30,7 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
     resourcesTableCols: TableColType[] = [
         { PropertyName: 'name', ColLabel: 'Name' },
         { PropertyName: 'description', ColLabel: 'Description' },
-        { PropertyName: 'checked_out', ColLabel: 'Checked Out' },
+        { PropertyName: 'checked_out', ColLabel: 'Checked Out', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     ];
     resourcesTableButtons: TableButtonType[] = [];
 
@@ -91,5 +92,9 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
 
     hideCheckInButton(resource: Resource): boolean {
         return !resource.checked_out;
+    }
+
+    decodeYesNoBoolean(b: boolean): string {
+        return decodeYesNoBoolean(b);
     }
 }

@@ -1,0 +1,12 @@
+<app-box [Title]="'Resource Checkout'" [Width]="'100%'">
+    <app-form-element [Type]="'select'" [LabelText]="'Resource Type'" [SelectList]="resourceTypes"
+        [DisplayProperty]="'name'" [(Model)]="selectedResourceType" [DisplayEmptyOption]="true" [MinWidth]="'150px'">
+    </app-form-element>
+
+    @if (selectedResourceType) {
+    <app-resource-manager [ResourceTypeCode]="selectedResourceType.name" [ShowTitle]="false"></app-resource-manager>
+    }
+    @else {
+    <p>Select a resource type to view available resources.</p>
+    }
+</app-box>

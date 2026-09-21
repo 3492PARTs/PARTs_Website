@@ -41,6 +41,12 @@ export const routes: Routes = [
     { path: 'media/competition', title: 'Media Competition', component: CompetitionComponent },
     { path: 'media/wallpapers', title: 'Media Wallpapers', component: WallpapersComponent },
     { path: 'resources', title: 'Resources', component: ResourcesComponent },
+    {
+        path: 'resources/team/checkout',
+        title: 'Team Resource Checkout',
+        loadComponent: () => import('./resources/components/resources/resources.component').then(mod => mod.ResourcesComponent),
+        canActivate: [authGuard]
+    },
     { path: 'first', title: 'FIRST', component: FirstComponent },
     { path: 'competition', title: 'Competition', component: EventCompetitionComponent }, // Moved to public section
 
