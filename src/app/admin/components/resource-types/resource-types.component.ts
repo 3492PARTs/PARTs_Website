@@ -162,21 +162,21 @@ export class ResourceTypesComponent implements OnInit {
     }
 
     downloadCheckoutQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, 'resources/team/checkout', this.outColor);
+        this.downloadResourceQrCode(resource, 'check-out', this.outColor);
     }
 
     downloadCheckinQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, 'resources/team/checkin', this.inColor);
+        this.downloadResourceQrCode(resource, 'check-in', this.inColor);
     }
 
     downloadResourceQrCode(resource: Resource, endpoint: string, foregroundColor: string): void {
-        const url = this.qrCodeService.buildEndpointUrl(endpoint, {
+        const url = this.qrCodeService.buildEndpointUrl(`resources/${endpoint}/`, {
             resourceType: resource.resource_type.name,
             resourceId: resource.id as number
         });
         if (this.qrCodeDownload) {
             this.qrCodeDownload.ForegroundColor = foregroundColor;
-            this.qrCodeDownload.download(url, `${resource.name}-qrcode.png`);
+            this.qrCodeDownload.download(url, `${resource.name}-${endpoint}-qrcode.png`);
         }
     }
 
