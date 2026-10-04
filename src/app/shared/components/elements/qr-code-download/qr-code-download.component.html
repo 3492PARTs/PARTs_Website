@@ -1,2 +1,3 @@
 <qrcode #qr [qrdata]="Value" [width]="Width" [elementType]="'canvas'" [errorCorrectionLevel]="'M'"
-    [allowEmptyString]="true" (qrCodeURL)="onRendered()"></qrcode>
+    [allowEmptyString]="true" (qrCodeURL)="onRendered($event)"></qrcode>
+<a [href]="qrCodeDownloadLink" download="qrcode">Download</a>
