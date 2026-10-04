@@ -39,13 +39,17 @@ export class ResourceTypesComponent implements OnInit {
 
     selectedResourceType: ResourceType | null = null;
 
+    private outColor = '#ffc107ff';
+    private inColor = '#28a745FF';
+
     resourcesTableCols: TableColType[] = [
         { PropertyName: 'name', ColLabel: 'Name' },
         { PropertyName: 'description', ColLabel: 'Description' },
         { PropertyName: 'checked_out', ColLabel: 'Checked Out' },
     ];
     resourcesTableButtons: TableButtonType[] = [
-        new TableButtonType('qrcode', this.downloadResourceQrCode.bind(this), 'Download QR Code'),
+        new TableButtonType('qrcode-minus', this.downloadCheckoutQrCode.bind(this), 'Checkout QR Code', undefined, undefined, undefined, undefined, this.outColor),
+        new TableButtonType('qrcode-plus', this.downloadCheckinQrCode.bind(this), 'Checkin QR Code', undefined, undefined, undefined, undefined, this.inColor),
     ];
     resources: Resource[] = [];
     activeResource: Resource = new Resource();
@@ -157,11 +161,23 @@ export class ResourceTypesComponent implements OnInit {
         });
     }
 
-    downloadResourceQrCode(resource: Resource): void {
-        const url = this.qrCodeService.buildEndpointUrl('resources/team/checkout', {
+    downloadCheckoutQrCode(resource: Resource): void {
+        this.downloadResourceQrCode(resource, 'resources/team/checkout', this.outColor);
+    }
+
+    downloadCheckinQrCode(resource: Resource): void {
+        this.downloadResourceQrCode(resource, 'resources/team/checkin', this.inColor);
+    }
+
+    downloadResourceQrCode(resource: Resource, endpoint: string, foregroundColor: string): void {
+        const url = this.qrCodeService.buildEndpointUrl(endpoint, {
             resourceType: resource.resource_type.name,
             resourceId: resource.id as number
         });
-        this.qrCodeDownload?.download(url, `${resource.name}-qrcode.png`);
+        if (this.qrCodeDownload) {
+            this.qrCodeDownload.ForegroundColor = foregroundColor;
+            this.qrCodeDownload.download(url, `${resource.name}-qrcode.png`);
+        }
     }
+
 }

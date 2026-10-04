@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
+import { triggerChange } from '@app/core';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { saveAs } from 'file-saver';
 
@@ -14,10 +15,13 @@ export class QrCodeDownloadComponent {
 
     @Input() Width = 256;
 
+    @Input() ForegroundColor = '#ffffffff';
+
+    @Input() BackgroundColor = '#000000ff';
+
     Value = '';
     Filename = 'qrcode.png';
     private pendingDownload = false;
-    public qrCodeDownloadLink: SafeUrl = "";
 
     @ViewChild('qr', { read: ElementRef, static: true }) qrRef?: ElementRef<HTMLElement>;
 
@@ -30,15 +34,17 @@ export class QrCodeDownloadComponent {
 
     // Called by the underlying qrcode component once the canvas has finished rendering.
     onRendered(url: SafeUrl): void {
-        if (!this.pendingDownload) return;
-        this.pendingDownload = false;
-        this.qrCodeDownloadLink = url;
+        triggerChange(() => {
+            if (!this.pendingDownload) return;
+            this.pendingDownload = false;
 
-        const canvas = this.qrRef?.nativeElement.querySelector('canvas');
-        if (!canvas) return;
+            const canvas = this.qrRef?.nativeElement.querySelector('canvas');
+            if (!canvas) return;
 
-        canvas.toBlob(blob => {
-            if (blob) saveAs(blob, this.Filename);
-        }, 'image/png');
+            canvas.toBlob(blob => {
+                if (blob) saveAs(blob, this.Filename);
+            }, 'image/png');
+        }, 500);
+
     }
 }
