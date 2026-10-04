@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { saveAs } from 'file-saver';
 
@@ -16,6 +17,7 @@ export class QrCodeDownloadComponent {
     Value = '';
     Filename = 'qrcode.png';
     private pendingDownload = false;
+    public qrCodeDownloadLink: SafeUrl = "";
 
     @ViewChild('qr', { read: ElementRef, static: true }) qrRef?: ElementRef<HTMLElement>;
 
@@ -27,9 +29,10 @@ export class QrCodeDownloadComponent {
     }
 
     // Called by the underlying qrcode component once the canvas has finished rendering.
-    onRendered(): void {
+    onRendered(url: SafeUrl): void {
         if (!this.pendingDownload) return;
         this.pendingDownload = false;
+        this.qrCodeDownloadLink = url;
 
         const canvas = this.qrRef?.nativeElement.querySelector('canvas');
         if (!canvas) return;
