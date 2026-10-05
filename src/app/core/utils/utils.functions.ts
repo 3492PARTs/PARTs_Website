@@ -736,3 +736,13 @@ export function previewImage(link: string, id: string): void {
 
 export function isNumber(value: any): boolean { return !Number.isNaN(+value) && Number.isFinite(+value) && !Number.isNaN(parseFloat(value)) }
 
+// Builds an absolute URL to the given app path (e.g. 'resources/team/checkout'), with optional query params.
+export function buildEndpointUrl(origin: string = "", path: string, params?: Record<string, string | number>): string {
+  const url = new URL(path.replace(/^\//, ''), origin || window.location.origin + '/');
+
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, String(value)));
+  }
+
+  return url.toString();
+}

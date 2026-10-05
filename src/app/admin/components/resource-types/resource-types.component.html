@@ -17,10 +17,11 @@
                 [TableDataButtons]="resourcesTableButtons" [ShowAddButton]="true"
                 (AddRecordCallBack)="startNewResource()" [ShowEditButton]="true"
                 (EditRecordCallBack)="editResource($event)" [ShowRemoveButton]="true"
-                (RemoveRecordCallBack)="deleteResource($event)" [Width]="'100%'">
+                (RemoveRecordCallBack)="deleteResource($event)" [Width]="'100%'"
+                (RecordClickCallBack)="editResource($event)">
             </app-table>
 
-            <app-resource-manager [ResourceTypeCode]="selectedResourceType.name"></app-resource-manager>
+            <app-resource-manager [ResourceTypeId]="selectedResourceType.id"></app-resource-manager>
             }
             @else {
             <p>Select a resource type to manage its resources.</p>

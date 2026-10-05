@@ -2,11 +2,12 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { BoxComponent } from '../../atoms/box/box.component';
 import { TableButtonType, TableColType, TableComponent } from '../../atoms/table/table.component';
 import { LoadingComponent } from '../../atoms/loading/loading.component';
-import { AuthService } from '@app/auth/services/auth.service';
+import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { User } from '@app/auth/models/user.models';
 import { CheckInResourceRequest, CheckOutResourceRequest, Resource, ResourceType } from '@app/admin/models/resource.models';
 import { ResourceService } from '@app/admin/services/resource.service';
-import { decodeYesNoBoolean } from '@app/core/utils/utils.functions';
+import { decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
+import { ActivatedRoute } from '@angular/router';
 
 // Generic component for checking resources of a given resource type in and out.
 @Component({
@@ -18,7 +19,7 @@ import { decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 export class ResourceManagerComponent implements OnInit, OnChanges {
 
     // Name of the resource type whose resources should be managed.
-    @Input() ResourceTypeCode = '';
+    @Input() ResourceTypeId: number | null = null;
     @Input() ShowTitle = true;
 
     private user: User | undefined = undefined;
@@ -35,19 +36,23 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
     ];
     resourcesTableButtons: TableButtonType[] = [];
 
-    constructor(private authService: AuthService, private resourceService: ResourceService) { }
+    constructor(private authService: AuthService, private resourceService: ResourceService, private route: ActivatedRoute) { }
 
     ngOnInit(): void {
         this.resourcesTableButtons = [
-            new TableButtonType('account-arrow-up-outline', this.checkOutResource.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'success'),
-            new TableButtonType('account-arrow-down-outline', this.checkInResource.bind(this), 'Check In', undefined, undefined, this.hideCheckInButton.bind(this), '', '', 'warning'),
+            new TableButtonType('account-arrow-up-outline', this.checkOutResource.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
+            new TableButtonType('account-arrow-down-outline', this.checkInResource.bind(this), 'Check In', undefined, undefined, this.hideCheckInButton.bind(this), '', '', 'success'),
         ];
 
         this.authService.user.subscribe(u => {
             this.user = !Number.isNaN(u.id) ? u : undefined;
         });
 
-        this.loadResourceType();
+        this.authService.authInFlight.subscribe(r => {
+            if (r === AuthCallStates.comp) {
+                this.loadResourceType();
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -57,10 +62,10 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
     }
 
     loadResourceType(): void {
-        if (!this.ResourceTypeCode) return;
+        if (!this.ResourceTypeId) return;
 
         this.loading = true;
-        this.resourceService.getResourceTypeByName(this.ResourceTypeCode).then(result => {
+        this.resourceService.getResourceTypeId(this.ResourceTypeId).then(result => {
             this.resourceType = result;
             if (this.resourceType) this.getResources();
             else this.resources = [];
@@ -72,6 +77,27 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
 
         this.resourceService.getResources(this.resourceType.id as number).then(result => {
             this.resources = result ?? [];
+
+            this.route.queryParamMap.subscribe(queryParams => {
+                let resourceId = queryParams.get('resourceId');
+                let direction = queryParams.get('direction');
+
+                if (!strNoE(resourceId) && !strNoE(direction)) {
+                    let resource = this.resources.find(r => r.id === Number(resourceId));
+                    if (resource) {
+                        switch (direction) {
+                            case 'check-out':
+                                if (!resource.checked_out)
+                                    this.checkOutResource(resource);
+                                break;
+                            case 'check-in':
+                                if (resource.checked_out)
+                                    this.checkInResource(resource);
+                                break;
+                        }
+                    }
+                }
+            });
         });
     }
 

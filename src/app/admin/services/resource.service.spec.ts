@@ -68,7 +68,7 @@ describe('ResourceService', () => {
                 return Promise.resolve();
             });
 
-            const result = await service.getResourceTypeByName('Tablet');
+            const result = await service.getResourceTypeId('Tablet');
 
             expect(result).toEqual(rt2);
         });

@@ -4,7 +4,7 @@
     </app-form-element>
 
     @if (selectedResourceType) {
-    <app-resource-manager [ResourceTypeCode]="selectedResourceType.name" [ShowTitle]="false"></app-resource-manager>
+    <app-resource-manager [ResourceTypeId]="selectedResourceType.id" [ShowTitle]="false"></app-resource-manager>
     }
     @else {
     <p>Select a resource type to view available resources.</p>

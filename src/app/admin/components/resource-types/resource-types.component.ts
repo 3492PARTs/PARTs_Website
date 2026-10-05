@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
-import { Resource, ResourceCheckOut, ResourceType } from '@app/admin/models/resource.models';
+import { Resource, ResourceCheckOut, ResourceDirection, ResourceType } from '@app/admin/models/resource.models';
 import { ResourceService } from '@app/admin/services/resource.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
@@ -11,10 +11,10 @@ import { TableButtonType, TableColType, TableComponent } from '@app/shared/compo
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { ResourceManagerComponent } from '@app/shared/components/elements/resource-manager/resource-manager.component';
 import { QrCodeDownloadComponent } from '@app/shared/components/elements/qr-code-download/qr-code-download.component';
-import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
+import { AppSize, buildEndpointUrl, cloneObject } from '@app/core/utils/utils.functions';
 import { GeneralService } from '@app/core/services/general.service';
-import { QrCodeService } from '@app/core/services/qr-code.service';
 import { CommonModule } from '@angular/common';
+import { environment } from 'src/environments/environment.uat';
 
 @Component({
     selector: 'app-resource-types',
@@ -61,7 +61,7 @@ export class ResourceTypesComponent implements OnInit {
         { PropertyName: 'time_in', ColLabel: 'Checked In' },
     ];
 
-    constructor(private authService: AuthService, private resourceService: ResourceService, private gs: GeneralService, private qrCodeService: QrCodeService) { }
+    constructor(private authService: AuthService, private resourceService: ResourceService, private gs: GeneralService) { }
 
     ngOnInit(): void {
         this.authService.authInFlight.subscribe((r) => {
@@ -162,21 +162,22 @@ export class ResourceTypesComponent implements OnInit {
     }
 
     downloadCheckoutQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, 'check-out', this.outColor);
+        this.downloadResourceQrCode(resource, ResourceDirection.CheckOut, this.outColor);
     }
 
     downloadCheckinQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, 'check-in', this.inColor);
+        this.downloadResourceQrCode(resource, ResourceDirection.CheckIn, this.inColor);
     }
 
-    downloadResourceQrCode(resource: Resource, endpoint: string, foregroundColor: string): void {
-        const url = this.qrCodeService.buildEndpointUrl(`resources/${endpoint}/`, {
-            resourceType: resource.resource_type.name,
-            resourceId: resource.id as number
+    downloadResourceQrCode(resource: Resource, direction: ResourceDirection, foregroundColor: string): void {
+        const url = buildEndpointUrl('', `resources/team/checkout/`, {
+            resourceTypeId: resource.resource_type.id as number,
+            resourceId: resource.id as number,
+            direction: direction
         });
         if (this.qrCodeDownload) {
             this.qrCodeDownload.ForegroundColor = foregroundColor;
-            this.qrCodeDownload.download(url, `${resource.name}-${endpoint}-qrcode.png`);
+            this.qrCodeDownload.download(url, `${resource.name}-${direction}-qrcode.png`);
         }
     }
 
