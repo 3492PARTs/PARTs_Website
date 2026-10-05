@@ -57,18 +57,20 @@ describe('ResourceService', () => {
         });
     });
 
-    describe('getResourceTypeByName', () => {
-        it('should find the matching resource type by name', async () => {
+    describe('getResourceTypeById', () => {
+        it('should find the matching resource type by ID', async () => {
             const rt1 = new ResourceType();
+            rt1.id = 1;
             rt1.name = 'Laptop';
             const rt2 = new ResourceType();
+            rt2.id = 2;
             rt2.name = 'Tablet';
             mockAPIService.get.and.callFake((loading: boolean, endpoint: string, params: any, onNext: any) => {
                 onNext([rt1, rt2]);
                 return Promise.resolve();
             });
 
-            const result = await service.getResourceTypeId('Tablet');
+            const result = await service.getResourceTypeById(2);
 
             expect(result).toEqual(rt2);
         });

@@ -7,7 +7,7 @@ import { SwPush } from '@angular/service-worker';
 
 import { ResourceManagerComponent } from './resource-manager.component';
 import { createMockSwPush } from '../../../../../test-helpers';
-import { AuthService } from '@app/auth/services/auth.service';
+import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { ResourceService } from '@app/admin/services/resource.service';
 import { Resource, ResourceType } from '@app/admin/models/resource.models';
 import { User } from '@app/auth/models/user.models';
@@ -21,10 +21,13 @@ describe('ResourceManagerComponent', () => {
     beforeEach(() => {
         const user = new User();
         user.id = 1;
-        mockAuthService = { user: of(user) };
+        mockAuthService = {
+            user: of(user),
+            authInFlight: of(AuthCallStates.comp)
+        };
 
-        mockResourceService = jasmine.createSpyObj('ResourceService', ['getResourceTypeByName', 'getResources', 'checkOutResource', 'checkInResource']);
-        mockResourceService.getResourceTypeByName.and.returnValue(Promise.resolve(null));
+        mockResourceService = jasmine.createSpyObj('ResourceService', ['getResourceTypeById', 'getResources', 'checkOutResource', 'checkInResource']);
+        mockResourceService.getResourceTypeById.and.returnValue(Promise.resolve(null));
         mockResourceService.getResources.and.returnValue(Promise.resolve([]));
 
         TestBed.configureTestingModule({
@@ -51,7 +54,7 @@ describe('ResourceManagerComponent', () => {
     it('should not load a resource type when ResourceTypeCode is empty', () => {
         fixture.detectChanges();
 
-        expect(mockResourceService.getResourceTypeByName).not.toHaveBeenCalled();
+        expect(mockResourceService.getResourceTypeById).not.toHaveBeenCalled();
     });
 
     describe('loadResourceType', () => {
@@ -60,9 +63,9 @@ describe('ResourceManagerComponent', () => {
             rt.id = 1;
             rt.name = 'Laptop';
             const resources = [new Resource()];
-            mockResourceService.getResourceTypeByName.and.returnValue(Promise.resolve(rt));
+            mockResourceService.getResourceTypeById.and.returnValue(Promise.resolve(rt));
             mockResourceService.getResources.and.returnValue(Promise.resolve(resources));
-            component.ResourceTypeId = 'Laptop';
+            component.ResourceTypeId = 1;
 
             fixture.detectChanges();
             await fixture.whenStable();
@@ -72,8 +75,8 @@ describe('ResourceManagerComponent', () => {
         });
 
         it('should clear resources when resource type is not found', async () => {
-            mockResourceService.getResourceTypeByName.and.returnValue(Promise.resolve(null));
-            component.ResourceTypeId = 'Unknown';
+            mockResourceService.getResourceTypeById.and.returnValue(Promise.resolve(null));
+            component.ResourceTypeId = null;
 
             fixture.detectChanges();
             await fixture.whenStable();
