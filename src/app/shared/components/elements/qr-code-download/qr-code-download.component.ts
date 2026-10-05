@@ -19,6 +19,12 @@ export class QrCodeDownloadComponent {
 
     @Input() BackgroundColor = '#000000ff';
 
+    @Input() Title = '';
+
+    @Input() TitlePosition: 'top' | 'bottom' = 'bottom';
+
+    @Input() TitleMargin = 8;
+
     Value = '';
     Filename = 'qrcode.png';
     private pendingDownload = false;
@@ -41,10 +47,47 @@ export class QrCodeDownloadComponent {
             const canvas = this.qrRef?.nativeElement.querySelector('canvas');
             if (!canvas) return;
 
-            canvas.toBlob(blob => {
+            const downloadCanvas = this.createDownloadCanvas(canvas);
+            downloadCanvas.toBlob(blob => {
                 if (blob) saveAs(blob, this.Filename);
             }, 'image/png');
         }, 500);
 
+    }
+
+    private createDownloadCanvas(qrCanvas: HTMLCanvasElement): HTMLCanvasElement {
+        const title = this.Title;
+        if (!title) return qrCanvas;
+
+        const titleFont = '16px Arial';
+        const titleHeight = 20;
+        const titleMargin = Number.isFinite(this.TitleMargin) ? Math.max(0, this.TitleMargin) : 0;
+        const measureContext = qrCanvas.ownerDocument.createElement('canvas').getContext('2d');
+        if (!measureContext) throw new Error('Unable to create a canvas context for the QR code title.');
+
+        measureContext.font = titleFont;
+        const titleWidth = Math.ceil(measureContext.measureText(title).width);
+        const canvas = qrCanvas.ownerDocument.createElement('canvas');
+        canvas.width = Math.max(qrCanvas.width, titleWidth);
+        canvas.height = qrCanvas.height + titleHeight + titleMargin;
+
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('Unable to create a canvas context for the titled QR code.');
+
+        context.fillStyle = this.ForegroundColor;
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.font = titleFont;
+        context.fillStyle = this.BackgroundColor;
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+
+        const titleY = this.TitlePosition === 'top' ? titleHeight / 2 : qrCanvas.height + titleHeight / 2;
+        context.fillText(title, canvas.width / 2, titleY);
+
+        const qrX = (canvas.width - qrCanvas.width) / 2;
+        const qrY = this.TitlePosition === 'top' ? titleHeight + titleMargin : 0;
+        context.drawImage(qrCanvas, qrX, qrY);
+
+        return canvas;
     }
 }

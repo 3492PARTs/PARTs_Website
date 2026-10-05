@@ -162,14 +162,14 @@ export class ResourceTypesComponent implements OnInit {
     }
 
     downloadCheckoutQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, ResourceDirection.CheckOut, this.outColor);
+        this.downloadResourceQrCode(resource, ResourceDirection.CheckOut, this.outColor, `Checkout ${resource.name}`);
     }
 
     downloadCheckinQrCode(resource: Resource): void {
-        this.downloadResourceQrCode(resource, ResourceDirection.CheckIn, this.inColor);
+        this.downloadResourceQrCode(resource, ResourceDirection.CheckIn, this.inColor, `Check in ${resource.name}`);
     }
 
-    downloadResourceQrCode(resource: Resource, direction: ResourceDirection, foregroundColor: string): void {
+    downloadResourceQrCode(resource: Resource, direction: ResourceDirection, foregroundColor: string, title: string): void {
         const url = buildEndpointUrl('', `resources/team/checkout/`, {
             resourceTypeId: resource.resource_type.id as number,
             resourceId: resource.id as number,
@@ -177,6 +177,7 @@ export class ResourceTypesComponent implements OnInit {
         });
         if (this.qrCodeDownload) {
             this.qrCodeDownload.ForegroundColor = foregroundColor;
+            this.qrCodeDownload.Title = title;
             this.qrCodeDownload.download(url, `${resource.name}-${direction}-qrcode.png`);
         }
     }
