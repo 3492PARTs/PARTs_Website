@@ -62,7 +62,7 @@ describe('ResourceManagerComponent', () => {
             const resources = [new Resource()];
             mockResourceService.getResourceTypeByName.and.returnValue(Promise.resolve(rt));
             mockResourceService.getResources.and.returnValue(Promise.resolve(resources));
-            component.ResourceTypeCode = 'Laptop';
+            component.ResourceTypeId = 'Laptop';
 
             fixture.detectChanges();
             await fixture.whenStable();
@@ -73,7 +73,7 @@ describe('ResourceManagerComponent', () => {
 
         it('should clear resources when resource type is not found', async () => {
             mockResourceService.getResourceTypeByName.and.returnValue(Promise.resolve(null));
-            component.ResourceTypeCode = 'Unknown';
+            component.ResourceTypeId = 'Unknown';
 
             fixture.detectChanges();
             await fixture.whenStable();

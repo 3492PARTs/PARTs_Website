@@ -73,3 +73,7 @@ export class CheckInResourceRequest {
         this.resource_id = resource_id;
     }
 }
+export enum ResourceDirection {
+    CheckOut = 'check-out',
+    CheckIn = 'check-in'
+}

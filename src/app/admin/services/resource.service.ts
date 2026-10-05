@@ -28,10 +28,10 @@ export class ResourceService {
         });
     }
 
-    getResourceTypeByName(name: string): Promise<ResourceType | null> {
+    getResourceTypeId(id: number): Promise<ResourceType | null> {
         return new Promise<ResourceType | null>(resolve => {
-            this.api.get(true, 'resources/resource-types/', { name }, (result: ResourceType[]) => {
-                resolve(result?.find(rt => rt.name === name) ?? null);
+            this.api.get(true, 'resources/resource-types/', { id }, (result: ResourceType[]) => {
+                resolve(result?.find(rt => rt.id === id) ?? null);
             }, () => resolve(null));
         });
     }
