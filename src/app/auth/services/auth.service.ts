@@ -169,7 +169,7 @@ export class AuthService {
     localStorage.removeItem(this.tokenStringLocalStorage);
     if (this.rememberMeTimeout)
       window.clearTimeout(this.rememberMeTimeout);
-    this.router.navigateByUrl(`login?returnUrl=${returnUrl}`);
+    this.router.navigateByUrl(`login${returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : ''}`);
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {
