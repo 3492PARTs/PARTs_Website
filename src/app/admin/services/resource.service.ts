@@ -28,7 +28,7 @@ export class ResourceService {
         });
     }
 
-    getResourceTypeId(id: number): Promise<ResourceType | null> {
+    getResourceTypeById(id: number): Promise<ResourceType | null> {
         return new Promise<ResourceType | null>(resolve => {
             this.api.get(true, 'resources/resource-types/', { id }, (result: ResourceType[]) => {
                 resolve(result?.find(rt => rt.id === id) ?? null);

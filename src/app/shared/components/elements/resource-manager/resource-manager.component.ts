@@ -48,15 +48,19 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
             this.user = !Number.isNaN(u.id) ? u : undefined;
         });
 
-        this.authService.authInFlight.subscribe(r => {
+        this.authService.authInFlight?.subscribe(r => {
             if (r === AuthCallStates.comp) {
                 this.loadResourceType();
             }
         });
+
+        if (!this.authService.authInFlight && this.ResourceTypeId) {
+            this.loadResourceType();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['ResourceTypeCode'] && !changes['ResourceTypeCode'].firstChange) {
+        if (changes['ResourceTypeId'] && !changes['ResourceTypeId'].firstChange) {
             this.loadResourceType();
         }
     }
@@ -65,7 +69,7 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
         if (!this.ResourceTypeId) return;
 
         this.loading = true;
-        this.resourceService.getResourceTypeId(this.ResourceTypeId).then(result => {
+        this.resourceService.getResourceTypeById(this.ResourceTypeId).then(result => {
             this.resourceType = result;
             if (this.resourceType) this.getResources();
             else this.resources = [];
