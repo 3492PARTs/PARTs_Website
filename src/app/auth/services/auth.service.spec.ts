@@ -262,7 +262,7 @@ describe('AuthService', () => {
 
       service.logOut(routerUrl);
 
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('login?returnUrl=/dashboard');
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(`login?returnUrl=${encodeURIComponent(routerUrl)}`);
     });
   });
 
