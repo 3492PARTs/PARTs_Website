@@ -1,10 +1,4 @@
 <app-box>
-    @if (AdminInterface) {
-    <app-button [Class]="'success'" [ButtonType]="'qrcode-plus'" (FunctionCallBack)="downloadCheckinQrCode()">Download
-        Check-in QR Code</app-button>
-    <app-button [Class]="'warning'" [ButtonType]="'qrcode-minus'" (FunctionCallBack)="downloadCheckoutQrCode()">Download
-        Check-out QR Code</app-button>
-    }
     <app-header [h]="2">Meetings</app-header>
 
     <div class="padding-top-1rem"></div>
@@ -91,9 +85,20 @@
 
         <div class="padding-top-1rem"></div>
 
-        <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
-            [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
-            [BindingProperty]="'value'"></app-form-element>
+        <div class="flex justify-content-space-between align-items-center">
+            <app-form-element [Type]="'radio'" [LabelText]="'Filter'" [SelectList]="attendanceFilterOptions"
+                [(Model)]="attendanceFilterOption" [DisplayProperty]="'property'"
+                [BindingProperty]="'value'"></app-form-element>
+
+            <div>
+                <app-button [Class]="'success'" [ButtonType]="'qrcode-plus'"
+                    (FunctionCallBack)="downloadCheckinQrCode()">Download
+                    Check-in QR Code</app-button>
+                <app-button [Class]="'warning'" [ButtonType]="'qrcode-minus'"
+                    (FunctionCallBack)="downloadCheckoutQrCode()">Download
+                    Check-out QR Code</app-button>
+            </div>
+        </div>
         }
         <app-table [TableCols]="attendanceTableCols" [TableData]="attendance" [ShowAddButton]="true"
             (AddRecordCallBack)="AdminInterface ? showAttendanceModal() : checkIn()"
