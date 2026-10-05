@@ -1,4 +1,10 @@
 <app-box>
+    @if (AdminInterface) {
+    <app-button [Class]="'success'" [ButtonType]="'qrcode-plus'" (FunctionCallBack)="downloadCheckinQrCode()">Download
+        Check-in QR Code</app-button>
+    <app-button [Class]="'warning'" [ButtonType]="'qrcode-minus'" (FunctionCallBack)="downloadCheckoutQrCode()">Download
+        Check-out QR Code</app-button>
+    }
     <app-header [h]="2">Meetings</app-header>
 
     <div class="padding-top-1rem"></div>
@@ -211,3 +217,5 @@
     </app-modal>
 
 </app-box>
+
+<app-qr-code-download></app-qr-code-download>

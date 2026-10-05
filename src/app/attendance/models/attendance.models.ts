@@ -50,3 +50,8 @@ export class AttendanceApprovalType {
     approval_typ = 'unapp';
     approval_nm = 'Unapproved';
 }
+
+export enum AttendanceDirection {
+    IN = 'in',
+    OUT = 'out'
+}

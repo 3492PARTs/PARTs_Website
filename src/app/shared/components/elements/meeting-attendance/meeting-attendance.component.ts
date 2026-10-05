@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
@@ -7,7 +7,7 @@ import { ButtonComponent } from "../../atoms/button/button.component";
 import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
 import { BoxComponent } from "../../atoms/box/box.component";
-import { Attendance, AttendanceApprovalType, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
+import { Attendance, AttendanceApprovalType, AttendanceDirection, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
@@ -17,15 +17,17 @@ import { UserService } from '@app/user/services/user.service';
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, cloneObject, decodeYesNoBoolean, updateOrAddObjectInArray as addOrUpdateObjectInArray } from '@app/core/utils/utils.functions';
+import { AppSize, cloneObject, decodeYesNoBoolean, updateOrAddObjectInArray as addOrUpdateObjectInArray, buildEndpointUrl, strNoE } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule } from '@angular/common';
 import { RemovedFilterPipe } from '@app/shared/pipes';
 import { LoadingComponent } from '../../atoms/loading/loading.component';
+import { QrCodeDownloadComponent } from '../qr-code-download/qr-code-download.component';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule, LoadingComponent],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule, LoadingComponent, QrCodeDownloadComponent],
   templateUrl: './meeting-attendance.component.html',
   styleUrls: ['./meeting-attendance.component.scss']
 })
@@ -85,7 +87,11 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceModalVisible = false;
   attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }, { approval_typ: 'exmpt', approval_nm: 'Exempt' }];
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService) {
+  private outColor = '#ffc107ff';
+  private inColor = '#28a745FF';
+  @ViewChild(QrCodeDownloadComponent) qrCodeDownload?: QrCodeDownloadComponent;
+
+  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService, private route: ActivatedRoute) {
 
   }
 
@@ -108,9 +114,11 @@ export class MeetingAttendanceComponent implements OnInit {
       { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
     ];
 
+    let calls: any[] = [];
+
     this.auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
-      if (!this.AdminInterface && this.user !== undefined) this.getAttendance();
+      if (!this.AdminInterface && this.user !== undefined) calls.push(this.getAttendance());
     }
     );
 
@@ -120,12 +128,43 @@ export class MeetingAttendanceComponent implements OnInit {
         ...this.attendanceReportTableCols
       ];
     }
-
     if (this.AdminInterface) {
-      this.getAttendance(undefined, undefined, false);
-      this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []);
+      calls.push(this.getAttendance(undefined, undefined, false));
+      calls.push(this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []));
     }
-    this.getMeetings();
+    calls.push(this.getMeetings());
+
+    Promise.all(calls).then(() => {
+      if (this.isNotAdminInterface()) {
+        this.route.queryParamMap.subscribe(async queryParams => {
+          let direction = queryParams.get('direction');
+
+          if (!strNoE(direction)) {
+            const activeMeeting = await this.meetingService.getActiveMeeting(this.meetings);
+            const activeAttendance = this.attendance.find(a => a.time_in !== null && a.time_out === null);
+            switch (direction) {
+              case 'out':
+                if (activeMeeting) {
+                  if (this.hasAttendedMeeting(activeMeeting))
+                    this.leaveMeeting(activeMeeting);
+                }
+                else if (activeAttendance)
+                  this.checkOut(activeAttendance);
+
+                break;
+              case 'in':
+                if (activeMeeting) {
+                  if (!this.hasAttendedMeeting(activeMeeting))
+                    this.attendMeeting(activeMeeting);
+                }
+                else if (!activeAttendance)
+                  this.checkIn();
+                break;
+            }
+          }
+        });
+      }
+    });
 
     if (this.AdminInterface)
       this.attendanceFilterOption = 'unapp';
@@ -172,20 +211,20 @@ export class MeetingAttendanceComponent implements OnInit {
     });
   }
 
-  getAttendance(meeting?: Meeting, user?: User, loadingScreen = true): void | null {
+  getAttendance(meeting?: Meeting, user?: User, loadingScreen = true): Promise<void | null> {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
       if (this.user)
         u = this.user;
       else {
         this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
-        return null;
+        return new Promise<void | null>((resolve, reject) => { resolve(null); });
       }
 
     if (user) u = user;
 
     this.attendanceLoading = true;
-    this.attendanceService.getAttendance(u, meeting, loadingScreen).then((result: Attendance[]) => {
+    return this.attendanceService.getAttendance(u, meeting, loadingScreen).then((result: Attendance[]) => {
       if (meeting)
         this.meetingAttendance = result;
       else if (user)
@@ -344,9 +383,28 @@ export class MeetingAttendanceComponent implements OnInit {
     return this.attendanceService.computeAttendanceDuration(attendance);
   }
 
+  downloadCheckoutQrCode(): void {
+    this.downloadAttendanceQrCode(AttendanceDirection.OUT, this.outColor, `Checkout`);
+  }
+
+  downloadCheckinQrCode(): void {
+    this.downloadAttendanceQrCode(AttendanceDirection.IN, this.inColor, `Check in`);
+  }
+
+  downloadAttendanceQrCode(direction: AttendanceDirection, foregroundColor: string, title: string): void {
+    const url = buildEndpointUrl('', `attendance/`, {
+      direction: direction
+    });
+    if (this.qrCodeDownload) {
+      this.qrCodeDownload.ForegroundColor = foregroundColor;
+      this.qrCodeDownload.Title = title;
+      this.qrCodeDownload.download(url, `attendance-${direction}-qrcode.png`);
+    }
+  }
+
   // MEETING -----------------------------------------------------------
-  getMeetings(id?: number): void | null {
-    this.meetingService.getMeetings(id, this.isNotAdminInterface()).then((result) => {
+  async getMeetings(id?: number): Promise<void | null> {
+    return this.meetingService.getMeetings(id, this.isNotAdminInterface()).then((result) => {
       if (result) {
         if (Array.isArray(result)) {
           this.meetings = result;
@@ -355,7 +413,8 @@ export class MeetingAttendanceComponent implements OnInit {
             if (updatedMeeting) this.meeting = updatedMeeting;
           }
         }
-        else this.meeting = result
+        else this.meeting = result;
+
       }
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       //this.getMeetingHours();
