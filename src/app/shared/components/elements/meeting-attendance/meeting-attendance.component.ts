@@ -53,7 +53,7 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'meeting_typ.meeting_nm', ColLabel: 'Type' },
   ];
   meetingsTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendance.bind(this), '', '', 'danger'),
+    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendedMeeting.bind(this), '', '', 'danger'),
     new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), 'Check In', undefined, undefined, this.hasAttendedMeeting.bind(this), '', '', 'success'),
     new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), 'Check Out', undefined, undefined, this.hasLeftMeeting.bind(this), '', '', 'warning'),
   ];
@@ -146,7 +146,7 @@ export class MeetingAttendanceComponent implements OnInit {
             switch (direction) {
               case 'out':
                 if (activeMeeting) {
-                  if (this.hasAttendedMeeting(activeMeeting))
+                  if (this.hasAttendedMeeting(activeMeeting) && !this.hasLeftMeeting(activeMeeting))
                     this.leaveMeeting(activeMeeting);
                 }
                 else if (activeAttendance)
@@ -484,11 +484,6 @@ export class MeetingAttendanceComponent implements OnInit {
   hasLeftMeeting(meeting: Meeting): boolean {
     if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
     return this.AdminInterface || !this.attendance.find(a => (a.meeting?.id === meeting.id)) || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
-  }
-
-  hasAttendance(meeting: Meeting): boolean {
-    if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
-    return this.AdminInterface || this.attendance.find(a => a.meeting?.id === meeting.id) !== undefined;
   }
 
   compareMeetingObjects(m1?: Meeting, m2?: Meeting): boolean {
