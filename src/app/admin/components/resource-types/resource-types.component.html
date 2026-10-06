@@ -58,6 +58,9 @@
             [Width]="'100%'">
         </app-form-element>
 
+        <app-form-element [Type]="'checkbox'" [LabelText]="'On Loan'" [(Model)]="activeResource.on_loan">
+        </app-form-element>
+
         <app-button-ribbon>
             <app-button [ButtonType]="'success'" [Type]="'submit'">Save</app-button>
         </app-button-ribbon>

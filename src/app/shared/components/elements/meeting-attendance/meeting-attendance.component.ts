@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { ModalComponent } from "../../atoms/modal/modal.component";
 import { FormComponent } from "../../atoms/form/form.component";
 import { FormElementComponent } from "../../atoms/form-element/form-element.component";
@@ -12,7 +12,6 @@ import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
-import { HeaderComponent } from "../../atoms/header/header.component";
 import { UserService } from '@app/user/services/user.service';
 import { environment } from '../../../../../environments/environment';
 
@@ -20,20 +19,22 @@ import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, cloneObject, decodeYesNoBoolean, updateOrAddObjectInArray as addOrUpdateObjectInArray, buildEndpointUrl, strNoE } from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { RemovedFilterPipe } from '@app/shared/pipes';
 import { LoadingComponent } from '../../atoms/loading/loading.component';
 import { QrCodeDownloadComponent } from '../qr-code-download/qr-code-download.component';
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, HeaderComponent, RemovedFilterPipe, CommonModule, LoadingComponent, QrCodeDownloadComponent],
+  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, RemovedFilterPipe, CommonModule, LoadingComponent, QrCodeDownloadComponent],
   templateUrl: './meeting-attendance.component.html',
   styleUrls: ['./meeting-attendance.component.scss']
 })
 export class MeetingAttendanceComponent implements OnInit {
 
   @Input() AdminInterface = false;
+
+  private readonly documentRef = inject(DOCUMENT);
 
   private user: User | undefined = undefined;
 
@@ -209,6 +210,13 @@ export class MeetingAttendanceComponent implements OnInit {
         //this.getAttendance(undefined, a.user);
       }
     });
+  }
+
+  downloadHelpDocument(): void {
+    const link = this.documentRef.createElement('a');
+    link.href = '/documents/support/%20Managing%20Your%20Attendance.pdf';
+    link.download = 'Managing Your Attendance.pdf';
+    link.click();
   }
 
   getAttendance(meeting?: Meeting, user?: User, loadingScreen = true): Promise<void | null> {
@@ -565,4 +573,3 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
 }
-
