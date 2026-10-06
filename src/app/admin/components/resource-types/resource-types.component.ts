@@ -11,7 +11,7 @@ import { TableButtonType, TableColType, TableComponent } from '@app/shared/compo
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { ResourceManagerComponent } from '@app/shared/components/elements/resource-manager/resource-manager.component';
 import { QrCodeDownloadComponent } from '@app/shared/components/elements/qr-code-download/qr-code-download.component';
-import { AppSize, buildEndpointUrl, cloneObject } from '@app/core/utils/utils.functions';
+import { AppSize, buildEndpointUrl, cloneObject, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/environments/environment.uat';
@@ -45,7 +45,8 @@ export class ResourceTypesComponent implements OnInit {
     resourcesTableCols: TableColType[] = [
         { PropertyName: 'name', ColLabel: 'Name' },
         { PropertyName: 'description', ColLabel: 'Description' },
-        { PropertyName: 'checked_out', ColLabel: 'Checked Out' },
+        { PropertyName: 'on_loan', ColLabel: 'On Loan', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+        { PropertyName: 'checked_out', ColLabel: 'Checked Out', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
     ];
     resourcesTableButtons: TableButtonType[] = [
         new TableButtonType('qrcode-minus', this.downloadCheckoutQrCode.bind(this), 'Checkout QR Code', undefined, undefined, undefined, undefined, this.outColor),
@@ -180,6 +181,10 @@ export class ResourceTypesComponent implements OnInit {
             this.qrCodeDownload.Title = title;
             this.qrCodeDownload.download(url, `${resource.name}-${direction}-qrcode.png`);
         }
+    }
+
+    decodeYesNoBoolean(b: boolean): string {
+        return decodeYesNoBoolean(b);
     }
 
 }

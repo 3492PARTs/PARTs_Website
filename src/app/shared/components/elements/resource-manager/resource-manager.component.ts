@@ -31,6 +31,7 @@ export class ResourceManagerComponent implements OnInit, OnChanges {
     resourcesTableCols: TableColType[] = [
         { PropertyName: 'name', ColLabel: 'Name' },
         { PropertyName: 'description', ColLabel: 'Description' },
+        { PropertyName: 'on_loan', ColLabel: 'On Loan', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
         { PropertyName: 'checked_out', ColLabel: 'Checked Out', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
         { PropertyName: 'checked_out_by', ColLabel: 'User' }
     ];
