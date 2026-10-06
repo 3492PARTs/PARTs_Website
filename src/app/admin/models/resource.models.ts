@@ -21,6 +21,7 @@ export interface IResource {
     description: string;
     checked_out: boolean;
     checked_out_by?: string;
+    on_loan: boolean;
     void_ind: string;
 }
 
@@ -31,6 +32,7 @@ export class Resource implements IResource {
     description = '';
     checked_out = false;
     checked_out_by?: string = undefined;
+    on_loan = false;
     void_ind = 'n';
 }
 
