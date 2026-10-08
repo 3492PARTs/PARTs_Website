@@ -13,6 +13,7 @@ import { ModalService } from '@app/core/services/modal.service';
 import { createMockSwPush } from '../../../../test-helpers';
 import { FieldScoutingComponent } from './field-scouting.component';
 import { User } from '@app/auth/models/user.models';
+import { ScoutFieldFormResponse, Match, Team } from '@app/scouting/models/scouting.models';
 
 describe('FieldScoutingComponent', () => {
   let component: FieldScoutingComponent;
@@ -38,7 +39,7 @@ describe('FieldScoutingComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'addBanner',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
@@ -50,6 +51,17 @@ describe('FieldScoutingComponent', () => {
     mockSS.saveFieldScoutingResponse.and.returnValue(Promise.resolve(false) as any);
     mockSS.loadScoutingFieldSchedules.and.returnValue(Promise.resolve(null) as any);
     mockCS = jasmine.createSpyObj('CacheService', ['clearAll']);
+    mockCS.ScoutFieldFormResponse = {
+      getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([])),
+      getById: jasmine.createSpy('getById').and.returnValue(Promise.resolve(null)),
+      RemoveAsync: jasmine.createSpy('RemoveAsync').and.returnValue(Promise.resolve()),
+    } as any;
+    mockCS.Team = {
+      getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([])),
+    } as any;
+    mockCS.Match = {
+      getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([])),
+    } as any;
     mockModalService = jasmine.createSpyObj('ModalService', [
       'triggerError', 'triggerConfirm', 'successfulResponseBanner',
     ]);
@@ -86,5 +98,194 @@ describe('FieldScoutingComponent', () => {
 
   it('ngOnDestroy should not throw', () => {
     expect(() => component.ngOnDestroy()).not.toThrow();
+  });
+
+  it('init should call loadAllScoutingInfo', () => {
+    component['init']();
+    expect(mockSS.loadAllScoutingInfo).toHaveBeenCalled();
+  });
+
+  it('init should call populateOutstandingResponses', () => {
+    spyOn(component, 'populateOutstandingResponses');
+    component['init']();
+    expect(component.populateOutstandingResponses).toHaveBeenCalled();
+  });
+
+  it('init should call gs.incrementOutstandingCalls', () => {
+    mockGS.incrementOutstandingCalls.calls.reset();
+    component['init']();
+    expect(mockGS.incrementOutstandingCalls).toHaveBeenCalled();
+  });
+
+  it('populateOutstandingResponses should call ScoutFieldFormResponse.getAll', () => {
+    component.populateOutstandingResponses();
+    expect(mockCS.ScoutFieldFormResponse.getAll).toHaveBeenCalled();
+  });
+
+  it('populateOutstandingResponses should populate outstandingResponses', async () => {
+    const responses = [{ id: 1, team_id: 100 }, { id: 2, team_id: 200 }];
+    mockCS.ScoutFieldFormResponse.getAll = jasmine.createSpy('getAll').and.returnValue(Promise.resolve(responses));
+    await component.populateOutstandingResponses();
+    expect(component.outstandingResponses.length).toBe(2);
+    expect(component.outstandingResponses[0]).toEqual({ id: 1, team: 100 });
+  });
+
+  it('removeResult should call triggerConfirm', () => {
+    component.removeResult();
+    expect(mockModalService.triggerConfirm).toHaveBeenCalled();
+  });
+
+  it('removeResult should call RemoveAsync when confirmed', () => {
+    mockModalService.triggerConfirm.and.callFake((_msg: string, fn: () => void) => fn());
+    component.scoutFieldResponse.id = 5;
+    component.removeResult();
+    expect(mockCS.ScoutFieldFormResponse.RemoveAsync).toHaveBeenCalledWith(5);
+  });
+
+  it('checkInScout should call api.get when scoutFieldSchedule has id', () => {
+    component['scoutFieldSchedule'] = { id: 42, st_time: '', end_time: '' } as any;
+    component.checkInScout();
+    expect(mockAPI.get).toHaveBeenCalled();
+  });
+
+  it('checkInScout should not call api.get when scoutFieldSchedule is undefined', () => {
+    mockAPI.get.calls.reset();
+    component['scoutFieldSchedule'] = undefined;
+    component.checkInScout();
+    expect(mockAPI.get).not.toHaveBeenCalled();
+  });
+
+  it('setNoMatch should call triggerConfirm', () => {
+    component.setNoMatch();
+    expect(mockModalService.triggerConfirm).toHaveBeenCalled();
+  });
+
+  it('setNoMatch when confirmed should set noMatch to true', () => {
+    mockModalService.triggerConfirm.and.callFake((_msg: string, fn: () => void) => fn());
+    component.setNoMatch();
+    expect(component.noMatch).toBeTrue();
+  });
+
+  it('save should call triggerError when no team selected', () => {
+    spyOn(component, 'isQuestionDisplayFormValid').and.returnValue(true);
+    component.scoutFieldResponse.team_id = NaN;
+    component.save();
+    expect(mockModalService.triggerError).toHaveBeenCalled();
+  });
+
+  it('save should call saveFieldScoutingResponse when team is set', () => {
+    spyOn(component, 'isQuestionDisplayFormValid').and.returnValue(true);
+    component.scoutFieldResponse.team_id = 3492;
+    component.scoutFieldResponse.match = undefined;
+    component.scoutFieldResponse.answers = [];
+    component['activeFormSubTypeForm'] = { questions: [], flows: [] } as any;
+    component.save();
+    expect(mockSS.saveFieldScoutingResponse).toHaveBeenCalled();
+  });
+
+  it('uploadOutstandingResponses should call ss.uploadOutstandingResponses', () => {
+    component.uploadOutstandingResponses();
+    expect(mockSS.uploadOutstandingResponses).toHaveBeenCalled();
+  });
+
+  it('getFirstStage should return minimum order from flow questions', () => {
+    const questions = [{ order: 3 }, { order: 1 }, { order: 2 }] as any[];
+    expect(component.getFirstStage(questions)).toBe(1);
+  });
+
+  it('getFirstStage should return NaN for empty array', () => {
+    expect(component.getFirstStage([])).toBeNaN();
+  });
+
+  it('setInvertedImage should set invertedImage', () => {
+    component.setInvertedImage(true);
+    expect(component.invertedImage).toBeTrue();
+    component.setInvertedImage(false);
+    expect(component.invertedImage).toBeFalse();
+  });
+
+  it('hasNonFormBasedFlows should return false when no activeFormSubTypeForm', () => {
+    component['activeFormSubTypeForm'] = undefined;
+    expect(component.hasNonFormBasedFlows).toBeFalse();
+  });
+
+  it('hasNonFormBasedFlows should return true when non-form-based flows exist', () => {
+    component['activeFormSubTypeForm'] = { flows: [{ form_based: false }] } as any;
+    expect(component.hasNonFormBasedFlows).toBeTrue();
+  });
+
+  it('formBasedFlows should return form-based flows', () => {
+    component['activeFormSubTypeForm'] = { flows: [{ form_based: true }, { form_based: false }] } as any;
+    expect(component.formBasedFlows.length).toBe(1);
+  });
+
+  it('formBasedFlows should return empty array when no activeFormSubTypeForm', () => {
+    component['activeFormSubTypeForm'] = undefined;
+    expect(component.formBasedFlows).toEqual([]);
+  });
+
+  it('stopwatchStop should stop the stopwatch', () => {
+    component['stopwatchRun'] = true;
+    component.stopwatchStop();
+    expect((component as any).stopwatchRun).toBeFalse();
+  });
+
+  it('stopwatchReset should reset stopwatch values', () => {
+    component.stopwatchSecond = 0;
+    component.stopwatchLoopCount = 5;
+    component.stopwatchReset();
+    expect(component.stopwatchSecond).toBe(component.autoTime);
+    expect(component.stopwatchLoopCount).toBe(0);
+  });
+
+  it('stopwatchStart should not start when already running', () => {
+    component['stopwatchRun'] = true;
+    component['activeFormSubTypeForm'] = { form_sub_typ: { form_sub_typ: 'auto' } } as any;
+    spyOn(component as any, 'stopwatchRunFunction');
+    component.stopwatchStart();
+    expect((component as any).stopwatchRunFunction).not.toHaveBeenCalled();
+  });
+
+  it('amendMatchList should call ScoutFieldFormResponse.getAll', () => {
+    component.amendMatchList();
+    expect(mockCS.ScoutFieldFormResponse.getAll).toHaveBeenCalled();
+  });
+
+  it('buildTeamList should call Team.getAll when no teams provided and match is set', async () => {
+    component.matches = [{ match_key: 'qm1' } as any];
+    component.scoutFieldResponse.match = { match_key: 'qm1' } as any;
+    await component.buildTeamList(NaN, undefined);
+    expect(mockCS.Team.getAll).toHaveBeenCalled();
+  });
+
+  it('changeFieldInversionForTeam should set invertedImage for blue alliance', () => {
+    component.scoutFieldResponse.match = { blue_one_id: 3492, blue_two_id: 0, blue_three_id: 0 } as any;
+    component.scoutFieldResponse.team_id = 3492;
+    spyOn(component, 'setInvertedImage');
+    component.changeFieldInversionForTeam();
+    expect(component.setInvertedImage).toHaveBeenCalledWith(true);
+  });
+
+  it('changeFieldInversionForTeam should not invert for red alliance', () => {
+    component.scoutFieldResponse.match = { blue_one_id: 1, blue_two_id: 2, blue_three_id: 3 } as any;
+    component.scoutFieldResponse.team_id = 3492;
+    spyOn(component, 'setInvertedImage');
+    component.changeFieldInversionForTeam();
+    expect(component.setInvertedImage).toHaveBeenCalledWith(false);
+  });
+
+  it('outstandingResponsesUploaded subscription should call populateOutstandingResponses', () => {
+    spyOn(component, 'populateOutstandingResponses');
+    outstandingResponsesUploaded.next(1);
+    expect(component.populateOutstandingResponses).toHaveBeenCalled();
+  });
+
+  it('setUpdateScoutFieldScheduleTimeout should not throw', () => {
+    expect(() => component.setUpdateScoutFieldScheduleTimeout()).not.toThrow();
+  });
+
+  it('updateScoutFieldSchedule should call ss.loadScoutingFieldSchedules', async () => {
+    await component.updateScoutFieldSchedule();
+    expect(mockSS.loadScoutingFieldSchedules).toHaveBeenCalled();
   });
 });

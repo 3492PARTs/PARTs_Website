@@ -44,7 +44,7 @@ describe('DashboardComponent', () => {
     mockSS.loadFieldScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockSS.getFieldFormFormFromCache.and.returnValue(Promise.resolve(null) as any);
     mockSS.getTeamsFromCache.and.returnValue(Promise.resolve([]) as any);
-    mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
+    mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner', 'triggerConfirm', 'triggerFormValidationBanner']);
 
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
@@ -73,5 +73,131 @@ describe('DashboardComponent', () => {
     mockSS.getFieldFormFormFromCache.calls.reset();
     authInFlight.next(AuthCallStates.comp);
     expect(mockSS.getFieldFormFormFromCache).toHaveBeenCalled();
+  });
+
+  it('getScoutingResponses should call api.get', () => {
+    component.getScoutingResponses();
+    expect(mockAPI.get).toHaveBeenCalled();
+  });
+
+  it('getScoutingResponses should set fieldResponses', () => {
+    const mockResponses = [{ team_id: 1 }, { team_id: 2 }];
+    mockAPI.get.and.callFake((_: boolean, url: string, ___?: any, onNext?: (result: any) => void) => {
+      if (url.includes('scouting-responses') && onNext) onNext(mockResponses);
+      return Promise.resolve(mockResponses);
+    });
+    component.getScoutingResponses();
+    expect(component.fieldResponses).toEqual(mockResponses as any);
+  });
+
+  it('saveDashboard should call api.post', () => {
+    component.saveDashboard();
+    expect(mockAPI.post).toHaveBeenCalled();
+  });
+
+  it('addViewToDashboard should push a new view to dashboard_views', () => {
+    component.dashboard.dashboard_views = [];
+    component.addViewToDashboard();
+    expect(component.dashboard.dashboard_views.length).toBe(1);
+  });
+
+  it('addViewToDashboard should set active to y', () => {
+    component.dashboard.dashboard_views = [];
+    component.addViewToDashboard();
+    expect(component.dashboard.dashboard_views[0].active).toBe('y');
+  });
+
+  it('addViewToDashboard with named view should trigger saveDashboard', () => {
+    spyOn(component, 'saveDashboard');
+    component.dashboard.dashboard_views = [];
+    const dv = { name: 'Test View', active: 'n', order: 1, teams: [], dashboard_graphs: [], availableGraphs: [] } as any;
+    component.addViewToDashboard(dv);
+    expect(component.saveDashboard).toHaveBeenCalled();
+  });
+
+  it('addGraphToDashboardView should trigger error when name is empty', () => {
+    const dv = { name: '', active: 'y', order: 1, teams: [], dashboard_graphs: [], availableGraphs: [] } as any;
+    component.addGraphToDashboardView(dv);
+    expect(mockModalService.triggerFormValidationBanner).toHaveBeenCalled();
+  });
+
+  it('addGraphToDashboardView should add graph when graphToAdd is set', () => {
+    spyOn(component, 'saveDashboard');
+    const dv = { name: 'TestView', active: 'y', order: 1, teams: [], dashboard_graphs: [], availableGraphs: [] } as any;
+    component.graphToAdd = { id: 5 } as any;
+    component.addGraphToDashboardView(dv);
+    expect(dv.dashboard_graphs.length).toBe(1);
+    expect(component.saveDashboard).toHaveBeenCalled();
+  });
+
+  it('hideMinus should return true when order matches first graph', () => {
+    const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
+    expect(component.hideMinus(dv, dv.dashboard_graphs[0])).toBeTrue();
+    expect(component.hideMinus(dv, dv.dashboard_graphs[1])).toBeFalse();
+  });
+
+  it('hidePlus should return true when order matches last graph', () => {
+    const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
+    expect(component.hidePlus(dv, dv.dashboard_graphs[1])).toBeTrue();
+    expect(component.hidePlus(dv, dv.dashboard_graphs[0])).toBeFalse();
+  });
+
+  it('hideViewMinus should return true for first view', () => {
+    component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
+    expect(component.hideViewMinus(component.dashboard.dashboard_views[0])).toBeTrue();
+    expect(component.hideViewMinus(component.dashboard.dashboard_views[1])).toBeFalse();
+  });
+
+  it('hideViewPlus should return true for last view', () => {
+    component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
+    expect(component.hideViewPlus(component.dashboard.dashboard_views[1])).toBeTrue();
+    expect(component.hideViewPlus(component.dashboard.dashboard_views[0])).toBeFalse();
+  });
+
+  it('incrementOrder should swap graph orders', () => {
+    const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
+    component.incrementOrder(dv, dv.dashboard_graphs[0]);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 1).order).toBe(2);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 2).order).toBe(1);
+  });
+
+  it('decrementOrder should swap graph orders', () => {
+    const dv = { dashboard_graphs: [{ id: 1, order: 1 }, { id: 2, order: 2 }] } as any;
+    component.decrementOrder(dv, dv.dashboard_graphs[1]);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 1).order).toBe(2);
+    expect(dv.dashboard_graphs.find((g: any) => g.id === 2).order).toBe(1);
+  });
+
+  it('incrementViewOrder should swap view orders', () => {
+    component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
+    component.incrementViewOrder(component.dashboard.dashboard_views[0]);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 1)!.order).toBe(2);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 2)!.order).toBe(1);
+  });
+
+  it('decrementViewOrder should swap view orders', () => {
+    component.dashboard.dashboard_views = [{ id: 1, order: 1 } as any, { id: 2, order: 2 } as any];
+    component.decrementViewOrder(component.dashboard.dashboard_views[1]);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 1)!.order).toBe(2);
+    expect(component.dashboard.dashboard_views.find((v: any) => v.id === 2)!.order).toBe(1);
+  });
+
+  it('removeGraph should call triggerConfirm', () => {
+    const graph = { id: 1, order: 1, active: 'y' } as any;
+    component.removeGraph(graph);
+    expect(mockModalService.triggerConfirm).toHaveBeenCalled();
+  });
+
+  it('removeView should call triggerConfirm', () => {
+    const view = { id: 1, order: 1, active: 'y' } as any;
+    component.removeView(view);
+    expect(mockModalService.triggerConfirm).toHaveBeenCalled();
+  });
+
+  it('graphViewTeam should call graphTeam for each dashboard_graph', () => {
+    spyOn(component, 'graphTeam');
+    const dv = { dashboard_graphs: [{ graph_id: 1 }, { graph_id: 2 }], teams: [], active: 'y', reference_team_id: 0 } as any;
+    component.graphViewTeam(dv);
+    expect(component.graphTeam).toHaveBeenCalledTimes(2);
   });
 });
