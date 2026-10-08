@@ -1,28 +1,48 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Graph } from '@app/core/models/form.models';
-import { FieldForm, FieldResponse, Dashboard, DashboardView, Team, DashboardViewType, DashboardGraph } from '@app/scouting/models/scouting.models';
+import {
+  FieldForm,
+  FieldResponse,
+  Dashboard,
+  DashboardView,
+  Team,
+  DashboardViewType,
+  DashboardGraph,
+} from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
-import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
-import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
-import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
-import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
-import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
-import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
-import { LoadingComponent } from "../../../../shared/components/atoms/loading/loading.component";
-import { ChartComponent } from "../../../../shared/components/atoms/chart/chart.component";
+import { BoxComponent } from '../../../../shared/components/atoms/box/box.component';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
+import { HeaderComponent } from '../../../../shared/components/atoms/header/header.component';
+import { LoadingComponent } from '../../../../shared/components/atoms/loading/loading.component';
+import { ChartComponent } from '../../../../shared/components/atoms/chart/chart.component';
 import { CommonModule } from '@angular/common';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, BoxComponent, ButtonComponent, ButtonRibbonComponent, FormElementComponent, ModalComponent, FormComponent, HeaderComponent, LoadingComponent, ChartComponent],
+  imports: [
+    CommonModule,
+    BoxComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormElementComponent,
+    ModalComponent,
+    FormComponent,
+    HeaderComponent,
+    LoadingComponent,
+    ChartComponent,
+  ],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   @Input() DashViewType: string | undefined = undefined;
@@ -55,9 +75,13 @@ export class DashboardComponent implements OnInit {
   activeViewCount = 0;
   private resizeTimer: number | null | undefined;
 
-  constructor(private api: APIService, private authService: AuthService, private ss: ScoutingService, private gs: GeneralService, private modalService: ModalService) {
-
-  }
+  constructor(
+    private api: APIService,
+    private authService: AuthService,
+    private ss: ScoutingService,
+    private gs: GeneralService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
     this.updateAppSize();
@@ -85,7 +109,6 @@ export class DashboardComponent implements OnInit {
   }
 
   private init(): void {
-
     this.ss.getFieldFormFormFromCache().then(result => {
       if (result) {
         this.fieldForm = result.field_form;
@@ -124,14 +147,19 @@ export class DashboardComponent implements OnInit {
   }
 
   private getDashboard(): void {
-    this.api.get(true, 'scouting/strategizing/dashboard/', this.DashViewType ? { dash_view_typ_id: this.DashViewType } : undefined, (result: Dashboard) => {
-      this.dashboard = result;
-      this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
-      this.calcActiveViewCount();
-      this.inactiveViews = this.dashboard.dashboard_views.filter(dv => dv.active === 'n');
+    this.api.get(
+      true,
+      'scouting/strategizing/dashboard/',
+      this.DashViewType ? { dash_view_typ_id: this.DashViewType } : undefined,
+      (result: Dashboard) => {
+        this.dashboard = result;
+        this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
+        this.calcActiveViewCount();
+        this.inactiveViews = this.dashboard.dashboard_views.filter(dv => dv.active === 'n');
 
-      this.getDashboardGraphs();
-    });
+        this.getDashboardGraphs();
+      }
+    );
   }
 
   private getDashboardGraphs(): void {
@@ -149,7 +177,7 @@ export class DashboardComponent implements OnInit {
   }
 
   saveDashboard(): void {
-    this.api.post(true, 'scouting/strategizing/dashboard/', this.dashboard, (result) => {
+    this.api.post(true, 'scouting/strategizing/dashboard/', this.dashboard, result => {
       this.getDashboard();
     });
   }
@@ -159,12 +187,13 @@ export class DashboardComponent implements OnInit {
       this.graphs = result;
 
       this.dashboard.dashboard_views.forEach(dv => this.filterAvailableGraphs(dv));
-
     });
   }
 
   private filterAvailableGraphs(dashboard_view: DashboardView): void {
-    dashboard_view.availableGraphs = this.graphs.filter(g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id));
+    dashboard_view.availableGraphs = this.graphs.filter(
+      g => !dashboard_view.dashboard_graphs.map(dg => dg.graph_id).includes(g.id)
+    );
   }
 
   private calcActiveViewCount(): void {
@@ -172,9 +201,16 @@ export class DashboardComponent implements OnInit {
   }
 
   addViewToDashboard(dashboard_view?: DashboardView): void {
-    dashboard_view = dashboard_view ? dashboard_view : new DashboardView(this.dashboard.default_dash_view_typ, this.dashboard.dashboard_views.length > 0 ? (this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1);
+    dashboard_view = dashboard_view
+      ? dashboard_view
+      : new DashboardView(
+          this.dashboard.default_dash_view_typ,
+          this.dashboard.dashboard_views.length > 0
+            ? this.dashboard.dashboard_views.map(dg => dg.order).reduce((p1, p2) => (p1 > p2 ? p1 : p2)) + 1
+            : 1
+        );
     dashboard_view.active = 'y';
-    this.dashboard.dashboard_views.push(dashboard_view)
+    this.dashboard.dashboard_views.push(dashboard_view);
     this.filterAvailableGraphs(dashboard_view);
     this.calcActiveViewCount();
     if (!strNoE(dashboard_view.name)) {
@@ -186,14 +222,19 @@ export class DashboardComponent implements OnInit {
   addGraphToDashboardView(dashboard_view: DashboardView): void {
     if (strNoE(dashboard_view.name)) {
       this.modalService.triggerFormValidationBanner(['Name is required']);
+    } else if (this.graphToAdd) {
+      dashboard_view.dashboard_graphs.push(
+        new DashboardGraph(
+          this.graphToAdd.id,
+          dashboard_view.dashboard_graphs.length > 0
+            ? dashboard_view.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => (p1 > p2 ? p1 : p2)) + 1
+            : 1
+        )
+      );
+      this.graphToAdd = undefined;
+      this.saveDashboard();
+      //this.getDashboardGraphs();
     }
-    else
-      if (this.graphToAdd) {
-        dashboard_view.dashboard_graphs.push(new DashboardGraph(this.graphToAdd.id, dashboard_view.dashboard_graphs.length > 0 ? (dashboard_view.dashboard_graphs.map(dg => dg.order).reduce((p1, p2) => p1 > p2 ? p1 : p2) + 1) : 1));
-        this.graphToAdd = undefined;
-        this.saveDashboard();
-        //this.getDashboardGraphs();
-      }
   }
 
   graphViewTeam(dashboard_view: DashboardView): void {
@@ -201,17 +242,25 @@ export class DashboardComponent implements OnInit {
   }
 
   graphTeam(dashboard_view: DashboardView, graphId: number): void {
-    const ids = this.Teams.length > 0 ? this.Teams.map(t => t.team_no) : dashboard_view.teams.filter(t => t.checked).map(t => t.team_no);
+    const ids =
+      this.Teams.length > 0
+        ? this.Teams.map(t => t.team_no)
+        : dashboard_view.teams.filter(t => t.checked).map(t => t.team_no);
     const index = dashboard_view.dashboard_graphs.findIndex(qg => qg.graph_id === graphId);
     dashboard_view.dashboard_graphs[index].data = undefined;
 
-    this.api.get(false, 'scouting/strategizing/graph-team/', {
-      graph_id: graphId,
-      team_ids: ids,
-      reference_team_id: dashboard_view.reference_team_id
-    }, (result) => {
-      dashboard_view.dashboard_graphs[index].data = result;
-    });
+    this.api.get(
+      false,
+      'scouting/strategizing/graph-team/',
+      {
+        graph_id: graphId,
+        team_ids: ids,
+        reference_team_id: dashboard_view.reference_team_id,
+      },
+      result => {
+        dashboard_view.dashboard_graphs[index].data = result;
+      }
+    );
   }
 
   hideMinus(dashboard_view: DashboardView, rec: DashboardGraph): boolean {

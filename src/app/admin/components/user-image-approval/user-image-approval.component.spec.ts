@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -23,28 +23,32 @@ describe('UserImageApprovalComponent', () => {
 
   beforeEach(() => {
     mockAPIService = {
-      get: jasmine.createSpy('get').and.callFake(
-        (_loading: boolean, _endpoint: string, _params: any, onNext?: (result: any) => void): Promise<any> => {
-          if (onNext) onNext([]);
-          return Promise.resolve([]);
-        }
-      ),
-      post: jasmine.createSpy('post').and.callFake(
-        (_loading: boolean, _endpoint: string, _obj: any, onNext?: (result: any) => void): Promise<any> => {
-          if (onNext) onNext({ retMessage: 'saved' });
-          return Promise.resolve({ retMessage: 'saved' });
-        }
-      ),
+      get: jasmine
+        .createSpy('get')
+        .and.callFake(
+          (_loading: boolean, _endpoint: string, _params: any, onNext?: (result: any) => void): Promise<any> => {
+            if (onNext) onNext([]);
+            return Promise.resolve([]);
+          }
+        ),
+      post: jasmine
+        .createSpy('post')
+        .and.callFake(
+          (_loading: boolean, _endpoint: string, _obj: any, onNext?: (result: any) => void): Promise<any> => {
+            if (onNext) onNext({ retMessage: 'saved' });
+            return Promise.resolve({ retMessage: 'saved' });
+          }
+        ),
     };
 
     mockModalService = {
       triggerError: jasmine.createSpy('triggerError'),
-      successfulResponseBanner: jasmine.createSpy('successfulResponseBanner')
+      successfulResponseBanner: jasmine.createSpy('successfulResponseBanner'),
     };
 
     authInFlightSubject = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
     const mockAuthService = {
-      authInFlight: authInFlightSubject.asObservable()
+      authInFlight: authInFlightSubject.asObservable(),
     };
 
     mockGeneralService = {
@@ -55,15 +59,15 @@ describe('UserImageApprovalComponent', () => {
     TestBed.configureTestingModule({
       imports: [UserImageApprovalComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
         { provide: APIService, useValue: mockAPIService },
         { provide: AuthService, useValue: mockAuthService },
         { provide: ModalService, useValue: mockModalService },
-        { provide: GeneralService, useValue: mockGeneralService }
-      ]
+        { provide: GeneralService, useValue: mockGeneralService },
+      ],
     });
 
     fixture = TestBed.createComponent(UserImageApprovalComponent);
@@ -95,7 +99,7 @@ describe('UserImageApprovalComponent', () => {
       last_name: 'User',
       name: 'Test User',
       username: 'test.user',
-      email: 'test@parts.com'
+      email: 'test@parts.com',
     });
     const image = Object.assign(new UserImage(), {
       id: 10,
@@ -103,7 +107,7 @@ describe('UserImageApprovalComponent', () => {
       img_id: 'path/image',
       img_ver: '123',
       date_added: new Date().toISOString(),
-      img_approved: false
+      img_approved: false,
     });
 
     mockAPIService.get.and.callFake(
@@ -126,7 +130,7 @@ describe('UserImageApprovalComponent', () => {
       first_name: 'Approve',
       last_name: 'Me',
       username: 'approve.me',
-      email: 'approve@parts.com'
+      email: 'approve@parts.com',
     });
     const image = Object.assign(new UserImage(), {
       id: 11,
@@ -134,16 +138,18 @@ describe('UserImageApprovalComponent', () => {
       img_id: 'x/y',
       img_ver: '456',
       date_added: new Date(),
-      img_approved: false
+      img_approved: false,
     });
 
-    component.userImages = [{
-      ...image,
-      image: 'https://example.com/x.png',
-      date_added: new Date(),
-      img_approved: false,
-      user: user,
-    }];
+    component.userImages = [
+      {
+        ...image,
+        image: 'https://example.com/x.png',
+        date_added: new Date(),
+        img_approved: false,
+        user: user,
+      },
+    ];
 
     component.approveUserImage(component.userImages[0]);
 

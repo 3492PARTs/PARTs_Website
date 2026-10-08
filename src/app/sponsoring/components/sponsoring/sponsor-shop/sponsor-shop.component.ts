@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Sponsor, Item } from '@app/admin/components/requested-items/requested-items.component';
 import { Banner } from '@app/core/models/api.models';
 import { APIService } from '@app/core/services/api.service';
@@ -18,9 +18,20 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { arrayObjectIndexOf, cloneObject, strNoE, previewImage } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-sponsor-shop',
-  imports: [MainViewComponent, BoxComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, FormElementComponent, FormElementGroupComponent, FormComponent],
+  imports: [
+    MainViewComponent,
+    BoxComponent,
+    ModalComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    TableComponent,
+    FormElementComponent,
+    FormElementGroupComponent,
+    FormComponent,
+  ],
   templateUrl: './sponsor-shop.component.html',
-  styleUrls: ['./sponsor-shop.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./sponsor-shop.component.scss'],
 })
 export class SponsorShopComponent implements OnInit {
   sponsors: Sponsor[] = [];
@@ -31,15 +42,26 @@ export class SponsorShopComponent implements OnInit {
   cartTableCols: TableColType[] = [
     { PropertyName: 'img_url', ColLabel: 'Image', Type: 'image', Width: '125px' },
     { PropertyName: 'item_nm', ColLabel: 'Item' },
-    { PropertyName: 'cart_quantity', ColLabel: 'Quantity', Type: 'number', MinValue: 0, Width: '100px', FunctionCallBack: this.removeEmptyCartItem.bind(this) },
+    {
+      PropertyName: 'cart_quantity',
+      ColLabel: 'Quantity',
+      Type: 'number',
+      MinValue: 0,
+      Width: '100px',
+      FunctionCallBack: this.removeEmptyCartItem.bind(this),
+    },
   ];
 
   cartModalVisible = false;
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.initSponsorShop() : null);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.initSponsorShop() : null));
   }
 
   initSponsorShop(): void {
@@ -69,8 +91,7 @@ export class SponsorShopComponent implements OnInit {
         }
       });
 
-      if (!match)
-        this.cart.push(cloneObject(item));
+      if (!match) this.cart.push(cloneObject(item));
 
       item.sponsor_quantity += item.cart_quantity;
       item.cart_quantity = 0;
@@ -111,12 +132,17 @@ export class SponsorShopComponent implements OnInit {
       return;
     }
 
-    this.api.post(true, 'sponsoring/save-sponsor-order/', { items: this.cart, sponsor: this.activeSponsor }, (result: any) => {
-      this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
-      this.cart = [];
-      this.activeSponsor = new Sponsor();
-      this.initSponsorShop();
-    });
+    this.api.post(
+      true,
+      'sponsoring/save-sponsor-order/',
+      { items: this.cart, sponsor: this.activeSponsor },
+      (result: any) => {
+        this.gs.addBanner(new Banner('Thank you for your donation!.', 5000));
+        this.cart = [];
+        this.activeSponsor = new Sponsor();
+        this.initSponsorShop();
+      }
+    );
   }
 
   previewImageWrapper(link: string, id: string): void {

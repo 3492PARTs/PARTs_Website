@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { AboutComponent } from './about.component';
 import { SwPush } from '@angular/service-worker';
@@ -14,15 +13,14 @@ describe('AboutComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ AboutComponent ],
+      imports: [AboutComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
-    })
-    .compileComponents();
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -52,51 +50,51 @@ describe('AboutComponent', () => {
 
   it('should set bot visibility to true', () => {
     const bot = component.bots[0];
-    
+
     component.setVisible(bot, true);
-    
+
     expect(bot.visible).toBe(true);
   });
 
   it('should set bot visibility to false', () => {
     const bot = component.bots[0];
     bot.visible = true;
-    
+
     component.setVisible(bot, false);
-    
+
     expect(bot.visible).toBe(false);
   });
 
   it('should toggle bot visibility', () => {
     const bot = component.bots[0];
-    
+
     component.setVisible(bot, true);
     expect(bot.visible).toBe(true);
-    
+
     component.setVisible(bot, false);
     expect(bot.visible).toBe(false);
   });
 
   it('should call setScreenSize on init', () => {
     spyOn<any>(component, 'setScreenSize');
-    
+
     component.ngOnInit();
-    
+
     expect(component['setScreenSize']).toHaveBeenCalled();
   });
 
   it('should handle window resize event', () => {
     spyOn<any>(component, 'setScreenSize');
-    
+
     const event = new Event('resize');
     component.onResize(event);
-    
+
     expect(component['setScreenSize']).toHaveBeenCalled();
   });
 
   it('should set screenSize property', () => {
     component.ngOnInit();
-    
+
     expect(component.screenSize).toBeDefined();
   });
 
@@ -126,9 +124,9 @@ describe('AboutComponent', () => {
   it('should not modify other bots when setting one visible', () => {
     const bot1 = component.bots[0];
     const bot2 = component.bots[1];
-    
+
     component.setVisible(bot1, true);
-    
+
     expect(bot1.visible).toBe(true);
     expect(bot2.visible).toBe(false);
   });
@@ -136,10 +134,10 @@ describe('AboutComponent', () => {
   it('should handle multiple bots being visible simultaneously', () => {
     const bot1 = component.bots[0];
     const bot2 = component.bots[1];
-    
+
     component.setVisible(bot1, true);
     component.setVisible(bot2, true);
-    
+
     expect(bot1.visible).toBe(true);
     expect(bot2.visible).toBe(true);
   });
@@ -147,9 +145,9 @@ describe('AboutComponent', () => {
   it('should update screen size on multiple resize events', () => {
     component.ngOnInit();
     const initialSize = component.screenSize;
-    
+
     component.onResize(new Event('resize'));
-    
+
     expect(component.screenSize).toBeDefined();
   });
 });

@@ -113,7 +113,7 @@ docker build --build-arg BUILD_CONFIGURATION=uat --target runtime-uat -t parts-w
 ## Build Stage Details
 
 The build stage (common to all configurations):
-1. Uses Node.js 20 on Debian Bullseye
+1. Uses Node.js 24 on Debian Bookworm (required by Angular 22)
 2. Installs Chrome for testing
 3. Installs npm dependencies with `npm ci`
 4. Builds the Angular application with the specified configuration

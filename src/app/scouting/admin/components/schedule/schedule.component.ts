@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { ScoutFieldSchedule, ScheduleType, ScheduleByType, Schedule, Event } from '@app/scouting/models/scouting.models';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ScoutFieldSchedule,
+  ScheduleType,
+  ScheduleByType,
+  Schedule,
+  Event,
+} from '@app/scouting/models/scouting.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -19,9 +25,19 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, decodeSentBoolean, decodeYesNoBoolean } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-schedule',
-  imports: [BoxComponent, FormElementComponent, TableComponent, FormElementGroupComponent, ButtonComponent, ButtonRibbonComponent, FormComponent, ModalComponent],
+  imports: [
+    BoxComponent,
+    FormElementComponent,
+    TableComponent,
+    FormElementGroupComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormComponent,
+    ModalComponent,
+  ],
   templateUrl: './schedule.component.html',
-  styleUrls: ['./schedule.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./schedule.component.scss'],
 })
 export class ScheduleComponent implements OnInit {
   currentEvent = new Event();
@@ -33,9 +49,24 @@ export class ScheduleComponent implements OnInit {
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    {
+      PropertyName: 'notification1',
+      ColLabel: '15 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification2',
+      ColLabel: '5 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification3',
+      ColLabel: '0 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
   ];
 
   scoutScheduleModalVisible = false;
@@ -49,13 +80,25 @@ export class ScheduleComponent implements OnInit {
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    {
+      PropertyName: 'notified',
+      ColLabel: 'Notified',
+      Type: 'function',
+      ColValueFunction: this.decodeYesNoBoolean.bind(this),
+    },
   ];
 
   currentSchedule = new Schedule();
   scheduleModalVisible = false;
 
-  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService, private us: UserService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private ss: ScoutingService,
+    private authService: AuthService,
+    private us: UserService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {
@@ -76,8 +119,7 @@ export class ScheduleComponent implements OnInit {
         this.currentEvent = result.events.filter(e => e.current === 'y')[0];
         this.scoutFieldSchedules = result.scout_field_schedules;
         this.scoutFieldSchedules.forEach(fs => {
-          fs.st_time = new Date(fs.st_time),
-            fs.end_time = new Date(fs.end_time)
+          ((fs.st_time = new Date(fs.st_time)), (fs.end_time = new Date(fs.end_time)));
         });
         this.scheduleTypes = result.schedule_types;
         this.scheduleByType = [];
@@ -85,7 +127,7 @@ export class ScheduleComponent implements OnInit {
           const tmp = result.schedules.filter(s => s.sch_typ === st.sch_typ);
           if (tmp) this.scheduleByType.push({ sch_typ: st, schedule: tmp });
         });
-      };
+      }
 
       this.gs.decrementOutstandingCalls();
     });
@@ -120,7 +162,7 @@ export class ScheduleComponent implements OnInit {
 
   saveScoutFieldScheduleEntry(): void | null {
     if (!this.currentEvent || this.currentEvent.id < 0) {
-      this.modalService.triggerError('Event not set, can\'t schedule scouts.');
+      this.modalService.triggerError("Event not set, can't schedule scouts.");
       return null;
     }
     let sfs = JSON.parse(JSON.stringify(this.ActiveScoutFieldSchedule));
@@ -132,25 +174,37 @@ export class ScheduleComponent implements OnInit {
     sfs.blue_two_id = sfs.blue_two_id && (sfs!.blue_two_id as User).id ? (sfs!.blue_two_id as User).id : null;
     sfs.blue_three_id = sfs.blue_three_id && (sfs!.blue_three_id as User).id ? (sfs!.blue_three_id as User).id : null;
 
-    this.api.post(true, 'scouting/admin/scout-field-schedule/', sfs, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
-      this.scoutScheduleModalVisible = false;
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'scouting/admin/scout-field-schedule/',
+      sfs,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
+        this.scoutScheduleModalVisible = false;
+        this.init();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   notifyUsers(scout_field_sch_id: number): void {
-    this.api.get(true, 'scouting/admin/notify-user/', {
-      scout_field_sch_id: scout_field_sch_id
-    }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/admin/notify-user/',
+      {
+        scout_field_sch_id: scout_field_sch_id,
+      },
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.init();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   setFieldScheduleEndTime() {
@@ -168,8 +222,7 @@ export class ScheduleComponent implements OnInit {
     if (s) {
       //"2020-01-01T01:00"
       this.currentSchedule = cloneObject(s);
-    }
-    else {
+    } else {
       this.currentSchedule = new Schedule();
     }
 
@@ -182,26 +235,38 @@ export class ScheduleComponent implements OnInit {
   saveScheduleEntry(): void {
     let s = cloneObject(this.currentSchedule);
     s.user = s.user && (s!.user as User).id ? (s!.user as User).id : null;
-    this.api.post(true, 'scouting/admin/schedule/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.currentSchedule = new Schedule();
-      this.scheduleModalVisible = false;
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'scouting/admin/schedule/',
+      s,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.currentSchedule = new Schedule();
+        this.scheduleModalVisible = false;
+        this.init();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   notifyUser(sch_id: number): void {
-    this.api.get(true, 'scouting/admin/notify-user/', {
-      sch_id: sch_id
-    }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.scheduleModalVisible = false;
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/admin/notify-user/',
+      {
+        sch_id: sch_id,
+      },
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.scheduleModalVisible = false;
+        this.init();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   copyScheduleEntry(): void {

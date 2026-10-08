@@ -162,14 +162,14 @@ export class AuthService {
       this.authInFlightBS.next(AuthCallStates.err);
   }
 
-  logOut(): void {
+  logOut(returnUrl?: string): void {
     this.setToken(new Token());
     this.userBS.next(new User());
     this.userLinksBS.next([]);
     localStorage.removeItem(this.tokenStringLocalStorage);
     if (this.rememberMeTimeout)
       window.clearTimeout(this.rememberMeTimeout);
-    this.router.navigateByUrl(`login?returnUrl=${this.router.url}`);
+    this.router.navigateByUrl(`login${returnUrl ? `?returnUrl=${encodeURIComponent(returnUrl)}` : ''}`);
   }
 
   registerUser(userData: RegisterUser, returnUrl?: string): void {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { Event, EventToTeams, Season, Team } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
@@ -15,9 +15,17 @@ import { cloneObject } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-manage-team',
-  imports: [FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent],
+  imports: [
+    FormElementGroupComponent,
+    FormElementComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    ModalComponent,
+    FormComponent,
+  ],
   templateUrl: './manage-team.component.html',
-  styleUrls: ['./manage-team.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-team.component.scss'],
 })
 export class ManageTeamComponent {
   private readonly api = inject(APIService);
@@ -47,14 +55,20 @@ export class ManageTeamComponent {
   removeTeamFromEventModalVisible = false;
 
   saveTeam(): void {
-    this.api.post(true, 'scouting/admin/team/', this.newTeam, () => {
-      this.manageTeamModalVisible = false;
-      this.newTeam = new Team();
-      this.refreshRequested.emit();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-      this.gs.decrementOutstandingCalls();
-    });
+    this.api.post(
+      true,
+      'scouting/admin/team/',
+      this.newTeam,
+      () => {
+        this.manageTeamModalVisible = false;
+        this.newTeam = new Team();
+        this.refreshRequested.emit();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
   }
 
   clearTeam(): void {
@@ -67,13 +81,19 @@ export class ManageTeamComponent {
   }
 
   addEventToTeams(): void {
-    this.api.post(true, 'scouting/admin/team-to-event/', this.eventToTeams, () => {
-      this.linkTeamToEventModalVisible = false;
-      this.clearEventToTeams();
-      this.refreshRequested.emit();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'scouting/admin/team-to-event/',
+      this.eventToTeams,
+      () => {
+        this.linkTeamToEventModalVisible = false;
+        this.clearEventToTeams();
+        this.refreshRequested.emit();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   buildLinkTeamToEventTeamList(): void {
@@ -82,7 +102,9 @@ export class ManageTeamComponent {
   }
 
   buildRemoveTeamFromEventTeamList(): void {
-    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent ? cloneObject(this.removeTeamFromEventEvent.teams) : [];
+    this.removeTeamFromEventTeams = this.removeTeamFromEventEvent
+      ? cloneObject(this.removeTeamFromEventEvent.teams)
+      : [];
   }
 
   buildEventTeamList(eventTeamList: Team[]): Team[] {
@@ -100,13 +122,19 @@ export class ManageTeamComponent {
   }
 
   removeEventToTeams(): void {
-    this.api.post(true, 'scouting/admin/remove-team-to-event/', this.removeTeamFromEventEvent, () => {
-      this.removeTeamFromEventModalVisible = false;
-      this.clearRemoveEventToTeams();
-      this.refreshRequested.emit();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'scouting/admin/remove-team-to-event/',
+      this.removeTeamFromEventEvent,
+      () => {
+        this.removeTeamFromEventModalVisible = false;
+        this.clearRemoveEventToTeams();
+        this.refreshRequested.emit();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   clearRemoveEventToTeams(): void {
@@ -130,6 +158,6 @@ export class ManageTeamComponent {
   }
 
   private async getEventsForSeason(season_id: number): Promise<Event[]> {
-    return await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id }));
+    return await this.ss.getEventsFromCache(e => e.where({ season_id: season_id }));
   }
 }

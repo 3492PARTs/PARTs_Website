@@ -1,4 +1,14 @@
-import { Component, Input, ContentChildren, QueryList, AfterViewInit, OnInit, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  ContentChildren,
+  QueryList,
+  AfterViewInit,
+  OnInit,
+  EventEmitter,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormElementComponent } from '../form-element/form-element.component';
 import { FormComponent } from '../form/form.component';
 import { QuestionFormElementComponent } from '@app/shared/components/elements/question-form-element/question-form-element.component';
@@ -10,7 +20,8 @@ import { triggerChange } from '@app/core/utils/utils.functions';
   selector: 'app-form-element-group',
   imports: [CommonModule],
   templateUrl: './form-element-group.component.html',
-  styleUrls: ['./form-element-group.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./form-element-group.component.scss'],
 })
 export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() Inline = false;
@@ -18,7 +29,8 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() LabelText = '';
   @Input() InlineElements = false;
   @ContentChildren(FormElementComponent, { descendants: true }) formElements = new QueryList<FormElementComponent>();
-  @ContentChildren(QuestionFormElementComponent, { descendants: true }) questionFormElements = new QueryList<QuestionFormElementComponent>();
+  @ContentChildren(QuestionFormElementComponent, { descendants: true }) questionFormElements =
+    new QueryList<QuestionFormElementComponent>();
 
   @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
@@ -26,15 +38,13 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
   @Input() RemoveBorder = false;
   @Input() MarginTop = '';
 
-  constructor(private gs: GeneralService) {
-  }
+  constructor(private gs: GeneralService) {}
 
   ngOnInit() {
     if (this.InlineElements) {
-      this.formElements.forEach(fe => fe.FormGroupInline = true);
-      this.questionFormElements.forEach(qfe => qfe.formElement.FormGroupInline = true);
+      this.formElements.forEach(fe => (fe.FormGroupInline = true));
+      this.questionFormElements.forEach(qfe => (qfe.formElement.FormGroupInline = true));
     }
-
   }
 
   ngAfterViewInit() {
@@ -47,7 +57,7 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
     this.questionFormElements.changes.subscribe(() => {
       this.setFormGroup();
       this.setFormElements();
-    })
+    });
     this.setFormElements();
   }
 
@@ -55,23 +65,18 @@ export class FormElementGroupComponent implements OnInit, AfterViewInit {
     triggerChange(() => {
       this.formElements.forEach(fe => {
         if (fe) {
-          if (!this.InlineElements)
-            fe.FormGroup = true;
-          else
-            fe.FormGroupInline = true;
+          if (!this.InlineElements) fe.FormGroup = true;
+          else fe.FormGroupInline = true;
         }
       });
 
       this.questionFormElements.forEach(qfe => {
         let fe = qfe.formElement;
         if (fe) {
-          if (!this.InlineElements)
-            fe.FormGroup = true;
-          else
-            fe.FormGroupInline = true;
+          if (!this.InlineElements) fe.FormGroup = true;
+          else fe.FormGroupInline = true;
         }
-      })
-
+      });
     });
   }
 

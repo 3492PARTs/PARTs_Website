@@ -1,4 +1,14 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  QueryList,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { Question, Answer } from '@app/core/models/form.models';
 import { GeneralService } from '@app/core/services/general.service';
@@ -10,10 +20,10 @@ import { isQuestionConditionMet, strNoE } from '@app/core/utils/utils.functions'
   selector: 'app-question-display-form',
   imports: [FormElementGroupComponent, QuestionFormElementComponent],
   templateUrl: './question-display-form.component.html',
-  styleUrls: ['./question-display-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./question-display-form.component.scss'],
 })
 export class QuestionDisplayFormComponent implements OnInit, OnChanges {
-
   @Input() LabelText = '';
   @Input() Disabled = false;
   @Input() Question: Question | undefined = undefined;
@@ -54,7 +64,7 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
   @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
   @Output() FormElementsChange: EventEmitter<QueryList<FormElementComponent>> = new EventEmitter();
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
   ngOnInit(): void {
     //this.setFormElements();
@@ -87,40 +97,41 @@ export class QuestionDisplayFormComponent implements OnInit, OnChanges {
     if (questions) {
       this.allQuestions = questions;
 
-      if (this.Question)
-        this.questionsWithConditions = [new QuestionWithConditions(this.Question)];
+      if (this.Question) this.questionsWithConditions = [new QuestionWithConditions(this.Question)];
       else {
         // if condition met from other answers move up to top level
         questions.forEach(q => {
           this.QuestionAnswers.forEach(qa => {
             // if answer is based on question
             if (qa.question) {
-              if (isQuestionConditionMet(qa.value, qa.question, q))
-                q.conditional_on_questions = [];
-            }
-            else
+              if (isQuestionConditionMet(qa.value, qa.question, q)) q.conditional_on_questions = [];
+            } else
               qa.flow_answers.forEach(fa => {
-                if (fa.question && isQuestionConditionMet(fa.value, fa.question, q))
-                  q.conditional_on_questions = [];
+                if (fa.question && isQuestionConditionMet(fa.value, fa.question, q)) q.conditional_on_questions = [];
               });
           });
-
         });
 
-        this.questionsWithConditions = questions.filter(q => q.conditional_on_questions.length <= 0).map(q => new QuestionWithConditions(q));
+        this.questionsWithConditions = questions
+          .filter(q => q.conditional_on_questions.length <= 0)
+          .map(q => new QuestionWithConditions(q));
       }
 
       // Push questions into the one they are conditional on
-      questions.filter(q => q.conditional_on_questions.length > 0).forEach(q => {
-        this.questionsWithConditions.find(qwc => q.conditional_on_questions.map(v => v.conditional_on).includes(qwc.question.id))?.conditionalQuestions.push(q);
-      });
+      questions
+        .filter(q => q.conditional_on_questions.length > 0)
+        .forEach(q => {
+          this.questionsWithConditions
+            .find(qwc => q.conditional_on_questions.map(v => v.conditional_on).includes(qwc.question.id))
+            ?.conditionalQuestions.push(q);
+        });
 
       // find questions who are not a top level question or their direct child conditional queston
-      // these will be passed down on any question with a list of conditions 
+      // these will be passed down on any question with a list of conditions
       // to see if there is a depper recursive conditional question
       let qs = this.questionsWithConditions.map(qwc => qwc.question);
       let qsc = this.questionsWithConditions.map(qwc => qwc.conditionalQuestions.map(c => c)).flatMap(q => q);
-      let ids = [...qs.map(q => q.id), ...qsc.map(q => q.id)]
+      let ids = [...qs.map(q => q.id), ...qsc.map(q => q.id)];
 
       let leftOvers = this.allQuestions.filter(q => !ids.includes(q.id));
       this.questionsWithConditions.forEach(qwc => {
@@ -168,6 +179,6 @@ class QuestionWithConditions {
     this.question = question;
     this.conditionalQuestions = [];
     this.activeConditionQuestions = [];
-    this.deeperConditionalQuestions = []
+    this.deeperConditionalQuestions = [];
   }
 }

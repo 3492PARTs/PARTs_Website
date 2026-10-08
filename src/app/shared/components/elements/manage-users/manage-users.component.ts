@@ -1,28 +1,37 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthGroup, User } from '@app/auth/models/user.models';
 import { AuthCallStates, AuthService, PhoneType } from '@app/auth/services/auth.service';
 import { APIService, GeneralService, ModalService, cloneObject, strNoE } from '@app/core';
 import { UserService } from '@app/user';
 import { TableColType, TableComponent } from '../../atoms/table/table.component';
-import { BoxComponent } from "../../atoms/box/box.component";
-import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
-import { FormElementComponent } from "../../atoms/form-element/form-element.component";
-import { ModalComponent } from "../../atoms/modal/modal.component";
-import { FormComponent } from "../../atoms/form/form.component";
-import { HeaderComponent } from "../../atoms/header/header.component";
-import { ButtonComponent } from "../../atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
+import { BoxComponent } from '../../atoms/box/box.component';
+import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { ModalComponent } from '../../atoms/modal/modal.component';
+import { FormComponent } from '../../atoms/form/form.component';
+import { HeaderComponent } from '../../atoms/header/header.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 
 @Component({
   selector: 'app-manage-users',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, TableComponent, ModalComponent, FormComponent, HeaderComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [
+    BoxComponent,
+    FormElementGroupComponent,
+    FormElementComponent,
+    TableComponent,
+    ModalComponent,
+    FormComponent,
+    HeaderComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+  ],
   templateUrl: './manage-users.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './manage-users.component.scss',
 })
 export class ManageUsersComponent implements OnInit {
-
   @Input() AdminInterface = false;
-
 
   users: User[] = [];
   phoneTypes: PhoneType[] = [];
@@ -32,12 +41,21 @@ export class ManageUsersComponent implements OnInit {
     { PropertyName: 'name', ColLabel: 'User' },
     { PropertyName: 'username', ColLabel: 'Username' },
     { PropertyName: 'email', ColLabel: 'Email' },
-    { PropertyName: 'discord_user_id', ColLabel: 'Discord', Type: 'function', ColValueFunction: this.hasDiscordId.bind(this), ColorFunction: this.colorDiscordColumn.bind(this) },
+    {
+      PropertyName: 'discord_user_id',
+      ColLabel: 'Discord',
+      Type: 'function',
+      ColValueFunction: this.hasDiscordId.bind(this),
+      ColorFunction: this.colorDiscordColumn.bind(this),
+    },
     //{ PropertyName: 'phone', ColLabel: 'Phone' },
     //{ PropertyName: 'phone_type_id', ColLabel: 'Carrier', Type: 'function', ColValueFunction: this.getPhoneTypeForTable.bind(this) },
   ];
 
-  userOptions = [{ property: 'Active', value: 1 }, { property: 'Inactive', value: -1 }];
+  userOptions = [
+    { property: 'Active', value: 1 },
+    { property: 'Inactive', value: -1 },
+  ];
   userOption = 1;
   adminOption = 1;
   filterText = '';
@@ -47,17 +65,20 @@ export class ManageUsersComponent implements OnInit {
   availableAuthGroups: AuthGroup[] = [];
   newAuthGroup: AuthGroup = new AuthGroup();
 
-  userGroupsTableCols: TableColType[] = [
-    { PropertyName: 'name', ColLabel: 'Name' }
-  ];
+  userGroupsTableCols: TableColType[] = [{ PropertyName: 'name', ColLabel: 'Name' }];
 
-  constructor(private us: UserService, private authService: AuthService, private gs: GeneralService, private modalService: ModalService, private api: APIService) {
-  }
+  constructor(
+    private us: UserService,
+    private authService: AuthService,
+    private gs: GeneralService,
+    private modalService: ModalService,
+    private api: APIService
+  ) {}
 
   ngOnInit(): void {
     this.adminOption = this.isAdminInterface() ? 1 : 0;
 
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getUsers();
         this.getGroups();
@@ -78,17 +99,22 @@ export class ManageUsersComponent implements OnInit {
         this.groups = gs || [];
       });
     else
-      this.api.get(true, 'scouting/admin/scout-auth-group/', undefined, (result: AuthGroup[]) => {
-        this.groups = result;
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.get(
+        true,
+        'scouting/admin/scout-auth-group/',
+        undefined,
+        (result: AuthGroup[]) => {
+          this.groups = result;
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
   }
 
   getPhoneTypes(): void {
     this.us.getPhoneTypes().then(result => {
-      if (result)
-        this.phoneTypes = result;
+      if (result) this.phoneTypes = result;
     });
   }
 
@@ -105,15 +131,15 @@ export class ManageUsersComponent implements OnInit {
   }
 
   addUserGroup(): void {
-    if (this.isAdminInterface())
-      this.pushUserGroup();
-    else
-      if (this.newAuthGroup.name === 'Lead Scout')
-        this.modalService.triggerConfirm('Are you sure you want to add another lead scout? This can only be undone by an admin.', () => {
+    if (this.isAdminInterface()) this.pushUserGroup();
+    else if (this.newAuthGroup.name === 'Lead Scout')
+      this.modalService.triggerConfirm(
+        'Are you sure you want to add another lead scout? This can only be undone by an admin.',
+        () => {
           this.pushUserGroup();
-        });
-      else
-        this.pushUserGroup();
+        }
+      );
+    else this.pushUserGroup();
   }
 
   private pushUserGroup() {
@@ -123,15 +149,9 @@ export class ManageUsersComponent implements OnInit {
   }
 
   removeUserGroup(ug: AuthGroup): void {
-    if (this.isAdminInterface())
-      this.spliceUserGroup(ug);
-    else
-      if (ug.name === 'Lead Scout')
-        this.modalService.triggerError('Can\'t remove lead scouts, see an admin.');
-      else
-        this.spliceUserGroup(ug);
-
-
+    if (this.isAdminInterface()) this.spliceUserGroup(ug);
+    else if (ug.name === 'Lead Scout') this.modalService.triggerError("Can't remove lead scouts, see an admin.");
+    else this.spliceUserGroup(ug);
   }
 
   private spliceUserGroup(ug: AuthGroup): void {
@@ -158,7 +178,10 @@ export class ManageUsersComponent implements OnInit {
   }
 
   simulateUser(user: User): void {
-    this.modalService.triggerConfirm(`Are you sure you want to simulate the user "${user.name}"? You will be logged out of your current session.`, () => this.authService.simulateUser(user));
+    this.modalService.triggerConfirm(
+      `Are you sure you want to simulate the user "${user.name}"? You will be logged out of your current session.`,
+      () => this.authService.simulateUser(user)
+    );
   }
 
   navigateToUserProfile(user: User): void {

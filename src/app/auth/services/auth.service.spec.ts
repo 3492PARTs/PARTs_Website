@@ -54,7 +54,7 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     const apiStatusSubject = new BehaviorSubject<APIStatus>(APIStatus.on);
-    
+
     mockAPIService = jasmine.createSpyObj('APIService', ['post', 'get'], {
       apiStatus: apiStatusSubject.asObservable(),
       connectionErrorStatuses: [0, 502, 503, 504]
@@ -64,19 +64,19 @@ describe('AuthService', () => {
     mockGeneralService = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'addBanner']);
     mockGeneralService.getNextGsId.and.returnValue('gs-1');
     mockNotificationsService = jasmine.createSpyObj('NotificationsService', ['subscribeToNotifications', 'getUserAlerts']);
-    
+
     const mockUserStore = jasmine.createSpyObj('UserStore', ['AddOrEditAsync', 'getAll']);
     const mockUserLinksStore = jasmine.createSpyObj('UserLinksStore', ['getAll', 'RemoveAllAsync', 'AddOrEditBulkAsync']);
     mockUserStore.AddOrEditAsync.and.returnValue(Promise.resolve() as any);
     mockUserLinksStore.getAll.and.returnValue(Promise.resolve([]) as any);
     mockUserLinksStore.RemoveAllAsync.and.returnValue(Promise.resolve() as any);
     mockUserLinksStore.AddOrEditBulkAsync.and.returnValue(Promise.resolve() as any);
-    
+
     mockCacheService = jasmine.createSpyObj('CacheService', [], {
       User: mockUserStore,
       UserLinks: mockUserLinksStore
     });
-    
+
     mockDataService = jasmine.createSpyObj('DataService', ['get']);
     mockScoutingService = jasmine.createSpyObj('ScoutingService', [
       'loadAllScoutingInfo',
@@ -103,7 +103,7 @@ describe('AuthService', () => {
         { provide: ModalService, useValue: mockModalService }
       ]
     });
-    
+
     service = TestBed.inject(AuthService);
     localStorage.clear();
   });
@@ -157,7 +157,7 @@ describe('AuthService', () => {
     it('should navigate to return URL after successful authorization', (done) => {
       const userData: UserData = { username: 'test', password: 'password' } as UserData;
       const returnUrl = '/dashboard';
-      
+
       mockAPIService.post.and.callFake((showLoading: boolean, endpoint: string, data: any, onNext: any) => {
         onNext(mockToken);
         return Promise.resolve(mockToken);
@@ -193,7 +193,7 @@ describe('AuthService', () => {
   describe('previouslyAuthorized', () => {
     it('should refresh token and get user data when refresh token exists', (done) => {
       localStorage.setItem(environment.tokenString, mockToken.refresh);
-      
+
       mockAPIService.post.and.callFake((showLoading: boolean, endpoint: string, data: any, onNext: any) => {
         onNext(mockToken);
         return Promise.resolve(mockToken);
@@ -226,7 +226,7 @@ describe('AuthService', () => {
     it('should log out on non-connection error', (done) => {
       localStorage.setItem(environment.tokenString, mockToken.refresh);
       const httpError = new HttpErrorResponse({ status: 401, statusText: 'Unauthorized' });
-      
+
       mockAPIService.post.and.callFake((showLoading, endpoint, data, onNext, onError: any) => {
         onError(httpError);
         return Promise.reject(httpError);
@@ -245,7 +245,7 @@ describe('AuthService', () => {
   describe('logOut', () => {
     it('should clear token and user data', () => {
       localStorage.setItem(environment.tokenString, 'test-token');
-      
+
       service.logOut();
 
       service.token.subscribe(token => {
@@ -259,10 +259,10 @@ describe('AuthService', () => {
 
     it('should navigate to login page with return URL', () => {
       routerUrl = '/dashboard';
-      
-      service.logOut();
 
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('login?returnUrl=/dashboard');
+      service.logOut(routerUrl);
+
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(`login?returnUrl=${encodeURIComponent(routerUrl)}`);
     });
   });
 
@@ -317,7 +317,7 @@ describe('AuthService', () => {
   describe('resendConfirmation', () => {
     it('should resend confirmation email', () => {
       const userData: UserData = { email: 'test@example.com' } as UserData;
-      
+
       mockAPIService.post.and.callFake((showLoading, endpoint, data, onNext: any) => {
         onNext({ success: true });
         return Promise.resolve({ success: true });
@@ -339,7 +339,7 @@ describe('AuthService', () => {
   describe('requestResetPassword', () => {
     it('should request password reset', () => {
       const userData: UserData = { email: 'test@example.com' } as UserData;
-      
+
       mockAPIService.post.and.callFake((showLoading, endpoint, data, onNext: any) => {
         onNext({ success: true });
         return Promise.resolve({ success: true });
@@ -361,7 +361,7 @@ describe('AuthService', () => {
   describe('forgotUsername', () => {
     it('should request username reminder', () => {
       const userData: UserData = { email: 'test@example.com' } as UserData;
-      
+
       mockAPIService.post.and.callFake((showLoading, endpoint, data, onNext: any) => {
         onNext({ success: true });
         return Promise.resolve({ success: true });
@@ -387,7 +387,7 @@ describe('AuthService', () => {
         token: 'test-token',
         password: 'newpassword'
       } as UserData;
-      
+
       mockAPIService.post.and.callFake((showLoading, endpoint, data, onNext: any) => {
         onNext({ success: true });
         return Promise.resolve({ success: true });
@@ -478,7 +478,7 @@ describe('AuthService', () => {
 
     it('should check if token is expired', () => {
       const expiredToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxLCJpYXQiOjEsImp0aSI6ImFiYyIsInVzZXJfaWQiOiIxMjMifQ.test';
-      
+
       expect(service.isTokenExpired(expiredToken)).toBe(true);
       expect(service.isTokenExpired(mockToken.access)).toBe(false);
     });
@@ -581,7 +581,7 @@ describe('AuthService', () => {
           menu_items: []
         })
       ];
-      
+
       mockDataService.get.and.callFake((showLoading, endpoint, params, store, query, onNext: any) => {
         onNext(links);
         return Promise.resolve() as any;
@@ -627,7 +627,7 @@ describe('AuthService', () => {
 
     it('should set and get refreshing token subject', () => {
       service.setRefreshingTokenSubject('test-token');
-      
+
       service.getRefreshingTokenSubject().subscribe(token => {
         expect(token).toBe('test-token');
       });

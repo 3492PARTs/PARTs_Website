@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { PhoneType, AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -14,18 +14,24 @@ import { ModalService } from '@app/core/services/modal.service';
   selector: 'app-phone-types',
   imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './phone-types.component.html',
-  styleUrls: ['./phone-types.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./phone-types.component.scss'],
 })
 export class PhoneTypesComponent implements OnInit {
-
   phoneTypes: PhoneType[] = [];
   newPhoneType = false;
   activePhoneType: PhoneType = new PhoneType();
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private us: UserService, private modalService: ModalService) { }
+  constructor(
+    private api: APIService,
+    private gs: GeneralService,
+    private authService: AuthService,
+    private us: UserService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getPhoneTypes();
       }
@@ -38,8 +44,7 @@ export class PhoneTypesComponent implements OnInit {
 
   getPhoneTypes(): void {
     this.us.getPhoneTypes().then(result => {
-      if (result)
-        this.phoneTypes = result;
+      if (result) this.phoneTypes = result;
     });
   }
 
@@ -49,25 +54,37 @@ export class PhoneTypesComponent implements OnInit {
   }
 
   savePhoneType(): void {
-    this.api.post(true, 'admin/phone-type/', this.activePhoneType, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.getPhoneTypes();
-      this.resetPhoneType();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'admin/phone-type/',
+      this.activePhoneType,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.getPhoneTypes();
+        this.resetPhoneType();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   deletePhoneType(): void {
     this.modalService.triggerConfirm('Are you sure you want to delete this phone type?', () => {
-      this.api.delete(true, 'admin/phone-type/', {
-        phone_type_id: this.activePhoneType.id
-      }, (result: any) => {
-        this.resetPhoneType();
-        this.getPhoneTypes();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.delete(
+        true,
+        'admin/phone-type/',
+        {
+          phone_type_id: this.activePhoneType.id,
+        },
+        (result: any) => {
+          this.resetPhoneType();
+          this.getPhoneTypes();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 }

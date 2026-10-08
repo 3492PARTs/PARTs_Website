@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { PaginationComponent } from './pagination.component';
 import { Page } from '@app/core/utils/utils.functions';
@@ -13,14 +12,9 @@ describe('PaginationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ PaginationComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      imports: [PaginationComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -45,7 +39,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 10;
       component.PageInfo = pageInfo;
       component.Page = 1;
-      
+
       expect(component.pages).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     });
 
@@ -54,7 +48,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 5;
       component.PageInfo = pageInfo;
       component.Page = 1;
-      
+
       expect(component.pages).toEqual([1, 2, 3, 4, 5]);
     });
 
@@ -63,7 +57,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 15;
       component.PageInfo = pageInfo;
       component.Page = 7;
-      
+
       expect(component.pages).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     });
 
@@ -72,7 +66,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 15;
       component.PageInfo = pageInfo;
       component.Page = 12;
-      
+
       expect(component.pages).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     });
 
@@ -81,7 +75,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 10;
       component.PageInfo = pageInfo;
       component.Page = 10;
-      
+
       expect(component.pages).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     });
 
@@ -90,7 +84,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 3;
       component.PageInfo = pageInfo;
       component.Page = 2;
-      
+
       expect(component.pages.length).toBe(3);
       expect(component.pages).toEqual([1, 2, 3]);
     });
@@ -100,7 +94,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 1;
       component.PageInfo = pageInfo;
       component.Page = 1;
-      
+
       expect(component.pages).toEqual([1]);
     });
 
@@ -109,7 +103,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 20;
       component.PageInfo = pageInfo;
       component.Page = 3;
-      
+
       expect(component.pages).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     });
 
@@ -118,7 +112,7 @@ describe('PaginationComponent', () => {
       pageInfo.count = 20;
       component.PageInfo = pageInfo;
       component.Page = 6;
-      
+
       expect(component.pages).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     });
   });
@@ -126,19 +120,19 @@ describe('PaginationComponent', () => {
   describe('getPage', () => {
     it('should emit page number when getPage is called', () => {
       spyOn(component.FunctionCallBack, 'emit');
-      
+
       component.getPage(5);
-      
+
       expect(component.FunctionCallBack.emit).toHaveBeenCalledWith(5);
     });
 
     it('should emit correct page number for multiple calls', () => {
       spyOn(component.FunctionCallBack, 'emit');
-      
+
       component.getPage(1);
       component.getPage(10);
       component.getPage(3);
-      
+
       expect(component.FunctionCallBack.emit).toHaveBeenCalledTimes(3);
       expect(component.FunctionCallBack.emit).toHaveBeenCalledWith(1);
       expect(component.FunctionCallBack.emit).toHaveBeenCalledWith(10);
@@ -149,20 +143,20 @@ describe('PaginationComponent', () => {
   describe('Input setters', () => {
     it('should update PageInfo and rebuild pages', () => {
       spyOn(component, 'buildPages');
-      
+
       const pageInfo = new Page();
       pageInfo.count = 5;
       component.PageInfo = pageInfo;
-      
+
       expect(component._pageInfo).toBe(pageInfo);
       expect(component.buildPages).toHaveBeenCalled();
     });
 
     it('should update Page and rebuild pages', () => {
       spyOn(component, 'buildPages');
-      
+
       component.Page = 7;
-      
+
       expect(component._page).toBe(7);
       expect(component.buildPages).toHaveBeenCalled();
     });

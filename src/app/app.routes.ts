@@ -41,6 +41,12 @@ export const routes: Routes = [
     { path: 'media/competition', title: 'Media Competition', component: CompetitionComponent },
     { path: 'media/wallpapers', title: 'Media Wallpapers', component: WallpapersComponent },
     { path: 'resources', title: 'Resources', component: ResourcesComponent },
+    {
+        path: 'resources/team/checkout',
+        title: 'Team Resource Checkout',
+        loadComponent: () => import('./resources/components/resources/resources.component').then(mod => mod.ResourcesComponent),
+        canActivate: [authGuard]
+    },
     { path: 'first', title: 'FIRST', component: FirstComponent },
     { path: 'competition', title: 'Competition', component: EventCompetitionComponent }, // Moved to public section
 
@@ -203,6 +209,11 @@ export const routes: Routes = [
                 path: 'phone-types',
                 title: 'Admin Phone Types',
                 loadComponent: () => import('./admin/components/phone-types/phone-types.component').then(mod => mod.PhoneTypesComponent),
+            },
+            {
+                path: 'resource-types',
+                title: 'Admin Resource Types',
+                loadComponent: () => import('./admin/components/resource-types/resource-types.component').then(mod => mod.ResourceTypesComponent),
             },
             {
                 path: 'alert-types',

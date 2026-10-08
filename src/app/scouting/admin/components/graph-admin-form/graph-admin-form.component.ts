@@ -1,23 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
-import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
-import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
-import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
-import { ModalComponent } from "../../../../shared/components/atoms/modal/modal.component";
-import { FormComponent } from "../../../../shared/components/atoms/form/form.component";
+import { FormElementComponent } from '../../../../shared/components/atoms/form-element/form-element.component';
+import { FormElementGroupComponent } from '../../../../shared/components/atoms/form-element-group/form-element-group.component';
+import {
+  TableButtonType,
+  TableColType,
+  TableComponent,
+} from '../../../../shared/components/atoms/table/table.component';
+import { ModalComponent } from '../../../../shared/components/atoms/modal/modal.component';
+import { FormComponent } from '../../../../shared/components/atoms/form/form.component';
 import { GeneralService } from '@app/core/services/general.service';
-import { ButtonComponent } from "../../../../shared/components/atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../../../shared/components/atoms/button-ribbon/button-ribbon.component";
-import { Question, QuestionAggregate, Graph, GraphType, GraphQuestionType, QuestionConditionType, GraphCategory, GraphBin, GraphCategoryAttribute, GraphQuestion } from '@app/core/models/form.models';
+import { ButtonComponent } from '../../../../shared/components/atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../../../shared/components/atoms/button-ribbon/button-ribbon.component';
+import {
+  Question,
+  QuestionAggregate,
+  Graph,
+  GraphType,
+  GraphQuestionType,
+  QuestionConditionType,
+  GraphCategory,
+  GraphBin,
+  GraphCategoryAttribute,
+  GraphQuestion,
+} from '@app/core/models/form.models';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, strNoE, updateTableSelectList } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-graph-admin-form',
-  imports: [FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [
+    FormElementComponent,
+    FormElementGroupComponent,
+    TableComponent,
+    ModalComponent,
+    FormComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+  ],
   templateUrl: './graph-admin-form.component.html',
-  styleUrls: ['./graph-admin-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./graph-admin-form.component.scss'],
 })
 export class GraphAdminFormComponent implements OnInit {
   private FormTyp = 'field';
@@ -30,7 +54,10 @@ export class GraphAdminFormComponent implements OnInit {
   graphQuestionTypes: GraphQuestionType[] = [];
   questionConditionTypes: QuestionConditionType[] = [];
 
-  filterOptions = [{ property: 'Active', value: 'y' }, { property: 'Inactive', value: 'n' }];
+  filterOptions = [
+    { property: 'Active', value: 'y' },
+    { property: 'Inactive', value: 'n' },
+  ];
   filterOption = 'y';
   filterText = '';
   graphTableCols: TableColType[] = [
@@ -41,9 +68,7 @@ export class GraphAdminFormComponent implements OnInit {
     { PropertyName: 'y_scale_min', ColLabel: 'Y Scale Min' },
     { PropertyName: 'y_scale_max', ColLabel: 'Y Scale Max' },
   ];
-  graphTableButtons: TableButtonType[] = [
-    new TableButtonType('copy', this.copyGraph.bind(this))
-  ]
+  graphTableButtons: TableButtonType[] = [new TableButtonType('copy', this.copyGraph.bind(this))];
   graphModalVisible = false;
   activeGraph: Graph | undefined = undefined;
 
@@ -61,24 +86,65 @@ export class GraphAdminFormComponent implements OnInit {
   activeCategory: GraphCategory | undefined = undefined;
 
   categoryAttributeTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', DisplayEmptyOption: true },
-    { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'name', DisplayEmptyOption: true },
-    { PropertyName: 'question_condition_typ', ColLabel: 'Condition Type', Type: 'select', DisplayProperty: 'question_condition_nm', Required: true },
+    {
+      PropertyName: 'question',
+      ColLabel: 'Question',
+      Type: 'select',
+      DisplayProperty: 'short_display_value',
+      DisplayEmptyOption: true,
+    },
+    {
+      PropertyName: 'question_aggregate',
+      ColLabel: 'Question Aggregate',
+      Type: 'select',
+      DisplayProperty: 'name',
+      DisplayEmptyOption: true,
+    },
+    {
+      PropertyName: 'question_condition_typ',
+      ColLabel: 'Condition Type',
+      Type: 'select',
+      DisplayProperty: 'question_condition_nm',
+      Required: true,
+    },
     { PropertyName: 'value', ColLabel: 'Condition Value', Type: 'text' },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
   graphQuestionTableCols: TableColType[] = [
-    { PropertyName: 'question', ColLabel: 'Question', Type: 'select', DisplayProperty: 'short_display_value', DisplayEmptyOption: true },
-    { PropertyName: 'question_aggregate', ColLabel: 'Question Aggregate', Type: 'select', DisplayProperty: 'name', DisplayEmptyOption: true },
-    { PropertyName: 'graph_question_typ', ColLabel: 'Question Type', Type: 'select', DisplayProperty: 'graph_question_nm', DisplayEmptyOption: true },
+    {
+      PropertyName: 'question',
+      ColLabel: 'Question',
+      Type: 'select',
+      DisplayProperty: 'short_display_value',
+      DisplayEmptyOption: true,
+    },
+    {
+      PropertyName: 'question_aggregate',
+      ColLabel: 'Question Aggregate',
+      Type: 'select',
+      DisplayProperty: 'name',
+      DisplayEmptyOption: true,
+    },
+    {
+      PropertyName: 'graph_question_typ',
+      ColLabel: 'Question Type',
+      Type: 'select',
+      DisplayProperty: 'graph_question_nm',
+      DisplayEmptyOption: true,
+    },
     { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n' },
   ];
 
-  constructor(private api: APIService, private authService: AuthService, private gs: GeneralService, private modalService: ModalService) { }
+  constructor(
+    private api: APIService,
+    private authService: AuthService,
+    private gs: GeneralService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getQuestions();
         this.getGraphFormEditor();
@@ -88,7 +154,7 @@ export class GraphAdminFormComponent implements OnInit {
   }
 
   getGraphFormEditor(): void {
-    this.api.get(true, 'form/graph-editor/', undefined, (result) => {
+    this.api.get(true, 'form/graph-editor/', undefined, result => {
       this.graphs = result['graphs'] as Graph[];
       this.graphTypes = result['graph_types'] as GraphType[];
       this.graphQuestionTypes = result['graph_question_types'] as GraphQuestionType[];
@@ -99,24 +165,34 @@ export class GraphAdminFormComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.api.get(true, 'form/question/', {
-      form_typ: this.FormTyp,
-      active: 'y'
-    }, (result: Question[]) => {
-      this.questions = result;
-      updateTableSelectList(this.categoryAttributeTableCols, 'question', this.questions);
-      updateTableSelectList(this.graphQuestionTableCols, 'question', this.questions);
-    });
+    this.api.get(
+      true,
+      'form/question/',
+      {
+        form_typ: this.FormTyp,
+        active: 'y',
+      },
+      (result: Question[]) => {
+        this.questions = result;
+        updateTableSelectList(this.categoryAttributeTableCols, 'question', this.questions);
+        updateTableSelectList(this.graphQuestionTableCols, 'question', this.questions);
+      }
+    );
   }
 
   getQuestionAggregates(): void {
-    this.api.get(true, 'form/question-aggregate/', {
-      form_typ: this.FormTyp
-    }, (result: any) => {
-      this.questionAggregates = result as QuestionAggregate[];
-      updateTableSelectList(this.categoryAttributeTableCols, 'question_aggregate', this.questionAggregates);
-      updateTableSelectList(this.graphQuestionTableCols, 'question_aggregate', this.questionAggregates);
-    });
+    this.api.get(
+      true,
+      'form/question-aggregate/',
+      {
+        form_typ: this.FormTyp,
+      },
+      (result: any) => {
+        this.questionAggregates = result as QuestionAggregate[];
+        updateTableSelectList(this.categoryAttributeTableCols, 'question_aggregate', this.questionAggregates);
+        updateTableSelectList(this.graphQuestionTableCols, 'question_aggregate', this.questionAggregates);
+      }
+    );
   }
 
   showGraphModal(graph?: Graph): void {
@@ -134,9 +210,8 @@ export class GraphAdminFormComponent implements OnInit {
   removeBin(bin: GraphBin): void {
     if (this.activeGraph) {
       if (!strNoE(bin.id)) {
-        this.modalService.triggerError('Can\'t delete saved bin, please mark inactive instead.');
-      }
-      else {
+        this.modalService.triggerError("Can't delete saved bin, please mark inactive instead.");
+      } else {
         const i = this.activeGraph.graphbin_set.indexOf(bin);
         if (i !== -1) this.activeGraph.graphbin_set.splice(i, 1);
       }
@@ -155,14 +230,12 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategory(category: GraphCategory): void {
     if (this.activeGraph) {
       if (!strNoE(category.id)) {
-        this.modalService.triggerError('Can\'t delete saved category, please mark inactive instead.');
-      }
-      else {
+        this.modalService.triggerError("Can't delete saved category, please mark inactive instead.");
+      } else {
         let i = 0;
         for (; i < this.activeGraph.graphcategory_set.length; i++) {
           const check = this.activeGraph.graphcategory_set[i];
-          if (check.category == category.category)
-            break;
+          if (check.category == category.category) break;
         }
         this.activeGraph.graphcategory_set.splice(i, 1);
       }
@@ -175,7 +248,11 @@ export class GraphAdminFormComponent implements OnInit {
 
   addCategoryAttribute(): void {
     if (this.activeCategory) {
-      if (!this.activeCategory.graphcategoryattribute_set.find(gc => strNoE(gc.id) && strNoE(gc.question) && strNoE(gc.question_condition_typ))) {
+      if (
+        !this.activeCategory.graphcategoryattribute_set.find(
+          gc => strNoE(gc.id) && strNoE(gc.question) && strNoE(gc.question_condition_typ)
+        )
+      ) {
         this.activeCategory.graphcategoryattribute_set.push(new GraphCategoryAttribute());
       }
     }
@@ -184,12 +261,14 @@ export class GraphAdminFormComponent implements OnInit {
   removeCategoryAttribute(category: GraphCategoryAttribute): void {
     if (this.activeCategory) {
       if (!strNoE(category.id)) {
-        this.modalService.triggerError('Can\'t delete saved category attribute, please mark inactive instead.');
-      }
-      else {
+        this.modalService.triggerError("Can't delete saved category attribute, please mark inactive instead.");
+      } else {
         let i = 0;
         for (; i < this.activeCategory.graphcategoryattribute_set.length; i++)
-          if (this.activeCategory.graphcategoryattribute_set[i].question === category.question && this.activeCategory.graphcategoryattribute_set[i].question_condition_typ === category.question_condition_typ)
+          if (
+            this.activeCategory.graphcategoryattribute_set[i].question === category.question &&
+            this.activeCategory.graphcategoryattribute_set[i].question_condition_typ === category.question_condition_typ
+          )
             break;
 
         this.activeCategory.graphcategoryattribute_set.splice(i, 1);
@@ -199,7 +278,11 @@ export class GraphAdminFormComponent implements OnInit {
 
   addGraphQuestion(): void {
     if (this.activeGraph) {
-      if (!this.activeGraph.graphquestion_set.find(gb => strNoE(gb.id) && strNoE(gb.question) && strNoE(gb.question_aggregate) && strNoE(gb.graph_question_typ)))
+      if (
+        !this.activeGraph.graphquestion_set.find(
+          gb => strNoE(gb.id) && strNoE(gb.question) && strNoE(gb.question_aggregate) && strNoE(gb.graph_question_typ)
+        )
+      )
         this.activeGraph.graphquestion_set.push(new GraphQuestion());
     }
   }
@@ -207,9 +290,8 @@ export class GraphAdminFormComponent implements OnInit {
   removeGraphQuestion(graphQuestion: GraphQuestion): void {
     if (this.activeGraph) {
       if (!strNoE(graphQuestion.id)) {
-        this.modalService.triggerError('Can\'t delete saved question, please mark inactive instead.');
-      }
-      else {
+        this.modalService.triggerError("Can't delete saved question, please mark inactive instead.");
+      } else {
         const i = this.activeGraph.graphquestion_set.indexOf(graphQuestion);
         if (i !== -1) this.activeGraph.graphquestion_set.splice(i, 1);
       }
@@ -218,7 +300,7 @@ export class GraphAdminFormComponent implements OnInit {
 
   saveGraph(): void {
     if (this.activeGraph) {
-      this.api.post(true, 'form/graph/', this.activeGraph, (result) => {
+      this.api.post(true, 'form/graph/', this.activeGraph, result => {
         this.getGraphs();
       });
     }
@@ -235,9 +317,9 @@ export class GraphAdminFormComponent implements OnInit {
   private copyGraph(graph: Graph): void {
     const g = cloneObject(graph) as Graph;
     g.id = NaN;
-    g.graphbin_set.forEach(gb => gb.id = NaN);
-    g.graphcategory_set.forEach(gc => gc.id = NaN);
-    g.graphquestion_set.forEach(gq => gq.id = NaN);
+    g.graphbin_set.forEach(gb => (gb.id = NaN));
+    g.graphcategory_set.forEach(gc => (gc.id = NaN));
+    g.graphquestion_set.forEach(gq => (gq.id = NaN));
     this.showGraphModal(g);
   }
 }

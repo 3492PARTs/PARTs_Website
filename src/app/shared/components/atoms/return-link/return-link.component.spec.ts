@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { ReturnLinkComponent } from './return-link.component';
 
@@ -13,13 +12,8 @@ describe('ReturnLinkComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReturnLinkComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ReturnLinkComponent);
     component = fixture.componentInstance;
@@ -42,19 +36,19 @@ describe('ReturnLinkComponent', () => {
 
   it('should emit event when runFunction is called', () => {
     spyOn(component.FunctionCallBack, 'emit');
-    
+
     component.runFunction();
-    
+
     expect(component.FunctionCallBack.emit).toHaveBeenCalled();
   });
 
   it('should emit event multiple times when runFunction is called multiple times', () => {
     spyOn(component.FunctionCallBack, 'emit');
-    
+
     component.runFunction();
     component.runFunction();
     component.runFunction();
-    
+
     expect(component.FunctionCallBack.emit).toHaveBeenCalledTimes(3);
   });
 
@@ -65,7 +59,7 @@ describe('ReturnLinkComponent', () => {
 
   it('should accept different RouterLink values', () => {
     const testRoutes = ['/dashboard', '/profile', '/settings', '/help'];
-    
+
     testRoutes.forEach(route => {
       component.RouterLink = route;
       expect(component.RouterLink).toBe(route);
@@ -92,20 +86,20 @@ describe('ReturnLinkComponent', () => {
     expect(component.RouterLink).toBe('');
   });
 
-  it('should allow subscription to FunctionCallBack', (done) => {
+  it('should allow subscription to FunctionCallBack', done => {
     component.FunctionCallBack.subscribe(() => {
       expect(true).toBe(true);
       done();
     });
-    
+
     component.runFunction();
   });
 
   it('should emit without parameters', () => {
     spyOn(component.FunctionCallBack, 'emit');
-    
+
     component.runFunction();
-    
+
     expect(component.FunctionCallBack.emit).toHaveBeenCalledWith();
   });
 
@@ -128,10 +122,10 @@ describe('ReturnLinkComponent', () => {
   it('should handle RouterLink updates multiple times', () => {
     component.RouterLink = '/first';
     expect(component.RouterLink).toBe('/first');
-    
+
     component.RouterLink = '/second';
     expect(component.RouterLink).toBe('/second');
-    
+
     component.RouterLink = '/third';
     expect(component.RouterLink).toBe('/third');
   });
@@ -145,10 +139,10 @@ describe('ReturnLinkComponent', () => {
     component.FunctionCallBack.subscribe(() => {
       callCount++;
     });
-    
+
     component.runFunction();
     component.runFunction();
-    
+
     expect(callCount).toBe(2);
   });
 });

@@ -2,7 +2,21 @@
 
 Team 3492's official website for scouting, team management, and public information.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+This project uses Angular 22 and [Angular CLI](https://github.com/angular/angular-cli) 22.
+
+## Angular 22 Upgrade Notes
+
+- Use Node.js `^22.22.3`, `^24.15.0`, or `>=26.0.0` and TypeScript `>=6.0 <6.1`. The Docker build stage uses Node.js 24.
+- Existing components explicitly use `ChangeDetectionStrategy.Eager` to preserve the pre-upgrade change-detection behavior. Angular 22 defaults new components to `OnPush`; choose a strategy intentionally when generating or editing components.
+- `provideHttpClient()` uses `withXhr()` to keep the app's XMLHttpRequest backend behavior.
+- The event-competition template uses `$safeNavigationMigration()` around optional-chain expressions where the old `null` result must be preserved. Keep this wrapper when editing those expressions unless you have verified the changed `undefined` behavior is safe.
+- `tsconfig.app.json` and `tsconfig.spec.json` suppress the `nullishCoalescingNotNullable` and `optionalChainNotNullable` extended diagnostics. These were added by the migration; remove the suppressions after reviewing and fixing those diagnostics.
+- TypeScript 6 deprecates `baseUrl`; it was removed from `tsconfig.json`, and path aliases are now explicitly relative to that config.
+- The app had no Angular animation triggers, so the deprecated `@angular/animations` and unused `@angular/platform-browser-dynamic` packages were removed. If Angular animations are added later, prefer Angular's CSS-based `animate.enter`/`animate.leave` APIs.
+- Karma remains the test runner. `istanbul-lib-instrument` was added for its coverage support. The optional Angular CLI migration to Vitest was not run.
+- The app already uses the `@angular/build:application` builder, so no build-system migration or extra build flags were needed.
+
+After upgrading, use `npm ci` to install the versions pinned by `package-lock.json`.
 
 ## 📚 Documentation
 

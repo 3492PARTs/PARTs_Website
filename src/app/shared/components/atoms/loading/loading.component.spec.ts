@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { LoadingComponent } from './loading.component';
 
@@ -12,14 +11,9 @@ describe('LoadingComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ LoadingComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      imports: [LoadingComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -156,9 +150,9 @@ describe('LoadingComponent', () => {
     component.Height = '200px';
     component.MinHeight = '50px';
     component.Loading = true;
-    
+
     fixture.detectChanges();
-    
+
     expect(component.Width).toBe('100px');
     expect(component.Height).toBe('200px');
     expect(component.MinHeight).toBe('50px');
@@ -171,7 +165,7 @@ describe('LoadingComponent', () => {
     component.Loading = true;
     component.Loading = false;
     component.Loading = true;
-    
+
     expect(component.Loading).toBe(true);
   });
 
@@ -179,7 +173,7 @@ describe('LoadingComponent', () => {
     component.Width = '0';
     component.Height = '0';
     component.MinHeight = '0';
-    
+
     expect(component.Width).toBe('0');
     expect(component.Height).toBe('0');
     expect(component.MinHeight).toBe('0');
@@ -209,13 +203,12 @@ describe('LoadingComponent', () => {
     component.Height = '200px';
     component.MinHeight = '50px';
     component.Loading = true;
-    
+
     component.Width = '150px'; // Change only Width
-    
+
     expect(component.Width).toBe('150px');
     expect(component.Height).toBe('200px'); // Should remain unchanged
     expect(component.MinHeight).toBe('50px'); // Should remain unchanged
     expect(component.Loading).toBe(true); // Should remain unchanged
   });
 });
-

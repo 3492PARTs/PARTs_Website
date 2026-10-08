@@ -1,4 +1,16 @@
-import { Input, Component, ContentChildren, QueryList, ContentChild, AfterContentInit, Renderer2, AfterContentChecked, HostListener, DoCheck } from '@angular/core';
+import {
+  Input,
+  Component,
+  ContentChildren,
+  QueryList,
+  ContentChild,
+  AfterContentInit,
+  Renderer2,
+  AfterContentChecked,
+  HostListener,
+  DoCheck,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { BoxComponent } from '../box/box.component';
 
@@ -6,10 +18,10 @@ import { BoxComponent } from '../box/box.component';
   selector: 'app-box-side-nav-wrapper',
   standalone: true,
   templateUrl: './box-side-nav-wrapper.component.html',
-  styleUrls: ['./box-side-nav-wrapper.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./box-side-nav-wrapper.component.scss'],
 })
 export class BoxSideNavWrapperComponent implements AfterContentInit {
-
   @Input()
   set ShowSideNavigation(b: boolean) {
     if (this.sideNav) {
@@ -26,7 +38,7 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
   private resizeTimer: number | null | undefined;
   private HideSideNav = false;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {}
 
   ngAfterContentInit() {
     this.boxes.changes.subscribe(() => {
@@ -60,7 +72,8 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
     }
   }
 
-  private shrinkBoxes(): void { // boxes beside side nav
+  private shrinkBoxes(): void {
+    // boxes beside side nav
     if (this.sideNav) {
       this.renderer.setStyle(this.sideNav.sideNav.nativeElement, 'float', 'left');
       this.sideNav.Width = this.sideNav.startingWidth;
@@ -68,9 +81,7 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
     }
 
     if (this.boxes && this.sideNav) {
-
       this.boxes.forEach(el => {
-
         let MaxWidthVal = '100%';
         let BoxFloat = 'none';
         let BoxMargin = '1em auto 0 auto';
@@ -82,24 +93,18 @@ export class BoxSideNavWrapperComponent implements AfterContentInit {
           BoxMargin = '1em 1em 0 0';
         }
 
-        this.renderer.setStyle(
-          el.box.nativeElement,
-          'max-width', MaxWidthVal
-        );
+        this.renderer.setStyle(el.box.nativeElement, 'max-width', MaxWidthVal);
         this.renderer.setStyle(el.box.nativeElement, 'margin', BoxMargin);
         this.renderer.setStyle(el.box.nativeElement, 'float', BoxFloat);
       });
     }
   }
 
-  private expandBoxes(): void { // side nav above boxes
+  private expandBoxes(): void {
+    // side nav above boxes
     if (this.boxes) {
-
       this.boxes.forEach(el => {
-        this.renderer.setStyle(
-          el.box.nativeElement,
-          'max-width', '100%'
-        );
+        this.renderer.setStyle(el.box.nativeElement, 'max-width', '100%');
         this.renderer.setStyle(el.box.nativeElement, 'margin', '1em auto 0 auto');
         this.renderer.setStyle(el.box.nativeElement, 'float', 'none');
       });

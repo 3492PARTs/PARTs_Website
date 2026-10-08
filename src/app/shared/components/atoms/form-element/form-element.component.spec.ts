@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
@@ -19,13 +19,12 @@ describe('FormElementComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FormElementComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
-    })
-      .compileComponents();
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(FormElementComponent);
     component = fixture.componentInstance;
@@ -321,7 +320,7 @@ describe('FormElementComponent', () => {
     it('should select all items', () => {
       component.multiSelectModel = [
         { id: 1, name: 'Item 1', checked: false },
-        { id: 2, name: 'Item 2', checked: false }
+        { id: 2, name: 'Item 2', checked: false },
       ];
       component.Model = [];
 
@@ -336,7 +335,7 @@ describe('FormElementComponent', () => {
     it('should deselect all items', () => {
       component.multiSelectModel = [
         { id: 1, name: 'Item 1', checked: true },
-        { id: 2, name: 'Item 2', checked: true }
+        { id: 2, name: 'Item 2', checked: true },
       ];
       component.Model = [];
 
@@ -359,8 +358,8 @@ describe('FormElementComponent', () => {
       const mockFile = new File(['test'], 'test.txt', { type: 'text/plain' });
       const event = {
         target: {
-          files: [mockFile]
-        }
+          files: [mockFile],
+        },
       };
 
       spyOn(component, 'change');
@@ -371,11 +370,13 @@ describe('FormElementComponent', () => {
     });
 
     it('should truncate long filenames', () => {
-      const mockFile = new File(['test'], 'this_is_a_very_long_filename_that_should_be_truncated.txt', { type: 'text/plain' });
+      const mockFile = new File(['test'], 'this_is_a_very_long_filename_that_should_be_truncated.txt', {
+        type: 'text/plain',
+      });
       const event = {
         target: {
-          files: [mockFile]
-        }
+          files: [mockFile],
+        },
       };
 
       component.fileProgress(event);

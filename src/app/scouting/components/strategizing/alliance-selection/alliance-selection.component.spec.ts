@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
@@ -17,11 +17,17 @@ describe('AllianceSelectionComponent', () => {
 
   beforeEach(async () => {
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'loadAllianceSelection', 'saveAllianceSelections',
+      'loadAllScoutingInfo',
+      'loadAllianceSelection',
+      'saveAllianceSelections',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.loadAllianceSelection.and.returnValue(Promise.resolve(null) as any);
@@ -30,7 +36,7 @@ describe('AllianceSelectionComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AllianceSelectionComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

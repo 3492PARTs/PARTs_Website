@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { ChartComponent } from './chart.component';
@@ -12,13 +12,8 @@ describe('ChartComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ChartComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChartComponent);
     component = fixture.componentInstance;
@@ -98,7 +93,7 @@ describe('ChartComponent', () => {
       const histogram = new Histogram();
       histogram.label = 'Test Histogram';
       histogram.bins = [];
-      
+
       expect(() => {
         component.Data = [histogram];
       }).not.toThrow();
@@ -107,7 +102,7 @@ describe('ChartComponent', () => {
     it('should process data setter', () => {
       component.ChartType = 'histogram';
       component.Data = [];
-      
+
       // DatasetColors should be reset - just check it exists
       expect(component.datasetColors).toBeDefined();
     });
@@ -119,7 +114,7 @@ describe('ChartComponent', () => {
       const histogram = new Histogram();
       histogram.label = 'Categorical Test';
       histogram.bins = [];
-      
+
       expect(() => {
         component.Data = [histogram];
       }).not.toThrow();
@@ -132,7 +127,7 @@ describe('ChartComponent', () => {
       const plot = new Plot();
       plot.label = 'Test Plot';
       plot.points = [];
-      
+
       expect(() => {
         component.Data = [plot];
       }).not.toThrow();
@@ -151,7 +146,7 @@ describe('ChartComponent', () => {
       const plot = new Plot();
       plot.label = 'Line Test';
       plot.points = [];
-      
+
       expect(() => {
         component.Data = [plot];
       }).not.toThrow();
@@ -162,7 +157,7 @@ describe('ChartComponent', () => {
       const plot = new Plot();
       plot.label = 'Diff Test';
       plot.points = [];
-      
+
       expect(() => {
         component.Data = [plot];
       }).not.toThrow();
@@ -174,7 +169,7 @@ describe('ChartComponent', () => {
       component.ChartType = 'box-wskr';
       const boxPlot = new BoxAndWhiskerPlot();
       boxPlot.label = 'Box Test';
-      
+
       expect(() => {
         component.Data = [boxPlot];
       }).not.toThrow();
@@ -192,7 +187,7 @@ describe('ChartComponent', () => {
       component.ChartType = 'touch-map';
       const touchMap = new TouchMap();
       touchMap.label = 'Touch Test';
-      
+
       expect(() => {
         component.Data = [touchMap];
       }).not.toThrow();
@@ -202,7 +197,7 @@ describe('ChartComponent', () => {
       component.ChartType = 'touch-map';
       const touchMap = new TouchMap();
       touchMap.label = 'Touch Test';
-      
+
       component.Data = [touchMap];
       // Heatmaps array should be defined
       expect(component.heatmaps).toBeDefined();
@@ -216,7 +211,7 @@ describe('ChartComponent', () => {
       // by Chart.getChart and destroy, so we just verify the pattern works
       component.ChartType = 'histogram';
       component.Data = [];
-      
+
       // Chart management should be handled properly
       expect(component.datasetColors).toBeDefined();
     });
@@ -236,7 +231,7 @@ describe('ChartComponent', () => {
     it('should allow setting custom X scale range', () => {
       component.XScaleMin = 10;
       component.XScaleMax = 90;
-      
+
       expect(component.XScaleMin).toBe(10);
       expect(component.XScaleMax).toBe(90);
     });
@@ -244,7 +239,7 @@ describe('ChartComponent', () => {
     it('should allow setting custom Y scale range', () => {
       component.YScaleMin = 5;
       component.YScaleMax = 95;
-      
+
       expect(component.YScaleMin).toBe(5);
       expect(component.YScaleMax).toBe(95);
     });
@@ -254,7 +249,7 @@ describe('ChartComponent', () => {
       component.XScaleMax = undefined;
       component.YScaleMin = undefined;
       component.YScaleMax = undefined;
-      
+
       expect(component.XScaleMin).toBeUndefined();
       expect(component.XScaleMax).toBeUndefined();
       expect(component.YScaleMin).toBeUndefined();

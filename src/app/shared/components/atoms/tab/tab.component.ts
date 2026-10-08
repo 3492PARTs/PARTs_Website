@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-tab',
   imports: [CommonModule],
   templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./tab.component.scss'],
 })
 export class TabComponent implements OnInit {
   @Input() TabName = '';
@@ -15,9 +16,7 @@ export class TabComponent implements OnInit {
 
   public visible = false;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

@@ -1,4 +1,4 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { OnCreateDirective } from './on-create.directive';
@@ -6,11 +6,8 @@ import { OnCreateDirective } from './on-create.directive';
 @Component({
   standalone: true,
   imports: [OnCreateDirective],
-  template: `
-    <div appOnCreate (onCreate)="onElementCreate()">
-      Test Element
-    </div>
-  `
+  changeDetection: ChangeDetectionStrategy.Eager,
+  template: ` <div appOnCreate (onCreate)="onElementCreate()">Test Element</div> `,
 })
 class TestComponent {
   created = false;
@@ -29,12 +26,12 @@ describe('OnCreateDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent]
+      imports: [TestComponent],
     });
 
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
-    
+
     const directiveEl = fixture.debugElement.query(By.directive(OnCreateDirective));
     directive = directiveEl.injector.get(OnCreateDirective);
   });
@@ -46,19 +43,19 @@ describe('OnCreateDirective', () => {
 
   it('should emit onCreate event when ngOnInit is called', () => {
     expect(component.created).toBe(false);
-    
+
     fixture.detectChanges(); // Triggers ngOnInit
-    
+
     expect(component.created).toBe(true);
   });
 
   it('should emit onCreate event exactly once during initialization', () => {
     expect(component.createCount).toBe(0);
-    
+
     fixture.detectChanges(); // Triggers ngOnInit
-    
+
     expect(component.createCount).toBe(1);
-    
+
     // Subsequent change detection should not trigger onCreate again
     fixture.detectChanges();
     expect(component.createCount).toBe(1);
@@ -69,12 +66,12 @@ describe('OnCreateDirective', () => {
     expect(directive.onCreate.observers.length).toBeGreaterThan(0);
   });
 
-  it('should emit onCreate during component lifecycle', (done) => {
+  it('should emit onCreate during component lifecycle', done => {
     directive.onCreate.subscribe(() => {
       expect(component.created).toBe(true);
       done();
     });
-    
+
     fixture.detectChanges(); // Triggers ngOnInit
   });
 
@@ -96,7 +93,7 @@ describe('OnCreateDirective', () => {
     expect(subscription2Called).toBe(true);
   });
 
-  it('should emit onCreate without any arguments', (done) => {
+  it('should emit onCreate without any arguments', done => {
     directive.onCreate.subscribe((data: any) => {
       expect(data).toBeUndefined();
       done();
@@ -112,7 +109,7 @@ describe('OnCreateDirective', () => {
       template: `
         <div appOnCreate (onCreate)="onFirstCreate()"></div>
         <div appOnCreate (onCreate)="onSecondCreate()"></div>
-      `
+      `,
     })
     class MultipleDirectivesComponent {
       firstCreated = false;

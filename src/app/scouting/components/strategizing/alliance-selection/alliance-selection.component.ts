@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { BoxComponent } from "@app/shared/components/atoms/box/box.component";
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { GeneralService } from '@app/core/services/general.service';
 import { TableButtonType, TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
-import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
-import { ButtonComponent } from "@app/shared/components/atoms/button/button.component";
-import { FormElementGroupComponent } from "@app/shared/components/atoms/form-element-group/form-element-group.component";
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
 import { AllianceSelection, Team, Event } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
@@ -12,15 +12,15 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
   selector: 'app-alliance-selection',
   imports: [BoxComponent, TableComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent],
   templateUrl: './alliance-selection.component.html',
-  styleUrls: ['./alliance-selection.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./alliance-selection.component.scss'],
 })
 export class AllianceSelectionComponent implements OnInit {
-
   allianceSelections: AllianceSelection[] = [];
 
   currentEvent: Event | undefined = undefined;
   teams: Team[] = [];
-  teamButtonData: { disabled: boolean, team_id: number }[] = [];
+  teamButtonData: { disabled: boolean; team_id: number }[] = [];
 
   allianceSelectionsTableCols: TableColType[] = [
     { PropertyName: 'team', ColLabel: 'Team', Type: 'function', ColValueFunction: this.decodeTeam },
@@ -30,15 +30,23 @@ export class AllianceSelectionComponent implements OnInit {
   ];
   allianceSelectionsTableButtons: TableButtonType[] = [
     new TableButtonType('minus', this.decrementOrder.bind(this), undefined, undefined, undefined, this.hideMinus),
-    new TableButtonType('add', this.incrementOrder.bind(this), undefined, undefined, undefined, this.hidePlus.bind(this)),
+    new TableButtonType(
+      'add',
+      this.incrementOrder.bind(this),
+      undefined,
+      undefined,
+      undefined,
+      this.hidePlus.bind(this)
+    ),
   ];
   triggerAllianceSelectionsTable = false;
 
   selectionsActive = false;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService) {
-
-  }
+  constructor(
+    private gs: GeneralService,
+    private ss: ScoutingService
+  ) {}
 
   ngOnInit(): void {
     this.gs.incrementOutstandingCalls();
@@ -46,15 +54,19 @@ export class AllianceSelectionComponent implements OnInit {
       if (result) {
         this.currentEvent = result.events.find(e => e.current === 'y');
 
-        this.teams = result.teams.filter(t => t.team_no !== 3492).sort((t1, t2) => {
-          if (t1.team_no > t2.team_no) return 1;
-          else if (t1.team_no < t2.team_no) return -1;
-          else return 0;
-        });
+        this.teams = result.teams
+          .filter(t => t.team_no !== 3492)
+          .sort((t1, t2) => {
+            if (t1.team_no > t2.team_no) return 1;
+            else if (t1.team_no < t2.team_no) return -1;
+            else return 0;
+          });
 
         this.allianceSelections = result.alliance_selections;
         this.triggerAllianceSelectionsTable = !this.triggerAllianceSelectionsTable;
-        this.teamButtonData = this.teams.map<{ disabled: boolean, team_id: number }>(t => { return { disabled: false, team_id: t.team_no } });
+        this.teamButtonData = this.teams.map<{ disabled: boolean; team_id: number }>(t => {
+          return { disabled: false, team_id: t.team_no };
+        });
       }
       this.gs.decrementOutstandingCalls();
     });
@@ -147,7 +159,7 @@ export class AllianceSelectionComponent implements OnInit {
 
   strikeThoughAllianceSelection(rec: AllianceSelection): boolean {
     if (this.teamButtonData && this.teamButtonData.length > 0)
-      return this.teamButtonData.find(tbd => tbd.team_id === rec.team?.team_no)?.disabled || false
+      return this.teamButtonData.find(tbd => tbd.team_id === rec.team?.team_no)?.disabled || false;
     return false;
   }
 }

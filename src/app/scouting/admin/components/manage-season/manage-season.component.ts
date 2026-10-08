@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '@app/auth/models/user.models';
 import { Season, Team, Event, UserInfo, UserSeason } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
@@ -23,9 +23,22 @@ import { cloneObject } from '@app/core/utils/utils.functions';
 import { UserService } from '@app/user/services/user.service';
 @Component({
   selector: 'app-manage-season',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, ModalComponent, FormComponent, ManageEventComponent, ManageTeamComponent, ManageMatchComponent, TableComponent],
+  imports: [
+    BoxComponent,
+    FormElementGroupComponent,
+    FormElementComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    ModalComponent,
+    FormComponent,
+    ManageEventComponent,
+    ManageTeamComponent,
+    ManageMatchComponent,
+    TableComponent,
+  ],
   templateUrl: './manage-season.component.html',
-  styleUrls: ['./manage-season.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-season.component.scss'],
 })
 export class ManageSeasonComponent implements OnInit {
   private readonly api = inject(APIService);
@@ -48,11 +61,14 @@ export class ManageSeasonComponent implements OnInit {
 
   userSeasonTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'User', Width: '220px' },
-    { PropertyName: 'id', ColLabel: 'Seasons', Type: 'function', ColValueFunction: this.getUserSeasonsForTable.bind(this) },
+    {
+      PropertyName: 'id',
+      ColLabel: 'Seasons',
+      Type: 'function',
+      ColValueFunction: this.getUserSeasonsForTable.bind(this),
+    },
   ];
-  activeUserSeasonTableCols: TableColType[] = [
-    { PropertyName: 'season.season', ColLabel: 'Season' },
-  ];
+  activeUserSeasonTableCols: TableColType[] = [{ PropertyName: 'season.season', ColLabel: 'Season' }];
 
   syncSeasonResponse = new RetMessage();
 
@@ -67,10 +83,10 @@ export class ManageSeasonComponent implements OnInit {
 
   private allSeasons: Season[] = [];
 
-  constructor(private us: UserService) { }
+  constructor(private us: UserService) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.init();
       }
@@ -91,21 +107,27 @@ export class ManageSeasonComponent implements OnInit {
         this.currentEvent = result.events.find(e => e.current === 'y') || new Event();
 
         this.getEventsForCurrentSeason();
-      };
+      }
 
       this.gs.decrementOutstandingCalls();
     });
   }
 
   syncSeason(): void {
-    this.api.get(true, 'tba/sync-season/', {
-      season_id: this.currentSeason.id.toString()
-    }, (result: any) => {
-      this.syncSeasonResponse = result as RetMessage;
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'tba/sync-season/',
+      {
+        season_id: this.currentSeason.id.toString(),
+      },
+      (result: any) => {
+        this.syncSeasonResponse = result as RetMessage;
+        this.init();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   setCurrentSeasonEvent(): void | null {
@@ -113,16 +135,24 @@ export class ManageSeasonComponent implements OnInit {
       this.modalService.triggerError('No season or event selected.');
       return null;
     }
-    this.api.get(true, 'scouting/admin/set-season-event/', {
-      season_id: this.currentSeason.id.toString(),
-      event_id: this.currentEvent.id.toString(),
-      competition_page_active: this.currentEvent.competition_page_active
-    }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.init();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    }).then(() => this.saveSeason(this.currentSeason));
+    this.api
+      .get(
+        true,
+        'scouting/admin/set-season-event/',
+        {
+          season_id: this.currentSeason.id.toString(),
+          event_id: this.currentEvent.id.toString(),
+          competition_page_active: this.currentEvent.competition_page_active,
+        },
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.init();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      )
+      .then(() => this.saveSeason(this.currentSeason));
   }
 
   async getEventsForCurrentSeason(): Promise<void> {
@@ -136,9 +166,11 @@ export class ManageSeasonComponent implements OnInit {
   async getEventsForSeason(season_id: number): Promise<Event[]> {
     let eventsList: Event[] = [];
 
-    await this.ss.getEventsFromCache(e => e.where({ 'season_id': season_id })).then(es => {
-      eventsList = es;
-    });
+    await this.ss
+      .getEventsFromCache(e => e.where({ season_id: season_id }))
+      .then(es => {
+        eventsList = es;
+      });
 
     return eventsList;
   }
@@ -152,32 +184,46 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   saveSeason(s: Season): void {
-    this.api.post(true, 'scouting/admin/seasons/', s, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.init();
-      s = new Season();
-      this.season = new Season();
-      this.manageSeasonModalVisible = false;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'scouting/admin/seasons/',
+      s,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.init();
+        s = new Season();
+        this.season = new Season();
+        this.manageSeasonModalVisible = false;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   deleteSeason(): void | null {
     if (this.season) {
-      this.modalService.triggerConfirm('Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.', () => {
-        this.api.delete(true, 'scouting/admin/seasons/', {
-          season_id: this.season?.id.toString() || ''
-        }, (result: any) => {
-          this.modalService.successfulResponseBanner(result);
-          this.init();
-          this.season = new Season();
-          this.manageSeasonModalVisible = false;
-        }, (err: any) => {
-          this.modalService.triggerError(err);
-        });
-      });
-
+      this.modalService.triggerConfirm(
+        'Are you sure you want to delete this season?\nDeleting this season will result in all associated data being removed.',
+        () => {
+          this.api.delete(
+            true,
+            'scouting/admin/seasons/',
+            {
+              season_id: this.season?.id.toString() || '',
+            },
+            (result: any) => {
+              this.modalService.successfulResponseBanner(result);
+              this.init();
+              this.season = new Season();
+              this.manageSeasonModalVisible = false;
+            },
+            (err: any) => {
+              this.modalService.triggerError(err);
+            }
+          );
+        }
+      );
     }
   }
 
@@ -203,27 +249,39 @@ export class ManageSeasonComponent implements OnInit {
   }
 
   getUserSeasons(): void {
-    this.api.get(true, 'scouting/admin/user-seasons/', undefined, (result: UserSeason[]) => {
-      this.userSeasons = result || [];
-      this.userSeasonTableUpdateTrigger = !this.userSeasonTableUpdateTrigger;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/admin/user-seasons/',
+      undefined,
+      (result: UserSeason[]) => {
+        this.userSeasons = result || [];
+        this.userSeasonTableUpdateTrigger = !this.userSeasonTableUpdateTrigger;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   showUserSeasonModal(user: User): void {
     this.activeUser = cloneObject(user);
     this.selectedSeasonToAdd = null;
-    this.api.get(true, 'scouting/admin/user-seasons/', { user_id: this.activeUser.id.toString() }, (result: UserSeason[]) => {
-      this.activeUserSeasons = result || [];
-      this.ss.loadSeasons().then(seasons => {
-        this.allSeasons = seasons || [];
-        this.updateAvailableSeasons();
-        this.userSeasonModalVisible = true;
-      });
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/admin/user-seasons/',
+      { user_id: this.activeUser.id.toString() },
+      (result: UserSeason[]) => {
+        this.activeUserSeasons = result || [];
+        this.ss.loadSeasons().then(seasons => {
+          this.allSeasons = seasons || [];
+          this.updateAvailableSeasons();
+          this.userSeasonModalVisible = true;
+        });
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   addSeasonToActiveUser(): void {
@@ -249,16 +307,22 @@ export class ManageSeasonComponent implements OnInit {
   saveUserSeasons(): void {
     if (!this.activeUser.id) return;
 
-    this.api.post(true, `scouting/admin/user-seasons/${this.activeUser.id}/`, this.activeUserSeasons, (result: any) => {
-      this.userSeasonModalVisible = false;
-      this.activeUser = new User();
-      this.activeUserSeasons = [];
-      this.selectedSeasonToAdd = null;
-      this.getUserSeasons();
-      this.modalService.successfulResponseBanner(result);
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      `scouting/admin/user-seasons/${this.activeUser.id}/`,
+      this.activeUserSeasons,
+      (result: any) => {
+        this.userSeasonModalVisible = false;
+        this.activeUser = new User();
+        this.activeUserSeasons = [];
+        this.selectedSeasonToAdd = null;
+        this.getUserSeasons();
+        this.modalService.successfulResponseBanner(result);
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   private updateAvailableSeasons(): void {

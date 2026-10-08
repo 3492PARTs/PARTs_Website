@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FieldScoutingResponsesComponent } from './field-scouting-responses.component';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { APIService } from '@app/core/services/api.service';
@@ -10,7 +10,12 @@ import { ModalService } from '@app/core/services/modal.service';
 import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
 import { AppSize } from '@app/core/utils/utils.functions';
 import { BehaviorSubject, of } from 'rxjs';
-import { ScoutFieldResponsesReturn, ScoutPitResponsesReturn, TeamNote, ScoutPitResponse } from '@app/scouting/models/scouting.models';
+import {
+  ScoutFieldResponsesReturn,
+  ScoutPitResponsesReturn,
+  TeamNote,
+  ScoutPitResponse,
+} from '@app/scouting/models/scouting.models';
 
 describe('FieldScoutingResponsesComponent', () => {
   let component: FieldScoutingResponsesComponent;
@@ -29,7 +34,7 @@ describe('FieldScoutingResponsesComponent', () => {
     navigationStateSubject = new BehaviorSubject<NavigationState>(NavigationState.expanded);
 
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
-      authInFlight: authInFlightSubject.asObservable()
+      authInFlight: authInFlightSubject.asObservable(),
     });
 
     mockAPIService = jasmine.createSpyObj('APIService', ['get', 'post']);
@@ -39,7 +44,7 @@ describe('FieldScoutingResponsesComponent', () => {
       'decrementOutstandingCalls',
       'getNextGsId',
       'getAppSize',
-      'isMobile'
+      'isMobile',
     ]);
 
     // Setup getNextGsId to return unique IDs
@@ -48,7 +53,7 @@ describe('FieldScoutingResponsesComponent', () => {
     mockGeneralService.getAppSize.and.returnValue(AppSize.LG);
 
     mockNavigationService = jasmine.createSpyObj('NavigationService', [], {
-      currentNavigationState: navigationStateSubject.asObservable()
+      currentNavigationState: navigationStateSubject.asObservable(),
     });
 
     mockScoutingService = jasmine.createSpyObj('ScoutingService', [
@@ -58,44 +63,32 @@ describe('FieldScoutingResponsesComponent', () => {
       'loadPitScoutingResponses',
       'getFieldResponseFromCache',
       'getPitResponsesFromCache',
-      'getTeamNotesFromCache'
+      'getTeamNotesFromCache',
     ]);
 
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError']);
 
     // Setup default return values
-    mockScoutingService.loadFieldScoutingResponses.and.returnValue(
-      Promise.resolve(new ScoutFieldResponsesReturn())
-    );
-    mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(
-      Promise.resolve([]) as any
-    );
+    mockScoutingService.loadFieldScoutingResponses.and.returnValue(Promise.resolve(new ScoutFieldResponsesReturn()));
+    mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve([]) as any);
     mockScoutingService.loadTeamNotes.and.returnValue(Promise.resolve([]) as any);
-    mockScoutingService.loadPitScoutingResponses.and.returnValue(
-      Promise.resolve(new ScoutPitResponsesReturn())
-    );
-    mockScoutingService.getFieldResponseFromCache.and.returnValue(
-      Promise.resolve([]) as any
-    );
-    mockScoutingService.getPitResponsesFromCache.and.returnValue(
-      Promise.resolve([]) as any
-    );
-    mockScoutingService.getTeamNotesFromCache.and.returnValue(
-      Promise.resolve([]) as any
-    );
+    mockScoutingService.loadPitScoutingResponses.and.returnValue(Promise.resolve(new ScoutPitResponsesReturn()));
+    mockScoutingService.getFieldResponseFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockScoutingService.getPitResponsesFromCache.and.returnValue(Promise.resolve([]) as any);
+    mockScoutingService.getTeamNotesFromCache.and.returnValue(Promise.resolve([]) as any);
 
     await TestBed.configureTestingModule({
       imports: [FieldScoutingResponsesComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         { provide: AuthService, useValue: mockAuthService },
         { provide: APIService, useValue: mockAPIService },
         { provide: GeneralService, useValue: mockGeneralService },
         { provide: ScoutingService, useValue: mockScoutingService },
         { provide: ModalService, useValue: mockModalService },
-        { provide: NavigationService, useValue: mockNavigationService }
-      ]
+        { provide: NavigationService, useValue: mockNavigationService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FieldScoutingResponsesComponent);
@@ -147,9 +140,7 @@ describe('FieldScoutingResponsesComponent', () => {
     it('should load field scouting responses', async () => {
       const mockResponses = new ScoutFieldResponsesReturn();
       mockResponses.scoutAnswers = [{ id: 1, team_id: 3492 }];
-      mockScoutingService.loadFieldScoutingResponses.and.returnValue(
-        Promise.resolve(mockResponses)
-      );
+      mockScoutingService.loadFieldScoutingResponses.and.returnValue(Promise.resolve(mockResponses));
 
       await component.init();
 
@@ -161,11 +152,9 @@ describe('FieldScoutingResponsesComponent', () => {
     it('should load field scouting response columns', async () => {
       const mockColumns = [
         { ColLabel: 'Team', PropertyName: 'team_id', Width: '100px', order: '1' },
-        { ColLabel: 'Match', PropertyName: 'match_key', Width: '150px', order: '2' }
+        { ColLabel: 'Match', PropertyName: 'match_key', Width: '150px', order: '2' },
       ];
-      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(
-        Promise.resolve(mockColumns as any)
-      );
+      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(mockColumns as any));
 
       await component.init();
 
@@ -175,9 +164,7 @@ describe('FieldScoutingResponsesComponent', () => {
     });
 
     it('should load team notes', async () => {
-      const mockNotes: TeamNote[] = [
-        { id: 1, team_id: 3492, note: 'Test note', time: new Date() } as TeamNote
-      ];
+      const mockNotes: TeamNote[] = [{ id: 1, team_id: 3492, note: 'Test note', time: new Date() } as TeamNote];
       mockScoutingService.loadTeamNotes.and.returnValue(Promise.resolve(mockNotes));
 
       await component.init();
@@ -187,9 +174,7 @@ describe('FieldScoutingResponsesComponent', () => {
 
     it('should load pit scouting responses', async () => {
       const mockPitResponses = new ScoutPitResponsesReturn();
-      mockScoutingService.loadPitScoutingResponses.and.returnValue(
-        Promise.resolve(mockPitResponses)
-      );
+      mockScoutingService.loadPitScoutingResponses.and.returnValue(Promise.resolve(mockPitResponses));
 
       await component.init();
 
@@ -224,11 +209,9 @@ describe('FieldScoutingResponsesComponent', () => {
     it('should set checked property on showScoutFieldCols', async () => {
       const mockColumns = [
         { ColLabel: 'Team', PropertyName: 'team_id', Width: '100px', order: '1' },
-        { ColLabel: 'Match', PropertyName: 'match_key', Width: '150px', order: '2' }
+        { ColLabel: 'Match', PropertyName: 'match_key', Width: '150px', order: '2' },
       ];
-      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(
-        Promise.resolve(mockColumns as any)
-      );
+      mockScoutingService.loadFieldScoutingResponseColumns.and.returnValue(Promise.resolve(mockColumns as any));
 
       await component.init();
 
@@ -264,14 +247,10 @@ describe('FieldScoutingResponsesComponent', () => {
     const mockRow = { team_id: 3492 };
 
     beforeEach(() => {
-      mockScoutingService.getFieldResponseFromCache.and.returnValue(
-        Promise.resolve([{ id: 1, team_id: 3492 }]) as any
-      );
+      mockScoutingService.getFieldResponseFromCache.and.returnValue(Promise.resolve([{ id: 1, team_id: 3492 }]) as any);
       const mockPitResponse = new ScoutPitResponse();
       mockPitResponse.team_no = 3492;
-      mockScoutingService.getPitResponsesFromCache.and.returnValue(
-        Promise.resolve([mockPitResponse]) as any
-      );
+      mockScoutingService.getPitResponsesFromCache.and.returnValue(Promise.resolve([mockPitResponse]) as any);
       mockScoutingService.getTeamNotesFromCache.and.returnValue(
         Promise.resolve([{ id: 1, team_id: 3492 } as TeamNote]) as any
       );
@@ -315,9 +294,7 @@ describe('FieldScoutingResponsesComponent', () => {
     });
 
     it('should handle empty pit responses', async () => {
-      mockScoutingService.getPitResponsesFromCache.and.returnValue(
-        Promise.resolve([]) as any
-      );
+      mockScoutingService.getPitResponsesFromCache.and.returnValue(Promise.resolve([]) as any);
 
       await component.getTeamInfo(mockRow);
 
@@ -327,11 +304,9 @@ describe('FieldScoutingResponsesComponent', () => {
     it('should handle multiple field responses for same team', async () => {
       const mockFieldResponses = [
         { id: 1, team_id: 3492, match_key: 'match1' },
-        { id: 2, team_id: 3492, match_key: 'match2' }
+        { id: 2, team_id: 3492, match_key: 'match2' },
       ];
-      mockScoutingService.getFieldResponseFromCache.and.returnValue(
-        Promise.resolve(mockFieldResponses) as any
-      );
+      mockScoutingService.getFieldResponseFromCache.and.returnValue(Promise.resolve(mockFieldResponses) as any);
 
       await component.getTeamInfo(mockRow);
 
@@ -341,11 +316,9 @@ describe('FieldScoutingResponsesComponent', () => {
     it('should handle multiple team notes', async () => {
       const mockNotes = [
         { id: 1, team_id: 3492, note: 'Note 1' } as TeamNote,
-        { id: 2, team_id: 3492, note: 'Note 2' } as TeamNote
+        { id: 2, team_id: 3492, note: 'Note 2' } as TeamNote,
       ];
-      mockScoutingService.getTeamNotesFromCache.and.returnValue(
-        Promise.resolve(mockNotes) as any
-      );
+      mockScoutingService.getTeamNotesFromCache.and.returnValue(Promise.resolve(mockNotes) as any);
 
       await component.getTeamInfo(mockRow);
 

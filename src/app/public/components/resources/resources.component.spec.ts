@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
@@ -14,12 +14,14 @@ describe('ResourcesComponent', () => {
 
   beforeEach(async () => {
     mockAPI = jasmine.createSpyObj('APIService', ['get']);
-    mockAPI.get.and.returnValue(Promise.resolve({ season: 2025, game: 'Reefscape', manual: 'http://example.com/manual.pdf' }));
+    mockAPI.get.and.returnValue(
+      Promise.resolve({ season: 2025, game: 'Reefscape', manual: 'http://example.com/manual.pdf' })
+    );
 
     await TestBed.configureTestingModule({
       imports: [ResourcesComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
