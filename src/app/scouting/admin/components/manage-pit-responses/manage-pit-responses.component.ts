@@ -4,7 +4,6 @@ import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
-import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
@@ -14,7 +13,7 @@ import { ScoutPicDisplayComponent } from '@app/scouting/components/elements/scou
 import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-manage-pit-responses',
-  imports: [BoxComponent, TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
+  imports: [TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
   templateUrl: './manage-pit-responses.component.html',
   styleUrls: ['./manage-pit-responses.component.scss']
 })

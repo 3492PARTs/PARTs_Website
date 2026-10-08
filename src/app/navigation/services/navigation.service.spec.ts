@@ -58,6 +58,12 @@ describe('NavigationService', () => {
       expect(service.allSubPages[0].length).toBeGreaterThan(0);
     });
 
+    it('should include alert types admin sub page', () => {
+      const alertTypesPage = service.allSubPages[0].find(sp => sp.routerlink === '/admin/alert-types');
+      expect(alertTypesPage).toBeDefined();
+      expect(alertTypesPage?.menu_name).toBe('Alert Types');
+    });
+
     it('should have scouting admin sub pages', () => {
       expect(service.allSubPages[1]).toBeDefined();
       expect(service.allSubPages[1].length).toBeGreaterThan(0);
@@ -118,7 +124,7 @@ describe('NavigationService', () => {
       service.setSubPages('/scouting/admin/activity');
       service.subPages.subscribe(pages => {
         expect(pages.length).toBeGreaterThan(0);
-        expect(pages.some(p => p.menu_name === 'Scouting Activity')).toBe(true);
+        expect(pages.some(p => p.menu_name === 'Activity')).toBe(true);
       });
     });
 
@@ -247,12 +253,10 @@ describe('NavigationService', () => {
   });
 
   describe('Nested scouting routes', () => {
-    it('should set scouting admin pages for nested scouting/scouting-admin route', () => {
+    it('should not set sub pages for legacy nested scouting/scouting-admin route', () => {
       service.setSubPages('/scouting/scouting-admin/activity');
       service.subPages.subscribe(pages => {
-        if (pages.length > 0) {
-          expect(pages.some(p => p.menu_name === 'Scouting Activity')).toBe(true);
-        }
+        expect(pages.length).toBe(0);
       });
     });
   });

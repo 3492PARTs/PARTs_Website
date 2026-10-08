@@ -187,12 +187,12 @@ export class ActivityComponent implements OnInit {
     if (sfs.blue_three_id)
       Object.assign(blue_three, sfs.blue_three_id);
 
-    str += sfs.red_one_id ? `R1: ${red_one.get_full_name()}: ${sfs.red_one_check_in ? formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
-    str += sfs.red_two_id ? `R2: ${red_two.get_full_name()}: ${sfs.red_two_check_in ? formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
-    str += sfs.red_three_id ? `R3: ${red_three.get_full_name()}: ${sfs.red_three_check_in ? formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
-    str += sfs.blue_one_id ? `B1: ${blue_one.get_full_name()}: ${sfs.blue_one_check_in ? formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
-    str += sfs.blue_two_id ? `B2: ${blue_two.get_full_name()}: ${sfs.blue_two_check_in ? formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
-    str += sfs.blue_three_id ? `B3: ${blue_three.get_full_name()}: ${sfs.blue_three_check_in ? formatDateString(sfs.blue_three_check_in) : missing}` : '';
+    str += sfs.red_one_id ? `R1: ${red_one.name}: ${sfs.red_one_check_in ? formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
+    str += sfs.red_two_id ? `R2: ${red_two.name}: ${sfs.red_two_check_in ? formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
+    str += sfs.red_three_id ? `R3: ${red_three.name}: ${sfs.red_three_check_in ? formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
+    str += sfs.blue_one_id ? `B1: ${blue_one.name}: ${sfs.blue_one_check_in ? formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
+    str += sfs.blue_two_id ? `B2: ${blue_two.name}: ${sfs.blue_two_check_in ? formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
+    str += sfs.blue_three_id ? `B3: ${blue_three.name}: ${sfs.blue_three_check_in ? formatDateString(sfs.blue_three_check_in) : missing}` : '';
     return str;
   }
 

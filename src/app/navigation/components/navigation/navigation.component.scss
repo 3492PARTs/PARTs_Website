@@ -30,7 +30,7 @@
   flex-direction: row;
 }
 
-:host ::ng-deep nav {
+:host ::ng-deep #app-nav {
   position: fixed;
   z-index: 17;
   top: 0;

@@ -1,204 +1,251 @@
 # Test Coverage Implementation Progress
 
-## Executive Summary
+> **Multi-session document** — Update the "Current Status" section and check off completed items each session before starting work. Run `npm run test:ci` to get fresh metrics.
 
-This branch implements comprehensive test infrastructure and makes significant progress toward 100% code coverage for the PARTs Website Angular application. While complete 100% coverage was not achieved due to the massive scope (138 TypeScript files), the foundation has been laid for systematic test coverage improvement.
+## How to Use This Document
+
+1. **Start of session**: Run `npm run test:ci` to capture fresh metrics. Update "Current Status" section.
+2. **Pick work**: Choose the highest-priority unchecked item from "Remaining Work" below.
+3. **End of session**: Check off completed items, update metrics, commit.
+4. **Command to run tests**: `CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeHeadless`
+
+---
 
 ## Current Status
 
+*Last updated: 2026-07-25*
+
 ### Test Metrics
-- **Total Tests**: 132 (increased from 94)
-- **Passing**: 64 tests (improved from 17)
-- **Failing**: 68 tests (reduced from 77)
-- **Coverage**:
-  - Statements: 12.85% (up from 10.21%)
-  - Branches: 5.7% (up from 3.28%)
-  - Functions: 6.56% (up from 3.76%)
-  - Lines: 13.29% (up from 10.56%)
+| Metric | Previous | **Current** | Goal |
+|--------|----------|-------------|------|
+| Total Tests | 132 | **2002** | — |
+| Passing | 64 | **2002** | 2002 |
+| Failing | 68 | **0** | 0 |
+| Statements | 12.85% | **62.66%** | 100% |
+| Branches | 5.7% | **46.5%** | 100% |
+| Functions | 6.56% | **58.36%** | 100% |
+| Lines | 13.29% | **63.5%** | 100% |
 
-## Work Completed
+### Coverage by Module (current session)
+| Module | Avg% | S% | B% | F% | L% |
+|--------|------|----|----|----|-----|
+| core/services | 90.0 | 91 | 90 | 88 | 91 |
+| shared/pipes | 98.4 | 100 | 94 | 100 | 100 |
+| shared/directives | ~100 | — | — | — | — |
+| attendance/services | 96.4 | 96 | 100 | 92 | 96 |
+| navigation/services | 92.2 | 95 | 88 | 86 | 100 |
+| auth/services | 67.9 | 75 | 46 | 75 | 76 |
+| scouting/services | 40.4 | 39 | 35 | 48 | 40 |
+| user/services | 82.8 | 85 | 60 | 92 | 94 |
+| core/utils | 81.1 | 82 | 74 | 87 | 81 |
+| core/models | 79.8 | 82 | 80 | 75 | 82 |
+| scouting/models | 61.1 | 62 | 58 | 62 | 62 |
 
-### 1. Infrastructure Setup ✅
-- **karma.conf.js**: Created with 100% coverage thresholds enforced
-- **package.json**: Added `test:ci` and `test:coverage` scripts
-- **TESTING.md**: Comprehensive testing documentation with examples for all component types
-- **src/test-helpers.ts**: Reusable mock factories for common services
+---
 
-### 2. Fixed Existing Tests ✅
-- Resolved 8 compilation errors in existing spec files
-- Fixed AppComponent spec with proper mocks
-- Corrected component name imports in 4 spec files
-- Fixed directive tests to use proper constructor parameters
-- Converted 55 spec files from `declarations` to `imports` for standalone components
+## Files at 100% Coverage ✅ (49 files — do not revisit)
 
-### 3. Added New Test Files ✅
-- `auth.guard.spec.ts`: Complete guard testing with all auth states
-- `safe-html.pipe.spec.ts`: Security bypass testing
-- `date-to-str.pipe.spec.ts`: Comprehensive date formatting tests
-- `date-filter.pipe.spec.ts`: Enhanced array filtering tests
-- `str-to-type.pipe.spec.ts`: Type conversion edge cases
+<details>
+<summary>Click to expand full list</summary>
 
-## Remaining Work
+- `admin/components/error-log`
+- `admin/components/meetings`
+- `admin/components/security`
+- `admin/components/team-application-form`
+- `admin/components/team-contact-form`
+- `admin/components/users`
+- `attendance/components/attendance`
+- `calendar/components/calendar`
+- `navigation/components/sub-navigation`
+- `public/components/event-competition`
+- `public/components/first`
+- `public/components/media/build-season`
+- `public/components/media/community-outreach`
+- `public/components/media/competition`
+- `public/components/media/elements/return-card`
+- `public/components/media/media`
+- `public/components/media/wallpapers`
+- `public/components/resources`
+- `scouting/admin/components/manage-field-flow-conditions`
+- `scouting/admin/components/manage-field-flows`
+- `scouting/admin/components/manage-field-question-aggregates`
+- `scouting/admin/components/manage-field-question-conditions`
+- `scouting/admin/components/manage-field-questions`
+- `scouting/admin/components/manage-pit-question-conditions`
+- `scouting/admin/components/manage-pit-questions`
+- `scouting/admin/components/manage-pit-responses`
+- `scouting/admin/components/users`
+- `scouting/components/elements/pit-result-display`
+- `scouting/components/strategizing/metrics`
+- `shared/components/atoms/box`
+- `shared/components/atoms/box-side-nav-wrapper`
+- `shared/components/atoms/button`
+- `shared/components/atoms/button-ribbon`
+- `shared/components/atoms/form`
+- `shared/components/atoms/header`
+- `shared/components/atoms/loading`
+- `shared/components/atoms/main-view`
+- `shared/components/atoms/pagination`
+- `shared/components/atoms/return-link`
+- `shared/components/atoms/tab`
+- `shared/components/elements/blue-banners`
+- `shared/components/elements/question-form-element`
+- `shared/directives/click-inside`
+- `shared/directives/click-outside`
+- `shared/directives/click-outside-element`
+- `shared/directives/full-screen`
+- `shared/directives/linkify`
+- `shared/directives/on-create`
+- `sponsoring/components/sponsoring`
 
-### 1. Fix Failing Tests (68 tests)
-Most failures are due to missing providers. Common fixes needed:
-```typescript
-providers: [
-  provideHttpClient(),
-  provideHttpClientTesting(),
-  provideRouter([])
-]
-```
+</details>
 
-### 2. Add Missing Spec Files (~34 files)
+---
 
-#### Services (11 files)
-- [ ] `auth.service.spec.ts`
-- [ ] `api.service.spec.ts`
-- [ ] `cache.service.spec.ts`
-- [ ] `data.service.spec.ts`
-- [ ] `database.service.spec.ts`
-- [ ] `general.service.spec.ts`
-- [ ] `modal.service.spec.ts`
-- [ ] `navigation.service.spec.ts`
-- [ ] `notifications.service.spec.ts`
-- [ ] `pwa.service.spec.ts`
-- [ ] `scouting.service.spec.ts`
+## Remaining Work (prioritized by impact)
 
-#### Components (~20 files)
-- [ ] Various shared atom components (box, button, modal, table, etc.)
-- [ ] `field-scouting-responses.component.spec.ts`
-- [ ] Other feature components
+Work items are ordered by coverage gap size. Tackle top items first each session.
 
-#### Directives (4 files)
-- [ ] `on-create.directive.spec.ts`
-- [ ] `click-inside.directive.spec.ts`
-- [ ] `click-outside-element.directive.spec.ts`
-- [ ] `click-outside.directive.spec.ts`
+### 🔴 Priority 1 — Critical Low Coverage (<30%)
 
-#### Other (2 files)
-- [ ] `http.interceptor.spec.ts`
-- [ ] `app.initializer.spec.ts`
+- [ ] **`scouting/components/field-scouting`** — 8.5% avg (S:12% B:1% F:11% L:11%)
+- [ ] **`shared/components/atoms/whiteboard`** — 9.4% avg (S:15% B:0% F:7% L:15%)
+- [ ] **`scouting/components/pit-scouting`** — 13.6% avg (S:19% B:4% F:12% L:19%)
+- [ ] **`shared/components/elements/draw-question-svg`** — 14.8% avg (S:20% B:9% F:11% L:19%)
+- [ ] **`shared/components/elements/manage-users`** — 20.6% avg (S:32% B:8% F:13% L:29%)
+- [ ] **`scouting/components/strategizing/matches`** — 20.8% avg (S:26% B:8% F:22% L:27%)
+- [ ] **`scouting/components/strategizing/match-planning`** — 23.9% avg (S:34% B:2% F:27% L:32%)
+- [ ] **`scouting/components/elements/dashboard`** — 26.6% avg (S:36% B:8% F:24% L:39%)
+- [ ] **`user/components/user/profile`** — 28.9% avg (S:36% B:20% F:26% L:34%)
+- [ ] **`sponsoring/components/sponsoring/sponsor-shop`** — 29.4% avg (S:33% B:17% F:39% L:30%)
 
-### 3. Expand Test Coverage
-Existing tests often only have basic "should create" tests. Need to add:
-- Input/Output testing
-- Method testing with all branches
-- Error path testing
-- Edge case testing
-- Template interaction testing
-- Lifecycle hook testing
+### 🟠 Priority 2 — Low Coverage (30–55%)
 
-## How to Continue
+- [ ] **`shared/components/elements/question-aggregate-admin-form`** — 31.8% avg
+- [ ] **`shared/components/elements/meeting-attendance`** — 32.6% avg
+- [ ] **`shared/components/elements/display-question-svg`** — 36.6% avg (B:0%!)
+- [ ] **`shared/components/elements/flow-admin-form`** — 38.3% avg
+- [ ] **`shared/components/elements/question-admin-form`** — 39.4% avg
+- [ ] **`navigation/components/navigation`** — 39.6% avg
+- [ ] **`scouting/admin/components/activity`** — 40.4% avg
+- [ ] **`scouting/services`** — 40.4% avg (S:39% B:35% F:48% L:40%)
+- [ ] **`shared/components/elements/banners`** — 41.0% avg
+- [ ] **`scouting/admin/components/manage-event`** — 41.3% avg
+- [ ] **`public/components/recruitment/team-application`** — 43.9% avg
+- [ ] **`scouting/components/field-scouting-responses`** — 44.5% avg
+- [ ] **`auth/components/login`** — 46.0% avg
+- [ ] **`scouting/admin/components/manage-team`** — 51.9% avg (B:0%!)
+- [ ] **`scouting/components/elements/scout-pic-display`** — 52.6% avg
+- [ ] **`shared/components/elements/flow-condition-admin-form`** — 53.0% avg
+- [ ] **`shared/components/elements/question-condition-admin-form`** — 53.3% avg
+- [ ] **`scouting/components/pit-scouting-responses`** — 53.3% avg
+- [ ] **`shared/components/elements/form-manager`** — 55.5% avg
 
-### Step 1: Fix Failing Tests
-Use the test helper utilities to add proper providers:
+### 🟡 Priority 3 — Medium Coverage (55–80%)
 
-```typescript
-import { getCommonTestProviders, createMockAPIService } from '../test-helpers';
+- [ ] **`shared/components/atoms/table`** — 56.1% avg
+- [ ] **`scouting/components/strategizing/team-notes`** — 57.6% avg
+- [ ] **`scouting/models`** — 61.1% avg
+- [ ] **`scouting/admin/components/manage-match`** — 61.2% avg
+- [ ] **`scouting/components/strategizing/alliance-selection`** — 62.1% avg
+- [ ] **`public/components/contact`** — 62.9% avg
+- [ ] **`auth/services`** — 67.9% avg (B:46%!)
+- [ ] **`scouting/components/scouting-portal`** — 67.9% avg
+- [ ] **`shared/components/atoms/chart`** — 70.9% avg
+- [ ] **`public/components/home`** — 71.5% avg (B:28%!)
+- [ ] **`scouting/admin/components/graph-admin-form`** — 72.4% avg
+- [ ] **`scouting/admin/components/manage-field-form`** — 73.6% avg
+- [ ] **`admin/components/phone-types`** — 75.6% avg
+- [ ] **`shared/components/atoms/form-element`** — 76.6% avg
+- [ ] **`scouting/admin/components/manage-season`** — 77.4% avg
+- [ ] **`admin/components/requested-items`** — 77.4% avg
+- [ ] **`admin/components/alert-types`** — 79.0% avg
+- [ ] **`core/models`** — 79.8% avg
+- [ ] **`core/utils`** — 81.1% avg
+- [ ] **`user/services`** — 82.8% avg
+- [ ] **`admin/components/user-image-approval`** — 81.8% avg
+- [ ] **`shared/components/atoms/side-nav`** — 82.0% avg
+- [ ] **`shared/directives/tooltip`** — 83.8% avg (B:60%!)
+- [ ] **`public/components/about`** — 84.6% avg (S:69%!)
 
-TestBed.configureTestingModule({
-  imports: [MyComponent],
-  providers: [
-    ...getCommonTestProviders(),
-    { provide: APIService, useValue: createMockAPIService() }
-  ]
-});
-```
+### 🟢 Priority 4 — High Coverage (80–99%)
 
-### Step 2: Add Missing Specs
-Follow patterns in TESTING.md for each file type:
-- Services: Use HttpClientTestingModule
-- Components: Shallow tests with mocked dependencies
-- Guards: Test all return paths
-- Interceptors: Test request/response modification
+- [ ] **`shared/components/atoms/form-element-group`** — 91.3% avg
+- [ ] **`public/components/recruitment/electrical`** — 91.9% avg
+- [ ] **`public/components/recruitment/impact`** — 91.9% avg
+- [ ] **`public/components/recruitment/mechanical`** — 91.9% avg
+- [ ] **`scouting/admin/components/schedule`** — 92.1% avg
+- [ ] **`navigation/services`** — 92.2% avg
+- [ ] **`public/components/recruitment/software`** — 92.2% avg
+- [ ] **`shared/components/elements/question-display-form`** — 93.1% avg
+- [ ] **`shared/components/atoms/modal`** — 95.4% avg
+- [ ] **`shared/components/atoms/tab-container`** — 95.5% avg
+- [ ] **`attendance/services`** — 96.4% avg
+- [ ] **`scouting/admin/components/manage-field-responses`** — 96.4% avg
+- [ ] **`public/components/media/elements/albums`** — 96.9% avg
+- [ ] **`shared/pipes`** — 98.4% avg (B:94%)
+- [ ] **`core/services`** — 90.0% avg
 
-### Step 3: Expand Coverage
-For each file, ensure tests cover:
-- All public methods
-- All conditional branches
-- Error scenarios
-- Edge cases (null, empty, boundary values)
-- Async operations (observables, promises)
+### ⚫ Not Yet Tracked in Coverage
+
+- [ ] **`app.component`** — not showing in per-file report; verify coverage
+- [ ] **`core/helpers/app.initializer`** — verify coverage (spec exists)
+- [ ] **`core/helpers/http.interceptor`** — verify coverage (spec exists)
+- [ ] **`core/classes/dexie-crud`** — verify coverage (spec exists)
+- [ ] **`auth/helpers/auth.guard`** — verify coverage (spec exists)
+
+---
+
+## Infrastructure ✅ (completed, no action needed)
+
+- [x] **karma.conf.js**: Coverage thresholds configured
+- [x] **package.json**: `test:ci` and `test:coverage` scripts added
+- [x] **TESTING.md**: Comprehensive testing documentation
+- [x] **src/test-helpers.ts**: Reusable mock factories for common services
+- [x] All spec files created (136/136 source files have spec)
+- [x] All tests passing (2002/2002)
+
+---
 
 ## Testing Commands
 
 ```bash
-# Development testing
+# Run all tests with coverage (use this to update metrics)
+CHROME_BIN=/usr/bin/google-chrome-stable ./node_modules/.bin/ng test --no-watch --code-coverage --browsers=ChromeHeadless
+
+# Development (interactive, watch mode)
 npm test
 
-# CI testing with coverage
-npm run test:ci
-
-# Coverage report only
-npm run test:coverage
-
-# View coverage report
-open coverage/parts-website/index.html
+# View HTML coverage report after running tests
+open coverage/parts_website/index.html  # macOS
+xdg-open coverage/parts_website/index.html  # Linux
 ```
 
-## Architecture Decisions
+---
 
-### 1. Standalone Components
-All components use Angular's standalone component pattern. Tests must use `imports: [Component]` not `declarations: [Component]`.
+## Architecture Notes
 
-### 2. Test Helpers
-Common mocks are centralized in `src/test-helpers.ts` to ensure consistency and reduce duplication.
+- **Standalone components**: All components use Angular standalone pattern. Tests use `imports: [Component]`, not `declarations`.
+- **Test helpers**: Mock factories in `src/test-helpers.ts` — use these instead of creating inline mocks.
+- **Scouting service**: Complex; uses Dexie.js IndexedDB and many HTTP endpoints. Prioritize mocking over real calls.
+- **general.service.ts**: Contains `eval()` — tests exist but this is a known security risk outside testing scope.
+- **Branch coverage** is the weakest metric at 46.5% — prioritize adding `if/else`, `null`, and error path tests.
 
-### 3. Coverage Enforcement
-Karma is configured to enforce 100% coverage thresholds. While currently not met, this ensures the goal is clear.
-
-### 4. Shallow Testing
-Tests follow shallow testing principles - mocking dependencies rather than integration testing.
+---
 
 ## Known Issues
 
-### 1. General Service eval() Warnings
-The `general.service.ts` uses `eval()` which triggers build warnings. This is a security concern and should be refactored, but is outside the scope of testing work.
+1. **`scouting/admin/components/manage-team` branches = 0%** — no branch tests at all; needs `if/else` coverage.
+2. **`shared/components/elements/display-question-svg` branches = 0%** — same issue.
+3. **`shared/components/atoms/whiteboard` branches = 0%** — complex canvas component; may need DOM mocking.
+4. **`auth/services` branches = 46%** — auth flows have many untested conditional paths.
 
-### 2. Complex Components
-Some components (especially scouting-related) are very complex with many dependencies. These will require significant effort to properly test.
-
-### 3. Database Service
-Uses Dexie.js for IndexedDB. Will need specific mocking strategies.
-
-## Recommendations
-
-### Short Term
-1. Prioritize fixing the 68 failing tests (highest ROI)
-2. Add service tests (most critical for business logic)
-3. Add directive tests (currently 0 coverage)
-
-### Medium Term  
-4. Expand component tests beyond "should create"
-5. Add interceptor and initializer tests
-6. Test error paths and edge cases
-
-### Long Term
-7. Integration tests for critical user flows
-8. E2E tests for key scenarios
-9. Visual regression testing
-10. Performance testing
-
-## Estimated Effort
-
-Based on the current state:
-- **Fix failing tests**: 8-12 hours
-- **Add missing spec files**: 20-30 hours
-- **Expand to 100% coverage**: 60-80 hours
-- **Total**: 88-122 hours
-
-This is a substantial engineering effort requiring dedicated focus.
+---
 
 ## Success Criteria
 
-To consider this task complete, the following must be achieved:
-- ✅ All tests pass without errors
-- ✅ Coverage meets 100% thresholds (statements, branches, functions, lines)
-- ✅ `npm run test:ci` succeeds in CI environment
-- ✅ All code paths are tested
-- ✅ Documentation is complete
-
-## Conclusion
-
-Significant progress has been made on test infrastructure and foundation. The path to 100% coverage is clear but requires substantial additional work. The framework, helpers, and documentation are in place for the team to systematically improve coverage over time.
+- [ ] All tests pass (`npm run test:ci` exits 0)
+- [ ] Statements ≥ 100%
+- [ ] Branches ≥ 100%
+- [ ] Functions ≥ 100%
+- [ ] Lines ≥ 100%

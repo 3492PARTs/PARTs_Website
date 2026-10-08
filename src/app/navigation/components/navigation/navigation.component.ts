@@ -9,7 +9,7 @@ import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { NavigationService, NavigationState } from '@app/navigation/services/navigation.service';
-import { Alert, NotificationsService } from '@app/core/services/notifications.service';
+import { NotificationsService } from '@app/core/services/notifications.service';
 import { PwaService } from '@app/core/services/pwa.service';
 import { CompetitionInit } from '@app/public/components/event-competition/event-competition.component';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
@@ -24,6 +24,7 @@ import { ICON_SVG_FRC, ICON_SVG_GITHUB, ICON_SVG_BOOKSTACK } from '@app/core';
 
 import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Alert } from '@app/core/models/alert.models';
 @Component({
   selector: 'app-navigation',
   imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
@@ -227,9 +228,12 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   setSiteBannerHeight(): void {
-    if (this.siteBannersElementRef) {
+    if (this.siteBannersElementRef && this.siteBanners.length > 0) {
       const height = this.siteBannersElementRef.nativeElement.scrollHeight;
       this.siteBannerHeight = height + 'px';
+    }
+    else {
+      this.siteBannerHeight = '0px';
     }
   }
 

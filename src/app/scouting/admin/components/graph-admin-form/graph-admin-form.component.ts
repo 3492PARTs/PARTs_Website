@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
-import { BoxComponent } from "../../../../shared/components/atoms/box/box.component";
 import { FormElementComponent } from "../../../../shared/components/atoms/form-element/form-element.component";
 import { FormElementGroupComponent } from "../../../../shared/components/atoms/form-element-group/form-element-group.component";
 import { TableButtonType, TableColType, TableComponent } from "../../../../shared/components/atoms/table/table.component";
@@ -16,7 +15,7 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, strNoE, updateTableSelectList } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-graph-admin-form',
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [FormElementComponent, FormElementGroupComponent, TableComponent, ModalComponent, FormComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './graph-admin-form.component.html',
   styleUrls: ['./graph-admin-form.component.scss']
 })

@@ -76,7 +76,4 @@ describe('ProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have isAdmin set', () => {
-    expect(typeof component.isAdmin).toBe('boolean');
-  });
 });

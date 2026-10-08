@@ -101,7 +101,8 @@ export function createMockGeneralService() {
     cloneObject: jasmine.createSpy('cloneObject').and.callFake((obj: any) => JSON.parse(JSON.stringify(obj))),
     arrayObjectIndexOf: jasmine.createSpy('arrayObjectIndexOf').and.returnValue(-1),
     strNoE: jasmine.createSpy('strNoE').and.returnValue(false),
-    getNextGsId: jasmine.createSpy('getNextGsId').and.returnValue(1)
+    getNextGsId: jasmine.createSpy('getNextGsId').and.returnValue(1),
+    isMobile: jasmine.createSpy('isMobile').and.returnValue(false),
   };
 }
 

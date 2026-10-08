@@ -1,0 +1,9 @@
+<app-box [Title]="'User Image Approval'">
+  @if (userImages.length > 0) {
+  <app-table [TableCols]="userImageTableCols" [TableData]="userImages" [TableDataButtons]="userImageTableButtons"
+    [EnableFilter]="true" [Scrollable]="true" [Responsive]="true" [ScrollHeight]="'calc(100vh - 24rem)'">
+  </app-table>
+  } @else {
+  <p>No unapproved user images found.</p>
+  }
+</app-box>
