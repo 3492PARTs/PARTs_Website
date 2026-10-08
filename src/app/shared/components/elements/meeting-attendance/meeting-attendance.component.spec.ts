@@ -165,7 +165,7 @@ describe('MeetingAttendanceComponent', () => {
     attendance.meeting = meeting;
     component.attendance = [attendance];
 
-    expect(component.hasAttendance(meeting)).toBeTrue();
+    expect(component.hasAttendedMeeting(meeting)).toBeTrue();
   });
 
   it('showMeetingModal should set a new meeting when no meeting is provided', () => {
