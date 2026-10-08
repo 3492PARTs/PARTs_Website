@@ -42,11 +42,7 @@ describe('FieldScoutingComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId',
-      'incrementOutstandingCalls',
-      'decrementOutstandingCalls',
-      'isMobile',
-      'getAppSize',
+      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'addBanner',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
