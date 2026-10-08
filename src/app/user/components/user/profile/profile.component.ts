@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { User } from '@app/auth/models/user.models';
@@ -27,12 +27,25 @@ import { Banner } from '@app/core';
 
 @Component({
   selector: 'app-profile',
-  imports: [CommonModule, BoxComponent, ModalComponent, FormElementComponent, ButtonRibbonComponent, TabComponent, TabContainerComponent, TableComponent, ButtonComponent, FormComponent, DateToStrPipe, ImageCropperComponent],
+  imports: [
+    CommonModule,
+    BoxComponent,
+    ModalComponent,
+    FormElementComponent,
+    ButtonRibbonComponent,
+    TabComponent,
+    TabContainerComponent,
+    TableComponent,
+    ButtonComponent,
+    FormComponent,
+    DateToStrPipe,
+    ImageCropperComponent,
+  ],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-
   // Expose Utils to template
   Utils = Utils;
 
@@ -42,8 +55,10 @@ export class ProfileComponent implements OnInit {
 
   editProfileImageModalVisible = false;
   showCropper = false;
-  @ViewChild('EditProfileImageModalButtonRibbon', { read: ElementRef, static: false }) editProfileImageModalButtonRibbon!: ElementRef;
-  @ViewChild('EditProfileImageModalCropper', { read: ElementRef, static: false }) editProfileImageModalCropper!: ElementRef;
+  @ViewChild('EditProfileImageModalButtonRibbon', { read: ElementRef, static: false })
+  editProfileImageModalButtonRibbon!: ElementRef;
+  @ViewChild('EditProfileImageModalCropper', { read: ElementRef, static: false })
+  editProfileImageModalCropper!: ElementRef;
 
   imageChangedEvent: any = '';
   croppedImage: Blob | undefined | null = undefined;
@@ -54,7 +69,6 @@ export class ProfileComponent implements OnInit {
     { PropertyName: 'subject', ColLabel: 'Subject' },
     { PropertyName: 'body', ColLabel: 'Message' },
     { PropertyName: 'staged_time', ColLabel: 'Sent' },
-
   ];
   notifications: Alert[] = [];
   messages: Alert[] = [];
@@ -64,18 +78,22 @@ export class ProfileComponent implements OnInit {
 
   activeTab = '';
 
-  constructor(private auth: AuthService,
+  constructor(
+    private auth: AuthService,
     public gs: GeneralService,
     private api: APIService,
     private renderer: Renderer2,
     private ns: NotificationsService,
-    private route: ActivatedRoute, private modalService: ModalService, private us: UserService) {
+    private route: ActivatedRoute,
+    private modalService: ModalService,
+    private us: UserService
+  ) {
     this.route.queryParamMap.subscribe(queryParams => {
       this.activeTab = queryParams.get('tab') || '';
     });
 
-    this.ns.notifications.subscribe(ns => this.notifications = ns);
-    this.ns.messages.subscribe(ms => this.messages = ms);
+    this.ns.notifications.subscribe(ns => (this.notifications = ns));
+    this.ns.messages.subscribe(ms => (this.messages = ms));
   }
 
   ngOnInit(): void {
@@ -87,16 +105,14 @@ export class ProfileComponent implements OnInit {
         this.editUser = cloneObject(u) as User;
         //console.log(this.editUser);
       });
-    }
-    else {
+    } else {
       this.us.getUsers().then(u => {
         if (u) {
           const usr = u.find(usr => usr.id === parseInt(userId!));
           if (usr) {
             this.user = usr;
             this.editUser = cloneObject(usr) as User;
-          }
-          else this.modalService.triggerError('User not found.');
+          } else this.modalService.triggerError('User not found.');
         }
       });
     }
@@ -112,11 +128,10 @@ export class ProfileComponent implements OnInit {
       const imageFile = new File([this.croppedImage], imageName, { type: this.croppedImage.type });
 
       this.gs.addBanner(new Banner('New profile images are pending approval.', 5000));
-      await resizeImageToMaxSize(imageFile, .2).then(async resizedPic => {
+      await resizeImageToMaxSize(imageFile, 0.2).then(async resizedPic => {
         form.append('image', resizedPic, imageFile.name);
       });
-    }
-    else if (!strNoE(this.input.password)) {
+    } else if (!strNoE(this.input.password)) {
       if (this.input.password === this.input.passwordConfirm) {
         form.append('password', this.input.password);
       } else {
@@ -129,17 +144,23 @@ export class ProfileComponent implements OnInit {
     form.append('email', this.editUser.email);
     form.append('id', this.editUser.id.toString());
 
-    this.api.put(true, 'user/profile/', form, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
+    this.api.put(
+      true,
+      'user/profile/',
+      form,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
 
-      this.auth.getUserObject();
-      this.userProfileImage = null;
-      this.input = new UserData();
-      this.gs.decrementOutstandingCalls();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-      this.gs.decrementOutstandingCalls();
-    });
+        this.auth.getUserObject();
+        this.userProfileImage = null;
+        this.input = new UserData();
+        this.gs.decrementOutstandingCalls();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+        this.gs.decrementOutstandingCalls();
+      }
+    );
   }
 
   /*---- Profile Image Helpers ----*/
@@ -180,11 +201,7 @@ export class ProfileComponent implements OnInit {
     if (this.editProfileImageModalButtonRibbon && this.editProfileImageModalCropper) {
       const height = this.editProfileImageModalButtonRibbon.nativeElement.children[0].scrollHeight;
       const heightStr = 'calc(100vh - (1em + 2.813em + 2em + ' + height + 'px))';
-      this.renderer.setStyle(
-        this.editProfileImageModalCropper.nativeElement,
-        'height',
-        heightStr
-      );
+      this.renderer.setStyle(this.editProfileImageModalCropper.nativeElement, 'height', heightStr);
     }
   }
 

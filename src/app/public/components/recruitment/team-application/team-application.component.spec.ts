@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -24,13 +24,25 @@ describe('TeamApplicationComponent', () => {
   beforeEach(async () => {
     authInFlight = new BehaviorSubject<number>(AuthCallStates.comp);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ retMessage: 'ok' }); return Promise.resolve({ retMessage: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb([]);
+      return Promise.resolve([]) as any;
+    });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ retMessage: 'ok' });
+      return Promise.resolve({ retMessage: 'ok' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'addBanner', 'navigateByUrl',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
+      'addBanner',
+      'navigateByUrl',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
@@ -38,7 +50,7 @@ describe('TeamApplicationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TeamApplicationComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -70,7 +82,12 @@ describe('TeamApplicationComponent', () => {
   });
 
   it('applicationInit error should call triggerError', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => { if (errCb) errCb('err'); return Promise.resolve() as any; });
+    mockAPI.get.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => {
+        if (errCb) errCb('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.applicationInit();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -82,7 +99,12 @@ describe('TeamApplicationComponent', () => {
   });
 
   it('save error should call triggerError', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => { if (errCb) errCb('err'); return Promise.resolve() as any; });
+    mockAPI.post.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => {
+        if (errCb) errCb('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.save();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -20,17 +20,16 @@ describe('RequestedItemsComponent', () => {
   let generalServiceSpy: any;
 
   beforeEach(() => {
-
     authInFlightSubject = new BehaviorSubject<AuthCallStates>(AuthCallStates.prcs);
     mockAuthService = { authInFlight: authInFlightSubject.asObservable() };
 
     apiServiceSpy = {
-      get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([]) }
-      ),
-      post: jasmine.createSpy('post').and.callFake(
-        (_a: boolean, _u: string, _d: any, fn: Function) => { if (fn) fn({}) }
-      )
+      get: jasmine.createSpy('get').and.callFake((_a: boolean, _u: string, _p: any, fn: Function) => {
+        if (fn) fn([]);
+      }),
+      post: jasmine.createSpy('post').and.callFake((_a: boolean, _u: string, _d: any, fn: Function) => {
+        if (fn) fn({});
+      }),
     };
 
     generalServiceSpy = {
@@ -44,14 +43,14 @@ describe('RequestedItemsComponent', () => {
     TestBed.configureTestingModule({
       imports: [RequestedItemsComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
         { provide: AuthService, useValue: mockAuthService },
         { provide: APIService, useValue: apiServiceSpy },
         { provide: GeneralService, useValue: generalServiceSpy },
-      ]
+      ],
     });
     fixture = TestBed.createComponent(RequestedItemsComponent);
     component = fixture.componentInstance;
@@ -72,18 +71,16 @@ describe('RequestedItemsComponent', () => {
     it('calls getItems when state is comp', () => {
       apiServiceSpy.get.calls.reset();
       authInFlightSubject.next(AuthCallStates.comp);
-      expect(apiServiceSpy.get).toHaveBeenCalledWith(
-        true, 'sponsoring/get-items/', undefined, jasmine.any(Function)
-      );
+      expect(apiServiceSpy.get).toHaveBeenCalledWith(true, 'sponsoring/get-items/', undefined, jasmine.any(Function));
     });
   });
 
   describe('getItems', () => {
     it('calls api.get and populates items', () => {
       const item: Item = Object.assign(new Item(), { item_id: 1, item_nm: 'Bolt' });
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([item]) }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p: any, fn: Function) => {
+        if (fn) fn([item]);
+      });
       component.getItems();
       expect(component.items).toEqual([item]);
     });
@@ -109,7 +106,10 @@ describe('RequestedItemsComponent', () => {
       component.itemModalVisible = true;
       component.saveItem();
       expect(apiServiceSpy.post).toHaveBeenCalledWith(
-        true, 'sponsoring/save-item/', jasmine.any(FormData), jasmine.any(Function)
+        true,
+        'sponsoring/save-item/',
+        jasmine.any(FormData),
+        jasmine.any(Function)
       );
       expect(component.itemModalVisible).toBeFalse();
     });
@@ -132,9 +132,7 @@ describe('RequestedItemsComponent', () => {
       const fakeFile = {} as any;
       component.activeItem.img = fakeFile;
       component.previewImageFile();
-      expect(generalServiceSpy.previewImageFile).toHaveBeenCalledWith(
-        fakeFile, jasmine.any(Function)
-      );
+      expect(generalServiceSpy.previewImageFile).toHaveBeenCalledWith(fakeFile, jasmine.any(Function));
     });
   });
 

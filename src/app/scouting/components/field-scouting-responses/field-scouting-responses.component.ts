@@ -1,6 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { ScoutFieldResponsesReturn, ScoutPitResponse, TeamNote, ScoutPitResponsesReturn, Col } from '@app/scouting/models/scouting.models';
+import {
+  ScoutFieldResponsesReturn,
+  ScoutPitResponse,
+  TeamNote,
+  ScoutPitResponsesReturn,
+  Col,
+} from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -14,18 +20,37 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { PitResultDisplayComponent } from '@app/scouting/components/elements/pit-result-display/pit-result-display.component';
 import { CommonModule } from '@angular/common';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
-import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { cloneObject, downloadFileAs, formatDateString, isNumber, returnIfValidDate, strNoE, triggerChange } from '@app/core/utils/utils.functions';
+import {
+  cloneObject,
+  downloadFileAs,
+  formatDateString,
+  isNumber,
+  returnIfValidDate,
+  strNoE,
+  triggerChange,
+} from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting-responses',
-  imports: [BoxComponent, FormElementComponent, FormElementGroupComponent, ButtonComponent, TableComponent, ModalComponent, PitResultDisplayComponent, CommonModule, DateToStrPipe, ButtonRibbonComponent],
+  imports: [
+    BoxComponent,
+    FormElementComponent,
+    FormElementGroupComponent,
+    ButtonComponent,
+    TableComponent,
+    ModalComponent,
+    PitResultDisplayComponent,
+    CommonModule,
+    DateToStrPipe,
+    ButtonRibbonComponent,
+  ],
   templateUrl: './field-scouting-responses.component.html',
-  styleUrls: ['./field-scouting-responses.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./field-scouting-responses.component.scss'],
 })
 export class FieldScoutingResponsesComponent implements OnInit {
-
   scoutResponses: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
   scoutResponseColumns: Col[] = [];
 
@@ -47,13 +72,16 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   teamNotes: TeamNote[] = [];
 
-  constructor(private api: APIService,
+  constructor(
+    private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService, private modalService: ModalService) { }
+    private ss: ScoutingService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.init() : null));
   }
 
   init(forceCall = false): void {
@@ -130,19 +158,25 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
   async getTeamInfo(row: any) {
     this.gs.incrementOutstandingCalls();
-    await this.ss.getFieldResponseFromCache(f => f.where({ 'team_id': row['team_id'] })).then(sprs => {
-      this.teamScoutResults = sprs;
-    });
+    await this.ss
+      .getFieldResponseFromCache(f => f.where({ team_id: row['team_id'] }))
+      .then(sprs => {
+        this.teamScoutResults = sprs;
+      });
 
-    await this.ss.getPitResponsesFromCache(f => f.where({ 'team_no': row['team_id'] })).then(sprs => {
-      if (sprs[0]) {
-        this.teamScoutPitResult = sprs[0];
-      }
-    });
+    await this.ss
+      .getPitResponsesFromCache(f => f.where({ team_no: row['team_id'] }))
+      .then(sprs => {
+        if (sprs[0]) {
+          this.teamScoutPitResult = sprs[0];
+        }
+      });
 
-    await this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_id': row['team_id'] })).then(tns => {
-      this.teamNotes = tns;
-    });
+    await this.ss
+      .getTeamNotesFromCache(tn => tn.where({ team_id: row['team_id'] }))
+      .then(tns => {
+        this.teamNotes = tns;
+      });
 
     this.teamScoutResultsModalVisible = true;
     this.gs.decrementOutstandingCalls();
@@ -164,7 +198,6 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
       this.scoutTableCols = tmp;
     }, 500);
-
   }
 
   resetTableColumns(): void {
@@ -183,16 +216,22 @@ export class FieldScoutingResponsesComponent implements OnInit {
 
     if (!strNoE(this.filterRank)) {
       for (let i = 0; i < this.scoutResponses.scoutAnswers.length; i++) {
-        temp = temp.filter(r => (this.filterAboveRank && r.rank <= (this.filterRank || 0)) || (!this.filterAboveRank && r.rank >= (this.filterRank || 0)))
+        temp = temp.filter(
+          r =>
+            (this.filterAboveRank && r.rank <= (this.filterRank || 0)) ||
+            (!this.filterAboveRank && r.rank >= (this.filterRank || 0))
+        );
       }
     }
 
-    if (!strNoE(this.filterRankGTE)) { //get those in a range of ranks
-      temp = temp.filter(r => r.rank >= (this.filterRankGTE || 0))
+    if (!strNoE(this.filterRankGTE)) {
+      //get those in a range of ranks
+      temp = temp.filter(r => r.rank >= (this.filterRankGTE || 0));
     }
 
-    if (!strNoE(this.filterRankLTE)) { //get those in a range of ranks
-      temp = temp.filter(r => r.rank <= (this.filterRankLTE || 0))
+    if (!strNoE(this.filterRankLTE)) {
+      //get those in a range of ranks
+      temp = temp.filter(r => r.rank <= (this.filterRankLTE || 0));
     }
 
     this.scoutTableRows = temp;
@@ -213,20 +252,16 @@ export class FieldScoutingResponsesComponent implements OnInit {
   }
 }
 
-
 export function formatFieldRecord(rec: any): any {
   if (Array.isArray(rec)) {
     let s = '';
     let sum = 0;
     rec.forEach(r => {
       if (Object.hasOwn(r, 'round') && Object.hasOwn(r, 'value')) {
-
-
         let point = null;
         try {
           point = JSON.parse(r['value']);
-        }
-        catch {
+        } catch {
           point = null;
         }
 
@@ -234,15 +269,12 @@ export function formatFieldRecord(rec: any): any {
 
         s += `Rnd${r['round']}: ${isPoint ? 1 : r['value']}\n`;
 
-        sum += (isNumber(r['value']) ? parseFloat(r['value']) : isPoint ? 1 : 0);
-      }
-      else
-        s += `${JSON.stringify(rec)}\n`;
+        sum += isNumber(r['value']) ? parseFloat(r['value']) : isPoint ? 1 : 0;
+      } else s += `${JSON.stringify(rec)}\n`;
     });
     s += `Sum: ${sum}`;
     return s;
-  }
-  else {
+  } else {
     const dt = returnIfValidDate(rec);
     if (dt) return formatDateString(dt);
     else return rec;

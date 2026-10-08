@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -31,7 +31,10 @@ describe('PitScoutingComponent', () => {
     outstandingResponsesUploaded = new Subject<number>();
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
     mockAPI.apiStatus = new BehaviorSubject<any>(null).asObservable();
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext([]); return Promise.resolve([]); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext([]);
+      return Promise.resolve([]);
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
@@ -40,8 +43,13 @@ describe('PitScoutingComponent', () => {
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'loadTeams', 'loadPitScoutingForm', 'savePitScoutingResponse',
-      'uploadOutstandingResponses', 'getFieldFormFormFromCache', 'getTeamsFromCache',
+      'loadAllScoutingInfo',
+      'loadTeams',
+      'loadPitScoutingForm',
+      'savePitScoutingResponse',
+      'uploadOutstandingResponses',
+      'getFieldFormFormFromCache',
+      'getTeamsFromCache',
       'getScoutingQuestionsFromCache',
     ]);
     mockSS.outstandingResponsesUploaded = outstandingResponsesUploaded.asObservable();
@@ -59,13 +67,15 @@ describe('PitScoutingComponent', () => {
       RemoveAsync: jasmine.createSpy('RemoveAsync').and.returnValue(Promise.resolve()),
     } as any;
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerError', 'triggerConfirm', 'successfulResponseBanner',
+      'triggerError',
+      'triggerConfirm',
+      'successfulResponseBanner',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [PitScoutingComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

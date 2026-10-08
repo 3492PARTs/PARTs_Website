@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { BlueBannersComponent } from './blue-banners.component';
 import { AppSize } from '@app/core/utils/utils.functions';
@@ -14,13 +13,8 @@ describe('BlueBannerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BlueBannersComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-      .compileComponents();
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BlueBannersComponent);
     component = fixture.componentInstance;
@@ -58,11 +52,11 @@ describe('BlueBannerComponent', () => {
 
   it('should update screen size on window resize', () => {
     const initialSize = component.screenSize;
-    
+
     // Trigger resize event
     window.dispatchEvent(new Event('resize'));
     fixture.detectChanges();
-    
+
     // Screen size should be set (may or may not change depending on actual window size)
     expect(component.screenSize).toBeDefined();
   });
@@ -72,9 +66,9 @@ describe('BlueBannerComponent', () => {
       'FIRST IMPACT AWARD',
       'WINNER',
       'ENGINEERING INSPIRATION AWARD',
-      'WOODIE FLOWERS FINALIST AWARD'
+      'WOODIE FLOWERS FINALIST AWARD',
     ];
-    
+
     const awardTitles = component.awards.map(a => a.title);
     expectedAwards.forEach(expected => {
       expect(awardTitles).toContain(expected);

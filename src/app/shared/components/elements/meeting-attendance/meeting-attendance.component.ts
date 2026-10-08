@@ -1,13 +1,21 @@
-import { Component, HostListener, Input, OnInit, ViewChild, inject } from '@angular/core';
-import { ModalComponent } from "../../atoms/modal/modal.component";
-import { FormComponent } from "../../atoms/form/form.component";
-import { FormElementComponent } from "../../atoms/form-element/form-element.component";
-import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
-import { ButtonComponent } from "../../atoms/button/button.component";
-import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
-import { TableButtonType, TableColType, TableComponent } from "../../atoms/table/table.component";
-import { BoxComponent } from "../../atoms/box/box.component";
-import { Attendance, AttendanceApprovalType, AttendanceDirection, AttendanceReport, Meeting, MeetingHours, MeetingType } from '@app/attendance/models/attendance.models';
+import { Component, HostListener, Input, OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import { ModalComponent } from '../../atoms/modal/modal.component';
+import { FormComponent } from '../../atoms/form/form.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
+import { TableButtonType, TableColType, TableComponent } from '../../atoms/table/table.component';
+import { BoxComponent } from '../../atoms/box/box.component';
+import {
+  Attendance,
+  AttendanceApprovalType,
+  AttendanceDirection,
+  AttendanceReport,
+  Meeting,
+  MeetingHours,
+  MeetingType,
+} from '@app/attendance/models/attendance.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService } from '@app/auth/services/auth.service';
@@ -16,7 +24,14 @@ import { UserService } from '@app/user/services/user.service';
 import { environment } from '../../../../../environments/environment';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { AppSize, cloneObject, decodeYesNoBoolean, updateOrAddObjectInArray as addOrUpdateObjectInArray, buildEndpointUrl, strNoE } from '@app/core/utils/utils.functions';
+import {
+  AppSize,
+  cloneObject,
+  decodeYesNoBoolean,
+  updateOrAddObjectInArray as addOrUpdateObjectInArray,
+  buildEndpointUrl,
+  strNoE,
+} from '@app/core/utils/utils.functions';
 import { AttendanceService } from '@app/attendance/services/attendance.service';
 import { MeetingService } from '@app/admin/services/meeting.service';
 import { CommonModule, DOCUMENT } from '@angular/common';
@@ -26,12 +41,25 @@ import { QrCodeDownloadComponent } from '../qr-code-download/qr-code-download.co
 import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-meeting-attendance',
-  imports: [ModalComponent, FormComponent, FormElementComponent, ButtonRibbonComponent, ButtonComponent, FormElementGroupComponent, TableComponent, BoxComponent, RemovedFilterPipe, CommonModule, LoadingComponent, QrCodeDownloadComponent],
+  imports: [
+    ModalComponent,
+    FormComponent,
+    FormElementComponent,
+    ButtonRibbonComponent,
+    ButtonComponent,
+    FormElementGroupComponent,
+    TableComponent,
+    BoxComponent,
+    RemovedFilterPipe,
+    CommonModule,
+    LoadingComponent,
+    QrCodeDownloadComponent,
+  ],
   templateUrl: './meeting-attendance.component.html',
-  styleUrls: ['./meeting-attendance.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./meeting-attendance.component.scss'],
 })
 export class MeetingAttendanceComponent implements OnInit {
-
   @Input() AdminInterface = false;
 
   private readonly documentRef = inject(DOCUMENT);
@@ -40,10 +68,18 @@ export class MeetingAttendanceComponent implements OnInit {
 
   users: User[] = [];
 
-  meetingFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Future', value: 'future' }, { property: 'Past', value: 'past' }];
+  meetingFilterOptions = [
+    { property: 'All', value: 'all' },
+    { property: 'Future', value: 'future' },
+    { property: 'Past', value: 'past' },
+  ];
   meetingFilterOption = 'future';
 
-  meetingTypeOptions: MeetingType[] = [{ meeting_typ: 'reg', meeting_nm: 'Regular' }, { meeting_typ: 'evnt', meeting_nm: 'Event' }, { meeting_typ: 'bns', meeting_nm: 'Bonus' }];
+  meetingTypeOptions: MeetingType[] = [
+    { meeting_typ: 'reg', meeting_nm: 'Regular' },
+    { meeting_typ: 'evnt', meeting_nm: 'Event' },
+    { meeting_typ: 'bns', meeting_nm: 'Bonus' },
+  ];
   meetings: Meeting[] = [];
   meetingsTableCols: TableColType[] = [
     { PropertyName: 'title', ColLabel: 'Title' },
@@ -53,17 +89,45 @@ export class MeetingAttendanceComponent implements OnInit {
     { PropertyName: 'meeting_typ.meeting_nm', ColLabel: 'Type' },
   ];
   meetingsTableButtons: TableButtonType[] = [
-    new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hasAttendedMeeting.bind(this), '', '', 'danger'),
-    new TableButtonType('account-arrow-down-outline', this.attendMeeting.bind(this), 'Check In', undefined, undefined, this.hasAttendedMeeting.bind(this), '', '', 'success'),
-    new TableButtonType('account-arrow-up-outline', this.leaveMeeting.bind(this), 'Check Out', undefined, undefined, this.hasLeftMeeting.bind(this), '', '', 'warning'),
+    new TableButtonType(
+      'account-alert',
+      this.markAbsent.bind(this),
+      'Mark Absent',
+      undefined,
+      undefined,
+      this.hasAttendedMeeting.bind(this),
+      '',
+      '',
+      'danger'
+    ),
+    new TableButtonType(
+      'account-arrow-down-outline',
+      this.attendMeeting.bind(this),
+      'Check In',
+      undefined,
+      undefined,
+      this.hasAttendedMeeting.bind(this),
+      '',
+      '',
+      'success'
+    ),
+    new TableButtonType(
+      'account-arrow-up-outline',
+      this.leaveMeeting.bind(this),
+      'Check Out',
+      undefined,
+      undefined,
+      this.hasLeftMeeting.bind(this),
+      '',
+      '',
+      'warning'
+    ),
   ];
   meetingModalVisible = false;
   meeting = new Meeting();
   triggerMeetingTableUpdate = false;
   meetingAttendance: Attendance[] = [];
-  meetingAttendanceTableCols: TableColType[] = [
-
-  ];
+  meetingAttendanceTableCols: TableColType[] = [];
 
   attendanceReport = new AttendanceReport();
   attendanceReports: AttendanceReport[] = [];
@@ -71,13 +135,17 @@ export class MeetingAttendanceComponent implements OnInit {
 
   reportAttendanceModalVisible = false;
   reportAttendance: Attendance[] = [];
-  reportAttendanceTableCols: TableColType[] = [
-
-  ];
+  reportAttendanceTableCols: TableColType[] = [];
 
   totalMeetingHours = new MeetingHours();
 
-  attendanceFilterOptions = [{ property: 'All', value: 'all' }, { property: 'Unapproved', value: 'unapp' }, { property: 'Approved', value: 'app' }, { property: 'Rejected', value: 'rej' }, { property: 'Exempt', value: 'exmpt' }];
+  attendanceFilterOptions = [
+    { property: 'All', value: 'all' },
+    { property: 'Unapproved', value: 'unapp' },
+    { property: 'Approved', value: 'app' },
+    { property: 'Rejected', value: 'rej' },
+    { property: 'Exempt', value: 'exmpt' },
+  ];
   attendanceFilterOption = 'all';
 
   attendanceLoading = false;
@@ -86,31 +154,98 @@ export class MeetingAttendanceComponent implements OnInit {
   attendanceTableCols: TableColType[] = [];
   attendanceTableButtons: TableButtonType[] = [];
   attendanceModalVisible = false;
-  attendanceApprovalTypeOptions: AttendanceApprovalType[] = [{ approval_typ: 'unapp', approval_nm: 'Unapproved' }, { approval_typ: 'app', approval_nm: 'Approved' }, { approval_typ: 'rej', approval_nm: 'Rejected' }, { approval_typ: 'exmpt', approval_nm: 'Exempt' }];
+  attendanceApprovalTypeOptions: AttendanceApprovalType[] = [
+    { approval_typ: 'unapp', approval_nm: 'Unapproved' },
+    { approval_typ: 'app', approval_nm: 'Approved' },
+    { approval_typ: 'rej', approval_nm: 'Rejected' },
+    { approval_typ: 'exmpt', approval_nm: 'Exempt' },
+  ];
 
   private outColor = '#ffc107ff';
   private inColor = '#28a745FF';
   @ViewChild(QrCodeDownloadComponent) qrCodeDownload?: QrCodeDownloadComponent;
 
-  constructor(private api: APIService, private auth: AuthService, private gs: GeneralService, private userService: UserService, private modalService: ModalService, private attendanceService: AttendanceService, private meetingService: MeetingService, private route: ActivatedRoute) {
-
-  }
+  constructor(
+    private api: APIService,
+    private auth: AuthService,
+    private gs: GeneralService,
+    private userService: UserService,
+    private modalService: ModalService,
+    private attendanceService: AttendanceService,
+    private meetingService: MeetingService,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.attendanceTableButtons = [
-      new TableButtonType('edit', this.showAttendanceModal.bind(this), 'Edit', undefined, undefined, this.hideAttendanceEditDeleteButton.bind(this)),
-      new TableButtonType('delete', this.removeAttendance.bind(this), 'Delete', undefined, undefined, this.hideAttendanceEditDeleteButton.bind(this)),
+      new TableButtonType(
+        'edit',
+        this.showAttendanceModal.bind(this),
+        'Edit',
+        undefined,
+        undefined,
+        this.hideAttendanceEditDeleteButton.bind(this)
+      ),
+      new TableButtonType(
+        'delete',
+        this.removeAttendance.bind(this),
+        'Delete',
+        undefined,
+        undefined,
+        this.hideAttendanceEditDeleteButton.bind(this)
+      ),
 
-
-      new TableButtonType('account-alert', this.markAbsent.bind(this), 'Mark Absent', undefined, undefined, this.hideAbsentButton.bind(this)),
-      new TableButtonType('account-arrow-up-outline', this.checkOut.bind(this), 'Check Out', undefined, undefined, this.hideCheckOutButton.bind(this), '', '', 'warning'),
-      new TableButtonType('check-decagram-outline', this.attendanceService.approveAttendance.bind(this), 'Approve', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'success'),
-      new TableButtonType('alert-decagram-outline', this.attendanceService.rejectAttendance.bind(this), 'Reject', undefined, undefined, this.hideApproveRejectAttendance.bind(this), '', '', 'danger'),
+      new TableButtonType(
+        'account-alert',
+        this.markAbsent.bind(this),
+        'Mark Absent',
+        undefined,
+        undefined,
+        this.hideAbsentButton.bind(this)
+      ),
+      new TableButtonType(
+        'account-arrow-up-outline',
+        this.checkOut.bind(this),
+        'Check Out',
+        undefined,
+        undefined,
+        this.hideCheckOutButton.bind(this),
+        '',
+        '',
+        'warning'
+      ),
+      new TableButtonType(
+        'check-decagram-outline',
+        this.attendanceService.approveAttendance.bind(this),
+        'Approve',
+        undefined,
+        undefined,
+        this.hideApproveRejectAttendance.bind(this),
+        '',
+        '',
+        'success'
+      ),
+      new TableButtonType(
+        'alert-decagram-outline',
+        this.attendanceService.rejectAttendance.bind(this),
+        'Reject',
+        undefined,
+        undefined,
+        this.hideApproveRejectAttendance.bind(this),
+        '',
+        '',
+        'danger'
+      ),
     ];
 
     this.attendanceReportTableCols = [
       { PropertyName: 'reg_time', ColLabel: 'Meeting Hours' },
-      { PropertyName: 'reg_time_percentage', ColLabel: ' Meeting Hours %', Type: 'percent', ColorFunction: this.attendanceReportBelowThresholdColor.bind(this) },
+      {
+        PropertyName: 'reg_time_percentage',
+        ColLabel: ' Meeting Hours %',
+        Type: 'percent',
+        ColorFunction: this.attendanceReportBelowThresholdColor.bind(this),
+      },
       { PropertyName: 'event_time', ColLabel: 'Event Hours' },
       { PropertyName: 'event_time_percentage', ColLabel: 'Event Hours %', Type: 'percent' },
     ];
@@ -120,18 +255,19 @@ export class MeetingAttendanceComponent implements OnInit {
     this.auth.user.subscribe(u => {
       this.user = !Number.isNaN(u.id) ? u : undefined;
       if (!this.AdminInterface && this.user !== undefined) calls.push(this.getAttendance());
-    }
-    );
+    });
 
     if (this.isAdminInterface()) {
       this.attendanceReportTableCols = [
         { PropertyName: 'user.name', ColLabel: 'User' },
-        ...this.attendanceReportTableCols
+        ...this.attendanceReportTableCols,
       ];
     }
     if (this.AdminInterface) {
       calls.push(this.getAttendance(undefined, undefined, false));
-      calls.push(this.userService.getUsers(1, environment.production ? 0 : 1).then(result => this.users = result ? result : []));
+      calls.push(
+        this.userService.getUsers(1, environment.production ? 0 : 1).then(result => (this.users = result ? result : []))
+      );
     }
     calls.push(this.getMeetings());
 
@@ -148,18 +284,13 @@ export class MeetingAttendanceComponent implements OnInit {
                 if (activeMeeting) {
                   if (this.hasAttendedMeeting(activeMeeting) && !this.hasLeftMeeting(activeMeeting))
                     this.leaveMeeting(activeMeeting);
-                }
-                else if (activeAttendance)
-                  this.checkOut(activeAttendance);
+                } else if (activeAttendance) this.checkOut(activeAttendance);
 
                 break;
               case 'in':
                 if (activeMeeting) {
-                  if (!this.hasAttendedMeeting(activeMeeting))
-                    this.attendMeeting(activeMeeting);
-                }
-                else if (!activeAttendance)
-                  this.checkIn();
+                  if (!this.hasAttendedMeeting(activeMeeting)) this.attendMeeting(activeMeeting);
+                } else if (!activeAttendance) this.checkIn();
                 break;
             }
           }
@@ -167,8 +298,7 @@ export class MeetingAttendanceComponent implements OnInit {
       }
     });
 
-    if (this.AdminInterface)
-      this.attendanceFilterOption = 'unapp';
+    if (this.AdminInterface) this.attendanceFilterOption = 'unapp';
 
     this.setAttendanceTableCols();
 
@@ -197,8 +327,7 @@ export class MeetingAttendanceComponent implements OnInit {
         if (a.void_ind === 'y') {
           this.getAttendance(undefined, undefined, false);
           if (this.meetingModalVisible) this.getAttendance(this.meeting, undefined, false);
-        }
-        else {
+        } else {
           this.attendance = [...addOrUpdateObjectInArray(this.attendance, 'id', result)];
           this.meetingAttendance = [...addOrUpdateObjectInArray(this.meetingAttendance, 'id', result)];
         }
@@ -222,25 +351,26 @@ export class MeetingAttendanceComponent implements OnInit {
   getAttendance(meeting?: Meeting, user?: User, loadingScreen = true): Promise<void | null> {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
-      if (this.user)
-        u = this.user;
+      if (this.user) u = this.user;
       else {
-        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
-        return new Promise<void | null>((resolve, reject) => { resolve(null); });
+        this.modalService.triggerError("No user, couldn't get attendance see a mentor.");
+        return new Promise<void | null>((resolve, reject) => {
+          resolve(null);
+        });
       }
 
     if (user) u = user;
 
     this.attendanceLoading = true;
-    return this.attendanceService.getAttendance(u, meeting, loadingScreen).then((result: Attendance[]) => {
-      if (meeting)
-        this.meetingAttendance = result;
-      else if (user)
-        this.reportAttendance = result;
-      else
-        this.attendance = result;
-      this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
-    }).finally(() => this.attendanceLoading = false);
+    return this.attendanceService
+      .getAttendance(u, meeting, loadingScreen)
+      .then((result: Attendance[]) => {
+        if (meeting) this.meetingAttendance = result;
+        else if (user) this.reportAttendance = result;
+        else this.attendance = result;
+        this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
+      })
+      .finally(() => (this.attendanceLoading = false));
 
     //if (!meeting) this.getAttendanceReport();
   }
@@ -250,14 +380,12 @@ export class MeetingAttendanceComponent implements OnInit {
       attendance.void_ind = 'y';
       this.saveAttendance(attendance);
     });
-
   }
 
   showAttendanceModal(attendance?: Attendance, meeting?: Meeting): void {
     this.attendanceEntry = attendance ? cloneObject(attendance) : new Attendance();
 
-    if (meeting)
-      this.attendanceEntry.meeting = meeting;
+    if (meeting) this.attendanceEntry.meeting = meeting;
 
     this.attendanceModalVisible = true;
   }
@@ -299,20 +427,31 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   hideAbsentButton(attendance: Attendance): boolean {
-    return attendance.absent || this.attendanceService.isAttendanceApproved(attendance) || attendance.meeting !== undefined;
+    return (
+      attendance.absent || this.attendanceService.isAttendanceApproved(attendance) || attendance.meeting !== undefined
+    );
   }
 
   hideApproveRejectAttendance(attendance: Attendance): boolean {
-    return !this.AdminInterface || this.attendanceService.isAttendanceApproved(attendance) || this.attendanceService.isAttendanceRejected(attendance) || !attendance.time_out;
+    return (
+      !this.AdminInterface ||
+      this.attendanceService.isAttendanceApproved(attendance) ||
+      this.attendanceService.isAttendanceRejected(attendance) ||
+      !attendance.time_out
+    );
   }
 
   attendanceStartOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && this.attendanceService.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting) {
+    if (
+      this.AdminInterface &&
+      this.attendanceService.isAttendanceUnapproved(attendance) &&
+      !attendance.absent &&
+      attendance.meeting
+    ) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.start), new Date(attendance.time_in));
     }
 
-    return 'initial'
-
+    return 'initial';
   }
 
   hideAttendanceEditDeleteButton(attendance: Attendance): boolean {
@@ -324,12 +463,17 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceEndOutlierColor(attendance: Attendance): string {
-    if (this.AdminInterface && this.attendanceService.isAttendanceUnapproved(attendance) && !attendance.absent && attendance.meeting && attendance.time_out) {
+    if (
+      this.AdminInterface &&
+      this.attendanceService.isAttendanceUnapproved(attendance) &&
+      !attendance.absent &&
+      attendance.meeting &&
+      attendance.time_out
+    ) {
       return this.attendanceOutlierColor(new Date(attendance.meeting.end), new Date(attendance.time_out));
     }
 
-    return 'initial'
-
+    return 'initial';
   }
 
   attendanceOutlierColor(start: Date, end: Date): string {
@@ -340,15 +484,12 @@ export class MeetingAttendanceComponent implements OnInit {
 
     if (timeDifferenceMs < -oneMinuteMs) {
       return 'green';
-    }
-    else if (timeDifferenceMs < fiveMinutesMs) {
+    } else if (timeDifferenceMs < fiveMinutesMs) {
       return 'lightgreen';
-    }
-    else if (timeDifferenceMs < thirtyMinutesMs) {
-      return 'yellow'
-    }
-    else {
-      return 'red'
+    } else if (timeDifferenceMs < thirtyMinutesMs) {
+      return 'yellow';
+    } else {
+      return 'red';
     }
   }
 
@@ -356,29 +497,36 @@ export class MeetingAttendanceComponent implements OnInit {
     let cols: TableColType[] = [
       { PropertyName: 'meeting.title', ColLabel: 'Meeting' },
       { PropertyName: 'meeting.meeting_typ.meeting_nm', ColLabel: 'Type' },
-      { PropertyName: 'time_in', ColLabel: 'Time In', ColorFunction: this.attendanceStartOutlierColor.bind(this), ColorFunctionRecAsParam: true },
-      { PropertyName: 'time_out', ColLabel: 'Time Out', ColorFunction: this.attendanceEndOutlierColor.bind(this), ColorFunctionRecAsParam: true }
+      {
+        PropertyName: 'time_in',
+        ColLabel: 'Time In',
+        ColorFunction: this.attendanceStartOutlierColor.bind(this),
+        ColorFunctionRecAsParam: true,
+      },
+      {
+        PropertyName: 'time_out',
+        ColLabel: 'Time Out',
+        ColorFunction: this.attendanceEndOutlierColor.bind(this),
+        ColorFunctionRecAsParam: true,
+      },
     ];
 
-    if (this.isAdminInterface())
-      cols = [
-        { PropertyName: 'user.name', ColLabel: 'User' },
-        ...cols
-      ];
+    if (this.isAdminInterface()) cols = [{ PropertyName: 'user.name', ColLabel: 'User' }, ...cols];
 
     if (this.gs.getAppSize() >= AppSize.LG) {
       cols = [
         ...cols,
         { ColLabel: 'Duration', Type: 'function', ColValueFunction: this.computeAttendanceDuration.bind(this) },
-        { PropertyName: 'absent', ColLabel: 'Absent', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+        {
+          PropertyName: 'absent',
+          ColLabel: 'Absent',
+          Type: 'function',
+          ColValueFunction: this.decodeYesNoBoolean.bind(this),
+        },
       ];
-
     }
 
-    this.attendanceTableCols = [
-      ...cols,
-      { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' },
-    ];
+    this.attendanceTableCols = [...cols, { PropertyName: 'approval_typ.approval_nm', ColLabel: 'Approval' }];
     this.meetingAttendanceTableCols = this.attendanceTableCols;
     this.reportAttendanceTableCols = this.attendanceTableCols;
   }
@@ -401,7 +549,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   downloadAttendanceQrCode(direction: AttendanceDirection, foregroundColor: string, title: string): void {
     const url = buildEndpointUrl('', `attendance/`, {
-      direction: direction
+      direction: direction,
     });
     if (this.qrCodeDownload) {
       this.qrCodeDownload.ForegroundColor = foregroundColor;
@@ -412,7 +560,7 @@ export class MeetingAttendanceComponent implements OnInit {
 
   // MEETING -----------------------------------------------------------
   async getMeetings(id?: number): Promise<void | null> {
-    return this.meetingService.getMeetings(id, this.isNotAdminInterface()).then((result) => {
+    return this.meetingService.getMeetings(id, this.isNotAdminInterface()).then(result => {
       if (result) {
         if (Array.isArray(result)) {
           this.meetings = result;
@@ -420,9 +568,7 @@ export class MeetingAttendanceComponent implements OnInit {
             const updatedMeeting = this.meetings.find(m => m.id === this.meeting.id);
             if (updatedMeeting) this.meeting = updatedMeeting;
           }
-        }
-        else this.meeting = result;
-
+        } else this.meeting = result;
       }
       this.triggerMeetingTableUpdate = !this.triggerMeetingTableUpdate;
       //this.getMeetingHours();
@@ -430,7 +576,10 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   endMeeting(meeting: Meeting): void | null {
-    this.meetingService.endMeeting(meeting).then(() => { this.getMeetings(); this.getAttendance(meeting); });
+    this.meetingService.endMeeting(meeting).then(() => {
+      this.getMeetings();
+      this.getAttendance(meeting);
+    });
   }
 
   saveMeeting(meeting?: Meeting): void | null {
@@ -473,7 +622,10 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   removeMeeting(meeting: Meeting): void | null {
-    this.meetingService.removeMeeting(meeting).then(() => { this.getMeetings(); this.getAttendance(); });
+    this.meetingService.removeMeeting(meeting).then(() => {
+      this.getMeetings();
+      this.getAttendance();
+    });
   }
 
   hasAttendedMeeting(meeting: Meeting): boolean {
@@ -483,7 +635,11 @@ export class MeetingAttendanceComponent implements OnInit {
 
   hasLeftMeeting(meeting: Meeting): boolean {
     if (!this.meetingService.isDayToTakeAttendance(meeting)) return true;
-    return this.AdminInterface || !this.attendance.find(a => (a.meeting?.id === meeting.id)) || this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined;
+    return (
+      this.AdminInterface ||
+      !this.attendance.find(a => a.meeting?.id === meeting.id) ||
+      this.attendance.find(a => (a.absent || a.time_out !== null) && a.meeting?.id === meeting.id) !== undefined
+    );
   }
 
   compareMeetingObjects(m1?: Meeting, m2?: Meeting): boolean {
@@ -494,10 +650,9 @@ export class MeetingAttendanceComponent implements OnInit {
   getAttendanceReport(meeting?: Meeting, loadingScreen = true): void | null {
     let u: User | undefined = undefined;
     if (!this.AdminInterface)
-      if (this.user)
-        u = this.user;
+      if (this.user) u = this.user;
       else {
-        this.modalService.triggerError('No user, couldn\'t get attendance see a mentor.');
+        this.modalService.triggerError("No user, couldn't get attendance see a mentor.");
         return null;
       }
 
@@ -517,15 +672,12 @@ export class MeetingAttendanceComponent implements OnInit {
   }
 
   attendanceReportBelowThresholdColor(value: number): string {
-
     if (this.isNotAdminInterface()) {
       return 'initial';
-    }
-    else if (value >= 80) {
+    } else if (value >= 80) {
       return 'green';
-    }
-    else {
-      return 'red'
+    } else {
+      return 'red';
     }
   }
 
@@ -566,5 +718,4 @@ export class MeetingAttendanceComponent implements OnInit {
   decodeYesNoBoolean(val: boolean): string {
     return decodeYesNoBoolean(val);
   }
-
 }

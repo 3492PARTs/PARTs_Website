@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -24,7 +24,7 @@ describe('ErrorLogComponent', () => {
       errors: [],
       count: 0,
       num_pages: 1,
-      ...overrides
+      ...overrides,
     };
   }
 
@@ -33,9 +33,12 @@ describe('ErrorLogComponent', () => {
     mockAuthService = { authInFlight: authInFlightSubject.asObservable() };
 
     apiServiceSpy = {
-      get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn(makeApiResponse()); return Promise.resolve(makeApiResponse()); }
-      )
+      get: jasmine
+        .createSpy('get')
+        .and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+          if (fn) fn(makeApiResponse());
+          return Promise.resolve(makeApiResponse());
+        }),
     };
 
     mockGeneralService = {
@@ -48,14 +51,14 @@ describe('ErrorLogComponent', () => {
     TestBed.configureTestingModule({
       imports: [ErrorLogComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
         { provide: AuthService, useValue: mockAuthService },
         { provide: APIService, useValue: apiServiceSpy },
         { provide: GeneralService, useValue: mockGeneralService },
-      ]
+      ],
     });
     fixture = TestBed.createComponent(ErrorLogComponent);
     component = fixture.componentInstance;
@@ -90,9 +93,7 @@ describe('ErrorLogComponent', () => {
     it('sets errorPage and calls api.get', () => {
       component.getErrors(3);
       expect(component.errorPage).toBe(3);
-      expect(apiServiceSpy.get).toHaveBeenCalledWith(
-        true, 'admin/error-log/', { pg_num: '3' }, jasmine.any(Function)
-      );
+      expect(apiServiceSpy.get).toHaveBeenCalledWith(true, 'admin/error-log/', { pg_num: '3' }, jasmine.any(Function));
     });
 
     it('populates errors array from result', () => {
@@ -102,11 +103,13 @@ describe('ErrorLogComponent', () => {
         error_message: 'detail',
         exception: 'Exc',
         time: new Date('2024-06-15T14:30:00').toISOString(),
-        user: { first_name: 'Jane', last_name: 'Doe' }
+        user: { first_name: 'Jane', last_name: 'Doe' },
       };
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        const _r = { errors: [rawError], count: 1, num_pages: 1 };
+        if (fn) fn(_r);
+        return Promise.resolve(_r);
+      });
       component.getErrors(1);
       expect(component.errors.length).toBe(1);
       expect((component.errors[0] as any).user_name).toBe('Jane Doe');
@@ -119,11 +122,13 @@ describe('ErrorLogComponent', () => {
         error_message: '',
         exception: '',
         time: new Date('2024-06-15T15:05:00').toISOString(),
-        user: { first_name: 'A', last_name: 'B' }
+        user: { first_name: 'A', last_name: 'B' },
       };
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        const _r = { errors: [rawError], count: 1, num_pages: 1 };
+        if (fn) fn(_r);
+        return Promise.resolve(_r);
+      });
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
       expect(display).toContain('PM');
@@ -136,11 +141,13 @@ describe('ErrorLogComponent', () => {
         error_message: '',
         exception: '',
         time: new Date('2024-06-15T09:05:00').toISOString(),
-        user: { first_name: 'A', last_name: 'B' }
+        user: { first_name: 'A', last_name: 'B' },
       };
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        const _r = { errors: [rawError], count: 1, num_pages: 1 };
+        if (fn) fn(_r);
+        return Promise.resolve(_r);
+      });
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
       expect(display).toContain('AM');
@@ -153,20 +160,24 @@ describe('ErrorLogComponent', () => {
         error_message: '',
         exception: '',
         time: new Date('2024-06-15T10:03:00').toISOString(),
-        user: { first_name: 'A', last_name: 'B' }
+        user: { first_name: 'A', last_name: 'B' },
       };
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [rawError], count: 1, num_pages: 1 }; if (fn) fn(_r); return Promise.resolve(_r); }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        const _r = { errors: [rawError], count: 1, num_pages: 1 };
+        if (fn) fn(_r);
+        return Promise.resolve(_r);
+      });
       component.getErrors(1);
       const display = (component.errors[0] as any).display_time as string;
       expect(display).toContain(':03');
     });
 
     it('sets pageInfo from result excluding errors', () => {
-      apiServiceSpy.get.and.callFake(
-        (_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { const _r = { errors: [], count: 5, num_pages: 2 }; if (fn) fn(_r); return Promise.resolve(_r); }
-      );
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        const _r = { errors: [], count: 5, num_pages: 2 };
+        if (fn) fn(_r);
+        return Promise.resolve(_r);
+      });
       component.getErrors(1);
       expect((component.pageInfo as any).count).toBe(5);
       expect((component.pageInfo as any).num_pages).toBe(2);

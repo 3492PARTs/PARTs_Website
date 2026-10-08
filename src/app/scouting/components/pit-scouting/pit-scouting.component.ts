@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ChangeDetectionStrategy } from '@angular/core';
 import { APIStatus, Banner } from '@app/core/models/api.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -13,8 +13,8 @@ import { FormComponent } from '@app/shared/components/atoms/form/form.component'
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 import { Question, Answer } from '@app/core/models/form.models';
-import { WhiteboardComponent } from "@app/shared/components/atoms/whiteboard/whiteboard.component";
-import { ModalComponent } from "@app/shared/components/atoms/modal/modal.component";
+import { WhiteboardComponent } from '@app/shared/components/atoms/whiteboard/whiteboard.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { Team, ScoutPitFormResponse, ScoutPitImage, FieldForm } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
@@ -22,9 +22,20 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, formatQuestionAnswer, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-pit-scouting',
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, FormComponent, FormElementComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, WhiteboardComponent, ModalComponent],
+  imports: [
+    BoxComponent,
+    FormElementGroupComponent,
+    ButtonComponent,
+    FormComponent,
+    FormElementComponent,
+    QuestionDisplayFormComponent,
+    ButtonRibbonComponent,
+    WhiteboardComponent,
+    ModalComponent,
+  ],
   templateUrl: './pit-scouting.component.html',
-  styleUrls: ['./pit-scouting.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./pit-scouting.component.scss'],
 })
 export class PitScoutingComponent implements OnInit, OnDestroy {
   private buildOutstandingTeamsTimeout: number | undefined;
@@ -50,34 +61,40 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  outstandingResults: { id: number, team: number }[] = [];
+  outstandingResults: { id: number; team: number }[] = [];
 
   apiStatus = APIStatus.prcs;
 
   fieldForm: FieldForm | undefined = undefined;
 
-  constructor(private api: APIService,
+  constructor(
+    private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
     private ss: ScoutingService,
-    private cs: CacheService, private modalService: ModalService) {
+    private cs: CacheService,
+    private modalService: ModalService
+  ) {
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
 
-    this.api.apiStatus.subscribe(s => this.apiStatus = s);
+    this.api.apiStatus.subscribe(s => (this.apiStatus = s));
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.init() : null));
 
-    this.checkTeamInterval = window.setInterval(() => {
-      this.ss.loadTeams(false).then(result => {
-        if (result) {
-          this.buildTeamLists(result);
-        }
-      });
-    }, 1000 * 60 * 3); //3 min
+    this.checkTeamInterval = window.setInterval(
+      () => {
+        this.ss.loadTeams(false).then(result => {
+          if (result) {
+            this.buildTeamLists(result);
+          }
+        });
+      },
+      1000 * 60 * 3
+    ); //3 min
   }
 
   ngOnDestroy(): void {
@@ -104,7 +121,6 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingForm().then(result => {
       if (strNoE(this.scoutPitResponse.team_id)) {
-
         if (result) {
           this.questions = result;
         }
@@ -120,7 +136,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
 
     this.buildOutstandingTeamsTimeout = window.setTimeout(async () => {
       if (!teams) {
-        await this.ss.getTeamsFromCache().then((ts) => {
+        await this.ss.getTeamsFromCache().then(ts => {
           teams = ts;
         });
       }
@@ -134,11 +150,12 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       this.missingImagesTeams = teams?.filter(t => t.pit_result === 1 && t.pit_image === 0) || [];
 
       if (wasOutstanding && this.completedTeams.find(t => t.team_no == this.scoutPitResponse.team_id)) {
-        const fn = () => { window.location.reload(); }
+        const fn = () => {
+          window.location.reload();
+        };
         this.modalService.triggerConfirm('Current Team scouted by another person, the screen will refresh.', fn, fn);
       }
     }, 200);
-
   }
 
   amendOutstandTeamsList(): void {
@@ -158,7 +175,6 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       sprs.forEach(s => {
         this.outstandingResults.push({ id: s.id, team: s.team_id });
       });
-
     });
 
     this.amendOutstandTeamsList();
@@ -179,7 +195,6 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
         this.populateOutstandingResponses();
       });
     });
-
   }
 
   changeTeam(load = false): void {
@@ -191,11 +206,11 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       if (!strNoE(answer)) {
         dirty = true;
       }
-
     });
 
     if (dirty) {
-      this.modalService.triggerConfirm('Are you sure you want to clear and change teams?',
+      this.modalService.triggerConfirm(
+        'Are you sure you want to clear and change teams?',
         () => {
           this.setNewTeam(load);
         },
@@ -203,9 +218,9 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
           triggerChange(() => {
             this.scoutPitResponse.team_id = this.previouslySelectedTeam;
           });
-        });
-    }
-    else {
+        }
+      );
+    } else {
       this.setNewTeam(load);
     }
   }
@@ -236,9 +251,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       if (!strNoE(this.autoTitle)) {
         this.scoutPitResponse.pics.push(new ScoutPitImage('', this.autoTitle, 'auto-path', this.autoPic));
         this.removeAutoPicture();
-      }
-      else
-        this.gs.addBanner(new Banner("Must add title to auto path.", 3500));
+      } else this.gs.addBanner(new Banner('Must add title to auto path.', 3500));
     }
   }
 
@@ -266,17 +279,17 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
     if (!spr) spr = this.scoutPitResponse;
 
     if (strNoE(spr.team_id)) {
-      this.gs.addBanner(new Banner("Must select a team.", 3500));
+      this.gs.addBanner(new Banner('Must select a team.', 3500));
       return null;
     }
 
     if (this.robotPic && this.robotPic.size > 0) {
-      this.gs.addBanner(new Banner("Must add or remove staged image.", 3500));
+      this.gs.addBanner(new Banner('Must add or remove staged image.', 3500));
       return null;
     }
 
     if (this.autoPic && this.autoPic.size > 0) {
-      this.gs.addBanner(new Banner("Must add or clear drawn path.", 3500));
+      this.gs.addBanner(new Banner('Must add or clear drawn path.', 3500));
       return null;
     }
 
@@ -284,8 +297,7 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
       const quest = cloneObject(q);
       quest.answer = formatQuestionAnswer(quest.answer);
       spr.answers.push(new Answer(quest.answer, quest));
-    }
-    );
+    });
 
     this.ss.savePitScoutingResponse(spr, id).then((success: boolean) => {
       if (success && !id) this.reset();
@@ -304,15 +316,21 @@ export class PitScoutingComponent implements OnInit, OnDestroy {
   }
 
   loadTeamPitData(): void {
-    this.api.get(true, 'scouting/pit/team-data/', {
-      team_num: this.scoutPitResponse.team_id
-    }, (result: any) => {
-      this.questions = (result['questions'] as Question[]);
-      this.scoutPitResponse.response_id = result['response_id'] as number;
-      this.previewImages = result['pics'] as ScoutPitImage[];
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/pit/team-data/',
+      {
+        team_num: this.scoutPitResponse.team_id,
+      },
+      (result: any) => {
+        this.questions = result['questions'] as Question[];
+        this.scoutPitResponse.response_id = result['response_id'] as number;
+        this.previewImages = result['pics'] as ScoutPitImage[];
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   setFormElements(fes: QueryList<FormElementComponent>): void {
@@ -331,4 +349,3 @@ export class ScoutPitInit {
   teams: Team[] = [];
   comp_teams: Team[] = [];
 }
-

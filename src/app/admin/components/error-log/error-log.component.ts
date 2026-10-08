@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { ErrorLog, AuthService, AuthCallStates } from '@app/auth/services/auth.service';
-import { Page  } from '@app/core/utils/utils.functions';
+import { Page } from '@app/core/utils/utils.functions';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
@@ -12,17 +12,17 @@ import { PaginationComponent } from '@app/shared/components/atoms/pagination/pag
   selector: 'app-error-log',
   imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, PaginationComponent],
   templateUrl: './error-log.component.html',
-  styleUrls: ['./error-log.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./error-log.component.scss'],
 })
 export class ErrorLogComponent implements OnInit {
-
   errorTableCols: TableColType[] = [
     { PropertyName: 'user_name', ColLabel: 'User' },
     { PropertyName: 'path', ColLabel: 'Path' },
     { PropertyName: 'message', ColLabel: 'Message' },
     { PropertyName: 'error_message', ColLabel: 'Error Message' },
     { PropertyName: 'exception', ColLabel: 'Exception' },
-    { PropertyName: 'display_time', ColLabel: 'Time' }
+    { PropertyName: 'display_time', ColLabel: 'Time' },
   ];
   errors: ErrorLog[] = [];
   pageInfo: Page = new Page();
@@ -31,10 +31,13 @@ export class ErrorLogComponent implements OnInit {
   errorDetailModalVisible = false;
   currentError: ErrorLog = new ErrorLog();
 
-  constructor(private api: APIService, private authService: AuthService) { }
+  constructor(
+    private api: APIService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getErrors(this.errorPage);
       }
@@ -43,21 +46,36 @@ export class ErrorLogComponent implements OnInit {
 
   getErrors(pg: number): void {
     this.errorPage = pg;
-    this.api.get(true, 'admin/error-log/', {
-      pg_num: pg.toString()
-    }, (result: any) => {
-      this.errors = result['errors'] as ErrorLog[];
-      delete result['errors'];
-      this.pageInfo = result as Page;
-      this.errors.forEach(el => {
-        el.user_name = el.user.first_name + ' ' + el.user.last_name;
-        el.time = new Date(el.time);
-        el.display_time = el.time.getMonth() + 1 + '/' + el.time.getDate() + '/' +
-          el.time.getFullYear() + ' ' +
-          (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) + ':' +
-          (el.time.getMinutes() < 10 ? '0' : '') + el.time.getMinutes() + ' ' + (el.time.getHours() > 12 ? 'PM' : 'AM');
-      });
-    });
+    this.api.get(
+      true,
+      'admin/error-log/',
+      {
+        pg_num: pg.toString(),
+      },
+      (result: any) => {
+        this.errors = result['errors'] as ErrorLog[];
+        delete result['errors'];
+        this.pageInfo = result as Page;
+        this.errors.forEach(el => {
+          el.user_name = el.user.first_name + ' ' + el.user.last_name;
+          el.time = new Date(el.time);
+          el.display_time =
+            el.time.getMonth() +
+            1 +
+            '/' +
+            el.time.getDate() +
+            '/' +
+            el.time.getFullYear() +
+            ' ' +
+            (el.time.getHours() > 12 ? el.time.getHours() - 12 : el.time.getHours()) +
+            ':' +
+            (el.time.getMinutes() < 10 ? '0' : '') +
+            el.time.getMinutes() +
+            ' ' +
+            (el.time.getHours() > 12 ? 'PM' : 'AM');
+        });
+      }
+    );
   }
 
   showErrorModal(error: ErrorLog) {

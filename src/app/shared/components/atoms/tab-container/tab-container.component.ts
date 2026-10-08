@@ -1,4 +1,4 @@
-import { Component, Input, ContentChildren, AfterContentInit, QueryList } from '@angular/core';
+import { Component, Input, ContentChildren, AfterContentInit, QueryList, ChangeDetectionStrategy } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
@@ -8,7 +8,8 @@ import { strNoE } from '@app/core/utils/utils.functions';
   selector: 'app-tab-container',
   imports: [CommonModule],
   templateUrl: './tab-container.component.html',
-  styleUrls: ['./tab-container.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./tab-container.component.scss'],
 })
 export class TabContainerComponent implements AfterContentInit {
   @ContentChildren(TabComponent) tabContainerTabs: QueryList<TabComponent> = new QueryList<TabComponent>();
@@ -24,7 +25,7 @@ export class TabContainerComponent implements AfterContentInit {
   }
   private activeTabTitle = '';
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
   ngAfterContentInit() {
     this.tabContainerTabs.changes.subscribe(() => {
@@ -35,7 +36,7 @@ export class TabContainerComponent implements AfterContentInit {
   }
 
   setActiveTab(at: string) {
-    if (at !== '') this.tabs.forEach(t => t.name === at ? this.showTab(t) : null);
+    if (at !== '') this.tabs.forEach(t => (t.name === at ? this.showTab(t) : null));
   }
 
   getTabs() {
@@ -62,7 +63,10 @@ export class TabContainerComponent implements AfterContentInit {
       this.activeTab = tab;
     }
   }
-
 }
 
-export class TabElement { name?: string; element?: TabComponent; active?: boolean; }
+export class TabElement {
+  name?: string;
+  element?: TabComponent;
+  active?: boolean;
+}

@@ -1,4 +1,13 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router, NavigationEnd, Event as NavigationEvent, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../../../environments/environment';
@@ -15,21 +24,42 @@ import { CompetitionInit } from '@app/public/components/event-competition/event-
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { SubNavigationComponent } from '@app/navigation/components/sub-navigation/sub-navigation.component';
-import { LoadingComponent } from "@app/shared/components/atoms/loading/loading.component";
+import { LoadingComponent } from '@app/shared/components/atoms/loading/loading.component';
 import { ClickInsideDirective } from '@app/shared/directives/click-inside/click-inside.directive';
 import { ClickOutsideDirective } from '@app/shared/directives/click-outside/click-outside.directive';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 import * as Utils from '@app/core/utils/utils.functions';
 import { ICON_SVG_FRC, ICON_SVG_GITHUB, ICON_SVG_BOOKSTACK } from '@app/core';
 
-import { AppSize, arrayObjectIndexOf, cloneObject, devConsoleLog, openURL, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
+import {
+  AppSize,
+  arrayObjectIndexOf,
+  cloneObject,
+  devConsoleLog,
+  openURL,
+  scrollTo,
+  strNoE,
+  triggerChange,
+} from '@app/core/utils/utils.functions';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Alert } from '@app/core/models/alert.models';
 @Component({
   selector: 'app-navigation',
-  imports: [CommonModule, RouterLink, ButtonComponent, FormElementComponent, SubNavigationComponent, RouterLinkActive, ClickOutsideDirective, ClickInsideDirective, DateToStrPipe, LoadingComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ButtonComponent,
+    FormElementComponent,
+    SubNavigationComponent,
+    RouterLinkActive,
+    ClickOutsideDirective,
+    ClickInsideDirective,
+    DateToStrPipe,
+    LoadingComponent,
+  ],
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit, AfterViewInit {
   // Expose Utils to template
@@ -83,8 +113,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   notifications: Alert[] = [];
   messages: Alert[] = [];
 
-  frontendEnv = "";
-  backendEnv = "";
+  frontendEnv = '';
+  backendEnv = '';
 
   //subPages: Link[] = [];
   subPage = '-1';
@@ -93,14 +123,17 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   iconGitHub: SafeHtml | undefined = undefined;
   iconBookStack: SafeHtml | undefined = undefined;
 
-  constructor(private gs: GeneralService,
+  constructor(
+    private gs: GeneralService,
     private renderer: Renderer2,
     private auth: AuthService,
     private router: Router,
     private api: APIService,
     private pwa: PwaService,
     private ns: NotificationsService,
-    private navigationService: NavigationService, private sanitizer: DomSanitizer) {
+    private navigationService: NavigationService,
+    private sanitizer: DomSanitizer
+  ) {
     this.gs.currentOutstandingCalls.subscribe(o => {
       this.loading = o > 0;
 
@@ -110,16 +143,15 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       if (this.loading) {
         html.style.overflow = 'hidden';
         body.style.overflow = 'hidden';
-      }
-      else {
+      } else {
         html.style.overflow = 'initial';
         body.style.overflow = 'initial';
       }
     });
 
-    this.auth.user.subscribe(u => this.user = u);
+    this.auth.user.subscribe(u => (this.user = u));
 
-    this.auth.userLinks.subscribe((ul) => {
+    this.auth.userLinks.subscribe(ul => {
       this.userLinks = cloneObject(ul);
 
       this.applicationMenu.forEach(mi => {
@@ -151,8 +183,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
             if (e && index === -1) {
               mi.menu_items.push(new Link('Install', ''));
-            }
-            else if (!e && index !== -1) {
+            } else if (!e && index !== -1) {
               mi.menu_items.splice(index, 1);
             }
           }
@@ -160,28 +191,26 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       }, 1);
     });
 
-    this.router.events.subscribe(
-      (event: NavigationEvent) => {
-        if (event instanceof NavigationEnd) {
-          if (this.urlEnd !== event.url)
-            scrollTo(0);
+    this.router.events.subscribe((event: NavigationEvent) => {
+      if (event instanceof NavigationEnd) {
+        if (this.urlEnd !== event.url) scrollTo(0);
 
-          this.urlEnd = event.url;
+        this.urlEnd = event.url;
 
-          this.navigationService.setSubPages(this.urlEnd);
+        this.navigationService.setSubPages(this.urlEnd);
 
-          this.resetActiveMenuItem();
-          this.applicationMenu.forEach(mi => {
-            mi.menu_items.forEach(mii => {
-              this.checkActiveMenuItem(this.urlEnd, mi, mii);
-            });
+        this.resetActiveMenuItem();
+        this.applicationMenu.forEach(mi => {
+          mi.menu_items.forEach(mii => {
+            this.checkActiveMenuItem(this.urlEnd, mi, mii);
           });
+        });
 
-          if (event.url.split('/').length <= 2) {
-            if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
-          }
+        if (event.url.split('/').length <= 2) {
+          if (this.gs.getAppSize() < AppSize.LG) this.setNavCollapsedHidden(false);
         }
-      });
+      }
+    });
 
     //this.navigationService.subPages.subscribe(s => this.subPages = s);
 
@@ -211,8 +240,8 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.ns.notifications.subscribe(n => this.notifications = n);
-    this.ns.messages.subscribe(m => this.messages = m);
+    this.ns.notifications.subscribe(n => (this.notifications = n));
+    this.ns.messages.subscribe(m => (this.messages = m));
 
     this.gs.siteBanners.subscribe(psb => {
       this.siteBanners = psb;
@@ -231,8 +260,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
     if (this.siteBannersElementRef && this.siteBanners.length > 0) {
       const height = this.siteBannersElementRef.nativeElement.scrollHeight;
       this.siteBannerHeight = height + 'px';
-    }
-    else {
+    } else {
       this.siteBannerHeight = '0px';
     }
   }
@@ -246,9 +274,10 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
     this.frontendEnv = environment.environment;
 
-    if (!strNoE(this.frontendEnv)) this.api.getAPIStatus().then(result => {
-      this.backendEnv = result;
-    });
+    if (!strNoE(this.frontendEnv))
+      this.api.getAPIStatus().then(result => {
+        this.backendEnv = result;
+      });
 
     this.setNavExpandedCollapsed(this.gs.getAppSize() >= AppSize.LG);
 
@@ -289,7 +318,6 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   @HostListener('window:scroll', ['$event']) // for window scroll events
   onScroll(event: any) {
     this.scrollEvents(window.scrollY);
-
   }
 
   @HostListener('window:resize', ['$event'])
@@ -351,8 +379,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
       if (this.isBottomInView(this.wrapper)) {
         //if (!environment.production) console.log('bottom in view');
         top = -70;
-      }
-      else if (!innerScrollElement && this.isTopInView(this.wrapper)) {
+      } else if (!innerScrollElement && this.isTopInView(this.wrapper)) {
         //if (!environment.production) console.log('top in view');
         top = 0;
       }
@@ -371,7 +398,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
   setHeaderPosition(top: number): void {
     this.renderer.setStyle(this.header.nativeElement, 'top', top + 'px');
-    this.renderer.setStyle(this.main.nativeElement, 'paddingTop', (top + 70) + 'px');
+    this.renderer.setStyle(this.main.nativeElement, 'paddingTop', top + 70 + 'px');
   }
 
   openSubNav(pgID: string, elemID: string): void {
@@ -390,11 +417,9 @@ export class NavigationComponent implements OnInit, AfterViewInit {
 
         if (childRect.bottom > winHeight) {
           let offScreen = childRect.bottom - winHeight;
-          child.style.top = winHeight - child.offsetHeight - (25 / 2) + 'px';//parentRect.top - offScreen + 'px';
-        }
-        else child.style.top = parentRect.top + 'px';
-      }
-      else {
+          child.style.top = winHeight - child.offsetHeight - 25 / 2 + 'px'; //parentRect.top - offScreen + 'px';
+        } else child.style.top = parentRect.top + 'px';
+      } else {
         if (parent && child) parent.style.height = 'calc(6.8rem + ' + child.offsetHeight + 'px + 32px)';
       }
     } else {
@@ -524,8 +549,7 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   checkActiveMenuItem(urlEnd: string, mi: Link, mii: SubLink): void {
-    if (!strNoE(mii.routerlink) && urlEnd.startsWith(mii.routerlink))
-      this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
+    if (!strNoE(mii.routerlink) && urlEnd.startsWith(mii.routerlink)) this.setActiveMenuSubmenuAndItem(mi, mii, urlEnd);
   }
 
   setActiveMenuSubmenuAndItem(parent: Link, child: SubLink, routerLink: string): void {
@@ -545,18 +569,22 @@ export class NavigationComponent implements OnInit, AfterViewInit {
   }
 
   resetActiveMenuItem(): void {
-    this.applicationMenu.forEach(mi => mi.menu_name_active_item = '');
+    this.applicationMenu.forEach(mi => (mi.menu_name_active_item = ''));
   }
 
   isActiveMenuItem(): boolean {
     let active = false;
-    this.applicationMenu.forEach(mi => { active = active || !strNoE(mi.menu_name_active_item) });
+    this.applicationMenu.forEach(mi => {
+      active = active || !strNoE(mi.menu_name_active_item);
+    });
     return active;
   }
 
   getActiveMenuItemName(): string {
     let active = '';
-    this.applicationMenu.forEach(mi => { if (!strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase() });
+    this.applicationMenu.forEach(mi => {
+      if (!strNoE(mi.menu_name_active_item)) active = mi.menu_name_active_item.toLowerCase();
+    });
     return active;
   }
 

@@ -1,11 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-loading',
   imports: [CommonModule],
   templateUrl: './loading.component.html',
-  styleUrls: ['./loading.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./loading.component.scss'],
 })
 export class LoadingComponent implements OnInit {
   @Input() Width = '';
@@ -13,11 +14,7 @@ export class LoadingComponent implements OnInit {
   @Input() MinHeight = '';
   @Input() Loading = false;
 
-  constructor() {
+  constructor() {}
 
-  }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

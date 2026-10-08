@@ -5,7 +5,7 @@ import { AuthService } from './auth/services/auth.service';
 import { GeneralService } from './core/services/general.service';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SwPush, SwUpdate } from '@angular/service-worker';
 import { createMockSwPush, createMockSwUpdate, createMockAuthService, createMockGeneralService } from '../test-helpers';
@@ -18,20 +18,20 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     mockAuthService = createMockAuthService();
     mockAuthService.previouslyAuthorized = jasmine.createSpy('previouslyAuthorized');
-    
+
     mockGeneralService = createMockGeneralService();
 
     await TestBed.configureTestingModule({
       imports: [AppComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: AuthService, useValue: mockAuthService },
         { provide: GeneralService, useValue: mockGeneralService },
         { provide: SwPush, useValue: createMockSwPush() },
-        { provide: SwUpdate, useValue: createMockSwUpdate() }
-      ]
+        { provide: SwUpdate, useValue: createMockSwUpdate() },
+      ],
     }).compileComponents();
   });
 

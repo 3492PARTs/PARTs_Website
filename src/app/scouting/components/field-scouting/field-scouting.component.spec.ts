@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -33,7 +33,10 @@ describe('FieldScoutingComponent', () => {
     userSubject = new BehaviorSubject<User>(new User());
     outstandingResponsesUploaded = new Subject<number>();
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext([]); return Promise.resolve([]); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext([]);
+      return Promise.resolve([]);
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
       user: userSubject.asObservable(),
@@ -43,8 +46,10 @@ describe('FieldScoutingComponent', () => {
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'saveFieldScoutingResponse',
-      'loadScoutingFieldSchedules', 'uploadOutstandingResponses',
+      'loadAllScoutingInfo',
+      'saveFieldScoutingResponse',
+      'loadScoutingFieldSchedules',
+      'uploadOutstandingResponses',
     ]);
     mockSS.outstandingResponsesUploaded = outstandingResponsesUploaded.asObservable();
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
@@ -63,13 +68,15 @@ describe('FieldScoutingComponent', () => {
       getAll: jasmine.createSpy('getAll').and.returnValue(Promise.resolve([])),
     } as any;
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerError', 'triggerConfirm', 'successfulResponseBanner',
+      'triggerError',
+      'triggerConfirm',
+      'successfulResponseBanner',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [FieldScoutingComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

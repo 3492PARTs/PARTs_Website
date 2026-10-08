@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ScoutFieldSchedule, UserInfo } from '@app/scouting/models/scouting.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
@@ -19,9 +19,19 @@ import { cloneObject, decodeSentBoolean, formatDateString } from '@app/core/util
 import { formatFieldRecord } from '@app/scouting/components/field-scouting-responses/field-scouting-responses.component';
 @Component({
   selector: 'app-scouting-activity',
-  imports: [BoxComponent, TableComponent, ModalComponent, FormElementGroupComponent, ButtonComponent, FormElementComponent, FormComponent, ButtonRibbonComponent],
+  imports: [
+    BoxComponent,
+    TableComponent,
+    ModalComponent,
+    FormElementGroupComponent,
+    ButtonComponent,
+    FormElementComponent,
+    FormComponent,
+    ButtonRibbonComponent,
+  ],
   templateUrl: './activity.component.html',
-  styleUrls: ['./activity.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./activity.component.scss'],
 })
 export class ActivityComponent implements OnInit {
   scoutFieldSchedules: ScoutFieldSchedule[] = [];
@@ -29,12 +39,30 @@ export class ActivityComponent implements OnInit {
   usersScoutingUserInfo: UserInfo[] = [];
   activeUserScoutingUserInfo: UserInfo = new UserInfo();
   userActivityTableCols: TableColType[] = [
-    { PropertyName: 'user.id', ColLabel: 'User', Width: '100px', Type: 'function', ColValueFunction: this.getUserNameForTable.bind(this) },
-    { PropertyName: 'user_info.under_review', ColLabel: 'Under Review', Width: '90px', Type: 'function', ColValueFunction: this.getUserReviewStatusForTable.bind(this) },
-    { PropertyName: 'user', ColLabel: 'Schedule', Type: 'function', ColValueFunction: this.getScoutScheduleForTable.bind(this) },
+    {
+      PropertyName: 'user.id',
+      ColLabel: 'User',
+      Width: '100px',
+      Type: 'function',
+      ColValueFunction: this.getUserNameForTable.bind(this),
+    },
+    {
+      PropertyName: 'user_info.under_review',
+      ColLabel: 'Under Review',
+      Width: '90px',
+      Type: 'function',
+      ColValueFunction: this.getUserReviewStatusForTable.bind(this),
+    },
+    {
+      PropertyName: 'user',
+      ColLabel: 'Schedule',
+      Type: 'function',
+      ColValueFunction: this.getScoutScheduleForTable.bind(this),
+    },
   ];
   userActivityTableButtons: TableButtonType[] = [
-    new TableButtonType('account-arrow-down-outline', this.markScoutPresent.bind(this), 'Mark Present')];
+    new TableButtonType('account-arrow-down-outline', this.markScoutPresent.bind(this), 'Mark Present'),
+  ];
   userActivityModalVisible = false;
   triggerUserActivityTableUpdate = false;
 
@@ -43,9 +71,24 @@ export class ActivityComponent implements OnInit {
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { ColLabel: 'Scouts', Type: 'function', ColValueFunction: this.getScoutingActivityScoutsForTable.bind(this) },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    {
+      PropertyName: 'notification1',
+      ColLabel: '15 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification2',
+      ColLabel: '5 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification3',
+      ColLabel: '0 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
   ];
 
   userScoutActivityResultsTableCols: TableColType[] = [
@@ -58,7 +101,13 @@ export class ActivityComponent implements OnInit {
   activeUserScoutingScoutAnswers: any[] = [];
   userScoutActivityResultsTableWidth = '200%';
 
-  constructor(private api: APIService, private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private api: APIService,
+    private gs: GeneralService,
+    private ss: ScoutingService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     this.authService.authInFlight.subscribe(r => {
@@ -76,37 +125,41 @@ export class ActivityComponent implements OnInit {
       if (result) {
         this.scoutFieldSchedules = result.scout_field_schedules;
         this.scoutFieldSchedules.forEach(fs => {
-          fs.st_time = new Date(fs.st_time),
-            fs.end_time = new Date(fs.end_time)
+          ((fs.st_time = new Date(fs.st_time)), (fs.end_time = new Date(fs.end_time)));
         });
-        this.triggerUserActivityTableUpdate = !this.triggerUserActivityTableUpdate
-      };
+        this.triggerUserActivityTableUpdate = !this.triggerUserActivityTableUpdate;
+      }
 
       this.gs.decrementOutstandingCalls();
     });
   }
 
   getUsersScoutingUserInfo(): void {
-    this.api.get(true, 'scouting/admin/scouting-user-info/', undefined, (result: any) => {
-      this.usersScoutingUserInfo = result as UserInfo[];
+    this.api.get(
+      true,
+      'scouting/admin/scouting-user-info/',
+      undefined,
+      (result: any) => {
+        this.usersScoutingUserInfo = result as UserInfo[];
 
-      if (this.activeUserScoutingUserInfo) {
-        this.usersScoutingUserInfo.forEach(ua => {
-          if (ua.user.id == this.activeUserScoutingUserInfo.user.id)
-            this.activeUserScoutingUserInfo = cloneObject(ua);
-        });
+        if (this.activeUserScoutingUserInfo) {
+          this.usersScoutingUserInfo.forEach(ua => {
+            if (ua.user.id == this.activeUserScoutingUserInfo.user.id)
+              this.activeUserScoutingUserInfo = cloneObject(ua);
+          });
+        }
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
       }
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    );
   }
 
   getUserNameForTable(id: number): string {
     let name = '';
 
     this.usersScoutingUserInfo.forEach(ua => {
-      if (ua.user.id === id)
-        name = `${ua.user.first_name} ${ua.user.last_name}`;
+      if (ua.user.id === id) name = `${ua.user.first_name} ${ua.user.last_name}`;
     });
 
     return name;
@@ -168,31 +221,37 @@ export class ActivityComponent implements OnInit {
     let str = '';
 
     let red_one = new User();
-    if (sfs.red_one_id)
-      Object.assign(red_one, sfs.red_one_id);
+    if (sfs.red_one_id) Object.assign(red_one, sfs.red_one_id);
     let red_two = new User();
-    if (sfs.red_two_id)
-      Object.assign(red_two, sfs.red_two_id);
+    if (sfs.red_two_id) Object.assign(red_two, sfs.red_two_id);
     let red_three = new User();
-    if (sfs.red_three_id)
-      Object.assign(red_three, sfs.red_three_id);
+    if (sfs.red_three_id) Object.assign(red_three, sfs.red_three_id);
 
     let blue_one = new User();
-    if (sfs.blue_one_id)
-      Object.assign(blue_one, sfs.blue_one_id);
+    if (sfs.blue_one_id) Object.assign(blue_one, sfs.blue_one_id);
     let blue_two = new User();
-    if (sfs.blue_two_id)
-      Object.assign(blue_two, sfs.blue_two_id);
+    if (sfs.blue_two_id) Object.assign(blue_two, sfs.blue_two_id);
     let blue_three = new User();
-    if (sfs.blue_three_id)
-      Object.assign(blue_three, sfs.blue_three_id);
+    if (sfs.blue_three_id) Object.assign(blue_three, sfs.blue_three_id);
 
-    str += sfs.red_one_id ? `R1: ${red_one.name}: ${sfs.red_one_check_in ? formatDateString(sfs.red_one_check_in) : missing}\n\n` : '';
-    str += sfs.red_two_id ? `R2: ${red_two.name}: ${sfs.red_two_check_in ? formatDateString(sfs.red_two_check_in) : missing}\n\n` : '';
-    str += sfs.red_three_id ? `R3: ${red_three.name}: ${sfs.red_three_check_in ? formatDateString(sfs.red_three_check_in) : missing}\n\n` : '';
-    str += sfs.blue_one_id ? `B1: ${blue_one.name}: ${sfs.blue_one_check_in ? formatDateString(sfs.blue_one_check_in) : missing}\n\n` : '';
-    str += sfs.blue_two_id ? `B2: ${blue_two.name}: ${sfs.blue_two_check_in ? formatDateString(sfs.blue_two_check_in) : missing}\n\n` : '';
-    str += sfs.blue_three_id ? `B3: ${blue_three.name}: ${sfs.blue_three_check_in ? formatDateString(sfs.blue_three_check_in) : missing}` : '';
+    str += sfs.red_one_id
+      ? `R1: ${red_one.name}: ${sfs.red_one_check_in ? formatDateString(sfs.red_one_check_in) : missing}\n\n`
+      : '';
+    str += sfs.red_two_id
+      ? `R2: ${red_two.name}: ${sfs.red_two_check_in ? formatDateString(sfs.red_two_check_in) : missing}\n\n`
+      : '';
+    str += sfs.red_three_id
+      ? `R3: ${red_three.name}: ${sfs.red_three_check_in ? formatDateString(sfs.red_three_check_in) : missing}\n\n`
+      : '';
+    str += sfs.blue_one_id
+      ? `B1: ${blue_one.name}: ${sfs.blue_one_check_in ? formatDateString(sfs.blue_one_check_in) : missing}\n\n`
+      : '';
+    str += sfs.blue_two_id
+      ? `B2: ${blue_two.name}: ${sfs.blue_two_check_in ? formatDateString(sfs.blue_two_check_in) : missing}\n\n`
+      : '';
+    str += sfs.blue_three_id
+      ? `B3: ${blue_three.name}: ${sfs.blue_three_check_in ? formatDateString(sfs.blue_three_check_in) : missing}`
+      : '';
     return str;
   }
 
@@ -214,90 +273,106 @@ export class ActivityComponent implements OnInit {
     });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.getFieldResponseFromCache(f => f.where({ 'user_id': ua.user.id })).then(frs => {
-      this.activeUserScoutingScoutAnswers = frs.sort(this.ss.scoutFieldResponseSortFunction);
-      this.gs.decrementOutstandingCalls();
-    });
+    this.ss
+      .getFieldResponseFromCache(f => f.where({ user_id: ua.user.id }))
+      .then(frs => {
+        this.activeUserScoutingScoutAnswers = frs.sort(this.ss.scoutFieldResponseSortFunction);
+        this.gs.decrementOutstandingCalls();
+      });
 
     this.gs.incrementOutstandingCalls();
-    this.ss.filterScoutFieldSchedulesFromCache(fs => {
-      let ids = [];
+    this.ss
+      .filterScoutFieldSchedulesFromCache(fs => {
+        let ids = [];
 
-      let red_one = fs.red_one_id as User;
-      let red_two = fs.red_two_id as User;
-      let red_three = fs.red_three_id as User;
+        let red_one = fs.red_one_id as User;
+        let red_two = fs.red_two_id as User;
+        let red_three = fs.red_three_id as User;
 
-      let blue_one = fs.blue_one_id as User;
-      let blue_two = fs.blue_two_id as User;
-      let blue_three = fs.blue_three_id as User;
+        let blue_one = fs.blue_one_id as User;
+        let blue_two = fs.blue_two_id as User;
+        let blue_three = fs.blue_three_id as User;
 
-      if (red_one) ids.push(red_one.id);
-      if (red_two) ids.push(red_two.id);
-      if (red_three) ids.push(red_three.id);
+        if (red_one) ids.push(red_one.id);
+        if (red_two) ids.push(red_two.id);
+        if (red_three) ids.push(red_three.id);
 
-      if (blue_one) ids.push(blue_one.id);
-      if (blue_two) ids.push(blue_two.id);
-      if (blue_three) ids.push(blue_three.id);
+        if (blue_one) ids.push(blue_one.id);
+        if (blue_two) ids.push(blue_two.id);
+        if (blue_three) ids.push(blue_three.id);
 
-      return ids.includes(ua.user.id);
-    }).then(fsf => {
-      this.activeUserScoutingFieldSchedule = fsf.sort(this.ss.scoutFieldScheduleSortFunction);
-      this.gs.decrementOutstandingCalls();
-    });
+        return ids.includes(ua.user.id);
+      })
+      .then(fsf => {
+        this.activeUserScoutingFieldSchedule = fsf.sort(this.ss.scoutFieldScheduleSortFunction);
+        this.gs.decrementOutstandingCalls();
+      });
   }
 
   saveUserInfo(): void {
-    this.api.post(true, 'scouting/admin/scouting-user-info/', this.activeUserScoutingUserInfo, (result: any) => {
-      if (this.modalService.checkResponse(result)) {
-        this.getUsersScoutingUserInfo();
-        this.modalService.successfulResponseBanner(result);
+    this.api.post(
+      true,
+      'scouting/admin/scouting-user-info/',
+      this.activeUserScoutingUserInfo,
+      (result: any) => {
+        if (this.modalService.checkResponse(result)) {
+          this.getUsersScoutingUserInfo();
+          this.modalService.successfulResponseBanner(result);
+        }
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
       }
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    );
   }
 
   markScoutPresent(sfs: ScoutFieldSchedule): void {
     this.modalService.triggerConfirm('Are you sure you want to mark this scout present?', () => {
-      this.api.get(true, 'scouting/admin/mark-scout-present/', {
-        scout_field_sch_id: sfs.id,
-        user_id: this.activeUserScoutingUserInfo.user.id
-      }, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.getUsersScoutingUserInfo();
-        this.ss.loadScoutingFieldSchedules().then(result => {
-          this.activeUserScoutingFieldSchedule = [];
-          if (result) {
-            this.scoutFieldSchedules = result;
-            this.activeUserScoutingFieldSchedule = result.filter(fs => {
-              let ids = [];
+      this.api.get(
+        true,
+        'scouting/admin/mark-scout-present/',
+        {
+          scout_field_sch_id: sfs.id,
+          user_id: this.activeUserScoutingUserInfo.user.id,
+        },
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.getUsersScoutingUserInfo();
+          this.ss.loadScoutingFieldSchedules().then(result => {
+            this.activeUserScoutingFieldSchedule = [];
+            if (result) {
+              this.scoutFieldSchedules = result;
+              this.activeUserScoutingFieldSchedule = result.filter(fs => {
+                let ids = [];
 
-              let red_one = fs.red_one_id as User;
-              let red_two = fs.red_two_id as User;
-              let red_three = fs.red_three_id as User;
+                let red_one = fs.red_one_id as User;
+                let red_two = fs.red_two_id as User;
+                let red_three = fs.red_three_id as User;
 
-              let blue_one = fs.blue_one_id as User;
-              let blue_two = fs.blue_two_id as User;
-              let blue_three = fs.blue_three_id as User;
+                let blue_one = fs.blue_one_id as User;
+                let blue_two = fs.blue_two_id as User;
+                let blue_three = fs.blue_three_id as User;
 
-              if (red_one) ids.push(red_one.id);
-              if (red_two) ids.push(red_two.id);
-              if (red_three) ids.push(red_three.id);
+                if (red_one) ids.push(red_one.id);
+                if (red_two) ids.push(red_two.id);
+                if (red_three) ids.push(red_three.id);
 
-              if (blue_one) ids.push(blue_one.id);
-              if (blue_two) ids.push(blue_two.id);
-              if (blue_three) ids.push(blue_three.id);
+                if (blue_one) ids.push(blue_one.id);
+                if (blue_two) ids.push(blue_two.id);
+                if (blue_three) ids.push(blue_three.id);
 
-              return ids.includes(this.activeUserScoutingUserInfo.user.id);
-            });
+                return ids.includes(this.activeUserScoutingUserInfo.user.id);
+              });
 
-            //trigger an update
-            this.usersScoutingUserInfo = this.usersScoutingUserInfo;
-          }
-        });
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+              //trigger an update
+              this.usersScoutingUserInfo = this.usersScoutingUserInfo;
+            }
+          });
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 

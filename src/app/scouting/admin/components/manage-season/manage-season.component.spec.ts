@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -40,24 +40,33 @@ describe('ManageSeasonComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'getTeams', 'getEventsFromCache', 'loadSeasons',
+      'loadAllScoutingInfo',
+      'getTeams',
+      'getEventsFromCache',
+      'loadSeasons',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.getTeams.and.returnValue(Promise.resolve(null) as any);
     mockSS.getEventsFromCache.and.returnValue(Promise.resolve([]) as any);
     mockSS.loadSeasons.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerConfirm', 'triggerError', 'successfulResponseBanner',
+      'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [ManageSeasonComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -96,7 +105,7 @@ describe('ManageSeasonComponent', () => {
     spyOn(component, 'getAllTeams');
 
     component.init();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
 
     expect(component.seasons.length).toBe(1);
     expect(component.currentSeason.id).toBe(1);
@@ -166,7 +175,7 @@ describe('ManageSeasonComponent', () => {
     mockSS.getTeams.and.returnValue(Promise.resolve(teams));
 
     component.getAllTeams();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
 
     expect(component.teams).toEqual(teams);
   });
@@ -208,7 +217,13 @@ describe('ManageSeasonComponent', () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/', { user_id: '10' }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.get).toHaveBeenCalledWith(
+      true,
+      'scouting/admin/user-seasons/',
+      { user_id: '10' },
+      jasmine.any(Function),
+      jasmine.any(Function)
+    );
     expect(mockSS.loadSeasons).toHaveBeenCalled();
     expect(component.userSeasonModalVisible).toBeTrue();
     expect(component.activeUser.id).toBe(10);
@@ -232,11 +247,13 @@ describe('ManageSeasonComponent', () => {
 
   it('saveUserSeasons should post the full list of user seasons', async () => {
     component.activeUser = Object.assign(new User(), { id: 1 });
-    const activeSeasons = [Object.assign(new UserSeason(), {
-      user: component.activeUser,
-      season: Object.assign(new Season(), { id: 2, season: '2026' }),
-      void_ind: 'n'
-    })];
+    const activeSeasons = [
+      Object.assign(new UserSeason(), {
+        user: component.activeUser,
+        season: Object.assign(new Season(), { id: 2, season: '2026' }),
+        void_ind: 'n',
+      }),
+    ];
     component.activeUserSeasons = activeSeasons;
 
     mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
@@ -246,7 +263,13 @@ describe('ManageSeasonComponent', () => {
 
     component.saveUserSeasons();
 
-    expect(mockAPI.post).toHaveBeenCalledWith(true, 'scouting/admin/user-seasons/1/', activeSeasons, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.post).toHaveBeenCalledWith(
+      true,
+      'scouting/admin/user-seasons/1/',
+      activeSeasons,
+      jasmine.any(Function),
+      jasmine.any(Function)
+    );
     expect(mockAPI.delete).not.toHaveBeenCalled();
   });
 });

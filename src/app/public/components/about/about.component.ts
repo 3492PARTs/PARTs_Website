@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
 import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
@@ -9,14 +9,9 @@ import { BlueBannersComponent } from '@app/shared/components/elements/blue-banne
 import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-about',
-  imports: [
-    BoxComponent,
-    HeaderComponent,
-    ModalComponent,
-    CommonModule,
-    BlueBannersComponent,
-  ],
+  imports: [BoxComponent, HeaderComponent, ModalComponent, CommonModule, BlueBannersComponent],
   templateUrl: './about.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
@@ -76,8 +71,8 @@ export class AboutComponent implements OnInit {
         `At Worlds we competed in the Daly division. We finished ranking 61 out of
           75. Even though we did not win the division we did win the
           Team Sustainability Award sponsored by Dow.`,
-        `In the <a href="https://www.thebluealliance.com/events/regional/2025#rankings" target="_blank">Regional Championship Pool</a>, we ranked #83 having earned 123 points.`
-      ]
+        `In the <a href="https://www.thebluealliance.com/events/regional/2025#rankings" target="_blank">Regional Championship Pool</a>, we ranked #83 having earned 123 points.`,
+      ],
     },
     {
       visible: false,
@@ -121,8 +116,8 @@ export class AboutComponent implements OnInit {
           out of 50 teams. We were not in finals however we won the Team
           Sustainability Award sponsored by Dow. This award "Celebrates and
           recognizes a team which has developed sustainable practices to have a
-          positive environmental impact and achieve long-term continuity.`
-      ]
+          positive environmental impact and achieve long-term continuity.`,
+      ],
     },
     {
       visible: false,
@@ -158,8 +153,8 @@ export class AboutComponent implements OnInit {
           50. We did not go on to compete in finals. At Smoky Mountains we were
           ranked 9 out of 38. We were captains of the 6th alliance consisting of
           teams 8841 (OTTER) and 4462 (Full Metal Jackets). We lost in upper
-          bracket round one and lower bracket round 2 and were eliminated.`
-      ]
+          bracket round one and lower bracket round 2 and were eliminated.`,
+      ],
     },
     {
       visible: false,
@@ -201,8 +196,8 @@ export class AboutComponent implements OnInit {
           and Robotichauns (2393).`,
         `In our off season event at WVRoX, we ranked 19th out of 24 teams, and
           we made it to the quarterfinals, where we were picked by Dark Side
-          Robotics (7515) and Horsepower (4991).`
-      ]
+          Robotics (7515) and Horsepower (4991).`,
+      ],
     },
     {
       visible: false,
@@ -244,8 +239,8 @@ export class AboutComponent implements OnInit {
           South Carolina. Our bot was ranked 22 out of 63, and were picked by
           Alliance 5 team captain AMP'D Robotics (1708) and their first pick
           Pandamaniacs (1293). Our alliance was knocked out in quarterfinals
-          match number 2.`
-      ]
+          match number 2.`,
+      ],
     },
     {
       visible: false,
@@ -288,8 +283,8 @@ export class AboutComponent implements OnInit {
           that went, and we did not get passed to qualifiers. Then our second
           competition at the Greater Pittsburgh Regionals in California, we
           ranked 24th out of 45 teams and we also did not get passed to
-          qualifiers`
-      ]
+          qualifiers`,
+      ],
     },
     {
       visible: false,
@@ -347,8 +342,8 @@ export class AboutComponent implements OnInit {
           finished rank 4 out of 52 teams and in alliance selections ended up
           being the 3rd alliance captain. As alliance captains we chose teams
           4522 (Team SCREAM) and 48 (Team E.L.I.T.E.) for finals, but were
-          eliminated in quarterfinals.`
-      ]
+          eliminated in quarterfinals.`,
+      ],
     },
     {
       visible: false,
@@ -397,8 +392,8 @@ export class AboutComponent implements OnInit {
           regional winners, and 1 from the event's extra, qualifying us for the
           world championship.`,
         `At Worlds we competed in the Darwin division. We finished ranking 62 out of
-          76.`
-      ]
+          76.`,
+      ],
     },
     {
       visible: false,
@@ -430,8 +425,8 @@ export class AboutComponent implements OnInit {
         `In our offseason event WV ROX(West Virginia RObotics eXtreme), we
           competed with our new drive team and finished 16 out of 24. We went on
           the be on the first alliance with 456(Seige Robotics) and 2641(MARS).
-          Playing hard with them, we won the event.`
-      ]
+          Playing hard with them, we won the event.`,
+      ],
     },
     {
       visible: false,
@@ -459,8 +454,8 @@ export class AboutComponent implements OnInit {
           competed through finals where we won the competition qualifying us for
           the world competition.`,
         `At Worlds we competed in the Galileo division. We finished ranking 62 out of
-          76.`
-      ]
+          76.`,
+      ],
     },
     {
       visible: false,
@@ -492,8 +487,8 @@ export class AboutComponent implements OnInit {
             community."</em>
           This qualified us for the world championship.`,
         `At Worlds we competed in the Archimedes division. We finished ranking 32 out of
-          100.`
-      ]
+          100.`,
+      ],
     },
     {
       visible: false,
@@ -521,8 +516,8 @@ export class AboutComponent implements OnInit {
           quarterfinals and were eliminated. At Cross Roads we were ranked 16
           out of 50. We went on to be selected by the 2nd alliance consisting of
           teams 930(Mukwonago BEARs) and 1501(Team THRUST). We played in
-          quarterfinals and were eliminated.`
-      ]
+          quarterfinals and were eliminated.`,
+      ],
     },
     {
       visible: false,
@@ -549,8 +544,8 @@ export class AboutComponent implements OnInit {
           through semifinals where we were eliminated. At the Queen City we were
           ranked 17 out of 57. We went on to be selected by the 1st alliance
           consisting of teams 3138(Innovator Robotics) and 1730(Team Driven). We
-          played with them and were eliminated in quarterfinals.`
-      ]
+          played with them and were eliminated in quarterfinals.`,
+      ],
     },
     {
       visible: false,
@@ -583,7 +578,7 @@ export class AboutComponent implements OnInit {
     },
   ];
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
   ngOnInit() {
     this.setScreenSize();

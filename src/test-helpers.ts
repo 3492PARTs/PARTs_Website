@@ -3,7 +3,7 @@
  * Provides common mocks and utilities for testing
  */
 import { Provider } from '@angular/core';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { of, Subject } from 'rxjs';
@@ -21,12 +21,12 @@ export function createMockRouter() {
     routerState: {
       root: {
         snapshot: {
-          data: {}
+          data: {},
         },
-        firstChild: null
-      }
+        firstChild: null,
+      },
     },
-    _eventsSubject: eventsSubject
+    _eventsSubject: eventsSubject,
   };
 }
 
@@ -43,12 +43,12 @@ export function createMockActivatedRoute(params: any = {}, queryParams: any = {}
       queryParams,
       data,
       paramMap: {
-        get: (key: string) => params[key]
+        get: (key: string) => params[key],
       },
       queryParamMap: {
-        get: (key: string) => queryParams[key]
-      }
-    }
+        get: (key: string) => queryParams[key],
+      },
+    },
   };
 }
 
@@ -63,7 +63,9 @@ export function createMockAPIService() {
     delete: jasmine.createSpy('delete').and.returnValue(of({ data: {} })),
     patch: jasmine.createSpy('patch').and.returnValue(of({ data: {} })),
     apiStatus: of({ status: 'ok', version: '1.0.0' }),
-    getAPIStatus: jasmine.createSpy('getAPIStatus').and.returnValue(Promise.resolve({ status: 'ok', version: '1.0.0' }))
+    getAPIStatus: jasmine
+      .createSpy('getAPIStatus')
+      .and.returnValue(Promise.resolve({ status: 'ok', version: '1.0.0' })),
   };
 }
 
@@ -72,7 +74,22 @@ export function createMockAPIService() {
  */
 export function createMockAuthService() {
   return {
-    user: of({ id: null, username: '', email: '', name: '', first_name: '', last_name: '', is_active: false, discord_user_id: '', phone: '', phone_type: '', groups: [], permissions: [], image: '', links: [] }),
+    user: of({
+      id: null,
+      username: '',
+      email: '',
+      name: '',
+      first_name: '',
+      last_name: '',
+      is_active: false,
+      discord_user_id: '',
+      phone: '',
+      phone_type: '',
+      groups: [],
+      permissions: [],
+      image: '',
+      links: [],
+    }),
     userLinks: of([]),
     userSections: of([]),
     loggedIn: of(false),
@@ -80,7 +97,7 @@ export function createMockAuthService() {
     previouslyAuthorized: jasmine.createSpy('previouslyAuthorized'),
     login: jasmine.createSpy('login').and.returnValue(of({ success: true })),
     logout: jasmine.createSpy('logout').and.returnValue(of({ success: true })),
-    checkAPIStatus: jasmine.createSpy('checkAPIStatus').and.returnValue(of({ status: 'ok' }))
+    checkAPIStatus: jasmine.createSpy('checkAPIStatus').and.returnValue(of({ status: 'ok' })),
   };
 }
 
@@ -114,7 +131,7 @@ export function createMockCacheService() {
     get: jasmine.createSpy('get').and.returnValue(of(null)),
     set: jasmine.createSpy('set').and.returnValue(of(null)),
     delete: jasmine.createSpy('delete').and.returnValue(of(null)),
-    clear: jasmine.createSpy('clear').and.returnValue(of(null))
+    clear: jasmine.createSpy('clear').and.returnValue(of(null)),
   };
 }
 
@@ -125,7 +142,7 @@ export function createMockScoutingService() {
   return {
     currentSeason: of({ season_id: 1, year: 2024 }),
     getCurrentSeason: jasmine.createSpy('getCurrentSeason').and.returnValue(of({ season_id: 1 })),
-    outstandingResponsesUploaded: of(true)
+    outstandingResponsesUploaded: of(true),
   };
 }
 
@@ -133,11 +150,7 @@ export function createMockScoutingService() {
  * Common providers for testing components with HTTP and routing
  */
 export function getCommonTestProviders() {
-  return [
-    provideHttpClient(),
-    provideHttpClientTesting(),
-    provideRouter([])
-  ];
+  return [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])];
 }
 
 /**
@@ -149,7 +162,7 @@ export function createMockModalService() {
     close: jasmine.createSpy('close'),
     isOpen: false,
     triggerConfirm: jasmine.createSpy('triggerConfirm'),
-    triggerError: jasmine.createSpy('triggerError')
+    triggerError: jasmine.createSpy('triggerError'),
   };
 }
 
@@ -160,7 +173,7 @@ export function createMockNavigationService() {
   return {
     navigate: jasmine.createSpy('navigate'),
     goBack: jasmine.createSpy('goBack'),
-    getCurrentRoute: jasmine.createSpy('getCurrentRoute').and.returnValue('/')
+    getCurrentRoute: jasmine.createSpy('getCurrentRoute').and.returnValue('/'),
   };
 }
 
@@ -178,7 +191,7 @@ export function createMockSwPush() {
     requestSubscription: jasmine.createSpy('requestSubscription').and.returnValue(Promise.resolve({} as any)),
     unsubscribe: jasmine.createSpy('unsubscribe').and.returnValue(Promise.resolve()),
     _messagesSubject: messagesSubject,
-    _notificationClicksSubject: notificationClicksSubject
+    _notificationClicksSubject: notificationClicksSubject,
   };
 }
 
@@ -191,6 +204,6 @@ export function createMockSwUpdate() {
     unrecoverable: of({}),
     isEnabled: false,
     checkForUpdate: jasmine.createSpy('checkForUpdate').and.returnValue(Promise.resolve(false)),
-    activateUpdate: jasmine.createSpy('activateUpdate').and.returnValue(Promise.resolve(true))
+    activateUpdate: jasmine.createSpy('activateUpdate').and.returnValue(Promise.resolve(true)),
   };
 }

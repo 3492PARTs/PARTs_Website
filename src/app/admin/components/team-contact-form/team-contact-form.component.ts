@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { TableColType } from '@app/shared/components/atoms/table/table.component';
 import { FormManagerComponent } from '@app/shared/components/elements/form-manager/form-manager.component';
@@ -7,14 +7,19 @@ import { FormManagerComponent } from '@app/shared/components/elements/form-manag
   selector: 'app-team-contact-form',
   imports: [BoxComponent, FormManagerComponent],
   templateUrl: './team-contact-form.component.html',
-  styleUrls: ['./team-contact-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./team-contact-form.component.scss'],
 })
 export class TeamContactFormComponent {
-
   teamContactResponsesCols: TableColType[] = [
     { PropertyName: 'id', ColLabel: 'ID' },
     { PropertyName: 'questionanswer_set[0].answer', ColLabel: 'Name' },
-    { PropertyName: 'questionanswer_set[3].answer', ColLabel: 'Message', Type: 'function', ColValueFunction: this.truncateMessage },
+    {
+      PropertyName: 'questionanswer_set[3].answer',
+      ColLabel: 'Message',
+      Type: 'function',
+      ColValueFunction: this.truncateMessage,
+    },
     { PropertyName: 'time', ColLabel: 'Time' },
   ];
 

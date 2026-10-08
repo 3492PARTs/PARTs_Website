@@ -1,22 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
 import { APIService } from '@app/core/services/api.service';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { Flow, FormInitialization, Question, FlowQuestion } from '@app/core/models/form.models';
 import { TableColType, TableComponent } from '@app/shared/components/atoms/table/table.component';
-import { ModalComponent } from "../../atoms/modal/modal.component";
-import { FormElementComponent } from "../../atoms/form-element/form-element.component";
-import { FormComponent } from "../../atoms/form/form.component";
-import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
-import { ButtonComponent } from "../../atoms/button/button.component";
+import { ModalComponent } from '../../atoms/modal/modal.component';
+import { FormElementComponent } from '../../atoms/form-element/form-element.component';
+import { FormComponent } from '../../atoms/form/form.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
+import { ButtonComponent } from '../../atoms/button/button.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { decodeBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-flow-admin-form',
-  imports: [ModalComponent, FormElementComponent, FormComponent, TableComponent, ButtonRibbonComponent, ButtonComponent],
+  imports: [
+    ModalComponent,
+    FormElementComponent,
+    FormComponent,
+    TableComponent,
+    ButtonRibbonComponent,
+    ButtonComponent,
+  ],
   templateUrl: './flow-admin-form.component.html',
-  styleUrls: ['./flow-admin-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./flow-admin-form.component.scss'],
 })
 export class FlowAdminFormComponent implements OnInit {
   @Input() FormType = '';
@@ -27,10 +35,30 @@ export class FlowAdminFormComponent implements OnInit {
   flowTableCols: TableColType[] = [
     { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' },
     { PropertyName: 'name', ColLabel: 'Name' },
-    { PropertyName: 'single_run', ColLabel: 'Single Run', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
-    { PropertyName: 'form_based', ColLabel: 'Form Based', Type: 'function', ColValueFunction: this.decodeBoolean.bind(this) },
-    { PropertyName: 'flow_questions', ColLabel: 'Questions', Type: 'function', ColValueFunction: this.decodeFlowQuestions },
-    { PropertyName: 'flow_conditional_on', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.decodeConditionalFlow.bind(this) },
+    {
+      PropertyName: 'single_run',
+      ColLabel: 'Single Run',
+      Type: 'function',
+      ColValueFunction: this.decodeBoolean.bind(this),
+    },
+    {
+      PropertyName: 'form_based',
+      ColLabel: 'Form Based',
+      Type: 'function',
+      ColValueFunction: this.decodeBoolean.bind(this),
+    },
+    {
+      PropertyName: 'flow_questions',
+      ColLabel: 'Questions',
+      Type: 'function',
+      ColValueFunction: this.decodeFlowQuestions,
+    },
+    {
+      PropertyName: 'flow_conditional_on',
+      ColLabel: 'Conditional on',
+      Type: 'function',
+      ColValueFunction: this.decodeConditionalFlow.bind(this),
+    },
   ];
   flowModalVisible = false;
   activeFlow: Flow | undefined = undefined;
@@ -43,46 +71,69 @@ export class FlowAdminFormComponent implements OnInit {
     { PropertyName: 'press_to_continue', ColLabel: 'Press to continue', Type: 'checkbox' },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.init() : null);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.init() : null));
   }
 
   private init(): void {
-    this.api.get(true, 'form/form-editor/', {
-      form_typ: this.FormType
-    }, (result: FormInitialization) => {
-      this.FormMetadata = result;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/form-editor/',
+      {
+        form_typ: this.FormType,
+      },
+      (result: FormInitialization) => {
+        this.FormMetadata = result;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
 
     this.getFlows();
   }
 
   private getFlows(): void {
-    this.api.get(true, 'form/flow/', {
-      form_typ: this.FormType
-    }, (result: Flow[]) => {
-      this.flows = result;
-      this.question = new Question();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/flow/',
+      {
+        form_typ: this.FormType,
+      },
+      (result: Flow[]) => {
+        this.flows = result;
+        this.question = new Question();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   saveFlow(): void {
     if (this.activeFlow) {
       this.activeFlow.form_typ.form_typ = this.FormType;
-      this.api.post(true, 'form/flow/', this.activeFlow, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.activeFlow = new Flow();
-        this.flowModalVisible = false;
-        this.init();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.post(
+        true,
+        'form/flow/',
+        this.activeFlow,
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.activeFlow = new Flow();
+          this.flowModalVisible = false;
+          this.init();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     }
   }
 
@@ -108,8 +159,7 @@ export class FlowAdminFormComponent implements OnInit {
     if (this.activeFlow) {
       let i = 0;
       for (; i < this.activeFlow.flow_questions.length; i++)
-        if (this.activeFlow.flow_questions[i].question.id === flowQuestion.question.id)
-          break;
+        if (this.activeFlow.flow_questions[i].question.id === flowQuestion.question.id) break;
 
       this.activeFlow.flow_questions.splice(i, 1);
       this.buildQuestions();
@@ -119,7 +169,13 @@ export class FlowAdminFormComponent implements OnInit {
   buildQuestions(): void {
     this.questions = [];
     if (this.FormMetadata)
-      this.questions = this.FormMetadata.questions.filter(q => this.activeFlow && this.activeFlow.form_sub_typ && q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ && !this.activeFlow.flow_questions.map(q => q.question.id).includes(q.id));
+      this.questions = this.FormMetadata.questions.filter(
+        q =>
+          this.activeFlow &&
+          this.activeFlow.form_sub_typ &&
+          q.form_sub_typ.form_sub_typ === this.activeFlow.form_sub_typ.form_sub_typ &&
+          !this.activeFlow.flow_questions.map(q => q.question.id).includes(q.id)
+      );
   }
 
   decodeBoolean(b: boolean): string {
@@ -129,7 +185,6 @@ export class FlowAdminFormComponent implements OnInit {
   decodeFlowQuestions(flowQuestions: FlowQuestion[]): string {
     return flowQuestions.map(qf => `Order: ${qf.order}: ${qf.question.question}`).join('\n');
     //Order: 1: Autonomous: Leave staging area?
-
   }
 
   decodeConditionalFlow(n?: number): string {

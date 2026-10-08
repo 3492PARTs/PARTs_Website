@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -45,7 +45,11 @@ describe('MeetingAttendanceComponent', () => {
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.getAppSize.and.returnValue(AppSize.LG);
@@ -80,13 +84,15 @@ describe('MeetingAttendanceComponent', () => {
     mockMS.computeMeetingDuration.and.returnValue('2 hours');
     mockMS.isDayToTakeAttendance.and.returnValue(true);
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerError', 'successfulResponseBanner', 'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
+      'triggerConfirm',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [MeetingAttendanceComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -159,7 +165,7 @@ describe('MeetingAttendanceComponent', () => {
     attendance.meeting = meeting;
     component.attendance = [attendance];
 
-    expect(component.hasAttendance(meeting)).toBeTrue();
+    expect(component.hasAttendedMeeting(meeting)).toBeTrue();
   });
 
   it('showMeetingModal should set a new meeting when no meeting is provided', () => {

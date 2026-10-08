@@ -1,11 +1,11 @@
-import { Component, input, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, input, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import LoadImg from 'blueimp-load-image';
 import { ScoutPitResponse, ScoutPitImage } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 
-import { HeaderComponent } from "../../../../shared/components/atoms/header/header.component";
+import { HeaderComponent } from '../../../../shared/components/atoms/header/header.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { strNoE } from '@app/core/utils/utils.functions';
@@ -13,7 +13,8 @@ import { strNoE } from '@app/core/utils/utils.functions';
   selector: 'app-scout-pic-display',
   imports: [ButtonComponent, HeaderComponent],
   templateUrl: './scout-pic-display.component.html',
-  styleUrls: ['./scout-pic-display.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./scout-pic-display.component.scss'],
 })
 export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   @Input() ScoutPitImages: ScoutPitImage[] = [];
@@ -26,7 +27,11 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
 
   elementId = '';
 
-  constructor(private gs: GeneralService, private api: APIService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
     this.elementId = this.gs.getNextGsId();
@@ -47,7 +52,9 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
   }
 
   setImages(): void {
-    this.ScoutPitImages = this.ScoutPitImages.filter(spi => strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ);
+    this.ScoutPitImages = this.ScoutPitImages.filter(
+      spi => strNoE(this.PitImgTyp) || this.PitImgTyp === spi.pit_image_typ.pit_image_typ
+    );
     this.preview();
   }
 
@@ -72,8 +79,7 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
       if (index !== undefined) {
         link = this.ScoutPitImages[index].img_url;
         this.displayPicIndex = index;
-      }
-      else {
+      } else {
         for (let i = 0; i < this.ScoutPitImages.length; i++) {
           if (this.ScoutPitImages[i].default) {
             this.displayPicIndex = i;
@@ -108,21 +114,27 @@ export class ScoutPicDisplayComponent implements OnInit, OnChanges {
           //minWidth: 100,
           //minHeight: 50,
           //canvas: true,
-          orientation: true
+          orientation: true,
         }
       );
     }
   }
 
   setDefaultPic(spi: ScoutPitImage): void {
-    this.api.get(true, 'scouting/pit/set-default-pit-image/', {
-      scout_pit_img_id: spi.id
-    }, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.ScoutPitImages.forEach(p => p.default = false);
-      spi.default = true;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'scouting/pit/set-default-pit-image/',
+      {
+        scout_pit_img_id: spi.id,
+      },
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.ScoutPitImages.forEach(p => (p.default = false));
+        spi.default = true;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 }

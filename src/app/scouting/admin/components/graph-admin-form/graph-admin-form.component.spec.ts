@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -25,14 +25,22 @@ describe('GraphAdminFormComponent', () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
-      if (successCb) successCb({ graphs: [], graph_types: [], graph_question_types: [], question_condition_types: [] }); return Promise.resolve({ graphs: [], graph_types: [], graph_question_types: [], question_condition_types: [] });
+      if (successCb) successCb({ graphs: [], graph_types: [], graph_question_types: [], question_condition_types: [] });
+      return Promise.resolve({ graphs: [], graph_types: [], graph_question_types: [], question_condition_types: [] });
     });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({}); return Promise.resolve({}); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({});
+      return Promise.resolve({});
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
@@ -40,7 +48,7 @@ describe('GraphAdminFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GraphAdminFormComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

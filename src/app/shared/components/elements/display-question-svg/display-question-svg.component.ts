@@ -1,6 +1,17 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  Renderer2,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Question } from '@app/core/models/form.models';
-import { SafeHTMLPipe } from "../../../pipes/safe-html.pipe";
+import { SafeHTMLPipe } from '../../../pipes/safe-html.pipe';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
@@ -9,10 +20,10 @@ import { triggerChange } from '@app/core/utils/utils.functions';
   selector: 'app-display-question-svg',
   imports: [SafeHTMLPipe, CommonModule],
   templateUrl: './display-question-svg.component.html',
-  styleUrls: ['./display-question-svg.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./display-question-svg.component.scss'],
 })
 export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
-
   @Input() set Question(q: Question) {
     this.question = q;
     triggerChange(() => this.setSvgAttributes());
@@ -31,7 +42,10 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
 
   private clickListener: (() => void) | null = null; // Store the listener function
 
-  constructor(private renderer: Renderer2, private gs: GeneralService) { }
+  constructor(
+    private renderer: Renderer2,
+    private gs: GeneralService
+  ) {}
 
   ngAfterViewInit(): void {
     this.setSvgAttributes();
@@ -64,7 +78,8 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
         this.renderer.setStyle(pathElement, 'stroke-linejoin', 'round');
       }
 
-      if (!this.clickListener) { // Check if listener already exists
+      if (!this.clickListener) {
+        // Check if listener already exists
         this.clickListener = this.renderer.listen(this.svgDiv.nativeElement, 'click', (event: MouseEvent) => {
           const target = event.target as SVGElement;
           if (target.tagName === 'path') {
@@ -78,8 +93,8 @@ export class DisplayQuestionSvgComponent implements AfterViewInit, OnDestroy {
   click(e: MouseEvent): void {
     if (this.svgDiv) {
       let coords = {
-        x: parseFloat((e.offsetX / parseInt(this.svgDiv.nativeElement.offsetWidth) * 100).toFixed(2)),
-        y: parseFloat((e.offsetY / parseInt(this.svgDiv.nativeElement.offsetHeight) * 100).toFixed(2)),
+        x: parseFloat(((e.offsetX / parseInt(this.svgDiv.nativeElement.offsetWidth)) * 100).toFixed(2)),
+        y: parseFloat(((e.offsetY / parseInt(this.svgDiv.nativeElement.offsetHeight)) * 100).toFixed(2)),
       };
 
       if (this.Inverted) {

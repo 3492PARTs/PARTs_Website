@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-    selector: 'app-header',
-    imports: [CommonModule],
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+  selector: 'app-header',
+  imports: [CommonModule],
+  templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   @Input() h?: number;
@@ -16,9 +17,7 @@ export class HeaderComponent implements OnInit {
   @Input() Width = 'auto';
   @Input() Color: string | undefined = undefined;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

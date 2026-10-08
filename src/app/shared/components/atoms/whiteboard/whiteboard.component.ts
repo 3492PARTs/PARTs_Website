@@ -1,20 +1,29 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ButtonComponent } from "../button/button.component";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 import { GeneralService } from '@app/core/services/general.service';
-import { FormElementGroupComponent } from "../form-element-group/form-element-group.component";
+import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { CommonModule } from '@angular/common';
 import { fromEvent, map, merge, switchMap, takeUntil } from 'rxjs';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { FormElementComponent } from "../form-element/form-element.component";
+import { FormElementComponent } from '../form-element/form-element.component';
 @Component({
   selector: 'app-whiteboard',
   imports: [ButtonComponent, FormElementGroupComponent, CommonModule, FormElementComponent],
   templateUrl: './whiteboard.component.html',
-  styleUrls: ['./whiteboard.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./whiteboard.component.scss'],
 })
 export class WhiteboardComponent implements OnInit {
-
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
   private ctx!: CanvasRenderingContext2D;
   private isDrawing = false;
@@ -57,17 +66,18 @@ export class WhiteboardComponent implements OnInit {
   private redoStack: ImageData[] = [];
   private currentStep = 0;
 
-  constructor(private gs: GeneralService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d', { willReadFrequently: true })!;
   }
 
   selectColor(color: string) {
-    if (this.currentColor !== color)
-      this.currentColor = color;
-    else
-      this.currentColor = '';
+    if (this.currentColor !== color) this.currentColor = color;
+    else this.currentColor = '';
   }
 
   onCanvasClick(event: MouseEvent) {
@@ -88,7 +98,6 @@ export class WhiteboardComponent implements OnInit {
 
       const [x, y] = this.getCoordinates(event);
       this.draw(x, y);
-
     }
   }
 
@@ -163,7 +172,7 @@ export class WhiteboardComponent implements OnInit {
       //const x = (event.clientX - rect.left) / this.scaleX;
       //const y = (event.clientY - rect.top) / this.scaleY;
 
-      const [x, y] = this.getCoordinates(event)
+      const [x, y] = this.getCoordinates(event);
 
       if (this.stampText.length > 0) {
         // Get text dimensions
@@ -202,10 +211,10 @@ export class WhiteboardComponent implements OnInit {
     const dataURL = this.canvas.nativeElement.toDataURL('image/png');
     // Download or upload the dataURL to your server
     // Example:
-    // window.open(dataURL, '_blank'); 
+    // window.open(dataURL, '_blank');
     // or send dataURL to a backend API for saving
 
-    // This is a simplified example. You'll likely need to handle 
+    // This is a simplified example. You'll likely need to handle
     // image saving and uploading more robustly in a real-world application.
     const file = this.dataURLtoFile(dataURL);
     this.ImageChange.emit(file);
@@ -217,7 +226,7 @@ export class WhiteboardComponent implements OnInit {
     var byteString = atob(dataURI.split(',')[1]);
 
     // separate out the mime component
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
     // write the bytes of the string to an ArrayBuffer
     var ab = new ArrayBuffer(byteString.length);
@@ -232,8 +241,7 @@ export class WhiteboardComponent implements OnInit {
 
     // write the ArrayBuffer to a blob, and you're done
     var blob = new Blob([ab], { type: mimeString });
-    return new File([blob], "whiteboard.png", { type: mimeString, });
-
+    return new File([blob], 'whiteboard.png', { type: mimeString });
   }
 
   clearCanvas(confirm = true) {
@@ -245,13 +253,10 @@ export class WhiteboardComponent implements OnInit {
         this.currentColor = '';
         this.stampText = '';
       }
-
     };
 
-    if (confirm)
-      this.modalService.triggerConfirm('Are you sure you want to clear the canvas?', fn);
-    else
-      fn();
+    if (confirm) this.modalService.triggerConfirm('Are you sure you want to clear the canvas?', fn);
+    else fn();
   }
 
   private setScale(): void {
@@ -317,12 +322,9 @@ export class WhiteboardComponent implements OnInit {
   }
 
   toggleStampText(s: string): void {
-    if (this.stampText.length <= 0)
-      this.stampText = s;
-    else if (this.stampText !== s)
-      this.stampText = s;
-    else
-      this.stampText = '';
+    if (this.stampText.length <= 0) this.stampText = s;
+    else if (this.stampText !== s) this.stampText = s;
+    else this.stampText = '';
   }
 
   resetCustomStampText(): void {

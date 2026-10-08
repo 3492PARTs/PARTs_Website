@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Col, ScoutFieldResponsesReturn } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -15,7 +15,8 @@ import { ModalService } from '@app/core/services/modal.service';
   selector: 'app-manage-field-responses',
   imports: [TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './manage-field-responses.component.html',
-  styleUrls: ['./manage-field-responses.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-field-responses.component.scss'],
 })
 export class ManageFieldResponsesComponent implements OnInit {
   scoutResults: ScoutFieldResponsesReturn = new ScoutFieldResponsesReturn();
@@ -31,12 +32,18 @@ export class ManageFieldResponsesComponent implements OnInit {
 
   tableWidth = '200%';
 
-  constructor(private gs: GeneralService, private api: APIService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private ss: ScoutingService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
     this.setTableSize();
 
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getFieldResponses();
       }
@@ -73,16 +80,22 @@ export class ManageFieldResponsesComponent implements OnInit {
 
   deleteFieldResult(): void {
     this.modalService.triggerConfirm('Are you sure you want to delete this result?', () => {
-      this.api.delete(true, 'scouting/admin/delete-field-result/', {
-        scout_field_id: this.activeScoutResult.id
-      }, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.getFieldResponses();
-        this.activeScoutResult = null;
-        this.scoutResultModalVisible = false;
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.delete(
+        true,
+        'scouting/admin/delete-field-result/',
+        {
+          scout_field_id: this.activeScoutResult.id,
+        },
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.getFieldResponses();
+          this.activeScoutResult = null;
+          this.scoutResultModalVisible = false;
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 }

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -24,24 +24,40 @@ describe('FormManagerComponent', () => {
   beforeEach(async () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post', 'delete']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({}); return Promise.resolve({}); });
-    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({}); return Promise.resolve({}); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb([]);
+      return Promise.resolve([]) as any;
+    });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({});
+      return Promise.resolve({});
+    });
+    mockAPI.delete.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({});
+      return Promise.resolve({});
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'navigateByUrl',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
+      'navigateByUrl',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerError', 'successfulResponseBanner', 'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
+      'triggerConfirm',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [FormManagerComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -75,7 +91,10 @@ describe('FormManagerComponent', () => {
 
   it('getResponses should set responses from API result', () => {
     const r = new Response();
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb([r]); return Promise.resolve([r]); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb([r]);
+      return Promise.resolve([r]);
+    });
     component.getResponses();
     expect(component.responses[0]).toBe(r);
   });

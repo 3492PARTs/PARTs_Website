@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  Renderer2,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { GeneralService } from '@app/core/services/general.service';
 import { ModalService } from '@app/core/services/modal.service';
@@ -12,7 +21,8 @@ import { AppSize, strNoE } from '@app/core/utils/utils.functions';
   selector: 'app-banners',
   imports: [CommonModule, ButtonComponent, BoxComponent],
   templateUrl: './banners.component.html',
-  styleUrls: ['./banners.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./banners.component.scss'],
 })
 export class BannersComponent implements OnInit, AfterViewInit {
   private scrollPosition = 0;
@@ -23,11 +33,16 @@ export class BannersComponent implements OnInit, AfterViewInit {
   mobile = false;
   zIndex = 15;
 
-  constructor(private gs: GeneralService, private router: Router, private renderer: Renderer2, private ms: ModalService) {
+  constructor(
+    private gs: GeneralService,
+    private router: Router,
+    private renderer: Renderer2,
+    private ms: ModalService
+  ) {
     this.ms.currentModalVisible.subscribe(m => {
       if (m) this.zIndex = 19;
       else this.zIndex = 17;
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -41,7 +56,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.router.events.subscribe((val) => {
+    this.router.events.subscribe(val => {
       const currentPage = this.router.url; // Current page route
     });
     this.positionBannerWrapper();
@@ -66,11 +81,11 @@ export class BannersComponent implements OnInit, AfterViewInit {
 
   /**
    * Position the banner wrapper based on scroll position and header height
-   * 
+   *
    * This method calculates the appropriate top position for the banner wrapper
    * to keep it positioned correctly below the header as the user scrolls. The
    * banners should appear below the fixed header and adjust dynamically.
-   * 
+   *
    * Uses native window.scrollY instead of jQuery's $(window).scrollTop() for
    * better performance and eliminates the jQuery dependency.
    */
@@ -90,7 +105,7 @@ export class BannersComponent implements OnInit, AfterViewInit {
   }
 
   scrollEvents(scrollY: number, innerScrollElement = false): void {
-    const header = document.getElementById('site-header') || new HTMLElement()
+    const header = document.getElementById('site-header') || new HTMLElement();
 
     if (strNoE(this.scrollPosition.toString())) {
       // wasn't set yet

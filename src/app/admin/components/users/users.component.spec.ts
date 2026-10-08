@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 
@@ -23,12 +23,12 @@ describe('UsersComponent', () => {
     TestBed.configureTestingModule({
       imports: [UsersComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
         { provide: GeneralService, useValue: mockGeneralService },
-      ]
+      ],
     });
     fixture = TestBed.createComponent(UsersComponent);
     component = fixture.componentInstance;

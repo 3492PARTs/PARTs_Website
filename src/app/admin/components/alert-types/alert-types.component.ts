@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthCallStates, AuthService } from '@app/auth/services/auth.service';
 import { AuthPermission } from '@app/auth/models/user.models';
 import { AlertType } from '@app/core/models/alert.models';
@@ -15,97 +15,129 @@ import { ModalComponent } from '@app/shared/components/atoms/modal/modal.compone
 import { cloneObject } from '@app/core/utils/utils.functions';
 
 @Component({
-    selector: 'app-alert-types',
-    imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, TableComponent, ModalComponent],
-    templateUrl: './alert-types.component.html',
-    styleUrls: ['./alert-types.component.scss']
+  selector: 'app-alert-types',
+  imports: [
+    BoxComponent,
+    FormElementComponent,
+    FormComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    TableComponent,
+    ModalComponent,
+  ],
+  templateUrl: './alert-types.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./alert-types.component.scss'],
 })
 export class AlertTypesComponent implements OnInit {
-    alertTypesTableCols: TableColType[] = [
-        { PropertyName: 'alert_typ_nm', ColLabel: 'Name' },
-        { PropertyName: 'alert_typ', ColLabel: 'Code' },
-        { PropertyName: 'permission.name', ColLabel: 'Permission' }
-    ];
+  alertTypesTableCols: TableColType[] = [
+    { PropertyName: 'alert_typ_nm', ColLabel: 'Name' },
+    { PropertyName: 'alert_typ', ColLabel: 'Code' },
+    { PropertyName: 'permission.name', ColLabel: 'Permission' },
+  ];
 
-    alertTypes: AlertType[] = [];
-    permissions: AuthPermission[] = [];
-    activeAlertType: AlertType = new AlertType();
-    alertTypeModalVisible = false;
+  alertTypes: AlertType[] = [];
+  permissions: AuthPermission[] = [];
+  activeAlertType: AlertType = new AlertType();
+  alertTypeModalVisible = false;
 
-    constructor(private api: APIService, private authService: AuthService, private us: UserService, private modalService: ModalService) { }
+  constructor(
+    private api: APIService,
+    private authService: AuthService,
+    private us: UserService,
+    private modalService: ModalService
+  ) {}
 
-    ngOnInit(): void {
-        this.authService.authInFlight.subscribe((r) => {
-            if (r === AuthCallStates.comp) {
-                this.getAlertTypes();
-                this.getPermissions();
-            }
-        });
+  ngOnInit(): void {
+    this.authService.authInFlight.subscribe(r => {
+      if (r === AuthCallStates.comp) {
+        this.getAlertTypes();
+        this.getPermissions();
+      }
+    });
+  }
+
+  resetAlertType(): void {
+    this.activeAlertType = new AlertType();
+  }
+
+  startNewAlertType(): void {
+    this.resetAlertType();
+    this.alertTypeModalVisible = true;
+  }
+
+  editAlertType(alertType: AlertType): void {
+    this.activeAlertType = cloneObject(alertType);
+    this.alertTypeModalVisible = true;
+  }
+
+  getAlertTypes(): void {
+    this.api.get(
+      true,
+      'alerts/types/',
+      undefined,
+      (result: AlertType[]) => {
+        this.alertTypes = result;
+      },
+      () => {
+        this.alertTypes = [];
+      }
+    );
+  }
+
+  getPermissions(): void {
+    this.us.getPermissions().then(result => {
+      if (result) {
+        this.permissions = result;
+      }
+    });
+  }
+
+  saveAlertType(): void {
+    const alertTypeToSave: AlertType = cloneObject(this.activeAlertType);
+
+    if (alertTypeToSave.permission === undefined || alertTypeToSave.permission.id === 0) {
+      alertTypeToSave.permission = undefined;
     }
-
-    resetAlertType(): void {
-        this.activeAlertType = new AlertType();
-    }
-
-    startNewAlertType(): void {
+    this.api.post(
+      true,
+      'alerts/types/',
+      alertTypeToSave,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.getAlertTypes();
         this.resetAlertType();
-        this.alertTypeModalVisible = true;
+        this.alertTypeModalVisible = false;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
+  }
+
+  voidAlertType(alertType?: AlertType): void {
+    const target = cloneObject(alertType ?? this.activeAlertType);
+
+    if (!target.alert_typ) {
+      this.modalService.triggerError('Select an alert type to void.');
+      return;
     }
 
-    editAlertType(alertType: AlertType): void {
-        this.activeAlertType = cloneObject(alertType);
-        this.alertTypeModalVisible = true;
-    }
-
-    getAlertTypes(): void {
-        this.api.get(true, 'alerts/types/', undefined, (result: AlertType[]) => {
-            this.alertTypes = result;
-        }, () => {
-            this.alertTypes = [];
-        });
-    }
-
-    getPermissions(): void {
-        this.us.getPermissions().then(result => {
-            if (result) {
-                this.permissions = result;
-            }
-        });
-    }
-
-    saveAlertType(): void {
-        const alertTypeToSave: AlertType = cloneObject(this.activeAlertType);
-
-        if (alertTypeToSave.permission === undefined || alertTypeToSave.permission.id === 0) {
-            alertTypeToSave.permission = undefined;
+    this.modalService.triggerConfirm('Are you sure you want to void this alert type?', () => {
+      target.void_ind = 'y';
+      this.api.post(
+        true,
+        'alerts/types/',
+        target,
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.getAlertTypes();
+          this.resetAlertType();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
         }
-        this.api.post(true, 'alerts/types/', alertTypeToSave, (result: any) => {
-            this.modalService.successfulResponseBanner(result);
-            this.getAlertTypes();
-            this.resetAlertType();
-            this.alertTypeModalVisible = false;
-        }, (err: any) => {
-            this.modalService.triggerError(err);
-        });
-    }
-
-    voidAlertType(alertType?: AlertType): void {
-        const target = cloneObject(alertType ?? this.activeAlertType);
-
-        if (!target.alert_typ) {
-            this.modalService.triggerError('Select an alert type to void.');
-            return;
-        }
-
-        this.modalService.triggerConfirm('Are you sure you want to void this alert type?', () => {
-            target.void_ind = 'y';
-            this.api.post(true, 'alerts/types/', target, (result: any) => {
-                this.modalService.successfulResponseBanner(result);
-                this.getAlertTypes();
-                this.resetAlertType();
-            }, (err: any) => {
-                this.modalService.triggerError(err);
-            });
-        });
-    }
+      );
+    });
+  }
 }

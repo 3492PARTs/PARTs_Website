@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -13,12 +13,20 @@ import { previewImage } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-requested-items',
-  imports: [BoxComponent, TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent],
+  imports: [
+    BoxComponent,
+    TableComponent,
+    ModalComponent,
+    FormComponent,
+    FormElementComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+  ],
   templateUrl: './requested-items.component.html',
-  styleUrls: ['./requested-items.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./requested-items.component.scss'],
 })
 export class RequestedItemsComponent implements OnInit {
-
   itemTableCols: TableColType[] = [
     { PropertyName: 'item_nm', ColLabel: 'Item' },
     { PropertyName: 'item_desc', ColLabel: 'Description' },
@@ -31,10 +39,14 @@ export class RequestedItemsComponent implements OnInit {
   activeItem = new Item();
   itemModalVisible = false;
 
-  constructor(private api: APIService, private authService: AuthService, private gs: GeneralService) { }
+  constructor(
+    private api: APIService,
+    private authService: AuthService,
+    private gs: GeneralService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getItems();
       }
@@ -54,7 +66,6 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   saveItem(): void {
-
     let formData = new FormData();
     //formData.append('file', this.form.get('profile').value);
     for (const [k, v] of Object.entries(this.activeItem)) {
@@ -69,7 +80,6 @@ export class RequestedItemsComponent implements OnInit {
       this.itemModalVisible = false;
       this.getItems();
     });
-
   }
 
   previewImageWrapper(link: string, id: string): void {
@@ -77,7 +87,7 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   previewImageFile(): void {
-    this.gs.previewImageFile(this.activeItem.img, this.loadImage.bind(this))
+    this.gs.previewImageFile(this.activeItem.img, this.loadImage.bind(this));
   }
 
   loadImage(ev: ProgressEvent<FileReader>): any {

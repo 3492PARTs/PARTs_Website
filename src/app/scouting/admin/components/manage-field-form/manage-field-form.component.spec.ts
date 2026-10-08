@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -26,14 +26,24 @@ describe('ManageFieldFormComponent', () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
     mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
-      const r = new FormInitialization(); if (successCb) successCb(r); return Promise.resolve(r);
+      const r = new FormInitialization();
+      if (successCb) successCb(r);
+      return Promise.resolve(r);
     });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'previewImageFile',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
+      'previewImageFile',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.isMobile.and.returnValue(false);
@@ -42,7 +52,7 @@ describe('ManageFieldFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ManageFieldFormComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -84,7 +94,13 @@ describe('ManageFieldFormComponent', () => {
   it('formInit should call api.get with form_typ', () => {
     mockAPI.get.calls.reset();
     component.formInit();
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'form/form-editor/', { form_typ: 'field' }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.get).toHaveBeenCalledWith(
+      true,
+      'form/form-editor/',
+      { form_typ: 'field' },
+      jasmine.any(Function),
+      jasmine.any(Function)
+    );
   });
 
   it('buildFlowOptions should filter flows by activeFormSubType', () => {

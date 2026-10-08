@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -24,17 +24,22 @@ describe('MetricsComponent', () => {
   beforeEach(async () => {
     const authInFlight = new BehaviorSubject<number>(AuthCallStates.prcs);
     mockAPI = jasmine.createSpyObj('APIService', ['get']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ retMessage: 'data' }); return Promise.resolve({ retMessage: 'data' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ retMessage: 'data' });
+      return Promise.resolve({ retMessage: 'data' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
-    mockSS = jasmine.createSpyObj('ScoutingService', [
-      'getFieldFormFormFromCache', 'getTeamsFromCache',
-    ]);
+    mockSS = jasmine.createSpyObj('ScoutingService', ['getFieldFormFormFromCache', 'getTeamsFromCache']);
     mockSS.getFieldFormFormFromCache.and.returnValue(Promise.resolve(null) as any);
     mockSS.getTeamsFromCache.and.returnValue(Promise.resolve([]) as any);
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError']);
@@ -42,7 +47,7 @@ describe('MetricsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MetricsComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -64,11 +69,24 @@ describe('MetricsComponent', () => {
 
   it('runScoutingReport should call api.get', () => {
     component.runScoutingReport();
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/scouting-report/', undefined, jasmine.any(Function), jasmine.any(Function), undefined, 600000);
+    expect(mockAPI.get).toHaveBeenCalledWith(
+      true,
+      'scouting/admin/scouting-report/',
+      undefined,
+      jasmine.any(Function),
+      jasmine.any(Function),
+      undefined,
+      600000
+    );
   });
 
   it('runScoutingReport error should call triggerError', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => { if (errCb) errCb('err'); return Promise.resolve() as any; });
+    mockAPI.get.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (result: any) => void, errCb?: (err: any) => void) => {
+        if (errCb) errCb('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.runScoutingReport();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

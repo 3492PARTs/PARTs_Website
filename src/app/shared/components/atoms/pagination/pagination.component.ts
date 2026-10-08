@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Page  } from '@app/core/utils/utils.functions';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Page } from '@app/core/utils/utils.functions';
 
 @Component({
   selector: 'app-pagination',
   imports: [CommonModule],
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./pagination.component.scss'],
 })
 export class PaginationComponent implements OnInit {
-
   _pageInfo: Page = new Page();
   @Input()
   public set PageInfo(val: Page) {
@@ -27,10 +27,9 @@ export class PaginationComponent implements OnInit {
 
   @Output() FunctionCallBack: EventEmitter<any> = new EventEmitter();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getPage(val: number): void {
     this.FunctionCallBack.emit(val);
@@ -55,5 +54,4 @@ export class PaginationComponent implements OnInit {
       this.pages.push(tmpPg);
     }
   }
-
 }

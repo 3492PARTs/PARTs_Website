@@ -1,7 +1,25 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  Renderer2,
+  ViewChild,
+  ViewChildren,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Banner } from '@app/core/models/api.models';
 import { Question, Answer, Flow, FlowAnswer, FlowQuestion } from '@app/core/models/form.models';
-import { ScoutFieldFormResponse, Team, Match, ScoutFieldSchedule, CompetitionLevel, FieldForm, FormSubTypeForm } from '@app/scouting/models/scouting.models';
+import {
+  ScoutFieldFormResponse,
+  Team,
+  Match,
+  ScoutFieldSchedule,
+  CompetitionLevel,
+  FieldForm,
+  FormSubTypeForm,
+} from '@app/scouting/models/scouting.models';
 import { User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -16,17 +34,38 @@ import { CommonModule } from '@angular/common';
 import { FormComponent } from '@app/shared/components/atoms/form/form.component';
 import { QuestionDisplayFormComponent } from '@app/shared/components/elements/question-display-form/question-display-form.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
-import { HeaderComponent } from "@app/shared/components/atoms/header/header.component";
-import { QuestionFormElementComponent } from "@app/shared/components/elements/question-form-element/question-form-element.component";
-import { ModalComponent } from "@app/shared/components/atoms/modal/modal.component";
+import { HeaderComponent } from '@app/shared/components/atoms/header/header.component';
+import { QuestionFormElementComponent } from '@app/shared/components/elements/question-form-element/question-form-element.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 
 import { ModalService } from '@app/core/services/modal.service';
-import { arrayObjectIndexOf, cloneObject, formatQuestionAnswer, isQuestionConditionMet, scrollTo, strNoE, triggerChange } from '@app/core/utils/utils.functions';
+import {
+  arrayObjectIndexOf,
+  cloneObject,
+  formatQuestionAnswer,
+  isQuestionConditionMet,
+  scrollTo,
+  strNoE,
+  triggerChange,
+} from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-field-scouting',
-  imports: [BoxComponent, FormElementGroupComponent, ButtonComponent, CommonModule, FormComponent, QuestionDisplayFormComponent, ButtonRibbonComponent, FormElementComponent, HeaderComponent, QuestionFormElementComponent, ModalComponent],
+  imports: [
+    BoxComponent,
+    FormElementGroupComponent,
+    ButtonComponent,
+    CommonModule,
+    FormComponent,
+    QuestionDisplayFormComponent,
+    ButtonRibbonComponent,
+    FormElementComponent,
+    HeaderComponent,
+    QuestionFormElementComponent,
+    ModalComponent,
+  ],
   templateUrl: './field-scouting.component.html',
-  styleUrls: ['./field-scouting.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./field-scouting.component.scss'],
 })
 export class FieldScoutingComponent implements OnInit, OnDestroy {
   invertedImage = false;
@@ -38,15 +77,19 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   scoutFieldResponse = new ScoutFieldFormResponse();
   @ViewChildren('box') boxes: QueryList<ElementRef> = new QueryList<ElementRef>();
-  @ViewChildren(QuestionFormElementComponent) questionFormElements: QueryList<QuestionFormElementComponent> = new QueryList<QuestionFormElementComponent>();
+  @ViewChildren(QuestionFormElementComponent) questionFormElements: QueryList<QuestionFormElementComponent> =
+    new QueryList<QuestionFormElementComponent>();
   @ViewChild(FormComponent) form!: FormComponent;
 
   fullScreen = false;
-  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined = undefined;
+  @ViewChild('imageBackground', { read: ElementRef, static: false }) imageBackground: ElementRef | undefined =
+    undefined;
   @ViewChild('imageContainer', { read: ElementRef, static: false }) imageContainer: ElementRef | undefined = undefined;
   @ViewChild('image', { read: ElementRef, static: false }) image: ElementRef | undefined = undefined;
-  @ViewChild('flowButtonsWrapper', { read: ElementRef, static: false }) flowButtonsWrapper: ElementRef | undefined = undefined;
-  @ViewChild('formSubTypeHeader', { read: ElementRef, static: false }) formSubTypeHeader: ElementRef | undefined = undefined;
+  @ViewChild('flowButtonsWrapper', { read: ElementRef, static: false }) flowButtonsWrapper: ElementRef | undefined =
+    undefined;
+  @ViewChild('formSubTypeHeader', { read: ElementRef, static: false }) formSubTypeHeader: ElementRef | undefined =
+    undefined;
 
   teams: Team[] = [];
   matches: Match[] = [];
@@ -57,7 +100,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   private checkScoutTimeout: number | undefined;
   user!: User;
 
-  outstandingResponses: { id: number, team: number }[] = [];
+  outstandingResponses: { id: number; team: number }[] = [];
 
   private stopwatchRun = false;
   autoTime = 15;
@@ -68,8 +111,16 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
   formDisabled = false;
 
-  constructor(private api: APIService, private gs: GeneralService, private authService: AuthService, private cs: CacheService, private ss: ScoutingService, private renderer: Renderer2, private modalService: ModalService) {
-    this.authService.user.subscribe(u => this.user = u);
+  constructor(
+    private api: APIService,
+    private gs: GeneralService,
+    private authService: AuthService,
+    private cs: CacheService,
+    private ss: ScoutingService,
+    private renderer: Renderer2,
+    private modalService: ModalService
+  ) {
+    this.authService.user.subscribe(u => (this.user = u));
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
@@ -77,14 +128,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.init() : null);
+    this.authService.authInFlight.subscribe(r => (AuthCallStates.comp ? this.init() : null));
   }
 
   ngOnDestroy(): void {
     try {
       window.clearTimeout(this.checkScoutTimeout);
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error clearing timeout');
     }
   }
@@ -105,15 +155,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
             if (!strNoE(qf.flow_conditional_on) && this.isConditionalFlowMet(qf)) {
               this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
               qf.flow_conditional_on = NaN;
-            }
-            else
-              this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
+            } else this.displayFlowStage(qf, this.getFirstStage(qf.flow_questions));
           });
           this.setFullScreen(false);
         });
 
         this.matches = result.matches.filter(m => {
-          const compLvl = (m.comp_level as CompetitionLevel);
+          const compLvl = m.comp_level as CompetitionLevel;
 
           return compLvl && compLvl.comp_lvl_typ === 'qm';
         });
@@ -121,8 +169,14 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         for (let i = 0; i < this.matches.length; i++) {
           const match = this.matches[i];
 
-          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
-            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+          if (
+            match.red_one_field_response &&
+            match.red_two_field_response &&
+            match.red_three_field_response &&
+            match.blue_one_field_response &&
+            match.blue_two_field_response &&
+            match.blue_three_field_response
+          ) {
             this.matches.splice(i--, 1);
           }
         }
@@ -146,7 +200,6 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       sfrc.forEach(s => {
         this.outstandingResponses.push({ id: s.id, team: s.team_id });
       });
-
     });
   }
 
@@ -179,16 +232,20 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.populateOutstandingResponses();
       });
     });
-
   }
 
   checkInScout(): void {
     if (this.scoutFieldSchedule && this.scoutFieldSchedule.id)
-      this.api.get(false, 'scouting/field/check-in/', {
-        scout_field_sch_id: this.scoutFieldSchedule.id
-      }, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-      });
+      this.api.get(
+        false,
+        'scouting/field/check-in/',
+        {
+          scout_field_sch_id: this.scoutFieldSchedule.id,
+        },
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+        }
+      );
   }
 
   setUpdateScoutFieldScheduleTimeout(): void {
@@ -235,35 +292,34 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
           if (match.red_one_id === s.team_id) {
             match.red_one_field_response = true;
-          }
-          else if (match.red_two_id === s.team_id) {
+          } else if (match.red_two_id === s.team_id) {
             match.red_two_field_response = true;
-          }
-          else if (match.red_three_id === s.team_id) {
+          } else if (match.red_three_id === s.team_id) {
             match.red_three_field_response = true;
-          }
-          else if (match.blue_one_id === s.team_id) {
+          } else if (match.blue_one_id === s.team_id) {
             match.blue_one_field_response = true;
-          }
-          else if (match.blue_two_id === s.team_id) {
+          } else if (match.blue_two_id === s.team_id) {
             match.blue_two_field_response = true;
-          }
-          else if (match.blue_three_id === s.team_id) {
+          } else if (match.blue_three_id === s.team_id) {
             match.blue_three_field_response = true;
           }
 
-          if (match.red_one_field_response && match.red_two_field_response && match.red_three_field_response &&
-            match.blue_one_field_response && match.blue_two_field_response && match.blue_three_field_response) {
+          if (
+            match.red_one_field_response &&
+            match.red_two_field_response &&
+            match.red_three_field_response &&
+            match.blue_one_field_response &&
+            match.blue_two_field_response &&
+            match.blue_three_field_response
+          ) {
             this.matches.splice(index, 1);
           }
         }
-
       });
     });
   }
 
   async buildTeamList(team = NaN, teams?: Team[]): Promise<void> {
-
     this.noMatch = false;
 
     this.scoutFieldResponse.team_id = team;
@@ -273,59 +329,99 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     }
     // only run if there are matchs
     if (this.scoutFieldResponse.match && this.matches.length > 0) {
-
       // get the teams for the match from the teams list
       this.teams = [];
       teams.forEach(t => {
-        if (!this.scoutFieldResponse.match?.blue_one_field_response && t.team_no === this.scoutFieldResponse.match?.blue_one_id) {
+        if (
+          !this.scoutFieldResponse.match?.blue_one_field_response &&
+          t.team_no === this.scoutFieldResponse.match?.blue_one_id
+        ) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.blue_two_field_response && t.team_no === this.scoutFieldResponse.match?.blue_two_id) {
+        if (
+          !this.scoutFieldResponse.match?.blue_two_field_response &&
+          t.team_no === this.scoutFieldResponse.match?.blue_two_id
+        ) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.blue_three_field_response && t.team_no == this.scoutFieldResponse.match?.blue_three_id) {
+        if (
+          !this.scoutFieldResponse.match?.blue_three_field_response &&
+          t.team_no == this.scoutFieldResponse.match?.blue_three_id
+        ) {
           this.teams.push(t);
         }
 
-        if (!this.scoutFieldResponse.match?.red_one_field_response && t.team_no === this.scoutFieldResponse.match?.red_one_id) {
+        if (
+          !this.scoutFieldResponse.match?.red_one_field_response &&
+          t.team_no === this.scoutFieldResponse.match?.red_one_id
+        ) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.red_two_field_response && t.team_no === this.scoutFieldResponse.match?.red_two_id) {
+        if (
+          !this.scoutFieldResponse.match?.red_two_field_response &&
+          t.team_no === this.scoutFieldResponse.match?.red_two_id
+        ) {
           this.teams.push(t);
         }
-        if (!this.scoutFieldResponse.match?.red_three_field_response && t.team_no === this.scoutFieldResponse.match?.red_three_id) {
+        if (
+          !this.scoutFieldResponse.match?.red_three_field_response &&
+          t.team_no === this.scoutFieldResponse.match?.red_three_id
+        ) {
           this.teams.push(t);
         }
       });
 
       if (this.scoutFieldSchedule) {
         // set the selected team based on which user is assigned to which team
-        if (!this.scoutFieldResponse.match.blue_one_field_response && this.scoutFieldResponse.match?.blue_one_id && this.user.id === this.scoutFieldSchedule.blue_one_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.blue_one_field_response &&
+          this.scoutFieldResponse.match?.blue_one_id &&
+          this.user.id === this.scoutFieldSchedule.blue_one_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_one_id as number;
         }
 
-        if (!this.scoutFieldResponse.match.blue_two_field_response && this.scoutFieldResponse.match?.blue_two_id && this.user.id === this.scoutFieldSchedule.blue_two_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.blue_two_field_response &&
+          this.scoutFieldResponse.match?.blue_two_id &&
+          this.user.id === this.scoutFieldSchedule.blue_two_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_two_id as number;
         }
 
-        if (!this.scoutFieldResponse.match.blue_three_field_response && this.scoutFieldResponse.match?.blue_three_id && this.user.id === this.scoutFieldSchedule.blue_three_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.blue_three_field_response &&
+          this.scoutFieldResponse.match?.blue_three_id &&
+          this.user.id === this.scoutFieldSchedule.blue_three_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.blue_three_id as number;
         }
 
-        if (!this.scoutFieldResponse.match.red_one_field_response && this.scoutFieldResponse.match?.red_one_id && this.user.id === this.scoutFieldSchedule.red_one_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.red_one_field_response &&
+          this.scoutFieldResponse.match?.red_one_id &&
+          this.user.id === this.scoutFieldSchedule.red_one_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_one_id as number;
         }
 
-        if (!this.scoutFieldResponse.match.red_two_field_response && this.scoutFieldResponse.match?.red_two_id && this.user.id === this.scoutFieldSchedule.red_two_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.red_two_field_response &&
+          this.scoutFieldResponse.match?.red_two_id &&
+          this.user.id === this.scoutFieldSchedule.red_two_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_two_id as number;
         }
 
-        if (!this.scoutFieldResponse.match.red_three_field_response && this.scoutFieldResponse.match?.red_three_id && this.user.id === this.scoutFieldSchedule.red_three_id?.id) {
+        if (
+          !this.scoutFieldResponse.match.red_three_field_response &&
+          this.scoutFieldResponse.match?.red_three_id &&
+          this.user.id === this.scoutFieldSchedule.red_three_id?.id
+        ) {
           this.scoutFieldResponse.team_id = this.scoutFieldResponse.match.red_three_id as number;
         }
       }
-    }
-    else {
+    } else {
       this.teams = teams;
     }
   }
@@ -356,7 +452,11 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       let answers = this.getActiveFlowFlowlessQuestionAnswers();
 
-      sfr = new ScoutFieldFormResponse(this.scoutFieldResponse.team_id, this.scoutFieldResponse.match, this.scoutFieldResponse.answers.concat(answers || []));
+      sfr = new ScoutFieldFormResponse(
+        this.scoutFieldResponse.team_id,
+        this.scoutFieldResponse.match,
+        this.scoutFieldResponse.answers.concat(answers || [])
+      );
     }
 
     this.ss.saveFieldScoutingResponse(sfr, id).then((success: boolean) => {
@@ -393,7 +493,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
           this.scoutFieldResponse.answers.push(qf.question_answer);
           qf.question_answer = undefined;
         }
-      })
+      });
 
       // Get answers from form at bottom of screen
       let answers = this.getActiveFlowFlowlessQuestionAnswers();
@@ -406,17 +506,18 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         // Display the first stage of each flow for this sub type
         triggerChange(() => {
           this.setFullScreen(false);
-          this.activeFormSubTypeForm?.flows.forEach(flow => this.displayFlowStage(flow, this.getFirstStage(flow.flow_questions)));
+          this.activeFormSubTypeForm?.flows.forEach(flow =>
+            this.displayFlowStage(flow, this.getFirstStage(flow.flow_questions))
+          );
         });
       });
 
       this.flowsActionStack = [];
-    }
+    };
 
     if (this.activeFormSubTypeForm?.form_sub_typ.order !== 1)
       this.modalService.triggerConfirm('Please make sure you answers are correct, you cannot go back.', fn);
-    else
-      fn();
+    else fn();
   }
 
   advanceFlow(flow: Flow, flowQuestion: FlowQuestion, question: Question, override = false): void {
@@ -433,7 +534,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       }
 
       // Create new Question Answer to hold the flow answers
-      if (!flow.question_answer) flow.question_answer = new Answer("", undefined, cloneObject(flow));
+      if (!flow.question_answer) flow.question_answer = new Answer('', undefined, cloneObject(flow));
 
       question.answer = formatQuestionAnswer(question.answer);
 
@@ -445,7 +546,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
 
       // check if there is a push to continue condition on a same order question in flow
       if (!flowQuestion.press_to_continue && !override) {
-        const pushToContinueQuestions = flow.flow_questions.filter(fq => fq.order === flowQuestion.order && fq.question.id !== question.id && fq.question.question_typ.question_typ === 'mnt-psh-btn');
+        const pushToContinueQuestions = flow.flow_questions.filter(
+          fq =>
+            fq.order === flowQuestion.order &&
+            fq.question.id !== question.id &&
+            fq.question.question_typ.question_typ === 'mnt-psh-btn'
+        );
         if (pushToContinueQuestions.length > 0) return;
       }
 
@@ -465,7 +571,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.scoutFieldResponse.answers.push(flow.question_answer);
         flow.question_answer = undefined;
 
-        // check if any flows in the form sub type that weren't met are now met. 
+        // check if any flows in the form sub type that weren't met are now met.
         const condQF = this.activeFormSubTypeForm?.flows.filter(qf => !strNoE(qf.flow_conditional_on));
         if (condQF && condQF.length > 0) {
           condQF.forEach(qf => {
@@ -477,14 +583,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
-      // stop flow or go to next 
+      // stop flow or go to next
       if (flow.single_run && nextStage <= flowQuestion.order) {
         flow.flow_questions.forEach(q => {
           this.hideFlowQuestionBox(flow, q);
         });
-      }
-      else
-        this.displayFlowStage(flow, nextStage);
+      } else this.displayFlowStage(flow, nextStage);
     }
   }
 
@@ -500,13 +604,13 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         questions.forEach(q => {
           this.showFlowQuestionBox(flow, q);
         });
-
-      }
-      else {
+      } else {
         // hide
-        flow.flow_questions.filter(q => q.order === stage).forEach(q => {
-          this.hideFlowQuestionBox(flow, q);
-        });
+        flow.flow_questions
+          .filter(q => q.order === stage)
+          .forEach(q => {
+            this.hideFlowQuestionBox(flow, q);
+          });
         /*
         if (stage < flow.questions[flow.questions.length - 1].order) {
           this.displayFlowStage(flow, stage + 1, false);
@@ -535,13 +639,19 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         if (isQuestionConditionMet(a.value, a.question, conditionalQuestion)) {
           sceneFound = true;
         }
-      }
-      else {
-        a.flow_answers.filter(qfa => qfa.question && qfa.question.form_sub_typ && qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ).forEach(qfa => {
-          if (qfa.question && isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
-            sceneFound = true;
-          }
-        })
+      } else {
+        a.flow_answers
+          .filter(
+            qfa =>
+              qfa.question &&
+              qfa.question.form_sub_typ &&
+              qfa.question.form_sub_typ.form_sub_typ !== conditionalQuestion.form_sub_typ.form_sub_typ
+          )
+          .forEach(qfa => {
+            if (qfa.question && isQuestionConditionMet(qfa.value, qfa.question, conditionalQuestion)) {
+              sceneFound = true;
+            }
+          });
       }
     });
 
@@ -551,7 +661,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   private isConditionalFlowMet(conditionalFlow: Flow): boolean {
     let sceneFound = false;
 
-    sceneFound = this.scoutFieldResponse.answers.filter(a => a.flow?.id === conditionalFlow.flow_conditional_on).length > 0;
+    sceneFound =
+      this.scoutFieldResponse.answers.filter(a => a.flow?.id === conditionalFlow.flow_conditional_on).length > 0;
 
     return sceneFound;
   }
@@ -603,8 +714,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   getNextStage(flow: Flow, currentStage: number): number {
     let sceneFound = false;
 
-    const questions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && q.question.conditional_on_questions.length <= 0);
-    const conditionalQuestions = flow.flow_questions.filter(q => q.order === (currentStage + 1) && q.question.conditional_on_questions.length > 0);
+    const questions = flow.flow_questions.filter(
+      q => q.order === currentStage + 1 && q.question.conditional_on_questions.length <= 0
+    );
+    const conditionalQuestions = flow.flow_questions.filter(
+      q => q.order === currentStage + 1 && q.question.conditional_on_questions.length > 0
+    );
 
     sceneFound = questions.length > 0;
 
@@ -615,34 +730,26 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       });
 
-    if (sceneFound)
-      return currentStage + 1;
-    else
-      if (currentStage + 1 < flow.flow_questions[flow.flow_questions.length - 1].order)
-        return this.getNextStage(flow, currentStage + 1);
-      else
-        return this.getFirstStage(flow.flow_questions);
+    if (sceneFound) return currentStage + 1;
+    else if (currentStage + 1 < flow.flow_questions[flow.flow_questions.length - 1].order)
+      return this.getNextStage(flow, currentStage + 1);
+    else return this.getFirstStage(flow.flow_questions);
   }
 
   getFirstStage(questions: FlowQuestion[]): number {
-    return questions.length > 0 ? questions.map(q => q.order).reduce((r1, r2) => r1 < r2 ? r1 : r2) : NaN;
+    return questions.length > 0 ? questions.map(q => q.order).reduce((r1, r2) => (r1 < r2 ? r1 : r2)) : NaN;
   }
 
   hideFlowQuestionBox(flow: Flow, question: FlowQuestion): void {
     const box = this.getFlowQuestionBox(flow, question);
-    if (box)
-      this.renderer.setStyle(box, 'display', 'none');
+    if (box) this.renderer.setStyle(box, 'display', 'none');
   }
 
   showFlowQuestionBox(flow: Flow, flowQuestion: FlowQuestion): void {
     const question = flowQuestion.question;
     const box = this.getFlowQuestionBox(flow, flowQuestion);
     if (box) {
-
-      if (!strNoE(question.x) &&
-        !strNoE(question.y) &&
-        !strNoE(question.width) &&
-        !strNoE(question.height)) {
+      if (!strNoE(question.x) && !strNoE(question.y) && !strNoE(question.width) && !strNoE(question.height)) {
         let width = question.width;
         let height = question.height;
         let x = question.x;
@@ -661,10 +768,8 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         }
       }
 
-      this.renderer.setStyle(box, 'display', "block");
-
+      this.renderer.setStyle(box, 'display', 'block');
     }
-
   }
 
   setInvertedImage(b: boolean): void {
@@ -673,35 +778,38 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   changeFieldInversionForTeam(): void {
-    if (this.scoutFieldResponse.match && [this.scoutFieldResponse.match.blue_one_id, this.scoutFieldResponse.match.blue_two_id, this.scoutFieldResponse.match.blue_three_id].includes(this.scoutFieldResponse.team_id))
+    if (
+      this.scoutFieldResponse.match &&
+      [
+        this.scoutFieldResponse.match.blue_one_id,
+        this.scoutFieldResponse.match.blue_two_id,
+        this.scoutFieldResponse.match.blue_three_id,
+      ].includes(this.scoutFieldResponse.team_id)
+    )
       this.setInvertedImage(true);
-    else
-      this.setInvertedImage(false);
+    else this.setInvertedImage(false);
   }
 
   invertImage(): void {
-
     this.activeFormSubTypeForm?.flows.forEach(flow => {
       let scene = NaN;
       let showFlow = false;
       if (!strNoE(flow.flow_conditional_on) && this.isConditionalFlowMet(flow)) {
         showFlow = true;
         flow.flow_conditional_on = NaN;
-      }
-      else
-        showFlow = true;
+      } else showFlow = true;
 
       // if there is an answer
       if (flow.question_answer) {
         if (showFlow)
-          scene = this.getNextStage(flow, flow.question_answer.flow_answers[flow.question_answer.flow_answers.length - 1].question?.order || 0);
-      }
-      else if (showFlow)
-        scene = this.getFirstStage(flow.flow_questions);
+          scene = this.getNextStage(
+            flow,
+            flow.question_answer.flow_answers[flow.question_answer.flow_answers.length - 1].question?.order || 0
+          );
+      } else if (showFlow) scene = this.getFirstStage(flow.flow_questions);
 
-      if (!Number.isNaN(scene))
-        this.displayFlowStage(flow, scene, true);
-    })
+      if (!Number.isNaN(scene)) this.displayFlowStage(flow, scene, true);
+    });
   }
 
   stopwatchStart(): void {
@@ -717,7 +825,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
   }
 
   stopwatchReset(): void {
-    this.stopwatchSecond = this.autoTime;;
+    this.stopwatchSecond = this.autoTime;
     this.stopwatchLoopCount = 0;
   }
 
@@ -725,14 +833,12 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
     if (this.stopwatchRun) {
       if (this.stopwatchLoopCount === 0) {
         this.stopwatchSecond--;
-        if (this.stopwatchSecond > 0)
-          this.stopwatchLoopCount = 100;
+        if (this.stopwatchSecond > 0) this.stopwatchLoopCount = 100;
       }
 
-      this.stopwatchLoopCount--
+      this.stopwatchLoopCount--;
 
-      if (this.stopwatchSecond > 0)
-        window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
+      if (this.stopwatchSecond > 0) window.setTimeout(this.stopwatchRunFunction.bind(this), 10);
       else {
         this.stopwatchRun = false;
         this.nextFormSubType();
@@ -769,8 +875,7 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'top', '0');
         this.renderer.setStyle(this.formSubTypeHeader.nativeElement, 'left', '2rem');
         //box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
-      }
-      else {
+      } else {
         this.renderer.setStyle(this.imageBackground.nativeElement, 'z-index', '0');
         this.renderer.setStyle(this.imageBackground.nativeElement, 'position', 'initial');
 
@@ -802,52 +907,47 @@ export class FieldScoutingComponent implements OnInit, OnDestroy {
       if (flow && (!flow.question_answer || flow.question_answer.flow_answers.length <= 0)) {
         let index = -1;
         for (let i = 0; i < this.scoutFieldResponse.answers.length; i++) {
-          if (this.scoutFieldResponse.answers[i].flow?.id === flowAction.flow_id)
-            index = i;
+          if (this.scoutFieldResponse.answers[i].flow?.id === flowAction.flow_id) index = i;
         }
 
         if (index !== -1) {
           const questionAnswer = this.scoutFieldResponse.answers.splice(index, 1)[0];
           flow.question_answer = questionAnswer;
           flow.flow_questions.forEach(q => {
-            q.question.answer = formatQuestionAnswer(flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value)
+            q.question.answer = formatQuestionAnswer(
+              flow.question_answer?.flow_answers.find(qfa => qfa.question?.id === q.question.id)?.value
+            );
           });
         }
       }
 
       if (flow && flow.question_answer) {
-
         const index = flow.question_answer.flow_answers.findIndex(qfa => qfa.question?.id === flowAction.question_id);
         if (index >= 0) {
           const question = flow.question_answer.flow_answers[index].question;
           const flowQuestion = flow.flow_questions.find(fq => fq.question.id === question?.id);
           // hide current stage
           if (question && flowQuestion) {
-
             this.displayFlowStage(flow, this.getNextStage(flow, flowQuestion.order), false);
             this.displayFlowStage(flow, flowQuestion.order);
 
-            found = true
+            found = true;
           }
 
           // remove answer
           flow.question_answer.flow_answers.splice(index, 1);
-        }
-        else
-          console.log('no question found in flow answers');
-      }
-      else
-        console.log('no flow or question answers');
+        } else console.log('no question found in flow answers');
+      } else console.log('no flow or question answers');
 
       //check answers saved to response. load back into active
       if (!found) {
-        throw new Error('no flow to undo')
+        throw new Error('no flow to undo');
       }
     }
   }
 
   get hasNonFormBasedFlows(): boolean {
-    return !!(this.activeFormSubTypeForm?.flows?.filter(f => !f.form_based).length);
+    return !!this.activeFormSubTypeForm?.flows?.filter(f => !f.form_based).length;
   }
 
   get formBasedFlows(): any[] {

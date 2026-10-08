@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
 import { RouterLink } from '@angular/router';
 
@@ -6,13 +6,13 @@ import { RouterLink } from '@angular/router';
   selector: 'app-mechanical',
   imports: [BoxComponent, RouterLink],
   templateUrl: './mechanical.component.html',
-  styleUrls: ['./mechanical.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./mechanical.component.scss'],
 })
 export class MechanicalComponent implements AfterViewInit {
-
   @ViewChild('thisJoinPic', { read: ElementRef, static: true }) pic!: ElementRef;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
     const header = document.getElementById('site-header');
@@ -23,5 +23,4 @@ export class MechanicalComponent implements AfterViewInit {
       else this.renderer.setStyle(this.pic.nativeElement, 'height', '100vh');
     }
   }
-
 }

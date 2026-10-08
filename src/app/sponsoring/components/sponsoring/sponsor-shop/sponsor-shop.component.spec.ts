@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -39,7 +39,7 @@ describe('SponsorShopComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SponsorShopComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -71,14 +71,20 @@ describe('SponsorShopComponent', () => {
 
   it('getItems should call api.get and set items', () => {
     const mockItems = [{ item_nm: 'T-Shirt', price: 25 }];
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb(mockItems); return Promise.resolve(mockItems); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb(mockItems);
+      return Promise.resolve(mockItems);
+    });
     component.getItems();
     expect(component.items).toEqual(mockItems as any);
   });
 
   it('getSponsors should call api.get and set sponsors', () => {
     const mockSponsors = [{ sponsor_nm: 'Test Sponsor' }];
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb(mockSponsors); return Promise.resolve(mockSponsors); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb(mockSponsors);
+      return Promise.resolve(mockSponsors);
+    });
     component.getSponsors();
     expect(component.sponsors).toEqual(mockSponsors as any);
   });

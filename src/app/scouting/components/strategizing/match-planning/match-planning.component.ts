@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { User } from '@app/auth/models/user.models';
-import { BoxComponent } from "@app/shared/components/atoms/box/box.component";
-import { FormElementGroupComponent } from "@app/shared/components/atoms/form-element-group/form-element-group.component";
-import { FormElementComponent } from "@app/shared/components/atoms/form-element/form-element.component";
-import { WhiteboardComponent } from "@app/shared/components/atoms/whiteboard/whiteboard.component";
-import { ButtonComponent } from "@app/shared/components/atoms/button/button.component";
-import { FormComponent } from "@app/shared/components/atoms/form/form.component";
-import { ButtonRibbonComponent } from "@app/shared/components/atoms/button-ribbon/button-ribbon.component";
-import { ModalComponent } from "@app/shared/components/atoms/modal/modal.component";
+import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
+import { FormElementGroupComponent } from '@app/shared/components/atoms/form-element-group/form-element-group.component';
+import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
+import { WhiteboardComponent } from '@app/shared/components/atoms/whiteboard/whiteboard.component';
+import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
+import { FormComponent } from '@app/shared/components/atoms/form/form.component';
+import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
+import { ModalComponent } from '@app/shared/components/atoms/modal/modal.component';
 import { FieldForm, Match, MatchStrategy, Team } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
@@ -17,12 +17,21 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, scrollTo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-match-planning',
-  imports: [BoxComponent, FormElementGroupComponent, FormElementComponent, WhiteboardComponent, ButtonComponent, FormComponent, ButtonRibbonComponent, ModalComponent],
+  imports: [
+    BoxComponent,
+    FormElementGroupComponent,
+    FormElementComponent,
+    WhiteboardComponent,
+    ButtonComponent,
+    FormComponent,
+    ButtonRibbonComponent,
+    ModalComponent,
+  ],
   templateUrl: './match-planning.component.html',
-  styleUrls: ['./match-planning.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./match-planning.component.scss'],
 })
 export class MatchPlanningComponent implements OnInit {
-
   private user: User | undefined = undefined;
   matches: Match[] = [];
   teams: Team[] = [];
@@ -35,11 +44,16 @@ export class MatchPlanningComponent implements OnInit {
   activeMatchStrategy: MatchStrategy | undefined = undefined;
   activeTeams: string[] = [];
 
-  outstandingResponses: { id: number, match: number }[] = [];
+  outstandingResponses: { id: number; match: number }[] = [];
   formDisabled = false;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
-    this.authService.user.subscribe(u => this.user = u);
+  constructor(
+    private gs: GeneralService,
+    private ss: ScoutingService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {
+    this.authService.user.subscribe(u => (this.user = u));
 
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.init();
@@ -62,7 +76,15 @@ export class MatchPlanningComponent implements OnInit {
       if (result) {
         this.teams = result.teams;
 
-        const ourMatches = result.matches.filter(m => m.blue_one_id === 3492 || m.blue_two_id === 3492 || m.blue_three_id === 3492 || m.red_one_id === 3492 || m.red_two_id === 349 || m.red_three_id === 3492);
+        const ourMatches = result.matches.filter(
+          m =>
+            m.blue_one_id === 3492 ||
+            m.blue_two_id === 3492 ||
+            m.blue_three_id === 3492 ||
+            m.red_one_id === 3492 ||
+            m.red_two_id === 349 ||
+            m.red_three_id === 3492
+        );
         this.matches = ourMatches;
 
         this.fieldForm = result.field_form_form.field_form;
@@ -80,21 +102,27 @@ export class MatchPlanningComponent implements OnInit {
       sfrc.forEach(s => {
         this.outstandingResponses.push({ id: s.id, match: s.match?.match_number || NaN });
       });
-
     });
   }
 
   setMatchStrategies(): void {
-    if (!this.activeMatchStrategy || !strNoE(this.activeMatchStrategy.id)) this.activeMatchStrategy = new MatchStrategy();
+    if (!this.activeMatchStrategy || !strNoE(this.activeMatchStrategy.id))
+      this.activeMatchStrategy = new MatchStrategy();
     this.activeMatchStrategies = this.matchStrategies.filter(ms => ms.match?.match_key === this.match?.match_key);
     this.buildTeamList();
   }
 
   buildTeamList(): void {
     if (this.match?.blue_one_id)
-      this.activeTeams = [this.match?.blue_one_id.toString() || '', this.match?.blue_two_id.toString() || '', this.match?.blue_three_id.toString() || '', this.match?.red_one_id.toString() || '', this.match?.red_two_id.toString() || '', this.match?.red_three_id.toString() || ''];
-    else
-      this.activeTeams = [];
+      this.activeTeams = [
+        this.match?.blue_one_id.toString() || '',
+        this.match?.blue_two_id.toString() || '',
+        this.match?.blue_three_id.toString() || '',
+        this.match?.red_one_id.toString() || '',
+        this.match?.red_two_id.toString() || '',
+        this.match?.red_three_id.toString() || '',
+      ];
+    else this.activeTeams = [];
   }
 
   setMatchStrategy(ms?: MatchStrategy): void {
@@ -102,31 +130,25 @@ export class MatchPlanningComponent implements OnInit {
   }
 
   setImage(f: File): void {
-    if (this.activeMatchStrategy)
-      this.activeMatchStrategy.img = f;
+    if (this.activeMatchStrategy) this.activeMatchStrategy.img = f;
   }
 
   clearImageUrl(): void {
-    if (this.activeMatchStrategy)
-      this.activeMatchStrategy.img_url = '';
+    if (this.activeMatchStrategy) this.activeMatchStrategy.img_url = '';
   }
 
   saveMatchStrategy(): void {
     if (this.activeMatchStrategy) {
+      if (!this.activeMatchStrategy.match) this.activeMatchStrategy.match = this.match;
 
-      if (!this.activeMatchStrategy.match)
-        this.activeMatchStrategy.match = this.match;
-
-      if (!this.activeMatchStrategy.user)
-        this.activeMatchStrategy.user = this.user;
+      if (!this.activeMatchStrategy.user) this.activeMatchStrategy.user = this.user;
 
       this.ss.saveMatchStrategy(this.activeMatchStrategy).then(result => {
         if (result) {
           this.activeMatchStrategy = new MatchStrategy();
 
           this.ss.loadMatchStrategies().then(result => {
-            if (result)
-              this.matchStrategies = result;
+            if (result) this.matchStrategies = result;
             this.setMatchStrategies();
             scrollTo(0);
           });
@@ -142,18 +164,19 @@ export class MatchPlanningComponent implements OnInit {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.ss.getMatchStrategyResponsesFromCache(tn => tn.where({ 'id': id })).then(result => {
-      result.forEach(r => {
-        this.activeMatchStrategy = r;
-        if (this.activeMatchStrategy.img)
-          this.gs.previewImageFile(this.activeMatchStrategy.img, (ev: ProgressEvent<FileReader>) => {
-            if (this.activeMatchStrategy)
-              this.activeMatchStrategy.img_url = ev.target?.result as string;
-          });
-        this.match = r.match;
-        this.buildTeamList();
+    this.ss
+      .getMatchStrategyResponsesFromCache(tn => tn.where({ id: id }))
+      .then(result => {
+        result.forEach(r => {
+          this.activeMatchStrategy = r;
+          if (this.activeMatchStrategy.img)
+            this.gs.previewImageFile(this.activeMatchStrategy.img, (ev: ProgressEvent<FileReader>) => {
+              if (this.activeMatchStrategy) this.activeMatchStrategy.img_url = ev.target?.result as string;
+            });
+          this.match = r.match;
+          this.buildTeamList();
+        });
       });
-    });
   }
 
   removeResult(): void {

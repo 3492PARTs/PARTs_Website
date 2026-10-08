@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -43,14 +43,18 @@ describe('ProfileComponent', () => {
       notifications: new BehaviorSubject([]).asObservable(),
       messages: new BehaviorSubject([]).asObservable(),
     });
-    mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner', 'triggerConfirm']);
+    mockModalService = jasmine.createSpyObj('ModalService', [
+      'triggerError',
+      'successfulResponseBanner',
+      'triggerConfirm',
+    ]);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers']);
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
 
     await TestBed.configureTestingModule({
       imports: [ProfileComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

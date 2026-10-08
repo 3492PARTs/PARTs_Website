@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -15,19 +15,24 @@ import { downloadFileAs, responsesToCSV, strNoE } from '@app/core/utils/utils.fu
   selector: 'app-form-manager',
   imports: [ButtonComponent, ButtonRibbonComponent, TableComponent, QuestionAdminFormComponent, ModalComponent],
   templateUrl: './form-manager.component.html',
-  styleUrls: ['./form-manager.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./form-manager.component.scss'],
 })
 export class FormManagerComponent implements OnInit {
-
   @Input() FormTyp = '';
   @Input() ResponsesCols: TableColType[] = [];
   responses: Response[] = [];
-  archiveInd = 'n'
+  archiveInd = 'n';
 
-  constructor(private authService: AuthService, private api: APIService, private gs: GeneralService, private modalService: ModalService) { }
+  constructor(
+    private authService: AuthService,
+    private api: APIService,
+    private gs: GeneralService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getResponses();
       }
@@ -35,45 +40,60 @@ export class FormManagerComponent implements OnInit {
   }
 
   getResponses(): void {
-    this.api.get(true, 'form/responses/', {
-      form_typ: this.FormTyp,
-      archive_ind: this.archiveInd
-    }, (result: any) => {
-      this.responses = result as Response[];
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/responses/',
+      {
+        form_typ: this.FormTyp,
+        archive_ind: this.archiveInd,
+      },
+      (result: any) => {
+        this.responses = result as Response[];
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   openResponse(res: Response): void {
-    if (res.form_typ === 'team-app')
-      this.gs.navigateByUrl(`/join/team-application?response_id=${res.id}`);
-    else
-      this.gs.navigateByUrl(`/contact?response_id=${res.id}`);
+    if (res.form_typ === 'team-app') this.gs.navigateByUrl(`/join/team-application?response_id=${res.id}`);
+    else this.gs.navigateByUrl(`/contact?response_id=${res.id}`);
   }
 
   archiveResponse(res: Response): void {
     this.modalService.triggerConfirm('Are you sure you want to archive this response?', () => {
-
       res.archive_ind = 'y';
 
-      this.api.post(true, 'form/response/', res, (result: any) => {
-        this.getResponses();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.post(
+        true,
+        'form/response/',
+        res,
+        (result: any) => {
+          this.getResponses();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 
   deleteResponse(res: Response): void {
     this.modalService.triggerConfirm('Are you sure you want to delete this response?', () => {
-      this.api.delete(true, 'form/response/', {
-        response_id: res.id
-      }, (result: any) => {
-        this.getResponses();
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.delete(
+        true,
+        'form/response/',
+        {
+          response_id: res.id,
+        },
+        (result: any) => {
+          this.getResponses();
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 

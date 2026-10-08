@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { LocationService } from './location.service';
 
@@ -13,25 +12,21 @@ describe('LocationService', () => {
   beforeEach(() => {
     // Mock geolocation
     mockGeolocation = {
-      getCurrentPosition: jasmine.createSpy('getCurrentPosition')
+      getCurrentPosition: jasmine.createSpy('getCurrentPosition'),
     };
-    
+
     // Store original navigator.geolocation
     const originalGeolocation = (navigator as any).geolocation;
-    
+
     // Replace navigator.geolocation with mock
     Object.defineProperty(navigator, 'geolocation', {
       writable: true,
       value: mockGeolocation,
-      configurable: true
+      configurable: true,
     });
 
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
     });
     service = TestBed.inject(LocationService);
   });
@@ -41,7 +36,7 @@ describe('LocationService', () => {
   });
 
   describe('getCurrentLocation', () => {
-    it('should return browser location when browser geolocation succeeds', (done) => {
+    it('should return browser location when browser geolocation succeeds', done => {
       const mockPosition: GeolocationPosition = {
         coords: {
           latitude: 38.5352373,
@@ -51,10 +46,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -69,19 +64,19 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle browser geolocation not supported', (done) => {
+    it('should handle browser geolocation not supported', done => {
       // Remove geolocation support
       Object.defineProperty(navigator, 'geolocation', {
         writable: true,
         value: undefined,
-        configurable: true
+        configurable: true,
       });
 
       // Mock fetch for IP fallback
       spyOn(window, 'fetch').and.returnValue(
         Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ latitude: 40.0, longitude: -80.0 })
+          json: () => Promise.resolve({ latitude: 40.0, longitude: -80.0 }),
         } as Response)
       );
 
@@ -93,13 +88,13 @@ describe('LocationService', () => {
       });
     });
 
-    it('should fallback to IP location when browser geolocation fails', (done) => {
+    it('should fallback to IP location when browser geolocation fails', done => {
       const mockError = {
         code: 1,
         message: 'User denied Geolocation',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
@@ -110,7 +105,7 @@ describe('LocationService', () => {
       spyOn(window, 'fetch').and.returnValue(
         Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ latitude: 40.0, longitude: -80.0 })
+          json: () => Promise.resolve({ latitude: 40.0, longitude: -80.0 }),
         } as Response)
       );
 
@@ -122,13 +117,13 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle both browser and IP geolocation failures', (done) => {
+    it('should handle both browser and IP geolocation failures', done => {
       const mockError = {
         code: 1,
         message: 'User denied Geolocation',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
@@ -136,9 +131,7 @@ describe('LocationService', () => {
       });
 
       // Mock fetch failure
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -151,7 +144,7 @@ describe('LocationService', () => {
   });
 
   describe('checkLocation', () => {
-    it('should return isAllowed true when within radius', (done) => {
+    it('should return isAllowed true when within radius', done => {
       const mockPosition: GeolocationPosition = {
         coords: {
           latitude: 38.5352373,
@@ -161,10 +154,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -178,7 +171,7 @@ describe('LocationService', () => {
       });
     });
 
-    it('should return isAllowed false when outside radius', (done) => {
+    it('should return isAllowed false when outside radius', done => {
       const mockPosition: GeolocationPosition = {
         coords: {
           latitude: 40.0, // Far from target
@@ -188,10 +181,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -205,7 +198,7 @@ describe('LocationService', () => {
       });
     });
 
-    it('should check against custom latitude and longitude', (done) => {
+    it('should check against custom latitude and longitude', done => {
       const mockPosition: GeolocationPosition = {
         coords: {
           latitude: 40.0,
@@ -215,10 +208,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -233,13 +226,13 @@ describe('LocationService', () => {
       });
     });
 
-    it('should propagate error when location cannot be determined', (done) => {
+    it('should propagate error when location cannot be determined', done => {
       const mockError = {
         code: 2,
         message: 'Position unavailable',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
@@ -247,9 +240,7 @@ describe('LocationService', () => {
       });
 
       // Mock fetch failure
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.checkLocation().subscribe(result => {
         expect(result.isAllowed).toBe(false);
@@ -260,22 +251,20 @@ describe('LocationService', () => {
   });
 
   describe('error handling', () => {
-    it('should handle PERMISSION_DENIED error', (done) => {
+    it('should handle PERMISSION_DENIED error', done => {
       const mockError = {
         code: 1,
         message: 'Permission denied',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
         error(mockError);
       });
 
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -283,22 +272,20 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle POSITION_UNAVAILABLE error', (done) => {
+    it('should handle POSITION_UNAVAILABLE error', done => {
       const mockError = {
         code: 2,
         message: 'Position unavailable',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
         error(mockError);
       });
 
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -306,22 +293,20 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle TIMEOUT error', (done) => {
+    it('should handle TIMEOUT error', done => {
       const mockError = {
         code: 3,
         message: 'Request timeout',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
         error(mockError);
       });
 
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -329,22 +314,20 @@ describe('LocationService', () => {
       });
     });
 
-    it('should include error message in failed result', (done) => {
+    it('should include error message in failed result', done => {
       const mockError = {
         code: 1,
         message: 'User denied permission',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
         error(mockError);
       });
 
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('IP lookup failed'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('IP lookup failed')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -354,22 +337,20 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle unknown geolocation error code', (done) => {
+    it('should handle unknown geolocation error code', done => {
       const mockError = {
         code: 999,
         message: 'Unknown error',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
         error(mockError);
       });
 
-      spyOn(window, 'fetch').and.returnValue(
-        Promise.reject(new Error('Network error'))
-      );
+      spyOn(window, 'fetch').and.returnValue(Promise.reject(new Error('Network error')));
 
       service.getCurrentLocation().subscribe(result => {
         expect(result.success).toBe(false);
@@ -377,13 +358,13 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle IP geolocation HTTP error', (done) => {
+    it('should handle IP geolocation HTTP error', done => {
       const mockError = {
         code: 1,
         message: 'Permission denied',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
@@ -394,7 +375,7 @@ describe('LocationService', () => {
         Promise.resolve({
           ok: false,
           status: 500,
-          statusText: 'Server Error'
+          statusText: 'Server Error',
         } as Response)
       );
 
@@ -405,13 +386,13 @@ describe('LocationService', () => {
       });
     });
 
-    it('should handle malformed IP geolocation response', (done) => {
+    it('should handle malformed IP geolocation response', done => {
       const mockError = {
         code: 1,
         message: 'Permission denied',
         PERMISSION_DENIED: 1,
         POSITION_UNAVAILABLE: 2,
-        TIMEOUT: 3
+        TIMEOUT: 3,
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any, error: any) => {
@@ -421,7 +402,7 @@ describe('LocationService', () => {
       spyOn(window, 'fetch').and.returnValue(
         Promise.resolve({
           ok: true,
-          json: () => Promise.resolve({ invalid: 'data' })
+          json: () => Promise.resolve({ invalid: 'data' }),
         } as Response)
       );
 
@@ -435,7 +416,7 @@ describe('LocationService', () => {
   });
 
   describe('distance calculations', () => {
-    it('should correctly determine locations within small radius', (done) => {
+    it('should correctly determine locations within small radius', done => {
       // Very close to target
       const mockPosition: GeolocationPosition = {
         coords: {
@@ -446,10 +427,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -462,7 +443,7 @@ describe('LocationService', () => {
       });
     });
 
-    it('should correctly determine locations far outside radius', (done) => {
+    it('should correctly determine locations far outside radius', done => {
       // Very far from target
       const mockPosition: GeolocationPosition = {
         coords: {
@@ -473,10 +454,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {
@@ -490,7 +471,7 @@ describe('LocationService', () => {
       });
     });
 
-    it('should work with high accuracy coordinates', (done) => {
+    it('should work with high accuracy coordinates', done => {
       const mockPosition: GeolocationPosition = {
         coords: {
           latitude: 38.53523730001,
@@ -500,10 +481,10 @@ describe('LocationService', () => {
           altitudeAccuracy: null,
           heading: null,
           speed: null,
-          toJSON: () => ({})
+          toJSON: () => ({}),
         },
         timestamp: Date.now(),
-        toJSON: () => ({})
+        toJSON: () => ({}),
       };
 
       mockGeolocation.getCurrentPosition.and.callFake((success: any) => {

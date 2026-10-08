@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { SimpleChange } from '@angular/core';
@@ -14,12 +14,8 @@ describe('QuestionDisplayFormComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ QuestionDisplayFormComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
+      imports: [QuestionDisplayFormComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
     });
     fixture = TestBed.createComponent(QuestionDisplayFormComponent);
     component = fixture.componentInstance;
@@ -51,7 +47,7 @@ describe('QuestionDisplayFormComponent', () => {
       const question1 = new Question();
       question1.id = 1;
       question1.conditional_on_questions = [];
-      
+
       const question2 = new Question();
       question2.id = 2;
       question2.conditional_on_questions = [];
@@ -66,7 +62,7 @@ describe('QuestionDisplayFormComponent', () => {
       const parentQuestion = new Question();
       parentQuestion.id = 1;
       parentQuestion.conditional_on_questions = [];
-      
+
       const conditionalQuestion = new Question();
       conditionalQuestion.id = 2;
       const qc = new ConditionalOnQuestion();
@@ -112,7 +108,7 @@ describe('QuestionDisplayFormComponent', () => {
       question.conditional_on_questions = [];
 
       component.ngOnChanges({
-        Questions: new SimpleChange(null, [question], false)
+        Questions: new SimpleChange(null, [question], false),
       });
 
       expect(component.questionsWithConditions).toBeDefined();
@@ -124,7 +120,7 @@ describe('QuestionDisplayFormComponent', () => {
       component.allQuestions = [question];
 
       component.ngOnChanges({
-        Question: new SimpleChange(null, question, false)
+        Question: new SimpleChange(null, question, false),
       });
 
       expect(component.questionsWithConditions).toBeDefined();
@@ -132,9 +128,9 @@ describe('QuestionDisplayFormComponent', () => {
 
     it('should handle QuestionAnswers changes', () => {
       const answer = new Answer('test', undefined, undefined);
-      
+
       component.ngOnChanges({
-        QuestionAnswers: new SimpleChange(null, [answer], false)
+        QuestionAnswers: new SimpleChange(null, [answer], false),
       });
 
       // Should not crash
@@ -364,12 +360,12 @@ describe('QuestionDisplayFormComponent', () => {
       expect(component.Disabled).toBe(true);
     });
 
-    it('should emit FormElementsChange', (done) => {
+    it('should emit FormElementsChange', done => {
       component.FormElementsChange.subscribe(formElements => {
         expect(formElements).toBeDefined();
         done();
       });
-      
+
       const mockQueryList = new QueryList<FormElementComponent>();
       component.setFormElements(mockQueryList);
     });

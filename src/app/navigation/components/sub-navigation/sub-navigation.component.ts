@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { Link } from '@app/core/models/navigation.models';
 import { NavigationService } from '@app/navigation/services/navigation.service';
 import { RouterLink } from '@angular/router';
@@ -8,10 +8,10 @@ import { RouterLink } from '@angular/router';
   selector: 'app-sub-navigation',
   imports: [CommonModule, RouterLink],
   templateUrl: './sub-navigation.component.html',
-  styleUrls: ['./sub-navigation.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./sub-navigation.component.scss'],
 })
 export class SubNavigationComponent {
-
   @Input()
   public set setNavExpanded(val: boolean) {
     this.navExpanded = val;
@@ -24,13 +24,11 @@ export class SubNavigationComponent {
   @Input() navItems: Link[] = [];
 
   constructor(private ns: NavigationService) {
-    this.ns.subPages.subscribe(sp => this.navItems = sp);
-    this.ns.subPage.subscribe(p => this.page = p);
+    this.ns.subPages.subscribe(sp => (this.navItems = sp));
+    this.ns.subPage.subscribe(p => (this.page = p));
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   setPage(s: string): void {
     this.ns.setSubPage(s);
