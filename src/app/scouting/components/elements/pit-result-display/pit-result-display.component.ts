@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
@@ -10,17 +10,18 @@ import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
   selector: 'app-pit-result-display',
   imports: [CommonModule, HeaderComponent, ScoutPicDisplayComponent],
   templateUrl: './pit-result-display.component.html',
-  styleUrls: ['./pit-result-display.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./pit-result-display.component.scss'],
 })
 export class PitResultDisplayComponent implements OnInit {
   appSize!: AppSize;
   screenSize!: AppSize;
   appSizeXLG = AppSize.XLG;
   appSizeSM = AppSize.SM;
-  @Input() ScoutPitResult = new ScoutPitResponse()
+  @Input() ScoutPitResult = new ScoutPitResponse();
   @Input() VerticalOnly = false;
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
   ngOnInit() {
     this.screenSize = getScreenSize();

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -7,7 +7,7 @@ import { FormElementComponent } from '@app/shared/components/atoms/form-element/
 import { ButtonComponent } from '@app/shared/components/atoms/button/button.component';
 import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbon/button-ribbon.component';
 
-import { PitResultDisplayComponent } from "@app/scouting/components/elements/pit-result-display/pit-result-display.component";
+import { PitResultDisplayComponent } from '@app/scouting/components/elements/pit-result-display/pit-result-display.component';
 import { Team, ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { ScoutingService } from '@app/scouting/services/scouting.service';
 
@@ -17,7 +17,8 @@ import { AppSize, downloadFileAs } from '@app/core/utils/utils.functions';
   selector: 'app-pit-scouting-responses',
   imports: [BoxComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, PitResultDisplayComponent],
   templateUrl: './pit-scouting-responses.component.html',
-  styleUrls: ['./pit-scouting-responses.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./pit-scouting-responses.component.scss'],
 })
 export class ScoutPitResponsesComponent implements OnInit {
   teamsSelectList: Team[] = [];
@@ -25,20 +26,22 @@ export class ScoutPitResponsesComponent implements OnInit {
   scoutPitResults: ScoutPitResponse[] = [];
   resultWidth = '350px';
 
-  constructor(private api: APIService,
+  constructor(
+    private api: APIService,
     private gs: GeneralService,
     private authService: AuthService,
-    private ss: ScoutingService, private modalService: ModalService) { }
+    private ss: ScoutingService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => AuthCallStates.comp ? this.scoutPitResultsInit() : null);
+    this.authService.authInFlight.subscribe(r => (AuthCallStates.comp ? this.scoutPitResultsInit() : null));
     this.resultWidth = this.gs.getAppSize() === AppSize.XS ? '100%' : '350px';
   }
 
   scoutPitResultsInit(): void {
     this.gs.incrementOutstandingCalls();
     this.ss.loadPitScoutingResponses().then(async result => {
-
       let tmp: Team[] = [];
 
       result?.teams.forEach(spr => {
@@ -57,11 +60,17 @@ export class ScoutPitResponsesComponent implements OnInit {
   }
 
   filter(): void {
-    let teams = this.teams.filter(t => t.checked).map(t => { return t.team_no; });
+    let teams = this.teams
+      .filter(t => t.checked)
+      .map(t => {
+        return t.team_no;
+      });
 
-    this.ss.filterPitResponsesFromCache(pr => teams.includes(pr.team_no)).then(prs => {
-      this.scoutPitResults = prs.sort(this.ss.teamSortFunction);
-    });
+    this.ss
+      .filterPitResponsesFromCache(pr => teams.includes(pr.team_no))
+      .then(prs => {
+        this.scoutPitResults = prs.sort(this.ss.teamSortFunction);
+      });
   }
 
   download(): void | null {
@@ -75,7 +84,7 @@ export class ScoutPitResponsesComponent implements OnInit {
     let csv = 'Team Number,';
     export_file[0].responses.forEach(r => {
       csv += '"' + r.question + '"' + ',';
-    })
+    });
 
     csv += 'Pic URL,';
 
@@ -101,6 +110,6 @@ export class ScoutPitResponsesComponent implements OnInit {
 
   reset(): void {
     this.scoutPitResults = [];
-    this.teams.forEach(t => t.checked = false);
+    this.teams.forEach(t => (t.checked = false));
   }
 }

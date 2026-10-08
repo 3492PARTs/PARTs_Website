@@ -1,4 +1,18 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, DoCheck, Renderer2, ContentChildren, QueryList, HostListener, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  ViewChild,
+  DoCheck,
+  Renderer2,
+  ContentChildren,
+  QueryList,
+  HostListener,
+  ElementRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ModalService } from '@app/core/services/modal.service';
 import { ButtonComponent } from '../button/button.component';
 import { FormComponent } from '../form/form.component';
@@ -12,7 +26,8 @@ import { AppSize, Page, strNoE } from '@app/core/utils/utils.functions';
   selector: 'app-modal',
   imports: [CommonModule, ButtonComponent, HeaderComponent, ClickOutsideDirective],
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnInit {
   private resizeTimer: number | null | undefined;
@@ -36,13 +51,16 @@ export class ModalComponent implements OnInit {
 
   @Input() zIndex = 17;
 
-  @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent;
+  @ViewChild('thisButton', { read: ButtonComponent, static: false }) button: ButtonComponent = new ButtonComponent();
   @ContentChildren(FormComponent) form = new QueryList<FormComponent>();
 
   protected openTime: number | undefined = undefined;
   protected modalNumber = 0;
 
-  constructor(public ms: ModalService, private gs: GeneralService) { }
+  constructor(
+    public ms: ModalService,
+    private gs: GeneralService
+  ) {}
 
   ngOnInit() {
     this.setModalSize();
@@ -64,17 +82,12 @@ export class ModalComponent implements OnInit {
     if (strNoE(this.Width)) {
       if (this.gs.getAppSize() >= AppSize._3XLG) {
         this._Width = '90%';
-      }
-      else if (this.gs.getAppSize() >= AppSize.LG) {
+      } else if (this.gs.getAppSize() >= AppSize.LG) {
         this._Width = '80%';
-      }
-      else {
+      } else {
         this._Width = '100%';
       }
-    }
-    else
-      this._Width = this.Width;
-
+    } else this._Width = this.Width;
   }
 
   open() {
@@ -115,11 +128,9 @@ export class ModalComponent implements OnInit {
     if (this.openTime) {
       html.style.overflow = 'hidden';
       body.style.overflow = 'hidden';
-    }
-    else {
+    } else {
       html.style.overflow = 'initial';
       body.style.overflow = 'initial';
     }
-  };
+  }
 }
-

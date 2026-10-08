@@ -1,5 +1,13 @@
-import { Component, OnInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
-import { Question, QuestionOption, QuestionType, FormInitialization, Flow, FormSubType, ConditionalOnQuestion } from '@app/core/models/form.models';
+import { Component, OnInit, Input, HostListener, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Question,
+  QuestionOption,
+  QuestionType,
+  FormInitialization,
+  Flow,
+  FormSubType,
+  ConditionalOnQuestion,
+} from '@app/core/models/form.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -11,18 +19,30 @@ import { ButtonRibbonComponent } from '@app/shared/components/atoms/button-ribbo
 import { TableComponent, TableColType } from '@app/shared/components/atoms/table/table.component';
 
 import { Banner } from '@app/core/models/api.models';
-import { FormElementGroupComponent } from "../../atoms/form-element-group/form-element-group.component";
+import { FormElementGroupComponent } from '../../atoms/form-element-group/form-element-group.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { AppSize, cloneObject } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-admin-form',
-  imports: [TableComponent, ModalComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent],
+  imports: [
+    TableComponent,
+    ModalComponent,
+    FormComponent,
+    FormElementComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormElementGroupComponent,
+  ],
   templateUrl: './question-admin-form.component.html',
-  styleUrls: ['./question-admin-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./question-admin-form.component.scss'],
 })
 export class QuestionAdminFormComponent implements OnInit {
-  questionOptions = [{ property: 'Active', value: 'y' }, { property: 'Inactive', value: 'n' }];
+  questionOptions = [
+    { property: 'Active', value: 'y' },
+    { property: 'Inactive', value: 'n' },
+  ];
   questionOption = 'y';
   filterText = '';
 
@@ -53,13 +73,18 @@ export class QuestionAdminFormComponent implements OnInit {
 
   optionsTableCols: TableColType[] = [
     { PropertyName: 'option', ColLabel: 'Option', Type: 'area', Required: true },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true }
+    { PropertyName: 'active', ColLabel: 'Active', Type: 'checkbox', TrueValue: 'y', FalseValue: 'n', Required: true },
   ];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.questionInit() : null);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.questionInit() : null));
     this.setQuestionTableCols();
   }
 
@@ -69,15 +94,21 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   questionInit(): void {
-    this.api.get(true, 'form/form-editor/', {
-      form_typ: this.formType
-    }, (result: FormInitialization) => {
-      this.FormMetadata = result;
-      this.setQuestionTableCols();
-      this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/form-editor/',
+      {
+        form_typ: this.formType,
+      },
+      (result: FormInitialization) => {
+        this.FormMetadata = result;
+        this.setQuestionTableCols();
+        this.questionTableTriggerUpdate = !this.questionTableTriggerUpdate;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   setQuestionTableCols(): void {
@@ -85,22 +116,37 @@ export class QuestionAdminFormComponent implements OnInit {
       this.questionTableCols = [
         ...this._questionTableCols,
         { PropertyName: 'required', ColLabel: 'Required', Type: 'function', ColValueFunction: this.ynToYesNo },
-        { PropertyName: 'flow_id_set', ColLabel: 'Flows', Type: 'function', ColValueFunction: this.getFlowNames.bind(this) },
-        { PropertyName: 'conditional_question_id_set', ColLabel: 'Conditional Questions', Type: 'function', ColValueFunction: this.getQuestionDisplayValues.bind(this) },
-        { PropertyName: 'conditional_on_questions', ColLabel: 'Conditional on', Type: 'function', ColValueFunction: this.getQuestionDisplayValue.bind(this) },
+        {
+          PropertyName: 'flow_id_set',
+          ColLabel: 'Flows',
+          Type: 'function',
+          ColValueFunction: this.getFlowNames.bind(this),
+        },
+        {
+          PropertyName: 'conditional_question_id_set',
+          ColLabel: 'Conditional Questions',
+          Type: 'function',
+          ColValueFunction: this.getQuestionDisplayValues.bind(this),
+        },
+        {
+          PropertyName: 'conditional_on_questions',
+          ColLabel: 'Conditional on',
+          Type: 'function',
+          ColValueFunction: this.getQuestionDisplayValue.bind(this),
+        },
       ];
 
       if (this.FormMetadata.form_sub_types.length > 0)
-        this.questionTableCols = [{ PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' } as TableColType].concat(this.questionTableCols);
-    }
-    else {
+        this.questionTableCols = [
+          { PropertyName: 'form_sub_typ.form_sub_nm', ColLabel: 'Form Sub Type' } as TableColType,
+        ].concat(this.questionTableCols);
+    } else {
       this.questionTableCols = [...this._questionTableCols];
     }
 
     if (this.formType === 'pit') {
-      this.questionTableCols = this.questionTableCols.filter(qc => !["Sub Type", "Flows"].includes(qc.ColLabel));
+      this.questionTableCols = this.questionTableCols.filter(qc => !['Sub Type', 'Flows'].includes(qc.ColLabel));
     }
-
   }
 
   showQuestionModal(q?: Question): void {
@@ -112,19 +158,28 @@ export class QuestionAdminFormComponent implements OnInit {
   saveQuestion(): void {
     this.activeQuestion.form_typ.form_typ = this.formType;
 
-    if (this.activeQuestion.question_typ.is_list === 'y' && this.activeQuestion.questionoption_set.filter(qo => qo.active === 'y').length <= 0) {
+    if (
+      this.activeQuestion.question_typ.is_list === 'y' &&
+      this.activeQuestion.questionoption_set.filter(qo => qo.active === 'y').length <= 0
+    ) {
       this.gs.addBanner(new Banner(`Must have one active option for list element.\n`, 3500));
       return;
     }
 
-    this.api.post(true, 'form/question/', this.activeQuestion, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.activeQuestion = new Question();
-      this.questionModalVisible = false;
-      this.questionInit();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'form/question/',
+      this.activeQuestion,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.activeQuestion = new Question();
+        this.questionModalVisible = false;
+        this.questionInit();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   addOption(): void {
@@ -155,15 +210,29 @@ export class QuestionAdminFormComponent implements OnInit {
   }
 
   getFlowNames(ids: number[]): string {
-    return this.FormMetadata.flows.filter(qf => ids.includes(qf.id)).map(f => f.name).join('\n') || '';
+    return (
+      this.FormMetadata.flows
+        .filter(qf => ids.includes(qf.id))
+        .map(f => f.name)
+        .join('\n') || ''
+    );
   }
 
   getQuestionDisplayValues(ids: number[]): string {
-    return this.FormMetadata.questions.filter(q => ids.includes(q.id)).map(f => f.display_value).join('\n') || '';
+    return (
+      this.FormMetadata.questions
+        .filter(q => ids.includes(q.id))
+        .map(f => f.display_value)
+        .join('\n') || ''
+    );
   }
 
   getQuestionDisplayValue(questions: ConditionalOnQuestion[]): string {
-    return this.FormMetadata.questions.filter(q => questions.map(qq => qq.conditional_on).includes(q.id)).map(f => f.display_value).join('\n') || '';
+    return (
+      this.FormMetadata.questions
+        .filter(q => questions.map(qq => qq.conditional_on).includes(q.id))
+        .map(f => f.display_value)
+        .join('\n') || ''
+    );
   }
-
 }

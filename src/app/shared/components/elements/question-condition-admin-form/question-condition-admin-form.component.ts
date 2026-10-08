@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Question, QuestionCondition, QuestionConditionType } from '@app/core/models/form.models';
 import { APIService } from '@app/core/services/api.service';
 import { GeneralService } from '@app/core/services/general.service';
@@ -14,9 +14,17 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject, decodeYesNo, strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-question-condition-admin-form',
-  imports: [TableComponent, ModalComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, FormComponent],
+  imports: [
+    TableComponent,
+    ModalComponent,
+    FormElementComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormComponent,
+  ],
   templateUrl: './question-condition-admin-form.component.html',
-  styleUrls: ['./question-condition-admin-form.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./question-condition-admin-form.component.scss'],
 })
 export class QuestionConditionAdminFormComponent implements OnInit {
   @Input() FormType = '';
@@ -36,10 +44,15 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   questionConditionQuestionFromList: Question[] = [];
   questionConditionQuestionToList: Question[] = [];
 
-  constructor(private gs: GeneralService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private api: APIService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getQuestions();
         this.getQuestionConditions();
@@ -49,34 +62,52 @@ export class QuestionConditionAdminFormComponent implements OnInit {
   }
 
   getQuestions(): void {
-    this.api.get(true, 'form/question/', {
-      form_typ: this.FormType,
-      active: 'y'
-    }, (result: Question[]) => {
-      this.questions = result;
-      this.buildQuestionConditionFromLists();
-      this.buildQuestionConditionToLists();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/question/',
+      {
+        form_typ: this.FormType,
+        active: 'y',
+      },
+      (result: Question[]) => {
+        this.questions = result;
+        this.buildQuestionConditionFromLists();
+        this.buildQuestionConditionToLists();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   getQuestionConditions(): void {
-    this.api.get(true, 'form/question-condition/', {
-      form_typ: this.FormType
-    }, (result: any) => {
-      this.questionConditions = result as QuestionCondition[];
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/question-condition/',
+      {
+        form_typ: this.FormType,
+      },
+      (result: any) => {
+        this.questionConditions = result as QuestionCondition[];
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   getQuestionConditionTypes(): void {
-    this.api.get(true, 'form/question-condition-types/', undefined, (result: QuestionConditionType[]) => {
-      this.questionConditionTypes = result;
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.get(
+      true,
+      'form/question-condition-types/',
+      undefined,
+      (result: QuestionConditionType[]) => {
+        this.questionConditionTypes = result;
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   showQuestionConditionModal(qc?: QuestionCondition) {
@@ -95,7 +126,8 @@ export class QuestionConditionAdminFormComponent implements OnInit {
     this.questionConditionQuestionToList = [];
 
     //So the active question shows in the drop down
-    if (this.activeQuestionCondition.question_to) this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as Question);
+    if (this.activeQuestionCondition.question_to)
+      this.questionConditionQuestionToList.push(this.activeQuestionCondition.question_to as Question);
 
     this.questions.forEach(question => {
       let match = false;
@@ -107,40 +139,47 @@ export class QuestionConditionAdminFormComponent implements OnInit {
       });*/
 
       // Keep the question just selected as from out of the list
-      if (this.activeQuestionCondition.question_from &&
+      if (
+        this.activeQuestionCondition.question_from &&
         !strNoE(this.activeQuestionCondition.question_from.id) &&
-        this.activeQuestionCondition.question_from.id === question.id) {
+        this.activeQuestionCondition.question_from.id === question.id
+      ) {
         match = true;
       }
 
-      if (this.activeQuestionCondition.question_to &&
+      if (
+        this.activeQuestionCondition.question_to &&
         !strNoE(this.activeQuestionCondition.question_to.id) &&
-        this.activeQuestionCondition.question_to.id === question.id) {
+        this.activeQuestionCondition.question_to.id === question.id
+      ) {
         match = false;
       }
 
-      if (!match)
-        this.questionConditionQuestionToList.push(question);
+      if (!match) this.questionConditionQuestionToList.push(question);
     });
   }
 
   compareQuestions(q1: Question, q2: Question): boolean {
-    if (q1 && q2)
-      return q1.id === q2.id;
-    else
-      return false;
+    if (q1 && q2) return q1.id === q2.id;
+    else return false;
   }
 
   saveQuestionCondition(): void {
-    this.api.post(true, 'form/question-condition/', this.activeQuestionCondition, (result: any) => {
-      this.modalService.successfulResponseBanner(result);
-      this.activeQuestionCondition = new QuestionCondition();
-      this.questionConditionModalVisible = false;
-      this.getQuestions();
-      this.getQuestionConditions();
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    });
+    this.api.post(
+      true,
+      'form/question-condition/',
+      this.activeQuestionCondition,
+      (result: any) => {
+        this.modalService.successfulResponseBanner(result);
+        this.activeQuestionCondition = new QuestionCondition();
+        this.questionConditionModalVisible = false;
+        this.getQuestions();
+        this.getQuestionConditions();
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      }
+    );
   }
 
   decodeYesNo(s: string): string {

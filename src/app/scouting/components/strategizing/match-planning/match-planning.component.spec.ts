@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -33,24 +33,35 @@ describe('MatchPlanningComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'saveMatchStrategy', 'getMatchStrategyResponsesFromCache',
-      'removeMatchStrategyResponseFromCache', 'uploadOutstandingResponses',
+      'loadAllScoutingInfo',
+      'saveMatchStrategy',
+      'getMatchStrategyResponsesFromCache',
+      'removeMatchStrategyResponseFromCache',
+      'uploadOutstandingResponses',
     ]);
     mockSS.outstandingResponsesUploaded = outstandingResponsesUploaded.asObservable();
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
     mockSS.getMatchStrategyResponsesFromCache.and.returnValue(Promise.resolve([]) as any);
     mockSS.saveMatchStrategy.and.returnValue(Promise.resolve(false) as any);
     mockSS.removeMatchStrategyResponseFromCache.and.returnValue(Promise.resolve() as any);
-    mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'triggerConfirm', 'successfulResponseBanner']);
+    mockModalService = jasmine.createSpyObj('ModalService', [
+      'triggerError',
+      'triggerConfirm',
+      'successfulResponseBanner',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [MatchPlanningComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

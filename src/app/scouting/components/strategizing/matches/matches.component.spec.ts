@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -30,7 +30,11 @@ describe('MatchesComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.isMobile.and.returnValue(false);
@@ -52,7 +56,7 @@ describe('MatchesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MatchesComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

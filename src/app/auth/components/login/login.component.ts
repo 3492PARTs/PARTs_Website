@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { UserData, RegisterUser, AuthService } from '@app/auth/services/auth.service';
@@ -18,20 +18,26 @@ import * as Utils from '@app/core/utils/utils.functions';
   selector: 'app-login',
   imports: [BoxComponent, FormComponent, FormElementComponent, ButtonComponent, ButtonRibbonComponent, CommonModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
   // Expose Utils to template
   Utils = Utils;
-  
-  input: UserData = new UserData;
+
+  input: UserData = new UserData();
   returnUrl: string | null = '';
   page: string | null = 'login';
   newUser: RegisterUser = new RegisterUser();
   rememberMe = false;
 
-  constructor(private authService: AuthService, public gs: GeneralService, private route: ActivatedRoute, private router: Router, private modalService: ModalService) {
+  constructor(
+    private authService: AuthService,
+    public gs: GeneralService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private modalService: ModalService
+  ) {
     /*this.route.queryParamMap.subscribe(queryParams => {
       this.returnUrl = strNoE(queryParams.get('returnUrl')) ? '' : queryParams.get('returnUrl');
     });*/
@@ -44,7 +50,7 @@ export class LoginComponent implements OnInit {
       passwordConfirm: '',
       uuid: '',
       token: '',
-      email: ''
+      email: '',
     };
 
     this.route.queryParamMap.subscribe(queryParams => {

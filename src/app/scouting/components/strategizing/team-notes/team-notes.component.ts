@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
 import { GeneralService } from '@app/core/services/general.service';
 import { BoxComponent } from '@app/shared/components/atoms/box/box.component';
@@ -16,12 +16,21 @@ import { ScoutingService } from '@app/scouting/services/scouting.service';
 import { ModalService } from '@app/core/services/modal.service';
 @Component({
   selector: 'app-team-notes',
-  imports: [BoxComponent, FormElementComponent, FormComponent, ButtonComponent, ButtonRibbonComponent, FormElementGroupComponent, CommonModule, DateToStrPipe],
+  imports: [
+    BoxComponent,
+    FormElementComponent,
+    FormComponent,
+    ButtonComponent,
+    ButtonRibbonComponent,
+    FormElementGroupComponent,
+    CommonModule,
+    DateToStrPipe,
+  ],
   templateUrl: './team-notes.component.html',
-  styleUrls: ['./team-notes.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./team-notes.component.scss'],
 })
 export class TeamNotesComponent implements OnInit {
-
   user = new User();
 
   teams: Team[] = [];
@@ -29,10 +38,15 @@ export class TeamNotesComponent implements OnInit {
 
   currentTeamNote = new TeamNote();
 
-  outstandingResponses: { id: number, team_id: number }[] = [];
+  outstandingResponses: { id: number; team_id: number }[] = [];
   formDisabled = false;
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private authService: AuthService, private modalService: ModalService) {
+  constructor(
+    private gs: GeneralService,
+    private ss: ScoutingService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {
     this.ss.outstandingResponsesUploaded.subscribe(b => {
       this.populateOutstandingResponses();
     });
@@ -45,17 +59,16 @@ export class TeamNotesComponent implements OnInit {
       }
     });
 
-    this.authService.user.subscribe(u => this.user = u);
+    this.authService.user.subscribe(u => (this.user = u));
   }
 
   init(): void {
     // chain outstanding promise if it exists
     this.ss.loadTeams(true, (result: Team[]) => {
       this.teams = result;
-    })
+    });
 
     this.ss.loadTeamNotes();
-
   }
 
   saveNote(): void {
@@ -70,9 +83,11 @@ export class TeamNotesComponent implements OnInit {
   }
 
   loadTeamNotes(): void {
-    this.ss.getTeamNotesFromCache(tn => tn.where({ 'team_id': this.currentTeamNote.team_id })).then(tns => {
-      this.teamNotes = tns;
-    });
+    this.ss
+      .getTeamNotesFromCache(tn => tn.where({ team_id: this.currentTeamNote.team_id }))
+      .then(tns => {
+        this.teamNotes = tns;
+      });
   }
 
   uploadOutstandingResponses(): void {
@@ -81,12 +96,14 @@ export class TeamNotesComponent implements OnInit {
 
   viewResult(id: number): void {
     this.formDisabled = true;
-    this.ss.getTeamNoteResponsesFromCache(tn => tn.where({ 'id': id })).then(result => {
-      result.forEach(r => {
-        this.currentTeamNote = r;
+    this.ss
+      .getTeamNoteResponsesFromCache(tn => tn.where({ id: id }))
+      .then(result => {
+        result.forEach(r => {
+          this.currentTeamNote = r;
+        });
+        this.loadTeamNotes();
       });
-      this.loadTeamNotes();
-    });
   }
 
   removeResult(): void {
@@ -112,7 +129,6 @@ export class TeamNotesComponent implements OnInit {
       sfrc.forEach(s => {
         this.outstandingResponses.push({ id: s.id, team_id: s.team_id || NaN });
       });
-
     });
   }
 }

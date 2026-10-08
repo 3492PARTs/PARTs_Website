@@ -7,16 +7,18 @@ import {
   ElementRef,
   Renderer2,
   Output,
-  EventEmitter
+  EventEmitter,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
-import { ReturnLinkComponent } from "../return-link/return-link.component";
+import { ReturnLinkComponent } from '../return-link/return-link.component';
 
 @Component({
-    selector: 'app-box',
-    imports: [CommonModule, ButtonComponent, ReturnLinkComponent],
-    templateUrl: './box.component.html',
-    styleUrls: ['./box.component.scss']
+  selector: 'app-box',
+  imports: [CommonModule, ButtonComponent, ReturnLinkComponent],
+  templateUrl: './box.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./box.component.scss'],
 })
 export class BoxComponent implements OnInit {
   @Input() Width = '0';
@@ -38,7 +40,7 @@ export class BoxComponent implements OnInit {
   @ViewChild('thisBox', { read: ElementRef, static: true }) box: ElementRef = new ElementRef(null);
   @ViewChild('content', { read: ElementRef, static: true }) content: ElementRef = new ElementRef(null);
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit() {
     if (this.Width !== '0') {

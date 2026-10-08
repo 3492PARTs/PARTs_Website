@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ScoutPitResponse } from '@app/scouting/models/scouting.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -15,10 +15,10 @@ import { ModalService } from '@app/core/services/modal.service';
   selector: 'app-manage-pit-responses',
   imports: [TableComponent, ModalComponent, ButtonComponent, ButtonRibbonComponent, ScoutPicDisplayComponent],
   templateUrl: './manage-pit-responses.component.html',
-  styleUrls: ['./manage-pit-responses.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./manage-pit-responses.component.scss'],
 })
 export class ManagePitResponsesComponent implements OnInit {
-
   scoutPitResults: ScoutPitResponse[] = [];
   scoutPitResultsCols: TableColType[] = [
     { PropertyName: 'team_no', ColLabel: 'Team' },
@@ -27,10 +27,16 @@ export class ManagePitResponsesComponent implements OnInit {
   scoutPitResultModalVisible = false;
   activePitScoutResult = new ScoutPitResponse();
 
-  constructor(private gs: GeneralService, private ss: ScoutingService, private api: APIService, private authService: AuthService, private modalService: ModalService) { }
+  constructor(
+    private gs: GeneralService,
+    private ss: ScoutingService,
+    private api: APIService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getPitResponses();
       }
@@ -55,16 +61,22 @@ export class ManagePitResponsesComponent implements OnInit {
 
   deletePitResult(): void {
     this.modalService.triggerConfirm('Are you sure you want to delete this result?', () => {
-      this.api.delete(true, 'scouting/admin/delete-pit-result/', {
-        scout_pit_id: this.activePitScoutResult.id
-      }, (result: any) => {
-        this.modalService.successfulResponseBanner(result);
-        this.getPitResponses();
-        this.activePitScoutResult = new ScoutPitResponse();
-        this.scoutPitResultModalVisible = false;
-      }, (err: any) => {
-        this.modalService.triggerError(err);
-      });
+      this.api.delete(
+        true,
+        'scouting/admin/delete-pit-result/',
+        {
+          scout_pit_id: this.activePitScoutResult.id,
+        },
+        (result: any) => {
+          this.modalService.successfulResponseBanner(result);
+          this.getPitResponses();
+          this.activePitScoutResult = new ScoutPitResponse();
+          this.scoutPitResultModalVisible = false;
+        },
+        (err: any) => {
+          this.modalService.triggerError(err);
+        }
+      );
     });
   }
 }

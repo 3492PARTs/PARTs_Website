@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TableComponent, TableButtonType, TableColType } from './table.component';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { SimpleChange } from '@angular/core';
 
@@ -11,10 +11,7 @@ describe('TableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TableComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TableComponent);
@@ -64,7 +61,10 @@ describe('TableComponent', () => {
 
   describe('Input Properties', () => {
     it('should accept TableData input', () => {
-      const testData = [{ id: 1, name: 'Test' }, { id: 2, name: 'Test2' }];
+      const testData = [
+        { id: 1, name: 'Test' },
+        { id: 2, name: 'Test2' },
+      ];
       component.TableData = testData;
       expect(component.TableData).toEqual(testData);
     });
@@ -172,7 +172,7 @@ describe('TableComponent', () => {
   });
 
   describe('Output Events', () => {
-    it('should emit RemoveRecordCallBack', (done) => {
+    it('should emit RemoveRecordCallBack', done => {
       component.RemoveRecordCallBack.subscribe((record: any) => {
         expect(record).toEqual({ id: 1 });
         done();
@@ -180,7 +180,7 @@ describe('TableComponent', () => {
       component.RemoveRecordCallBack.emit({ id: 1 });
     });
 
-    it('should emit ViewRecordCallBack', (done) => {
+    it('should emit ViewRecordCallBack', done => {
       component.ViewRecordCallBack.subscribe((record: any) => {
         expect(record).toEqual({ id: 2 });
         done();
@@ -188,7 +188,7 @@ describe('TableComponent', () => {
       component.ViewRecordCallBack.emit({ id: 2 });
     });
 
-    it('should emit EditRecordCallBack', (done) => {
+    it('should emit EditRecordCallBack', done => {
       component.EditRecordCallBack.subscribe((record: any) => {
         expect(record).toEqual({ id: 3 });
         done();
@@ -196,14 +196,14 @@ describe('TableComponent', () => {
       component.EditRecordCallBack.emit({ id: 3 });
     });
 
-    it('should emit AddRecordCallBack', (done) => {
+    it('should emit AddRecordCallBack', done => {
       component.AddRecordCallBack.subscribe(() => {
         done();
       });
       component.AddRecordCallBack.emit();
     });
 
-    it('should emit RecordClickCallBack', (done) => {
+    it('should emit RecordClickCallBack', done => {
       component.RecordClickCallBack.subscribe((record: any) => {
         expect(record).toEqual({ id: 4 });
         done();
@@ -211,7 +211,7 @@ describe('TableComponent', () => {
       component.RecordClickCallBack.emit({ id: 4 });
     });
 
-    it('should emit DblClkRecordClickCallBack', (done) => {
+    it('should emit DblClkRecordClickCallBack', done => {
       component.DblClkRecordClickCallBack.subscribe((record: any) => {
         expect(record).toEqual({ id: 5 });
         done();
@@ -219,7 +219,7 @@ describe('TableComponent', () => {
       component.DblClkRecordClickCallBack.emit({ id: 5 });
     });
 
-    it('should emit FilterTextChange', (done) => {
+    it('should emit FilterTextChange', done => {
       component.FilterTextChange.subscribe((text: string) => {
         expect(text).toBe('filter');
         done();
@@ -231,9 +231,9 @@ describe('TableComponent', () => {
   describe('ngOnChanges', () => {
     it('should handle TableData changes', () => {
       spyOn<any>(component, 'generateTableDisplayValues');
-      
+
       component.ngOnChanges({
-        TableData: new SimpleChange(null, [{ id: 1 }], false)
+        TableData: new SimpleChange(null, [{ id: 1 }], false),
       });
 
       expect(component['generateTableDisplayValues']).toHaveBeenCalled();
@@ -241,9 +241,9 @@ describe('TableComponent', () => {
 
     it('should handle TableCols changes', () => {
       spyOn<any>(component, 'generateTableDisplayValues');
-      
+
       component.ngOnChanges({
-        TableCols: new SimpleChange(null, [], false)
+        TableCols: new SimpleChange(null, [], false),
       });
 
       expect(component['generateTableDisplayValues']).toHaveBeenCalled();
@@ -251,9 +251,9 @@ describe('TableComponent', () => {
 
     it('should handle ShowAddButton changes', () => {
       spyOn<any>(component, 'ShowButtonColumn');
-      
+
       component.ngOnChanges({
-        ShowAddButton: new SimpleChange(false, true, false)
+        ShowAddButton: new SimpleChange(false, true, false),
       });
 
       expect(component['ShowButtonColumn']).toHaveBeenCalled();
@@ -261,9 +261,9 @@ describe('TableComponent', () => {
 
     it('should handle ShowEditButton changes', () => {
       spyOn<any>(component, 'ShowButtonColumn');
-      
+
       component.ngOnChanges({
-        ShowEditButton: new SimpleChange(false, true, false)
+        ShowEditButton: new SimpleChange(false, true, false),
       });
 
       expect(component['ShowButtonColumn']).toHaveBeenCalled();
@@ -271,9 +271,9 @@ describe('TableComponent', () => {
 
     it('should handle TableDataButtons changes', () => {
       spyOn<any>(component, 'generateTableDisplayValues');
-      
+
       component.ngOnChanges({
-        TableDataButtons: new SimpleChange(null, [], false)
+        TableDataButtons: new SimpleChange(null, [], false),
       });
 
       expect(component['generateTableDisplayValues']).toHaveBeenCalled();
@@ -281,9 +281,9 @@ describe('TableComponent', () => {
 
     it('should handle TriggerUpdate changes', () => {
       spyOn<any>(component, 'generateTableDisplayValues');
-      
+
       component.ngOnChanges({
-        TriggerUpdate: new SimpleChange(null, true, false)
+        TriggerUpdate: new SimpleChange(null, true, false),
       });
 
       expect(component['generateTableDisplayValues']).toHaveBeenCalled();
@@ -292,10 +292,10 @@ describe('TableComponent', () => {
     it('should handle multiple changes at once', () => {
       spyOn<any>(component, 'generateTableDisplayValues');
       spyOn<any>(component, 'ShowButtonColumn');
-      
+
       component.ngOnChanges({
         TableData: new SimpleChange(null, [], false),
-        ShowAddButton: new SimpleChange(false, true, false)
+        ShowAddButton: new SimpleChange(false, true, false),
       });
 
       expect(component['generateTableDisplayValues']).toHaveBeenCalled();
@@ -382,7 +382,7 @@ describe('TableComponent', () => {
       const mockCallback = jasmine.createSpy('callback');
       const button = new TableButtonType('custom', mockCallback, 'Custom Action');
       component.TableDataButtons = [button];
-      
+
       expect(component.TableDataButtons.length).toBe(1);
       expect(component.TableDataButtons[0].ButtonType).toBe('custom');
     });
@@ -392,18 +392,18 @@ describe('TableComponent', () => {
       const btn1 = new TableButtonType('edit', mockCallback);
       const btn2 = new TableButtonType('delete', mockCallback);
       const btn3 = new TableButtonType('view', mockCallback);
-      
+
       component.TableDataButtons = [btn1, btn2, btn3];
       expect(component.TableDataButtons.length).toBe(3);
     });
   });
 
   describe('Window Resize Handling', () => {
-    it('should call setSymbolSizeForButtons on resize', (done) => {
+    it('should call setSymbolSizeForButtons on resize', done => {
       spyOn<any>(component, 'setSymbolSizeForButtons');
-      
+
       component.onResize({});
-      
+
       // Wait for debounce
       setTimeout(() => {
         expect(component['setSymbolSizeForButtons']).toHaveBeenCalled();
@@ -413,12 +413,12 @@ describe('TableComponent', () => {
 
     it('should debounce resize events', () => {
       spyOn<any>(component, 'SetTableContainerWidth');
-      
+
       // Trigger multiple resize events
       component.onResize({});
       component.onResize({});
       component.onResize({});
-      
+
       // SetTableContainerWidth should not be called immediately
       expect(component['SetTableContainerWidth']).not.toHaveBeenCalled();
     });
@@ -465,7 +465,10 @@ describe('TableColType', () => {
   });
 
   it('should allow setting SelectList', () => {
-    const selectList = [{ id: 1, name: 'Option 1' }, { id: 2, name: 'Option 2' }];
+    const selectList = [
+      { id: 1, name: 'Option 1' },
+      { id: 2, name: 'Option 2' },
+    ];
     col.SelectList = selectList;
     expect(col.SelectList).toEqual(selectList);
   });
@@ -543,7 +546,7 @@ describe('TableColType', () => {
   });
 
   it('should allow setting ColorFunction', () => {
-    const colorFn = (val: any) => val > 50 ? 'red' : 'green';
+    const colorFn = (val: any) => (val > 50 ? 'red' : 'green');
     col.ColorFunction = colorFn;
     expect(col.ColorFunction).toBe(colorFn);
     expect(col.ColorFunction?.(60)).toBe('red');
@@ -556,7 +559,7 @@ describe('TableColType', () => {
   });
 
   it('should allow setting FontColorFunction', () => {
-    const fontColorFn = (val: any) => val === 'error' ? 'red' : 'black';
+    const fontColorFn = (val: any) => (val === 'error' ? 'red' : 'black');
     col.FontColorFunction = fontColorFn;
     expect(col.FontColorFunction).toBe(fontColorFn);
     expect(col.FontColorFunction?.('error')).toBe('red');
@@ -592,7 +595,7 @@ describe('TableColType', () => {
   });
 
   it('should handle null and undefined values in functions', () => {
-    col.ColorFunction = (val: any) => val == null ? 'gray' : 'blue';
+    col.ColorFunction = (val: any) => (val == null ? 'gray' : 'blue');
     expect(col.ColorFunction?.(null)).toBe('gray');
     expect(col.ColorFunction?.(undefined)).toBe('gray');
     expect(col.ColorFunction?.('value')).toBe('blue');
@@ -676,7 +679,7 @@ describe('TableButtonType', () => {
   it('should handle complex HideFunction logic', () => {
     const hideFn = (rec: any) => rec.status === 'archived' || rec.permissions?.includes('hidden');
     button.HideFunction = hideFn;
-    
+
     expect(button.HideFunction?.({ status: 'archived' })).toBe(true);
     expect(button.HideFunction?.({ status: 'active', permissions: ['hidden'] })).toBe(true);
     expect(button.HideFunction?.({ status: 'active', permissions: ['visible'] })).toBe(false);

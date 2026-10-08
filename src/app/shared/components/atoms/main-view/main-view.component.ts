@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-main-view',
   standalone: true,
   templateUrl: './main-view.component.html',
-  styleUrls: ['./main-view.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./main-view.component.scss'],
 })
-export class MainViewComponent {
-
-}
+export class MainViewComponent {}

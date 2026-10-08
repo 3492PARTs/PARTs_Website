@@ -1,4 +1,13 @@
-import { Component, OnInit, ContentChildren, QueryList, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ContentChildren,
+  QueryList,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { FormElementGroupComponent } from '../form-element-group/form-element-group.component';
 import { FormElementComponent } from '../form-element/form-element.component';
@@ -10,9 +19,9 @@ import { strNoE } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-form',
   imports: [FormsModule],
-  templateUrl: './form.component.html'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  templateUrl: './form.component.html',
 })
-
 export class FormComponent implements OnInit {
   @Input() FormElements: QueryList<FormElementComponent> = new QueryList<FormElementComponent>();
 
@@ -22,9 +31,9 @@ export class FormComponent implements OnInit {
   //@ContentChildren(FormElementGroupComponent) formElementGroups = new QueryList<FormElementGroupComponent>();
   @ContentChildren(TableComponent, { descendants: true }) tables = new QueryList<TableComponent>();
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   reset() {
     this.formElements.forEach(eachObj => {
@@ -52,8 +61,7 @@ export class FormComponent implements OnInit {
         tableRet += this.validateFormElement(fec);
       });
 
-      if (tableRet.length > 0)
-        ret += `${t.TableName}:\n ${tableRet}`;
+      if (tableRet.length > 0) ret += `${t.TableName}:\n ${tableRet}`;
     });
     return ret;
   }
@@ -61,8 +69,7 @@ export class FormComponent implements OnInit {
   private validateFormElement(fec: FormElementComponent): string {
     if (fec) {
       fec.touchIt();
-      if (fec.isInvalid())
-        return `&bull;  ${fec.Name} is invalid\n`;
+      if (fec.isInvalid()) return `&bull;  ${fec.Name} is invalid\n`;
     }
     return '';
   }
@@ -82,8 +89,7 @@ export class FormComponent implements OnInit {
     if (strNoE(ret)) {
       this.SubmitFunction.emit();
       this.reset();
-    }
-    else {
+    } else {
       this.gs.addBanner(new Banner(ret, 3500));
     }
   }

@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { BannersComponent } from './banners.component';
 
@@ -12,14 +11,9 @@ describe('BannersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ BannersComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      imports: [BannersComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
   });
 
   beforeEach(() => {

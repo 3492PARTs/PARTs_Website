@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
-
 
 import { LoginComponent } from './login.component';
 import { SwPush } from '@angular/service-worker';
@@ -15,21 +14,20 @@ describe('LoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ LoginComponent ],
+      imports: [LoginComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
-    })
-    .compileComponents();
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
-    
+
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -60,38 +58,38 @@ describe('LoginComponent', () => {
   it('should save rememberMe to localStorage', () => {
     component.rememberMe = true;
     component.setRememberMe();
-    
+
     expect(localStorage.getItem(environment.rememberMe)).toBe('true');
   });
 
   it('should read rememberMe from localStorage', () => {
     localStorage.setItem(environment.rememberMe, 'true');
-    
+
     component.readRememberMe();
-    
+
     expect(component.rememberMe).toBe(true);
   });
 
   it('should handle rememberMe false value in localStorage', () => {
     localStorage.setItem(environment.rememberMe, 'false');
-    
+
     component.readRememberMe();
-    
+
     expect(component.rememberMe).toBe(false);
   });
 
   it('should handle missing rememberMe in localStorage', () => {
     component.readRememberMe();
-    
+
     expect(component.rememberMe).toBe(false);
   });
 
   it('should call changePage and update page value', () => {
     const router = TestBed.inject(Router);
     spyOn(router, 'navigateByUrl');
-    
+
     component.changePage('register');
-    
+
     expect(component.page).toBe('register');
     expect(router.navigateByUrl).toHaveBeenCalledWith('login?page=register');
   });

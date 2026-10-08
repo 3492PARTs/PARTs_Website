@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -33,11 +33,20 @@ describe('TeamNotesComponent', () => {
       authInFlight: authInFlight.asObservable(),
       user: userSubject.asObservable(),
     });
-    mockGS = jasmine.createSpyObj('GeneralService', ['getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls']);
+    mockGS = jasmine.createSpyObj('GeneralService', [
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+    ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadTeams', 'loadTeamNotes', 'saveTeamNote', 'getTeamNotesFromCache',
-      'uploadOutstandingResponses', 'getTeamNoteResponsesFromCache', 'removeTeamNoteResponseFromCache',
+      'loadTeams',
+      'loadTeamNotes',
+      'saveTeamNote',
+      'getTeamNotesFromCache',
+      'uploadOutstandingResponses',
+      'getTeamNoteResponsesFromCache',
+      'removeTeamNoteResponseFromCache',
     ]);
     mockSS.outstandingResponsesUploaded = outstandingResponsesUploaded.asObservable();
     mockSS.loadTeams.and.returnValue(Promise.resolve(null) as any);
@@ -51,7 +60,7 @@ describe('TeamNotesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TeamNotesComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -91,7 +100,7 @@ describe('TeamNotesComponent', () => {
     mockSS.saveTeamNote.and.returnValue(Promise.resolve(true));
     spyOn(component, 'reset');
     component.saveNote();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
     expect(component.reset).toHaveBeenCalled();
   });
 
@@ -104,7 +113,7 @@ describe('TeamNotesComponent', () => {
     const note = new TeamNote();
     mockSS.getTeamNotesFromCache.and.returnValue(Promise.resolve([note]) as any);
     component.loadTeamNotes();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
     expect(component.teamNotes[0]).toBe(note);
   });
 

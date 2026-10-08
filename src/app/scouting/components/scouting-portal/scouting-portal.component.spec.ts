@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
@@ -33,7 +33,11 @@ describe('ScoutingPortalComponent', () => {
       user: userSubject.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', ['loadAllScoutingInfo']);
@@ -44,7 +48,7 @@ describe('ScoutingPortalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ScoutingPortalComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -81,17 +85,26 @@ describe('ScoutingPortalComponent', () => {
     u.id = 1;
     component.user = u;
     const sfs = {
-      red_one_id: u, red_two_id: null, red_three_id: null,
-      blue_one_id: null, blue_two_id: null, blue_three_id: null,
-      st_time: '2024-01-01T08:00', end_time: '2024-01-01T09:00',
-      notification1: false, notification2: false, notification3: false,
+      red_one_id: u,
+      red_two_id: null,
+      red_three_id: null,
+      blue_one_id: null,
+      blue_two_id: null,
+      blue_three_id: null,
+      st_time: '2024-01-01T08:00',
+      end_time: '2024-01-01T09:00',
+      notification1: false,
+      notification2: false,
+      notification3: false,
     };
-    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve({
-      schedules: [],
-      scout_field_schedules: [sfs as any],
-    } as any));
+    mockSS.loadAllScoutingInfo.and.returnValue(
+      Promise.resolve({
+        schedules: [],
+        scout_field_schedules: [sfs as any],
+      } as any)
+    );
     component.portalInit();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
     expect(component.fieldSchedule.length).toBe(1);
     expect(component.fieldSchedule[0].position).toBe('red one');
   });

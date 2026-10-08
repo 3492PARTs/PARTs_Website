@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -33,12 +33,20 @@ describe('ActivityComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadAllScoutingInfo', 'getFieldResponseColumnsFromCache', 'getFieldResponseFromCache',
-      'filterScoutFieldSchedulesFromCache', 'loadScoutingFieldSchedules', 'scoutFieldResponseSortFunction',
+      'loadAllScoutingInfo',
+      'getFieldResponseColumnsFromCache',
+      'getFieldResponseFromCache',
+      'filterScoutFieldSchedulesFromCache',
+      'loadScoutingFieldSchedules',
+      'scoutFieldResponseSortFunction',
       'scoutFieldScheduleSortFunction',
     ]);
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(null) as any);
@@ -49,13 +57,16 @@ describe('ActivityComponent', () => {
     mockSS.scoutFieldResponseSortFunction.and.returnValue(0);
     mockSS.scoutFieldScheduleSortFunction.and.returnValue(0);
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerConfirm', 'triggerError', 'successfulResponseBanner', 'checkResponse',
+      'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
+      'checkResponse',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [ActivityComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -93,18 +104,19 @@ describe('ActivityComponent', () => {
     const sfs = new ScoutFieldSchedule();
     sfs.st_time = '2024-01-01T08:00' as any;
     sfs.end_time = '2024-01-01T09:00' as any;
-    mockSS.loadAllScoutingInfo.and.returnValue(
-      Promise.resolve({ scout_field_schedules: [sfs] } as any),
-    );
+    mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve({ scout_field_schedules: [sfs] } as any));
     spyOn(component, 'getUsersScoutingUserInfo');
     component.init();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
     expect(component.scoutFieldSchedules[0].st_time instanceof Date).toBeTrue();
   });
 
   it('getUsersScoutingUserInfo should set usersScoutingUserInfo on success', () => {
     const userData: UserInfo[] = [{ user: { id: 1, first_name: 'John', last_name: 'Doe' } } as any];
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext(userData); return Promise.resolve(userData); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext(userData);
+      return Promise.resolve(userData);
+    });
     component.getUsersScoutingUserInfo();
     expect(component.usersScoutingUserInfo).toEqual(userData);
   });
@@ -112,24 +124,28 @@ describe('ActivityComponent', () => {
   it('getUsersScoutingUserInfo should update activeUserScoutingUserInfo when user matches', () => {
     const activeUser = { user: { id: 2, first_name: 'Jane', last_name: 'Smith' } } as any;
     component.activeUserScoutingUserInfo = activeUser;
-    const newData: UserInfo[] = [
-      { user: { id: 2, first_name: 'Jane', last_name: 'Updated' } } as any,
-    ];
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext(newData); return Promise.resolve(newData); });
+    const newData: UserInfo[] = [{ user: { id: 2, first_name: 'Jane', last_name: 'Updated' } } as any];
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext(newData);
+      return Promise.resolve(newData);
+    });
     component.getUsersScoutingUserInfo();
     expect(component.activeUserScoutingUserInfo.user.last_name).toBe('Updated');
   });
 
   it('getUsersScoutingUserInfo should call triggerError on failure', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.get.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.getUsersScoutingUserInfo();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('getUserNameForTable should return full name for matching user', () => {
-    component.usersScoutingUserInfo = [
-      { user: { id: 10, first_name: 'Alice', last_name: 'Brown' } } as any,
-    ];
+    component.usersScoutingUserInfo = [{ user: { id: 10, first_name: 'Alice', last_name: 'Brown' } } as any];
     const result = component.getUserNameForTable(10);
     expect(result).toBe('Alice Brown');
   });
@@ -160,7 +176,8 @@ describe('ActivityComponent', () => {
   it('saveUserInfo should call api.post', () => {
     mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
       mockModalService.checkResponse.and.returnValue(true);
-      if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' });
+      if (successCb) successCb({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
     });
     mockModalService.checkResponse.and.returnValue(true);
     component.saveUserInfo();
@@ -168,7 +185,12 @@ describe('ActivityComponent', () => {
   });
 
   it('saveUserInfo should call triggerError on failure', () => {
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.post.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.saveUserInfo();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });

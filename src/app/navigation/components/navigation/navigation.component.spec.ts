@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -32,15 +32,23 @@ describe('NavigationComponent', () => {
     outstandingCallsSubject = new BehaviorSubject<number>(0);
     navigationStateSubject = new BehaviorSubject<NavigationState>(NavigationState.expanded);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void): Promise<any> => {
+      if (successCb) successCb([]);
+      return Promise.resolve([]) as any;
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', ['logout', 'isAdmin'], {
       user: userSubject.asObservable(),
       userLinks: new BehaviorSubject<any[]>([]).asObservable(),
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
-      'navigateByUrl', 'addBanner',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
+      'navigateByUrl',
+      'addBanner',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.currentOutstandingCalls = outstandingCallsSubject.asObservable();
@@ -65,7 +73,7 @@ describe('NavigationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [NavigationComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

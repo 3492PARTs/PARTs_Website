@@ -1,15 +1,27 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  Renderer2,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormElementComponent } from '@app/shared/components/atoms/form-element/form-element.component';
 import { GeneralService } from '@app/core/services/general.service';
 import { CommonModule } from '@angular/common';
 import { Question } from '@app/core/models/form.models';
-import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
+import { DisplayQuestionSvgComponent } from '../display-question-svg/display-question-svg.component';
 
 @Component({
   selector: 'app-question-form-element',
   imports: [CommonModule, FormElementComponent, DisplayQuestionSvgComponent],
   templateUrl: './question-form-element.component.html',
-  styleUrls: ['./question-form-element.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./question-form-element.component.scss'],
 })
 export class QuestionFormElementComponent implements AfterViewInit {
   @Input() Question!: Question;
@@ -22,11 +34,12 @@ export class QuestionFormElementComponent implements AfterViewInit {
 
   @Input() Inverted = false;
 
-  constructor(private gs: GeneralService, private renderer: Renderer2) { }
+  constructor(
+    private gs: GeneralService,
+    private renderer: Renderer2
+  ) {}
 
-  ngAfterViewInit(): void {
-
-  }
+  ngAfterViewInit(): void {}
 
   change(answer: any): void {
     this.Question.answer = answer;

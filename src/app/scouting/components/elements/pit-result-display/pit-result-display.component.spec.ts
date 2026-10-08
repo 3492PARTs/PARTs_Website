@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { PitResultDisplayComponent } from './pit-result-display.component';
 import { SwPush } from '@angular/service-worker';
@@ -18,13 +17,13 @@ describe('PitResultDisplayComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ PitResultDisplayComponent ],
+      imports: [PitResultDisplayComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
     });
     fixture = TestBed.createComponent(PitResultDisplayComponent);
     component = fixture.componentInstance;
@@ -61,50 +60,50 @@ describe('PitResultDisplayComponent', () => {
   it('should accept ScoutPitResult input', () => {
     const mockResult = new ScoutPitResponse();
     mockResult.id = 123;
-    
+
     component.ScoutPitResult = mockResult;
     fixture.detectChanges();
-    
+
     expect(component.ScoutPitResult.id).toBe(123);
   });
 
   it('should accept VerticalOnly input', () => {
     component.VerticalOnly = true;
     fixture.detectChanges();
-    
+
     expect(component.VerticalOnly).toBe(true);
   });
 
   it('should update screen size on window resize', () => {
     const initialSize = component.screenSize;
-    
+
     window.dispatchEvent(new Event('resize'));
     fixture.detectChanges();
-    
+
     expect(component.screenSize).toBeDefined();
   });
 
   it('should update app size on window resize', () => {
     window.dispatchEvent(new Event('resize'));
     fixture.detectChanges();
-    
+
     expect(component.appSize).toBeDefined();
   });
 
   it('should check if mobile through GeneralService', () => {
     spyOn(generalService, 'isMobile').and.returnValue(true);
-    
+
     const result = component.isMobile();
-    
+
     expect(result).toBe(true);
     expect(generalService.isMobile).toHaveBeenCalled();
   });
 
   it('should return false for isMobile when not mobile', () => {
     spyOn(generalService, 'isMobile').and.returnValue(false);
-    
+
     const result = component.isMobile();
-    
+
     expect(result).toBe(false);
   });
 });

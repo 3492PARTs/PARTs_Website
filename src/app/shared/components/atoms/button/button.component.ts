@@ -1,11 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-button',
-  imports: [CommonModule,],
+  imports: [CommonModule],
   templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent implements OnInit {
   @Input() ButtonType = 'main';
@@ -28,9 +38,9 @@ export class ButtonComponent implements OnInit {
 
   @ViewChild('thisButton', { read: ElementRef, static: false }) button?: ElementRef;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   RunFunction() {
     this.FunctionCallBack.emit();

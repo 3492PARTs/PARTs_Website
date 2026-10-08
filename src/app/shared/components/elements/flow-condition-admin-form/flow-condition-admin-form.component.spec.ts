@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -24,13 +24,23 @@ describe('FlowConditionAdminFormComponent', () => {
   beforeEach(async () => {
     authInFlight = new BehaviorSubject<number>(0);
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post', 'delete']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb([]);
+      return Promise.resolve([]) as any;
+    });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', [], {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner']);
@@ -38,7 +48,7 @@ describe('FlowConditionAdminFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FlowConditionAdminFormComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -74,7 +84,10 @@ describe('FlowConditionAdminFormComponent', () => {
 
   it('getFlowConditions should set flowConditions', () => {
     const mockConditions: FlowCondition[] = [new FlowCondition()];
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb(mockConditions); return Promise.resolve(mockConditions); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb(mockConditions);
+      return Promise.resolve(mockConditions);
+    });
     component.getFlowConditions();
     expect(component.flowConditions).toEqual(mockConditions);
   });

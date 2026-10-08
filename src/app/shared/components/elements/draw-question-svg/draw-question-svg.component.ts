@@ -1,11 +1,22 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+  Renderer2,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { GeneralService } from '@app/core/services/general.service';
-import { TableColType, TableComponent } from "../../atoms/table/table.component";
+import { TableColType, TableComponent } from '../../atoms/table/table.component';
 import { Flow, FlowQuestion } from '@app/core/models/form.models';
-import { DisplayQuestionSvgComponent } from "../display-question-svg/display-question-svg.component";
+import { DisplayQuestionSvgComponent } from '../display-question-svg/display-question-svg.component';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from "../../atoms/button/button.component";
-import { ButtonRibbonComponent } from "../../atoms/button-ribbon/button-ribbon.component";
+import { ButtonComponent } from '../../atoms/button/button.component';
+import { ButtonRibbonComponent } from '../../atoms/button-ribbon/button-ribbon.component';
 
 import { ModalService } from '@app/core/services/modal.service';
 import { decodeYesNo, triggerChange } from '@app/core/utils/utils.functions';
@@ -13,7 +24,8 @@ import { decodeYesNo, triggerChange } from '@app/core/utils/utils.functions';
   selector: 'app-draw-question-svg',
   imports: [TableComponent, DisplayQuestionSvgComponent, CommonModule, ButtonComponent, ButtonRibbonComponent],
   templateUrl: './draw-question-svg.component.html',
-  styleUrls: ['./draw-question-svg.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./draw-question-svg.component.scss'],
 })
 export class DrawQuestionSvgComponent implements AfterViewInit {
   @ViewChild('mySvg', { static: false }) mySvg!: ElementRef<SVGSVGElement>;
@@ -22,8 +34,8 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
 
   private isDrawing = false;
   private isDragging = false;
-  points: { x: number, y: number }[] = [];
-  private draggingPoint: { x: number, y: number } | null = null;
+  points: { x: number; y: number }[] = [];
+  private draggingPoint: { x: number; y: number } | null = null;
 
   @Input() Stroke = '#ffffff';
   @Input() Fill = '#80808087';
@@ -31,7 +43,6 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   @Input() set ImageUrl(s: string) {
     this.url = s;
     triggerChange(() => this.adjustImage(), 5);
-
   }
 
   url = '';
@@ -47,16 +58,28 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   @Output() SvgChange: EventEmitter<Svg> = new EventEmitter<Svg>();
 
   flowTableCols: TableColType[] = [
-    { PropertyName: 'question.question', ColLabel: 'Question', Type: "text", Required: true, Width: '200px' },
-    { PropertyName: 'order', ColLabel: 'Order', Type: "number", Required: true, Width: '100px' },
+    { PropertyName: 'question.question', ColLabel: 'Question', Type: 'text', Required: true, Width: '200px' },
+    { PropertyName: 'order', ColLabel: 'Order', Type: 'number', Required: true, Width: '100px' },
     { PropertyName: 'question.question_typ.question_typ_nm', ColLabel: 'Type' },
-    { PropertyName: 'active', ColLabel: 'Active', Type: 'function', ColValueFunction: this.ynToYesNo.bind(this), Width: '50px' },
-    { PropertyName: 'question.x', ColLabel: 'X', Type: "number" },
-    { PropertyName: 'question.y', ColLabel: 'Y', Type: "number" },
-    { PropertyName: 'question.width', ColLabel: 'Width', Type: "number" },
-    { PropertyName: 'question.height', ColLabel: 'Height', Type: "number" },
-    { PropertyName: 'question.icon', ColLabel: 'Icon', Type: "text", Href: "https://pictogrammers.com/library/mdi/", Width: '150px' },
-    { PropertyName: 'question.icon_only', ColLabel: 'Icon Only', Type: "checkbox" },
+    {
+      PropertyName: 'active',
+      ColLabel: 'Active',
+      Type: 'function',
+      ColValueFunction: this.ynToYesNo.bind(this),
+      Width: '50px',
+    },
+    { PropertyName: 'question.x', ColLabel: 'X', Type: 'number' },
+    { PropertyName: 'question.y', ColLabel: 'Y', Type: 'number' },
+    { PropertyName: 'question.width', ColLabel: 'Width', Type: 'number' },
+    { PropertyName: 'question.height', ColLabel: 'Height', Type: 'number' },
+    {
+      PropertyName: 'question.icon',
+      ColLabel: 'Icon',
+      Type: 'text',
+      Href: 'https://pictogrammers.com/library/mdi/',
+      Width: '150px',
+    },
+    { PropertyName: 'question.icon_only', ColLabel: 'Icon Only', Type: 'checkbox' },
   ];
   flowTableTriggerUpdate = false;
 
@@ -68,7 +91,11 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   @Output() FlowQuestionsChange: EventEmitter<FlowQuestion[]> = new EventEmitter<FlowQuestion[]>();
   activeFlowQuestion: FlowQuestion | undefined = undefined;
 
-  constructor(private renderer: Renderer2, private gs: GeneralService, private modalService: ModalService) { }
+  constructor(
+    private renderer: Renderer2,
+    private gs: GeneralService,
+    private modalService: ModalService
+  ) {}
 
   ngAfterViewInit() {
     // It's crucial to get the SVG and path elements after the view is initialized.
@@ -90,10 +117,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     if (!this.isDragging) {
       this.isDrawing = true;
       this.addPoint(event.offsetX, event.offsetY);
-    }
-    else
-      this.isDrawing = false;
-
+    } else this.isDrawing = false;
   }
 
   handleMouseMove(event: MouseEvent) {
@@ -123,13 +147,15 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
   }
 
   draw() {
-    const pathData = this.points.map((p, i) => {
-      if (i === 0) {
-        return `M${p.x},${p.y}`;
-      } else {
-        return `L${p.x},${p.y}`;
-      }
-    }).join(' ');
+    const pathData = this.points
+      .map((p, i) => {
+        if (i === 0) {
+          return `M${p.x},${p.y}`;
+        } else {
+          return `L${p.x},${p.y}`;
+        }
+      })
+      .join(' ');
     this.myPath.nativeElement.setAttribute('d', pathData);
   }
 
@@ -141,7 +167,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     }
   }
 
-  startDragging(point: { x: number, y: number }) {
+  startDragging(point: { x: number; y: number }) {
     this.isDragging = true;
     this.isDrawing = false;
     this.draggingPoint = point;
@@ -169,13 +195,11 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       <svg width="${pathBounds.width}" height="${pathBounds.height}" viewBox="${pathBounds.x} ${pathBounds.y} ${pathBounds.width} ${pathBounds.height}" xmlns="http://www.w3.org/2000/svg">
         <path d="${this.myPath.nativeElement.getAttribute('d')}" fill="${this.Fill}" stroke="${this.Stroke}" />
       </svg>
-    `
+    `;
     if (svg.length > 2000) {
       this.modalService.triggerError('Path too complicated, simplify please.');
       return '';
-    }
-    else
-      return svg;
+    } else return svg;
   }
 
   exportSvg() {
@@ -197,8 +221,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
       if (window.innerWidth > window.innerHeight) {
         this.renderer.setStyle(this.image.nativeElement, 'width', 'auto');
         this.renderer.setStyle(this.image.nativeElement, 'height', '70vh');
-      }
-      else {
+      } else {
         this.renderer.setStyle(this.image.nativeElement, 'width', '100%');
         this.renderer.setStyle(this.image.nativeElement, 'height', 'auto');
       }
@@ -207,8 +230,7 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
 
   reset(): void {
     this.points = [];
-    if (this.myPath)
-      this.myPath.nativeElement.setAttribute('d', '');
+    if (this.myPath) this.myPath.nativeElement.setAttribute('d', '');
   }
 
   exit(): void {
@@ -222,10 +244,10 @@ export class DrawQuestionSvgComponent implements AfterViewInit {
     const pathBounds = this.myPath.nativeElement.getBBox();
 
     let svg = new Svg();
-    svg.x = parseFloat((pathBounds.x / this.image.nativeElement.offsetWidth * 100).toFixed(2));
-    svg.y = parseFloat((pathBounds.y / this.image.nativeElement.offsetHeight * 100).toFixed(2));
-    svg.width = parseFloat((pathBounds.width / this.image.nativeElement.offsetWidth * 100).toFixed(2));
-    svg.height = parseFloat((pathBounds.height / this.image.nativeElement.offsetHeight * 100).toFixed(2));
+    svg.x = parseFloat(((pathBounds.x / this.image.nativeElement.offsetWidth) * 100).toFixed(2));
+    svg.y = parseFloat(((pathBounds.y / this.image.nativeElement.offsetHeight) * 100).toFixed(2));
+    svg.width = parseFloat(((pathBounds.width / this.image.nativeElement.offsetWidth) * 100).toFixed(2));
+    svg.height = parseFloat(((pathBounds.height / this.image.nativeElement.offsetHeight) * 100).toFixed(2));
     svg.svg = this.createSvg();
 
     if (this.activeFlowQuestion) {

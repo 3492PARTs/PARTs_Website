@@ -37,7 +37,7 @@ Two runtime targets are available using Docker's `--target` flag:
 
 ### 1. Specific Node.js Version
 **Before:** `FROM node:lts`  
-**After:** `FROM node:20-bullseye`  
+**After:** `FROM node:24-bookworm`
 **Benefit:** Ensures reproducible builds with a specific, stable version
 
 ### 2. Modern GPG Key Management

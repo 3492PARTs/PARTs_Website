@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { SubNavigationComponent } from './sub-navigation.component';
 import { SwPush } from '@angular/service-worker';
@@ -19,13 +18,12 @@ describe('SubNavigationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SubNavigationComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
-    })
-      .compileComponents();
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SubNavigationComponent);
     component = fixture.componentInstance;
@@ -59,10 +57,7 @@ describe('SubNavigationComponent', () => {
   });
 
   it('should accept navItems input', () => {
-    const testLinks: Link[] = [
-      new Link('Test 1', '/test1', 'icon1'),
-      new Link('Test 2', '/test2', 'icon2')
-    ];
+    const testLinks: Link[] = [new Link('Test 1', '/test1', 'icon1'), new Link('Test 2', '/test2', 'icon2')];
 
     component.navItems = testLinks;
     fixture.detectChanges();

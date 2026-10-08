@@ -1,5 +1,5 @@
 # Stage 1: Compile and Build angular codebase
-FROM node:20-bullseye AS build
+FROM node:24-bookworm AS build
 
 # Build argument for Angular configuration (production, uat, development)
 ARG BUILD_CONFIGURATION=production

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -42,7 +42,11 @@ describe('ScheduleComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockSS = jasmine.createSpyObj('ScoutingService', ['loadAllScoutingInfo']);
@@ -51,13 +55,15 @@ describe('ScheduleComponent', () => {
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
     mockUS.compareUserObjects.and.returnValue(false);
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerConfirm', 'triggerError', 'successfulResponseBanner',
+      'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [ScheduleComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -88,7 +94,7 @@ describe('ScheduleComponent', () => {
   it('init should load schedules and users', async () => {
     mockSS.loadAllScoutingInfo.and.returnValue(Promise.resolve(makeAllScoutInfo() as any));
     component.init();
-    await Promise.resolve() as any;
+    (await Promise.resolve()) as any;
     expect(mockUS.getUsers).toHaveBeenCalled();
     expect(mockSS.loadAllScoutingInfo).toHaveBeenCalled();
   });
@@ -112,8 +118,12 @@ describe('ScheduleComponent', () => {
     u1.id = 10;
     component.currentEvent = Object.assign(new Event(), { id: 1 });
     component.ActiveScoutFieldSchedule = Object.assign(new ScoutFieldSchedule(), {
-      red_one_id: u1, red_two_id: null, red_three_id: null,
-      blue_one_id: null, blue_two_id: null, blue_three_id: null,
+      red_one_id: u1,
+      red_two_id: null,
+      red_three_id: null,
+      blue_one_id: null,
+      blue_two_id: null,
+      blue_three_id: null,
     });
     component.copyScoutFieldScheduleEntry();
     expect((component.ActiveScoutFieldSchedule.red_one_id as User).id).toBe(10);
@@ -129,7 +139,10 @@ describe('ScheduleComponent', () => {
   it('saveScoutFieldScheduleEntry should call api.post when event is valid', () => {
     component.currentEvent = Object.assign(new Event(), { id: 3 });
     component.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     component.saveScoutFieldScheduleEntry();
     expect(mockAPI.post).toHaveBeenCalled();
     expect(component.scoutScheduleModalVisible).toBeFalse();
@@ -138,19 +151,38 @@ describe('ScheduleComponent', () => {
   it('saveScoutFieldScheduleEntry error should call triggerError', () => {
     component.currentEvent = Object.assign(new Event(), { id: 3 });
     component.ActiveScoutFieldSchedule = new ScoutFieldSchedule();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.post.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.saveScoutFieldScheduleEntry();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('notifyUsers should call api.get', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     component.notifyUsers(7);
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/notify-user/', { scout_field_sch_id: 7 }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.get).toHaveBeenCalledWith(
+      true,
+      'scouting/admin/notify-user/',
+      { scout_field_sch_id: 7 },
+      jasmine.any(Function),
+      jasmine.any(Function)
+    );
   });
 
   it('notifyUsers error should call triggerError', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.get.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.notifyUsers(7);
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -185,26 +217,48 @@ describe('ScheduleComponent', () => {
 
   it('saveScheduleEntry should call api.post', () => {
     component.currentSchedule = new Schedule();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     component.saveScheduleEntry();
     expect(mockAPI.post).toHaveBeenCalled();
   });
 
   it('saveScheduleEntry error should call triggerError', () => {
     component.currentSchedule = new Schedule();
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.post.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.saveScheduleEntry();
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
 
   it('notifyUser should call api.get with sch_id', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => { if (onNext) onNext({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, onNext?: (result: any) => void): Promise<any> => {
+      if (onNext) onNext({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     component.notifyUser(5);
-    expect(mockAPI.get).toHaveBeenCalledWith(true, 'scouting/admin/notify-user/', { sch_id: 5 }, jasmine.any(Function), jasmine.any(Function));
+    expect(mockAPI.get).toHaveBeenCalledWith(
+      true,
+      'scouting/admin/notify-user/',
+      { sch_id: 5 },
+      jasmine.any(Function),
+      jasmine.any(Function)
+    );
   });
 
   it('notifyUser error should call triggerError', () => {
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => { if (onError) onError('err'); return Promise.resolve() as any; });
+    mockAPI.get.and.callFake(
+      (_: boolean, __: string, ___?: any, ____?: (r: any) => void, onError?: (e: any) => void): Promise<any> => {
+        if (onError) onError('err');
+        return Promise.resolve() as any;
+      }
+    );
     component.notifyUser(5);
     expect(mockModalService.triggerError).toHaveBeenCalledWith('err');
   });
@@ -213,7 +267,10 @@ describe('ScheduleComponent', () => {
     const u = new User();
     u.id = 3;
     component.currentSchedule = Object.assign(new Schedule(), {
-      user: u, sch_typ: 'A', st_time: new Date(), end_time: new Date(),
+      user: u,
+      sch_typ: 'A',
+      st_time: new Date(),
+      end_time: new Date(),
     });
     component.copyScheduleEntry();
     expect(component.currentSchedule.id).toBeFalsy();

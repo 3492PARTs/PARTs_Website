@@ -13,7 +13,8 @@ import {
   RendererStyleFlags2,
   QueryList,
   ViewChildren,
-  SimpleChanges
+  SimpleChanges,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GeneralService } from '@app/core/services/general.service';
@@ -26,22 +27,40 @@ import { OrderByPipe } from '@app/shared/pipes/order-by.pipe';
 import { RemovedFilterPipe } from '@app/shared/pipes/removed-filter.pipe';
 import { DateToStrPipe } from '@app/shared/pipes/date-to-str.pipe';
 
-import { getPropertyValue, setPropertyValue, strNoE, previewImage, tableToCSV, downloadFileAs } from '@app/core/utils/utils.functions';
+import {
+  getPropertyValue,
+  setPropertyValue,
+  strNoE,
+  previewImage,
+  tableToCSV,
+  downloadFileAs,
+} from '@app/core/utils/utils.functions';
 import { OnCreateDirective } from '@app/shared/directives/on-create/on-create.directive';
 //import * as $ from 'jquery';
 
 @Component({
   selector: 'app-table',
-  imports: [CommonModule, FormsModule, HeaderComponent, FormElementComponent, ButtonComponent, RemovedFilterPipe, OrderByPipe, ObjectWildCardFilterPipe, DateToStrPipe, OnCreateDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    HeaderComponent,
+    FormElementComponent,
+    ButtonComponent,
+    RemovedFilterPipe,
+    OrderByPipe,
+    ObjectWildCardFilterPipe,
+    DateToStrPipe,
+    OnCreateDirective,
+  ],
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit, OnChanges {
-
   private screenSizeWide = 1175;
   private resizeTimer: number | null | undefined;
 
-  TableDisplayValue = "";
+  TableDisplayValue = '';
 
   @Input() TableData: any[] = [];
   @Input() TableCols: TableColType[] = [];
@@ -130,17 +149,24 @@ export class TableComponent implements OnInit, OnChanges {
 
   buttonWidth = 0;
 
-  constructor(private gs: GeneralService, private renderer: Renderer2) { }
+  constructor(
+    private gs: GeneralService,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit() {
     if (this.RecordClickCallBack.observed || this.DblClkRecordClickCallBack.observed) this.CursorPointer = true;
     this.setSymbolSizeForButtons();
     this.generateTableDisplayValues();
-    if (strNoE(this.TableName) && !strNoE(this.TableTitle))
-      this.TableName = this.TableTitle;
+    if (strNoE(this.TableName) && !strNoE(this.TableTitle)) this.TableName = this.TableTitle;
 
     if (this.Width !== '' && this.Table) {
-      this.renderer.setStyle(this.Table.nativeElement, 'width', this.Width, RendererStyleFlags2.DashCase | RendererStyleFlags2.Important);
+      this.renderer.setStyle(
+        this.Table.nativeElement,
+        'width',
+        this.Width,
+        RendererStyleFlags2.DashCase | RendererStyleFlags2.Important
+      );
     }
 
     this.SetTableContainerWidth();
@@ -151,13 +177,8 @@ export class TableComponent implements OnInit, OnChanges {
     */
     if (this.Scrollable && this.MainTableBody) {
       this.FixedTableScrollColWidth = this.getScrollbarWidth() + 'px';
-      this.renderer.setStyle(
-        this.MainTableBody.nativeElement,
-        'max-height',
-        this.ScrollHeight
-      );
+      this.renderer.setStyle(this.MainTableBody.nativeElement, 'max-height', this.ScrollHeight);
     }
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -192,8 +213,7 @@ export class TableComponent implements OnInit, OnChanges {
       if (this.resizeTimer != null) {
         window.clearTimeout(this.resizeTimer);
       }
-    }
-    catch (e) {
+    } catch (e) {
       console.error('Error clearing resize timer:', e);
     }
 
@@ -213,17 +233,22 @@ export class TableComponent implements OnInit, OnChanges {
       this.TableCols.forEach(col => {
         if (strNoE(col.Type) && col.PropertyName?.includes('.')) {
           rec[col.PropertyName] = this.GetTableDisplayValue(rec, col.PropertyName || '');
-        }
-        else if (col.Type === 'function') {
-          rec[(col.PropertyName || '') + (col.ColValueFunction?.name || '')] = col.ColValueFunction ? (col.ColValueFunction(col.PropertyName ? this.GetTableDisplayValue(rec, col.PropertyName) : rec)) : rec;
+        } else if (col.Type === 'function') {
+          rec[(col.PropertyName || '') + (col.ColValueFunction?.name || '')] = col.ColValueFunction
+            ? col.ColValueFunction(col.PropertyName ? this.GetTableDisplayValue(rec, col.PropertyName) : rec)
+            : rec;
         }
 
         if (col.ColorFunction) {
-          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(col.ColorFunctionRecAsParam ? rec : this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+          rec[(col.PropertyName || '') + (col.ColorFunction?.name || '')] = col.ColorFunction(
+            col.ColorFunctionRecAsParam ? rec : this.GetTableDisplayValue(rec, col.PropertyName || '')
+          );
         }
 
         if (col.FontColorFunction) {
-          rec[(col.PropertyName || '') + (col.FontColorFunction?.name || '')] = col.FontColorFunction(this.GetTableDisplayValue(rec, (col.PropertyName || '')));
+          rec[(col.PropertyName || '') + (col.FontColorFunction?.name || '')] = col.FontColorFunction(
+            this.GetTableDisplayValue(rec, col.PropertyName || '')
+          );
         }
 
         if (col.UnderlineFn) {
@@ -273,42 +298,22 @@ export class TableComponent implements OnInit, OnChanges {
 
   SetTableContainerWidth() {
     if (this.InfoContainer && this.DisplayRecordInfo && this.ActiveRec != null) {
-      this.renderer.setStyle(
-        this.InfoContainer.nativeElement,
-        'display',
-        'inline-block'
-      );
+      this.renderer.setStyle(this.InfoContainer.nativeElement, 'display', 'inline-block');
       const infopixels = this.InfoContainer.nativeElement.offsetWidth;
       const FinalCssVal = 'calc(100% - ' + infopixels + 'px)';
 
-      if (this.TableContainer &&
+      if (
+        this.TableContainer &&
         window.innerWidth >= this.screenSizeWide &&
-        (window.innerWidth - (infopixels + 300) > 0)
+        window.innerWidth - (infopixels + 300) > 0
       ) {
-        this.renderer.setStyle(
-          this.TableContainer.nativeElement,
-          'width',
-          FinalCssVal
-        );
+        this.renderer.setStyle(this.TableContainer.nativeElement, 'width', FinalCssVal);
       } else if (this.TableContainer) {
-        this.renderer.setStyle(
-          this.TableContainer.nativeElement,
-          'width',
-          '100%'
-        );
-        this.renderer.setStyle(
-          this.InfoContainer.nativeElement,
-          'display',
-          'block'
-        );
+        this.renderer.setStyle(this.TableContainer.nativeElement, 'width', '100%');
+        this.renderer.setStyle(this.InfoContainer.nativeElement, 'display', 'block');
       }
-
     } else if (this.InfoContainer) {
-      this.renderer.setStyle(
-        this.InfoContainer.nativeElement,
-        'display',
-        'none'
-      );
+      this.renderer.setStyle(this.InfoContainer.nativeElement, 'display', 'none');
     }
   }
 
@@ -349,7 +354,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ShowButtonColumn(): void {
-    this.buttonWidth = parseFloat(this.SymbolSize.replace('rem', '')) + .5;
+    this.buttonWidth = parseFloat(this.SymbolSize.replace('rem', '')) + 0.5;
     let colWidth = 0;
 
     if (this.ShowEditButton) {
@@ -383,26 +388,20 @@ export class TableComponent implements OnInit, OnChanges {
 
     this.TableDataButtons.forEach(t => {
       if (t.isOneOfButtonTypeVisible())
-        if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType))
-          colWidth += 6;
-        else
-          colWidth += this.buttonWidth;
+        if (['main', 'success', 'danger', 'warning'].includes(t.ButtonType)) colWidth += 6;
+        else colWidth += this.buttonWidth;
     });
 
     // only need to account for header buttons if no other buttons or other is smaller than header buttons
     let headerColWidth = 0;
-    if (this.ShowAddButton)
-      headerColWidth += this.buttonWidth;
-    if (this.ShowDownloadButton)
-      headerColWidth += this.buttonWidth;
+    if (this.ShowAddButton) headerColWidth += this.buttonWidth;
+    if (this.ShowDownloadButton) headerColWidth += this.buttonWidth;
 
-    if (headerColWidth > colWidth)
-      colWidth = headerColWidth;
+    if (headerColWidth > colWidth) colWidth = headerColWidth;
 
     if (colWidth > 0) {
       this.buttonCellWidth = colWidth + 1 + 'rem';
     }
-
 
     if (
       this.ShowAddButton ||
@@ -413,9 +412,7 @@ export class TableComponent implements OnInit, OnChanges {
       this.TableDataButtons.length > 0
     ) {
       this.showButtonColumn = true;
-    }
-    else
-      this.showButtonColumn = false;
+    } else this.showButtonColumn = false;
   }
 
   Remove(rec: any) {
@@ -436,7 +433,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   Download() {
     const csv = tableToCSV(this.TableCols, this.TableData);
-    downloadFileAs(`${(this.TableName || 'Export')}.csv`, csv, 'text/csv');
+    downloadFileAs(`${this.TableName || 'Export'}.csv`, csv, 'text/csv');
   }
 
   Archive(rec: any) {
@@ -507,17 +504,27 @@ export class TableColType {
 
 export class TableButtonType {
   ButtonType = '';
-  RecordCallBack: (arg: any) => any = () => { };
+  RecordCallBack: (arg: any) => any = () => {};
   Title?: string;
   Type?: string;
   Text?: string;
-  Color = "";
-  BackgroundColor = "";
-  Class = "";
+  Color = '';
+  BackgroundColor = '';
+  Class = '';
   HideFunction?: (arg: any) => boolean;
-  private oneOfButtonTypeIsVisible = false
+  private oneOfButtonTypeIsVisible = false;
 
-  constructor(ButtonType: string, RecordCallBack: (arg: any) => any, Title?: string, Type?: string, Text?: string, HideFunction?: (arg: any) => boolean, Color = "", BackgroundColor = "", Class = "") {
+  constructor(
+    ButtonType: string,
+    RecordCallBack: (arg: any) => any,
+    Title?: string,
+    Type?: string,
+    Text?: string,
+    HideFunction?: (arg: any) => boolean,
+    Color = '',
+    BackgroundColor = '',
+    Class = ''
+  ) {
     this.ButtonType = ButtonType;
     this.RecordCallBack = RecordCallBack;
     this.Title = Title;

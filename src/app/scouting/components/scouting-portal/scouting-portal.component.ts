@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { User, AuthPermission } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -16,7 +16,8 @@ import { decodeSentBoolean, decodeYesNoBoolean, strNoE } from '@app/core/utils/u
   selector: 'app-scouting-portal',
   imports: [BoxComponent, TableComponent, FormElementGroupComponent],
   templateUrl: './scouting-portal.component.html',
-  styleUrls: ['./scouting-portal.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./scouting-portal.component.scss'],
 })
 export class ScoutingPortalComponent implements OnInit {
   user: User = new User();
@@ -26,48 +27,85 @@ export class ScoutingPortalComponent implements OnInit {
 
   schedule: Schedule[] = [];
   fieldSchedule: {
-    position: string,
-    st_time: Date,
-    end_time: Date,
-    notification1: boolean,
-    notification2: boolean,
-    notification3: boolean,
+    position: string;
+    st_time: Date;
+    end_time: Date;
+    notification1: boolean;
+    notification2: boolean;
+    notification3: boolean;
   }[] = [];
 
   scoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'position', ColLabel: 'Position' },
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    {
+      PropertyName: 'notification1',
+      ColLabel: '15 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification2',
+      ColLabel: '5 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification3',
+      ColLabel: '0 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
   ];
 
   expandedScoutFieldScheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
     { PropertyName: 'scouts', ColLabel: 'Scouts' },
-    { PropertyName: 'notification1', ColLabel: '15 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification2', ColLabel: '5 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
-    { PropertyName: 'notification3', ColLabel: '0 min notification', Type: 'function', ColValueFunction: this.decodeSentBoolean.bind(this) },
+    {
+      PropertyName: 'notification1',
+      ColLabel: '15 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification2',
+      ColLabel: '5 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
+    {
+      PropertyName: 'notification3',
+      ColLabel: '0 min notification',
+      Type: 'function',
+      ColValueFunction: this.decodeSentBoolean.bind(this),
+    },
   ];
 
   scheduleTableCols: TableColType[] = [
     { PropertyName: 'st_time', ColLabel: 'Start Time' },
     { PropertyName: 'end_time', ColLabel: 'End Time' },
-    { PropertyName: 'notified', ColLabel: 'Notified', Type: 'function', ColValueFunction: this.decodeYesNoBoolean.bind(this) },
+    {
+      PropertyName: 'notified',
+      ColLabel: 'Notified',
+      Type: 'function',
+      ColValueFunction: this.decodeYesNoBoolean.bind(this),
+    },
     { PropertyName: 'sch_nm', ColLabel: 'Type' },
   ];
 
-  constructor(private gs: GeneralService,
+  constructor(
+    private gs: GeneralService,
     private api: APIService,
     private authService: AuthService,
     private ss: ScoutingService,
-    private us: UserService) { }
+    private us: UserService
+  ) {}
 
   ngOnInit() {
-    this.authService.authInFlight.subscribe(r => r === AuthCallStates.comp ? this.portalInit() : null);
-    this.authService.user.subscribe(u => this.user = u);
+    this.authService.authInFlight.subscribe(r => (r === AuthCallStates.comp ? this.portalInit() : null));
+    this.authService.user.subscribe(u => (this.user = u));
     //this.authService.userPermissions.subscribe(ups => this.userPermissions = ups);
   }
 
@@ -81,22 +119,17 @@ export class ScoutingPortalComponent implements OnInit {
           let pos = '';
 
           if ((fs.red_one_id as User)?.id === this.user.id) {
-            pos = 'red one'
-          }
-          else if ((fs.red_two_id as User)?.id === this.user.id) {
-            pos = 'red two'
-          }
-          else if ((fs.red_three_id as User)?.id === this.user.id) {
-            pos = 'red three'
-          }
-          else if ((fs.blue_one_id as User)?.id === this.user.id) {
-            pos = 'blue one'
-          }
-          else if ((fs.blue_two_id as User)?.id === this.user.id) {
-            pos = 'blue two'
-          }
-          else if ((fs.blue_three_id as User)?.id === this.user.id) {
-            pos = 'blue three'
+            pos = 'red one';
+          } else if ((fs.red_two_id as User)?.id === this.user.id) {
+            pos = 'red two';
+          } else if ((fs.red_three_id as User)?.id === this.user.id) {
+            pos = 'red three';
+          } else if ((fs.blue_one_id as User)?.id === this.user.id) {
+            pos = 'blue one';
+          } else if ((fs.blue_two_id as User)?.id === this.user.id) {
+            pos = 'blue two';
+          } else if ((fs.blue_three_id as User)?.id === this.user.id) {
+            pos = 'blue three';
           }
 
           if (!strNoE(pos)) {

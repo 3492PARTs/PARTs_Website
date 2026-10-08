@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { ReturnCardComponent } from './return-card.component';
 
@@ -12,12 +11,8 @@ describe('ReturnCardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ ReturnCardComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
+      imports: [ReturnCardComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
     });
     fixture = TestBed.createComponent(ReturnCardComponent);
     component = fixture.componentInstance;
@@ -52,7 +47,7 @@ describe('ReturnCardComponent', () => {
     component.Title = 'Dashboard';
     component.RouterLink = '/dashboard';
     fixture.detectChanges();
-    
+
     expect(component.Title).toBe('Dashboard');
     expect(component.RouterLink).toBe('/dashboard');
   });

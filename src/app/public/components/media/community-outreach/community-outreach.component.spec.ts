@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { MediaCommunityOutreachComponent } from './community-outreach.component';
 
@@ -12,14 +11,9 @@ describe('MediaCommunityOutreachComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ MediaCommunityOutreachComponent ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([])
-      ]
-    })
-    .compileComponents();
+      imports: [MediaCommunityOutreachComponent],
+      providers: [provideHttpClient(withXhr()), provideHttpClientTesting(), provideRouter([])],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

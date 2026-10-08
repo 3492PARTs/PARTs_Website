@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -28,27 +28,39 @@ describe('ProfileComponent', () => {
   beforeEach(async () => {
     userSubject = new BehaviorSubject<User>(new User());
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', ['isAdmin'], {
       user: userSubject.asObservable(),
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize', 'navigateByUrl',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
+      'navigateByUrl',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockNS = jasmine.createSpyObj('NotificationsService', [], {
       notifications: new BehaviorSubject([]).asObservable(),
       messages: new BehaviorSubject([]).asObservable(),
     });
-    mockModalService = jasmine.createSpyObj('ModalService', ['triggerError', 'successfulResponseBanner', 'triggerConfirm']);
+    mockModalService = jasmine.createSpyObj('ModalService', [
+      'triggerError',
+      'successfulResponseBanner',
+      'triggerConfirm',
+    ]);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers']);
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
 
     await TestBed.configureTestingModule({
       imports: [ProfileComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -75,5 +87,4 @@ describe('ProfileComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

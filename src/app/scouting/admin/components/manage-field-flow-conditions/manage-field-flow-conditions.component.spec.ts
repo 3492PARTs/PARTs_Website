@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-
 
 import { ManageFieldFlowConditionsComponent } from './manage-field-flow-conditions.component';
 import { SwPush } from '@angular/service-worker';
@@ -16,13 +15,12 @@ describe('ManageFieldFlowConditionsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ManageFieldFlowConditionsComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
-        { provide: SwPush, useValue: createMockSwPush() }
-      ]
-    })
-      .compileComponents();
+        { provide: SwPush, useValue: createMockSwPush() },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ManageFieldFlowConditionsComponent);
     component = fixture.componentInstance;

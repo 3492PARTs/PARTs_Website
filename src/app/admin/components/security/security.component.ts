@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AuthGroup, AuthPermission, User } from '@app/auth/models/user.models';
 import { APIService } from '@app/core/services/api.service';
 import { AuthService, AuthCallStates } from '@app/auth/services/auth.service';
@@ -17,15 +17,28 @@ import { ModalService } from '@app/core/services/modal.service';
 import { cloneObject } from '@app/core/utils/utils.functions';
 @Component({
   selector: 'app-security',
-  imports: [ButtonComponent, ButtonRibbonComponent, ModalComponent, TableComponent, FormComponent, FormElementComponent, BoxComponent],
+  imports: [
+    ButtonComponent,
+    ButtonRibbonComponent,
+    ModalComponent,
+    TableComponent,
+    FormComponent,
+    FormElementComponent,
+    BoxComponent,
+  ],
   templateUrl: './security.component.html',
-  styleUrls: ['./security.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./security.component.scss'],
 })
 export class SecurityComponent implements OnInit {
-
   groupsTableCols: TableColType[] = [
     { PropertyName: 'name', ColLabel: 'Group' },
-    { PropertyName: 'permissions', ColLabel: 'Permissions', Type: 'function', ColValueFunction: this.getPermissionDisplayValue },
+    {
+      PropertyName: 'permissions',
+      ColLabel: 'Permissions',
+      Type: 'function',
+      ColValueFunction: this.getPermissionDisplayValue,
+    },
   ];
   groupModalVisible = false;
   groups: AuthGroup[] = [];
@@ -63,11 +76,16 @@ export class SecurityComponent implements OnInit {
   links: Link[] = [];
   activeLink = new Link();
 
-  constructor(private api: APIService, private gs: GeneralService, private us: UserService, private authService: AuthService, private modalService: ModalService) {
-  }
+  constructor(
+    private api: APIService,
+    private gs: GeneralService,
+    private us: UserService,
+    private authService: AuthService,
+    private modalService: ModalService
+  ) {}
 
   ngOnInit(): void {
-    this.authService.authInFlight.subscribe((r) => {
+    this.authService.authInFlight.subscribe(r => {
       if (r === AuthCallStates.comp) {
         this.getGroups();
         this.getPermissions();
@@ -78,27 +96,27 @@ export class SecurityComponent implements OnInit {
 
   getGroups(): void {
     this.us.getGroups().then(result => {
-      if (result)
-        this.groups = result;
+      if (result) this.groups = result;
     });
   }
 
   getPermissions(): void {
     this.us.getPermissions().then(result => {
-      if (result)
-        this.permissions = result;
+      if (result) this.permissions = result;
     });
   }
 
   getLinks(): void {
     this.us.getLinks().then(result => {
-      if (result)
-        this.links = result;
+      if (result) this.links = result;
     });
   }
 
   getPermissionDisplayValue(prmsns: AuthPermission[]): string {
-    let names = prmsns.map((prm: AuthPermission) => prm.name).sort().reduce((s1: string, s2: string, i: number) => `${s1}, ${s2}`);
+    let names = prmsns
+      .map((prm: AuthPermission) => prm.name)
+      .sort()
+      .reduce((s1: string, s2: string, i: number) => `${s1}, ${s2}`);
 
     return names;
   }
@@ -198,9 +216,12 @@ export class SecurityComponent implements OnInit {
   }
 
   getGroupTableValue(groups: AuthGroup[]): string {
-    let name = groups.reduce((pV: AuthGroup, cV: AuthGroup, i: number) => {
-      return { id: -1, name: `${pV.name}, ${cV.name}`, permissions: [] };
-    }, { id: -1, name: '', permissions: [] }).name;
+    let name = groups.reduce(
+      (pV: AuthGroup, cV: AuthGroup, i: number) => {
+        return { id: -1, name: `${pV.name}, ${cV.name}`, permissions: [] };
+      },
+      { id: -1, name: '', permissions: [] }
+    ).name;
 
     return name.substring(2, name.length);
   }
@@ -222,10 +243,8 @@ export class SecurityComponent implements OnInit {
     if (this.selectedScoutAuthGroup.id) {
       this.scoutAuthGroups.push(this.selectedScoutAuthGroup);
       this.selectedScoutAuthGroup = new AuthGroup();
-      this.buildAvailableScoutAuthGroups()
-    }
-    else
-      this.modalService.triggerError('Cannot add empty group.');
+      this.buildAvailableScoutAuthGroups();
+    } else this.modalService.triggerError('Cannot add empty group.');
   }
 
   removeScoutAuthGroup(ag: AuthGroup) {

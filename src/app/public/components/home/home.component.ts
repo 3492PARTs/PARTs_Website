@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '@app/core/services/general.service';
 
@@ -7,13 +7,14 @@ import { AppSize, getScreenSize } from '@app/core/utils/utils.functions';
   selector: 'app-home',
   imports: [CommonModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
   screenSize!: AppSize;
   screenSizeLG = AppSize.LG;
 
-  constructor(private gs: GeneralService) { }
+  constructor(private gs: GeneralService) {}
 
   ngOnInit() {
     this.resizeContent();
@@ -27,7 +28,6 @@ export class HomeComponent implements OnInit {
   }
 
   private resizeContent(): void {
-
     const appHeader = document.getElementById('site-header');
 
     const slider = document.getElementById('cssSliderWrapper') || new HTMLElement();
@@ -44,8 +44,7 @@ export class HomeComponent implements OnInit {
       intro.style.minHeight = 'calc( 100vh - ' + (appHeader?.offsetHeight || 0) + 'px)';
       join.style.height = 'calc( 100vh - ' + (appHeader?.offsetHeight || 0) + 'px)';
       media.style.minHeight = 'calc( 100vh - ' + (appHeader?.offsetHeight || 0) + 'px)';
-    }
-    else {
+    } else {
       slider.style.paddingBottom = 'calc((100% * 1365) / 2048)';
       slider.style.height = 'unset';
       intro.style.minHeight = '100vh';
@@ -57,5 +56,4 @@ export class HomeComponent implements OnInit {
   private setScreenSize(): void {
     this.screenSize = getScreenSize();
   }
-
 }

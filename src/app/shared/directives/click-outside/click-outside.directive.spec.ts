@@ -1,4 +1,4 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ClickOutsideDirective } from './click-outside.directive';
@@ -6,6 +6,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
 @Component({
   standalone: true,
   imports: [ClickOutsideDirective],
+  changeDetection: ChangeDetectionStrategy.Eager,
   template: `
     <div class="container" style="width: 200px; height: 200px;">
       <div class="target" (appClickOutside)="onClickOutside($event)" style="width: 100px; height: 100px;">
@@ -13,7 +14,7 @@ import { ClickOutsideDirective } from './click-outside.directive';
       </div>
       <div class="outside" style="width: 50px; height: 50px;">Outside</div>
     </div>
-  `
+  `,
 })
 class TestComponent {
   clickedOutside = false;
@@ -31,7 +32,7 @@ describe('ClickOutsideDirective', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TestComponent]
+      imports: [TestComponent],
     });
 
     fixture = TestBed.createComponent(TestComponent);
@@ -47,7 +48,7 @@ describe('ClickOutsideDirective', () => {
   it('should have appClickOutside output defined', () => {
     const directiveEl = fixture.debugElement.query(By.directive(ClickOutsideDirective));
     const directive = directiveEl.injector.get(ClickOutsideDirective);
-    
+
     expect(directive).toBeTruthy();
     expect(directive.appClickOutside).toBeDefined();
   });
@@ -55,13 +56,13 @@ describe('ClickOutsideDirective', () => {
   it('should instantiate with ElementRef', () => {
     const mockElementRef = { nativeElement: document.createElement('div') };
     const directive = new ClickOutsideDirective(mockElementRef);
-    
+
     expect(directive).toBeTruthy();
   });
 
   it('should emit event when clicking outside the directive element', () => {
     const outsideEl = fixture.debugElement.query(By.css('.outside'));
-    
+
     component.clickedOutside = false;
     outsideEl.nativeElement.click();
     fixture.detectChanges();
@@ -71,7 +72,7 @@ describe('ClickOutsideDirective', () => {
 
   it('should not emit event when clicking inside the directive element', () => {
     const targetEl = fixture.debugElement.query(By.css('.target'));
-    
+
     component.clickedOutside = false;
     targetEl.nativeElement.click();
     fixture.detectChanges();
@@ -81,7 +82,7 @@ describe('ClickOutsideDirective', () => {
 
   it('should not emit event when clicking on child elements inside', () => {
     const innerEl = fixture.debugElement.query(By.css('.inner'));
-    
+
     component.clickedOutside = false;
     innerEl.nativeElement.click();
     fixture.detectChanges();
@@ -91,7 +92,7 @@ describe('ClickOutsideDirective', () => {
 
   it('should pass the event object to the handler', () => {
     const outsideEl = fixture.debugElement.query(By.css('.outside'));
-    
+
     component.lastEvent = null;
     outsideEl.nativeElement.click();
     fixture.detectChanges();
@@ -103,10 +104,10 @@ describe('ClickOutsideDirective', () => {
   it('should emit event multiple times for multiple clicks outside', () => {
     const outsideEl = fixture.debugElement.query(By.css('.outside'));
     let clickCount = 0;
-    
+
     const directiveEl = fixture.debugElement.query(By.directive(ClickOutsideDirective));
     const directive = directiveEl.injector.get(ClickOutsideDirective);
-    
+
     directive.appClickOutside.subscribe(() => {
       clickCount++;
     });
@@ -130,14 +131,14 @@ describe('ClickOutsideDirective', () => {
           top: 0,
           width: 0,
           x: 0,
-          y: 0
-        })
-      }
+          y: 0,
+        }),
+      },
     };
 
     const directiveEl = fixture.debugElement.query(By.directive(ClickOutsideDirective));
     const directive = directiveEl.injector.get(ClickOutsideDirective);
-    
+
     component.clickedOutside = false;
     directive.onClickBody(mockEvent as any);
     fixture.detectChanges();
@@ -146,4 +147,3 @@ describe('ClickOutsideDirective', () => {
     expect(component.clickedOutside).toBe(false);
   });
 });
-

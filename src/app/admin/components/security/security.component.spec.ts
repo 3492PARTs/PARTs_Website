@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -30,11 +30,16 @@ describe('SecurityComponent', () => {
     mockAuthService = { authInFlight: authInFlightSubject.asObservable() };
 
     userServiceSpy = jasmine.createSpyObj('UserService', [
-      'getGroups', 'getPermissions', 'getLinks',
-      'saveGroup', 'deleteGroup',
-      'savePermission', 'deletePermission',
+      'getGroups',
+      'getPermissions',
+      'getLinks',
+      'saveGroup',
+      'deleteGroup',
+      'savePermission',
+      'deletePermission',
       'runSecurityAudit',
-      'saveLink', 'deleteLink'
+      'saveLink',
+      'deleteLink',
     ]);
     userServiceSpy.getGroups.and.returnValue(Promise.resolve([]) as any);
     userServiceSpy.getPermissions.and.returnValue(Promise.resolve([]) as any);
@@ -48,20 +53,20 @@ describe('SecurityComponent', () => {
     userServiceSpy.deleteLink.and.callFake((_id: number, fn?: Function) => fn && fn());
 
     apiServiceSpy = {
-      get: jasmine.createSpy('get').and.callFake(
-        (_a: boolean, _u: string, _p: any, fn: Function) => { if (fn) fn([]) }
-      ),
-      post: jasmine.createSpy('post').and.callFake(
-        (_a: boolean, _u: string, _d: any, fn: Function) => { if (fn) fn({ retMessage: 'Success' }) }
-      )
+      get: jasmine.createSpy('get').and.callFake((_a: boolean, _u: string, _p: any, fn: Function) => {
+        if (fn) fn([]);
+      }),
+      post: jasmine.createSpy('post').and.callFake((_a: boolean, _u: string, _d: any, fn: Function) => {
+        if (fn) fn({ retMessage: 'Success' });
+      }),
     };
 
     modalServiceSpy = {
-      triggerConfirm: jasmine.createSpy('triggerConfirm').and.callFake(
-        (_msg: string, fn: Function) => { if (fn) fn() }
-      ),
+      triggerConfirm: jasmine.createSpy('triggerConfirm').and.callFake((_msg: string, fn: Function) => {
+        if (fn) fn();
+      }),
       triggerError: jasmine.createSpy('triggerError'),
-      successfulResponseBanner: jasmine.createSpy('successfulResponseBanner')
+      successfulResponseBanner: jasmine.createSpy('successfulResponseBanner'),
     };
 
     generalServiceSpy = {
@@ -74,7 +79,7 @@ describe('SecurityComponent', () => {
     TestBed.configureTestingModule({
       imports: [SecurityComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
@@ -83,7 +88,7 @@ describe('SecurityComponent', () => {
         { provide: APIService, useValue: apiServiceSpy },
         { provide: ModalService, useValue: modalServiceSpy },
         { provide: GeneralService, useValue: generalServiceSpy },
-      ]
+      ],
     });
     fixture = TestBed.createComponent(SecurityComponent);
     component = fixture.componentInstance;
@@ -137,7 +142,12 @@ describe('SecurityComponent', () => {
 
   describe('getPermissions', () => {
     it('sets permissions when result is returned', fakeAsync(() => {
-      const perm: AuthPermission = Object.assign(new AuthPermission(), { id: 1, name: 'view', codename: 'view', content_type: 1 });
+      const perm: AuthPermission = Object.assign(new AuthPermission(), {
+        id: 1,
+        name: 'view',
+        codename: 'view',
+        content_type: 1,
+      });
       userServiceSpy.getPermissions.and.returnValue(Promise.resolve([perm]));
       component.getPermissions();
       flush();
@@ -181,9 +191,7 @@ describe('SecurityComponent', () => {
     });
 
     it('returns single permission name', () => {
-      const perms: AuthPermission[] = [
-        Object.assign(new AuthPermission(), { name: 'OnlyOne' }),
-      ];
+      const perms: AuthPermission[] = [Object.assign(new AuthPermission(), { name: 'OnlyOne' })];
       expect(component.getPermissionDisplayValue(perms)).toBe('OnlyOne');
     });
   });
@@ -317,7 +325,12 @@ describe('SecurityComponent', () => {
 
   describe('savePermission', () => {
     it('calls us.savePermission and resets on success', fakeAsync(() => {
-      component.activePermission = Object.assign(new AuthPermission(), { id: 1, name: 'edit', codename: 'edit', content_type: 1 });
+      component.activePermission = Object.assign(new AuthPermission(), {
+        id: 1,
+        name: 'edit',
+        codename: 'edit',
+        content_type: 1,
+      });
       component.savePermission();
       flush();
       expect(userServiceSpy.savePermission).toHaveBeenCalled();
@@ -363,7 +376,10 @@ describe('SecurityComponent', () => {
   describe('getScoutAuthGroups', () => {
     it('calls api.get and sets scoutAuthGroups', () => {
       const group = Object.assign(new AuthGroup(), { id: 10, name: 'Scout', permissions: [] });
-      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => { if (fn) fn([group]); return Promise.resolve([group]); });
+      apiServiceSpy.get.and.callFake((_a: boolean, _u: string, _p?: any, fn?: (r: any) => void): Promise<any> => {
+        if (fn) fn([group]);
+        return Promise.resolve([group]);
+      });
       component.getScoutAuthGroups(true);
       expect(apiServiceSpy.get).toHaveBeenCalled();
       expect(component.scoutAuthGroups).toEqual([group]);

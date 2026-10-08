@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -31,27 +31,53 @@ describe('MeetingAttendanceComponent', () => {
   beforeEach(async () => {
     userSubject = new BehaviorSubject<User>(new User());
     mockAPI = jasmine.createSpyObj('APIService', ['get', 'post']);
-    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb([]); return Promise.resolve([]) as any; });
-    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => { if (successCb) successCb({ message: 'ok' }); return Promise.resolve({ message: 'ok' }); });
+    mockAPI.get.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb([]);
+      return Promise.resolve([]) as any;
+    });
+    mockAPI.post.and.callFake((_: boolean, __: string, ___?: any, successCb?: (result: any) => void) => {
+      if (successCb) successCb({ message: 'ok' });
+      return Promise.resolve({ message: 'ok' });
+    });
     mockAuthService = jasmine.createSpyObj('AuthService', ['isAdmin'], {
       user: userSubject.asObservable(),
     });
     mockAuthService.isAdmin.and.returnValue(false);
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockUS = jasmine.createSpyObj('UserService', ['getUsers']);
     mockUS.getUsers.and.returnValue(Promise.resolve([]) as any);
-    mockAS = jasmine.createSpyObj('AttendanceService', ['getAttendance', 'getAttendanceReport', 'approveAttendance', 'rejectAttendance', 'isAttendanceUnapproved', 'isAttendanceApproved', 'isAttendanceRejected', 'isAttendanceExempted']);
+    mockAS = jasmine.createSpyObj('AttendanceService', [
+      'getAttendance',
+      'getAttendanceReport',
+      'approveAttendance',
+      'rejectAttendance',
+      'isAttendanceUnapproved',
+      'isAttendanceApproved',
+      'isAttendanceRejected',
+      'isAttendanceExempted',
+    ]);
     mockAS.getAttendance.and.returnValue(Promise.resolve([]) as any);
     mockAS.getAttendanceReport.and.returnValue(Promise.resolve(null) as any);
     mockAS.isAttendanceUnapproved.and.returnValue(false);
     mockAS.isAttendanceApproved.and.returnValue(false);
     mockAS.isAttendanceRejected.and.returnValue(false);
     mockAS.isAttendanceExempted.and.returnValue(false);
-    mockMS = jasmine.createSpyObj('MeetingService', ['saveMeeting', 'removeMeeting', 'getMeetings', 'computeMeetingDuration', 'getActiveMeeting', 'getMeetingHours']);
+    mockMS = jasmine.createSpyObj('MeetingService', [
+      'saveMeeting',
+      'removeMeeting',
+      'getMeetings',
+      'computeMeetingDuration',
+      'getActiveMeeting',
+      'getMeetingHours',
+    ]);
     mockMS.saveMeeting.and.returnValue(Promise.resolve(false) as any);
     mockMS.removeMeeting.and.returnValue(Promise.resolve(false) as any);
     mockMS.getMeetings.and.returnValue(Promise.resolve([]) as any);
@@ -59,13 +85,15 @@ describe('MeetingAttendanceComponent', () => {
     mockMS.getMeetingHours.and.returnValue(Promise.resolve(null) as any);
     mockMS.computeMeetingDuration.and.returnValue('');
     mockModalService = jasmine.createSpyObj('ModalService', [
-      'triggerError', 'successfulResponseBanner', 'triggerConfirm',
+      'triggerError',
+      'successfulResponseBanner',
+      'triggerConfirm',
     ]);
 
     await TestBed.configureTestingModule({
       imports: [MeetingAttendanceComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },

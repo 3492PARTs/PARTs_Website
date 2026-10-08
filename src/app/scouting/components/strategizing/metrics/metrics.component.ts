@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { DashboardComponent } from "../../elements/dashboard/dashboard.component";
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { DashboardComponent } from '../../elements/dashboard/dashboard.component';
 import { APIService, ModalService, RetMessage, downloadFileAs } from '@app/core';
 import { BoxComponent, ButtonComponent, FormElementGroupComponent } from '@app/shared';
 
@@ -7,18 +7,29 @@ import { BoxComponent, ButtonComponent, FormElementGroupComponent } from '@app/s
   selector: 'app-metrics',
   imports: [DashboardComponent, FormElementGroupComponent, ButtonComponent, BoxComponent],
   templateUrl: './metrics.component.html',
-  styleUrls: ['./metrics.component.scss']
+  changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrls: ['./metrics.component.scss'],
 })
 export class MetricsComponent {
-
-  constructor(private api: APIService, private modalService: ModalService) { }
+  constructor(
+    private api: APIService,
+    private modalService: ModalService
+  ) {}
 
   runScoutingReport(): void {
-    this.api.get(true, 'scouting/admin/scouting-report/', undefined, (result: RetMessage) => {
-      //console.log(result);
-      downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
-    }, (err: any) => {
-      this.modalService.triggerError(err);
-    }, undefined, 1_000 * 60 * 10); // 10m timeout
+    this.api.get(
+      true,
+      'scouting/admin/scouting-report/',
+      undefined,
+      (result: RetMessage) => {
+        //console.log(result);
+        downloadFileAs('ScoutReport.csv', result.retMessage, 'text/csv');
+      },
+      (err: any) => {
+        this.modalService.triggerError(err);
+      },
+      undefined,
+      1_000 * 60 * 10
+    ); // 10m timeout
   }
 }

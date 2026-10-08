@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -30,12 +30,18 @@ describe('ScoutPitResponsesComponent', () => {
       authInFlight: authInFlight.asObservable(),
     });
     mockGS = jasmine.createSpyObj('GeneralService', [
-      'getNextGsId', 'incrementOutstandingCalls', 'decrementOutstandingCalls', 'isMobile', 'getAppSize',
+      'getNextGsId',
+      'incrementOutstandingCalls',
+      'decrementOutstandingCalls',
+      'isMobile',
+      'getAppSize',
     ]);
     mockGS.getNextGsId.and.returnValue('gs-1');
     mockGS.getAppSize.and.returnValue(AppSize.LG);
     mockSS = jasmine.createSpyObj('ScoutingService', [
-      'loadPitScoutingResponses', 'filterPitResponsesFromCache', 'teamSortFunction',
+      'loadPitScoutingResponses',
+      'filterPitResponsesFromCache',
+      'teamSortFunction',
     ]);
     mockSS.loadPitScoutingResponses.and.returnValue(Promise.resolve(null) as any);
     mockSS.filterPitResponsesFromCache.and.returnValue(Promise.resolve([]) as any);
@@ -45,7 +51,7 @@ describe('ScoutPitResponsesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ScoutPitResponsesComponent],
       providers: [
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         provideHttpClientTesting(),
         provideRouter([]),
         { provide: SwPush, useValue: createMockSwPush() },
